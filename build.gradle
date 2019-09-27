@@ -5,11 +5,16 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.5.0-x'
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,6 +22,7 @@ buildscript {
 
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'jacoco'
+apply plugin: 'io.codearte.nexus-staging'
 
 jacoco {
     toolVersion = "0.8.0"
@@ -50,6 +56,22 @@ allprojects {
         maven { url "https://dl.bintray.com/ona/rdt-capture" }
     }
 }
+
+configure(allprojects) { project ->
+
+    version = VERSION_NAME
+    group = GROUP
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+            mavenCentral()
+            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+            mavenLocal()
+        }
+    }
+}
+
 
 project.ext.preDexLibs = !project.hasProperty('disablePreDex')
 
@@ -128,4 +150,8 @@ task jacocoTestReport(type: JacocoReport) {
 
 task build {
     dependsOn tasks.jacocoTestReport
+}
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
 }

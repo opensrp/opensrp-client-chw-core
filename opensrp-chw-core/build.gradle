@@ -203,3 +203,4 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
+apply from: '../maven.gradle'
