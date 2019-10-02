@@ -87,11 +87,6 @@ public class CoreChwRepository extends Repository {
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
 
         onUpgrade(database, 1, databaseVersion);
-        ReportingLibrary reportingLibraryInstance = ReportingLibrary.getInstance();
-        String childIndicatorsConfigFile = "config/child-reporting-indicator-definitions.yml";
-        String ancIndicatorConfigFile = "config/anc-reporting-indicator-definitions.yml";
-        reportingLibraryInstance.initMultipleIndicatorsData(Collections.unmodifiableList(
-                Arrays.asList(childIndicatorsConfigFile, ancIndicatorConfigFile)), database);
     }
 
     @Override
