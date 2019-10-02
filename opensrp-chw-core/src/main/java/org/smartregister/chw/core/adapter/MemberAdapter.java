@@ -129,47 +129,32 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         if (currentViewHolder == null) {
             return false;
         }
-
         boolean res = validateTextView(currentViewHolder.etPhone);
-        //res = (res && validateTextView(currentViewHolder.etAlternatePhone));
-
-        if (!res) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setMessage(context.getString(R.string.change_member_alert));
-            builder1.setCancelable(true);
-
-            builder1.setPositiveButton(
-                    context.getString(R.string.dismiss),
-                    (dialog, id) -> dialog.cancel());
-
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
-        }
         return res;
     }
 
     private boolean validateTextView(TextView textView) {
         String text = textView.getText().toString().trim();
-        if (flavorPhoneNumberLength != null && flavorPhoneNumberLength.isPhoneNumberLength16Digit()) {
-            if (text.length() < 8) {
-                textView.setError(context.getString(R.string.number_8_16));
-                return false;
-            }
-            if (text.length() > 16) {
-                textView.setError(context.getString(R.string.number_8_16));
-                return false;
-            }
-        } else {
-            if (text.length() > 0 && !text.substring(0, 1).equals("0")) {
-                textView.setError(context.getString(R.string.must_start_with_zero));
-                return false;
-            }
+          if(text.length() > 0 && text.length() < 8 || text.length() > 16){
+              textView.setError(context.getString(R.string.number_8_16));
+              return false;
+      }
+          else {
+              if(text.length() ==0 ){
 
-            if (text.length() > 0 && text.length() != 10) {
-                textView.setError(context.getString(R.string.length_equal_10));
-                return false;
-            }
-        }
+                  AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                  builder1.setMessage(context.getString(R.string.change_member_alert));
+                  builder1.setCancelable(true);
+
+                  builder1.setPositiveButton(
+                          context.getString(R.string.dismiss),
+                          (dialog, id) -> dialog.cancel());
+
+                  AlertDialog alert11 = builder1.create();
+                  alert11.show();
+
+              }
+          }
 
         return true;
     }
@@ -239,23 +224,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
                 @Override
                 public void afterTextChanged(Editable s) {
                     String text = et.getText().toString().trim();
-                    if (flavorPhoneNumberLength != null && flavorPhoneNumberLength.isPhoneNumberLength16Digit()) {
-                        if (text.length() < 8) {
+                        if(text.length() > 0 && text.length() < 8 || text.length() > 16){
                             et.setError(context.getString(R.string.number_8_16));
                         }
-                        if (text.length() > 16) {
-                            et.setError(context.getString(R.string.number_8_16));
-                        }
-
-                    } else {
-                        if (text.length() > 0 && text.length() != 10) {
-                            et.setError(context.getString(R.string.length_equal_10));
-                        }
-                        if (text.length() > 0 && !text.substring(0, 1).equals("0")) {
-                            et.setError(context.getString(R.string.must_start_with_zero));
-
-                        }
-                    }
 
                 }
             };
