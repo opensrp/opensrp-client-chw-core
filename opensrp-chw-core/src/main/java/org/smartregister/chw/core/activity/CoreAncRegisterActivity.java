@@ -114,17 +114,6 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
     }
 
     @Override
-    public Class getAncRegisterActivity() {
-        return CoreAncRegisterActivity.class;
-    }
-
-    //TODO GET PNC REGISTER
-    @Override
-    public Class getPncRegisterActivity() {
-        return CoreAncRegisterActivity.class;
-    }
-
-    @Override
     public String getFormRegistrationEvent() {
         return org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_REGISTRATION;
     }
