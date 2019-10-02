@@ -129,7 +129,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         if (currentViewHolder == null) {
             return false;
         }
-
         boolean res = validateTextView(currentViewHolder.etPhone);
         return res;
     }
