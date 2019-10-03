@@ -7,16 +7,20 @@ import android.content.Intent;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.activity.BaseAncHomeVisitActivity;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 import org.smartregister.util.LangUtils;
 
 import java.text.MessageFormat;
+
+import timber.log.Timber;
 
 public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivity {
 
@@ -30,18 +34,32 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
     @Override
     protected abstract void registerPresenter();
 
+
     @Override
     public void startFormActivity(JSONObject jsonForm) {
+        try {
 
-        Form form = new Form();
-        form.setActionBarBackground(R.color.family_actionbar);
-        form.setWizard(false);
+            JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
+            JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
+            if (memberObject.getDob() != null) {
+                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "birth_cert_issue_date");
+                int days = CoreJsonFormUtils.getDayFromDate(memberObject.getDob());
 
-        Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
-        intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
-        intent.putExtra(Constants.WizardFormActivity.EnableOnCloseDialog, false);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
-        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+                min_date.put("min_date", "today-" + days + "d");
+            }
+            Form form = new Form();
+            form.setActionBarBackground(R.color.family_actionbar);
+            form.setWizard(false);
+
+            Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
+            intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+            intent.putExtra(Constants.WizardFormActivity.EnableOnCloseDialog, false);
+            intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+            startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
     }
 
     @Override
