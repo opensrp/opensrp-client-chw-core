@@ -8,7 +8,6 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.activity.BaseAncHomeVisitActivity;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -20,12 +19,10 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.util.LangUtils;
 
 import java.text.MessageFormat;
-import java.util.Date;
 
 import timber.log.Timber;
 
 public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivity {
-    private Date dob;
 
     public static void startMe(Activity activity, MemberObject memberObject, Boolean isEditMode, Class<?> cls) {
         Intent intent = new Intent(activity, cls);
