@@ -32,26 +32,11 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject);
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.EDIT_MODE, isEditMode);
         activity.startActivityForResult(intent, org.smartregister.chw.anc.util.Constants.REQUEST_CODE_HOME_VISIT);
-        String date = memberObject.getDob();
     }
 
     @Override
     protected abstract void registerPresenter();
 
-
-    private void updateFormField(JSONArray formFieldArrays, String formFieldKey, Date updateValue) {
-        if (updateValue != null) {
-            JSONObject formObject = org.smartregister.util.JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
-            if (formObject != null) {
-                try {
-                    formObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
-                    formObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
-                } catch (JSONException e) {
-                    Timber.e(e);
-                }
-            }
-        }
-    }
 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
