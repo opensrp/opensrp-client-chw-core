@@ -132,16 +132,16 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         boolean res = validateTextView(currentViewHolder.etPhone);
 
         if(!res){
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setMessage(context.getString(R.string.change_member_alert));
-            builder1.setCancelable(true);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setMessage(context.getString(R.string.change_member_alert));
+            alertDialogBuilder.setCancelable(true);
 
-            builder1.setPositiveButton(
+            alertDialogBuilder.setPositiveButton(
                     context.getString(R.string.dismiss),
                     (dialog, id) -> dialog.cancel());
 
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
 
         return res;
