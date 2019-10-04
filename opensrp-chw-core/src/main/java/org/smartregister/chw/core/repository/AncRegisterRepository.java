@@ -28,7 +28,6 @@ public class AncRegisterRepository extends BaseRepository {
     public static final String LAST_MENSTRUAL_PERIOD = "last_menstrual_period";
 
     public static final String[] TABLE_COLUMNS = {FIRST_NAME, MIDDLE_NAME, LAST_NAME, PHONE_NUMBER};
-    public static final String[] ANC_COUNT_TABLE_COLUMNS = {BASE_ENTITY_ID};
     public static final String[] LAST_MENSTRUAL_PERIOD_COLUMNS = {LAST_MENSTRUAL_PERIOD};
 
 
@@ -96,36 +95,6 @@ public class AncRegisterRepository extends BaseRepository {
             }
         }
         return null;
-
-    }
-
-    public int getAncPncWomenCount(String familyBaseID, String register) {
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = null;
-        try {
-            if (database == null) {
-                return 0;
-            }
-            String tableName = CoreConstants.TABLE_NAME.ANC_MEMBER.equals(register) ? CoreConstants.TABLE_NAME.ANC_MEMBER : CoreConstants.TABLE_NAME.PNC_MEMBER;
-
-            String query = "select * from " + tableName  + " inner join " +
-                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + " on " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID +
-                    " = " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID
-                    + " and  " +  CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." +  org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0 "
-                    + " and " + tableName  + "."  + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0 "
-                    + " and " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." +  DBConstants.KEY.RELATIONAL_ID + " = ? ";
-
-            cursor = database.rawQuery(query,new String[]{familyBaseID});
-            return cursor.getCount();
-
-        } catch (Exception e) {
-            Timber.e(e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return 0;
 
     }
 
