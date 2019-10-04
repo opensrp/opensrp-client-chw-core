@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -193,6 +194,10 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         }
 
         return res;
+    }
+
+    public static int getPncAncWomenCount(String familyBaseID, boolean isAncCount) {
+        return PNCDao.getPncAncWomenCount(familyBaseID, isAncCount);
     }
 
     public abstract List<ChildVisit> retrieveChildVisitList(Rules rules, List<Map<String, String>> list);
