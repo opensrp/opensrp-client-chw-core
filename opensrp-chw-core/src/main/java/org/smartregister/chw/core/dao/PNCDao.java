@@ -3,6 +3,8 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.model.ChildModel;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.family.util.DBConstants;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +34,25 @@ public class PNCDao extends AbstractDao {
             return false;
 
         return res.get(0) > 0;
+    }
+
+    public static int getPncAncWomenCount(String familyBaseID, boolean isAncCount) {
+
+        String tableName = isAncCount ? CoreConstants.TABLE_NAME.ANC_MEMBER : CoreConstants.TABLE_NAME.PNC_MEMBER;
+        String condition = isAncCount ? " and " + tableName + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0 " :
+                " and " + tableName + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0  "
+                        + " and " + tableName + "." + org.smartregister.chw.anc.util.DBConstants.KEY.DELIVERY_DATE + " IS NOT NULL  ";
+
+        String sql = "select * from " + tableName + " inner join " +
+                CoreConstants.TABLE_NAME.FAMILY_MEMBER + " on " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID +
+                " = " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID
+                + " and  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " =0 "
+                + condition + " and " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID + " = '" + familyBaseID + "' ";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        return res.size();
     }
 
     public static MemberObject getMember(String baseEntityID) {
