@@ -46,7 +46,7 @@ public class PNCDao extends AbstractDao {
         String sql = "select * from " + tableName + " inner join " +
                 CoreConstants.TABLE_NAME.FAMILY_MEMBER + " on " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID +
                 " = " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID
-                + " and  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " =0 "
+                + " and  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0 "
                 + condition + " and " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID + " = '" + familyBaseID + "' ";
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
