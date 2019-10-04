@@ -39,13 +39,16 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
     public void startFormActivity(JSONObject jsonForm) {
         try {
 
-            JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
-            JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
             if (memberObject.getDob() != null) {
+                JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
+                JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
                 JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "birth_cert_issue_date");
-                int days = CoreJsonFormUtils.getDayFromDate(memberObject.getDob());
+                if(min_date != null){
+                    int days = CoreJsonFormUtils.getDayFromDate(memberObject.getDob());
 
-                min_date.put("min_date", "today-" + days + "d");
+                    min_date.put("min_date", "today-" + days + "d");
+                }
+
             }
             Form form = new Form();
             form.setActionBarBackground(R.color.family_actionbar);
