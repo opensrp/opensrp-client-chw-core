@@ -130,7 +130,22 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
             return false;
         }
         boolean res = validateTextView(currentViewHolder.etPhone);
+
+        if(!res){
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            builder1.setMessage(context.getString(R.string.change_member_alert));
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    context.getString(R.string.dismiss),
+                    (dialog, id) -> dialog.cancel());
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
+
         return res;
+
     }
 
     private boolean validateTextView(TextView textView) {
@@ -139,21 +154,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
               textView.setError(context.getString(R.string.number_8_16));
               return false;
       }
-          else {
-              if(text.length() ==0 ){
-
-                  AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                  builder1.setMessage(context.getString(R.string.change_member_alert));
-                  builder1.setCancelable(true);
-
-                  builder1.setPositiveButton(
-                          context.getString(R.string.dismiss),
-                          (dialog, id) -> dialog.cancel());
-
-                  AlertDialog alert11 = builder1.create();
-                  alert11.show();
-
-              }
+          if(text.length() == 0){
+              return false;
           }
 
         return true;
