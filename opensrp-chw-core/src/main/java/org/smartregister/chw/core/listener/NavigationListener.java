@@ -38,12 +38,7 @@ public class NavigationListener implements View.OnClickListener {
                     Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.LD, Toast.LENGTH_SHORT).show();
                     break;
                 case CoreConstants.DrawerMenu.PNC:
-                    Class pnc = getActivity(CoreConstants.REGISTERED_ACTIVITIES.PNC_REGISTER_ACTIVITY);
-                    if (pnc == null) {
-                        Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.PNC, Toast.LENGTH_SHORT).show();
-                    } else {
-                        startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.PNC_REGISTER_ACTIVITY));
-                    }
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.PNC_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.FAMILY_PLANNING:
                     Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.FAMILY_PLANNING, Toast.LENGTH_SHORT).show();
@@ -53,15 +48,14 @@ public class NavigationListener implements View.OnClickListener {
                     if (malaria == null) {
                         Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.MALARIA, Toast.LENGTH_SHORT).show();
                     } else {
-                        startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.MALARIA_REGISTER_ACTIVITY));
+                        startRegisterActivity(malaria);
                     }
-                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.MALARIA_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.REFERRALS:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.REFERRALS_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.ALL_CLIENTS:
-                    Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.ALL_CLIENTS, Toast.LENGTH_SHORT).show();
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.ALL_CLIENTS_REGISTERED_ACTIVITY));
                     break;
                 default:
                     Utils.showShortToast(activity.getApplicationContext(), "Unspecified navigation action");
