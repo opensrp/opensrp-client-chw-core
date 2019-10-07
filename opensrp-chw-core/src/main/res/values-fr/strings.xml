@@ -240,7 +240,7 @@
     <string name="handwashing_facilities">Le ménage dispose-t-il d\'un dispositive pour se laver les mains?</string>
     <string name="drinking_water">Le ménage a-t-il accès à de l\'eau potable propre?</string>
     <string name="hygienic_latrine">Les membres du ménage utilisent-ils des latrines hygiéniques pour l\'évacuation des excréments?</string>
-    <string name="wash_check">Vérification Eau, Hygiène et Assainissement </string>
+    <string name="wash_check">Vérif. EHA</string>
 
     <string name="abv_first">1er</string>
     <string name="abv_second">2ème</string>
