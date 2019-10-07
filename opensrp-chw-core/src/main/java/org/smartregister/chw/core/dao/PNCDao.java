@@ -25,7 +25,7 @@ public class PNCDao extends AbstractDao {
     }
 
     public static boolean isPNCMember(String baseEntityID) {
-        String sql = "select count(*) count from ec_pregnancy_outcome where base_entity_id = '" + baseEntityID + "' and is_closed = 0 and delivery_date IS NOT NULL";
+        String sql = "select count(ec_pregnancy_outcome.base_entity_id) count from ec_pregnancy_outcome where base_entity_id = '" + baseEntityID + "' and is_closed = 0 and delivery_date IS NOT NULL";
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
@@ -43,7 +43,7 @@ public class PNCDao extends AbstractDao {
                 " and " + tableName + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0  "
                         + " and " + tableName + "." + org.smartregister.chw.anc.util.DBConstants.KEY.DELIVERY_DATE + " IS NOT NULL  ";
 
-        String sql = "select "+tableName+".id from " + tableName + " inner join " +
+        String sql = "select count("+tableName+".id) from " + tableName + " inner join " +
                 CoreConstants.TABLE_NAME.FAMILY_MEMBER + " on " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID +
                 " = " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID
                 + " and  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.IS_CLOSED + " = 0 "
