@@ -196,11 +196,11 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
     }
 
     public static int getAncWomenCount(String familyBaseID) {
-        return AncDao.getPncAncWomenCount(familyBaseID);
+        return AncDao.getAncWomenCount(familyBaseID);
     }
 
     public static int getPncWomenCount(String familyBaseID) {
-        return PNCDao.getPnWomenCount(familyBaseID);
+        return PNCDao.getPncWomenCount(familyBaseID);
     }
 
     public abstract List<ChildVisit> retrieveChildVisitList(Rules rules, List<Map<String, String>> list);

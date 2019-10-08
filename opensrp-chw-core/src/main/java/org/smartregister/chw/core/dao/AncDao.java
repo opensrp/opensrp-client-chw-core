@@ -84,7 +84,7 @@ public class AncDao extends AlertDao {
         return res.get(0);
     }
 
-    public static int getPncAncWomenCount(String familyBaseID) {
+    public static int getAncWomenCount(String familyBaseID) {
         String sql = "SELECT count(ear.base_entity_id) count FROM  ec_anc_register as ear " +
                 "INNER JOIN ec_family_member efm ON ear.base_entity_id = efm.base_entity_id " +
                 "WHERE ear.relational_id = '" + familyBaseID + "' " +

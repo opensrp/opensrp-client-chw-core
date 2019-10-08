@@ -34,7 +34,7 @@ public class PNCDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
-    public static int getPnWomenCount(String familyBaseID) {
+    public static int getPncWomenCount(String familyBaseID) {
 
         String sql = "SELECT count(ear.base_entity_id) count FROM ec_pregnancy_outcome as ear " +
                 "INNER JOIN ec_family_member efm ON ear.base_entity_id = efm.base_entity_id " +
