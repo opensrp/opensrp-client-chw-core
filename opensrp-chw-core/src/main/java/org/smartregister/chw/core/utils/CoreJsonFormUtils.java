@@ -946,10 +946,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                    if (jsonObject.getString(KEY).equalsIgnoreCase("last_menstrual_period") ||
-//                            jsonObject.getString(KEY).equalsIgnoreCase("delivery_method")) {
-//                        jsonObject.put(READ_ONLY, true);
-//                    }
                     try {
                         for (Obs obs : observations) {
                             if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
