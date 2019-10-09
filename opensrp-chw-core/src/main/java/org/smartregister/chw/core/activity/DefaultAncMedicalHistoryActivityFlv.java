@@ -170,9 +170,12 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
     private void processLastVisit(int days, Context context) {
         linearLayoutLastVisit.setVisibility(View.VISIBLE);
-        String str_days = days < 1 ? context.getString(R.string.less_than_twenty_four) : String.valueOf(days);
-        customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), str_days)));
-
+        if( days < 1){
+            customFontTextViewLastVisit.setText(R.string.less_than_twenty_four);
+        }
+        else  {
+            customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), String.valueOf(days))));
+        }
     }
 
     protected void processAncCard(String has_card, Context context) {
