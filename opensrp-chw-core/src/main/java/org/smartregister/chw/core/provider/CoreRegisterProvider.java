@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -33,8 +34,6 @@ import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate;
 
 public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
@@ -105,7 +104,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
             for (Map<String, String> map : list) {
                 if ("PNC".equals(map.get(CoreConstants.DB_CONSTANTS.ENTRY_POINT))) {
                     String dob = map.get(DBConstants.KEY.DOB);
-                    if (dob != null && getDayFromDate(dob) < 29) {
+                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29) {
                         return;
                     }
                 }
@@ -196,8 +195,12 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         return res;
     }
 
-    public static int getPncAncWomenCount(String familyBaseID, boolean isAncCount) {
-        return PNCDao.getPncAncWomenCount(familyBaseID, isAncCount);
+    public static int getAncWomenCount(String familyBaseID) {
+        return AncDao.getAncWomenCount(familyBaseID);
+    }
+
+    public static int getPncWomenCount(String familyBaseID) {
+        return PNCDao.getPncWomenCount(familyBaseID);
     }
 
     public abstract List<ChildVisit> retrieveChildVisitList(Rules rules, List<Map<String, String>> list);
