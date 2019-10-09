@@ -3,16 +3,12 @@ package org.smartregister.chw.core.repository;
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Repository;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import timber.log.Timber;
 
