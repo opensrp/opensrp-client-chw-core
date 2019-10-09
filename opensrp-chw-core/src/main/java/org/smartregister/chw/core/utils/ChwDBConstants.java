@@ -22,7 +22,6 @@ public interface ChwDBConstants {
     String TASK_CODE = "code";
     String TASK_STATUS_READY = "READY";
     String TASK_STATUS_REFERRAL = "Referral";
-    String PREGNANCY_OUTCOME = "preg_outcome";
 
     interface TaskTable {
         String FOR = "for";

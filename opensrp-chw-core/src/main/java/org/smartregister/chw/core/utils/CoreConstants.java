@@ -173,6 +173,7 @@ public class CoreConstants {
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
         }
+
         public static String getPncReferralForm() {
             return PNC_REFERRAL_FORM;
         }
@@ -564,14 +565,6 @@ public class CoreConstants {
     }
 
     public static class FORM_CONSTANTS {
-
-        public static class PregnancyOutcomeHelper {
-            public static final String LIVE_BIRTH = "born_alive";
-            public static final String BORN_ALIVE_AND_DIED = "born_alive_died";
-            public static final String STILL_BIRTH = "still_born";
-            public static final String ALIVE_WITH_PROBLEM = "alive_with_problem";
-            public static final String MISCARIAGE = "miscarriage";
-        }
 
         public static class REMOVE_MEMBER_FORM {
             public static final String REASON = "remove_reason";
