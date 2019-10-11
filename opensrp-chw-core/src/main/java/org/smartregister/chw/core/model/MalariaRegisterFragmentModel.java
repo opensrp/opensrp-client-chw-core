@@ -1,4 +1,4 @@
-package org.smartregister.chw.hf.model;
+package org.smartregister.chw.core.model;
 
 import android.support.annotation.NonNull;
 

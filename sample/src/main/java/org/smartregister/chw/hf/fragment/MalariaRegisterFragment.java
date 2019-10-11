@@ -1,7 +1,7 @@
 package org.smartregister.chw.hf.fragment;
 
 import org.smartregister.chw.core.fragment.CoreMalariaRegisterFragment;
-import org.smartregister.chw.hf.model.MalariaRegisterFragmentModel;
+import org.smartregister.chw.core.model.MalariaRegisterFragmentModel;
 import org.smartregister.chw.hf.presenter.MalariaRegisterFragmentPresenter;
 import org.smartregister.view.activity.BaseRegisterActivity;
 
