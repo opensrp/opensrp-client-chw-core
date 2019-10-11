@@ -231,11 +231,12 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
             String key = vals.getKey().toLowerCase().replace("_date", "").toUpperCase();
             String val = vals.getValue();
 
+
             if (!val.contains("not")) {
                 View view = inflater.inflate(R.layout.vaccine_content_view, null);
                 TextView info = view.findViewById(R.id.name_date_tv);
-                info.setText(MessageFormat.format(context.getString(R.string.vaccines_done_date), key, val));
-
+                String res = key.substring(2);
+                info.setText(MessageFormat.format(context.getString(R.string.tt_done), res, val));
                 linearLayoutTTImmunizationDetails.addView(view, visible);
                 visible++;
             }
@@ -252,11 +253,13 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
             if (!val.contains("not")) {
                 View view = inflater.inflate(R.layout.vaccine_content_view, null);
                 TextView info = view.findViewById(R.id.name_date_tv);
-                info.setText(MessageFormat.format(context.getString(R.string.vaccines_done_date), key, val));
+                String res = key.substring(12);
+                info.setText(MessageFormat.format(context.getString(R.string.iptpsp_done), res, val));
 
                 linearLayoutIPTpDetails.addView(view, visible);
                 visible++;
             }
+
         }
         linearLayoutIPTp.setVisibility(visible > 0 ? View.VISIBLE : View.GONE);
     }
