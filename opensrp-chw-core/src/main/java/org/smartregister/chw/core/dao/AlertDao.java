@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import org.smartregister.chw.core.domain.AlertState;
+import org.smartregister.dao.AbstractDao;
 import org.smartregister.domain.Alert;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.repository.AlertRepository;
