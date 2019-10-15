@@ -80,6 +80,18 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat yyyy_mm_dd = new SimpleDateFormat("yyyy-mm-dd");
     private static List<String> assets;
 
+    public static int getAnCWomanImageResourceIdentifier() {
+        return R.drawable.anc_woman;
+    }
+
+    public static int getPnCWomanImageResourceIdentifier() {
+        return R.drawable.pnc_woman;
+    }
+
+    public static int getMemberImageResourceIdentifier() {
+        return R.mipmap.ic_member;
+    }
+
     public static String getImmunizationHeaderLanguageSpecific(Context context, String value) {
         if (TextUtils.isEmpty(value)) return "";
         if (value.equalsIgnoreCase("at birth")) {
@@ -111,7 +123,6 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
         return value;
     }
-
 
 
     public static String firstCharacterUppercase(String str) {
