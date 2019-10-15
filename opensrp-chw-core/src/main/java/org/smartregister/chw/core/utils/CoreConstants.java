@@ -173,6 +173,7 @@ public class CoreConstants {
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
         }
+
         public static String getPncReferralForm() {
             return PNC_REFERRAL_FORM;
         }

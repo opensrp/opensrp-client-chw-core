@@ -960,4 +960,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         return intent;
     }
+
+    public static JSONObject getAutoPopulatedJsonEditMemberFormString(String title, String formName, Context context, CommonPersonObjectClient client, String eventType, String familyName, boolean isPrimaryCaregiver) {
+        return new BAJsonFormUtils(CoreChwApplication.getInstance()).getAutoJsonEditMemberFormString(title, formName, context, client, eventType, familyName, isPrimaryCaregiver);
+    }
 }

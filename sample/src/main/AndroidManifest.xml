@@ -114,6 +114,12 @@
         <activity
             android:name=".activity.PncMedicalHistoryActivity"
             android:theme="@style/HFTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MalariaRegisterActivity"
+            android:theme="@style/HFTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MalariaProfileActivity"
+            android:theme="@style/HFTheme.NoActionBar" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3f94f9c3caeff331b3a2bd8c2182b663ad6a955a" />
