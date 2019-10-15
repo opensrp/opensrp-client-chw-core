@@ -10,7 +10,7 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.DefaultPncMedicalHistoryActivityFlv;
-import org.smartregister.chw.core.dao.AbstractDao;
+import org.smartregister.dao.AbstractDao;
 
 import java.text.DateFormat;
 import java.text.MessageFormat;
