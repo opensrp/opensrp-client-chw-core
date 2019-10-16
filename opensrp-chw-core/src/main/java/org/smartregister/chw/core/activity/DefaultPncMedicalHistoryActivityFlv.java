@@ -78,7 +78,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             Map<String, String> immunization = new HashMap<>();
             Map<String, String> growth_data = new HashMap<>();
 
-
             while (x < visits.size()) {
                 // the first object in this list is the days difference
                 if (x == 0) {
