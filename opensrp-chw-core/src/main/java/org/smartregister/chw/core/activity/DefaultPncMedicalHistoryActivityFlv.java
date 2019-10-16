@@ -73,7 +73,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             int x = 0;
             Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
             Map<String, String> family_planning = new HashMap<>();
-            String vaccineCard = "No";
+            String vaccineCard = context.getString(R.string.pnc_no);
             String earlyBreastFeeding = "";
             Map<String, String> immunization = new HashMap<>();
             Map<String, String> growth_data = new HashMap<>();
@@ -124,7 +124,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         // vaccine card
                         case "vaccine_card":
                             if ("No".equalsIgnoreCase(vaccineCard) && "Yes".equalsIgnoreCase(val)) {
-                                vaccineCard = "Yes";
+                                vaccineCard = context.getString(R.string.pnc_yes);
                             }
                             break;
                         // immunization
@@ -142,10 +142,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
                 earlyBreastFeeding = PNCDao.earlyBreastFeeding(v.getBaseEntityId(),v.getVisitId());
                 if(earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("Yes")){
-                    earlyBreastFeeding = "Yes";
+                    earlyBreastFeeding = context.getString(R.string.pnc_yes);
                 }
                 else if(earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("No")) {
-                    earlyBreastFeeding = "No";
+                    earlyBreastFeeding = context.getString(R.string.pnc_no);
                 }
             }
             processLastVisit(days, context);
@@ -203,12 +203,40 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             for (Map.Entry<String, String> entry : family_plnning.entrySet()
             ) {
                 View view = inflater.inflate(R.layout.pnc_wcaro_family_planning, null);
+                if(entry.getKey() != null){
+                    TextView tvPncFamilyPlanningMethod = view.findViewById(R.id.pncFamilyPlanningMethod);
+                    String method = "";
+                    switch (entry.getKey()){
+                        case "None":
+                            method = context.getString(R.string.pnc_none);
+                            break;
+                        case "Abstinence":
+                            method = context.getString(R.string.pnc_abstinence);
+                            break;
+                        case "Condom":
+                            method = context.getString(R.string.pnc_condom);
+                            break;
+                        case "Tablets":
+                            method = context.getString(R.string.pnc_tablets);
+                            break;
+                        case "Injectable":
+                            method = context.getString(R.string.pnc_injectable);
+                            break;
+                        case "IUD":
+                            method = context.getString(R.string.pnc_iud);
+                            break;
+                        case "Implant":
+                            method = context.getString(R.string.pnc_implant);
+                            break;
+                    }
+                    tvPncFamilyPlanningMethod.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_method),method));
 
-                TextView tvPncFamilyPlanningMethod = view.findViewById(R.id.pncFamilyPlanningMethod);
-                TextView tvPncFamilyPlanningDate = view.findViewById(R.id.pncFamilyPlanningDate);
-                tvPncFamilyPlanningMethod.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_method), entry.getKey()));
-                tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), entry.getValue()));
+                }
+                if(entry.getValue() != null){
+                    TextView tvPncFamilyPlanningDate = view.findViewById(R.id.pncFamilyPlanningDate);
+                    tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), entry.getValue()));
 
+                }
                 linearLayoutPncFamilyPlanningDetails.addView(view, 0);
             }
 
@@ -235,15 +263,18 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             TextView tvBirth = view.findViewById(R.id.pncBirth);
             tvBirth.setText(context.getString(R.string.pnc_birth));
             for(Map.Entry<String, String> entry : immunization.entrySet()) {
-                if ((entry.getKey().equals("bcg")) && entry.getValue() != null) {
-                    TextView tvBcg = view.findViewById(R.id.pncBcg);
-                    tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entry.getValue()));
+                if(entry.getValue() != null) {
+
+                    String entryValue = entry.getValue().equalsIgnoreCase("Vaccine not given") ? context.getString(R.string.pnc_vaccine_not_given) : entry.getValue();
+                    if (entry.getKey().equals("bcg")) {
+                        TextView tvBcg = view.findViewById(R.id.pncBcg);
+                        tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
+                    } else if (entry.getKey().equals("opv0")) {
+                            TextView tvOpv0 = view.findViewById(R.id.pncOpv0);
+                            tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
+                        }
+                    }
                 }
-               else if ((entry.getKey().equals("opv0")) && entry.getValue() != null) {
-                    TextView tvOpv0 = view.findViewById(R.id.pncOpv0);
-                    tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0), entry.getValue()));
-                }
-            }
             linearLayoutPncImmunizationDetails.addView(view, 0);
         }
     }
@@ -259,10 +290,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             for (Map.Entry<String, String> entry : growth_data.entrySet()) {
                 TextView tvpncExcussiveBf = view.findViewById(R.id.pncExcussiveBf);
                 if(entry.getValue().equalsIgnoreCase("YES")){
-                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), "No"));
+                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_no)));
                 }
                 else {
-                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), "Yes"));
+                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_yes)));
                 }
             }
             linearLayoutPncGrowthAndNutritionDetails.addView(view, 0);
