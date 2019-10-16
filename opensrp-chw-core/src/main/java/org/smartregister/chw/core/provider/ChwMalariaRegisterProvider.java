@@ -58,7 +58,6 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
     private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
-
         private MalariaFollowUpRule malariaFollowUpRule;
 
         private UpdateAsyncTask(RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
