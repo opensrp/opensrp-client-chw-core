@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.model.ChildModel;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PNCDao extends AbstractDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        return res.size();
+        return res.get(0);
     }
 
     public static MemberObject getMember(String baseEntityID) {
