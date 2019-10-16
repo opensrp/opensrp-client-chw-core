@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.model.ChildModel;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.Date;
 import java.util.List;

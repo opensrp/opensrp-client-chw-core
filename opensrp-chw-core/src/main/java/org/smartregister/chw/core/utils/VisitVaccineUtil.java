@@ -13,8 +13,8 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.dao.AbstractDao;
 import org.smartregister.chw.core.dao.VisitDao;
+import org.smartregister.dao.AbstractDao;
 import org.smartregister.domain.Alert;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.immunization.db.VaccineRepo;
@@ -109,7 +109,7 @@ public class VisitVaccineUtil {
 
         if (includePending) {
             Map<String, Date> vac = VisitDao.getUnprocessedVaccines(baseEntityID);
-            for(Map.Entry<String,Date> entry: vac.entrySet()){
+            for (Map.Entry<String, Date> entry : vac.entrySet()) {
                 vaccines.put(entry.getKey().replace("_", "").replace(" ", ""), entry.getValue());
             }
         }
