@@ -45,6 +45,8 @@ public class MalariaRegisterFragmentModel extends BaseMalariaRegisterFragmentMod
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FAMILY_HEAD);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.PRIMARY_CAREGIVER);
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.DELIVERY_DATE);
+        columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + "" + org.smartregister.chw.malaria.util.DBConstants.KEY.PNC_IS_CLOSED);
+        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + "" + org.smartregister.chw.malaria.util.DBConstants.KEY.ANC_IS_CLOSED);
         columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.PHONE_NUMBER);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FIRST_NAME + " as " + org.smartregister.chw.anc.util.DBConstants.KEY.FAMILY_NAME);
         return columnList.toArray(new String[columnList.size()]);

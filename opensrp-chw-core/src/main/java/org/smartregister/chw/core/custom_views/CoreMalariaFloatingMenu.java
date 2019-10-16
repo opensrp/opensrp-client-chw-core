@@ -3,7 +3,6 @@ package org.smartregister.chw.core.custom_views;
 import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,6 +12,7 @@ import android.widget.RelativeLayout;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 import org.smartregister.chw.malaria.custom_views.BaseMalariaFloatingMenu;
+import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.fragment.BaseMalariaCallDialogFragment;
 
 import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
@@ -29,14 +29,12 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
     private boolean isFabMenuOpen = false;
     private LinearLayout menuBar;
     private OnClickFloatingMenu onClickFloatingMenu;
+    private MemberObject MEMBER_OBJECT;
 
-    public CoreMalariaFloatingMenu(Context context, String clientName, String clientPhone,
-                                   String clientFamilyHeadName, String clientFamilyHeadPhone) {
-        super(context, clientName, clientPhone, clientFamilyHeadName, clientFamilyHeadPhone);
-    }
 
-    public CoreMalariaFloatingMenu(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public CoreMalariaFloatingMenu(Context context, MemberObject MEMBER_OBJECT) {
+        super(context, MEMBER_OBJECT);
+        this.MEMBER_OBJECT = MEMBER_OBJECT;
     }
 
     public void setFloatMenuClickListener(OnClickFloatingMenu onClickFloatingMenu) {
@@ -107,8 +105,7 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
 
 
     public void launchCallWidget() {
-        BaseMalariaCallDialogFragment.launchDialog((Activity) this.getContext(), getClientName(),
-                getPhoneNumber(), getFamilyHeadName(), getFamilyHeadPhone());
+        BaseMalariaCallDialogFragment.launchDialog((Activity) this.getContext(), MEMBER_OBJECT);
     }
 
     public void redraw(boolean hasPhoneNumber) {
