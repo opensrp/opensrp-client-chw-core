@@ -335,10 +335,11 @@
 
     <string name="pnc_family_planning_method">Method: {0}</string>
     <string name="pnc_family_planning_date">Start date: {0}</string>
-    <string name="pnc_child_vaccine_card">card: {0}</string>
+    <string name="pnc_child_vaccine_card">{0}</string>
 
     <string name="pnc_bcg">BCG - done [{0}]</string>
-    <string name="pnc_opv0">OPV 0 - done [{}]</string>
+    <string name="pnc_opv0">OPV 0 - done [{0}]</string>
+    <string name="pnc_birth">Birth</string>
 
     <string name="pnc_early_initiation_bf">Early initiation of breastfeeding: {0}</string>
     <string name="pnc_exclusive_bf_0_months">Exclusive breastfeeding 0 months: {0}</string>
