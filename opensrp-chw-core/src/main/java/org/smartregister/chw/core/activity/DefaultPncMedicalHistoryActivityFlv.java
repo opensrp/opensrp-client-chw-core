@@ -227,6 +227,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         case "Implant":
                             method = context.getString(R.string.pnc_implant);
                             break;
+                        case "Other":
+                            method = context.getString(R.string.pnc_other);
+                            break;
                     }
                     tvPncFamilyPlanningMethod.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_method),method));
 

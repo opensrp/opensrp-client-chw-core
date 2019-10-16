@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
+        android:paddingTop="10dp"
         android:text="@string/pnc_wcaro_health_facility_visit"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"

@@ -342,6 +342,7 @@
     <string name="pnc_injectable">Injectable</string>
     <string name="pnc_iud">IUD</string>
     <string name="pnc_implant">Implant</string>
+    <string name="pnc_other">Other</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
     <string name="pnc_bcg">BCG - done [{0}]</string>

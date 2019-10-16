@@ -74,9 +74,9 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         String id = sourceVisits.get(0).getBaseEntityId();
         String DeliveryDateSql = "SELECT delivery_date FROM ec_pregnancy_outcome where base_entity_id = ? ";
 
-        List<Map<String, String>> valus = AbstractDao.readData(DeliveryDateSql, new String[]{id});
+        List<Map<String, Object>> valus = AbstractDao.readData(DeliveryDateSql, new String[]{id});
 
-        String deliveryDate = valus.get(0).get("delivery_date");
+        String deliveryDate = valus.get(0).get("delivery_date").toString();
 
 
         if (sourceVisits != null) {
