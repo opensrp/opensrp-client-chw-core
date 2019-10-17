@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import org.smartregister.chw.core.domain.Child;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.ArrayList;
 import java.util.List;
