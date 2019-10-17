@@ -5,6 +5,7 @@ import android.util.Pair;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.domain.VisitSummary;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.dao.AbstractDao;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 

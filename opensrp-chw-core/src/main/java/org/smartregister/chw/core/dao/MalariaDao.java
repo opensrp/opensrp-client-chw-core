@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import org.jetbrains.annotations.Nullable;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.Date;
 import java.util.List;

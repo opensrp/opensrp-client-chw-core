@@ -170,9 +170,12 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
     private void processLastVisit(int days, Context context) {
         linearLayoutLastVisit.setVisibility(View.VISIBLE);
-        String str_days = days < 1 ? context.getString(R.string.less_than_twenty_four) : String.valueOf(days);
-        customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), str_days)));
-
+        if( days < 1){
+            customFontTextViewLastVisit.setText(R.string.less_than_twenty_four);
+        }
+        else  {
+            customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), String.valueOf(days))));
+        }
     }
 
     protected void processAncCard(String has_card, Context context) {
@@ -195,7 +198,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
                 TextView tvIfa = view.findViewById(R.id.ifa_received);
                 TextView tvTests = view.findViewById(R.id.tests);
 
-                tvTitle.setText(MessageFormat.format(context.getString(R.string.anc_visit_date), (hf_visits.size() - x), getMapValue(vals, "anc_hf_visit_date")));
+                tvTitle.setText(MessageFormat.format(context.getString(R.string.anc_visit_date), x + 1, getMapValue(vals, "anc_hf_visit_date")));
                 tvWeight.setText(MessageFormat.format(context.getString(R.string.weight_in_kgs), getMapValue(vals, "weight")));
                 tvBP.setText(MessageFormat.format(context.getString(R.string.bp_in_mmhg), getMapValue(vals, "sys_bp"), getMapValue(vals, "dia_bp")));
                 tvHB.setText(context.getString(R.string.hb_level_in_g_dl, getMapValue(vals, "hb_level")));
@@ -231,8 +234,8 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
             if (!val.contains("not")) {
                 View view = inflater.inflate(R.layout.vaccine_content_view, null);
                 TextView info = view.findViewById(R.id.name_date_tv);
-                info.setText(MessageFormat.format(context.getString(R.string.vaccines_done_date), key, val));
-
+                String res = key.substring(2);
+                info.setText(MessageFormat.format(context.getString(R.string.tt_done), res, val));
                 linearLayoutTTImmunizationDetails.addView(view, visible);
                 visible++;
             }
@@ -249,11 +252,13 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
             if (!val.contains("not")) {
                 View view = inflater.inflate(R.layout.vaccine_content_view, null);
                 TextView info = view.findViewById(R.id.name_date_tv);
-                info.setText(MessageFormat.format(context.getString(R.string.vaccines_done_date), key, val));
+                String res = key.substring(12);
+                info.setText(MessageFormat.format(context.getString(R.string.iptpsp_done), res, val));
 
                 linearLayoutIPTpDetails.addView(view, visible);
                 visible++;
             }
+
         }
         linearLayoutIPTp.setVisibility(visible > 0 ? View.VISIBLE : View.GONE);
     }

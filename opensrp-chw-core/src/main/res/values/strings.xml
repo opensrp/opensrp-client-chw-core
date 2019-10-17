@@ -299,6 +299,8 @@
     <string name="ifa_received_status">IFA received: {0}</string>
     <string name="tests_done_details">Tests done: {0}</string>
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
+    <string name="tt_done">TT{0} - done {1}</string>
+    <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
 
     <string name="child_details">Child details %1$s</string>
 
@@ -333,10 +335,22 @@
 
     <string name="pnc_family_planning_method">Method: {0}</string>
     <string name="pnc_family_planning_date">Start date: {0}</string>
-    <string name="pnc_child_vaccine_card">card: {0}</string>
+    <string name="pnc_none">None</string>
+    <string name="pnc_abstinence">Abstinence</string>
+    <string name="pnc_condom">Condom</string>
+    <string name="pnc_tablets">Tablets</string>
+    <string name="pnc_injectable">Injectable</string>
+    <string name="pnc_iud">IUD</string>
+    <string name="pnc_implant">Implant</string>
+    <string name="pnc_other">Other</string>
+    <string name="pnc_child_vaccine_card">{0}</string>
 
     <string name="pnc_bcg">BCG - done [{0}]</string>
-    <string name="pnc_opv0">OPV 0 - done [{}]</string>
+    <string name="pnc_opv0">OPV 0 - done [{0}]</string>
+    <string name="pnc_birth">Birth</string>
+    <string name="pnc_yes">Yes</string>
+    <string name="pnc_no">No</string>
+    <string name="pnc_vaccine_not_given">Vaccine not given</string>
 
     <string name="pnc_early_initiation_bf">Early initiation of breastfeeding: {0}</string>
     <string name="pnc_exclusive_bf_0_months">Exclusive breastfeeding 0 months: {0}</string>
