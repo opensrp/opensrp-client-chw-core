@@ -342,7 +342,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            NCUtils.processAncHomeVisit(eventClient); // save locally
+            NCUtils.processHomeVisit(eventClient); // save locally
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
