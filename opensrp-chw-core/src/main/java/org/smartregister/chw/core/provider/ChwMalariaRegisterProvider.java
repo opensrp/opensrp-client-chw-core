@@ -4,9 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.Button;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.MalariaVisitUtil;
@@ -45,23 +46,18 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         Utils.startAsyncTask(new UpdateAsyncTask(viewHolder, pc), null);
     }
 
-    private void updateDueColumn(RegisterViewHolder viewHolder, MalariaFollowUpRule followUpRule) {
-        viewHolder.dueButton.setVisibility(View.VISIBLE);
-        viewHolder.dueButton.setOnClickListener(onClickListener);
-
-        if (followUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
-            viewHolder.dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
-            viewHolder.dueButton.setTextColor(context.getResources().getColor(R.color.white));
-
-        } else
-            viewHolder.dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
-
+    private void updateDueColumn(Button dueButton, String followStatus) {
+        dueButton.setVisibility(View.VISIBLE);
+        dueButton.setOnClickListener(onClickListener);
+        if (CoreConstants.VISIT_STATE.OVERDUE.equalsIgnoreCase(followStatus)) {
+            dueButton.setTextColor(context.getResources().getColor(R.color.white));
+            dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
+        }
     }
 
     private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
-
         private MalariaFollowUpRule malariaFollowUpRule;
 
         private UpdateAsyncTask(RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
@@ -82,10 +78,9 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            if (malariaFollowUpRule != null && (malariaFollowUpRule.getButtonStatus()
-                    .equalsIgnoreCase(CoreChildProfileInteractor.VisitType.DUE.name()) ||
-                    malariaFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreChildProfileInteractor.VisitType.OVERDUE.name()))) {
-                updateDueColumn(viewHolder, malariaFollowUpRule);
+            if (malariaFollowUpRule != null && StringUtils.isNotBlank(malariaFollowUpRule.getButtonStatus()) &&
+                    !CoreConstants.VISIT_STATE.EXPIRED.equalsIgnoreCase(malariaFollowUpRule.getButtonStatus())) {
+                updateDueColumn(viewHolder.dueButton, malariaFollowUpRule.getButtonStatus());
             }
         }
     }

@@ -2,6 +2,8 @@ package org.smartregister.chw.core.dao;
 
 import android.database.Cursor;
 
+import org.smartregister.dao.AbstractDao;
+
 import java.util.List;
 
 public class NavigationDao extends AbstractDao {

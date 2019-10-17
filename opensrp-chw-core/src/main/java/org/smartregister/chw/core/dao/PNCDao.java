@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.model.ChildModel;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.Date;
 import java.util.List;
@@ -107,5 +108,17 @@ public class PNCDao extends AbstractDao {
                 new ChildModel(getCursorValue(cursor, "child_name"), getCursorValue(cursor, "dob"));
 
         return readData(sql, dataMap);
+    }
+
+    public static  String earlyBreastFeeding(String motherBaseEntityId, String visitId){
+        String sql = "SELECT early_bf_1hr " +
+                "FROM ec_child " +
+                "INNER JOIN visits v ON v.visit_id = '" + visitId + "' COLLATE NOCASE " +
+                "AND mother_entity_id = '" + motherBaseEntityId + "' COLLATE NOCASE ";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "early_bf_1hr");
+
+        List<String> res = readData(sql, dataMap);
+        return res.get(0);
     }
 }
