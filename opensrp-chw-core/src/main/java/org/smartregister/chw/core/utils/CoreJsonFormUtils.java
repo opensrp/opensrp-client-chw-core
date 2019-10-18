@@ -469,6 +469,13 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
                 }
 
+                JSONObject stepTwo = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP2);
+                JSONArray jsonArray2 = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+                for (int j = 0; j < jsonArray2.length(); j++) {
+                    JSONObject jsonObject2 = jsonArray.getJSONObject(j);
+                    processPopulatableFields(client, jsonObject2);
+                }
+
                 org.smartregister.family.util.JsonFormUtils.addLocHierarchyQuestions(form);
 
                 return form;
@@ -960,6 +967,30 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                         Timber.e(e);
                     }
                 }
+
+                JSONObject stepTwo = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP2);
+
+                if (StringUtils.isNotBlank(title)) {
+                    stepTwo.put(TITLE, title);
+                }
+                JSONArray jsonArray2 = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+
+                for (int j = 0; j < jsonArray2.length(); j++) {
+                    JSONObject jsonObject2 = jsonArray2.getJSONObject(j);
+                    try {
+                        for (Obs obs : observations) {
+                            if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject2.getString(KEY))) {
+                                if (jsonObject2.getString("type").equals("spinner")) {
+                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                                } else {
+                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
                 return form;
             }
 
@@ -972,7 +1003,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     private static Event getEditMalariaLatestProperties(String baseEntityID) {
 
         Event ecEvent = null;
-
         String query_event = String.format("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;",
                 baseEntityID, CoreConstants.EventType.UPDATE_MALARIA_CONFIRMATION, CoreConstants.EventType.MALARIA_CONFIRMATION);
 
