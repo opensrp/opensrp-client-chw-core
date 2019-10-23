@@ -129,7 +129,7 @@ public class HomeAlertRule implements ICommonRule {
 
     /**
      * visit is due the first day of the month
-     *
+     *chwone
      * @return
      */
     public Date getDueDate() {

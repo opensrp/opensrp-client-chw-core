@@ -84,7 +84,7 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
     }
 
     public boolean isOverdueWithinMonth(Integer value) {
-        int diff = getMonthsDifference((lastVisitDate != null ? lastVisitDate : dateCreated), todayDate);
+        int diff = getMonthsDifference((lastVisitDate != null ? lastVisitDate : dateCreated), todayDate) - 1;
         if (diff >= value) {
             noOfMonthDue = diff + "M";
             return true;
@@ -142,7 +142,7 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
 
     public Date getOverDueDate() {
         Date anchor = (lastVisitDate != null ? lastVisitDate.toDate() : dateCreated.toDate());
-        return getLastDayOfMonth(anchor);
+        return new DateTime(anchor).withDayOfMonth(1).plusMonths(2).toDate();
     }
 
     protected Date getLastDayOfMonth(Date refDate) {
@@ -150,7 +150,7 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
         return first.plusMonths(1).minusDays(1).toDate();
     }
 
-    private boolean isVisitThisMonth(LocalDate lastVisit, LocalDate todayDate) {
+    protected boolean isVisitThisMonth(LocalDate lastVisit, LocalDate todayDate) {
         return getMonthsDifference(lastVisit, todayDate) < 1;
     }
 
@@ -168,7 +168,7 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
         return (lastVisitDate != null) && isVisitThisMonth(lastVisitDate, todayDate);
     }
 
-    public Date getNotDoneDate(){
+    public Date getNotDoneDate() {
         if (getCompletionDate() == null && visitNotDoneDate != null) {
             return visitNotDoneDate.toDate();
         }
