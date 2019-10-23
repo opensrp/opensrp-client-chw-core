@@ -36,9 +36,9 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         if (i == android.R.id.home) {
             onBackPressed();
             return true;
-        } else if (i == R.id.action_pnc_member_registration) {
+        } else if (item.getItemId() == R.id.action_pnc_member_registration) {
             JSONObject form = CoreJsonFormUtils.getAncPncForm(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister(), memberObject, this);
-            startFormForEdit(form);
+            startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
         } else if (i == R.id.action_pnc_registration) {
             CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
