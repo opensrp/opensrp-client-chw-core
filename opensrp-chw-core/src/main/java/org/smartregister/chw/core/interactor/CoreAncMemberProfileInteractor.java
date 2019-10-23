@@ -12,6 +12,7 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
+import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
@@ -21,6 +22,11 @@ import org.smartregister.repository.AllSharedPreferences;
 
 import java.util.Date;
 import java.util.Set;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteractor implements AncMemberProfileContract.Interactor {
     protected Context context;
