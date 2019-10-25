@@ -106,7 +106,6 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
     private Date getFirstDayOfMonth(Date refDate) {
         return new DateTime(refDate).withDayOfMonth(1).toDate();
     }
-
     /**
      * visit is due the first day of the month
      *
