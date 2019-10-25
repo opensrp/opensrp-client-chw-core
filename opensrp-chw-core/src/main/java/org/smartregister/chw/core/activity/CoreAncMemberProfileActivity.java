@@ -134,10 +134,8 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             if (lastNotDoneVisitUndo != null
                     && lastNotDoneVisitUndo.getDate().after(lastNotDoneVisit.getDate())) {
                 lastNotDoneVisit = null;
-
             }
         }
-
         if(lastNotDoneVisit!= null){
             String lastDt = new SimpleDateFormat("dd-MM-yyyy").format(lastNotDoneVisit.getDate());
             LocalDate firstMonthDayoflastVisitNotDoneDate = formatter.parseDateTime(lastDt).toLocalDate().withDayOfMonth(1);
@@ -146,7 +144,10 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             if(isWithinMonth)
                 openVisitMonthView();
             else
-                checkIfDueOrOverDue();
+                textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_selector_overdue);
+            layoutRecordView.setVisibility(View.VISIBLE);
+            textViewAncVisitNot.setVisibility(View.VISIBLE);
+            record_reccuringvisit_done_bar.setVisibility(View.GONE);
         }
 
         else {
@@ -154,8 +155,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         }
 
     }
-
-
 
     private void checkIfDueOrOverDue() {
         Rules rules = CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
