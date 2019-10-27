@@ -344,8 +344,10 @@
     <string name="pnc_other">Autre</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - fait [{0}]</string>
-    <string name="pnc_opv0">VPO 0 - fait [{0}]</string>
+    <string name="pnc_bcg">BCG - fait {0}</string>
+    <string name="pnc_opv0">VPO 0 - fait {0}</string>
+    <string name="pnc_bcg_not_done">BCG - {0}</string>
+    <string name="pnc_opv0_not_done">VPO 0 - {0}</string>
     <string name="pnc_birth">À la naissance</string>
     <string name="pnc_yes">Oui</string>
     <string name="pnc_no">Non</string>
