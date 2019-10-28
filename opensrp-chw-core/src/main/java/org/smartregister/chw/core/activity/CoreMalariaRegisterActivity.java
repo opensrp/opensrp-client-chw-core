@@ -83,11 +83,10 @@ public abstract class CoreMalariaRegisterActivity extends BaseMalariaRegisterAct
                     JSONObject fever_still_object = getFieldJSONObject(fields, "fever_still");
                     if (fever_still_object != null && "No".equalsIgnoreCase(fever_still_object.optString(VALUE))) {
                         MalariaDao.closeMemberFromRegister(jsonForm.optString(ENTITY_ID));
-                        startRegisterActivity(getMalariaRegisterActivity().getClass());
+
                     }
-                } else {
-                    startRegisterActivity(getMalariaRegisterActivity().getClass());
                 }
+                startRegisterActivity(getMalariaRegisterActivity().getClass());
 
             } catch (JSONException e) {
                 Timber.e(e);
