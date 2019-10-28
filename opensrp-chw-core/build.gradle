@@ -108,7 +108,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-reporting:0.0.6-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-reporting:0.0.8-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -116,7 +116,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:0.1.31-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:0.1.32-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
