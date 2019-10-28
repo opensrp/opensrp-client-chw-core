@@ -77,11 +77,10 @@ public class CoreChwRepository extends Repository {
         TaskRepository.createTable(database);
         //LocationRepository.createTable(database);    //TODO verify why this causes a break in code
 
-
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
-
+        
         onUpgrade(database, 1, databaseVersion);
     }
 
