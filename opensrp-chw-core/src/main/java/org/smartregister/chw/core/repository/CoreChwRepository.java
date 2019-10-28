@@ -17,6 +17,7 @@ import org.smartregister.immunization.repository.VaccineNameRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.repository.VaccineTypeRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
+import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.reporting.repository.DailyIndicatorCountRepository;
 import org.smartregister.reporting.repository.IndicatorQueryRepository;
 import org.smartregister.reporting.repository.IndicatorRepository;
@@ -30,6 +31,9 @@ import org.smartregister.repository.SettingsRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.util.Session;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import timber.log.Timber;
 
@@ -77,12 +81,23 @@ public class CoreChwRepository extends Repository {
         TaskRepository.createTable(database);
         //LocationRepository.createTable(database);    //TODO verify why this causes a break in code
 
-
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
 
+        initializeIndicatorDefinitions(ReportingLibrary.getInstance(), database);
+
         onUpgrade(database, 1, databaseVersion);
+    }
+
+    private static void initializeIndicatorDefinitions(ReportingLibrary reportingLibrary, SQLiteDatabase database) {
+        String childIndicatorsConfigFile = "config/child-reporting-indicator-definitions.yml";
+        String ancIndicatorConfigFile = "config/anc-reporting-indicator-definitions.yml";
+        String pncIndicatorConfigFile = "config/pnc-reporting-indicator-definitions.yml";
+        for (String configFile : Collections.unmodifiableList(
+                Arrays.asList(childIndicatorsConfigFile, ancIndicatorConfigFile, pncIndicatorConfigFile))) {
+            reportingLibrary.readConfigFile(configFile, database);
+        }
     }
 
     @Override
