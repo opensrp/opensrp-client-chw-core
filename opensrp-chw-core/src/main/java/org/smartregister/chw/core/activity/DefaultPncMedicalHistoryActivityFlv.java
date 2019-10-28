@@ -276,7 +276,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             tvBirth.setText(context.getString(R.string.pnc_birth));
             for(Map.Entry<String, String> entry : immunization.entrySet()) {
                 if(entry.getValue() != null) {
-
                     String entryValue = entry.getValue().equalsIgnoreCase("Vaccine not given") ? context.getString(R.string.pnc_vaccine_not_given) : entry.getValue();
                     if (entry.getKey().equals("bcg") ) {
                         TextView tvBcg = view.findViewById(R.id.pncBcg);
@@ -284,17 +283,17 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         if(entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
                             tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg_not_done), entryValue));
                         else
-                        tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
+                            tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
                     } else if (entry.getKey().equals("opv0")) {
-                            TextView tvOpv0 = view.findViewById(R.id.pncOpv0);
-                            tvOpv0.setVisibility(View.VISIBLE);
+                        TextView tvOpv0 = view.findViewById(R.id.pncOpv0);
+                        tvOpv0.setVisibility(View.VISIBLE);
                         if(entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
                             tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0_not_done), entryValue));
                         else
                             tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
                     }
-                    }
                 }
+            }
             linearLayoutPncImmunizationDetails.addView(view, 0);
         }
     }
