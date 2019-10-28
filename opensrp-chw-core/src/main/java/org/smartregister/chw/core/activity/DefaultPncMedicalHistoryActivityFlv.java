@@ -188,14 +188,16 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 TextView tvTitle = view.findViewById(R.id.pncHealthVisit);
                 TextView tvbabyTemp = view.findViewById(R.id.babyTemp);
                 tvTitle.setText(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
-                if(entry.getValue().get("baby_weight") != null)
+                if(entry.getValue().get("baby_weight") != null){
                     tvbabyWeight.setVisibility(View.VISIBLE);
-                tvbabyWeight.setText(context.getString(R.string.pnc_baby_weight, entry.getValue().get("baby_weight")));
-
-                if(entry.getValue().get("baby_temp") != null)
+                    tvbabyWeight.setText(context.getString(R.string.pnc_baby_weight, entry.getValue().get("baby_weight")));
+                }
+                if(entry.getValue().get("baby_temp") != null){
                     tvbabyTemp.setVisibility(View.VISIBLE);
-                tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
-                linearLayoutHealthFacilityVisitDetails.addView(view, 0);
+                    tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
+                    linearLayoutHealthFacilityVisitDetails.addView(view, 0);
+                }
+
             }
         }
     }
