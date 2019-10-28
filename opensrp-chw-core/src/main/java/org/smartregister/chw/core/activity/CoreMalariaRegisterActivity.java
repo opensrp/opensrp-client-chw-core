@@ -13,16 +13,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.job.HomeVisitServiceJob;
-import org.smartregister.chw.core.job.VaccineRecurringServiceJob;
+import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.malaria.activity.BaseMalariaRegisterActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
-import org.smartregister.job.ImageUploadServiceJob;
-import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncServiceJob;
-import org.smartregister.job.SyncTaskServiceJob;
 
 import java.util.Collections;
 import java.util.List;
@@ -71,7 +67,6 @@ public abstract class CoreMalariaRegisterActivity extends BaseMalariaRegisterAct
         return Collections.singletonList(CoreConstants.CONFIGURATION.MALARIA_REGISTER);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,17 +76,19 @@ public abstract class CoreMalariaRegisterActivity extends BaseMalariaRegisterAct
                 JSONObject form = new JSONObject(jsonString);
                 Triple<Boolean, JSONObject, JSONArray> registrationFormParams = validateParameters(form.toString());
                 JSONObject jsonForm = registrationFormParams.getMiddle();
-                JSONArray fields = registrationFormParams.getRight();
                 String encounter_type = jsonForm.optString(org.smartregister.chw.malaria.util.Constants.JSON_FORM_EXTRA.ENCOUNTER_TYPE);
 
                 if (org.smartregister.chw.malaria.util.Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT.equals(encounter_type)) {
+                    JSONArray fields = registrationFormParams.getRight();
                     JSONObject fever_still_object = getFieldJSONObject(fields, "fever_still");
-                    if (fever_still_object != null && "Yes".equalsIgnoreCase(fever_still_object.optString(VALUE))) {
-                        startMalariaRegisterActivity(getMalariaRegisterActivity(), jsonForm.optString(ENTITY_ID));
+                    if (fever_still_object != null && "No".equalsIgnoreCase(fever_still_object.optString(VALUE))) {
+                        MalariaDao.closeMemberFromRegister(jsonForm.optString(ENTITY_ID));
+                        startRegisterActivity(getMalariaRegisterActivity().getClass());
                     }
                 } else {
                     startRegisterActivity(getMalariaRegisterActivity().getClass());
                 }
+
             } catch (JSONException e) {
                 Timber.e(e);
             }
@@ -104,16 +101,8 @@ public abstract class CoreMalariaRegisterActivity extends BaseMalariaRegisterAct
 
     protected abstract Activity getMalariaRegisterActivity();
 
-    protected abstract void startMalariaRegisterActivity(Activity activity, String optString);
-
     private void startRegisterActivity(Class registerClass) {
-        HomeVisitServiceJob.scheduleJobImmediately(HomeVisitServiceJob.TAG);
-        VaccineRecurringServiceJob.scheduleJobImmediately(VaccineRecurringServiceJob.TAG);
-        ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
         SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
-        PullUniqueIdsServiceJob.scheduleJobImmediately(PullUniqueIdsServiceJob.TAG);
-        HomeVisitServiceJob.scheduleJobImmediately(HomeVisitServiceJob.TAG);
-        SyncTaskServiceJob.scheduleJobImmediately(SyncTaskServiceJob.TAG);
         Intent intent = new Intent(this, registerClass);
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
