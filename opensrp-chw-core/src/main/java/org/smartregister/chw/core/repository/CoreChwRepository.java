@@ -84,20 +84,8 @@ public class CoreChwRepository extends Repository {
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
-
-        initializeIndicatorDefinitions(ReportingLibrary.getInstance(), database);
-
+        
         onUpgrade(database, 1, databaseVersion);
-    }
-
-    private static void initializeIndicatorDefinitions(ReportingLibrary reportingLibrary, SQLiteDatabase database) {
-        String childIndicatorsConfigFile = "config/child-reporting-indicator-definitions.yml";
-        String ancIndicatorConfigFile = "config/anc-reporting-indicator-definitions.yml";
-        String pncIndicatorConfigFile = "config/pnc-reporting-indicator-definitions.yml";
-        for (String configFile : Collections.unmodifiableList(
-                Arrays.asList(childIndicatorsConfigFile, ancIndicatorConfigFile, pncIndicatorConfigFile))) {
-            reportingLibrary.readConfigFile(configFile, database);
-        }
     }
 
     @Override
