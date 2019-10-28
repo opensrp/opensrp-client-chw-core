@@ -20,4 +20,9 @@ public class MalariaDao extends AbstractDao {
 
         return res.get(0);
     }
+
+    public static void closeMemberFromRegister(String baseEntityID) {
+        String sql = "update ec_malaria_confirmation set is_closed = 1 where base_entity_id = '" + baseEntityID + "'";
+        updateDB(sql);
+    }
 }
