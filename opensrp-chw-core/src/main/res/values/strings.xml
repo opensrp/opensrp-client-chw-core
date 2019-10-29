@@ -283,7 +283,7 @@
 
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
-    <string name="anc_card">ANC CARD</string>
+    <string name="anc_card">ANC Card</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -345,8 +345,10 @@
     <string name="pnc_other">Other</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - done [{0}]</string>
-    <string name="pnc_opv0">OPV 0 - done [{0}]</string>
+    <string name="pnc_bcg">BCG - done {0}</string>
+    <string name="pnc_opv0">OPV 0 - done {0}</string>
+    <string name="pnc_bcg_not_done">BCG - {0}</string>
+    <string name="pnc_opv0_not_done">OPV 0 - {0}</string>
     <string name="pnc_birth">Birth</string>
     <string name="pnc_yes">Yes</string>
     <string name="pnc_no">No</string>

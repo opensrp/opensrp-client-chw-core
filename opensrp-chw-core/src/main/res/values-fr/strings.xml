@@ -282,7 +282,7 @@
     <string name="anc_pregnancy_out_come">Issue de la grossesse</string>
 
     <string name="anc_health_facility_visits">VISITE CPN A LA FORMATION SANITAIRE</string>
-    <string name="anc_card">CARNET CPN</string>
+    <string name="anc_card">Carnet CPN</string>
     <string name="anc_tt_immunization">VAT</string>
     <string name="anc_iptp_sp">SP dose</string>
     <string name="urine_analysis">Analyse urinaire</string>
@@ -344,8 +344,10 @@
     <string name="pnc_other">Autre</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - fait [{0}]</string>
-    <string name="pnc_opv0">VPO 0 - fait [{0}]</string>
+    <string name="pnc_bcg">BCG - fait {0}</string>
+    <string name="pnc_opv0">VPO 0 - fait {0}</string>
+    <string name="pnc_bcg_not_done">BCG - {0}</string>
+    <string name="pnc_opv0_not_done">VPO 0 - {0}</string>
     <string name="pnc_birth">À la naissance</string>
     <string name="pnc_yes">Oui</string>
     <string name="pnc_no">Non</string>

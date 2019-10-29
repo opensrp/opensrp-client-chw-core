@@ -13,6 +13,7 @@
         android:text="@string/pnc_birth"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -24,6 +25,7 @@
         android:text="@string/pnc_bcg"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -35,6 +37,7 @@
         android:text="@string/pnc_opv0"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
 </LinearLayout>
