@@ -90,7 +90,7 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         return (getSearchView() == null) ? "" : getSearchView().getText().toString();
     }
 
-    private String getDueCondition() {
+    public String getDueCondition() {
         return "ec_pregnancy_outcome.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.PNC_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
     }
 
