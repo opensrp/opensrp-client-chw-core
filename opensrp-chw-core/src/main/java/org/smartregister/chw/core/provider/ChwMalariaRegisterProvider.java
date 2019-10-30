@@ -53,6 +53,10 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
             dueButton.setTextColor(context.getResources().getColor(R.color.white));
             dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
         }
+        if (CoreConstants.VISIT_STATE.DUE.equalsIgnoreCase(followStatus)) {
+            dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
+            dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
+        }
     }
 
     private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
