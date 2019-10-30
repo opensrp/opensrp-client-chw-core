@@ -3,50 +3,49 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
-import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.chw.anc.activity.BaseAncMedicalHistoryActivity;
+import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.anc.domain.Visit;
+import org.smartregister.chw.anc.util.Constants;
+import org.smartregister.chw.core.contract.CoreChildMedicalHistoryContract;
+import org.smartregister.chw.core.interactor.CoreChildMedicalHistoryActivityInteractor;
+import org.smartregister.chw.core.presenter.CoreChildMedicalHistoryPresenter;
+import org.smartregister.immunization.domain.ServiceRecord;
+import org.smartregister.immunization.domain.ServiceType;
+import org.smartregister.immunization.domain.Vaccine;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CoreChildMedicalHistoryActivity extends BaseChildMedicalHistory {
+public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivity implements  CoreChildMedicalHistoryContract.View  {
 
-    private Flavor flavor;
-
-    public static void startMedicalHistoryActivity(Activity activity, CommonPersonObjectClient childClient, String childName, String lastVisitDays, String dateOfirth,
-                                                   LinkedHashMap<String, Date> receivedVaccine, Class<?> cls) {
-        Intent intent = new Intent(activity, cls);
-        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, childClient);
-        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_NAME, childName);
-        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_DATE_OF_BIRTH, dateOfirth);
-        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_LAST_VISIT_DAYS, lastVisitDays);
-        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_VACCINE_LIST, receivedVaccine);
-
+    public static void startMe(Activity activity, MemberObject memberObject) {
+        Intent intent = new Intent(activity, CoreChildMedicalHistoryActivity.class);
+        intent.putExtra(Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject);
         activity.startActivity(intent);
     }
 
+    @Override
+    public void initializePresenter() {
+        presenter = new CoreChildMedicalHistoryPresenter(new CoreChildMedicalHistoryActivityInteractor(), this, memberObject.getBaseEntityId());
+    }
 
     @Override
-    public void onViewCreated(Activity activity) {
-        if (flavor != null) {
-            flavor.renderView(this);
-            flavor.fetchData(activity, vaccineList, dateOfBirth, childClient);
-        }
+    public void onVaccineDataReceived(Map<String, List<Vaccine>> vaccines) {
+
     }
 
-    public Flavor getFlavor() {
-        return flavor;
-    }
+    @Override
+    public void onServicesDataReceived(List<ServiceRecord> serviceRecords, Map<String, ServiceType> serviceTypeMap) {
 
-    public void setFlavor(Flavor flavor) {
-        this.flavor = flavor;
     }
 
     public interface Flavor {
-        void renderView(Activity activity);
+        View bindViews(Activity activity);
 
-        void fetchData(Context context, Map<String, Date> vaccineList, String dateOfBirth, CommonPersonObjectClient childClient);
+        void processViewData(List<Visit> visits, Context context);
     }
+
 }
