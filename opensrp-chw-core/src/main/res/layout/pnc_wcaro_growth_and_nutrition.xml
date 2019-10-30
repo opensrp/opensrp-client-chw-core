@@ -13,6 +13,7 @@
         android:text="@string/pnc_early_initiation_bf"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -24,6 +25,7 @@
         android:text="@string/pnc_exclusive_bf_0_months"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
 

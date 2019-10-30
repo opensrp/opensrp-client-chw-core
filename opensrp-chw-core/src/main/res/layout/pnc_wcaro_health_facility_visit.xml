@@ -25,6 +25,7 @@
         android:text="@string/pnc_baby_weight"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
 
@@ -37,6 +38,7 @@
         android:text="@string/pnc_baby_temp"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
+        android:visibility="gone"
         />
 
 </LinearLayout>
