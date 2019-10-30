@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import org.smartregister.chw.core.domain.Child;
+import org.smartregister.dao.AbstractDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,4 +83,16 @@ public class ChildDao extends AbstractDao {
         };
     }
 
+    public static boolean isChild(String baseEntityID) {
+        String sql = "select count(c.base_entity_id) count from ec_child c where c.base_entity_id = '" + baseEntityID + "' " +
+                "and c.is_closed = 0 and (( ifnull(entry_point,'') <> 'PNC' ) or (ifnull(entry_point,'') = 'PNC' and date(c.dob, '+28 days') > date()))";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return false;
+
+        return res.get(0) > 0;
+    }
 }

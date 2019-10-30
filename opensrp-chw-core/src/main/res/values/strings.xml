@@ -283,7 +283,7 @@
 
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
-    <string name="anc_card">ANC CARD</string>
+    <string name="anc_card">ANC Card</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -335,10 +335,24 @@
 
     <string name="pnc_family_planning_method">Method: {0}</string>
     <string name="pnc_family_planning_date">Start date: {0}</string>
-    <string name="pnc_child_vaccine_card">card: {0}</string>
+    <string name="pnc_none">None</string>
+    <string name="pnc_abstinence">Abstinence</string>
+    <string name="pnc_condom">Condom</string>
+    <string name="pnc_tablets">Tablets</string>
+    <string name="pnc_injectable">Injectable</string>
+    <string name="pnc_iud">IUD</string>
+    <string name="pnc_implant">Implant</string>
+    <string name="pnc_other">Other</string>
+    <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - done [{0}]</string>
-    <string name="pnc_opv0">OPV 0 - done [{}]</string>
+    <string name="pnc_bcg">BCG - done {0}</string>
+    <string name="pnc_opv0">OPV 0 - done {0}</string>
+    <string name="pnc_bcg_not_done">BCG - {0}</string>
+    <string name="pnc_opv0_not_done">OPV 0 - {0}</string>
+    <string name="pnc_birth">Birth</string>
+    <string name="pnc_yes">Yes</string>
+    <string name="pnc_no">No</string>
+    <string name="pnc_vaccine_not_given">Vaccine not given</string>
 
     <string name="pnc_early_initiation_bf">Early initiation of breastfeeding: {0}</string>
     <string name="pnc_exclusive_bf_0_months">Exclusive breastfeeding 0 months: {0}</string>
@@ -395,4 +409,9 @@
     <string name="standard_day_method"> Standard day method</string>
     <string name="permanent_blt"> Permanent (BTL)</string>
     <string name="permanent_vasectomy"> Permanent (Vasectomy)</string>
+    <string name="hf_malaria_follow_up">Malaria follow-up</string>
+    <string name="family_planning_initiation">FP initiation</string>
+    <string name="pregnancy_confirmation">Pregnancy confirmation</string>
+    <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
+    <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
 </resources>

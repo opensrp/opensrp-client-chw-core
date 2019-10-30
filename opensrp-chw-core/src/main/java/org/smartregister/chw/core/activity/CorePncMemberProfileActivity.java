@@ -32,15 +32,15 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == android.R.id.home) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
             onBackPressed();
             return true;
-        } else if (i == R.id.action_pnc_member_registration) {
+        } else if (itemId == R.id.action_pnc_member_registration) {
             JSONObject form = CoreJsonFormUtils.getAncPncForm(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister(), memberObject, this);
-            startFormForEdit(form);
+            startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
-        } else if (i == R.id.action_pnc_registration) {
+        } else if (itemId == R.id.action_pnc_registration) {
             CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
 
             List<CommonPersonObjectClient> children = pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
@@ -52,7 +52,11 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
                         memberObject.getBaseEntityId()));
             }
             return true;
-        } else if (i == R.id.action__pnc_remove_member) {
+
+        } else if (itemId == R.id.action_malaria_confirmation) {
+            startMalariaRegister();
+            return true;
+        } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
         }
@@ -137,4 +141,6 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void removePncMember();
 
     protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
+
+    protected abstract void startMalariaRegister();
 }
