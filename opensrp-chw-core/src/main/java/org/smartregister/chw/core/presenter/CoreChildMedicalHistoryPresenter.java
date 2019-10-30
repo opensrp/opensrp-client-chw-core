@@ -4,7 +4,6 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.presenter.BaseAncMedicalHistoryPresenter;
 import org.smartregister.chw.core.contract.CoreChildMedicalHistoryContract;
 import org.smartregister.immunization.domain.ServiceRecord;
-import org.smartregister.immunization.domain.ServiceType;
 import org.smartregister.immunization.domain.Vaccine;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class CoreChildMedicalHistoryPresenter extends BaseAncMedicalHistoryPrese
     }
 
     @Override
-    public void onDataFetched(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords) {
+    public void onDataFetched(List<Visit> visits, Map<String, List<Vaccine>> vaccines, List<ServiceRecord> serviceRecords) {
         if (getView() != null)
             getView().onDataReceived(visits, vaccines, serviceRecords);
     }

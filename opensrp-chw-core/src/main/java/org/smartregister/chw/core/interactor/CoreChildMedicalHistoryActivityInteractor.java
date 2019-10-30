@@ -14,10 +14,8 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.RecurringServiceUtil;
 import org.smartregister.chw.core.utils.VaccineScheduleUtil;
 import org.smartregister.chw.core.utils.VisitVaccineUtil;
-import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.domain.ServiceRecord;
-import org.smartregister.immunization.domain.ServiceType;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 
@@ -34,7 +32,7 @@ public class CoreChildMedicalHistoryActivityInteractor extends BaseAncMedicalHis
     public void getMemberHistory(final String memberID, final Context context, final BaseAncMedicalHistoryContract.InteractorCallBack callBack) {
         final Runnable runnable = () -> {
             List<Visit> visits = getVisits(memberID);
-            Map<ServiceType, List<ServiceRecord>> serviceRecords = getServiceRecords(memberID);
+            List<ServiceRecord> serviceRecords = getServiceRecords(memberID);
             Map<String, List<Vaccine>> vaccines = getVaccinesReceivedGroup(memberID);
             appExecutors.mainThread().execute(() -> ((CoreChildMedicalHistoryContract.InteractorCallBack) callBack).onDataFetched(visits, vaccines, serviceRecords));
         };
@@ -72,35 +70,8 @@ public class CoreChildMedicalHistoryActivityInteractor extends BaseAncMedicalHis
     }
 
     @Override
-    public Map<ServiceType, List<ServiceRecord>> getServiceRecords(String baseEntityID) {
-
-        Map<String, List<ServiceRecord>> serviceRecordMap = getServiceRecordsByType(baseEntityID);
-
-        // get the types
-        List<ServiceType> serviceTypes = ImmunizationLibrary.getInstance()
-                .recurringServiceTypeRepository().fetchAll();
-
-        Map<ServiceType, List<ServiceRecord>> map = new LinkedHashMap<>();
-        for (ServiceType serviceType : serviceTypes) {
-            map.put(serviceType, serviceRecordMap.get(serviceType.getType()));
-        }
-
-        return map;
-    }
-
-    private Map<String, List<ServiceRecord>> getServiceRecordsByType(String baseEntityID) {
-        List<ServiceRecord> serviceRecords = RecurringServiceUtil.getServiceRecords(baseEntityID, true);
-        // get the records
-        Map<String, List<ServiceRecord>> serviceRecordMap = new LinkedHashMap<>();
-        for (ServiceRecord serviceRecord : serviceRecords) {
-            List<ServiceRecord> records = serviceRecordMap.get(serviceRecord.getType());
-            if (records == null)
-                records = new ArrayList<>();
-
-            records.add(serviceRecord);
-            serviceRecordMap.put(serviceRecord.getType(), records);
-        }
-        return serviceRecordMap;
+    public List<ServiceRecord> getServiceRecords(String baseEntityID) {
+        return RecurringServiceUtil.getServiceRecords(baseEntityID, true);
     }
 
     @Override

@@ -156,9 +156,7 @@ public class ChildProfileActivity extends CoreChildProfileActivity {
     }
 
     private void openMedicalHistoryScreen() {
-        Map<String, Date> vaccine = ((HfChildProfilePresenter) presenter()).getVaccineList();
-        CoreChildMedicalHistoryActivity.startMedicalHistoryActivity(this, ((CoreChildProfilePresenter) presenter()).getChildClient(), patientName, lastVisitDay,
-                ((HfChildProfilePresenter) presenter()).getDateOfBirth(), new LinkedHashMap<>(vaccine), CoreChildMedicalHistoryActivity.class);
+        CoreChildMedicalHistoryActivity.startMe(this, memberObject);
     }
 
     private void openUpcomingServicePage() {

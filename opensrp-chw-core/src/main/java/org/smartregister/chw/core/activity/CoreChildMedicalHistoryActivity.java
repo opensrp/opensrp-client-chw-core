@@ -14,7 +14,6 @@ import org.smartregister.chw.core.contract.CoreChildMedicalHistoryContract;
 import org.smartregister.chw.core.interactor.CoreChildMedicalHistoryActivityInteractor;
 import org.smartregister.chw.core.presenter.CoreChildMedicalHistoryPresenter;
 import org.smartregister.immunization.domain.ServiceRecord;
-import org.smartregister.immunization.domain.ServiceType;
 import org.smartregister.immunization.domain.Vaccine;
 
 import java.util.List;
@@ -34,13 +33,13 @@ public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivi
     }
 
     @Override
-    public void onDataReceived(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords) {
-        View view = renderView(visits);
+    public void onDataReceived(List<Visit> visits, Map<String, List<Vaccine>> vaccines, List<ServiceRecord> serviceRecords) {
+        View view = renderView(visits, vaccines, serviceRecords);
         linearLayout.addView(view, 0);
     }
 
     @Override
-    public View renderView(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords) {
+    public View renderView(List<Visit> visits, Map<String, List<Vaccine>> vaccines, List<ServiceRecord> serviceRecords) {
         LayoutInflater inflater = getLayoutInflater();
         return inflater.inflate(org.smartregister.chw.opensrp_chw_anc.R.layout.medical_history_details, null);
     }
@@ -51,7 +50,7 @@ public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivi
         void processViewData(
                 List<Visit> visits,
                 Map<String, List<Vaccine>> vaccines,
-                Map<ServiceType, List<ServiceRecord>> serviceRecords,
+                List<ServiceRecord> serviceRecords,
                 Context context
         );
     }
