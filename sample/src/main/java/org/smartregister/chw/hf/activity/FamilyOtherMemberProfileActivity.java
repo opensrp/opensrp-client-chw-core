@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.activity.CoreFamilyOtherMemberProfileActivity;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
+import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.fragment.FamilyCallDialogFragment;
 import org.smartregister.chw.core.utils.BAJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -129,15 +130,23 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     private void setupMenuOptions(Menu menu) {
-        menu.findItem(R.id.action_malaria_registration).setVisible(true);
+        menu.findItem(R.id.action_malaria_registration).setVisible(false);
         menu.findItem(R.id.action_malaria_followup_visit).setVisible(false);
         menu.findItem(R.id.action_sick_child_follow_up).setVisible(false);
-        menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);
+        menu.findItem(R.id.action_anc_registration).setVisible(false);
         menu.findItem(R.id.action_remove_member).setVisible(false);
-        if (isWomanOfReproductiveAge(commonPersonObject, 10, 49)) {
-            menu.findItem(R.id.action_anc_registration).setVisible(true);
+
+        if (MalariaDao.isRegisteredForMalaria(baseEntityId)) {
+            menu.findItem(R.id.action_malaria_followup_visit).setTitle(R.string.hf_malaria_follow_up);
+            menu.findItem(R.id.action_malaria_followup_visit).setVisible(true);
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);
         } else {
-            menu.findItem(R.id.action_anc_registration).setVisible(false);
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
+        }
+
+        if (isWomanOfReproductiveAge(commonPersonObject, 10, 49)) {
+            menu.findItem(R.id.action_pregnancy_confirmation).setVisible(true);
+            menu.findItem(R.id.action_family_planning_initiation).setVisible(true);
         }
     }
 }

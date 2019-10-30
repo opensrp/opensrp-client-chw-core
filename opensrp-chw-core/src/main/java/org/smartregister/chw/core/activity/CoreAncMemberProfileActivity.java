@@ -37,25 +37,13 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             onBackPressed();
             return true;
         } else if (itemId == R.id.action_anc_member_registration) {
-            startFormForEdit(R.string.edit_member_form_title,
-                    CoreConstants.JSON_FORM.getFamilyMemberRegister());
+            startFormForEdit(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister());
             return true;
         } else if (itemId == R.id.action_anc_registration) {
-            startFormForEdit(R.string.edit_anc_registration_form_title,
-                    CoreConstants.JSON_FORM.getAncRegistration());
+            startFormForEdit(R.string.edit_anc_registration_form_title, CoreConstants.JSON_FORM.getAncRegistration());
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setFamilyStatus(AlertStatus status) {
-        super.setFamilyStatus(status);
-        if (status == AlertStatus.complete) {
-            hasDueServices = false;
-        } else if (status == AlertStatus.normal || status == AlertStatus.urgent) {
-            hasDueServices = true;
-        }
     }
 
     @Override
@@ -101,6 +89,16 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     @Override
     public abstract void openFamilyDueServices();
+
+    @Override
+    public void setFamilyStatus(AlertStatus status) {
+        super.setFamilyStatus(status);
+        if (status == AlertStatus.complete) {
+            hasDueServices = false;
+        } else if (status == AlertStatus.normal || status == AlertStatus.urgent) {
+            hasDueServices = true;
+        }
+    }
 
     @Override
     public void onClick(View view) {

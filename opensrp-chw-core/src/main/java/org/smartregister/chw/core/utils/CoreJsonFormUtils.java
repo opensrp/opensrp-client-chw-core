@@ -873,18 +873,21 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
     public static JSONObject getAncPncForm(Integer title_resource, String formName, MemberObject memberObject, Context context) {
         JSONObject form = null;
-
+        boolean isPrimaryCareGiver = memberObject.getPrimaryCareGiver().equals(memberObject.getBaseEntityId());
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
         CommonPersonObject personObject = commonRepository.findByBaseEntityId(memberObject.getBaseEntityId());
         CommonPersonObjectClient client = new CommonPersonObjectClient(personObject.getCaseId(), personObject.getDetails(), "");
         client.setColumnmaps(personObject.getColumnmaps());
-
         if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = getAutoJsonEditAncFormString(
                     memberObject.getBaseEntityId(), context, formName, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, context.getResources().getString(title_resource));
+        } else if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
+            form = getAutoPopulatedJsonEditMemberFormString(
+                    (title_resource != null) ? context.getResources().getString(title_resource) : null,
+                    CoreConstants.JSON_FORM.getFamilyMemberRegister(),
+                    context, client, Utils.metadata().familyMemberRegister.updateEventType, memberObject.getFamilyName(), isPrimaryCareGiver);
         }
         return form;
-
     }
 
     public static JSONObject getAutoJsonEditAncFormString(String baseEntityID, Context context, String formName, String eventType, String title) {
