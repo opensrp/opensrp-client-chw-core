@@ -31,9 +31,6 @@ import org.smartregister.chw.hf.presenter.HfChildProfilePresenter;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.Constants;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class ChildProfileActivity extends CoreChildProfileActivity {
