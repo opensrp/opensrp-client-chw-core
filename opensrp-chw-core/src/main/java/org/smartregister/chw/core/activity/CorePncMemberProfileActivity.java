@@ -52,6 +52,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
                         memberObject.getBaseEntityId()));
             }
             return true;
+
+        } else if (itemId == R.id.action_malaria_confirmation) {
+            startMalariaRegister();
+            return true;
         } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
@@ -137,4 +141,6 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void removePncMember();
 
     protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
+
+    protected abstract void startMalariaRegister();
 }

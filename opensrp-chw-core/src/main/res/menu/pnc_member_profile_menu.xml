@@ -15,6 +15,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_malaria_confirmation"
+        android:enabled="true"
+        android:title="@string/malaria_registration"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action__pnc_remove_member"
         android:enabled="true"
         android:title="@string/remove_this_person"

@@ -3,7 +3,6 @@ package org.smartregister.chw.hf.activity;
 import android.app.Activity;
 import android.content.Intent;
 
-
 import org.smartregister.chw.core.activity.CoreMalariaRegisterActivity;
 import org.smartregister.chw.hf.fragment.MalariaRegisterFragment;
 import org.smartregister.helper.BottomNavigationHelper;
@@ -26,10 +25,6 @@ public class MalariaRegisterActivity extends CoreMalariaRegisterActivity {
         return this;
     }
 
-    @Override
-    protected void startMalariaRegisterActivity(Activity activity, String optString) {
-        startMalariaRegistrationActivity(this, optString);
-    }
     @Override
     protected void registerBottomNavigation() {
 
