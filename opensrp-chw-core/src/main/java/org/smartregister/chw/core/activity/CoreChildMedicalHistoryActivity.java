@@ -3,6 +3,7 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import org.smartregister.chw.anc.activity.BaseAncMedicalHistoryActivity;
@@ -19,7 +20,7 @@ import org.smartregister.immunization.domain.Vaccine;
 import java.util.List;
 import java.util.Map;
 
-public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivity implements  CoreChildMedicalHistoryContract.View  {
+public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivity implements CoreChildMedicalHistoryContract.View {
 
     public static void startMe(Activity activity, MemberObject memberObject) {
         Intent intent = new Intent(activity, CoreChildMedicalHistoryActivity.class);
@@ -33,19 +34,26 @@ public class CoreChildMedicalHistoryActivity extends BaseAncMedicalHistoryActivi
     }
 
     @Override
-    public void onVaccineDataReceived(Map<String, List<Vaccine>> vaccines) {
-
+    public void onDataReceived(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords) {
+        View view = renderView(visits);
+        linearLayout.addView(view, 0);
     }
 
     @Override
-    public void onServicesDataReceived(List<ServiceRecord> serviceRecords, Map<String, ServiceType> serviceTypeMap) {
-
+    public View renderView(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords) {
+        LayoutInflater inflater = getLayoutInflater();
+        return inflater.inflate(org.smartregister.chw.opensrp_chw_anc.R.layout.medical_history_details, null);
     }
 
     public interface Flavor {
         View bindViews(Activity activity);
 
-        void processViewData(List<Visit> visits, Context context);
+        void processViewData(
+                List<Visit> visits,
+                Map<String, List<Vaccine>> vaccines,
+                Map<ServiceType, List<ServiceRecord>> serviceRecords,
+                Context context
+        );
     }
 
 }

@@ -1,8 +1,7 @@
 package org.smartregister.chw.core.contract;
 
-import android.content.Context;
-
 import org.smartregister.chw.anc.contract.BaseAncMedicalHistoryContract;
+import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.ServiceType;
 import org.smartregister.immunization.domain.Vaccine;
@@ -12,26 +11,28 @@ import java.util.Map;
 
 public interface CoreChildMedicalHistoryContract extends BaseAncMedicalHistoryContract {
 
-    interface Interactor extends BaseAncMedicalHistoryContract.Interactor {
+    interface View extends BaseAncMedicalHistoryContract.View {
+        void onDataReceived(List<Visit> visits,
+                            Map<String, List<Vaccine>> vaccines,
+                            Map<ServiceType, List<ServiceRecord>> serviceRecords);
 
-        void getRecurringServicesReceived(String memberID, Context context, InteractorCallBack callBack);
-
-        void getVaccinesReceived(String memberID, Context context, InteractorCallBack callBack);
+        android.view.View renderView(List<Visit> visits,
+                                     Map<String, List<Vaccine>> vaccines,
+                                     Map<ServiceType, List<ServiceRecord>> serviceRecords);
     }
 
     interface InteractorCallBack extends BaseAncMedicalHistoryContract.InteractorCallBack {
 
-        void onVaccineDataFetched(Map<String, List<Vaccine>> vaccines);
-
-        void onServicesDataFetched(List<ServiceRecord> serviceRecords, Map<String, ServiceType> serviceTypeMap);
+        void onDataFetched(List<Visit> visits, Map<String, List<Vaccine>> vaccines, Map<ServiceType, List<ServiceRecord>> serviceRecords);
 
     }
 
-    interface View extends BaseAncMedicalHistoryContract.View {
+    interface Interactor extends BaseAncMedicalHistoryContract.Interactor {
 
-        void onVaccineDataReceived(Map<String, List<Vaccine>> vaccines);
+        List<Visit> getVisits(String baseEntityID);
 
-        void onServicesDataReceived(List<ServiceRecord> serviceRecords, Map<String, ServiceType> serviceTypeMap);
+        Map<ServiceType, List<ServiceRecord>> getServiceRecords(String baseEntityID);
 
+        Map<String, List<Vaccine>> getVaccinesReceivedGroup(String baseEntityID);
     }
 }
