@@ -41,4 +41,19 @@
         android:title="@string/remove_this_person"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_family_planning_initiation"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/family_planning_initiation"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_pregnancy_confirmation"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/pregnancy_confirmation"
+        app:showAsAction="never" />
+
+
 </menu>

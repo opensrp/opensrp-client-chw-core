@@ -18,6 +18,7 @@ import org.smartregister.chw.core.activity.CoreChildMedicalHistoryActivity;
 import org.smartregister.chw.core.activity.CoreChildProfileActivity;
 import org.smartregister.chw.core.activity.CoreUpcomingServicesActivity;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
+import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.fragment.FamilyCallDialogFragment;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 import org.smartregister.chw.core.model.CoreChildProfileModel;
@@ -144,9 +145,16 @@ public class ChildProfileActivity extends CoreChildProfileActivity {
         super.onCreateOptionsMenu(menu);
         menu.findItem(R.id.action_anc_registration).setVisible(false);
         menu.findItem(R.id.action_malaria_registration).setVisible(false);
+        menu.findItem(R.id.action_malaria_followup_visit).setVisible(false);
         menu.findItem(R.id.action_remove_member).setVisible(false);
         menu.findItem(R.id.action_sick_child_follow_up).setVisible(true);
-        menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
+        if (MalariaDao.isRegisteredForMalaria(childBaseEntityId)) {
+            menu.findItem(R.id.action_malaria_followup_visit).setTitle(R.string.hf_malaria_follow_up);
+            menu.findItem(R.id.action_malaria_followup_visit).setVisible(true);
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
+        }
         return true;
     }
 
