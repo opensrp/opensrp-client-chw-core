@@ -31,9 +31,6 @@ import org.smartregister.chw.hf.presenter.HfChildProfilePresenter;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.Constants;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class ChildProfileActivity extends CoreChildProfileActivity {
@@ -164,9 +161,7 @@ public class ChildProfileActivity extends CoreChildProfileActivity {
     }
 
     private void openMedicalHistoryScreen() {
-        Map<String, Date> vaccine = ((HfChildProfilePresenter) presenter()).getVaccineList();
-        CoreChildMedicalHistoryActivity.startMedicalHistoryActivity(this, ((CoreChildProfilePresenter) presenter()).getChildClient(), patientName, lastVisitDay,
-                ((HfChildProfilePresenter) presenter()).getDateOfBirth(), new LinkedHashMap<>(vaccine), CoreChildMedicalHistoryActivity.class);
+        CoreChildMedicalHistoryActivity.startMe(this, memberObject);
     }
 
     private void openUpcomingServicePage() {
