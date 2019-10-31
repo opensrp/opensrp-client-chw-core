@@ -29,7 +29,7 @@
     <string name="nav_registers">Rejesta</string>
     <string name="nav_logout_as">Toka kwenye mfumo kama</string>
     <string name="nav_sync">Sync</string>
-    <string name="nav_last">\"Mwisho:</string>
+    <string name="nav_last">Mwisho:</string>
     <string name="nav_last_sync_time">HH:mm a , MMM DD</string>
     <string name="all_registers">Rejesta zote</string>
     <string name="log_out_as">Toka kwenye mfumo kama</string>
@@ -228,7 +228,7 @@
     <string name="birth">kuzaliwa</string>
     <string name="week_full">Wiki</string>
     <string name="month_full">Mwezi</string>
-    <string name="at_birth">kuzaliwa</string>
+    <string name="at_birth">wakati wa kuzaliwa</string>
     <string name="pnc_health_facility_visit_num">Hudhurio katika kituo cha kutolea huduma za afya kwa huduma ya mtoto na mama baada ya kujifungua {0}</string>
     <string name="child">Mtoto</string>
     <string name="birth_cap">Kuzaliwa</string>
