@@ -251,6 +251,7 @@ public class CoreConstants {
             private static final String DIETARY = "child_hv_dietary_diversity";
             private static final String MNP = "child_hv_mnp";
             private static final String SLEEPING_UNDER_LLITN = "child_hv_sleeping_under_llitn";
+            private static final String NUTRITION_STATUS = "child_hv_nutrition_status";
 
             public static String getVaccineCard() {
                 return Utils.getLocalForm(VACCINE_CARD, locale, assetManager);
@@ -278,6 +279,10 @@ public class CoreConstants {
 
             public static String getSleepingUnderLlitn() {
                 return Utils.getLocalForm(SLEEPING_UNDER_LLITN, locale, assetManager);
+            }
+
+            public static String getNutritionStatus() {
+                return Utils.getLocalForm(NUTRITION_STATUS, locale, assetManager);
             }
         }
 
