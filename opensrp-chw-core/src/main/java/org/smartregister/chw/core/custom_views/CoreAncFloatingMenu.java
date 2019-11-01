@@ -24,7 +24,7 @@ public abstract class CoreAncFloatingMenu extends BaseAncFloatingMenu {
     private Animation rotateForward;
     private Animation rotateBack;
     private View callLayout;
-    private View referLayout;
+    protected View referLayout;
     private RelativeLayout activityMain;
     private boolean isFabMenuOpen = false;
     private LinearLayout menuBar;
