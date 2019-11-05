@@ -74,13 +74,12 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
     }
 
     public void animateFAB() {
-        if (menuBar.getVisibility() == GONE) {
-            menuBar.setVisibility(VISIBLE);
-        }
+        menuBar.setVisibility(VISIBLE);
+        fab.startAnimation(rotateForward);
 
         if (isFabMenuOpen) {
             activityMain.setBackgroundResource(R.color.transparent);
-            fab.startAnimation(rotateBack);
+
             fab.setImageResource(R.drawable.ic_edit_white);
 
             callLayout.startAnimation(fabClose);
@@ -91,14 +90,11 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
             isFabMenuOpen = false;
         } else {
             activityMain.setBackgroundResource(R.color.grey_tranparent_50);
-            fab.startAnimation(rotateForward);
+
             fab.setImageResource(R.drawable.ic_input_add);
 
             callLayout.startAnimation(fabOpen);
             callLayout.setClickable(true);
-
-            referLayout.startAnimation(fabOpen);
-            referLayout.setClickable(true);
             isFabMenuOpen = true;
         }
     }

@@ -12,7 +12,7 @@ import org.smartregister.family.util.DBConstants;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MalariaRegisterFragmentModel extends BaseMalariaRegisterFragmentModel {
+public class CoreMalariaRegisterFragmentModel extends BaseMalariaRegisterFragmentModel {
 
     @NonNull
     @Override
@@ -42,13 +42,13 @@ public class MalariaRegisterFragmentModel extends BaseMalariaRegisterFragmentMod
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.UNIQUE_ID);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.ENTITY_TYPE);
+        columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.PHONE_NUMBER +" as member_phone_number");
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.VILLAGE_TOWN);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FAMILY_HEAD);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.PRIMARY_CAREGIVER);
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.DELIVERY_DATE);
-        columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + "" + org.smartregister.chw.malaria.util.DBConstants.KEY.PNC_IS_CLOSED);
-        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + "" + org.smartregister.chw.malaria.util.DBConstants.KEY.ANC_IS_CLOSED);
-        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.PHONE_NUMBER);
+
+//        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.PHONE_NUMBER);
         columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_anc_closed");
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_pnc_closed");
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FIRST_NAME + " as " + org.smartregister.chw.anc.util.DBConstants.KEY.FAMILY_NAME);
