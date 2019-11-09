@@ -23,7 +23,7 @@
     <item
         android:id="@+id/anc_danger_signs_outcome"
         android:enabled="true"
-        android:title="Anc danger signs outcome"
+        android:title="@string/anc_danger_signs_outcome"
         app:showAsAction="never" />
 
     <item

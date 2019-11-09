@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -223,6 +224,71 @@ public class VisitDao extends AbstractDao {
         List<VisitDetail> details = readData(sql, dataMap);
         if (details != null)
             return details;
+
+        return new ArrayList<>();
+    }
+
+    public static Map<String, List<VisitDetail>> getMedicalHistory(String baseEntityID) {
+        String sql = "select v.visit_date,  vd.visit_key , vd.parent_code , vd.preprocessed_type , vd.details, vd.human_readable_details , vd.visit_id , v.base_entity_id " +
+                "from visit_details vd " +
+                "inner join visits v on vd.visit_id = v.visit_id " +
+                "where ( v.base_entity_id  = '" + baseEntityID + "' or v.base_entity_id in (select base_entity_id " +
+                "from ec_child c where c.mother_entity_id = '" + baseEntityID + "')) " +
+                "order by v.visit_date desc ";
+
+        DataMap<VisitDetail> dataMap = c -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setVisitId(getCursorValue(c, "visit_id"));
+            detail.setBaseEntityId(getCursorValue(c, "base_entity_id"));
+            detail.setVisitKey(getCursorValue(c, "visit_key"));
+            detail.setParentCode(getCursorValue(c, "parent_code"));
+            detail.setPreProcessedType(getCursorValue(c, "preprocessed_type"));
+            detail.setDetails(getCursorValue(c, "details"));
+            detail.setHumanReadable(getCursorValue(c, "human_readable_details"));
+            return detail;
+        };
+
+        HashMap<String, List<VisitDetail>> detailsMap = new LinkedHashMap<>();
+
+        List<VisitDetail> details = readData(sql, dataMap);
+        if (details != null) {
+            for (VisitDetail d : details) {
+                List<VisitDetail> currentDetails = detailsMap.get(d.getVisitId());
+                if (currentDetails == null) currentDetails = new ArrayList<>();
+
+                currentDetails.add(d);
+                detailsMap.put(d.getVisitId(), currentDetails);
+            }
+        }
+
+        return detailsMap;
+    }
+
+    public static List<Visit> getVisitsByMemberID(String baseEntityID){
+        String sql = "SELECT * from visits WHERE base_entity_id  = '" + baseEntityID + "' COLLATE NOCASE " +
+                " OR base_entity_id = (SELECT base_entity_id from ec_child WHERE mother_entity_id  = '" + baseEntityID + "' COLLATE NOCASE )";
+
+        DataMap<Visit> dataMap = c -> {
+            Visit visit = new Visit();
+            visit.setBaseEntityId(getCursorValue(c, "base_entity_id"));
+            visit.setVisitId(getCursorValue(c, "visit_id"));
+            visit.setDate(getCursorValueAsDate(c, "visit_date"));
+            visit.setBaseEntityId(getCursorValue(c, "base_entity_id"));
+            visit.setVisitType(getCursorValue(c, "visit_type"));
+            visit.setParentVisitID(getCursorValue(c, "parent_visit_id"));
+            visit.setPreProcessedJson(getCursorValue(c, "pre_processed"));
+            visit.setBaseEntityId(getCursorValue(c, "base_entity_id"));
+            visit.setDate(getCursorValueAsDate(c, "visit_date"));
+            visit.setJson(getCursorValue(c, "visit_json"));
+            visit.setFormSubmissionId(getCursorValue(c, "form_submission_id"));
+            visit.setProcessed(getCursorIntValue(c, "processed", 0) == 1);
+            visit.setCreatedAt(getCursorValueAsDate(c, "created_at"));
+            visit.setUpdatedAt(getCursorValueAsDate(c, "updated_at"));
+            return visit;
+        };
+
+        List<Visit> visits = readData(sql, dataMap);
+        if (visits != null) return visits;
 
         return new ArrayList<>();
     }
