@@ -29,7 +29,6 @@ public class CoreMalariaRegisterFragmentModel extends BaseMalariaRegisterFragmen
     @Override
     protected String[] mainColumns(String tableName) {
         Set<String> columnList = new HashSet<>();
-
         columnList.add(tableName + "." + DBConstants.KEY.LAST_INTERACTED_WITH);
         columnList.add(tableName + "." + DBConstants.KEY.BASE_ENTITY_ID);
         columnList.add(tableName + "." + org.smartregister.chw.malaria.util.DBConstants.KEY.MALARIA_TEST_DATE);
@@ -42,13 +41,13 @@ public class CoreMalariaRegisterFragmentModel extends BaseMalariaRegisterFragmen
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.UNIQUE_ID);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.ENTITY_TYPE);
-        columnList.add(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.PHONE_NUMBER +" as member_phone_number");
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.VILLAGE_TOWN);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FAMILY_HEAD);
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.PRIMARY_CAREGIVER);
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.DELIVERY_DATE);
-
-//        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.PHONE_NUMBER);
+        columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as " + org.smartregister.chw.malaria.util.DBConstants.KEY.IS_ANC_CLOSED);
+        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as " + org.smartregister.chw.malaria.util.DBConstants.KEY.IS_PNC_CLOSED);
+        columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + org.smartregister.chw.anc.util.DBConstants.KEY.PHONE_NUMBER);
         columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_anc_closed");
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_pnc_closed");
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FIRST_NAME + " as " + org.smartregister.chw.anc.util.DBConstants.KEY.FAMILY_NAME);
