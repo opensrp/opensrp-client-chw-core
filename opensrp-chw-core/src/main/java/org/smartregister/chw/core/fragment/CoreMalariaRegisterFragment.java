@@ -40,7 +40,7 @@ public abstract class CoreMalariaRegisterFragment extends BaseMalariaRegisterFra
 
     @Override
     public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        ChwMalariaRegisterProvider malariaRegisterProvider = new ChwMalariaRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns, commonRepository());
+        ChwMalariaRegisterProvider malariaRegisterProvider = new ChwMalariaRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, malariaRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);
