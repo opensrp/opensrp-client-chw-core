@@ -21,7 +21,6 @@ import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,44 +75,40 @@ public class CoreChildMedicalHistoryActivityInteractor extends BaseAncMedicalHis
 
     @Override
     public Map<String, List<Vaccine>> getVaccinesReceivedGroup(String baseEntityID) {
+        List<VaccineGroup> vaccineGroups =
+                VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
 
-        Map<String, String> vaccinesGroup = getVaccineGroup();
+
         Map<String, Date> receivedDateMap = VisitVaccineUtil.getIssuedVaccines(baseEntityID, true);
 
         // create a result map
         Map<String, VaccineRepo.Vaccine> vaccineMap = VisitVaccineUtil.getAllVaccines();
         Map<String, List<Vaccine>> result = new LinkedHashMap<>();
 
-        for (Map.Entry<String, Date> entry : receivedDateMap.entrySet()) {
-            String groupName = vaccinesGroup.get(entry.getKey());
-
-            List<Vaccine> vaccines = result.get(groupName);
-            if (vaccines == null)
-                vaccines = new ArrayList<>();
-
-            VaccineRepo.Vaccine repoObj = vaccineMap.get(entry.getKey());
-            if (repoObj != null) {
-                Vaccine vaccine = new Vaccine();
-                vaccine.setDate(entry.getValue());
-                vaccine.setName(repoObj.display());
-                vaccines.add(vaccine);
-            }
-
-            result.put(groupName, vaccines);
-        }
-
-        return result;
-    }
-
-    private Map<String, String> getVaccineGroup() {
-        List<VaccineGroup> vaccineGroups =
-                VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
-        Map<String, String> result = new HashMap<>();
         for (VaccineGroup group : vaccineGroups) {
             for (org.smartregister.immunization.domain.jsonmapping.Vaccine vaccine : group.vaccines) {
-                result.put(vaccine.getName().replace(" ", "").toLowerCase(), group.name);
+
+                String vacName = vaccine.getName().replace(" ", "").toLowerCase();
+                Date receivedDate = receivedDateMap.get(vacName);
+                if (receivedDate == null) continue;
+
+                List<Vaccine> vaccines = result.get(group.name);
+                if (vaccines == null)
+                    vaccines = new ArrayList<>();
+
+                VaccineRepo.Vaccine repoObj = vaccineMap.get(vacName);
+                if (repoObj != null) {
+                    Vaccine domainVaccine = new Vaccine();
+                    domainVaccine.setDate(receivedDate);
+                    domainVaccine.setName(repoObj.display());
+                    vaccines.add(domainVaccine);
+                }
+
+                if (vaccines.size() > 0)
+                    result.put(group.name, vaccines);
             }
         }
+
         return result;
     }
 }
