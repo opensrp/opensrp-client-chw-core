@@ -31,8 +31,8 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
     private Context context;
 
     public ChwMalariaRegisterProvider(Context context, View.OnClickListener paginationClickListener,
-                                      View.OnClickListener onClickListener, Set visibleColumns, CommonRepository commonRepository) {
-        super(context, paginationClickListener, onClickListener, visibleColumns, commonRepository);
+                                      View.OnClickListener onClickListener, Set visibleColumns) {
+        super(context, paginationClickListener, onClickListener, visibleColumns);
         this.context = context;
     }
 
