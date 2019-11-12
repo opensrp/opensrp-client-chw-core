@@ -142,7 +142,7 @@ public class WashCheckAlertRule implements ICommonRule {
     }
 
     private LocalDate getDateCreated() {
-        return dateCreated != null ? dateCreated : lastVisitDate;
+        return dateCreated != null ? dateCreated : new LocalDate();
     }
 
     public Date getOverDueDate() {
