@@ -141,8 +141,12 @@ public class WashCheckAlertRule implements ICommonRule {
         return getLastDayOfMonth(new Date());
     }
 
+    private LocalDate getDateCreated() {
+        return dateCreated != null ? dateCreated : lastVisitDate;
+    }
+
     public Date getOverDueDate() {
-        Date anchor = (lastVisitDate != null ? lastVisitDate.toDate() : dateCreated.toDate());
+        Date anchor = (lastVisitDate != null ? lastVisitDate.toDate() : getDateCreated().toDate());
         Date overDue = getLastDayOfMonth(anchor);
         if (overDue.getTime() < getDueDate().getTime()) {
             return getDueDate();
