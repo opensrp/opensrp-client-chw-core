@@ -111,6 +111,7 @@ public class CoreConstants {
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
         public static final String MALARIA_FOLLOW_UP_VISIT = "Malaria Follow-up Visit";
         public static final String MALARIA_CONFIRMATION = "Malaria Confirmation";
+        public static final String UPDATE_MALARIA_CONFIRMATION = "Update Malaria Confirmation";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
@@ -145,7 +146,7 @@ public class CoreConstants {
 
         private static final String ANC_REGISTRATION = "anc_member_registration";
         private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
-        private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
+        public static final String MALARIA_CONFIRMATION = "malaria_confirmation";
         private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
         private static final String WASH_CHECK = "wash_check";
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";

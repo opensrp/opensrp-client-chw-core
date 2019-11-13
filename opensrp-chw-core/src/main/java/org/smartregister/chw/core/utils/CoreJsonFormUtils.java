@@ -893,7 +893,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getAutoJsonEditAncFormString(String baseEntityID, Context context, String formName, String eventType, String title) {
         try {
 
-            Event event = getEditAncLatestProperties(baseEntityID);
+            Event event = getEditFormLatestProperties(baseEntityID, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, CoreConstants.EventType.ANC_REGISTRATION);
             final List<Obs> observations = event.getObs();
             JSONObject form = getFormWithMetaData(baseEntityID, context, formName, eventType);
             if (form != null) {
@@ -933,12 +933,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return null;
     }
 
-    private static Event getEditAncLatestProperties(String baseEntityID) {
+    private static Event getEditFormLatestProperties(String baseEntityID, String eventType, String updateEventType) {
 
         Event ecEvent = null;
 
-        String query_event = String.format("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;",
-                baseEntityID, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, CoreConstants.EventType.ANC_REGISTRATION);
+        String query_event = String.format("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;", baseEntityID, eventType, updateEventType);
 
         try (Cursor cursor = CoreChwApplication.getInstance().getRepository().getReadableDatabase().rawQuery(query_event, new String[]{})) {
             cursor.moveToFirst();
@@ -967,4 +966,66 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getAutoPopulatedJsonEditMemberFormString(String title, String formName, Context context, CommonPersonObjectClient client, String eventType, String familyName, boolean isPrimaryCaregiver) {
         return new BAJsonFormUtils(CoreChwApplication.getInstance()).getAutoJsonEditMemberFormString(title, formName, context, client, eventType, familyName, isPrimaryCaregiver);
     }
+
+
+    public static JSONObject getEditMalariaFormString(String baseEntityID, Context context, String formName) {
+        try {
+            Event event = getEditFormLatestProperties(baseEntityID, CoreConstants.EventType.UPDATE_MALARIA_CONFIRMATION, CoreConstants.EventType.MALARIA_CONFIRMATION);
+            JSONObject form = getFormWithMetaData(baseEntityID, context, formName, CoreConstants.EventType.UPDATE_MALARIA_CONFIRMATION);
+
+            if (form != null) {
+                JSONObject stepOne = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP1);
+                final List<Obs> observations = event.getObs();
+                stepOne.put(TITLE, context.getResources().getString(R.string.malaria__update_form_info));
+                JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    try {
+                        for (Obs obs : observations) {
+                            if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
+                                if (jsonObject.getString("type").equals("spinner")) {
+                                    jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                                } else {
+                                    jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+
+                JSONObject stepTwo = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP2);
+
+//                if (StringUtils.isNotBlank(title)) {
+//                    stepTwo.put(TITLE, title);
+//                }
+                JSONArray jsonArray2 = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+
+                for (int j = 0; j < jsonArray2.length(); j++) {
+                    JSONObject jsonObject2 = jsonArray2.getJSONObject(j);
+                    try {
+                        for (Obs obs : observations) {
+                            if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject2.getString(KEY))) {
+                                if (jsonObject2.getString("type").equals("spinner")) {
+                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                                } else {
+                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+                return form;
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
+    }
+
 }
