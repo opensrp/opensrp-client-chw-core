@@ -175,7 +175,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                         case "LAM":
                             method = context.getString(R.string.lam);
                             break;
-                        case "Standard day method":
+                        case "Bead Counting":
                             method = context.getString(R.string.standard_day_method);
                             break;
                         case "Permanent (BTL)":
