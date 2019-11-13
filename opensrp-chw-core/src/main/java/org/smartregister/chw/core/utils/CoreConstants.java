@@ -461,6 +461,7 @@ public class CoreConstants {
         public static final String MALARIA_CONFIRMATION = "ec_malaria_confirmation";
         public static final String ANC_PREGNANCY_OUTCOME = "ec_pregnancy_outcome";
         public static final String TASK = "task";
+        public static final String WASH_CHECK_LOG = "ec_wash_check_log";
         public static final String CHILD_REFERRAL = "ec_child_referral";
         public static final String ANC_REFERRAL = "ec_anc_referral";
         public static final String PNC_REFERRAL = "ec_pnc_referral";
