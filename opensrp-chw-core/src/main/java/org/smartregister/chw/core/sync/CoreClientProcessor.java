@@ -124,6 +124,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
+            case CoreConstants.EventType.WASH_CHECK:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -180,11 +181,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (eventClient.getClient() == null) {
                     return;
                 }
-                processVisitEvent(eventClient);
-                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                break;
-            case CoreConstants.EventType.WASH_CHECK:
-                processWashCheckEvent(eventClient);
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -461,23 +457,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
 
         }
-    }
-
-    private void processWashCheckEvent(EventClient eventClient) {
-        WashCheck washCheck = new WashCheck();
-        for (Obs obs : eventClient.getEvent().getObs()) {
-
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.FAMILY_ID)) {
-                washCheck.setFamilyBaseEntityId((String) obs.getValue());
-            }
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.WASH_CHECK_DETAILS)) {
-                washCheck.setDetailsJson((String) obs.getValue());
-            }
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.WASH_CHECK_LAST_VISIT)) {
-                washCheck.setLastVisit(Long.parseLong((String) obs.getValue()));
-            }
-        }
-        CoreChwApplication.getWashCheckRepository().add(washCheck);
     }
 
     private ContentValues processCaseModel(EventClient eventClient, Table table) {

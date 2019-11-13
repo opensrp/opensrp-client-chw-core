@@ -55,7 +55,6 @@ public class CoreChwRepository extends Repository {
         VaccineRepository.createTable(database);
         VaccineNameRepository.createTable(database);
         VaccineTypeRepository.createTable(database);
-        WashCheckRepository.createTable(database);
         ConfigurableViewsRepository.createTable(database);
         LocationRepository.createTable(database);
 
@@ -80,7 +79,7 @@ public class CoreChwRepository extends Repository {
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
-        
+
         onUpgrade(database, 1, databaseVersion);
     }
 
