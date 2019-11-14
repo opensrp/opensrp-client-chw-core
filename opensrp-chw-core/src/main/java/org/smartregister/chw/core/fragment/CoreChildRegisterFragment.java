@@ -259,6 +259,44 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
         return null;
     }
 
+
+    @Override
+    public void countExecute() {
+        Cursor c = null;
+        try {
+            c = commonRepository().rawCustomQueryForAdapter(getCountSelect());
+            c.moveToFirst();
+            clientAdapter.setTotalcount(c.getInt(0));
+
+            clientAdapter.setCurrentlimit(20);
+            clientAdapter.setCurrentoffset(0);
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    private String getCountSelect() {
+        SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(countSelect);
+
+        String query = countSelect;
+        try {
+            if (StringUtils.isNotBlank(filters))
+                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
+
+            if (dueFilterActive)
+                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
+            query = sqb.Endquery(query);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return query;
+    }
+
     private String filterandSortQuery() {
         SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(mainSelect);
 
