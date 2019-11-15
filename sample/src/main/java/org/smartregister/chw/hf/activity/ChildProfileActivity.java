@@ -161,7 +161,7 @@ public class ChildProfileActivity extends CoreChildProfileActivity {
     }
 
     private void openMedicalHistoryScreen() {
-        CoreChildMedicalHistoryActivity.startMe(this, memberObject);
+        ChildMedicalHistoryActivity.startMe(this, memberObject);
     }
 
     private void openUpcomingServicePage() {
