@@ -658,6 +658,17 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return null;
     }
 
+    public static MemberObject referralToAncMember(org.smartregister.chw.referral.domain.MemberObject memberObject) {
+        try {
+            JSONObject referralJson = new JSONObject(org.smartregister.family.util.JsonFormUtils.gson.toJson(memberObject));
+            MemberObject memberObject1 = (MemberObject)convert(referralJson.toString(), MemberObject.class);
+            return memberObject1;
+        } catch (JSONException var3) {
+            Timber.e(var3);
+            return null;
+        }
+    }
+
     public static String getFamilyDueFilter() {
         return "and ec_family.base_entity_id in ( select ec_family_member.relational_id from schedule_service inner join ec_family_member on ec_family_member.base_entity_id = schedule_service.base_entity_id " +
                 " where strftime('%Y-%m-%d') BETWEEN schedule_service.due_date and schedule_service.expiry_date and ifnull(schedule_service.not_done_date,'') = '' and ifnull(schedule_service.completion_date,'') = ''  ) ";

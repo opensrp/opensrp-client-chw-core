@@ -151,6 +151,8 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String GENERAL_REFERRAL_FORM = "general_referral_form";
+        private static final String REFERRAL_FOLLOWUP_FORM = "referral_followup_form";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -241,6 +243,14 @@ public class CoreConstants {
 
         public static String getWashCheck() {
             return Utils.getLocalForm(WASH_CHECK, locale, assetManager);
+        }
+
+        public static String getGeneralReferralForm() {
+            return Utils.getLocalForm(GENERAL_REFERRAL_FORM, locale, assetManager);
+        }
+
+        public static String getReferralFollowupForm() {
+            return Utils.getLocalForm(REFERRAL_FOLLOWUP_FORM, locale, assetManager);
         }
 
         public static class CHILD_HOME_VISIT {

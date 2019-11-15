@@ -4,6 +4,7 @@ import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
 
 import java.util.Date;
@@ -165,6 +166,16 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "         )\n" +
                         "     )\n";
                 return NavigationDao.getQueryCount(allClients);
+
+            case Constants.TABLES.REFERRAL:
+                String sqlReferral = "select count(*) " +
+                        "from "+Constants.TABLES.REFERRAL+" p " +
+                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                        "inner join ec_referral_service rs on rs.id = p.chw_referral_service_id COLLATE NOCASE " +
+                        "inner join location l on l.uuid = p.chw_referral_hf COLLATE NOCASE " +
+                        "where m.date_removed is null and p.referral_status = '"+Constants.REFERRAL_STATUS.PENDING+"' ";
+                return NavigationDao.getQueryCount(sqlReferral);
 
             default:
                 return NavigationDao.getTableCount(tableName);

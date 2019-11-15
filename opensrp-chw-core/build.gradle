@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
     }
 }
@@ -135,6 +135,13 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
     api('org.smartregister:opensrp-client-chw-malaria:1.2.1-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+    api('org.smartregister:opensrp-client-chw-referral:1.0.1-Test-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
