@@ -93,6 +93,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private View viewLastVisitRow, viewMostDueRow, viewFamilyRow;
     private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas;
     private ImageView imageViewCross;
+    protected ImageView imageViewCrossChild;
     private ProgressBar progressBar;
     private String gender;
     private static boolean isStartedFromReferrals;
@@ -188,6 +189,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth = findViewById(R.id.textview_not_visit_this_month);
         textViewLastVisit = findViewById(R.id.textview_last_vist_day);
         textViewUndo = findViewById(R.id.textview_undo);
+        imageViewCrossChild = findViewById(R.id.cross_image_child);
         imageViewCross = findViewById(R.id.cross_image);
         layoutRecordView = findViewById(R.id.record_visit_bar);
         layoutNotRecordView = findViewById(R.id.record_visit_status_bar);
@@ -206,6 +208,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewVisitNot.setOnClickListener(this);
         textViewUndo.setOnClickListener(this);
         imageViewCross.setOnClickListener(this);
+        imageViewCrossChild.setOnClickListener(this);
         layoutLastVisitRow.setOnClickListener(this);
         layoutMostDueOverdue.setOnClickListener(this);
         layoutFamilyHasRow.setOnClickListener(this);
@@ -363,7 +366,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
         textViewUndo.setText(getString(R.string.undo));
         textViewUndo.setVisibility(View.VISIBLE);
-        imageViewCross.setImageResource(R.drawable.activityrow_notvisited);
+       imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
 
     @Override
