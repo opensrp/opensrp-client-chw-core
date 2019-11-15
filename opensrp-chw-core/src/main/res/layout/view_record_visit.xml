@@ -83,7 +83,7 @@
         android:visibility="gone">
 
         <ImageView
-            android:id="@+id/cross_image"
+            android:id="@+id/cross_image_child"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/textview_undo"
-            android:layout_toRightOf="@+id/cross_image"
+            android:layout_toRightOf="@+id/cross_image_child"
             android:padding="10dp"
             android:text="@string/not_visiting_this_month"
             android:textColor="@color/black" />
