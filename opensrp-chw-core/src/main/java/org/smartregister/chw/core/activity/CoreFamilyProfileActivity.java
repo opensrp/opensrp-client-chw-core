@@ -30,6 +30,7 @@ import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -311,11 +312,15 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (view.getTag() instanceof CommonPersonObjectClient) {
             CommonPersonObjectClient commonPersonObjectClient = (CommonPersonObjectClient) view.getTag();
             String entityType = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.ENTITY_TYPE, false);
+            String schedule_name = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.SCHEDULE_NAME, false);
+
             if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
-                if (isAncMember(commonPersonObjectClient.entityId())) {
+                if (CoreConstants.SCHEDULE_TYPES.ANC_VISIT.equals(schedule_name)) {
                     goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (isPncMember(commonPersonObjectClient.entityId())) {
+                } else if (CoreConstants.SCHEDULE_TYPES.PNC_VISIT.equals(schedule_name)) {
                     gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
+                } else if (CoreConstants.SCHEDULE_TYPES.MALARIA_VISIT.equals(schedule_name)) {
+                    gotToMalariaProfileActivity(commonPersonObjectClient);
                 } else {
                     goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
                 }
@@ -363,6 +368,9 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     public void gotToPncProfileActivity(CommonPersonObjectClient patient, Bundle bundle) {
         patient.getColumnmaps().putAll(getPncCommonPersonObject(patient.entityId()).getColumnmaps());
         startActivity(initProfileActivityIntent(patient, bundle, getPncMemberProfileActivityClass()));
+    }
+
+    public void gotToMalariaProfileActivity(CommonPersonObjectClient patient) {
     }
 
     private Intent initProfileActivityIntent(CommonPersonObjectClient patient, Bundle bundle, Class activityClass) {
