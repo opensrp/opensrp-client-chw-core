@@ -371,6 +371,7 @@ public class CoreConstants {
             private static final String NUTRITION_STATUS_MOTHER = "pnc_nutrition_status_mother";
             private static final String NUTRITION_STATUS_INFANT = "pnc_nutrition_status_infant";
             private static final String MALARIA_PREVENTION = "pnc_malaria_prevention";
+            private static final String CHILD_MALARIA_PREVENTION = "child_hv_malaria_prevention";
             private static final String FAMILY_PLANNING = "pnc_family_planning";
             private static final String KANGAROO_CARE = "pnc_kangaroo_care";
             private static final String VACCINE_CARD = "pnc_vaccine_card";
@@ -416,6 +417,10 @@ public class CoreConstants {
 
             public static String getMalariaPrevention() {
                 return Utils.getLocalForm(MALARIA_PREVENTION, locale, assetManager);
+            }
+
+            public static String getChildMalariaPrevention() {
+                return Utils.getLocalForm(CHILD_MALARIA_PREVENTION, locale, assetManager);
             }
 
             public static String getFamilyPlanning() {
