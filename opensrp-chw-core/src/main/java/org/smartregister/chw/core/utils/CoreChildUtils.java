@@ -158,6 +158,7 @@ public abstract class CoreChildUtils {
         columnList.add(tableName + "." + ChildDBConstants.KEY.INSURANCE_PROVIDER);
         columnList.add(tableName + "." + ChildDBConstants.KEY.INSURANCE_PROVIDER_NUMBER);
         columnList.add(tableName + "." + ChildDBConstants.KEY.RHC_CARD);
+        columnList.add(tableName + "." + ChildDBConstants.KEY.NUTRITION_STATUS);
         columnList.add(tableName + "." + ChildDBConstants.KEY.ILLNESS_DATE);
         columnList.add(tableName + "." + ChildDBConstants.KEY.ILLNESS_DESCRIPTION);
         columnList.add(tableName + "." + ChildDBConstants.KEY.DATE_CREATED);
