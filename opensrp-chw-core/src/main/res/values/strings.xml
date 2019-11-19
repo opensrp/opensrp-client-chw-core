@@ -415,4 +415,7 @@
     <string name="pregnancy_confirmation">Pregnancy confirmation</string>
     <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
     <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
+
+    <!-- Medical history -->
+    <string name="dose_number">Dose %s</string>
 </resources>
