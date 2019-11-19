@@ -977,48 +977,13 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 JSONObject stepOne = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP1);
                 final List<Obs> observations = event.getObs();
                 stepOne.put(TITLE, context.getResources().getString(R.string.malaria__update_form_info));
-                JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    try {
-                        for (Obs obs : observations) {
-                            if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
-                                if (jsonObject.getString("type").equals("spinner")) {
-                                    jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
-                                } else {
-                                    jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                }
+                JSONArray stepOneJsonArray = stepOne.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+                populateMalariaConfirmationForm(observations, stepOneJsonArray);
 
                 JSONObject stepTwo = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP2);
+                JSONArray stepTwoJsonArray = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+                populateMalariaConfirmationForm(observations, stepTwoJsonArray);
 
-//                if (StringUtils.isNotBlank(title)) {
-//                    stepTwo.put(TITLE, title);
-//                }
-                JSONArray jsonArray2 = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
-
-                for (int j = 0; j < jsonArray2.length(); j++) {
-                    JSONObject jsonObject2 = jsonArray2.getJSONObject(j);
-                    try {
-                        for (Obs obs : observations) {
-                            if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject2.getString(KEY))) {
-                                if (jsonObject2.getString("type").equals("spinner")) {
-                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
-                                } else {
-                                    jsonObject2.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                }
                 return form;
             }
 
@@ -1028,4 +993,24 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return null;
     }
 
+    private static void populateMalariaConfirmationForm(List<Obs> observations, JSONArray jsonArray) {
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                for (Obs obs : observations) {
+
+                    if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
+                        if (jsonObject.getString("type").equals("spinner")) {
+                            jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                        } else {
+                            jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Timber.d(e);
+        }
+
+    }
 }
