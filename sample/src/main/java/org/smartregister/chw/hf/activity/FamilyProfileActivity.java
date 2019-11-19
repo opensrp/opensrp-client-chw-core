@@ -129,6 +129,11 @@ public class FamilyProfileActivity extends CoreFamilyProfileActivity {
         return getFamilyProfilePresenter().isPncMember(baseEntityId);
     }
 
+    @Override
+    protected boolean isMalariaMember(String baseEntityId) {
+        return getFamilyProfilePresenter().isMalariaMember(baseEntityId);
+    }
+
     private void setupMenuOptions(Menu menu) {
 
         MenuItem removeMember = menu.findItem(org.smartregister.chw.core.R.id.action_remove_member);
