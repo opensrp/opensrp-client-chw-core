@@ -30,7 +30,6 @@ import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -315,11 +314,11 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
             String schedule_name = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.SCHEDULE_NAME, false);
 
             if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
-                if (CoreConstants.SCHEDULE_TYPES.ANC_VISIT.equals(schedule_name)) {
+                if (isAncMember(commonPersonObjectClient.entityId())) {
                     goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (CoreConstants.SCHEDULE_TYPES.PNC_VISIT.equals(schedule_name)) {
+                } else if (isPncMember(commonPersonObjectClient.entityId())) {
                     gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (CoreConstants.SCHEDULE_TYPES.MALARIA_VISIT.equals(schedule_name)) {
+                } else if (isMalariaMember(commonPersonObjectClient.entityId())) {
                     gotToMalariaProfileActivity(commonPersonObjectClient);
                 } else {
                     goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
@@ -403,4 +402,6 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected abstract CommonPersonObject getPncCommonPersonObject(String baseEntityId);
 
     protected abstract boolean isPncMember(String baseEntityId);
+
+    protected abstract boolean isMalariaMember(String baseEntityId);
 }
