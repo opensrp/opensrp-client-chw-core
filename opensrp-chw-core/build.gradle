@@ -134,7 +134,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
-    api('org.smartregister:opensrp-client-chw-malaria:1.2.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-malaria:1.2.10-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
