@@ -159,10 +159,12 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
         Date anchor;
         if (lastVisitDate == null) {
             anchor = getLastDayOfMonth(dateCreated.toDate());
-        } else {
-            if (isVisitWithinThisMonth()) {
+        }
+        else {
+            if((getMonthsDifference(lastVisitDate,todayDate) == 0) || (getMonthsDifference(lastVisitDate,todayDate) == 1)){
                 anchor = getLastDayOfMonth(todayDate.toDate());
-            } else {
+            }
+            else {
                 anchor = getLastDayOfMonth(lastVisitDate.toDate());
             }
         }
