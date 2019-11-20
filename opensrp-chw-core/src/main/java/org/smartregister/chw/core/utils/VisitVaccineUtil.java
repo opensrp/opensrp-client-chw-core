@@ -121,7 +121,7 @@ public class VisitVaccineUtil {
             for (Map.Entry<String, Date> entry : vac.entrySet()) {
                 vaccines.put(entry.getKey().replace("_", "").replace(" ", ""), entry.getValue());
 
-                String vac_name = entry.getKey().replace(" ", "_".trim());
+                String vac_name = entry.getKey().replace("_", " ");
                 vaccineList.add(toDomainVaccine(vac_name, entry.getValue(), baseEntityID));
             }
         }
