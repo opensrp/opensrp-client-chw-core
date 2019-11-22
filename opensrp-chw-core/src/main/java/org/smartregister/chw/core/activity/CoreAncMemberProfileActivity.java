@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.jeasy.rules.api.Rules;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
@@ -17,19 +16,15 @@ import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
-import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.interactor.CoreAncMemberProfileInteractor;
-import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
-import org.smartregister.chw.core.rule.AncVisitAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.core.utils.VisitSummary;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 
@@ -42,9 +37,11 @@ import java.util.Set;
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
     protected boolean hasDueServices = false;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-yyyy");
+    private LocalDate ancCreatedDate;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,47 +118,40 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         super.onClick(view);
     }
 
-  /*  @Override
-    public void setupViews() {
-        super.setupViews();
-        Rules rules = CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-
-        VisitSummary visitSummary = HomeVisitUtil.getAncVisitStatus(this, rules, memberObject.getLastContactVisit(), null, new DateTime(memberObject.getDateCreated()).toLocalDate());
-        String visitStatus = visitSummary.getVisitStatus();
-
-        if (!visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE) &&
-                !visitStatus.equalsIgnoreCase(CoreChildProfileInteractor.VisitType.OVERDUE.name())) {
-            textview_record_anc_visit.setVisibility(View.GONE);
-            view_anc_record.setVisibility(View.GONE);
-            textViewAncVisitNot.setVisibility(View.GONE);
-        }
-
-        Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
-        boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
-        if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) && !within24Hours) {
-            textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_selector_overdue);
-            layoutRecordView.setVisibility(View.VISIBLE);
-            record_reccuringvisit_done_bar.setVisibility(View.GONE);
-        }
-    }*/
-
     private int getMonthsDifference(LocalDate date1, LocalDate date2) {
         return Months.monthsBetween(
                 date1.withDayOfMonth(1),
                 date2.withDayOfMonth(1)).getMonths();
     }
 
-    private boolean isVisitThisMonth(LocalDate lastVisitDate,LocalDate todayDate ){
+    private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
         return getMonthsDifference(lastVisitDate, todayDate) < 1;
     }
 
-    private void getButtonStatus(){
+    private LocalDate getDateCreated() {
+        try {
+            Date dateCreated = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(memberObject.getDateCreated().substring(0, 10));
+            String createdDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(dateCreated);
+            ancCreatedDate = formatter.parseLocalDate(createdDate);
+        } catch (Exception e) {
+
+        }
+        return ancCreatedDate;
+
+    }
+
+    private void getLayoutVisibility() {
+        layoutRecordView.setVisibility(View.VISIBLE);
+        record_reccuringvisit_done_bar.setVisibility(View.GONE);
+        textViewAncVisitNot.setVisibility(View.VISIBLE);
+        layoutNotRecordView.setVisibility(View.GONE);
+    }
+
+    private void getButtonStatus() {
         openVisitMonthView();
         textViewUndo.setVisibility(View.GONE);
 
         Rules rules = CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-        String dateStringss = sdf.format(memberObject.getDateCreated());
-        LocalDate dateCreated = formatter.parseLocalDate(dateStringss);
 
         Visit lastNotDoneVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE);
         if (lastNotDoneVisit != null) {
@@ -173,23 +163,20 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         }
 
         Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT);
-        String visitDate = lastVisit != null ? sdf.format(lastVisit.getDate()) : null;
-        String lastVisitNotDone = lastNotDoneVisit != null ? sdf.format(lastNotDoneVisit.getDate()) : null;
+        String visitDate = lastVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getDate()) : null;
+        String lastVisitNotDone = lastNotDoneVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getDate()) : null;
 
-        VisitSummary  visitSummary = HomeVisitUtil.getAncVisitStatus(this, rules, visitDate, lastVisitNotDone, dateCreated);
+        VisitSummary visitSummary = HomeVisitUtil.getAncVisitStatus(this, rules, visitDate, lastVisitNotDone, getDateCreated());
         String visitStatus = visitSummary.getVisitStatus();
 
         if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
             textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_selector_overdue);
-            layoutRecordView.setVisibility(View.VISIBLE);
-            record_reccuringvisit_done_bar.setVisibility(View.GONE);
-        }
-        else if(visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)){
+            getLayoutVisibility();
+
+        } else if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_anc_selector);
-            layoutRecordView.setVisibility(View.VISIBLE);
-            record_reccuringvisit_done_bar.setVisibility(View.GONE);
-        }
-        else {
+            getLayoutVisibility();
+        } else {
             record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
             layoutNotRecordView.setVisibility(View.GONE);
             view_anc_record.setVisibility(View.GONE);
@@ -197,42 +184,40 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         }
     }
 
-   @Override
-   public  void setupViews(){
-       super.setupViews();
+    @Override
+    public void setupViews() {
+        super.setupViews();
 
-       Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
-       textViewAncVisitNot.setVisibility(View.GONE);
-       if(lastVisit != null){
-           boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
-           String dateString = simpleDateFormat.format(lastVisit.getDate());
-           if(isVisitThisMonth(formatter.parseLocalDate(dateString), new LocalDate())){
-               if(within24Hours){
-                   Calendar cal = Calendar.getInstance();
-                   int offset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
-                   Long longDate = lastVisit.getDate().getTime();
-                   Date date = new Date(longDate - (long) offset);
-                   String monthString = (String) DateFormat.format("MMMM", date);
-                   layoutRecordView.setVisibility(View.GONE);
-                   tvEdit.setVisibility(View.VISIBLE);
-                   textViewNotVisitMonth.setText(getContext().getString(R.string.anc_visit_done, monthString));
-                   imageViewCross.setImageResource(R.drawable.activityrow_visited);
-               }
-               else {
-                   record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
-                   layoutNotRecordView.setVisibility(View.GONE);
-               }
-               textViewUndo.setVisibility(View.GONE);
-           }
-           else {
-               getButtonStatus();
-           }
-       }
-       else {
-           getButtonStatus();
-       }
+        Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
+        if (lastVisit != null) {
+            boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
+            String lastVisitDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getDate());
+            if (isVisitThisMonth(formatter.parseLocalDate(lastVisitDate), new LocalDate())) {
+                if (within24Hours) {
+                    Calendar cal = Calendar.getInstance();
+                    int offset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+                    Long longDate = lastVisit.getDate().getTime();
+                    Date date = new Date(longDate - (long) offset);
+                    String monthString = (String) DateFormat.format("MMMM", date);
+                    layoutRecordView.setVisibility(View.GONE);
+                    tvEdit.setVisibility(View.VISIBLE);
+                    textViewNotVisitMonth.setText(getContext().getString(R.string.anc_visit_done, monthString));
+                    imageViewCross.setImageResource(R.drawable.activityrow_visited);
+                } else {
+                    record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
+                    layoutNotRecordView.setVisibility(View.GONE);
+                }
+                textViewUndo.setVisibility(View.GONE);
+                textViewAncVisitNot.setVisibility(View.GONE);
 
-   }
+            } else {
+                getButtonStatus();
+            }
+        } else {
+            getButtonStatus();
+        }
+
+    }
 
 
     @Override
