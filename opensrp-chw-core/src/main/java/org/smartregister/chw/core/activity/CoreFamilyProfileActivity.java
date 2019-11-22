@@ -318,7 +318,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
                     goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
                 } else if (isPncMember(commonPersonObjectClient.entityId())) {
                     gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (isMalariaMember(commonPersonObjectClient.entityId())) {
+                } else if (CoreConstants.SCHEDULE_TYPES.MALARIA_VISIT.equals(schedule_name)) {
                     gotToMalariaProfileActivity(commonPersonObjectClient);
                 } else {
                     goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
@@ -403,5 +403,4 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
 
     protected abstract boolean isPncMember(String baseEntityId);
 
-    protected abstract boolean isMalariaMember(String baseEntityId);
 }
