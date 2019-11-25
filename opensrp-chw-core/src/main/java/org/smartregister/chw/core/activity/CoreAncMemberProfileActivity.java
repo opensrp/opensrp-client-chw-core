@@ -176,11 +176,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         } else if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_anc_selector);
             getLayoutVisibility();
-        } else {
-            record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
-            layoutNotRecordView.setVisibility(View.GONE);
-            view_anc_record.setVisibility(View.GONE);
-            textview_record_anc_visit.setVisibility(View.GONE);
+        }
+       else if(visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_VISIT_THIS_MONTH)){
+            textViewUndo.setVisibility(View.VISIBLE);
+            textViewUndo.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.undo));
+
         }
     }
 
