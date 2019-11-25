@@ -45,7 +45,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     @Override
     public View bindViews(Activity activity) {
         inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(org.smartregister.chw.opensrp_chw_anc.R.layout.medical_history_details, null);
+        View view = inflater.inflate(R.layout.medical_history_details, null);
 
         linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
         customFontTextViewLastVisit = view.findViewById(R.id.customFontTextViewLastVisit);
