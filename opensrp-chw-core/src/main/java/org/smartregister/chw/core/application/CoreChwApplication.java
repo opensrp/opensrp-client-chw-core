@@ -12,7 +12,6 @@ import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
-import org.smartregister.chw.core.repository.WashCheckRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -51,7 +50,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     protected static TaskRepository taskRepository;
     private static PncRegisterRepository pncRegisterRepository;
     private static PlanDefinitionRepository planDefinitionRepository;
-    private static WashCheckRepository washCheckRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
     public JsonSpecHelper jsonSpecHelper;
@@ -87,13 +85,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
             pncRegisterRepository = new PncRegisterRepository(getInstance().getRepository());
         }
         return pncRegisterRepository;
-    }
-
-    public static WashCheckRepository getWashCheckRepository() {
-        if (washCheckRepository == null) {
-            washCheckRepository = new WashCheckRepository(getInstance().getRepository());
-        }
-        return washCheckRepository;
     }
 
     public static MalariaRegisterRepository malariaRegisterRepository() {
