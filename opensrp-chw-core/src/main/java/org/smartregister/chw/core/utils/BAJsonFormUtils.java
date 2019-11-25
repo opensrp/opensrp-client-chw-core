@@ -31,8 +31,6 @@ import static org.smartregister.util.AssetHandler.jsonStringToJava;
 
 public class BAJsonFormUtils {
     private static final String TITLE = "title";
-    private static final String SAME_AS_FAM_NAME = "same_as_fam_name";
-    private final String SURNAME = "surname";
     private HashMap<String, String> JSON_DB_MAP;
     private CoreChwApplication coreChwApplication;
 
@@ -140,7 +138,6 @@ public class BAJsonFormUtils {
 
     protected void processFieldsForMemberEdit(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray, String familyName, boolean isPrimaryCaregiver, Event ecEvent, Client ecClient) throws JSONException {
 
-
         switch (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).toLowerCase()) {
             case org.smartregister.family.util.Constants.JSON_FORM_KEY.DOB_UNKNOWN:
                 computeDOBUnknown(jsonObject, client);
@@ -159,10 +156,6 @@ public class BAJsonFormUtils {
             case DBConstants.KEY.UNIQUE_ID:
                 String uniqueId = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.UNIQUE_ID, false);
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, uniqueId.replace("-", ""));
-                break;
-
-            case SAME_AS_FAM_NAME:
-                computeSameAsFamName(jsonObject, client, ecClient, familyName);
                 break;
 
             case CoreConstants.JsonAssets.PREGNANT_1_YR:
@@ -238,16 +231,6 @@ public class BAJsonFormUtils {
         }
     }
 
-    // Show same as fam name checkbox when surname is different from family name
-    private void computeSameAsFamName(JSONObject jsonObject, CommonPersonObjectClient client, Client ecClient, String familyName) throws JSONException {
-        if (ecClient.getLastName() != null) {
-            String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, false);
-            if (familyName.equals(lastName)) {
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, "");
-            }
-        }
-    }
-
     private void computePregnantOneYr(JSONObject jsonObject, Event ecEvent) throws JSONException {
         if (ecEvent != null) {
             String id = jsonObject.getString(JsonFormConstants.OPENMRS_ENTITY_ID);
@@ -287,15 +270,17 @@ public class BAJsonFormUtils {
                 sameOptions.put(org.smartregister.family.util.JsonFormUtils.VALUE, false);
             }
 
+            final String SURNAME = "surname";
+
             JSONObject surname = CoreJsonFormUtils.getFieldJSONObject(jsonArray, SURNAME);
             if (!familyName.equals(lastName)) {
                 surname.put(org.smartregister.family.util.JsonFormUtils.VALUE, lastName);
                 surname.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, false);
+                sameAsFamName.remove(org.smartregister.family.util.JsonFormUtils.VALUE);
             } else {
                 surname.put(org.smartregister.family.util.JsonFormUtils.VALUE, "");
                 surname.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
             }
-
         }
     }
 
