@@ -410,4 +410,12 @@ public abstract class CoreChildUtils {
         }
         return value;
     }
+
+    public interface Flavor {
+        ArrayList<String> mainColumns(String tableName, String familyTable, String familyMemberTable);
+
+        String[] getOneYearVaccines();
+
+        String[] getTwoYearVaccines();
+    }
 }

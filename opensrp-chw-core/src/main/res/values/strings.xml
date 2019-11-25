@@ -409,4 +409,18 @@
     <string name="standard_day_method"> Standard day method</string>
     <string name="permanent_blt"> Permanent (BTL)</string>
     <string name="permanent_vasectomy"> Permanent (Vasectomy)</string>
+    <string name="hf_malaria_follow_up">Malaria follow-up</string>
+    <string name="family_planning_initiation">FP initiation</string>
+    <string name="pregnancy_confirmation">Pregnancy confirmation</string>
+    <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
+    <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
+
+    <!-- Medical history -->
+    <string name="dose_number">Dose %s</string>
+
+    <!--Wcaro Upcoming Services -->
+    <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Immunizations (%s) \n%s </string>
+
+
 </resources>

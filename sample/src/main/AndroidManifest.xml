@@ -86,7 +86,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.NoActionBar" />
         <activity
-            android:name="org.smartregister.chw.core.activity.CoreChildMedicalHistoryActivity"
+            android:name="org.smartregister.chw.hf.activity.ChildMedicalHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.NoActionBar" />
         <activity

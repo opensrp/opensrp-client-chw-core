@@ -250,7 +250,9 @@ public class CoreConstants {
             private static final String MUAC = "child_hv_muac";
             private static final String DIETARY = "child_hv_dietary_diversity";
             private static final String MNP = "child_hv_mnp";
+            private static final String MALARIA_PREVENTION = "child_hv_malaria_prevention";
             private static final String SLEEPING_UNDER_LLITN = "child_hv_sleeping_under_llitn";
+            private static final String NUTRITION_STATUS = "child_hv_nutrition_status";
 
             public static String getVaccineCard() {
                 return Utils.getLocalForm(VACCINE_CARD, locale, assetManager);
@@ -276,8 +278,16 @@ public class CoreConstants {
                 return Utils.getLocalForm(MNP, locale, assetManager);
             }
 
+            public static String getMalariaPrevention() {
+                return Utils.getLocalForm(MALARIA_PREVENTION, locale, assetManager);
+            }
+
             public static String getSleepingUnderLlitn() {
                 return Utils.getLocalForm(SLEEPING_UNDER_LLITN, locale, assetManager);
+            }
+
+            public static String getNutritionStatus() {
+                return Utils.getLocalForm(NUTRITION_STATUS, locale, assetManager);
             }
         }
 

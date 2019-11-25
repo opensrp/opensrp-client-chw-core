@@ -408,4 +408,8 @@
     <string name="standard_day_method"> Méthode de la journée type</string>
     <string name="permanent_blt"> Permanente (BTL)</string>
     <string name="permanent_vasectomy">Permanente (vasectomie)</string>
+
+    <!--Wcaro Upcoming Services -->
+    <string name="upcoming_immunizations">Vaccination (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Vaccination (%s) \n%s </string>
 </resources>

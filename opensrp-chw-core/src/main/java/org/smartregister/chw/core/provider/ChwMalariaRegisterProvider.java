@@ -31,8 +31,8 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
     private Context context;
 
     public ChwMalariaRegisterProvider(Context context, View.OnClickListener paginationClickListener,
-                                      View.OnClickListener onClickListener, Set visibleColumns, CommonRepository commonRepository) {
-        super(context, paginationClickListener, onClickListener, visibleColumns, commonRepository);
+                                      View.OnClickListener onClickListener, Set visibleColumns) {
+        super(context, paginationClickListener, onClickListener, visibleColumns);
         this.context = context;
     }
 
@@ -52,6 +52,10 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         if (CoreConstants.VISIT_STATE.OVERDUE.equalsIgnoreCase(followStatus)) {
             dueButton.setTextColor(context.getResources().getColor(R.color.white));
             dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
+        }
+        if (CoreConstants.VISIT_STATE.DUE.equalsIgnoreCase(followStatus)) {
+            dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
+            dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
         }
     }
 
