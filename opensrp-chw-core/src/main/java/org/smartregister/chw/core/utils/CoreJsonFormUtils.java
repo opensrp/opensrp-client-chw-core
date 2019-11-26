@@ -996,12 +996,23 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     private static void populateMalariaConfirmationForm(List<Obs> observations, JSONArray jsonArray) {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
+                Map<String, Map<String, String>> checkboxes = new HashMap<>();
+
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 for (Obs obs : observations) {
 
                     if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
-                        if (jsonObject.getString("type").equals("spinner")) {
+                        if (jsonObject.getString("type").equals(JsonFormConstants.SPINNER)) {
                             jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                        } else if (jsonObject.getString("type").equals(JsonFormConstants.CHECK_BOX)) {
+                            String key = jsonObject.getString(KEY);
+                            if (checkboxes.get(key) == null) {
+                                JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
+                                Map<String, String> vals = getKeyIDMap(options);
+
+                                checkboxes.put(key, vals);
+                                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, getCheckBoxValue(observations, key, vals));
+                            }
                         } else {
                             jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
                         }
@@ -1011,6 +1022,26 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         } catch (JSONException e) {
             Timber.d(e);
         }
+    }
 
+    private static JSONArray getCheckBoxValue(List<Obs> observations, String obs_key, Map<String, String> options) {
+        JSONArray array = new JSONArray();
+        for (Obs obs : observations) {
+            if (obs.getFormSubmissionField().equals(obs_key))
+                array.put(options.get(obs.getValue()));
+        }
+        return array;
+    }
+
+    private static Map<String, String> getKeyIDMap(JSONArray options) throws JSONException {
+        Map<String, String> res = new HashMap<>();
+
+        int x = options.length() - 1;
+        while (x >= 0) {
+            JSONObject object = options.getJSONObject(x);
+            res.put(object.getString(JsonFormConstants.OPENMRS_ENTITY_ID), object.getString(JsonFormConstants.KEY));
+            x--;
+        }
+        return res;
     }
 }
