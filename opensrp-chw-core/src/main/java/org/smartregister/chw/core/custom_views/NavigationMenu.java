@@ -237,7 +237,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerNavigation(Activity parentActivity) {
+    protected void registerNavigation(Activity parentActivity) {
         if (recyclerView != null) {
 
             List<NavigationOption> navigationOptions = mPresenter.getOptions();
