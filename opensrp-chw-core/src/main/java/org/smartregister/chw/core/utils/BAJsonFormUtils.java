@@ -138,7 +138,6 @@ public class BAJsonFormUtils {
 
     protected void processFieldsForMemberEdit(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray, String familyName, boolean isPrimaryCaregiver, Event ecEvent, Client ecClient) throws JSONException {
 
-
         switch (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).toLowerCase()) {
             case org.smartregister.family.util.Constants.JSON_FORM_KEY.DOB_UNKNOWN:
                 computeDOBUnknown(jsonObject, client);
@@ -256,7 +255,6 @@ public class BAJsonFormUtils {
         if (ecClient.getLastName() != null) {
 
             final String SAME_AS_FAM_NAME = "same_as_fam_name";
-            final String SURNAME = "surname";
 
             jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, familyName);
 
@@ -272,15 +270,17 @@ public class BAJsonFormUtils {
                 sameOptions.put(org.smartregister.family.util.JsonFormUtils.VALUE, false);
             }
 
+            final String SURNAME = "surname";
+
             JSONObject surname = CoreJsonFormUtils.getFieldJSONObject(jsonArray, SURNAME);
             if (!familyName.equals(lastName)) {
                 surname.put(org.smartregister.family.util.JsonFormUtils.VALUE, lastName);
                 surname.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, false);
+                sameAsFamName.remove(org.smartregister.family.util.JsonFormUtils.VALUE);
             } else {
                 surname.put(org.smartregister.family.util.JsonFormUtils.VALUE, "");
                 surname.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
             }
-
         }
     }
 
