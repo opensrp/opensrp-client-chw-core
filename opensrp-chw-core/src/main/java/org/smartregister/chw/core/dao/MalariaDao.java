@@ -68,6 +68,7 @@ public class MalariaDao extends AbstractDao {
             memberObject.setFamilyHeadPhoneNumber(getCursorValue(cursor, "family_head_phone_number", ""));
             memberObject.setAncMember(getCursorValue(cursor, "anc_is_closed", ""));
             memberObject.setPncMember(getCursorValue(cursor, "pnc_is_closed", ""));
+            memberObject.setMalariaTestDate(getCursorValue(cursor, "malaria_test_date", ""));
 
             String familyHeadName = getCursorValue(cursor, "family_head_first_name", "") + " "
                     + getCursorValue(cursor, "family_head_middle_name", "");

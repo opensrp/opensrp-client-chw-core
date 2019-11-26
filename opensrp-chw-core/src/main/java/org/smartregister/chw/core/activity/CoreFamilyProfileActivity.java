@@ -311,11 +311,15 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (view.getTag() instanceof CommonPersonObjectClient) {
             CommonPersonObjectClient commonPersonObjectClient = (CommonPersonObjectClient) view.getTag();
             String entityType = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.ENTITY_TYPE, false);
+            String schedule_name = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.SCHEDULE_NAME, false);
+
             if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
                 if (isAncMember(commonPersonObjectClient.entityId())) {
                     goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
                 } else if (isPncMember(commonPersonObjectClient.entityId())) {
                     gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
+                } else if (CoreConstants.SCHEDULE_TYPES.MALARIA_VISIT.equals(schedule_name)) {
+                    gotToMalariaProfileActivity(commonPersonObjectClient);
                 } else {
                     goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
                 }
@@ -365,6 +369,9 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         startActivity(initProfileActivityIntent(patient, bundle, getPncMemberProfileActivityClass()));
     }
 
+    public void gotToMalariaProfileActivity(CommonPersonObjectClient patient) {
+    }
+
     private Intent initProfileActivityIntent(CommonPersonObjectClient patient, Bundle bundle, Class activityClass) {
         Intent intent = new Intent(this, activityClass);
         if (bundle != null) {
@@ -395,4 +402,5 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected abstract CommonPersonObject getPncCommonPersonObject(String baseEntityId);
 
     protected abstract boolean isPncMember(String baseEntityId);
+
 }

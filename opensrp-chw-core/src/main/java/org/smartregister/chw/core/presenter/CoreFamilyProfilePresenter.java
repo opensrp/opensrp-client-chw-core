@@ -11,6 +11,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.domain.FamilyMember;
 import org.smartregister.chw.core.interactor.CoreChildRegisterInteractor;
@@ -183,6 +184,10 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
     public boolean isPncMember(String baseEntityId) {
         return PNCDao.isPNCMember(baseEntityId);
+    }
+
+    public boolean isMalariaMember(String baseEntityId) {
+        return MalariaDao.isRegisteredForMalaria(baseEntityId);
     }
 
     private AncRegisterRepository getAncRegisterRepository() {

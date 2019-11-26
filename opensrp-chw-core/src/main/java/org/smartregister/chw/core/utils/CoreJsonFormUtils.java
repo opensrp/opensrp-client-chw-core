@@ -893,7 +893,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getAutoJsonEditAncFormString(String baseEntityID, Context context, String formName, String eventType, String title) {
         try {
 
-            Event event = getEditAncLatestProperties(baseEntityID);
+            Event event = getEditFormLatestProperties(baseEntityID, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, CoreConstants.EventType.ANC_REGISTRATION);
             final List<Obs> observations = event.getObs();
             JSONObject form = getFormWithMetaData(baseEntityID, context, formName, eventType);
             if (form != null) {
@@ -933,12 +933,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return null;
     }
 
-    private static Event getEditAncLatestProperties(String baseEntityID) {
+    private static Event getEditFormLatestProperties(String baseEntityID, String eventType, String updateEventType) {
 
         Event ecEvent = null;
 
-        String query_event = String.format("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;",
-                baseEntityID, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, CoreConstants.EventType.ANC_REGISTRATION);
+        String query_event = String.format("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;", baseEntityID, eventType, updateEventType);
 
         try (Cursor cursor = CoreChwApplication.getInstance().getRepository().getReadableDatabase().rawQuery(query_event, new String[]{})) {
             cursor.moveToFirst();
@@ -966,5 +965,83 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
     public static JSONObject getAutoPopulatedJsonEditMemberFormString(String title, String formName, Context context, CommonPersonObjectClient client, String eventType, String familyName, boolean isPrimaryCaregiver) {
         return new BAJsonFormUtils(CoreChwApplication.getInstance()).getAutoJsonEditMemberFormString(title, formName, context, client, eventType, familyName, isPrimaryCaregiver);
+    }
+
+
+    public static JSONObject getEditMalariaFormString(String baseEntityID, Context context, String formName) {
+        try {
+            Event event = getEditFormLatestProperties(baseEntityID, CoreConstants.EventType.UPDATE_MALARIA_CONFIRMATION, CoreConstants.EventType.MALARIA_CONFIRMATION);
+            JSONObject form = getFormWithMetaData(baseEntityID, context, formName, CoreConstants.EventType.UPDATE_MALARIA_CONFIRMATION);
+
+            if (form != null) {
+                JSONObject stepOne = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP1);
+                final List<Obs> observations = event.getObs();
+                stepOne.put(TITLE, context.getResources().getString(R.string.malaria__update_form_info));
+                JSONArray stepOneJsonArray = stepOne.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+                populateMalariaConfirmationForm(observations, stepOneJsonArray);
+
+                JSONObject stepTwo = form.getJSONObject(org.smartregister.family.util.JsonFormUtils.STEP2);
+                JSONArray stepTwoJsonArray = stepTwo.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
+                populateMalariaConfirmationForm(observations, stepTwoJsonArray);
+
+                return form;
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
+    }
+
+    private static void populateMalariaConfirmationForm(List<Obs> observations, JSONArray jsonArray) {
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Map<String, Map<String, String>> checkboxes = new HashMap<>();
+
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                for (Obs obs : observations) {
+
+                    if (obs.getFormSubmissionField().equalsIgnoreCase(jsonObject.getString(KEY))) {
+                        if (jsonObject.getString("type").equals(JsonFormConstants.SPINNER)) {
+                            jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getHumanReadableValues().get(0));
+                        } else if (jsonObject.getString("type").equals(JsonFormConstants.CHECK_BOX)) {
+                            String key = jsonObject.getString(KEY);
+                            if (checkboxes.get(key) == null) {
+                                JSONArray options = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
+                                Map<String, String> vals = getKeyIDMap(options);
+
+                                checkboxes.put(key, vals);
+                                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, getCheckBoxValue(observations, key, vals));
+                            }
+                        } else {
+                            jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, obs.getValue());
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Timber.d(e);
+        }
+    }
+
+    private static JSONArray getCheckBoxValue(List<Obs> observations, String obs_key, Map<String, String> options) {
+        JSONArray array = new JSONArray();
+        for (Obs obs : observations) {
+            if (obs.getFormSubmissionField().equals(obs_key))
+                array.put(options.get(obs.getValue()));
+        }
+        return array;
+    }
+
+    private static Map<String, String> getKeyIDMap(JSONArray options) throws JSONException {
+        Map<String, String> res = new HashMap<>();
+
+        int x = options.length() - 1;
+        while (x >= 0) {
+            JSONObject object = options.getJSONObject(x);
+            res.put(object.getString(JsonFormConstants.OPENMRS_ENTITY_ID), object.getString(JsonFormConstants.KEY));
+            x--;
+        }
+        return res;
     }
 }
