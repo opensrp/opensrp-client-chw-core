@@ -418,4 +418,10 @@
 
     <!-- Medical history -->
     <string name="dose_number">Dose %s</string>
+
+    <!--Wcaro Upcoming Services -->
+    <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Immunizations (%s) \n%s </string>
+
+
 </resources>

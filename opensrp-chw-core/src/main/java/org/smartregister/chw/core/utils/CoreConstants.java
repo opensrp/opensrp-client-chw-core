@@ -680,6 +680,7 @@ public class CoreConstants {
         public static final String OVERDUE = "OVERDUE";
         public static final String VISIT_NOT_DONE = "VISIT_NOT_DONE";
         public static final String VISIT_DONE = "VISIT_DONE";
+        public static final String NOT_VISIT_THIS_MONTH = "NOT_VISIT_THIS_MONTH";
     }
 
     public static final class DATE_FORMATS {

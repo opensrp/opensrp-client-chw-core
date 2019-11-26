@@ -415,7 +415,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.visit_month, monthName));
         textViewUndo.setText(getString(R.string.edit));
         textViewUndo.setVisibility(View.GONE);
-        imageViewCross.setImageResource(R.drawable.activityrow_visited);
+        imageViewCrossChild.setImageResource(R.drawable.activityrow_visited);
         openVisitMonthView();
     }
 
