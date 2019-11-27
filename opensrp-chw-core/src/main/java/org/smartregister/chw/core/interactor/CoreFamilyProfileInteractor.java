@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
