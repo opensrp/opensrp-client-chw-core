@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.job;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.smartregister.reporting.job.RecurringIndicatorGeneratingJob;
 

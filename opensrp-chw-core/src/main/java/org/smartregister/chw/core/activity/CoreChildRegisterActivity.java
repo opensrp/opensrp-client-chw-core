@@ -2,8 +2,8 @@ package org.smartregister.chw.core.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.bottomnavigation.LabelVisibilityMode;
-import android.support.v4.app.Fragment;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import androidx.fragment.app.Fragment;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
