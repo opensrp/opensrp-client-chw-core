@@ -15,6 +15,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.fp.activity.BaseFpRegisterActivity;
 import org.smartregister.chw.malaria.activity.BaseMalariaRegisterActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
