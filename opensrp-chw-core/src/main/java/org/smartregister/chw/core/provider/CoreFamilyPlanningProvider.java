@@ -14,7 +14,6 @@ import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.rule.FPAlertRule;
-import org.smartregister.chw.core.rule.PncVisitAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -57,9 +56,9 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FPAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
-            setVisitButtonDueStatus(context, fpAlertRule.getVisitId(), viewHolder.dueButton);
+            setVisitButtonDueStatus(context, fpAlertRule.getVisitID(), viewHolder.dueButton);
         } else if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
-            setVisitButtonOverdueStatus(context, fpAlertRule.getVisitId(), viewHolder.dueButton);
+            setVisitButtonOverdueStatus(context, fpAlertRule.getVisitID(), viewHolder.dueButton);
         } else if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
             setVisitDone(context, viewHolder.dueButton);
         }
@@ -123,8 +122,8 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
             if (lastVisit != null) {
                 lastVisitDate = lastVisit.getDate();
             }
-            for(Rules rule:fpRules){
-                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule,lastVisitDate,deliveryDate);
+            for (Rules rule : fpRules) {
+                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, deliveryDate);
             }
             return null;
         }
@@ -132,12 +131,12 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
         @Override
         protected void onPostExecute(Void param) {
             // Update status column
-            if (fpAlertRule == null || StringUtils.isBlank(fpAlertRule.getVisitId())) {
+            if (fpAlertRule == null || StringUtils.isBlank(fpAlertRule.getVisitID())) {
                 return;
             }
 
             if (fpAlertRule != null
-                    && StringUtils.isNotBlank(fpAlertRule.getVisitId())
+                    && StringUtils.isNotBlank(fpAlertRule.getVisitID())
                     && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
             ) {
                 updateDueColumn(context, viewHolder, fpAlertRule);

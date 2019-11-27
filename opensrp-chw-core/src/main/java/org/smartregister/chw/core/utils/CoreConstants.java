@@ -524,11 +524,11 @@ public class CoreConstants {
         public static final String CONTACT_RULES = "contact-rules.yml";
         public static final String PNC_HEALTH_FACILITY_VISIT = "pnc-health-facility-schedule-rule.yml";
         public static final String MALARIA_FOLLOW_UP_VISIT = "malaria-followup-rules.yml";
-        public static final String FP_COC_POP_REFILL = "fp_coc_pop_refill";
-        public static final String FP_CONDOM_REFILL = "fp_condom_refill";
-        public static final String FP_INJECTION_DUE = "fp_injection_due";
-        public static final String FP_FEMALE_STERILIZATION = "fp_female_sterilization";
-        public static final String FP_IUCD ="fp_iucd";
+        public static final String FP_COC_POP_REFILL = "fp-coc-pop-refill-rule.yml";
+        public static final String FP_CONDOM_REFILL = "fp-condom-refill-rule.yml";
+        public static final String FP_INJECTION_DUE = "fp-injection-due-rule.yml";
+        public static final String FP_FEMALE_STERILIZATION = "fp-female-sterilization-rule.yml";
+        public static final String FP_IUCD ="fp-iucd-rule.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {
