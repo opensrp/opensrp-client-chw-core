@@ -137,6 +137,9 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_anc_registration) {
             startAncRegister();
             return true;
+        }  else if (i == R.id.action_fp_initiation) {
+            startFpRegister();
+            return true;
         } else if (i == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
@@ -156,6 +159,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     }
 
     protected abstract void startAncRegister();
+
+    protected abstract void startFpRegister();
 
     protected abstract void startMalariaRegister();
 
