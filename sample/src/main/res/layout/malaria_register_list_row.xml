@@ -32,7 +32,7 @@
             android:text="CG:Parent Name"
             android:textColor="@color/text_black"
             android:textSize="@dimen/register_list_title_size"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/patient_name_age"
@@ -57,8 +57,8 @@
                 style="@style/CustomFontTextViewStyle.ClientList.Light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lavingtone #445"
                 android:paddingStart="0dp"
+                android:text="Lavingtone #445"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/register_member_village_size" />
@@ -80,6 +80,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/register_member_village_size" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/text_view_referral_day"
             android:layout_width="wrap_content"

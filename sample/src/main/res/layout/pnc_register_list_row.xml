@@ -55,8 +55,8 @@
             android:layout_marginStart="@dimen/referral_item_margin"
             android:layout_marginEnd="@dimen/referral_item_margin"
             android:layout_toEndOf="@id/pnc_period"
-            android:textStyle="bold"
-            android:text="." />
+            android:text="."
+            android:textStyle="bold" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/village_town"
