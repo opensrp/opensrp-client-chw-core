@@ -2,7 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
 
 import org.apache.commons.lang3.tuple.Triple;

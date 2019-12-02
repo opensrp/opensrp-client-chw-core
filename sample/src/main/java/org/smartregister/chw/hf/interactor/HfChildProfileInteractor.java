@@ -1,7 +1,8 @@
 package org.smartregister.chw.hf.interactor;
 
 import android.content.Context;
-import android.support.annotation.VisibleForTesting;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;

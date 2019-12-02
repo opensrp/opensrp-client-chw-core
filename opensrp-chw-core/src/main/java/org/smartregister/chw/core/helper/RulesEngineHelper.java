@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public class RulesEngineHelper {
     private final String RULE_FOLDER_PATH = "rule/";
     private Context context;
@@ -68,7 +70,11 @@ public class RulesEngineHelper {
             if (!ruleMap.containsKey(fileName)) {
 
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open(fileName)));
-                ruleMap.put(fileName, MVELRuleFactory.createRulesFrom(bufferedReader));
+                try {
+                    ruleMap.put(fileName, MVELRuleFactory.createRulesFrom(bufferedReader));
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
             }
             return ruleMap.get(fileName);
         } catch (IOException e) {

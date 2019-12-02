@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,9 +30,7 @@ import org.smartregister.chw.hf.adapter.ReferralCardViewAdapter;
 import org.smartregister.chw.hf.model.FamilyProfileModel;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.AllCommonsRepository;
-import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -96,11 +96,11 @@ public class AncMemberProfileActivity extends CoreAncMemberProfileActivity {
         super.onOptionsItemSelected(item);
         int itemId = item.getItemId();
         if (itemId == org.smartregister.chw.core.R.id.action_pregnancy_out_come) {
-             PncRegisterActivity.startAncRegistrationActivity(
-                     AncMemberProfileActivity.this, memberObject.getBaseEntityId(),
-                     null, CoreConstants.JSON_FORM.getPregnancyOutcome(),
-                     AncLibrary.getInstance().getUniqueIdRepository().getNextUniqueId().getOpenmrsId(),
-                     memberObject.getFamilyBaseEntityId(), memberObject.getFamilyName());
+            PncRegisterActivity.startAncRegistrationActivity(
+                    AncMemberProfileActivity.this, memberObject.getBaseEntityId(),
+                    null, CoreConstants.JSON_FORM.getPregnancyOutcome(),
+                    AncLibrary.getInstance().getUniqueIdRepository().getNextUniqueId().getOpenmrsId(),
+                    memberObject.getFamilyBaseEntityId(), memberObject.getFamilyName());
             return true;
         }
         return true;

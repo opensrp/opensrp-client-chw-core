@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/register_columns"
     android:layout_width="match_parent"
@@ -55,8 +55,8 @@
             android:layout_marginStart="@dimen/referral_item_margin"
             android:layout_marginEnd="@dimen/referral_item_margin"
             android:layout_toEndOf="@id/pnc_period"
-            android:textStyle="bold"
-            android:text="." />
+            android:text="."
+            android:textStyle="bold" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/village_town"
@@ -160,5 +160,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -10,10 +10,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -415,7 +415,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.visit_month, monthName));
         textViewUndo.setText(getString(R.string.edit));
         textViewUndo.setVisibility(View.GONE);
-        imageViewCross.setImageResource(R.drawable.activityrow_visited);
+        imageViewCrossChild.setImageResource(R.drawable.activityrow_visited);
         openVisitMonthView();
     }
 
