@@ -105,7 +105,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);

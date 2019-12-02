@@ -701,6 +701,7 @@ public class CoreConstants {
         public static final String PNC_REGISTER_ACTIVITY = "PNC_REGISTER_ACTIVITY";
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
+        public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
     }
 
