@@ -47,6 +47,7 @@ public class CoreConstants {
         String PNC_VISIT = "PNC_VISIT";
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
+        String FP_VISIT ="FP_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
