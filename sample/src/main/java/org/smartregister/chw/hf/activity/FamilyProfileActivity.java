@@ -1,9 +1,10 @@
 package org.smartregister.chw.hf.activity;
 
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CoreAboveFiveChildProfileActivity;

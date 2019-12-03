@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -94,11 +96,11 @@ public class AncMemberProfileActivity extends CoreAncMemberProfileActivity {
         super.onOptionsItemSelected(item);
         int itemId = item.getItemId();
         if (itemId == org.smartregister.chw.core.R.id.action_pregnancy_out_come) {
-             PncRegisterActivity.startAncRegistrationActivity(
-                     AncMemberProfileActivity.this, memberObject.getBaseEntityId(),
-                     null, CoreConstants.JSON_FORM.getPregnancyOutcome(),
-                     AncLibrary.getInstance().getUniqueIdRepository().getNextUniqueId().getOpenmrsId(),
-                     memberObject.getFamilyBaseEntityId(), memberObject.getFamilyName());
+            PncRegisterActivity.startAncRegistrationActivity(
+                    AncMemberProfileActivity.this, memberObject.getBaseEntityId(),
+                    null, CoreConstants.JSON_FORM.getPregnancyOutcome(),
+                    AncLibrary.getInstance().getUniqueIdRepository().getNextUniqueId().getOpenmrsId(),
+                    memberObject.getFamilyBaseEntityId(), memberObject.getFamilyName());
             return true;
         }
         return true;
