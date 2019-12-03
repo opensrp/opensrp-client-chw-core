@@ -23,6 +23,7 @@
         android:id="@+id/action_fp_initiation"
         android:enabled="true"
         android:title="@string/fp_initiation"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item
