@@ -417,4 +417,6 @@
     <string name="date_days">Jours</string>
     <string name="date_weeks">Semaines</string>
     <string name="date_months">Mois</string>
+
+    <string name="last_visit_x_days_ago">Dernière visite il y a %1$s jours</string>
 </resources>

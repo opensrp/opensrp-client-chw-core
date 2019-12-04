@@ -413,4 +413,6 @@
     <string name="date_days">Siku</string>
     <string name="date_weeks">Wiki</string>
     <string name="date_months">Miezi</string>
+
+    <string name="last_visit_x_days_ago">Tembeleo la mwisho siku %1$s iliyopita</string>
 </resources>

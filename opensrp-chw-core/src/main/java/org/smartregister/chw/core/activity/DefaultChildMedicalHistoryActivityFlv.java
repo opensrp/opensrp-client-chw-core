@@ -2,14 +2,15 @@ package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.annotation.LayoutRes;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.LayoutRes;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -29,6 +30,7 @@ import org.smartregister.chw.core.utils.CustomDividerItemDecoration;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
+import org.smartregister.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,7 +93,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             List<MedicalHistory> medicalHistories = new ArrayList<>();
             MedicalHistory history = new MedicalHistory();
             int days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
-            history.setText(context.getString(R.string.last_visit_40_days_ago, Integer.toString(days)));
+            history.setText(context.getString(R.string.last_visit_x_days_ago, Integer.toString(days)));
             medicalHistories.add(history);
 
             View view = new ViewBuilder()
@@ -181,7 +183,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             count.getAndSet(count.get() + 1);
             return String.format("%s: %s",
                     context.getString(R.string.exclusive_breastfeeding_months, Integer.toString(count.get())),
-                    context.getString(NCUtils.getText(details).toLowerCase().contains("yes") ? R.string.no :  R.string.yes)
+                    context.getString(NCUtils.getText(details).toLowerCase().contains("yes") ? R.string.no : R.string.yes)
             );
         };
     }
