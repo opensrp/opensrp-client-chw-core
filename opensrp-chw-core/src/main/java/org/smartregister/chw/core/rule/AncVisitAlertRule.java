@@ -195,7 +195,7 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
 
     public Date getNotDoneDate() {
         if (getCompletionDate() == null && visitNotDoneDate != null) {
-            return visitNotDoneDate.toDate();
+            return visitNotDoneDate.toDate().getTime() >= getDueDate().getTime() ? visitNotDoneDate.toDate()  :  null;
         }
         return null;
     }
