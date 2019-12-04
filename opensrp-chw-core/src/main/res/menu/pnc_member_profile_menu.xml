@@ -19,6 +19,11 @@
         android:enabled="true"
         android:title="@string/malaria_registration"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/fp_initiation"
+        android:enabled="true"
+        android:title="@string/fp_initiation"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action__pnc_remove_member"

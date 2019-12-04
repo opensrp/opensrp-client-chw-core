@@ -45,8 +45,8 @@ public class HomeVisitUtil {
         return pncVisitAlertRule;
     }
 
-    public static FPAlertRule getFpVisitStatus(Rules rules, Date lastVisitDate, Date fpDate) {
-        FPAlertRule fpAlertRule = new FPAlertRule(lastVisitDate, fpDate);
+    public static FPAlertRule getFpVisitStatus(Rules rules, Date lastVisitDate, Date fpDate, Integer pillCycles, String fpMethod) {
+        FPAlertRule fpAlertRule = new FPAlertRule(fpDate, lastVisitDate, pillCycles, fpMethod);
         CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(fpAlertRule, rules);
         return fpAlertRule;
     }

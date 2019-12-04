@@ -2,47 +2,48 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
 import org.apache.commons.lang3.StringUtils;
-import org.smartregister.chw.anc.fragment.BaseAncRegisterFragment;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.CoreAncMemberProfileActivity;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.model.CoreAncRegisterFragmentModel;
-import org.smartregister.chw.core.presenter.AncRegisterFragmentPresenter;
-import org.smartregister.chw.core.provider.ChwAncRegisterProvider;
+import org.smartregister.chw.core.provider.CoreFamilyPlanningProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryBuilder;
 import org.smartregister.chw.core.utils.Utils;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.chw.fp.fragment.BaseFpRegisterFragment;
+import org.smartregister.chw.fp.provider.BaseFpRegisterProvider;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import timber.log.Timber;
 
-public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
+public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
 
     private static final String DUE_FILTER_TAG = "PRESSED";
     private View view;
+    private View dueOnlyLayout;
     private boolean dueFilterActive = false;
 
     @Override
     public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        ChwAncRegisterProvider provider = new ChwAncRegisterProvider(getActivity(), commonRepository(), visibleColumns, registerActionHandler, paginationViewHandler);
-        clientAdapter = new RecyclerViewPaginatedAdapter(null, provider, context().commonrepository(this.tablename));
+        CoreFamilyPlanningProvider fpRegisterProvider = new CoreFamilyPlanningProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
+        clientAdapter = new RecyclerViewPaginatedAdapter(null, fpRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);
     }
@@ -55,7 +56,6 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
-        toolbar.setContentInsetStartWithNavigation(0);
         toolbar.setContentInsetStartWithNavigation(0);
 
         NavigationMenu.getInstance(getActivity(), null, toolbar);
@@ -86,43 +86,33 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         View filterSortLayout = view.findViewById(R.id.filter_sort_layout);
         filterSortLayout.setVisibility(View.GONE);
 
-        View dueOnlyLayout = view.findViewById(R.id.due_only_layout);
+        dueOnlyLayout = view.findViewById(R.id.due_only_layout);
         dueOnlyLayout.setVisibility(View.VISIBLE);
         dueOnlyLayout.setOnClickListener(registerActionHandler);
 
         if (getSearchView() != null) {
-            getSearchView().setBackgroundResource(R.color.white);
-            getSearchView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search, 0, 0, 0);
+            getSearchView().setBackgroundResource(org.smartregister.family.R.color.white);
+            getSearchView().setCompoundDrawablesWithIntrinsicBounds(org.smartregister.family.R.drawable.ic_action_search, 0, 0, 0);
             getSearchView().setTextColor(getResources().getColor(R.color.text_black));
         }
-
-        NavigationMenu.getInstance(getActivity(), null, toolbar);
     }
 
     @Override
-    protected void initializePresenter() {
-        if (getActivity() == null) {
-            return;
-        }
-        presenter = new AncRegisterFragmentPresenter(this, new CoreAncRegisterFragmentModel(), null);
-    }
-
-    @Override
-    protected String getMainCondition() {
-        return presenter().getMainCondition();
+    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
+        //TODO
+        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
     }
 
     @Override
     protected void onViewClicked(View view) {
+        super.onViewClicked(view);
 
         if (view.getId() == R.id.due_only_layout) {
             toggleFilterSelection(view);
-        } else {
-            super.onViewClicked(view);
         }
     }
 
-    private void toggleFilterSelection(View dueOnlyLayout) {
+    protected void toggleFilterSelection(View dueOnlyLayout) {
         if (dueOnlyLayout != null) {
             if (dueOnlyLayout.getTag() == null) {
                 dueFilterActive = true;
@@ -134,26 +124,7 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         }
     }
 
-    private void dueFilter(View dueOnlyLayout) {
-        filter(searchText(), "", presenter().getDueFilterCondition());
-        dueOnlyLayout.setTag(DUE_FILTER_TAG);
-        switchViews(dueOnlyLayout, true);
-    }
-
-    private void normalFilter(View dueOnlyLayout) {
-        filter(searchText(), "", presenter().getMainCondition());
-        dueOnlyLayout.setTag(null);
-        switchViews(dueOnlyLayout, false);
-    }
-
-    protected void filter(String filterString, String joinTableString, String mainConditionString) {
-        filters = filterString;
-        joinTable = joinTableString;
-        mainCondition = mainConditionString;
-        filterandSortExecute(countBundle());
-    }
-
-    private String searchText() {
+    protected String searchText() {
         return (getSearchView() == null) ? "" : getSearchView().getText().toString();
     }
 
@@ -163,16 +134,18 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
             dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_on, 0);
         } else {
             dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_off, 0);
+
         }
     }
 
     @Override
-    protected void openProfile(CommonPersonObjectClient client) {
-        CoreAncMemberProfileActivity.startMe(getActivity(), client.getCaseId());
+    protected void onResumption() {
+        if (dueFilterActive && dueOnlyLayout != null) {
+            dueFilter(dueOnlyLayout);
+        } else {
+            super.onResumption();
+        }
     }
-
-    @Override
-    protected abstract void openHomeVisit(CommonPersonObjectClient client);
 
     @Override
     public void onResume() {
@@ -182,7 +155,6 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
-
         NavigationMenu.getInstance(getActivity(), null, toolbar);
     }
 
@@ -206,12 +178,11 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
             customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.LAST_NAME, filters));
             customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.MIDDLE_NAME, filters));
             customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ) ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, filters));
-        }
 
+        }
         if (dueFilterActive) {
-            customFilter.append(getDueCondition());
+            customFilter.append(MessageFormat.format(" and ( {0}) ", presenter().getDueFilterCondition()));
         }
-
         try {
             if (isValidFilterForFts(commonRepository())) {
 
@@ -227,10 +198,46 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
 
             }
         } catch (Exception e) {
-            Timber.e(e);
+            Log.e(getClass().getName(), e.toString(), e);
         }
 
         return query;
+    }
+
+
+    @Override
+    public void countExecute() {
+        Cursor c = null;
+        try {
+
+            String query = "select count(*) from " + presenter().getMainTable() + " inner join " + CoreConstants.TABLE_NAME.FAMILY_MEMBER +
+                    " on " + presenter().getMainTable() + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " +
+                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
+                    " where " + presenter().getMainCondition();
+
+            if (StringUtils.isNotBlank(filters)) {
+                query = query + " and ( " + filters + " ) ";
+            }
+
+            if (dueFilterActive) {
+                query = query + " and ( " + presenter().getDueFilterCondition() + " ) ";
+            }
+
+            c = commonRepository().rawCustomQueryForAdapter(query);
+            c.moveToFirst();
+            clientAdapter.setTotalcount(c.getInt(0));
+            Timber.v("total count here %s", clientAdapter.getTotalcount());
+
+            clientAdapter.setCurrentlimit(20);
+            clientAdapter.setCurrentoffset(0);
+
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
     }
 
     @Override
@@ -252,43 +259,24 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         return super.onCreateLoader(id, args);
     }
 
-    public String getDueCondition() {
-        return " and " + CoreConstants.TABLE_NAME.ANC_MEMBER + ".base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.ANC_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
+    protected void dueFilter(View dueOnlyLayout) {
+        filterDue(searchText(), "", presenter().getDueFilterCondition());
+        dueOnlyLayout.setTag(DUE_FILTER_TAG);
+        switchViews(dueOnlyLayout, true);
+    }
+    protected void normalFilter(View dueOnlyLayout) {
+        filterDue(searchText(), "", presenter().getMainCondition());
+        dueOnlyLayout.setTag(null);
+        switchViews(dueOnlyLayout, false);
     }
 
-    @Override
-    public void countExecute() {
-        Cursor cursor = null;
-        try {
-
-            String query = "select count(*) from " + presenter().getMainTable() + " inner join " + CoreConstants.TABLE_NAME.FAMILY_MEMBER +
-                    " on " + presenter().getMainTable() + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " +
-                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
-                    " where " + presenter().getMainCondition();
-
-            if (StringUtils.isNotBlank(filters)) {
-                query = query + " and ( " + filters + " ) ";
-            }
-
-            if (dueFilterActive) {
-                query = query + getDueCondition();
-            }
-
-            cursor = commonRepository().rawCustomQueryForAdapter(query);
-            cursor.moveToFirst();
-            clientAdapter.setTotalcount(cursor.getInt(0));
-            Timber.v("total count here %d", clientAdapter.getTotalcount());
-
-            clientAdapter.setCurrentlimit(20);
-            clientAdapter.setCurrentoffset(0);
-
-
-        } catch (Exception e) {
-            Timber.e(e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+    protected void filterDue(String filterString, String joinTableString, String mainConditionString) {
+        filters = filterString;
+        joinTable = joinTableString;
+        mainCondition = mainConditionString;
+        filterandSortExecute(countBundle());
     }
+
 }
+
+

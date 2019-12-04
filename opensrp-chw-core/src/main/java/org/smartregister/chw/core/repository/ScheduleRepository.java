@@ -35,7 +35,7 @@ public class ScheduleRepository extends BaseRepository {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + "(" +
+    public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + "(" +
             ID + "  VARCHAR , " +
             BASE_ENTITY_ID + "  VARCHAR, " +
             SCHEDULE_GROUP_NAME + "  VARCHAR, " +
@@ -52,9 +52,11 @@ public class ScheduleRepository extends BaseRepository {
 
     private String[] COLUMNS = {BASE_ENTITY_ID, SCHEDULE_GROUP_NAME, SCHEDULE_NAME, DUE_DATE, NOT_DONE_DATE, OVER_DUE_DATE, EXPIRY_DATE, COMPLETION_DATE, UPDATED_AT, CREATED_AT};
 
-    private static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
-    private static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE " + ")";
-    private static final String SCHEDULE_GROUP_NAME_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + SCHEDULE_GROUP_NAME + "_index ON " + TABLE_NAME + "(" + SCHEDULE_GROUP_NAME + " COLLATE NOCASE " + ")";
+    public static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
+    public static final String USER_UNIQUE_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + SCHEDULE_NAME + "_index ON " +
+            TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE , " + SCHEDULE_GROUP_NAME + " COLLATE NOCASE , " + SCHEDULE_NAME + " COLLATE NOCASE " + ")";
+    public static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE " + ")";
+    public static final String SCHEDULE_GROUP_NAME_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + SCHEDULE_GROUP_NAME + "_index ON " + TABLE_NAME + "(" + SCHEDULE_GROUP_NAME + " COLLATE NOCASE " + ")";
 
     public ScheduleRepository(Repository repository) {
         super(repository);
@@ -63,6 +65,7 @@ public class ScheduleRepository extends BaseRepository {
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_SQL);
         database.execSQL(BASE_ID_INDEX);
+        database.execSQL(USER_UNIQUE_INDEX);
         database.execSQL(BASE_ENTITY_ID_INDEX);
         database.execSQL(SCHEDULE_GROUP_NAME_INDEX);
     }

@@ -2,9 +2,9 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -105,7 +105,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);

@@ -47,6 +47,7 @@ public class CoreConstants {
         String PNC_VISIT = "PNC_VISIT";
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
+        String FP_VISIT = "FP_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
@@ -151,6 +152,7 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -228,6 +230,10 @@ public class CoreConstants {
 
         public static String getMalariaConfirmation() {
             return Utils.getLocalForm(MALARIA_CONFIRMATION, locale, assetManager);
+        }
+
+        public static String getFpRegistration() {
+            return Utils.getLocalForm(FAMILY_PLANNING_REGISTRATION_FORM, locale, assetManager);
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
@@ -701,6 +707,7 @@ public class CoreConstants {
         public static final String PNC_REGISTER_ACTIVITY = "PNC_REGISTER_ACTIVITY";
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
+        public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
     }
 
