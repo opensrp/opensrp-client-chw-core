@@ -30,7 +30,6 @@ import org.smartregister.chw.core.utils.CustomDividerItemDecoration;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
-import org.smartregister.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +76,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
         evaluateLastVisitDate();
         evaluateImmunizations();
+        evaluateVaccineCard();
         evaluateGrowthAndNutrition();
         evaluateECD();
         evaluateLLITN();
@@ -143,6 +143,43 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         }
     }
 
+    private void evaluateVaccineCard() {
+
+        List<Visit> visits = visitMap.get(CoreConstants.EventType.CHILD_VACCINE_CARD_RECEIVED);
+
+        String value = getValue(visits).toLowerCase().contains("yes") ? context.getString(R.string.yes) : context.getString(R.string.no);
+
+        List<MedicalHistory> medicalHistories = new ArrayList<>();
+        MedicalHistory history = new MedicalHistory();
+        history.setText(String.format("%s %s", context.getString(R.string.vaccine_card_text), value));
+        medicalHistories.add(history);
+
+        View view = new ViewBuilder()
+                .withTitle(context.getString(R.string.vaccine_card_title))
+                .withHistory(medicalHistories)
+                .withSeparator(true)
+                .build();
+        parentView.addView(view);
+    }
+
+    private String getValue(List<Visit> visits) {
+        String val = "";
+        if (visits != null) {
+            List<VisitDetail> details = new ArrayList<>();
+
+            for (Visit v : visits) {
+                if (v.getVisitDetails() != null) {
+                    List<VisitDetail> all = v.getVisitDetails().get("child_vaccine_card");
+                    if (all != null)
+                        details.addAll(all);
+                }
+            }
+
+            val = NCUtils.getText(details);
+        }
+        return val;
+    }
+
     private String getVaccineTitle(String name, Context context) {
         String res = name.contains("birth") ? context.getString(R.string.at_birth) :
                 name.replace("weeks", " " + context.getString(R.string.week_full))
@@ -198,13 +235,13 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 return null;
 
             Date vaccineDate = VisitUtils.getDateFromString(date);
-            if(vaccineDate == null)
+            if (vaccineDate == null)
                 return null;
 
             return String.format("%s - %s %s",
                     context.getString(R.string.dose_number, numberOnly),
                     done,
-                    vaccineDate != null ? sdf.format(vaccineDate) : ""
+                    sdf.format(vaccineDate)
             );
         };
     }
@@ -219,13 +256,13 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 return null;
 
             Date vaccineDate = VisitUtils.getDateFromString(date);
-            if(vaccineDate == null)
+            if (vaccineDate == null)
                 return null;
 
             return String.format("%s - %s %s",
                     context.getString(R.string.dose_number, numberOnly),
                     done,
-                    vaccineDate != null ? sdf.format(vaccineDate) : ""
+                    sdf.format(vaccineDate)
             );
         };
     }
