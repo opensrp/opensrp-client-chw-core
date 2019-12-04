@@ -408,4 +408,9 @@
     <string name="standard_day_method">Shanga</string>
     <string name="permanent_blt">Kufunga kizazi mwanamke</string>
     <string name="permanent_vasectomy">Kufunga kizazi mwanamme</string>
+
+    <!-- dates -->
+    <string name="date_days">Siku</string>
+    <string name="date_weeks">Wiki</string>
+    <string name="date_months">Miezi</string>
 </resources>

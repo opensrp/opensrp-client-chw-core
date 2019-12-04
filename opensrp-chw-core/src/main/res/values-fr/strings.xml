@@ -412,4 +412,9 @@
     <!--Wcaro Upcoming Services -->
     <string name="upcoming_immunizations">Vaccination (%s) \n%s \n%s</string>
     <string name="up_immunizations">Vaccination (%s) \n%s </string>
+
+    <!-- dates -->
+    <string name="date_days">Jours</string>
+    <string name="date_weeks">Semaines</string>
+    <string name="date_months">Mois</string>
 </resources>
