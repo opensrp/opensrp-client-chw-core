@@ -2,8 +2,6 @@ package org.smartregister.chw.core.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,6 +14,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
@@ -131,7 +132,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         }
         boolean res = validateTextView(currentViewHolder.etPhone);
 
-        if(!res){
+        if (!res) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
             alertDialogBuilder.setMessage(context.getString(R.string.change_member_alert));
             alertDialogBuilder.setCancelable(true);
@@ -150,15 +151,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
 
     private boolean validateTextView(TextView textView) {
         String text = textView.getText().toString().trim();
-          if(text.length() > 0 && text.length() < 8 || text.length() > 16){
-              textView.setError(context.getString(R.string.number_8_16));
-              return false;
-      }
-          if(text.length() == 0){
-              return false;
-          }
-
-        return true;
+        /*
+        if (text.length() > 0 && text.length() < 8 || text.length() > 16) {
+            textView.setError(context.getString(R.string.number_8_16));
+            return false;
+        }
+         */
+        return text.length() != 0;
     }
 
     public FamilyMember getSelectedResults() {
@@ -205,35 +204,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
             etPhone = view.findViewById(R.id.etPhoneNumber);
             etAlternatePhone = view.findViewById(R.id.etOtherNumber);
 
-            setLengthErrorMessage(etPhone);
-            setLengthErrorMessage(etAlternatePhone);
-
-        }
-
-        private void setLengthErrorMessage(final EditText et) {
-
-            TextWatcher tw = new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    //// TODO: 15/08/19  
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //// TODO: 15/08/19
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    String text = et.getText().toString().trim();
-                        if(text.length() > 0 && text.length() < 8 || text.length() > 16){
-                            et.setError(context.getString(R.string.number_8_16));
-                        }
-
-                }
-            };
-
-            et.addTextChangedListener(tw);
         }
 
     }
