@@ -198,6 +198,8 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 return null;
 
             Date vaccineDate = VisitUtils.getDateFromString(date);
+            if(vaccineDate == null)
+                return null;
 
             return String.format("%s - %s %s",
                     context.getString(R.string.dose_number, numberOnly),
@@ -217,6 +219,8 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 return null;
 
             Date vaccineDate = VisitUtils.getDateFromString(date);
+            if(vaccineDate == null)
+                return null;
 
             return String.format("%s - %s %s",
                     context.getString(R.string.dose_number, numberOnly),
