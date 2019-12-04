@@ -181,7 +181,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             count.getAndSet(count.get() + 1);
             return String.format("%s: %s",
                     context.getString(R.string.exclusive_breastfeeding_months, Integer.toString(count.get())),
-                    context.getString(NCUtils.getText(details).toLowerCase().contains("yes") ? R.string.yes : R.string.no)
+                    context.getString(NCUtils.getText(details).toLowerCase().contains("yes") ? R.string.no :  R.string.yes)
             );
         };
     }
