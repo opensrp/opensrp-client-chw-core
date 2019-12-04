@@ -423,5 +423,10 @@
     <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
     <string name="up_immunizations">Immunizations (%s) \n%s </string>
 
+    <!-- dates -->
+    <string name="date_days">Days</string>
+    <string name="date_weeks">Weeks</string>
+    <string name="date_months">Months</string>
 
+    <string name="last_visit_x_days_ago">Last visit %1$s days ago</string>
 </resources>
