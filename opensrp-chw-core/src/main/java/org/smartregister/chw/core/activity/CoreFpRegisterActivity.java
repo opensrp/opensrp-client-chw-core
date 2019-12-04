@@ -42,7 +42,7 @@ public abstract class CoreFpRegisterActivity extends BaseFpRegisterActivity {
         if (isMultiPartForm(jsonForm)) {
             form.setWizard(true);
             form.setNavigationBackground(R.color.family_navigation);
-            form.setName(this.getString(R.string.malaria_registration));
+            form.setName(this.getString(R.string.fp_registration));
             form.setNextLabel(this.getResources().getString(R.string.next));
             form.setPreviousLabel(this.getResources().getString(R.string.back));
         }
