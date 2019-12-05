@@ -303,6 +303,14 @@
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
     <string name="tt_done">TT{0} - done {1}</string>
     <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="st">st</string>
+    <string name="nd">nd</string>
+    <string name="rd">rd</string>
+    <string name="th">th</string>
+
 
     <string name="child_details">Child details %1$s</string>
 
