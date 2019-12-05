@@ -304,13 +304,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
         switch (n % 10) {
             case 1:
-                return "st";
+                return context().getStringResource(R.string.st);
             case 2:
-                return "nd";
+                return context().getStringResource(R.string.nd);
             case 3:
-                return "rd";
+                return context().getStringResource(R.string.th);
             default:
-                return "th";
+                return context().getStringResource(R.string.th);
         }
     }
 
