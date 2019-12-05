@@ -40,8 +40,8 @@ public class FPAlertRule implements ICommonRule {
     }
 
     public boolean isCocPopValid(int dueDay, int overdueDate) {
-        this.dueDate = new DateTime(fpDate).plusDays(4 * 28).minusDays(dueDay);
-        this.overDueDate = new DateTime(fpDate).plus(4 * 28).minusDays(overdueDate);
+        this.dueDate = new DateTime(fpDate).plusDays(pillCycles * 28).minusDays(dueDay);
+        this.overDueDate = new DateTime(fpDate).plus(pillCycles * 28).minusDays(overdueDate);
         return (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_COC) || fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_POP));
     }
 

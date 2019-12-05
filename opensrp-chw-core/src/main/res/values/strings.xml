@@ -127,6 +127,7 @@
     <string name="anc_registration">ANC Registration</string>
     <string name="fp_initiation">FP initiation</string>
     <string name="malaria_registration">Malaria Confirmation</string>
+    <string name="fp_registration">Family planning registration</string>
     <string name="malaria_follow_up">Follow-up Visit</string>
     <string name="malaria_diagnosis">Malaria Diagnosis</string>
     <string name="sick_child_follow_up">Sick child follow-up</string>

@@ -14,9 +14,6 @@ import org.smartregister.chw.fp.activity.BaseFpRegisterActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
 
 public abstract class CoreFpRegisterActivity extends BaseFpRegisterActivity {
@@ -42,7 +39,7 @@ public abstract class CoreFpRegisterActivity extends BaseFpRegisterActivity {
         if (isMultiPartForm(jsonForm)) {
             form.setWizard(true);
             form.setNavigationBackground(R.color.family_navigation);
-            form.setName(this.getString(R.string.malaria_registration));
+            form.setName(this.getString(R.string.fp_registration));
             form.setNextLabel(this.getResources().getString(R.string.next));
             form.setPreviousLabel(this.getResources().getString(R.string.back));
         }
@@ -55,13 +52,8 @@ public abstract class CoreFpRegisterActivity extends BaseFpRegisterActivity {
         super.onResumption();
         NavigationMenu menu = NavigationMenu.getInstance(this, null, null);
         if (menu != null) {
-            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.MALARIA);
+            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.FAMILY_PLANNING);
         }
-    }
-
-    @Override
-    public List<String> getViewIdentifiers() {
-        return Collections.singletonList(CoreConstants.CONFIGURATION.MALARIA_REGISTER);
     }
 
 }
