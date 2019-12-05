@@ -9,13 +9,12 @@ import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.RegisterAlert;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
-import org.smartregister.chw.core.rule.FPAlertRule;
+import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.rule.PncVisitAlertRule;
 
 import java.util.Date;
 
 public class HomeVisitUtil {
-    //debug ya ronald
     public static VisitSummary getAncVisitStatus(Context context, Rules rules, String visitDate, String visitNotDate, LocalDate dateCreated) {
         AncVisitAlertRule ancVisitAlertRule = new AncVisitAlertRule(context, DateTimeFormat.forPattern("dd-MM-yyyy").print(dateCreated), visitDate, visitNotDate, dateCreated);
         CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(ancVisitAlertRule, rules);
@@ -45,8 +44,8 @@ public class HomeVisitUtil {
         return pncVisitAlertRule;
     }
 
-    public static FPAlertRule getFpVisitStatus(Rules rules, Date lastVisitDate, Date fpDate) {
-        FPAlertRule fpAlertRule = new FPAlertRule(lastVisitDate, fpDate);
+    public static FpAlertRule getFpVisitStatus(Rules rules, Date lastVisitDate, Date fpDate, Integer pillCycles, String fpMethod) {
+        FpAlertRule fpAlertRule = new FpAlertRule(fpDate, lastVisitDate, pillCycles, fpMethod);
         CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(fpAlertRule, rules);
         return fpAlertRule;
     }

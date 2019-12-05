@@ -15,11 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.provider.CoreFpProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryBuilder;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.fragment.BaseFpRegisterFragment;
-import org.smartregister.chw.fp.provider.BaseFpRegisterProvider;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -41,7 +41,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
 
     @Override
     public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        BaseFpRegisterProvider fpRegisterProvider = new BaseFpRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns);
+        CoreFpProvider fpRegisterProvider = new CoreFpProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, fpRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);
@@ -52,7 +52,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
         super.setupViews(view);
         this.view = view;
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -150,7 +150,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -263,6 +263,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
         dueOnlyLayout.setTag(DUE_FILTER_TAG);
         switchViews(dueOnlyLayout, true);
     }
+
     protected void normalFilter(View dueOnlyLayout) {
         filterDue(searchText(), "", presenter().getMainCondition());
         dueOnlyLayout.setTag(null);

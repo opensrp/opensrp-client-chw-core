@@ -13,11 +13,12 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.rule.FPAlertRule;
+import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
+import org.smartregister.chw.fp.provider.BaseFpRegisterProvider;
+import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
 
@@ -29,16 +30,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import provider.PncRegisterProvider;
 import timber.log.Timber;
 
-public class CoreFamilyPlanningProvider extends PncRegisterProvider {
+public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private Context context;
     private View.OnClickListener onClickListener;
 
-    public CoreFamilyPlanningProvider(Context context, CommonRepository commonRepository, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
-        super(context, commonRepository, visibleColumns, onClickListener, paginationClickListener);
+    public CoreFpProvider(Context context, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
+        super(context, paginationClickListener, onClickListener, visibleColumns);
         this.context = context;
         this.onClickListener = onClickListener;
     }
@@ -53,7 +53,7 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
         Utils.startAsyncTask(new UpdateAsyncTask(context, viewHolder, pc), null);
     }
 
-    private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FPAlertRule fpAlertRule) {
+    private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FpAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             setVisitButtonDueStatus(context, fpAlertRule.getVisitID(), viewHolder.dueButton);
@@ -89,8 +89,14 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
         private final Context context;
-        private FPAlertRule fpAlertRule;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        private FpAlertRule fpAlertRule;
         private List<Rules> fpRules = new ArrayList<>();
+        private Visit lastVisit;
+        private String pillCycles;
+        private String dayFp;
+        private String fpMethod;
+
 
         private UpdateAsyncTask(Context context, RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
             this.context = context;
@@ -106,41 +112,39 @@ public class CoreFamilyPlanningProvider extends PncRegisterProvider {
 
         @Override
         protected Void doInBackground(Void... params) {
-            //map = getChildDetails(pc.getCaseId());
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
             String baseEntityID = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.BASE_ENTITY_ID, false);
-            String dayPnc = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DELIVERY_DATE, true);
-            Date deliveryDate = null;
-            Date lastVisitDate = null;
-            try {
-                deliveryDate = sdf.parse(dayPnc);
-            } catch (ParseException e) {
-                Timber.e(e);
-            }
+            dayFp = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_FP_START_DATE, true);
+            pillCycles = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_PILL_CYCLES, true);
+            fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, true);
+            lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, FamilyPlanningConstants.EventType.FP_HOME_VISIT);
 
-            Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.PNC_HOME_VISIT);
-            if (lastVisit != null) {
-                lastVisitDate = lastVisit.getDate();
-            }
-            for (Rules rule : fpRules) {
-                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, deliveryDate);
-            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            // Update status column
-            if (fpAlertRule == null || StringUtils.isBlank(fpAlertRule.getVisitID())) {
-                return;
+            Integer pills = pillCycles == null || pillCycles.equalsIgnoreCase("") ? 0 : Integer.parseInt(pillCycles);
+            Date fpDate = null;
+            Date lastVisitDate = null;
+            try {
+                fpDate = sdf.parse(dayFp);
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+            if (lastVisit != null) {
+                lastVisitDate = lastVisit.getDate();
+            }
+            for (Rules rule : fpRules) {
+                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
+                if (fpAlertRule != null
+                        && StringUtils.isNotBlank(fpAlertRule.getVisitID())
+                        && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
+                ) {
+                    updateDueColumn(context, viewHolder, fpAlertRule);
+                }
+
             }
 
-            if (fpAlertRule != null
-                    && StringUtils.isNotBlank(fpAlertRule.getVisitID())
-                    && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
-            ) {
-                updateDueColumn(context, viewHolder, fpAlertRule);
-            }
         }
     }
 }
