@@ -1,9 +1,11 @@
 package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -11,10 +13,15 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
-import org.smartregister.chw.fp.interactor.BaseFpProfileInteractor;
+import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.presenter.BaseFpProfilePresenter;
+import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
@@ -30,7 +37,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
     @Override
     protected void initializePresenter() {
-        fpProfilePresenter = new BaseFpProfilePresenter(this, new BaseFpProfileInteractor(), fpMemberObject);
+        fpProfilePresenter = new BaseFpProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
         fpProfilePresenter.refreshProfileData();
     }
 
@@ -94,4 +101,57 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @NonNull
     @Override
     public abstract CoreFamilyOtherMemberActivityPresenter presenter();
+
+    @Override
+    public void setProfileName(@NonNull String s) {
+        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_name);
+        textView.setText(s);
+    }
+
+    @Override
+    public void setProfileDetailOne(@NonNull String s) {
+        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
+        textView.setText(s);
+    }
+
+    @Override
+    public void setProfileDetailTwo(@NonNull String s) {
+        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_address);
+        textView.setText(s);
+    }
+
+    public void startFormForEdit(Integer title_resource, String formName) {
+
+        JSONObject form = null;
+        CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(fpMemberObject.getBaseEntityId());
+
+        if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
+            form = CoreJsonFormUtils.getAutoPopulatedJsonEditMemberFormString(
+                    (title_resource != null) ? getResources().getString(title_resource) : null,
+                    CoreConstants.JSON_FORM.getFamilyMemberRegister(),
+                    this, client,
+                    Utils.metadata().familyMemberRegister.updateEventType, fpMemberObject.getLastName(), false);
+        } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
+            form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
+                    fpMemberObject.getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(title_resource));
+        }
+
+        try {
+            assert form != null;
+            startFormActivity(form, fpMemberObject);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    private void startFormActivity(JSONObject jsonForm, FpMemberObject fpMemberObject) {
+        Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
+        intent.putExtra(FamilyPlanningConstants.FamilyPlanningMemberObject.MEMBER_OBJECT, fpMemberObject);
+        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
 }
