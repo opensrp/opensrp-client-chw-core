@@ -13,6 +13,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.RegisterAlert;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
@@ -27,6 +28,8 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
     private LocalDate lastVisitDate;
     private LocalDate visitNotDoneDate;
     private Context context;
+    private Date anchor;
+
 
     public AncVisitAlertRule(Context context, String lmpDate, String visitDate, String visitNotDoneDate, LocalDate dateCreated) {
         this.context = context;
@@ -84,10 +87,11 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
     }
 
     public boolean isOverdueWithinMonth(Integer value) {
-        int diff = getMonthsDifference((lastVisitDate != null ? lastVisitDate : dateCreated), todayDate);
-        if (diff >= value) {
+        LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getOverDueDate()));
+        int diff = getMonthsDifference(overdue, todayDate);
+        if(diff >= value){
             noOfMonthDue = diff + "M";
-            return true;
+            return  true;
         }
         return false;
     }
@@ -141,8 +145,29 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
     }
 
     public Date getOverDueDate() {
-        Date anchor = (lastVisitDate != null ? lastVisitDate.toDate() : dateCreated.toDate());
-        return getLastDayOfMonth(anchor);
+        if (lastVisitDate == null) {
+            if(visitNotDoneDate != null){
+                anchor = visitNotDoneDate.toDate();
+            }
+            else {
+                anchor = getLastDayOfMonth(dateCreated.toDate());
+            }
+        }
+        else {
+            if(visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))){
+                if((getMonthsDifference(lastVisitDate,todayDate) == 0) || (getMonthsDifference(lastVisitDate,todayDate) == 1)){
+                    anchor = getLastDayOfMonth(todayDate.toDate());
+                }
+                else {
+
+                }
+            }
+            else if (visitNotDoneDate!= null && visitNotDoneDate.isAfter(lastVisitDate)){
+                anchor = visitNotDoneDate.toDate();
+            }
+        }
+        return anchor;
+
     }
 
     protected Date getLastDayOfMonth(Date refDate) {
@@ -168,9 +193,9 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
         return (lastVisitDate != null) && isVisitThisMonth(lastVisitDate, todayDate);
     }
 
-    public Date getNotDoneDate(){
+    public Date getNotDoneDate() {
         if (getCompletionDate() == null && visitNotDoneDate != null) {
-            return visitNotDoneDate.toDate();
+            return visitNotDoneDate.toDate().getTime() >= getDueDate().getTime() ? visitNotDoneDate.toDate()  :  null;
         }
         return null;
     }

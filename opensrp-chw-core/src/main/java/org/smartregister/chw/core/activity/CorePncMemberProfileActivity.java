@@ -56,6 +56,9 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_malaria_confirmation) {
             startMalariaRegister();
             return true;
+        } else if (itemId == R.id.action_fp_initiation) {
+            startFpRegister();
+            return true;
         } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
@@ -117,20 +120,20 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public void setFamilyStatus(AlertStatus status) {
         TextView tvFamilyStatus;
-        tvFamilyStatus = findViewById(org.smartregister.chw.opensrp_chw_anc.R.id.textview_family_has);
+        tvFamilyStatus = findViewById(R.id.textview_family_has);
 
         view_family_row.setVisibility(View.VISIBLE);
         rlFamilyServicesDue.setVisibility(View.VISIBLE);
 
         if (status == AlertStatus.complete) {
             hasDueServices = false;
-            tvFamilyStatus.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_nothing_due));
+            tvFamilyStatus.setText(getString(R.string.family_has_nothing_due));
         } else if (status == AlertStatus.normal) {
             hasDueServices = true;
-            tvFamilyStatus.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_services_due));
+            tvFamilyStatus.setText(R.string.family_has_services_due);
         } else if (status == AlertStatus.urgent) {
             hasDueServices = true;
-            tvFamilyStatus.setText(NCUtils.fromHtml(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_service_overdue)));
+            tvFamilyStatus.setText(NCUtils.fromHtml(getString(R.string.family_has_service_overdue)));
         }
     }
 
@@ -143,4 +146,6 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
 
     protected abstract void startMalariaRegister();
+
+    protected abstract void startFpRegister();
 }

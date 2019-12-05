@@ -10,10 +10,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,8 +93,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private View viewLastVisitRow, viewMostDueRow, viewFamilyRow;
     private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas;
     private ImageView imageViewCross;
+    protected ImageView imageViewCrossChild;
     private ProgressBar progressBar;
-    private String gender;
     private static boolean isStartedFromReferrals;
 
     public static void startMe(Activity activity, boolean isComesFromFamily, MemberObject memberObject, Class<?> cls) {
@@ -188,6 +188,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth = findViewById(R.id.textview_not_visit_this_month);
         textViewLastVisit = findViewById(R.id.textview_last_vist_day);
         textViewUndo = findViewById(R.id.textview_undo);
+        imageViewCrossChild = findViewById(R.id.cross_image_child);
         imageViewCross = findViewById(R.id.cross_image);
         layoutRecordView = findViewById(R.id.record_visit_bar);
         layoutNotRecordView = findViewById(R.id.record_visit_status_bar);
@@ -206,6 +207,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewVisitNot.setOnClickListener(this);
         textViewUndo.setOnClickListener(this);
         imageViewCross.setOnClickListener(this);
+        imageViewCrossChild.setOnClickListener(this);
         layoutLastVisitRow.setOnClickListener(this);
         layoutMostDueOverdue.setOnClickListener(this);
         layoutFamilyHasRow.setOnClickListener(this);
@@ -317,9 +319,17 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     @Override
     public void setGender(String gender) {
-        this.gender = gender;
-        textViewGender.setText(gender);
-        updateTopBar();
+        textViewGender.setText(getGenderTranslated(gender));
+        updateTopBar(gender);
+    }
+
+    private String getGenderTranslated(String gender){
+        if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
+            return getResources().getString(R.string.male);
+        } else if (gender.equalsIgnoreCase(Gender.FEMALE.toString())) {
+            return getResources().getString(R.string.female);
+        }
+        return "";
     }
 
     @Override
@@ -363,7 +373,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
         textViewUndo.setText(getString(R.string.undo));
         textViewUndo.setVisibility(View.VISIBLE);
-        imageViewCross.setImageResource(R.drawable.activityrow_notvisited);
+       imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
 
     @Override
@@ -412,7 +422,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.visit_month, monthName));
         textViewUndo.setText(getString(R.string.edit));
         textViewUndo.setVisibility(View.GONE);
-        imageViewCross.setImageResource(R.drawable.activityrow_visited);
+        imageViewCrossChild.setImageResource(R.drawable.activityrow_visited);
         openVisitMonthView();
     }
 
@@ -494,7 +504,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         //// TODO: 06/08/19
     }
 
-    protected void updateTopBar() {
+    protected void updateTopBar(String gender) {
         if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
             imageViewProfile.setBorderColor(getResources().getColor(R.color.light_blue));
         } else if (gender.equalsIgnoreCase(Gender.FEMALE.toString())) {

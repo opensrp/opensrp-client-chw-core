@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.smartregister.chw.hf">
 
     <application
@@ -9,7 +10,8 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/HFTheme">
+        android:theme="@style/HFTheme"
+        tools:replace="android:theme">
 
         <activity
             android:name="org.smartregister.chw.hf.activity.LoginActivity"
@@ -86,7 +88,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.NoActionBar" />
         <activity
-            android:name="org.smartregister.chw.core.activity.CoreChildMedicalHistoryActivity"
+            android:name="org.smartregister.chw.hf.activity.ChildMedicalHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.NoActionBar" />
         <activity
@@ -120,11 +122,12 @@
         <activity
             android:name=".activity.MalariaProfileActivity"
             android:theme="@style/HFTheme.NoActionBar" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3f94f9c3caeff331b3a2bd8c2182b663ad6a955a" />
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

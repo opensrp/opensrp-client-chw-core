@@ -283,7 +283,7 @@
 
     <string name="anc_health_facility_visits">VISITE CPN A LA FORMATION SANITAIRE</string>
     <string name="anc_card">Carnet CPN</string>
-    <string name="anc_tt_immunization">VAT</string>
+    <string name="anc_tt_immunization">Td</string>
     <string name="anc_iptp_sp">SP dose</string>
     <string name="urine_analysis">Analyse urinaire</string>
     <string name="hiv_test">Dépistage VIH</string>
@@ -298,8 +298,15 @@
     <string name="ifa_received_status">FAF reçu: {0}</string>
     <string name="tests_done_details">Examens effectués: {0}</string>
     <string name="anc_home_visit_anc_card_received">Carnet CPN reçu</string>
-    <string name="tt_done">VAT{0} - fait {1}</string>
+    <string name="tt_done">Td{0} - fait {1}</string>
     <string name="iptpsp_done">SP dose{0}- fait {1} </string>
+    <string name="one">un</string>
+    <string name="two">deux</string>
+    <string name="three">trois</string>
+    <string name="st">er</string>
+    <string name="nd">ème</string>
+    <string name="rd">ème</string>
+    <string name="th">ème</string>
 
     <string name="child_details">Détails sur l\'enfant %1$s</string>
 

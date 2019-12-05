@@ -12,7 +12,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.5.0-x'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
         // NOTE: Do not place your application dependencies here; they belong
@@ -79,8 +79,8 @@ subprojects {
 
     group = 'org.smartregister'
 
-    ext.androidToolsBuildGradle = '28.0.0'
-    ext.androidBuildToolsVersion = '28.0.0'
+    ext.androidToolsBuildGradle = '28.0.3'
+    ext.androidBuildToolsVersion = '28.0.3'
     ext.androidMinSdkVersion = 18
     ext.androidCompileSdkVersion = 28
     ext.androidTargetSdkVersion = 28

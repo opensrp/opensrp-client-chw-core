@@ -68,11 +68,13 @@ public class VisitVaccineUtil {
         /// compute the alerts
         HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules = getVaccineSchedules(category);
 
-        List<Vaccine> vaccines = new ArrayList<>();
-        List<Alert> alerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, baseEntityID, anchorDate, category, vaccines);
+
+        Pair<List<Vaccine>, Map<String, Date>> vaccinesDetails = getIssuedVaccinesList(baseEntityID, includePending);
+
+        List<Alert> alerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, baseEntityID, anchorDate, category, vaccinesDetails.first);
 
         /// prepare the given vaccines map
-        Map<String, Date> issuedVaccines = getIssuedVaccines(baseEntityID, includePending);
+        Map<String, Date> issuedVaccines = vaccinesDetails.second;
 
         List<Alert> pending = new ArrayList<>();
         for (Alert alert : alerts) {
@@ -98,12 +100,19 @@ public class VisitVaccineUtil {
     }
 
     public static Map<String, Date> getIssuedVaccines(String baseEntityID, boolean includePending) {
+        return getIssuedVaccinesList(baseEntityID, includePending).second;
+    }
+
+    public static Pair<List<Vaccine>, Map<String, Date>> getIssuedVaccinesList(String baseEntityID, boolean includePending) {
         Map<String, Date> vaccines = new LinkedHashMap<>();
+        List<Vaccine> vaccineList = new ArrayList<>();
+
         VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
         List<Vaccine> savedVaccines = vaccineRepository.findByEntityId(baseEntityID);
         if (savedVaccines != null && !savedVaccines.isEmpty()) {
             for (Vaccine vaccine : savedVaccines) {
                 vaccines.put(vaccine.getName().replace("_", "").replace(" ", ""), vaccine.getDate());
+                vaccineList.add(vaccine);
             }
         }
 
@@ -111,10 +120,25 @@ public class VisitVaccineUtil {
             Map<String, Date> vac = VisitDao.getUnprocessedVaccines(baseEntityID);
             for (Map.Entry<String, Date> entry : vac.entrySet()) {
                 vaccines.put(entry.getKey().replace("_", "").replace(" ", ""), entry.getValue());
+
+                String vac_name = entry.getKey().replace("_", " ");
+                vaccineList.add(toDomainVaccine(vac_name, entry.getValue(), baseEntityID));
             }
         }
 
-        return vaccines;
+        return Pair.create(vaccineList, vaccines);
+    }
+
+    private static Vaccine toDomainVaccine(String name, Date dateReceived, String baseEntityID) {
+        Vaccine vaccine = new Vaccine();
+        vaccine.setBaseEntityId(baseEntityID);
+        vaccine.setName(name);
+        vaccine.setDate(dateReceived);
+
+        String val = name.replaceAll("\\D+", "");
+        int calculation = StringUtils.isBlank(val) ? 0 : Integer.parseInt(val);
+        vaccine.setCalculation(calculation);
+        return vaccine;
     }
 
     public static String getAlertIteration(Alert alert) {
@@ -398,8 +422,7 @@ public class VisitVaccineUtil {
             return context.getString(R.string.at_birth);
         }
 
-        return name.replace("Weeks", context.getString(org.smartregister.chw.core.R.string.abbrv_weeks))
-                .replace("Months", context.getString(org.smartregister.chw.core.R.string.abbrv_months))
-                .replace(" ", "");
+        return name.replace("Weeks", context.getString(R.string.date_weeks)).toLowerCase()
+                .replace("Months", context.getString(R.string.date_months)).toLowerCase();
     }
 }

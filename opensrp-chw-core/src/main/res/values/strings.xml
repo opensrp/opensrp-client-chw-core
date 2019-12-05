@@ -125,7 +125,9 @@
     <string name="remove_this_person">Remove this person</string>
     <string name="registration_info">Registration info</string>
     <string name="anc_registration">ANC Registration</string>
+    <string name="fp_initiation">FP initiation</string>
     <string name="malaria_registration">Malaria Confirmation</string>
+    <string name="fp_registration">Family planning registration</string>
     <string name="malaria_follow_up">Follow-up Visit</string>
     <string name="malaria_diagnosis">Malaria Diagnosis</string>
     <string name="sick_child_follow_up">Sick child follow-up</string>
@@ -301,6 +303,14 @@
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
     <string name="tt_done">TT{0} - done {1}</string>
     <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="st">st</string>
+    <string name="nd">nd</string>
+    <string name="rd">rd</string>
+    <string name="th">th</string>
+
 
     <string name="child_details">Child details %1$s</string>
 
@@ -414,4 +424,18 @@
     <string name="pregnancy_confirmation">Pregnancy confirmation</string>
     <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
     <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
+
+    <!-- Medical history -->
+    <string name="dose_number">Dose %s</string>
+
+    <!--Wcaro Upcoming Services -->
+    <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Immunizations (%s) \n%s </string>
+
+    <!-- dates -->
+    <string name="date_days">Days</string>
+    <string name="date_weeks">Weeks</string>
+    <string name="date_months">Months</string>
+
+    <string name="last_visit_x_days_ago">Last visit %1$s days ago</string>
 </resources>

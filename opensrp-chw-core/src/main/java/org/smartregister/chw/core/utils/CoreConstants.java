@@ -151,6 +151,7 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -230,6 +231,10 @@ public class CoreConstants {
             return Utils.getLocalForm(MALARIA_CONFIRMATION, locale, assetManager);
         }
 
+        public static String getFpRegistration() {
+            return Utils.getLocalForm(FAMILY_PLANNING_REGISTRATION_FORM, locale, assetManager);
+        }
+
         public static boolean isMultiPartForm(JSONObject jsonForm) {
             String encounterType = jsonForm.optString(ENCOUNTER_TYPE);
             return !encounterType.equals(MALARIA_FOLLOW_UP_VISIT);
@@ -250,7 +255,9 @@ public class CoreConstants {
             private static final String MUAC = "child_hv_muac";
             private static final String DIETARY = "child_hv_dietary_diversity";
             private static final String MNP = "child_hv_mnp";
+            private static final String MALARIA_PREVENTION = "child_hv_malaria_prevention";
             private static final String SLEEPING_UNDER_LLITN = "child_hv_sleeping_under_llitn";
+            private static final String NUTRITION_STATUS = "child_hv_nutrition_status";
 
             public static String getVaccineCard() {
                 return Utils.getLocalForm(VACCINE_CARD, locale, assetManager);
@@ -276,8 +283,16 @@ public class CoreConstants {
                 return Utils.getLocalForm(MNP, locale, assetManager);
             }
 
+            public static String getMalariaPrevention() {
+                return Utils.getLocalForm(MALARIA_PREVENTION, locale, assetManager);
+            }
+
             public static String getSleepingUnderLlitn() {
                 return Utils.getLocalForm(SLEEPING_UNDER_LLITN, locale, assetManager);
+            }
+
+            public static String getNutritionStatus() {
+                return Utils.getLocalForm(NUTRITION_STATUS, locale, assetManager);
             }
         }
 
@@ -669,6 +684,7 @@ public class CoreConstants {
         public static final String OVERDUE = "OVERDUE";
         public static final String VISIT_NOT_DONE = "VISIT_NOT_DONE";
         public static final String VISIT_DONE = "VISIT_DONE";
+        public static final String NOT_VISIT_THIS_MONTH = "NOT_VISIT_THIS_MONTH";
     }
 
     public static final class DATE_FORMATS {
@@ -685,6 +701,7 @@ public class CoreConstants {
         public static final String PNC_REGISTER_ACTIVITY = "PNC_REGISTER_ACTIVITY";
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
+        public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
     }
 
