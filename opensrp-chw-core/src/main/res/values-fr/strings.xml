@@ -408,17 +408,25 @@
     <string name="malaria_visit_suffix">&#183; Visite du Paludisme</string>
 
     <!-- BA family Planning-->
-    <string name="ppiucd"> PPIUCD</string>
+    <string name="ppiucd">Dispositif intra-utérin - DUI</string>
     <string name="pills"> Pilules</string>
     <string name="condoms"> Préservatifs</string>
-    <string name="lam">LAM</string>
+    <string name="lam">Aménorrhée lactationnelle</string>
     <string name="standard_day_method"> Méthode de la journée type</string>
-    <string name="permanent_blt"> Permanente (BTL)</string>
+    <string name="permanent_blt"> Permanente (Ligature bilatérale des trompes)</string>
     <string name="permanent_vasectomy">Permanente (vasectomie)</string>
+    <string name="hf_malaria_follow_up">Suivi du paludisme</string>
+    <string name="family_planning_initiation">Initiation à la planification familiale</string>
+    <string name="pregnancy_confirmation">Confirmation de grossesse</string>
+    <string name="pnc_danger_sign_outcome">Résultat des signes de danger de la CPoN</string>
+    <string name="anc_danger_signs_outcome">Résultat des signes de danger de la CPN</string>
+
+    <!-- Medical history -->
+    <string name="dose_number">%s dose</string>
 
     <!--Wcaro Upcoming Services -->
-    <string name="upcoming_immunizations">Vaccination (%s) \n%s \n%s</string>
-    <string name="up_immunizations">Vaccination (%s) \n%s </string>
+    <string name="upcoming_immunizations">Vaccinations (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Vaccinations (%s) \n%s</string>
 
     <!-- dates -->
     <string name="date_days">Jours</string>
