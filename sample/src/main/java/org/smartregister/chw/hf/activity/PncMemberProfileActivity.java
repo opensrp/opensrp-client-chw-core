@@ -65,6 +65,11 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
         MalariaRegisterActivity.startMalariaRegistrationActivity(this, memberObject.getBaseEntityId());
     }
 
+    @Override
+    protected void startFpRegister() {
+        //TODO implement start FP register for HF
+    }
+
     public void setReferralTasks(Set<Task> taskList) {
         if (referralRecyclerView != null && taskList.size() > 0) {
             RecyclerView.Adapter mAdapter = new ReferralCardViewAdapter(taskList, this, memberObject, getFamilyHeadName(),

@@ -49,6 +49,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     @Override
+    protected void startFpRegister() {
+        //TODO implement start anc register for HF
+    }
+
+    @Override
     protected void startMalariaRegister() {
         //TODO implement start anc malaria for HF
     }
