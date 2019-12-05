@@ -300,6 +300,13 @@
     <string name="anc_home_visit_anc_card_received">Carnet CPN reçu</string>
     <string name="tt_done">Td{0} - fait {1}</string>
     <string name="iptpsp_done">SP dose{0}- fait {1} </string>
+    <string name="one">un</string>
+    <string name="two">deux</string>
+    <string name="three">trois</string>
+    <string name="st">er</string>
+    <string name="nd">ème</string>
+    <string name="rd">ème</string>
+    <string name="th">ème</string>
 
     <string name="child_details">Détails sur l\'enfant %1$s</string>
 
