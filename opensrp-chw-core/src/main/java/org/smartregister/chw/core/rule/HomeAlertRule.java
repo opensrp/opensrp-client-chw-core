@@ -2,6 +2,7 @@ package org.smartregister.chw.core.rule;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -31,7 +32,6 @@ public class HomeAlertRule implements ICommonRule {
     private LocalDate visitNotDoneDate;
     private Integer yearOfBirth;
     private Context context;
-    private Date anchor;
 
 
     public HomeAlertRule(Context context, String yearOfBirthString, long lastVisitDateLong, long visitNotDoneValue, long dateCreatedLong) {
@@ -76,7 +76,7 @@ public class HomeAlertRule implements ICommonRule {
         LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getOverDueDate()));
         int diff = getMonthsDifference(overdue, todayDate);
         if (diff >= value) {
-            noOfMonthDue = diff + "M";
+            noOfMonthDue = diff + StringUtils.upperCase(context.getString(R.string.abbrv_months));
             return true;
         }
         return false;
@@ -175,6 +175,7 @@ public class HomeAlertRule implements ICommonRule {
     }
 
     public Date getOverDueDate() {
+        Date anchor = null;
         if (lastVisitDate == null) {
             if (visitNotDoneDate != null) {
                 anchor = visitNotDoneDate.toDate();
