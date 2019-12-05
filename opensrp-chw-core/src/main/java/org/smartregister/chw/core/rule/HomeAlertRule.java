@@ -2,7 +2,6 @@ package org.smartregister.chw.core.rule;
 
 import android.content.Context;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -76,9 +75,9 @@ public class HomeAlertRule implements ICommonRule {
     public boolean isOverdueWithinMonth(Integer value) {
         LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getOverDueDate()));
         int diff = getMonthsDifference(overdue, todayDate);
-        if(diff >= value){
+        if (diff >= value) {
             noOfMonthDue = diff + "M";
-            return  true;
+            return true;
         }
         return false;
     }
@@ -153,9 +152,9 @@ public class HomeAlertRule implements ICommonRule {
         }
     }
 
-    public Date getNotDoneDate(){
+    public Date getNotDoneDate() {
         if (getCompletionDate() == null && visitNotDoneDate != null) {
-            return visitNotDoneDate.toDate().getTime() >= getDueDate().getTime() ? visitNotDoneDate.toDate()  :  null;
+            return visitNotDoneDate.toDate().getTime() >= getDueDate().getTime() ? visitNotDoneDate.toDate() : null;
         }
         return null;
     }
@@ -177,23 +176,20 @@ public class HomeAlertRule implements ICommonRule {
 
     public Date getOverDueDate() {
         if (lastVisitDate == null) {
-            if(visitNotDoneDate != null){
+            if (visitNotDoneDate != null) {
                 anchor = visitNotDoneDate.toDate();
-            }
-            else {
+            } else {
                 anchor = getLastDayOfMonth(dateCreated.toDate());
             }
-        }
-        else {
-            if(visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))){
-                if((getMonthsDifference(lastVisitDate,todayDate) == 0) || (getMonthsDifference(lastVisitDate,todayDate) == 1)){
+        } else {
+            if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
+                if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
                     anchor = getLastDayOfMonth(todayDate.toDate());
                 }
-            }
-            else if (visitNotDoneDate!= null && visitNotDoneDate.isAfter(lastVisitDate)){
+            } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
                 anchor = visitNotDoneDate.toDate();
             }
         }
         return anchor;
-}
     }
+}
