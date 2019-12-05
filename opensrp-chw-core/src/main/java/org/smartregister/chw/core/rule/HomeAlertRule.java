@@ -189,9 +189,6 @@ public class HomeAlertRule implements ICommonRule {
                 if((getMonthsDifference(lastVisitDate,todayDate) == 0) || (getMonthsDifference(lastVisitDate,todayDate) == 1)){
                     anchor = getLastDayOfMonth(todayDate.toDate());
                 }
-                else {
-
-                }
             }
             else if (visitNotDoneDate!= null && visitNotDoneDate.isAfter(lastVisitDate)){
                 anchor = visitNotDoneDate.toDate();
