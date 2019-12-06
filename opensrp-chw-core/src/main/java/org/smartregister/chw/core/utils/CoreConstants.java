@@ -47,6 +47,7 @@ public class CoreConstants {
         String PNC_VISIT = "PNC_VISIT";
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
+        String FP_VISIT = "FP_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
@@ -529,6 +530,11 @@ public class CoreConstants {
         public static final String CONTACT_RULES = "contact-rules.yml";
         public static final String PNC_HEALTH_FACILITY_VISIT = "pnc-health-facility-schedule-rule.yml";
         public static final String MALARIA_FOLLOW_UP_VISIT = "malaria-followup-rules.yml";
+        public static final String FP_COC_POP_REFILL = "fp-coc-pop-refill-rule.yml";
+        public static final String FP_CONDOM_REFILL = "fp-condom-refill-rule.yml";
+        public static final String FP_INJECTION_DUE = "fp-injection-due-rule.yml";
+        public static final String FP_FEMALE_STERILIZATION = "fp-female-sterilization-rule.yml";
+        public static final String FP_IUCD ="fp-iucd-rule.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {
