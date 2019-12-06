@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -13,6 +14,7 @@ import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.domain.VisitSummary;
 import org.smartregister.chw.core.holders.RegisterViewHolder;
 import org.smartregister.chw.core.model.ChildVisit;
+import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObject;
@@ -20,7 +22,11 @@ import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Map;
+
+import timber.log.Timber;
 
 public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
     private final Context context;
@@ -31,6 +37,7 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
     private CommonPersonObject commonPersonObject;
     private ChildVisit childVisit;
     private View.OnClickListener onClickListener;
+    private SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public UpdateLastAsyncTask(Context context, CommonRepository commonRepository, RegisterViewHolder viewHolder, String baseEntityId, View.OnClickListener onClickListener) {
         this.context = context;
@@ -54,6 +61,14 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
                 long lastVisit = 0;
                 long visitNot = 0;
                 long dateCreated = 0;
+                try {
+                    String createVal = Utils.getValue(commonPersonObject.getColumnmaps(), ChwDBConstants.DATE_CREATED, false);
+                    if (StringUtils.isNotBlank(createVal))
+                        dateCreated = ISO8601DATEFORMAT.parse(createVal).getTime();
+
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
                 if (lastVisitSummary != null)
                     lastVisit = lastVisitSummary.getVisitDate().getTime();
 
