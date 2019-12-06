@@ -37,8 +37,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
     @Override
     protected void initializePresenter() {
+        showProgressBar(true);
         fpProfilePresenter = new BaseFpProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
-        fpProfilePresenter.refreshProfileData();
+        fetchProfileData();
     }
 
     @Override
