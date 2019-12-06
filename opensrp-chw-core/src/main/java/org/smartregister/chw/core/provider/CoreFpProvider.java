@@ -97,7 +97,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         private String dayFp;
         private String fpMethod;
 
-
         private UpdateAsyncTask(Context context, RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
             this.context = context;
             this.viewHolder = viewHolder;
