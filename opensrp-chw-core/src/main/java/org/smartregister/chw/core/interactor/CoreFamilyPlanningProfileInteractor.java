@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
 import org.smartregister.chw.anc.AncLibrary;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
