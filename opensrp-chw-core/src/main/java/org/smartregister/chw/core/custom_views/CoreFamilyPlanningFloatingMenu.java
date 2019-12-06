@@ -47,7 +47,7 @@ public class CoreFamilyPlanningFloatingMenu extends BaseFpFloatingMenu {
 
     @Override
     protected void initUi() {
-        inflate(getContext(), R.layout.fp_call_floating_menu, this);
+        inflate(getContext(), R.layout.family_planning_floating_menu, this);
         fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
         rotateForward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
