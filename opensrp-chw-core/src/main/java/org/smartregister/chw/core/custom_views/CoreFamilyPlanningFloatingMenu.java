@@ -41,6 +41,10 @@ public class CoreFamilyPlanningFloatingMenu extends BaseFpFloatingMenu {
 
     // public CoreFamilyPlanningFloatingMenu(Context context, AttributeSet attrs) { super(context, attrs); }
 
+    public void setFloatingMenuOnClickListener(OnClickFloatingMenu onClickFloatingMenu) {
+        this.onClickFloatingMenu = onClickFloatingMenu;
+    }
+
     @Override
     protected void initUi() {
         inflate(getContext(), R.layout.fp_call_floating_menu, this);
