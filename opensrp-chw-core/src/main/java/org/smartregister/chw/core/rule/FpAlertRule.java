@@ -40,54 +40,49 @@ public class FpAlertRule implements ICommonRule {
     }
 
     public boolean isCocPopValid(int dueDay, int overdueDate) {
-        this.dueDate = new DateTime(fpDate).plusDays(pillCycles * 28).minusDays(dueDay);
-        this.overDueDate = new DateTime(fpDate).plus(pillCycles * 28).minusDays(overdueDate);
-        return (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_COC) || fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_POP));
+            this.dueDate = (new DateTime(this.fpDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
+            this.overDueDate = (new DateTime(this.fpDate)).plus((long)(this.pillCycles * 28)).minusDays(overdueDate);
+            return true;
     }
 
     public boolean isCondomValid(int dueDay, int overdueDate) {
-        this.dueDate = new DateTime().withDayOfMonth(dueDay);
-        this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
-        return (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM) || fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM));
+            this.dueDate = new DateTime().withDayOfMonth(dueDay);
+            this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+            return true;
     }
 
     public boolean isInjectionValid(int dueDay, int overdueDate) {
         this.dueDate = new DateTime(fpDate).plusDays(dueDay);
         this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
-        return fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE);
+        return true;
     }
 
     public boolean isFemaleSterilizationFollowUpOneValid(int dueDay, int overdueDate, int expiry) {
         this.dueDate = new DateTime(fpDate).plusDays(dueDay);
         this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
         this.expiryDate = new DateTime(fpDate).plusDays(expiry);
-        return (fpDifference >= dueDay && fpDifference < expiry && fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_STERLIZATION));
+        return true;
     }
 
     public boolean isFemaleSterilizationFollowUpTwoValid(int dueDay, int overdueDate, int expiry) {
         this.dueDate = new DateTime(fpDate).plusDays(dueDay);
         this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
         this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        int expiryDiff = Days.daysBetween(new DateTime(fpDate), this.expiryDate).getDays();
-        return (fpDifference >= dueDay && fpDifference < expiryDiff && fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_STERLIZATION));
+        return true;
     }
 
     public boolean isFemaleSterilizationFollowUpThreeValid(int dueDay, int overdueDate, int expiry) {
         this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
         this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
         this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        int dueDiff = Days.daysBetween(new DateTime(fpDate), this.dueDate).getDays();
-        int expiryDiff = Days.daysBetween(new DateTime(fpDate), this.expiryDate).getDays();
-        return (fpDifference >= dueDiff && fpDifference < expiryDiff && fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_STERLIZATION));
+        return true;
     }
 
     public boolean isIUCDValid(int dueDay, int overdueDate, int expiry) {
         this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
         this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
         this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        int dueDiff = Days.daysBetween(new DateTime(fpDate), this.dueDate).getDays();
-        int expiryDiff = Days.daysBetween(new DateTime(fpDate), this.expiryDate).getDays();
-        return (fpDifference >= dueDiff && fpDifference < expiryDiff && fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_IUCD));
+        return true;
     }
 
     public Integer getPillCycles() {
