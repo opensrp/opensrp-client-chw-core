@@ -3,8 +3,8 @@ package org.smartregister.chw.core.rule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.Months;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +21,6 @@ public class FpAlertRule implements ICommonRule {
     private int fpDifference;
     private Integer pillCycles;
     private String fpMethod;
-
 
     public FpAlertRule(Date fpDate, Date lastVisitDate, Integer pillCycles, String fpMethod) {
         this.pillCycles = pillCycles == null ? 0 : pillCycles;
@@ -40,49 +39,87 @@ public class FpAlertRule implements ICommonRule {
     }
 
     public boolean isCocPopValid(int dueDay, int overdueDate) {
+        if (lastVisitDate != null) {
+            this.dueDate = (new DateTime(this.lastVisitDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
+            this.overDueDate = (new DateTime(this.lastVisitDate)).plus((long) (this.pillCycles * 28)).minusDays(overdueDate);
+        } else {
             this.dueDate = (new DateTime(this.fpDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
-            this.overDueDate = (new DateTime(this.fpDate)).plus((long)(this.pillCycles * 28)).minusDays(overdueDate);
-            return true;
+            this.overDueDate = (new DateTime(this.fpDate)).plus((long) (this.pillCycles * 28)).minusDays(overdueDate);
+        }
+        return true;
     }
 
     public boolean isCondomValid(int dueDay, int overdueDate) {
-            this.dueDate = new DateTime().withDayOfMonth(dueDay);
-            this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
-            return true;
+        if (lastVisitDate != null) {
+            if (Months.monthsBetween(new DateTime(lastVisitDate), new DateTime()).getMonths() <= 1) {
+                this.dueDate = new DateTime().withDayOfMonth(dueDay);
+                this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+            } else {
+                this.dueDate = lastVisitDate.withDayOfMonth(dueDay);
+                this.dueDate = lastVisitDate.withDayOfMonth(overdueDate);
+            }
+        } else {
+            this.dueDate = fpDate.plusMonths(1).withDayOfMonth(dueDay);
+            this.overDueDate = fpDate.plusMonths(1).withDayOfMonth(overdueDate);
+        }
+        return true;
     }
 
     public boolean isInjectionValid(int dueDay, int overdueDate) {
-        this.dueDate = new DateTime(fpDate).plusDays(dueDay);
-        this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
+        if (lastVisitDate != null) {
+            this.dueDate = new DateTime(lastVisitDate).plusDays(dueDay);
+            this.overDueDate = new DateTime(lastVisitDate).plusDays(overdueDate);
+        } else {
+            this.dueDate = new DateTime(fpDate).plusDays(dueDay);
+            this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
+        }
+
         return true;
     }
 
     public boolean isFemaleSterilizationFollowUpOneValid(int dueDay, int overdueDate, int expiry) {
-        this.dueDate = new DateTime(fpDate).plusDays(dueDay);
-        this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
-        this.expiryDate = new DateTime(fpDate).plusDays(expiry);
-        return true;
+        if (fpDifference >= dueDay && fpDifference < expiry) {
+            this.dueDate = new DateTime(fpDate).plusDays(dueDay);
+            this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
+            this.expiryDate = new DateTime(fpDate).plusDays(expiry);
+            return true;
+        }
+        return false;
     }
 
     public boolean isFemaleSterilizationFollowUpTwoValid(int dueDay, int overdueDate, int expiry) {
-        this.dueDate = new DateTime(fpDate).plusDays(dueDay);
-        this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
-        this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        return true;
+        int expiryDiff = Days.daysBetween(new DateTime(fpDate), new DateTime(fpDate).plusMonths(expiry)).getDays();
+        if (fpDifference >= dueDay && fpDifference < expiryDiff) {
+            this.dueDate = new DateTime(fpDate).plusDays(dueDay);
+            this.overDueDate = new DateTime(fpDate).plusDays(overdueDate);
+            this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
+            return true;
+        }
+        return false;
     }
 
     public boolean isFemaleSterilizationFollowUpThreeValid(int dueDay, int overdueDate, int expiry) {
-        this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
-        this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
-        this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        return true;
+        int dueDiff = Days.daysBetween(new DateTime(fpDate), new DateTime(fpDate).plusMonths(dueDay)).getDays();
+        int expiryDiff = Days.daysBetween(new DateTime(fpDate), new DateTime(fpDate).plusMonths(expiry)).getDays();
+        if (fpDifference >= dueDiff && fpDifference < expiryDiff) {
+            this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
+            this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
+            this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
+            return true;
+        }
+        return false;
     }
 
     public boolean isIUCDValid(int dueDay, int overdueDate, int expiry) {
-        this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
-        this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
-        this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
-        return true;
+        int dueDiff = Days.daysBetween(new DateTime(fpDate), new DateTime(fpDate).plusMonths(dueDay)).getDays();
+        int expiryDiff = Days.daysBetween(new DateTime(fpDate), new DateTime(fpDate).plusMonths(expiry)).getDays();
+        if (fpDifference >= dueDiff && fpDifference < expiryDiff) {
+            this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
+            this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
+            this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
+            return true;
+        }
+        return false;
     }
 
     public Integer getPillCycles() {

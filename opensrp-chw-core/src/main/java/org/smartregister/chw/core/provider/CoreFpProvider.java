@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.DBConstants;
@@ -56,9 +58,9 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FpAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
-            setVisitButtonDueStatus(context, fpAlertRule.getVisitID(), viewHolder.dueButton);
+            setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(fpAlertRule.getDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
         } else if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
-            setVisitButtonOverdueStatus(context, fpAlertRule.getVisitID(), viewHolder.dueButton);
+            setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(fpAlertRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
         } else if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
             setVisitDone(context, viewHolder.dueButton);
         }
@@ -66,14 +68,14 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
-        dueButton.setText(context.getString(R.string.pnc_visit_day_due, visitDue));
+        dueButton.setText(context.getString(R.string.fp_visit_day_due, visitDue));
         dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
         dueButton.setOnClickListener(onClickListener);
     }
 
     private void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
-        dueButton.setText(context.getString(R.string.pnc_visit_day_overdue, visitDue));
+        dueButton.setText(context.getString(R.string.fp_visit_day_overdue, visitDue));
         dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
         dueButton.setOnClickListener(onClickListener);
     }

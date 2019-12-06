@@ -388,6 +388,10 @@
     <string name="pnc_visit_day_due">DAY %s VISIT DUE</string>
     <string name="pnc_visit_day_overdue">DAY %s OVERDUE</string>
 
+    <!--FP -->
+    <string name="fp_visit_day_due">%s DAYS DUE</string>
+    <string name="fp_visit_day_overdue">%s DAYS OVERDUE</string>
+
     <!-- Completed tasks subtitles (text) -->
     <string name="family_planning">Family Planning</string>
     <string name="period_received">Period received</string>
