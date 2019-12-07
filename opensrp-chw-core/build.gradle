@@ -141,7 +141,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    api('org.smartregister:opensrp-client-chw-referral:1.0.0-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-referral:1.1.0-Test-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

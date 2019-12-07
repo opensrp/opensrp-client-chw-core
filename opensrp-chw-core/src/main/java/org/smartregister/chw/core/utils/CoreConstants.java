@@ -151,8 +151,8 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
-        private static final String GENERAL_REFERRAL_FORM = "general_referral_form";
-        private static final String REFERRAL_FOLLOWUP_FORM = "referral_followup_form";
+        private static final String GENERAL_REFERRAL_FORM = "general_neat_referral_form";
+        private static final String REFERRAL_FOLLOWUP_FORM = "referral_followup_neat_form";
         public static AssetManager assetManager;
         public static Locale locale;
 
