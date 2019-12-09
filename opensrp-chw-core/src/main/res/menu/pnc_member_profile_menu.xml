@@ -15,14 +15,16 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_malaria_confirmation"
-        android:enabled="true"
-        android:title="@string/malaria_registration"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_fp_initiation"
         android:enabled="true"
         android:title="@string/family_planning_initiation"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_malaria_confirmation"
+        android:enabled="true"
+        android:title="@string/malaria_registration"
         android:visible="false"
         app:showAsAction="never" />
 
