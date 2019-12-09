@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.dao;
 
-import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.dao.AbstractDao;
 
@@ -9,7 +8,6 @@ import java.util.List;
 
 public class MalariaDao extends AbstractDao {
 
-    @Nullable
     public static Date getMalariaTestDate(String baseEntityID) {
         String sql = "select malaria_test_date from ec_malaria_confirmation where base_entity_id = '" + baseEntityID + "'";
 
