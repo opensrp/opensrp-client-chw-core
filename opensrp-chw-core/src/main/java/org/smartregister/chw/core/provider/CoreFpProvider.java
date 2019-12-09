@@ -38,6 +38,8 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private Context context;
     private View.OnClickListener onClickListener;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
 
     public CoreFpProvider(Context context, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
         super(context, paginationClickListener, onClickListener, visibleColumns);
@@ -57,6 +59,9 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FpAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
+        if(fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)){
+            setVisitButtonNextDueStatus(context,sdf.format(fpAlertRule.getDueDate()), viewHolder.dueButton);
+        }
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(fpAlertRule.getDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
         } else if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
@@ -65,17 +70,35 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             setVisitDone(context, viewHolder.dueButton);
         }
     }
+    private void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
+        dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
+        dueButton.setText(context.getString(R.string.fp_visit_day_next_due, visitDue));
+        dueButton.setBackgroundResource(R.drawable.colorless_btn_selector);
+        dueButton.setOnClickListener(onClickListener);
+    }
+
 
     private void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
-        dueButton.setText(context.getString(R.string.fp_visit_day_due, visitDue));
+        if(visitDue.equalsIgnoreCase("0")){
+            dueButton.setText(context.getString(R.string.fp_visit_day_due_today));
+        }
+        else {
+            dueButton.setText(context.getString(R.string.fp_visit_day_due, visitDue));
+        }
         dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
         dueButton.setOnClickListener(onClickListener);
     }
 
     private void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
-        dueButton.setText(context.getString(R.string.fp_visit_day_overdue, visitDue));
+        if(visitDue.equalsIgnoreCase("0")){
+            dueButton.setText(context.getString(R.string.fp_visit_day_overdue_today));
+
+        }
+        else{
+            dueButton.setText(context.getString(R.string.fp_visit_day_overdue, visitDue));
+        }
         dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
         dueButton.setOnClickListener(onClickListener);
     }
@@ -91,7 +114,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
         private final Context context;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         private FpAlertRule fpAlertRule;
         private List<Rules> fpRules = new ArrayList<>();
         private Visit lastVisit;

@@ -41,10 +41,10 @@ public class FpAlertRule implements ICommonRule {
     public boolean isCocPopValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
             this.dueDate = (new DateTime(this.lastVisitDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
-            this.overDueDate = (new DateTime(this.lastVisitDate)).plus((long) (this.pillCycles * 28)).minusDays(overdueDate);
+            this.overDueDate = (new DateTime(this.lastVisitDate)).plusDays(this.pillCycles * 28).minusDays(overdueDate);
         } else {
             this.dueDate = (new DateTime(this.fpDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
-            this.overDueDate = (new DateTime(this.fpDate)).plus((long) (this.pillCycles * 28)).minusDays(overdueDate);
+            this.overDueDate = (new DateTime(this.fpDate)).plusDays(this.pillCycles * 28).minusDays(overdueDate);
         }
         return true;
     }
@@ -157,6 +157,9 @@ public class FpAlertRule implements ICommonRule {
 
         if (lastVisitDate != null) {
             if (expiryDate != null) {
+                if(currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)){
+                    return CoreConstants.VISIT_STATE.NOT_DUE_YET;
+                }
                 if ((lastVisit.isAfter(dueDate) || lastVisit.isEqual(dueDate)) && lastVisit.isBefore(expiryDate))
                     return CoreConstants.VISIT_STATE.VISIT_DONE;
                 if (lastVisit.isBefore(dueDate)) {
@@ -167,6 +170,9 @@ public class FpAlertRule implements ICommonRule {
                         return CoreConstants.VISIT_STATE.OVERDUE;
                 }
             } else {
+                if(currentDate.isBefore(dueDate)){
+                    return CoreConstants.VISIT_STATE.NOT_DUE_YET;
+                }
                 if ((lastVisit.isAfter(dueDate) || lastVisit.isEqual(dueDate)) && lastVisit.isBefore(overDueDate))
                     return CoreConstants.VISIT_STATE.VISIT_DONE;
                 if (lastVisit.isBefore(dueDate)) {
@@ -180,12 +186,18 @@ public class FpAlertRule implements ICommonRule {
 
         } else {
             if (expiryDate != null) {
+                if(currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)){
+                    return CoreConstants.VISIT_STATE.NOT_DUE_YET;
+                }
                 if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
                     return CoreConstants.VISIT_STATE.DUE;
 
                 if (currentDate.isBefore(expiryDate) && (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                     return CoreConstants.VISIT_STATE.OVERDUE;
             } else {
+                if(currentDate.isBefore(dueDate)){
+                    return CoreConstants.VISIT_STATE.NOT_DUE_YET;
+                }
                 if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
                     return CoreConstants.VISIT_STATE.DUE;
 
