@@ -16,10 +16,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -46,6 +50,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 import org.smartregister.chw.core.custom_views.CoreAncFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
+import org.smartregister.chw.core.custom_views.CoreFamilyPlanningFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreMalariaFloatingMenu;
 import org.smartregister.chw.core.fragment.CopyToClipboardDialog;
 import org.smartregister.clientandeventmodel.Obs;
@@ -479,21 +484,28 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     private static void setCallLayoutListener(boolean has_phone, LinearLayout menu) {
         CoreFamilyMemberFloatingMenu memberFloatingMenu;
         CoreAncFloatingMenu ancFloatingMenu;
+        CoreFamilyPlanningFloatingMenu fpFloatingMenu;
         if (has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
             memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
             memberFloatingMenu.getCallLayout().setOnClickListener(memberFloatingMenu);
+        } else if (!has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
+            memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
+            memberFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (has_phone && menu instanceof CoreAncFloatingMenu) {
             ancFloatingMenu = (CoreAncFloatingMenu) menu;
             ancFloatingMenu.getCallLayout().setOnClickListener(ancFloatingMenu);
         } else if (!has_phone && menu instanceof CoreAncFloatingMenu) {
             ancFloatingMenu = (CoreAncFloatingMenu) menu;
             ancFloatingMenu.getCallLayout().setOnClickListener(null);
-        } else if (!has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
-            memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
-            memberFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (!has_phone && menu instanceof CoreMalariaFloatingMenu) {
             CoreMalariaFloatingMenu malariaFloatingMenu = (CoreMalariaFloatingMenu) menu;
             malariaFloatingMenu.getCallLayout().setOnClickListener(null);
+        } else if (has_phone && menu instanceof CoreFamilyPlanningFloatingMenu) {
+            fpFloatingMenu = (CoreFamilyPlanningFloatingMenu) menu;
+            fpFloatingMenu.getCallLayout().setOnClickListener(fpFloatingMenu);
+        } else if (!has_phone && menu instanceof CoreFamilyPlanningFloatingMenu) {
+            fpFloatingMenu = (CoreFamilyPlanningFloatingMenu) menu;
+            fpFloatingMenu.getCallLayout().setOnClickListener(null);
         }
     }
 
