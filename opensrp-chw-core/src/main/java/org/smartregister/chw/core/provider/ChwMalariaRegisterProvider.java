@@ -14,12 +14,14 @@ import org.smartregister.chw.core.utils.MalariaVisitUtil;
 import org.smartregister.chw.malaria.provider.MalariaRegisterProvider;
 import org.smartregister.chw.malaria.util.DBConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
@@ -73,7 +75,24 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         protected Void doInBackground(Void... voids) {
             try {
                 Date date = new SimpleDateFormat(CoreConstants.DATE_FORMATS.NATIVE_FORMS, Locale.getDefault()).parse(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MALARIA_TEST_DATE, false));
-                malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(date);
+                String followup = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MALARIA_FOLLOW_UP_DATE, false);
+                if (!followup.trim().isEmpty() && !followup.equals("0")) {
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(CoreConstants.DATE_FORMATS.NATIVE_FORMS);
+                        int period = Period.between(LocalDate.parse(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MALARIA_TEST_DATE, false), dateTimeFormatter), LocalDate.parse(followup, dateTimeFormatter)).getDays();
+
+                        if (period >= 1) {
+                            Date followUpDate = new SimpleDateFormat(CoreConstants.DATE_FORMATS.NATIVE_FORMS, Locale.getDefault()).parse(followup);
+                            malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(followUpDate);
+                        } else {
+                            malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(date);
+                        }
+                     }
+                 } else {
+                     malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(date);
+                 }
+
             } catch (ParseException e) {
                 Timber.e(e);
             }

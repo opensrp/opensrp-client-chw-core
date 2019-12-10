@@ -477,6 +477,7 @@ public class CoreConstants {
         public static final String PNC_REFERRAL = "ec_pnc_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
+        public static final String MALARIA_FOLLOW_UP_VISIT = "ec_malaria_follow_up_visit";
     }
 
     public static final class INTENT_KEY {

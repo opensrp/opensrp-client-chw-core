@@ -23,6 +23,7 @@ public class CoreMalariaRegisterFragmentModel extends BaseMalariaRegisterFragmen
         queryBuilder.customJoin("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY + " ON  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID + " = " + CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.BASE_ENTITY_ID);
         queryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.ANC_MEMBER + " ON  " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.ANC_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID + " COLLATE NOCASE ");
         queryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.PNC_MEMBER + " ON  " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.PNC_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID + " COLLATE NOCASE ");
+        queryBuilder.customJoin("INNER JOIN " + CoreConstants.TABLE_NAME.MALARIA_FOLLOW_UP_VISIT + " ON  " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.MALARIA_FOLLOW_UP_VISIT + "." + DBConstants.KEY.BASE_ENTITY_ID + " COLLATE NOCASE ");
         return queryBuilder.mainCondition(mainCondition);
     }
 
@@ -51,6 +52,7 @@ public class CoreMalariaRegisterFragmentModel extends BaseMalariaRegisterFragmen
         columnList.add(CoreConstants.TABLE_NAME.ANC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_anc_closed");
         columnList.add(CoreConstants.TABLE_NAME.PNC_MEMBER + "." + ChwDBConstants.IS_CLOSED + " as is_pnc_closed");
         columnList.add(CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.FIRST_NAME + " as " + org.smartregister.chw.anc.util.DBConstants.KEY.FAMILY_NAME);
+        columnList.add(CoreConstants.TABLE_NAME.MALARIA_FOLLOW_UP_VISIT + "." + org.smartregister.chw.malaria.util.DBConstants.KEY.MALARIA_FOLLOW_UP_DATE);
         return columnList.toArray(new String[columnList.size()]);
     }
 }
