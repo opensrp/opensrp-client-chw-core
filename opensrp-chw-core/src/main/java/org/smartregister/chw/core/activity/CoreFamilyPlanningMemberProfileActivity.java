@@ -48,6 +48,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     public void setupViews() {
         super.setupViews();
+      /*  if (hasFollowUp(fpMemberObject.getFpMethod())) {
+            new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
+        }*/
         new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
     }
 
@@ -167,13 +170,8 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
-    private void updateFollowUpVisitButton(FpAlertRule alertRule) {
-        String buttonStatus = alertRule.getButtonStatus();
+    private void updateFollowUpVisitButton(String buttonStatus) {
         switch (buttonStatus) {
-            case CoreConstants.VISIT_STATE.NOT_DUE_YET:
-            case CoreConstants.VISIT_STATE.VISIT_DONE:
-                hideFollowUpVisitButton();
-                break;
             case CoreConstants.VISIT_STATE.DUE:
                 setFollowUpButtonDue();
                 break;
@@ -210,11 +208,10 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
         @Override
         protected void onPostExecute(Void param) {
-            if (fpAlertRule != null
-                    && StringUtils.isNotBlank(fpAlertRule.getVisitID())
-                    && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
+            if (fpAlertRule != null && (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
+                    fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {
-                updateFollowUpVisitButton(fpAlertRule);
+                updateFollowUpVisitButton(fpAlertRule.getButtonStatus());
             }
         }
     }
