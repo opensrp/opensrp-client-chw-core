@@ -204,6 +204,11 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
         return PncRegisterActivity.class;
     }
 
+    @Override
+    protected void startMalariaFollowUpVisit() {
+//        TODO implement functionality to malaria home visit
+    }
+
     public PncMemberProfileContract.Presenter pncMemberProfilePresenter() {
         if (pncMemberProfilePresenter == null) {
             pncMemberProfilePresenter = new PncMemberProfilePresenter(this, new PncMemberProfileInteractor(), memberObject);
