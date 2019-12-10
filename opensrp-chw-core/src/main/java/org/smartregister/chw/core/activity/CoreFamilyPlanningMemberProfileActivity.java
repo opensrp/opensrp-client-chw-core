@@ -46,6 +46,12 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     }
 
     @Override
+    public void setupViews() {
+        super.setupViews();
+        new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
+    }
+
+    @Override
     protected void initializePresenter() {
         showProgressBar(true);
         fpProfilePresenter = new BaseFpProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
@@ -197,9 +203,8 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
-            for (Rules rule : FpUtil.getFpRules(fpMemberObject.getFpMethod())) {
-                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), fpMemberObject.getPillCycles(), fpMemberObject.getFpMethod());
-            }
+            Rules rule = FpUtil.getFpRules(fpMemberObject.getFpMethod());
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), fpMemberObject.getPillCycles(), fpMemberObject.getFpMethod());
             return null;
         }
 
