@@ -147,7 +147,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         super.setupViews(view);
         this.view = view;
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
