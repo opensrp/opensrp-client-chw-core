@@ -53,7 +53,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             }
             return true;
 
-        } else if (itemId == R.id.action_malaria_confirmation) {
+        } else if (itemId == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
         } else if (itemId == R.id.action_fp_initiation) {
