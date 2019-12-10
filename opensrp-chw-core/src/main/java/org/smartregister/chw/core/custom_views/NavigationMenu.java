@@ -4,15 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +12,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
@@ -46,10 +47,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -67,6 +70,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private ProgressBar syncProgressBar;
     private NavigationContract.Presenter mPresenter;
     private View parentView;
+    private Timer timer;
 
     private NavigationMenu() {
 
@@ -155,6 +159,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void prepareViews(Activity activity) {
 
         drawer = activity.findViewById(R.id.drawer_layout);
+        drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
@@ -391,7 +396,49 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        Timber.v("Drawer is sliding");
+    }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) {
+        Timber.v("Drawer is opened");
+        recomputeCounts();
+    }
+
+    @Override
+    public void onDrawerClosed(@NonNull View drawerView) {
+        Timber.v("Drawer is closed");
+        if (timer != null)
+            timer = null;
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        Timber.v("Drawer state is changed");
+    }
+
     public interface Flavour {
         String[] getSupportedLanguages();
+    }
+
+    private void recomputeCounts() {
+        try {
+            if (timer == null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Activity activity = activityWeakReference.get();
+                        if (mPresenter != null && activity != null) {
+                            mPresenter.refreshNavigationCount(activity);
+                        }
+                    }
+                }, 0, 5000);
+            }
+        } catch (Exception e) {
+            Timber.v(e);
+        }
     }
 }

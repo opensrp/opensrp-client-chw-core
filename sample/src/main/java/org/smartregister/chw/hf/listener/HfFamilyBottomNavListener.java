@@ -1,9 +1,11 @@
 package org.smartregister.chw.hf.listener;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.smartregister.view.activity.BaseRegisterActivity;
 

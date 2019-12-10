@@ -2,7 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
@@ -98,7 +99,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
             if (alert != null) {
                 CoreChildService childService = new CoreChildService();
-                childService.setServiceName(alert.scheduleName());
+                childService.setServiceName(getTranslatedService(context, alert.scheduleName()));
                 childService.setServiceDate(alert.startDate());
                 childService.setServiceStatus(getImmunizationStateFromAlert(alert.status()).name());
                 e.onNext(childService);
@@ -106,6 +107,24 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 e.onNext(null);
             }
         });
+    }
+
+    private String getTranslatedService(Context context, String _name){
+        String name = _name.toLowerCase();
+
+        String num = name.replaceAll("\\D+","");
+        if(name.contains("breastfeeding")){
+            return context.getString(R.string.exclusive_breastfeeding_months, num);
+        }else if(name.contains("deworming")){
+            return context.getString(R.string.deworming_number_dose, num);
+        }else if(name.contains("vitamin")){
+            return context.getString(R.string.vitamin_a, num);
+        }else if(name.contains("mnp")){
+            return context.getString(R.string.mnp_number_pack, num);
+        }else{
+            String val = name.replace(" ", "_");
+            return Utils.getStringResourceByName(val, context);
+        }
     }
 
     private ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {

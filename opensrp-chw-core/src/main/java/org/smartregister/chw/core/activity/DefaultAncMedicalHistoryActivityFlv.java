@@ -37,7 +37,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
     @Override
     public View bindViews(Activity activity) {
         inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(org.smartregister.chw.opensrp_chw_anc.R.layout.medical_history_details, null);
+        View view = inflater.inflate(R.layout.medical_history_details, null);
 
         linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
         linearLayoutAncCard = view.findViewById(R.id.linearLayoutAncCard);

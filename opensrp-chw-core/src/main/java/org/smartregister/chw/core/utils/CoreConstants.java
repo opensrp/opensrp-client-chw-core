@@ -47,7 +47,7 @@ public class CoreConstants {
         String PNC_VISIT = "PNC_VISIT";
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
-        String FP_VISIT ="FP_VISIT";
+        String FP_VISIT = "FP_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
@@ -121,6 +121,8 @@ public class CoreConstants {
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
 
+        public static final String FP_FOLLOW_UP_VISIT = "FP Follow Up Visit";
+
     }
 
     public static final class EncounterType {
@@ -152,6 +154,7 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -229,6 +232,10 @@ public class CoreConstants {
 
         public static String getMalariaConfirmation() {
             return Utils.getLocalForm(MALARIA_CONFIRMATION, locale, assetManager);
+        }
+
+        public static String getFpRegistration() {
+            return Utils.getLocalForm(FAMILY_PLANNING_REGISTRATION_FORM, locale, assetManager);
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
@@ -448,6 +455,22 @@ public class CoreConstants {
                 return Utils.getLocalForm(OBSERVATION_AND_ILLNESS_INFANT, locale, assetManager);
             }
         }
+        public static class FP_FOLLOW_UP_VISIT {
+            private static final String FAMILY_PLANNING_FOLLOWUP_COUNSEL = "fp_followup_counsel";
+            private static final String FAMILY_PLANNING_FOLLOWUP_REVISIT = "fp_followup_revisit";
+            private static final String FAMILY_PLANNING_FOLLOWUP_SIDE_EFFECTS = "fp_followup_side_effects";
+
+            public static String getFamilyPlanningFollowupCounsel() {
+                return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_COUNSEL, locale, assetManager);
+            }
+            public static String getFamilyPlanningFollowupRevist() {
+                return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_REVISIT, locale, assetManager);
+            }
+            public static String getFamilyPlanningFollowupSideEffects() {
+                return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_SIDE_EFFECTS, locale, assetManager);
+            }
+        }
+
     }
 
     public static class RELATIONSHIP {
@@ -569,6 +592,7 @@ public class CoreConstants {
         public static final String REFERRAL_CODE = "Referral";
 
 
+
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
             public static final String PHONE_NUMBER = "phone_number";
@@ -686,6 +710,7 @@ public class CoreConstants {
         public static final String VISIT_NOT_DONE = "VISIT_NOT_DONE";
         public static final String VISIT_DONE = "VISIT_DONE";
         public static final String NOT_VISIT_THIS_MONTH = "NOT_VISIT_THIS_MONTH";
+        public static final String NOT_DUE_YET = "NOT_DUE_YET";
     }
 
     public static final class DATE_FORMATS {
@@ -702,6 +727,7 @@ public class CoreConstants {
         public static final String PNC_REGISTER_ACTIVITY = "PNC_REGISTER_ACTIVITY";
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
+        public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
     }
 

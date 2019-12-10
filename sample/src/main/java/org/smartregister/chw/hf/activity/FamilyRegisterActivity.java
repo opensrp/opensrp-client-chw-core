@@ -2,8 +2,9 @@ package org.smartregister.chw.hf.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.bottomnavigation.LabelVisibilityMode;
-import android.support.design.widget.BottomNavigationView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 
 import org.smartregister.chw.core.activity.CoreFamilyRegisterActivity;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
@@ -33,7 +34,7 @@ public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
         if (!BuildConfig.SUPPORT_QR)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_scan_qr);
 
-        if(!BuildConfig.SUPPORT_REPORT)
+        if (!BuildConfig.SUPPORT_REPORT)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_job_aids);
 
     }
@@ -45,7 +46,7 @@ public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
         if (!BuildConfig.SUPPORT_QR)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_scan_qr);
 
-        if(!BuildConfig.SUPPORT_REPORT)
+        if (!BuildConfig.SUPPORT_REPORT)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_job_aids);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new HfFamilyBottomNavListener(this, bottomNavigationView));
