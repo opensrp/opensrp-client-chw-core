@@ -29,6 +29,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_malaria_followup_visit"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/hf_malaria_follow_up"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action__pnc_remove_member"
         android:enabled="true"
         android:title="@string/remove_this_person"
@@ -46,13 +53,6 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/malaria_diagnosis"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_malaria_followup_visit"
-        android:enabled="true"
-        android:visible="false"
-        android:title="@string/hf_malaria_follow_up"
         app:showAsAction="never" />
 
 </menu>
