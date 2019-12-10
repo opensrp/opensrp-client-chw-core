@@ -58,8 +58,8 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FpAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
-        if(fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)){
-            setVisitButtonNextDueStatus(context,FpUtil.sdf.format(fpAlertRule.getDueDate()), viewHolder.dueButton);
+        if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
+            setVisitButtonNextDueStatus(context, FpUtil.sdf.format(fpAlertRule.getDueDate()), viewHolder.dueButton);
         }
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(fpAlertRule.getDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
@@ -69,6 +69,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             setVisitDone(context, viewHolder.dueButton);
         }
     }
+
     private void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
         dueButton.setText(context.getString(R.string.fp_visit_day_next_due, visitDue));
@@ -79,10 +80,9 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
-        if(visitDue.equalsIgnoreCase("0")){
+        if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.fp_visit_day_due_today));
-        }
-        else {
+        } else {
             dueButton.setText(context.getString(R.string.fp_visit_day_due, visitDue));
         }
         dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
@@ -91,11 +91,10 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
-        if(visitDue.equalsIgnoreCase("0")){
+        if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.fp_visit_day_overdue_today));
 
-        }
-        else{
+        } else {
             dueButton.setText(context.getString(R.string.fp_visit_day_overdue, visitDue));
         }
         dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
@@ -137,23 +136,20 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            Integer pills =  StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
+            Integer pills = StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
             Date fpDate = FpUtil.parseFpStartDate(dayFp);
             Date lastVisitDate = null;
             if (lastVisit != null) {
                 lastVisitDate = lastVisit.getDate();
             }
-            for (Rules rule : FpUtil.getFpRules(fpMethod)) {
-                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
-                if (fpAlertRule != null
-                        && StringUtils.isNotBlank(fpAlertRule.getVisitID())
-                        && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
-                ) {
-                    updateDueColumn(context, viewHolder, fpAlertRule);
-                }
-
+            Rules rule = FpUtil.getFpRules(fpMethod);
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
+            if (fpAlertRule != null
+                    && StringUtils.isNotBlank(fpAlertRule.getVisitID())
+                    && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
+            ) {
+                updateDueColumn(context, viewHolder, fpAlertRule);
             }
-
         }
     }
 }
