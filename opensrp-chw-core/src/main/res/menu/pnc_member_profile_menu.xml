@@ -22,7 +22,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_malaria_confirmation"
+        android:id="@+id/action_malaria_registration"
         android:enabled="true"
         android:title="@string/malaria_registration"
         android:visible="false"
