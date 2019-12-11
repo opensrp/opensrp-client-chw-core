@@ -62,6 +62,9 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_fp_initiation) {
             startFpRegister();
             return true;
+        }else if (itemId == R.id.action_fp_change) {
+            startFpChangeMethod();
+            return true;
         } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
@@ -151,6 +154,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void startMalariaRegister();
 
     protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
 
     protected abstract void startMalariaFollowUpVisit();
 }
