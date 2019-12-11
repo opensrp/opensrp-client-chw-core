@@ -19,6 +19,14 @@
         android:title="@string/family_planning_initiation"
         android:visible="false"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_fp_change"
+        android:enabled="true"
+        android:title="@string/family_planning_change"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_malaria_registration"
         android:enabled="true"
