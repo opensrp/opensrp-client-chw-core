@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.AncLibrary;
@@ -48,9 +47,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     public void setupViews() {
         super.setupViews();
-      /*  if (hasFollowUp(fpMemberObject.getFpMethod())) {
-            new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
-        }*/
         new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
     }
 
@@ -183,14 +179,19 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
+    private void updateFollowUpVisitStatusRow(Visit lastVisit) {
+        setupFollowupVisitEditViews(FpUtil.isVisitWithin24Hours(lastVisit));
+    }
+
     @Override
     public Context getContext() {
         return this;
     }
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
-        private final FpMemberObject fpMemberObject;
+        private FpMemberObject fpMemberObject;
         private FpAlertRule fpAlertRule;
+        private Visit lastVisit;
 
         public UpdateFollowUpVisitButtonTask(FpMemberObject fpMemberObject) {
             this.fpMemberObject = fpMemberObject;
@@ -198,7 +199,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
+            lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
             Rules rule = FpUtil.getFpRules(fpMemberObject.getFpMethod());
@@ -213,6 +214,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             ) {
                 updateFollowUpVisitButton(fpAlertRule.getButtonStatus());
             }
+            updateFollowUpVisitStatusRow(lastVisit);
         }
     }
 
