@@ -70,6 +70,11 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
         //TODO implement start FP register for HF
     }
 
+    @Override
+    protected void startFpChangeMethod() {
+        //TODO implement start FP change method for HF
+    }
+
     public void setReferralTasks(Set<Task> taskList) {
         if (referralRecyclerView != null && taskList.size() > 0) {
             RecyclerView.Adapter mAdapter = new ReferralCardViewAdapter(taskList, this, memberObject, getFamilyHeadName(),
