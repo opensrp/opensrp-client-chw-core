@@ -110,6 +110,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         dueButton.setOnClickListener(null);
     }
 
+
     private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
