@@ -3,20 +3,27 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.AncLibrary;
+import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
+import org.smartregister.chw.core.utils.FpUtil;
+import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.presenter.BaseFpProfilePresenter;
@@ -24,6 +31,8 @@ import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
+
+import java.util.Date;
 
 import timber.log.Timber;
 
@@ -33,6 +42,12 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     protected void onCreation() {
         super.onCreation();
+    }
+
+    @Override
+    public void setupViews() {
+        super.setupViews();
+        new UpdateFollowUpVisitButtonTask(fpMemberObject).execute();
     }
 
     @Override
@@ -151,8 +166,56 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
+    private void updateFollowUpVisitButton(String buttonStatus) {
+        switch (buttonStatus) {
+            case CoreConstants.VISIT_STATE.DUE:
+                setFollowUpButtonDue();
+                break;
+            case CoreConstants.VISIT_STATE.OVERDUE:
+                setFollowUpButtonOverdue();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void updateFollowUpVisitStatusRow(Visit lastVisit) {
+        setupFollowupVisitEditViews(FpUtil.isVisitWithin24Hours(lastVisit));
+    }
+
     @Override
     public Context getContext() {
         return this;
     }
+
+    private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
+        private FpMemberObject fpMemberObject;
+        private FpAlertRule fpAlertRule;
+        private Visit lastVisit;
+
+        public UpdateFollowUpVisitButtonTask(FpMemberObject fpMemberObject) {
+            this.fpMemberObject = fpMemberObject;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
+            Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
+
+            Rules rule = FpUtil.getFpRules(fpMemberObject.getFpMethod());
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), fpMemberObject.getPillCycles(), fpMemberObject.getFpMethod());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            if (fpAlertRule != null && (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
+                    fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
+            ) {
+                updateFollowUpVisitButton(fpAlertRule.getButtonStatus());
+            }
+            updateFollowUpVisitStatusRow(lastVisit);
+        }
+    }
+
 }
