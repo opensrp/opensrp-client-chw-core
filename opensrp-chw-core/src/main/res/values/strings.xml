@@ -125,7 +125,6 @@
     <string name="remove_this_person">Remove this person</string>
     <string name="registration_info">Registration info</string>
     <string name="anc_registration">ANC Registration</string>
-    <string name="fp_initiation">FP initiation</string>
     <string name="malaria_registration">Malaria Confirmation</string>
     <string name="fp_registration">Family planning registration</string>
     <string name="malaria_follow_up">Follow-up Visit</string>
@@ -421,6 +420,7 @@
     <string name="permanent_vasectomy"> Permanent (Vasectomy)</string>
     <string name="hf_malaria_follow_up">Malaria follow-up</string>
     <string name="family_planning_initiation">FP initiation</string>
+    <string name="family_planning_change">FP method change</string>
     <string name="pregnancy_confirmation">Pregnancy confirmation</string>
     <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
     <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>

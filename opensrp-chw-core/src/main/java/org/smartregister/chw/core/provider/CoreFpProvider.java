@@ -17,6 +17,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.fp.provider.BaseFpRegisterProvider;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
@@ -38,8 +39,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private Context context;
     private View.OnClickListener onClickListener;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-
 
     public CoreFpProvider(Context context, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
         super(context, paginationClickListener, onClickListener, visibleColumns);
@@ -59,8 +58,8 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, FpAlertRule fpAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
-        if(fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)){
-            setVisitButtonNextDueStatus(context,sdf.format(fpAlertRule.getDueDate()), viewHolder.dueButton);
+        if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
+            setVisitButtonNextDueStatus(context, FpUtil.sdf.format(fpAlertRule.getDueDate()), viewHolder.dueButton);
         }
         if (fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(fpAlertRule.getDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
@@ -70,6 +69,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             setVisitDone(context, viewHolder.dueButton);
         }
     }
+
     private void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
         dueButton.setText(context.getString(R.string.fp_visit_day_next_due, visitDue));
@@ -80,10 +80,9 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
-        if(visitDue.equalsIgnoreCase("0")){
+        if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.fp_visit_day_due_today));
-        }
-        else {
+        } else {
             dueButton.setText(context.getString(R.string.fp_visit_day_due, visitDue));
         }
         dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
@@ -92,11 +91,10 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
     private void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
-        if(visitDue.equalsIgnoreCase("0")){
+        if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.fp_visit_day_overdue_today));
 
-        }
-        else{
+        } else {
             dueButton.setText(context.getString(R.string.fp_visit_day_overdue, visitDue));
         }
         dueButton.setBackgroundResource(R.drawable.overdue_red_btn_selector);
@@ -116,7 +114,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         private final CommonPersonObjectClient pc;
         private final Context context;
         private FpAlertRule fpAlertRule;
-        private List<Rules> fpRules = new ArrayList<>();
         private Visit lastVisit;
         private String pillCycles;
         private String dayFp;
@@ -126,19 +123,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             this.context = context;
             this.viewHolder = viewHolder;
             this.pc = pc;
-            fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, true);
-
-            if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_POP) || fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_COC)) {
-                fpRules.add(CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.FP_COC_POP_REFILL));
-            } else if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_IUCD)) {
-                fpRules.add(CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.FP_IUCD));
-            } else if (fpMethod.equalsIgnoreCase((FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM)) || fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM)) {
-                fpRules.add(CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.FP_CONDOM_REFILL));
-            } else if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
-                fpRules.add(CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.FP_INJECTION_DUE));
-            } else if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_STERLIZATION)) {
-                fpRules.add(CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.FP_FEMALE_STERILIZATION));
-            }
         }
 
         @Override
@@ -153,28 +137,20 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            Integer pills = pillCycles == null || pillCycles.equalsIgnoreCase("") ? 0 : Integer.parseInt(pillCycles);
-            Date fpDate = null;
+            Integer pills = StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
+            Date fpDate = FpUtil.parseFpStartDate(dayFp);
             Date lastVisitDate = null;
-            try {
-                fpDate = sdf.parse(dayFp);
-            } catch (ParseException e) {
-                Timber.e(e);
-            }
             if (lastVisit != null) {
                 lastVisitDate = lastVisit.getDate();
             }
-            for (Rules rule : fpRules) {
-                fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
-                if (fpAlertRule != null
-                        && StringUtils.isNotBlank(fpAlertRule.getVisitID())
-                        && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
-                ) {
-                    updateDueColumn(context, viewHolder, fpAlertRule);
-                }
-
+            Rules rule = FpUtil.getFpRules(fpMethod);
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
+            if (fpAlertRule != null
+                    && StringUtils.isNotBlank(fpAlertRule.getVisitID())
+                    && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
+            ) {
+                updateDueColumn(context, viewHolder, fpAlertRule);
             }
-
         }
     }
 }

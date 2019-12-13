@@ -153,6 +153,7 @@ public class CoreConstants {
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
         private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
+        private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -232,8 +233,12 @@ public class CoreConstants {
             return Utils.getLocalForm(MALARIA_CONFIRMATION, locale, assetManager);
         }
 
-        public static String getFpRegistration() {
+        public static String getFpRegistrationForm() {
             return Utils.getLocalForm(FAMILY_PLANNING_REGISTRATION_FORM, locale, assetManager);
+        }
+
+        public static String getFpChengeMethodForm() {
+            return Utils.getLocalForm(FAMILY_PLANNING_CHANGE_METHOD_FORM, locale, assetManager);
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
