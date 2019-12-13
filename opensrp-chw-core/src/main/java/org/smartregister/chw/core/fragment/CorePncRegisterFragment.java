@@ -1,17 +1,17 @@
 package org.smartregister.chw.core.fragment;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
@@ -20,19 +20,16 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.model.PncRegisterFragmentModel;
 import org.smartregister.chw.core.provider.ChwPncRegisterProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.core.utils.QueryBuilder;
+import org.smartregister.chw.core.utils.QueryGenerator;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.pnc.fragment.BasePncRegisterFragment;
 import org.smartregister.chw.pnc.presenter.BasePncRegisterFragmentPresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
-import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -211,82 +208,74 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         }
     }
 
+    @Nullable
     private String defaultFilterAndSortQuery() {
-        SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(mainSelect);
-
-        String query = "";
-        StringBuilder customFilter = new StringBuilder();
-        if (StringUtils.isNotBlank(filters)) {
-            customFilter.append(MessageFormat.format(" and ( {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.FIRST_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.LAST_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.MIDDLE_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ) ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, filters));
-        }
-
-        if (dueFilterActive) {
-            customFilter.append(MessageFormat.format(" and ( {0} ) ", getDueCondition()));
-        }
-
         try {
-            if (isValidFilterForFts(commonRepository())) {
+            QueryGenerator generator = new QueryGenerator()
+                    .setMainSelect(mainSelect)
+                    .addWhereClause(presenter().getMainCondition())
+                    .addSortColumn(Sortqueries)
+                    .addLimitClause(clientAdapter.getCurrentoffset(), clientAdapter.getCurrentlimit());
 
-                String myquery = QueryBuilder.getQuery(joinTables, mainCondition, tablename, customFilter.toString(), clientAdapter, Sortqueries);
-                List<String> ids = commonRepository().findSearchIds(myquery);
-                query = sqb.toStringFts(ids, tablename, CommonRepository.ID_COLUMN,
-                        Sortqueries);
-                query = sqb.Endquery(query);
-            } else {
-                sqb.addCondition(customFilter.toString());
-                query = sqb.orderbyCondition(Sortqueries);
-                query = sqb.Endquery(sqb.addlimitandOffset(query, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset()));
+            if (dueFilterActive)
+                generator.addWhereClause(getDueCondition());
 
-            }
+            if (StringUtils.isNotBlank(filters))
+                generator.addWhereClause(getSearchFilter(filters));
+
+            return generator.generateQuery();
         } catch (Exception e) {
             Timber.e(e);
         }
 
-        return query;
+        return null;
+    }
+
+    private String getSearchFilter(String search) {
+        return MessageFormat.format(" {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.FIRST_NAME, search) +
+                MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.LAST_NAME, search) +
+                MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.MIDDLE_NAME, search) +
+                MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, search);
     }
 
     @Override
     public void countExecute() {
-
-        Cursor c = null;
+        Cursor cursor = null;
         try {
+            String mainTable = presenter().getMainTable();
 
-            String query = "select count(*) from " + presenter().getMainTable() + " inner join " + CoreConstants.TABLE_NAME.FAMILY_MEMBER +
-                    " on " + presenter().getMainTable() + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " +
-                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
-                    " where " + getCondition();
+            QueryGenerator generator = new QueryGenerator()
+                    .setMainTable(mainTable)
+                    .addColumn("count(*)")
+                    .addJoinClause("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON "
+                    + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
+                    + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
 
-            if (StringUtils.isNotBlank(filters)) {
-                query = query + " and ( " + filters + " ) ";
-            }
+                    .addWhereClause(presenter().getMainCondition());
 
-            if (dueFilterActive) {
-                query = query + " and ( " + getDueCondition() + " ) ";
-            }
+            if (dueFilterActive)
+                generator.addWhereClause(getDueCondition());
 
-            c = commonRepository().rawCustomQueryForAdapter(query);
-            c.moveToFirst();
-            clientAdapter.setTotalcount(c.getInt(0));
-            Timber.v("total count here %s", clientAdapter.getTotalcount());
+            if (StringUtils.isNotBlank(filters))
+                generator.addWhereClause(getSearchFilter(filters));
+
+            cursor = commonRepository().rawCustomQueryForAdapter(generator.generateQuery());
+            cursor.moveToFirst();
+            clientAdapter.setTotalcount(cursor.getInt(0));
+            Timber.v("total count here %d", clientAdapter.getTotalcount());
 
             clientAdapter.setCurrentlimit(20);
             clientAdapter.setCurrentoffset(0);
-
         } catch (Exception e) {
             Timber.e(e);
         } finally {
-            if (c != null) {
-                c.close();
+            if (cursor != null) {
+                cursor.close();
             }
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
     @Override
-    @NonNull
     public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
         if (id == LOADER_ID) {
             return new CursorLoader(getActivity()) {
@@ -297,6 +286,7 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
                     if (args != null && args.getBoolean(COUNT)) {
                         countExecute();
                     }
+
                     String query = defaultFilterAndSortQuery();
                     return commonRepository().rawCustomQueryForAdapter(query);
                 }
