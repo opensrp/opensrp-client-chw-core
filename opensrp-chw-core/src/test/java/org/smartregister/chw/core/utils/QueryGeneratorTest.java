@@ -18,12 +18,12 @@ public class QueryGeneratorTest {
     public void testGeneratorWithMainSelect() throws QueryGenerator.InvalidQueryException {
         String mainSelect = "select * from table1";
         QueryGenerator generator = new QueryGenerator();
-        generator.setMainSelect(mainSelect);
+        generator.withMainSelect(mainSelect);
 
 
-        generator.addWhereClause("");
-        generator.addWhereClause("table1.column1 = '12345'");
-        generator.addWhereClause("table1.column2 = '45678'");
+        generator.withWhereClause("");
+        generator.withWhereClause("table1.column1 = '12345'");
+        generator.withWhereClause("table1.column2 = '45678'");
 
         String expected = mainSelect + " WHERE ( table1.column1 = '12345' ) AND ( table1.column2 = '45678' )";
         String query = generator.generateQuery();
@@ -40,9 +40,9 @@ public class QueryGeneratorTest {
         strings.add("table1.column3");
 
         QueryGenerator generator = new QueryGenerator();
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(strings);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(strings);
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);
     }
@@ -56,13 +56,13 @@ public class QueryGeneratorTest {
         strings.add("table1.column2");
 
         QueryGenerator generator = new QueryGenerator();
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(strings);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(strings);
 
-        generator.addWhereClause("");
-        generator.addWhereClause("table1.column1 = '12345'");
-        generator.addWhereClause("table1.column2 = '45678'");
+        generator.withWhereClause("");
+        generator.withWhereClause("table1.column1 = '12345'");
+        generator.withWhereClause("table1.column2 = '45678'");
 
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);
@@ -81,16 +81,16 @@ public class QueryGeneratorTest {
         List<String> columns = new ArrayList<>();
         columns.add("table1.column2");
         columns.add("table2.column1");
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(columns);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(columns);
 
 
         List<String> joins = new ArrayList<>();
         joins.add("INNER JOIN table3 ON table1.id = table3.other_id");
         joins.add("INNER JOIN table4 ON table1.id = table4.other_id");
-        generator.addJoinClause("INNER JOIN table2 ON table1.id = table2.other_id");
-        generator.addJoinClause(joins);
+        generator.withJoinClause("INNER JOIN table2 ON table1.id = table2.other_id");
+        generator.withJoinClause(joins);
 
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);
@@ -106,12 +106,12 @@ public class QueryGeneratorTest {
         columns.add("table1.column3");
 
         QueryGenerator generator = new QueryGenerator();
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(columns);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(columns);
 
-        generator.addSortColumn("table1.id");
-        generator.addSortColumn(columns);
+        generator.withSortColumn("table1.id");
+        generator.withSortColumn(columns);
 
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);
@@ -127,10 +127,10 @@ public class QueryGeneratorTest {
         columns.add("table1.column3");
 
         QueryGenerator generator = new QueryGenerator();
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(columns);
-        generator.addLimitClause(0, 10);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(columns);
+        generator.withLimitClause(0, 10);
 
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);
@@ -151,21 +151,21 @@ public class QueryGeneratorTest {
         List<String> columns = new ArrayList<>();
         columns.add("table1.column2");
         columns.add("table2.column1");
-        generator.setMainTable("table1");
-        generator.addColumn("table1.column1");
-        generator.addColumns(columns);
+        generator.withMainTable("table1");
+        generator.withColumn("table1.column1");
+        generator.withColumns(columns);
 
 
         List<String> joins = new ArrayList<>();
         joins.add("INNER JOIN table3 ON table1.id = table3.other_id");
         joins.add("INNER JOIN table4 ON table1.id = table4.other_id");
-        generator.addJoinClause("INNER JOIN table2 ON table1.id = table2.other_id");
-        generator.addJoinClause(joins);
+        generator.withJoinClause("INNER JOIN table2 ON table1.id = table2.other_id");
+        generator.withJoinClause(joins);
 
-        generator.addSortColumn("table1.id");
-        generator.addSortColumn(columns);
+        generator.withSortColumn("table1.id");
+        generator.withSortColumn(columns);
 
-        generator.addLimitClause(0, 10);
+        generator.withLimitClause(0, 10);
 
         String query = generator.generateQuery();
         Assert.assertEquals(values, query);

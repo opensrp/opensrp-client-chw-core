@@ -62,31 +62,11 @@ public class QueryGenerator {
         }
     }
 
-    public QueryGenerator setMainTable(String mainTable) {
-        this.mainTable = mainTable;
-        return this;
-    }
-
-    public QueryGenerator setMainSelect(String mainSelect) {
-        this.mainSelect = mainSelect;
-        return this;
-    }
-
     private Columns getColumns() {
         if (columns == null)
             columns = new Columns();
 
         return columns;
-    }
-
-    public QueryGenerator addColumns(List<String> values) {
-        getColumns().addColumns(values);
-        return this;
-    }
-
-    public QueryGenerator addColumn(String value) {
-        getColumns().addColumn(value);
-        return this;
     }
 
     private JoinClause getJoinClause() {
@@ -96,12 +76,46 @@ public class QueryGenerator {
         return joinClause;
     }
 
-    public QueryGenerator addJoinClause(List<String> values) {
+    private LimitClause getLimitClause() {
+        if (limitClause == null)
+            limitClause = new LimitClause();
+
+        return limitClause;
+    }
+
+    private SortClause getSortClause() {
+        if (sortClause == null)
+            sortClause = new SortClause();
+
+        return sortClause;
+    }
+
+    public QueryGenerator withMainTable(String mainTable) {
+        this.mainTable = mainTable;
+        return this;
+    }
+
+    public QueryGenerator withMainSelect(String mainSelect) {
+        this.mainSelect = mainSelect;
+        return this;
+    }
+
+    public QueryGenerator withColumns(List<String> values) {
+        getColumns().addColumns(values);
+        return this;
+    }
+
+    public QueryGenerator withColumn(String value) {
+        getColumns().addColumn(value);
+        return this;
+    }
+
+    public QueryGenerator withJoinClause(List<String> values) {
         getJoinClause().addJoinClause(values);
         return this;
     }
 
-    public QueryGenerator addJoinClause(String value) {
+    public QueryGenerator withJoinClause(String value) {
         getJoinClause().addJoinClause(value);
         return this;
     }
@@ -113,41 +127,27 @@ public class QueryGenerator {
         return whereClause;
     }
 
-    public QueryGenerator addWhereClause(List<String> values) {
+    public QueryGenerator withWhereClause(List<String> values) {
         getWhereClause().addWhereClause(values);
         return this;
     }
 
-    public QueryGenerator addWhereClause(String value) {
+    public QueryGenerator withWhereClause(String value) {
         getWhereClause().addWhereClause(value);
         return this;
     }
 
-    private LimitClause getLimitClause() {
-        if (limitClause == null)
-            limitClause = new LimitClause();
-
-        return limitClause;
-    }
-
-    public QueryGenerator addLimitClause(int start, int end) {
+    public QueryGenerator withLimitClause(int start, int end) {
         getLimitClause().addLimitClause(start, end);
         return this;
     }
 
-    private SortClause getSortClause() {
-        if (sortClause == null)
-            sortClause = new SortClause();
-
-        return sortClause;
-    }
-
-    public QueryGenerator addSortColumn(List<String> values) {
+    public QueryGenerator withSortColumn(List<String> values) {
         getSortClause().addSortColumn(values);
         return this;
     }
 
-    public QueryGenerator addSortColumn(String value) {
+    public QueryGenerator withSortColumn(String value) {
         getSortClause().addSortColumn(value);
         return this;
     }

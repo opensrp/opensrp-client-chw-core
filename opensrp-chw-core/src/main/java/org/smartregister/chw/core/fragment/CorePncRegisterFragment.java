@@ -212,16 +212,16 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
     private String defaultFilterAndSortQuery() {
         try {
             QueryGenerator generator = new QueryGenerator()
-                    .setMainSelect(mainSelect)
-                    .addWhereClause(presenter().getMainCondition())
-                    .addSortColumn(Sortqueries)
-                    .addLimitClause(clientAdapter.getCurrentoffset(), clientAdapter.getCurrentlimit());
+                    .withMainSelect(mainSelect)
+                    .withWhereClause(presenter().getMainCondition())
+                    .withSortColumn(Sortqueries)
+                    .withLimitClause(clientAdapter.getCurrentoffset(), clientAdapter.getCurrentlimit());
 
             if (dueFilterActive)
-                generator.addWhereClause(getDueCondition());
+                generator.withWhereClause(getDueCondition());
 
             if (StringUtils.isNotBlank(filters))
-                generator.addWhereClause(getSearchFilter(filters));
+                generator.withWhereClause(getSearchFilter(filters));
 
             return generator.generateQuery();
         } catch (Exception e) {
@@ -245,19 +245,19 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
             String mainTable = presenter().getMainTable();
 
             QueryGenerator generator = new QueryGenerator()
-                    .setMainTable(mainTable)
-                    .addColumn("count(*)")
-                    .addJoinClause("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON "
+                    .withMainTable(mainTable)
+                    .withColumn("count(*)")
+                    .withJoinClause("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON "
                     + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
                     + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
 
-                    .addWhereClause(presenter().getMainCondition());
+                    .withWhereClause(presenter().getMainCondition());
 
             if (dueFilterActive)
-                generator.addWhereClause(getDueCondition());
+                generator.withWhereClause(getDueCondition());
 
             if (StringUtils.isNotBlank(filters))
-                generator.addWhereClause(getSearchFilter(filters));
+                generator.withWhereClause(getSearchFilter(filters));
 
             cursor = commonRepository().rawCustomQueryForAdapter(generator.generateQuery());
             cursor.moveToFirst();
