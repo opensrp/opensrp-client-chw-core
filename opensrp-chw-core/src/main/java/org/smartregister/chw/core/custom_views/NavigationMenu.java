@@ -335,6 +335,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void refreshSyncProgressSpinner() {
+        if(syncProgressBar == null || ivSync == null)
+            return;
+
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
             ivSync.setVisibility(View.INVISIBLE);
