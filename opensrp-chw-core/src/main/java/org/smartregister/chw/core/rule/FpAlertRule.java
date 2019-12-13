@@ -24,7 +24,8 @@ public class FpAlertRule implements ICommonRule {
 
     public FpAlertRule(Date fpDate, Date lastVisitDate, Integer pillCycles, String fpMethod) {
         this.pillCycles = pillCycles == null ? 0 : pillCycles;
-        this.fpDate = fpDate == null ? null : new DateTime(sdf.format(fpDate));
+
+        this.fpDate = fpDate != null ? new DateTime(sdf.format(fpDate)) : null;
         this.lastVisitDate = lastVisitDate == null ? null : new DateTime(lastVisitDate);
         this.fpMethod = fpMethod;
         fpDifference = Days.daysBetween(new DateTime(fpDate), new DateTime()).getDays();
