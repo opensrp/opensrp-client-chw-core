@@ -54,18 +54,4 @@ public class FpUtil extends org.smartregister.chw.fp.util.FpUtil {
 
         return null;
     }
-
-    /**
-     * Check whether a visit occurred in the last 24 hours
-     *
-     * @param lastVisit The Visit instance for which you wish to check
-     * @return true or false based on whether the visit was between 24 hours
-     */
-    public static boolean isVisitWithin24Hours(Visit lastVisit) {
-        if (lastVisit != null) {
-            return (Days.daysBetween(new DateTime(lastVisit.getCreatedAt()), new DateTime()).getDays() < 1) &&
-                    (Days.daysBetween(new DateTime(lastVisit.getDate()), new DateTime()).getDays() <= 1);
-        }
-        return false;
-    }
 }

@@ -14,6 +14,7 @@ import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
+import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
@@ -180,7 +181,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     }
 
     private void updateFollowUpVisitStatusRow(Visit lastVisit) {
-        setupFollowupVisitEditViews(FpUtil.isVisitWithin24Hours(lastVisit));
+        setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
     }
 
     @Override
