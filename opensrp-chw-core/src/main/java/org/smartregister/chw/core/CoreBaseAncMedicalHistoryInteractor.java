@@ -2,10 +2,8 @@ package org.smartregister.chw.core;
 
 import android.content.Context;
 
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.contract.BaseAncMedicalHistoryContract;
 import org.smartregister.chw.anc.domain.Visit;
-import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.anc.interactor.BaseAncMedicalHistoryInteractor;
 import org.smartregister.chw.anc.util.VisitUtils;
 

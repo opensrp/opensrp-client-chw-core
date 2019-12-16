@@ -1,11 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
-import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;

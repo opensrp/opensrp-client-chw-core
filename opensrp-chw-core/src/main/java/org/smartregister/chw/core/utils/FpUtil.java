@@ -1,9 +1,6 @@
 package org.smartregister.chw.core.utils;
 
 import org.jeasy.rules.api.Rules;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
