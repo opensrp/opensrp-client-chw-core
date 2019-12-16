@@ -459,7 +459,7 @@ public class CoreConstants {
             }
         }
 
-        public static class FP_FOLLOW_UP_VISIT {
+        public static class FpFollowUpVisit {
             private static final String FAMILY_PLANNING_FOLLOWUP_COUNSEL = "fp_followup_counsel";
             private static final String FAMILY_PLANNING_FOLLOWUP_RESUPPLY = "fp_followup_resupply";
             private static final String FAMILY_PLANNING_FOLLOWUP_SIDE_EFFECTS = "fp_followup_side_effects";
