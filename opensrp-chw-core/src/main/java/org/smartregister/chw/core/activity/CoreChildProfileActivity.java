@@ -42,6 +42,7 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -539,8 +540,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void onRegistrationSaved(boolean isEdit) {
-        //TODO
+    public void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient) {
         Timber.d("onRegistrationSaved unimplemented");
     }
 
