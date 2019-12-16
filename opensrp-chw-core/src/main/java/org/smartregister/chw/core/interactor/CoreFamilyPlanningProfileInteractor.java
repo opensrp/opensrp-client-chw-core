@@ -1,18 +1,24 @@
 package org.smartregister.chw.core.interactor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
+import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
+import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.interactor.BaseFpProfileInteractor;
 import org.smartregister.domain.AlertStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor {
 
@@ -46,30 +52,39 @@ public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor
         return type;
     }
 
-    private Date getLastVisitDate(FpMemberObject memberObject) {
+    public Date getLastVisitDate(FpMemberObject memberObject) {
         Date lastVisitDate = null;
-        String visitType = null;
+        List<Visit> visits = new ArrayList<>();
         String memberType = getMemberVisitType(memberObject.getBaseEntityId());
 
-        switch (memberType) {
-            case CoreConstants.TABLE_NAME.PNC_MEMBER:
-                visitType = Constants.EVENT_TYPE.PNC_HOME_VISIT;
-                break;
-            case CoreConstants.TABLE_NAME.ANC_MEMBER:
-                visitType = Constants.EVENT_TYPE.ANC_HOME_VISIT;
-                break;
-            default:
-                break;
-        }
+        if (memberType != null) {
+            switch (memberType) {
+                case CoreConstants.TABLE_NAME.PNC_MEMBER:
+                    visits = VisitDao.getPNCVisitsMedicalHistory(memberObject.getBaseEntityId());
+                    break;
+                case CoreConstants.TABLE_NAME.ANC_MEMBER:
+                    visits = getAncVisitsMedicalHistory(memberObject.getBaseEntityId());
+                    break;
+                default:
+                    break;
+            }
 
-        if (StringUtils.isNotBlank(visitType)) {
-            Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), visitType);
-            if (lastVisit != null) {
-                lastVisitDate = lastVisit.getDate();
+            if (visits.size() > 0) {
+                lastVisitDate = visits.get(0).getDate();
             }
         }
-
         return lastVisitDate;
+    }
+
+    private List<Visit> getAncVisitsMedicalHistory(String baseEntityId) {
+        List<Visit> visits = VisitUtils.getVisits(baseEntityId);
+        List<Visit> allVisits = new ArrayList<>(visits);
+
+        for (Visit visit : visits) {
+            List<Visit> childVisits = VisitUtils.getChildVisits(visit.getVisitId());
+            allVisits.addAll(childVisits);
+        }
+        return allVisits;
     }
 
 }
