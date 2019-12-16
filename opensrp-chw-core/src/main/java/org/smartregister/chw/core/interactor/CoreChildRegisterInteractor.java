@@ -74,7 +74,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
         //   Runnable runnable = () -> {
         if (saveRegistration(pair, jsonString, isEditMode)) {
-            callBack.onRegistrationSaved(isEditMode);
+            callBack.onRegistrationSaved(isEditMode, true, null);
         }
         //    appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode));
         // };
