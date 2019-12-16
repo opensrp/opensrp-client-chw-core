@@ -165,7 +165,7 @@ public abstract class CoreFamilyProfileChangeDialog extends DialogFragment imple
         progressBar.setVisibility(View.INVISIBLE);
 
 
-        if (actionType.equals(CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER)) {
+        if (CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER.equals(actionType)) {
             tvTitle.setText(getString(R.string.select_caregiver));
             tvInfo.setText(getString(R.string.remove_caregiver_warning_message));
         } else {
