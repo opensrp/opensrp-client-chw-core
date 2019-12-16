@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -85,21 +86,28 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         NavigationMenu.showDeviceToDeviceSync = showDeviceToDeviceSync;
     }
 
+    @Nullable
     public static NavigationMenu getInstance(Activity activity, View parentView, Toolbar myToolbar) {
-        SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
-        activityWeakReference = new WeakReference<>(activity);
-        int orientation = activity.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (instance == null) {
-                instance = new NavigationMenu();
-            }
+        try {
+            SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
+            activityWeakReference = new WeakReference<>(activity);
+            int orientation = activity.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if (instance == null) {
+                    instance = new NavigationMenu();
+                }
 
-            SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
-            instance.init(activity, parentView, myToolbar);
-            return instance;
-        } else {
-            return null;
+                SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
+                instance.init(activity, parentView, myToolbar);
+                return instance;
+            } else {
+                return null;
+            }
+        }catch (OutOfMemoryError e){
+            Timber.e(e);
         }
+
+        return null;
     }
 
     private void init(Activity activity, View myParentView, Toolbar myToolbar) {
@@ -335,6 +343,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void refreshSyncProgressSpinner() {
+        if(syncProgressBar == null || ivSync == null)
+            return;
+
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
             ivSync.setVisibility(View.INVISIBLE);

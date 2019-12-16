@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -113,10 +114,10 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             List<MedicalHistory> medicalHistories = new ArrayList<>();
             for (Map.Entry<String, List<Vaccine>> entry : vaccineMap.entrySet()) {
                 MedicalHistory history = new MedicalHistory();
-                history.setTitle(getVaccineTitle(entry.getKey().toLowerCase().trim(), context));
+                history.setTitle(getVaccineTitle(toLowerCase(entry.getKey()).trim(), context));
                 List<String> content = new ArrayList<>();
                 for (Vaccine vaccine : entry.getValue()) {
-                    String val = vaccine.getName().toLowerCase().replace(" ", "_");
+                    String val = toLowerCase(vaccine.getName()).replace(" ", "_");
                     vaccineGiven.add(val.replace("_", ""));
                     String translated = Utils.getStringResourceByName(val, context);
                     content.add(String.format("%s - %s %s", translated, context.getString(R.string.done), sdf.format(vaccine.getDate())));
@@ -141,6 +142,12 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
             parentView.addView(view);
         }
+    }
+
+    private String toLowerCase(@Nullable String s){
+        if(s ==null) return "";
+
+        return s.toLowerCase();
     }
 
     private void evaluateVaccineCard() {

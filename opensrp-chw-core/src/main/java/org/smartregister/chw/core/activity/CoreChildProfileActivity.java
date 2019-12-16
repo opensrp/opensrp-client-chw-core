@@ -10,10 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -40,6 +42,7 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -323,7 +326,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         updateTopBar(gender);
     }
 
-    private String getGenderTranslated(String gender){
+    private String getGenderTranslated(String gender) {
         if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
             return getResources().getString(R.string.male);
         } else if (gender.equalsIgnoreCase(Gender.FEMALE.toString())) {
@@ -373,7 +376,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
         textViewUndo.setText(getString(R.string.undo));
         textViewUndo.setVisibility(View.VISIBLE);
-       imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
+        imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
 
     @Override
@@ -537,8 +540,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void onRegistrationSaved(boolean isEdit) {
-        //TODO
+    public void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient) {
         Timber.d("onRegistrationSaved unimplemented");
     }
 
@@ -549,8 +551,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             onBackPressed();
             return true;
         } else if (i == R.id.action_registration) {
-            ((CoreChildProfilePresenter) presenter()).startFormForEdit(getResources().getString(R.string.edit_child_form_title),
-                    ((CoreChildProfilePresenter) presenter()).getChildClient());
+            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
+            if (profilePresenter != null) {
+                profilePresenter.startFormForEdit(getResources().getString(R.string.edit_child_form_title),
+                        profilePresenter.getChildClient());
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
