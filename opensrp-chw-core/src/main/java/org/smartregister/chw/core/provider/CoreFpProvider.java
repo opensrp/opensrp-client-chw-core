@@ -124,7 +124,6 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             dayFp = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_FP_START_DATE, true);
             pillCycles = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_PILL_CYCLES, true);
             fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, false);
-            lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, FamilyPlanningConstants.EventType.FP_HOME_VISIT);
             if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(baseEntityID, fpMethod);
             } else {
