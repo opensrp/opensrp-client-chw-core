@@ -80,7 +80,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
     private void updatePncAncIcons(RegisterViewHolder viewHolder, int womanCount, String register) {
         for (int i = 1; i <= womanCount; i++) {
-            int res = CoreConstants.TABLE_NAME.ANC_MEMBER.equals(register) ? R.mipmap.ic_anc_pink : org.smartregister.family.R.mipmap.row_pnc;
+            int res = CoreConstants.TABLE_NAME.ANC_MEMBER.equals(register) ? R.mipmap.ic_anc_pink : R.mipmap.row_pnc;
             addImageView(viewHolder, res);
         }
     }
@@ -92,6 +92,14 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
     protected void updateMalariaIcons(RegisterViewHolder viewHolder, int malariaCount) {
         for (int i = 1; i <= malariaCount; i++) {
             addImageView(viewHolder, R.drawable.ic_row_malaria);
+        }
+    }
+
+    protected void updateFpIcons(RegisterViewHolder viewHolder, int fpCount) {
+        if(fpCount != 0){
+            for (int i = 1; i <= fpCount; i++) {
+                addImageView(viewHolder, R.mipmap.sidemenu_fp);
+            }
         }
     }
 
