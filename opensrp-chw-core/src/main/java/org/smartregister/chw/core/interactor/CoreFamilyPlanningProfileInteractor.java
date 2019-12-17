@@ -33,7 +33,7 @@ public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor
 
     private Date getLastVisitDate(FpMemberObject memberObject) {
         Date lastVisitDate = null;
-        Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
+        Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT);
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
         }
