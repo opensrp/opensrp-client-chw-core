@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.Visit;
+import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
@@ -180,7 +181,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     }
 
     private void updateFollowUpVisitStatusRow(Visit lastVisit) {
-        setupFollowupVisitEditViews(FpUtil.isVisitWithin24Hours(lastVisit));
+        setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
     }
 
     @Override
@@ -203,7 +204,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             if (fpMemberObject.getFpMethod().equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(fpMemberObject.getBaseEntityId(), fpMemberObject.getFpMethod());
             } else {
-                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMemberObject.getBaseEntityId());
+                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMemberObject.getFpMethod());
             }
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
