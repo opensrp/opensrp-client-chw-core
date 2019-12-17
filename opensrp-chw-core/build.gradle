@@ -143,7 +143,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-chw-family-planning:1.0.8-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-chw-family-planning:1.0.9-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
