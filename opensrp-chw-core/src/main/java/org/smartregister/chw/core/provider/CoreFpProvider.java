@@ -10,30 +10,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
+import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.provider.BaseFpRegisterProvider;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Set;
-
-import timber.log.Timber;
 
 public class CoreFpProvider extends BaseFpRegisterProvider {
 
@@ -74,7 +66,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
         dueButton.setText(context.getString(R.string.fp_visit_day_next_due, visitDue));
         dueButton.setBackgroundResource(R.drawable.colorless_btn_selector);
-        dueButton.setOnClickListener(onClickListener);
+        dueButton.setOnClickListener(null);
     }
 
 
@@ -108,6 +100,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         dueButton.setOnClickListener(null);
     }
 
+
     private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
@@ -130,7 +123,11 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             dayFp = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_FP_START_DATE, true);
             pillCycles = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_PILL_CYCLES, true);
             fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, true);
-            lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, FamilyPlanningConstants.EventType.FP_HOME_VISIT);
+            if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
+                lastVisit = FpDao.getLatestInjectionVisit(baseEntityID, fpMethod);
+            } else {
+                lastVisit = FpDao.getLatestFpVisit(baseEntityID, FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMethod);
+            }
             return null;
         }
 
