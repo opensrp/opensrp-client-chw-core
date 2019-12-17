@@ -204,7 +204,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             if (fpMemberObject.getFpMethod().equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(fpMemberObject.getBaseEntityId(), fpMemberObject.getFpMethod());
             } else {
-                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMemberObject.getBaseEntityId());
+                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMemberObject.getFpMethod());
             }
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
