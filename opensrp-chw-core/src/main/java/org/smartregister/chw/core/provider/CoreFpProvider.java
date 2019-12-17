@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
@@ -122,7 +123,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
             String baseEntityID = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.BASE_ENTITY_ID, false);
             dayFp = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_FP_START_DATE, true);
             pillCycles = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_PILL_CYCLES, true);
-            fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, true);
+            fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, false);
             if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(baseEntityID, fpMethod);
             } else {
