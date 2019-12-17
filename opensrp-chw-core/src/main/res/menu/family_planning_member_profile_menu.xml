@@ -9,6 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_fp_change"
+        android:enabled="true"
+        android:title="@string/family_planning_change"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_remove_member"
         android:enabled="true"
         android:title="@string/remove_this_person"

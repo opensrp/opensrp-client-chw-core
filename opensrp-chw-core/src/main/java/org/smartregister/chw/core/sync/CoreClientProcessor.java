@@ -10,12 +10,14 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.fp.util.FpUtil;
 import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.domain.db.Client;
 import org.smartregister.domain.db.Event;
 import org.smartregister.domain.db.EventClient;
+import org.smartregister.domain.db.Obs;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -170,6 +172,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     return;
                 }
                 processRemoveMember(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                break;
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+
+                List<Obs> observations = event.getObs();
+                for (Obs obs : observations) {
+                    if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
+                        break;
+                    }
+                }
                 break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
