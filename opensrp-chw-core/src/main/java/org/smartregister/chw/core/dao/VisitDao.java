@@ -7,7 +7,6 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.domain.VisitSummary;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
@@ -112,17 +111,6 @@ public class VisitDao extends AbstractDao {
 
     public static boolean memberHasVisits(String baseEntityID) {
         String sql = "select count(*) total from visits where base_entity_id = '" + baseEntityID + "'";
-
-        DataMap<String> dataMap = c -> getCursorValue(c, "total");
-        List<String> values = AbstractDao.readData(sql, dataMap);
-        if (values == null || values.size() == 0)
-            return false;
-
-        return Integer.valueOf(values.get(0)) > 0;
-    }
-
-    public static boolean memberHasNonFamilyPlanningVisits(String baseEntityID) {
-        String sql = "select count(*) total from visits where base_entity_id = '" + baseEntityID + "' and visit_type != '" + FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT + "'";
 
         DataMap<String> dataMap = c -> getCursorValue(c, "total");
         List<String> values = AbstractDao.readData(sql, dataMap);
