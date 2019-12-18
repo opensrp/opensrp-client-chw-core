@@ -200,7 +200,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //  lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_HOME_VISIT);
             if (fpMemberObject.getFpMethod().equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(fpMemberObject.getBaseEntityId(), fpMemberObject.getFpMethod());
             } else {
