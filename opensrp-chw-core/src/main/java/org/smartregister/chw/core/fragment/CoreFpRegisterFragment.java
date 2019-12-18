@@ -252,7 +252,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
     }
 
     public String getDueCondition() {
-        return FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE + ".base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.FP_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
+        return FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE + ".base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and ifnull(expiry_date,strftime('%Y-%m-%d')) and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.FP_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
     }
 
     protected void dueFilter(View dueOnlyLayout) {

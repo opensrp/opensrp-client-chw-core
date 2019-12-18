@@ -27,9 +27,8 @@ public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor
             public void run() {
                 appExecutors.mainThread().execute(() -> {
                     callback.refreshFamilyStatus(AlertStatus.normal);
-                    callback.refreshLastVisit(lastVisitDate);
                     callback.refreshUpComingServicesStatus("Family Planning Followup Visit", AlertStatus.normal, new Date());
-                    callback.refreshMedicalHistory(true);
+                    callback.refreshMedicalHistory(lastVisitDate);
                 });
             }
         };
