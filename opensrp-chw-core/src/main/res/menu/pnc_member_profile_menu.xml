@@ -15,20 +15,6 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_fp_initiation"
-        android:enabled="true"
-        android:title="@string/family_planning_initiation"
-        android:visible="false"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_fp_change"
-        android:enabled="true"
-        android:title="@string/family_planning_change"
-        android:visible="false"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_malaria_registration"
         android:enabled="true"
         android:title="@string/malaria_registration"
@@ -40,6 +26,20 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/hf_malaria_follow_up"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_fp_initiation"
+        android:enabled="true"
+        android:title="@string/family_planning_initiation"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_fp_change"
+        android:enabled="true"
+        android:title="@string/family_planning_change"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item
