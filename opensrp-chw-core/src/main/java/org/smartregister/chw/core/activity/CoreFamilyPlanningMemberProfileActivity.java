@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.Visit;
+import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
@@ -35,7 +36,14 @@ import org.smartregister.family.util.Utils;
 
 import java.util.Date;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements
         FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack {
@@ -106,9 +114,52 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
                     }
                 }
                 break;
+            case Constants.REQUEST_CODE_HOME_VISIT:
+                refreshViewOnHomeVisitResult();
+                break;
             default:
                 break;
         }
+    }
+
+    private void refreshViewOnHomeVisitResult() {
+        Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
+            Visit lastVisit = FpDao.getLatestVisit(fpMemberObject.getBaseEntityId(), FP_FOLLOW_UP_VISIT);
+            visitObservableEmitter.onNext(lastVisit);
+            visitObservableEmitter.onComplete();
+        });
+
+        final Disposable[] disposable = new Disposable[1];
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Visit>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable[0] = d;
+                    }
+
+                    @Override
+                    public void onNext(Visit visit) {
+                        updateLastVisitRow(visit.getDate());
+                        onMemberDetailsReloaded(fpMemberObject);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable[0].dispose();
+                        disposable[0] = null;
+                    }
+                });
+    }
+
+    public void onMemberDetailsReloaded(FpMemberObject fpMemberObject) {
+        super.onMemberDetailsReloaded(fpMemberObject);
+
     }
 
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
@@ -203,7 +254,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             if (fpMemberObject.getFpMethod().equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(fpMemberObject.getBaseEntityId(), fpMemberObject.getFpMethod());
             } else {
-                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT, fpMemberObject.getFpMethod());
+                lastVisit = FpDao.getLatestFpVisit(fpMemberObject.getBaseEntityId(), FP_FOLLOW_UP_VISIT, fpMemberObject.getFpMethod());
             }
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
