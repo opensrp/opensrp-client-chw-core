@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
