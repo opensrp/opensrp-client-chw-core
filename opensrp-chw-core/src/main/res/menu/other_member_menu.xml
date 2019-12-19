@@ -13,6 +13,20 @@
         android:enabled="true"
         android:title="@string/anc_registration"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_malaria_registration"
+        android:enabled="true"
+        android:title="@string/malaria_registration"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_malaria_followup_visit"
+        android:enabled="true"
+        android:title="@string/follow_up_visit"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_fp_initiation"
         android:enabled="true"
@@ -27,18 +41,6 @@
         android:visible="false"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_malaria_registration"
-        android:enabled="true"
-        android:title="@string/malaria_registration"
-        android:visible="false"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_malaria_followup_visit"
-        android:enabled="true"
-        android:title="@string/follow_up_visit"
-        android:visible="false"
-        app:showAsAction="never" />
     <item
         android:id="@+id/action_sick_child_follow_up"
         android:enabled="true"
