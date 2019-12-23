@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.Menu;
@@ -15,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;

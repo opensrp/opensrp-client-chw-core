@@ -2,8 +2,6 @@ package org.smartregister.chw.core.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,6 +14,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;

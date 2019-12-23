@@ -10,10 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;

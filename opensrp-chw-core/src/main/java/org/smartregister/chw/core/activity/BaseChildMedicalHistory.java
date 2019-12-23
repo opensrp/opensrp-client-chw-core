@@ -4,12 +4,13 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.utils.CoreConstants;

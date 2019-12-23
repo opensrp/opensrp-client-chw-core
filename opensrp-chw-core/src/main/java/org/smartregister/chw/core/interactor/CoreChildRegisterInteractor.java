@@ -1,7 +1,8 @@
 package org.smartregister.chw.core.interactor;
 
-import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;

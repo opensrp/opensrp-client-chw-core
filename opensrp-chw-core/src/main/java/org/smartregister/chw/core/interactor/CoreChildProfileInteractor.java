@@ -2,8 +2,9 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;

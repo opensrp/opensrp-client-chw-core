@@ -3,10 +3,11 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;

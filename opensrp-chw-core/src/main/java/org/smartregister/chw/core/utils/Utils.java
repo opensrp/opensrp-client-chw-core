@@ -16,10 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -27,7 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.internal.Preconditions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 

@@ -15,6 +15,7 @@ import org.smartregister.chw.core.repository.ScheduleRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.referral.ReferralLibrary;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
@@ -103,6 +104,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     }
 
     public TaskRepository getTaskRepository() {
+        taskRepository = ReferralLibrary.getInstance().getTaskRepository();
         if (taskRepository == null) {
             taskRepository = new TaskRepository(getRepository(), new TaskNotesRepository(getRepository()));
         }
