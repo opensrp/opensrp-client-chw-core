@@ -148,11 +148,11 @@ public class CoreConstants {
         private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
         private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
         private static final String WASH_CHECK = "wash_check";
-        private static final String CHILD_REFERRAL_FORM = "child_referral_form";
-        private static final String ANC_REFERRAL_FORM = "anc_referral_form";
-        private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
-        private static final String GENERAL_REFERRAL_FORM = "general_neat_referral_form";
-        private static final String REFERRAL_FOLLOWUP_FORM = "referral_followup_neat_form";
+        private static final String CHILD_REFERRAL_FORM = "referrals/child_referral_form";
+        private static final String ANC_REFERRAL_FORM = "referrals/anc_referral_form";
+        private static final String PNC_REFERRAL_FORM = "referrals/pnc_referral_form";
+        private static final String GENERAL_REFERRAL_FORM = "referrals/general_neat_referral_form";
+        private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
         public static AssetManager assetManager;
         public static Locale locale;
 
