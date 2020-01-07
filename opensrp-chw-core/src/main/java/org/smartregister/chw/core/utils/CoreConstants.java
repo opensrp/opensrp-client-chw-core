@@ -152,6 +152,7 @@ public class CoreConstants {
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
         private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
         public static AssetManager assetManager;
@@ -179,6 +180,10 @@ public class CoreConstants {
 
         public static String getPncReferralForm() {
             return PNC_REFERRAL_FORM;
+        }
+
+        public static String getFamilyPlanningReferralForm() {
+            return FAMILY_PLANNING_REFERRAL_FORM;
         }
 
         public static String getBirthCertification() {
@@ -467,9 +472,11 @@ public class CoreConstants {
             public static String getFamilyPlanningFollowupCounsel() {
                 return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_COUNSEL, locale, assetManager);
             }
+
             public static String getFamilyPlanningFollowupResupply() {
                 return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_RESUPPLY, locale, assetManager);
             }
+
             public static String getFamilyPlanningFollowupSideEffects() {
                 return Utils.getLocalForm(FAMILY_PLANNING_FOLLOWUP_SIDE_EFFECTS, locale, assetManager);
             }
@@ -555,7 +562,7 @@ public class CoreConstants {
         public static final String FP_CONDOM_REFILL = "fp-condom-refill-rule.yml";
         public static final String FP_INJECTION_DUE = "fp-injection-due-rule.yml";
         public static final String FP_FEMALE_STERILIZATION = "fp-female-sterilization-rule.yml";
-        public static final String FP_IUCD ="fp-iucd-rule.yml";
+        public static final String FP_IUCD = "fp-iucd-rule.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {
