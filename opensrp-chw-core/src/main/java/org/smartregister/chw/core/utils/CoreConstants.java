@@ -504,6 +504,7 @@ public class CoreConstants {
         public static final String CHILD_REFERRAL = "ec_child_referral";
         public static final String ANC_REFERRAL = "ec_anc_referral";
         public static final String PNC_REFERRAL = "ec_pnc_referral";
+        public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
     }

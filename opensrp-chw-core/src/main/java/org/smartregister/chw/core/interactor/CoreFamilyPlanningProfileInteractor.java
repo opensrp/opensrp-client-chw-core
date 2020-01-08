@@ -2,20 +2,23 @@ package org.smartregister.chw.core.interactor;
 
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.VisitUtils;
+import org.smartregister.chw.core.contract.FamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.interactor.BaseFpProfileInteractor;
 import org.smartregister.domain.AlertStatus;
+import org.smartregister.repository.AllSharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor {
+public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor implements FamilyPlanningMemberProfileContract.Interactor {
 
     @Override
     public void updateProfileFpStatusInfo(FpMemberObject memberObject, BaseFpProfileContract.InteractorCallback callback) {
@@ -81,4 +84,8 @@ public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor
         return allVisits;
     }
 
+    @Override
+    public void createReferralEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        CoreReferralUtils.createReferralEvent(allSharedPreferences, jsonString, CoreConstants.TABLE_NAME.FP_REFERRAL, entityID);
+    }
 }
