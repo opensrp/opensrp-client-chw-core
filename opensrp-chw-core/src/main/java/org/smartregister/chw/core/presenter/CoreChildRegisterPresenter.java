@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -73,7 +74,7 @@ public class CoreChildRegisterPresenter implements CoreChildRegisterContract.Pre
     @Override
     public void updateInitials() {
         String initials = model.getInitials();
-        if (initials != null) {
+        if (initials != null && getView() != null) {
             getView().updateInitialsText(initials);
         }
     }
@@ -102,10 +103,12 @@ public class CoreChildRegisterPresenter implements CoreChildRegisterContract.Pre
         }
         if (TextUtils.isEmpty(familyId)) {
             JSONObject form = new BaseFamilyRegisterModel().getFormAsJson(formName, entityId, currentLocationId);
-            getView().startFormActivity(form);
+            if (getView() != null)
+                getView().startFormActivity(form);
         } else {
             JSONObject form = model.getFormAsJson(formName, entityId, currentLocationId, familyId);
-            getView().startFormActivity(form);
+            if (getView() != null)
+                getView().startFormActivity(form);
         }
 
 
@@ -116,7 +119,8 @@ public class CoreChildRegisterPresenter implements CoreChildRegisterContract.Pre
 
         try {
 
-            getView().showProgressDialog(R.string.saving_dialog_title);
+            if (getView() != null)
+                getView().showProgressDialog(R.string.saving_dialog_title);
             JSONObject form = new JSONObject(jsonString);
             if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyRegister.registerEventType)) {
 
@@ -125,20 +129,23 @@ public class CoreChildRegisterPresenter implements CoreChildRegisterContract.Pre
                     return;
                 }
                 new FamilyRegisterInteractor().saveRegistration(fevent, jsonString, isEditMode, new FamilyRegisterContract.InteractorCallBack() {
+
                     @Override
-                    public void onUniqueIdFetched(Triple<String, String, String> triple, String entityId) {
-                        //// TODO: 15/08/19
+                    public void onUniqueIdFetched(Triple<String, String, String> triple, String s) {
+
                     }
 
                     @Override
                     public void onNoUniqueId() {
-                        //// TODO: 15/08/19
+
                     }
 
                     @Override
-                    public void onRegistrationSaved(boolean isEdit) {
+                    public void onRegistrationSaved(boolean isEditMode, boolean isSaved, List<FamilyEventClient> list) {
                         getView().hideProgressDialog();
                         getView().openFamilyListView();
+                        if (!isSaved && getView().getContext() != null)
+                            Toast.makeText(getView().getContext(), "Saving failed", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -187,13 +194,17 @@ public class CoreChildRegisterPresenter implements CoreChildRegisterContract.Pre
             startForm(triple.getLeft(), entityId, triple.getMiddle(), triple.getRight(), familyId);
         } catch (Exception e) {
             Timber.e(e);
-            getView().displayToast(R.string.error_unable_to_start_form);
+            if (getView() != null)
+                getView().displayToast(R.string.error_unable_to_start_form);
         }
     }
 
     @Override
-    public void onRegistrationSaved(boolean isEdit) {
-        getView().refreshList(FetchStatus.fetched);
-        getView().hideProgressDialog();
+    public void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient) {
+        if (getView() != null) {
+            getView().refreshList(FetchStatus.fetched);
+            getView().hideProgressDialog();
+        }
     }
+
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -47,10 +48,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -68,6 +71,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private ProgressBar syncProgressBar;
     private NavigationContract.Presenter mPresenter;
     private View parentView;
+    private Timer timer;
 
     private NavigationMenu() {
 
@@ -82,21 +86,28 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         NavigationMenu.showDeviceToDeviceSync = showDeviceToDeviceSync;
     }
 
+    @Nullable
     public static NavigationMenu getInstance(Activity activity, View parentView, Toolbar myToolbar) {
-        SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
-        activityWeakReference = new WeakReference<>(activity);
-        int orientation = activity.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (instance == null) {
-                instance = new NavigationMenu();
-            }
+        try {
+            SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
+            activityWeakReference = new WeakReference<>(activity);
+            int orientation = activity.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if (instance == null) {
+                    instance = new NavigationMenu();
+                }
 
-            SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
-            instance.init(activity, parentView, myToolbar);
-            return instance;
-        } else {
-            return null;
+                SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
+                instance.init(activity, parentView, myToolbar);
+                return instance;
+            } else {
+                return null;
+            }
+        } catch (OutOfMemoryError e) {
+            Timber.e(e);
         }
+
+        return null;
     }
 
     private void init(Activity activity, View myParentView, Toolbar myToolbar) {
@@ -156,6 +167,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void prepareViews(Activity activity) {
 
         drawer = activity.findViewById(R.id.drawer_layout);
+        drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
@@ -331,6 +343,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void refreshSyncProgressSpinner() {
+        if (syncProgressBar == null || ivSync == null)
+            return;
+
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
             ivSync.setVisibility(View.INVISIBLE);
@@ -389,6 +404,48 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
+        }
+    }
+
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        Timber.v("Drawer is sliding");
+    }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) {
+        Timber.v("Drawer is opened");
+        recomputeCounts();
+    }
+
+    @Override
+    public void onDrawerClosed(@NonNull View drawerView) {
+        Timber.v("Drawer is closed");
+        if (timer != null)
+            timer = null;
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        Timber.v("Drawer state is changed");
+    }
+
+    private void recomputeCounts() {
+        try {
+            if (timer == null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Activity activity = activityWeakReference.get();
+                        if (mPresenter != null && activity != null) {
+                            mPresenter.refreshNavigationCount(activity);
+                        }
+                    }
+                }, 0, 5000);
+            }
+        } catch (Exception e) {
+            Timber.v(e);
         }
     }
 

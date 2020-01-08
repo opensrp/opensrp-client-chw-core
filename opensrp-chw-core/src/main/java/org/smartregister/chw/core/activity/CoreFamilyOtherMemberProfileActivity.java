@@ -138,8 +138,17 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_anc_registration) {
             startAncRegister();
             return true;
+        }  else if (i == R.id.action_fp_initiation) {
+            startFpRegister();
+            return true;
+        } else if (i == R.id.action_fp_change) {
+            startFpChangeMethod();
+            return true;
         } else if (i == R.id.action_malaria_registration) {
             startMalariaRegister();
+            return true;
+        }else if (i == R.id.action_malaria_followup_visit) {
+            startMalariaFollowUpVisit();
             return true;
         } else if (i == R.id.action_registration) {
             startFormForEdit(R.string.edit_member_form_title);
@@ -158,7 +167,13 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
 
     protected abstract void startAncRegister();
 
+    protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
+
     protected abstract void startMalariaRegister();
+
+    protected abstract void startMalariaFollowUpVisit();
 
     public void startFormForEdit(Integer title_resource) {
 

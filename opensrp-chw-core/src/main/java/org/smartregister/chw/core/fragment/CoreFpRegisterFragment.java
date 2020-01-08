@@ -12,19 +12,15 @@ import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
-import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.model.PncRegisterFragmentModel;
-import org.smartregister.chw.core.provider.ChwPncRegisterProvider;
+import org.smartregister.chw.core.provider.CoreFpProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryGenerator;
 import org.smartregister.chw.core.utils.Utils;
-import org.smartregister.chw.pnc.fragment.BasePncRegisterFragment;
-import org.smartregister.chw.pnc.presenter.BasePncRegisterFragmentPresenter;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.chw.fp.fragment.BaseFpRegisterFragment;
+import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
@@ -34,81 +30,17 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
+public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
 
     private static final String DUE_FILTER_TAG = "PRESSED";
-    protected View dueOnlyLayout;
     private View view;
+    private View dueOnlyLayout;
     private boolean dueFilterActive = false;
-    private CommonPersonObjectClient client;
-
-    @Override
-    protected void onViewClicked(View view) {
-
-        if (view.getId() == R.id.due_only_layout) {
-            toggleFilterSelection(view);
-        } else {
-            super.onViewClicked(view);
-        }
-    }
-
-    private void toggleFilterSelection(View dueOnlyLayout) {
-        if (dueOnlyLayout != null) {
-            if (dueOnlyLayout.getTag() == null) {
-                dueFilterActive = true;
-                dueFilter(dueOnlyLayout);
-            } else if (dueOnlyLayout.getTag().toString().equals(DUE_FILTER_TAG)) {
-                dueFilterActive = false;
-                normalFilter(dueOnlyLayout);
-            }
-        }
-    }
-
-    private void dueFilter(View dueOnlyLayout) {
-        filter(searchText(), "", getDueCondition());
-        dueOnlyLayout.setTag(DUE_FILTER_TAG);
-        switchViews(dueOnlyLayout, true);
-    }
-
-    private void normalFilter(View dueOnlyLayout) {
-        filter(searchText(), "", getCondition());
-        dueOnlyLayout.setTag(null);
-        switchViews(dueOnlyLayout, false);
-    }
-
-    protected void filter(String filterString, String joinTableString, String mainConditionString) {
-        filters = filterString;
-        joinTable = joinTableString;
-        mainCondition = mainConditionString;
-        filterandSortExecute(countBundle());
-    }
-
-    private String searchText() {
-        return (getSearchView() == null) ? "" : getSearchView().getText().toString();
-    }
-
-    public String getDueCondition() {
-        return "ec_pregnancy_outcome.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.PNC_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
-    }
-
-    private void switchViews(View dueOnlyLayout, boolean isPress) {
-        TextView dueOnlyTextView = dueOnlyLayout.findViewById(R.id.due_only_text_view);
-        if (isPress) {
-            dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_on, 0);
-        } else {
-            dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_off, 0);
-        }
-    }
-
-    private String getCondition() {
-        return " " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.DATE_REMOVED + " is null " +
-                "AND " + CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME + "." + DBConstants.KEY.IS_CLOSED + " is 0 ";
-    }
 
     @Override
     public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        ChwPncRegisterProvider provider = new ChwPncRegisterProvider(getActivity(), commonRepository(), visibleColumns, registerActionHandler, paginationViewHandler);
-        clientAdapter = new RecyclerViewPaginatedAdapter(null, provider, context().commonrepository(this.tablename));
+        CoreFpProvider fpRegisterProvider = new CoreFpProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
+        clientAdapter = new RecyclerViewPaginatedAdapter(null, fpRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);
     }
@@ -118,10 +50,9 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         super.setupViews(view);
         this.view = view;
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
-        toolbar.setContentInsetStartWithNavigation(0);
         toolbar.setContentInsetStartWithNavigation(0);
 
         NavigationMenu.getInstance(getActivity(), null, toolbar);
@@ -157,44 +88,69 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         dueOnlyLayout.setOnClickListener(registerActionHandler);
 
         if (getSearchView() != null) {
-            getSearchView().setBackgroundResource(R.color.white);
-            getSearchView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search, 0, 0, 0);
+            getSearchView().setBackgroundResource(org.smartregister.family.R.color.white);
+            getSearchView().setCompoundDrawablesWithIntrinsicBounds(org.smartregister.family.R.drawable.ic_action_search, 0, 0, 0);
             getSearchView().setTextColor(getResources().getColor(R.color.text_black));
         }
-
-        NavigationMenu.getInstance(getActivity(), null, toolbar);
     }
 
     @Override
-    protected void initializePresenter() {
-        if (getActivity() == null) {
-            return;
+    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
+        //TODO
+        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
+    }
+
+    @Override
+    protected void onViewClicked(View view) {
+        super.onViewClicked(view);
+
+        if (view.getId() == R.id.due_only_layout) {
+            toggleFilterSelection(view);
         }
-        presenter = new BasePncRegisterFragmentPresenter(this, new PncRegisterFragmentModel(), null);
+    }
+
+    protected void toggleFilterSelection(View dueOnlyLayout) {
+        if (dueOnlyLayout != null) {
+            if (dueOnlyLayout.getTag() == null) {
+                dueFilterActive = true;
+                dueFilter(dueOnlyLayout);
+            } else if (dueOnlyLayout.getTag().toString().equals(DUE_FILTER_TAG)) {
+                dueFilterActive = false;
+                normalFilter(dueOnlyLayout);
+            }
+        }
+    }
+
+    protected String searchText() {
+        return (getSearchView() == null) ? "" : getSearchView().getText().toString();
+    }
+
+    private void switchViews(View dueOnlyLayout, boolean isPress) {
+        TextView dueOnlyTextView = dueOnlyLayout.findViewById(R.id.due_only_text_view);
+        if (isPress) {
+            dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_on, 0);
+        } else {
+            dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_off, 0);
+        }
     }
 
     @Override
-    protected void openProfile(CommonPersonObjectClient client) {
-        setClient(client);
-        openPncMemberProfile(client);
+    protected void onResumption() {
+        if (dueFilterActive && dueOnlyLayout != null) {
+            dueFilter(dueOnlyLayout);
+        } else {
+            super.onResumption();
+        }
     }
-
-    @Override
-    protected void openHomeVisit(CommonPersonObjectClient client) {
-        super.openHomeVisit(client);
-    }
-
-    protected abstract void openPncMemberProfile(CommonPersonObjectClient client);
 
     @Override
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
-
         NavigationMenu.getInstance(getActivity(), null, toolbar);
     }
 
@@ -295,26 +251,29 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         return super.onCreateLoader(id, args);
     }
 
-    public String getFamilyName() {
-        if (getDetailsMap() == null) {
-            return "";
-        }
-        return getDetailsMap().get(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.FAMILY_HEAD_NAME);
+    public String getDueCondition() {
+        return FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE + ".base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and ifnull(expiry_date,strftime('%Y-%m-%d')) and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.FP_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
     }
 
-    public String getFamilyHeadPhone() {
-        if (getDetailsMap() == null) {
-            return "";
-        }
-        return getDetailsMap().get(Constants.ANC_MEMBER_OBJECTS.FAMILY_HEAD_PHONE);
+    protected void dueFilter(View dueOnlyLayout) {
+        filterDue(searchText(), "", presenter().getDueFilterCondition());
+        dueOnlyLayout.setTag(DUE_FILTER_TAG);
+        switchViews(dueOnlyLayout, true);
     }
 
-    public HashMap<String, String> getDetailsMap() {
-        return CoreChwApplication.ancRegisterRepository().getFamilyNameAndPhone(
-                Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FAMILY_HEAD, false));
+    protected void normalFilter(View dueOnlyLayout) {
+        filterDue(searchText(), "", presenter().getMainCondition());
+        dueOnlyLayout.setTag(null);
+        switchViews(dueOnlyLayout, false);
     }
 
-    public void setClient(CommonPersonObjectClient client) {
-        this.client = client;
+    protected void filterDue(String filterString, String joinTableString, String mainConditionString) {
+        filters = filterString;
+        joinTable = joinTableString;
+        mainCondition = mainConditionString;
+        filterandSortExecute(countBundle());
     }
+
 }
+
+
