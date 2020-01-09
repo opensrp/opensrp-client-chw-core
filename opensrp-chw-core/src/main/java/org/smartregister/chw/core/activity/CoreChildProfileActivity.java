@@ -42,6 +42,7 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -97,7 +98,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private ImageView imageViewCross;
     protected ImageView imageViewCrossChild;
     private ProgressBar progressBar;
-    private String gender;
     private static boolean isStartedFromReferrals;
 
     public static void startMe(Activity activity, boolean isComesFromFamily, MemberObject memberObject, Class<?> cls) {
@@ -322,9 +322,17 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     @Override
     public void setGender(String gender) {
-        this.gender = gender;
-        textViewGender.setText(gender);
-        updateTopBar();
+        textViewGender.setText(getGenderTranslated(gender));
+        updateTopBar(gender);
+    }
+
+    private String getGenderTranslated(String gender) {
+        if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
+            return getResources().getString(R.string.male);
+        } else if (gender.equalsIgnoreCase(Gender.FEMALE.toString())) {
+            return getResources().getString(R.string.female);
+        }
+        return "";
     }
 
     @Override
@@ -368,7 +376,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
         textViewUndo.setText(getString(R.string.undo));
         textViewUndo.setVisibility(View.VISIBLE);
-       imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
+        imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
 
     @Override
@@ -499,7 +507,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         //// TODO: 06/08/19
     }
 
-    protected void updateTopBar() {
+    protected void updateTopBar(String gender) {
         if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
             imageViewProfile.setBorderColor(getResources().getColor(R.color.light_blue));
         } else if (gender.equalsIgnoreCase(Gender.FEMALE.toString())) {
@@ -532,8 +540,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void onRegistrationSaved(boolean isEdit) {
-        //TODO
+    public void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient) {
         Timber.d("onRegistrationSaved unimplemented");
     }
 
@@ -544,8 +551,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             onBackPressed();
             return true;
         } else if (i == R.id.action_registration) {
-            ((CoreChildProfilePresenter) presenter()).startFormForEdit(getResources().getString(R.string.edit_child_form_title),
-                    ((CoreChildProfilePresenter) presenter()).getChildClient());
+            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
+            if (profilePresenter != null) {
+                profilePresenter.startFormForEdit(getResources().getString(R.string.edit_child_form_title),
+                        profilePresenter.getChildClient());
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
