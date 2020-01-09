@@ -2,7 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.VisitUtils;
-import org.smartregister.chw.core.contract.FamilyPlanningMemberProfileContract;
+import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.dao.VisitDao;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor implements FamilyPlanningMemberProfileContract.Interactor {
+public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor implements CoreFamilyPlanningMemberProfileContract.Interactor {
 
     @Override
     public void updateProfileFpStatusInfo(FpMemberObject memberObject, BaseFpProfileContract.InteractorCallback callback) {

@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.presenter;
 
-import org.smartregister.chw.core.contract.FamilyPlanningMemberProfileContract;
+import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
-public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter implements FamilyPlanningMemberProfileContract.Presenter {
+public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter implements CoreFamilyPlanningMemberProfileContract.Presenter {
     private BaseFpProfileContract.Interactor interactor;
     private WeakReference<BaseFpProfileContract.View> view;
     private FormUtils formUtils;
@@ -28,13 +28,13 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
 
     @Override
     public void createReferralEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
-        ((FamilyPlanningMemberProfileContract.Interactor) interactor).createReferralEvent(allSharedPreferences, jsonString, fpMemberObject.getBaseEntityId());
+        ((CoreFamilyPlanningMemberProfileContract.Interactor) interactor).createReferralEvent(allSharedPreferences, jsonString, fpMemberObject.getBaseEntityId());
     }
 
     @Override
-    public FamilyPlanningMemberProfileContract.View getView() {
+    public CoreFamilyPlanningMemberProfileContract.View getView() {
         if (view != null) {
-            return (FamilyPlanningMemberProfileContract.View) view.get();
+            return (CoreFamilyPlanningMemberProfileContract.View) view.get();
         } else {
             return null;
         }
@@ -43,7 +43,7 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
     @Override
     public void startFamilyPlanningReferral() {
         try {
-            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getAncReferralForm()), fpMemberObject);
+            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getFamilyPlanningReferralForm()), fpMemberObject);
         } catch (Exception e) {
             Timber.e(e);
         }

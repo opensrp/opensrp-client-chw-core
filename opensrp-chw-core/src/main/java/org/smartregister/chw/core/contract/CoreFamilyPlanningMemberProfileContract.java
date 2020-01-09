@@ -5,7 +5,7 @@ import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.repository.AllSharedPreferences;
 
-public interface FamilyPlanningMemberProfileContract {
+public interface CoreFamilyPlanningMemberProfileContract {
 
     interface View extends BaseFpProfileContract.View {
         void startFormActivity(JSONObject formJson, FpMemberObject fpMemberObject);
