@@ -16,10 +16,6 @@ public class PncRegisterRepository extends BaseRepository {
 
     public static final String TABLE_NAME = CoreConstants.TABLE_NAME.PNC_MEMBER;
 
-    public PncRegisterRepository(Repository repository) {
-        super(repository);
-    }
-
     public CommonPersonObject getPncCommonPersonObject(String baseEntityId) {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = null;

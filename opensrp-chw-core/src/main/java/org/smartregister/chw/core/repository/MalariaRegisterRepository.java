@@ -31,10 +31,6 @@ public class MalariaRegisterRepository extends BaseRepository {
     public static final String[] MALARIA_COUNT_TABLE_COLUMNS = {BASE_ENTITY_ID};
 
 
-    public MalariaRegisterRepository(Repository repository) {
-        super(repository);
-    }
-
     public HashMap<String, String> getFamilyNameAndPhone(String baseEntityID) {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = null;
