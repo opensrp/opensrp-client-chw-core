@@ -70,7 +70,7 @@ public class JsonFormUtils extends CoreJsonFormUtils {
                 addRelationship(context, ss, baseClient);
                 SQLiteDatabase db = HealthFacilityApplication.getInstance().getRepository().getReadableDatabase();
                 HfChwRepository pathRepository = new HfChwRepository(context, HealthFacilityApplication.getInstance().getContext());
-                EventClientRepository eventClientRepository = new EventClientRepository(pathRepository);
+                EventClientRepository eventClientRepository = new EventClientRepository();
                 JSONObject clientjson = eventClientRepository.getClient(db, lookUpBaseEntityId);
                 baseClient.setAddresses(getAddressFromClientJson(clientjson));
             }
