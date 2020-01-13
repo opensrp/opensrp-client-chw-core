@@ -58,9 +58,6 @@ public class ScheduleRepository extends BaseRepository {
     public static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE " + ")";
     public static final String SCHEDULE_GROUP_NAME_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + SCHEDULE_GROUP_NAME + "_index ON " + TABLE_NAME + "(" + SCHEDULE_GROUP_NAME + " COLLATE NOCASE " + ")";
 
-    public ScheduleRepository(Repository repository) {
-        super(repository);
-    }
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_SQL);

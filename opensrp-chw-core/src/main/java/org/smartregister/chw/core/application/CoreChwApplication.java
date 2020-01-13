@@ -76,21 +76,21 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public static AncRegisterRepository ancRegisterRepository() {
         if (ancRegisterRepository == null) {
-            ancRegisterRepository = new AncRegisterRepository(getInstance().getRepository());
+            ancRegisterRepository = new AncRegisterRepository();
         }
         return ancRegisterRepository;
     }
 
     public static PncRegisterRepository pncRegisterRepository() {
         if (pncRegisterRepository == null) {
-            pncRegisterRepository = new PncRegisterRepository(getInstance().getRepository());
+            pncRegisterRepository = new PncRegisterRepository();
         }
         return pncRegisterRepository;
     }
 
     public static MalariaRegisterRepository malariaRegisterRepository() {
         if (malariaRegisterRepository == null) {
-            malariaRegisterRepository = new MalariaRegisterRepository(getInstance().getRepository());
+            malariaRegisterRepository = new MalariaRegisterRepository();
         }
 
         return malariaRegisterRepository;
@@ -106,21 +106,21 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     public TaskRepository getTaskRepository() {
         taskRepository = ReferralLibrary.getInstance().getTaskRepository();
         if (taskRepository == null) {
-            taskRepository = new TaskRepository(getRepository(), new TaskNotesRepository(getRepository()));
+            taskRepository = new TaskRepository(new TaskNotesRepository());
         }
         return taskRepository;
     }
 
     public PlanDefinitionRepository getPlanDefinitionRepository() {
         if (planDefinitionRepository == null) {
-            planDefinitionRepository = new PlanDefinitionRepository(getRepository());
+            planDefinitionRepository = new PlanDefinitionRepository();
         }
         return planDefinitionRepository;
     }
 
     public ScheduleRepository getScheduleRepository() {
         if (scheduleRepository == null) {
-            scheduleRepository = new ScheduleRepository(getRepository());
+            scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
     }
@@ -168,7 +168,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public LocationRepository getLocationRepository() {
         if (locationRepository == null) {
-            locationRepository = new LocationRepository(getRepository());
+            locationRepository = new LocationRepository();
         }
         return locationRepository;
     }
@@ -206,7 +206,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public UniqueIdRepository getUniqueIdRepository() {
         if (this.uniqueIdRepository == null) {
-            this.uniqueIdRepository = new UniqueIdRepository(this.getRepository());
+            this.uniqueIdRepository = new UniqueIdRepository();
         }
 
         return this.uniqueIdRepository;
