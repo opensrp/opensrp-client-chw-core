@@ -137,6 +137,7 @@ public class CoreConstants {
         public static final String FAMILY_REGISTER = "family_register";
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
         public static final String CHILD_REGISTER = "child_enrollment";
+        public static final String CHILD_SICK_FORM = "child_sick_form";
         public static final String FAMILY_DETAILS_REGISTER = "family_details_register";
         public static final String FAMILY_DETAILS_REMOVE_MEMBER = "family_details_remove_member";
 
@@ -195,6 +196,10 @@ public class CoreConstants {
 
         public static String getFamilyMemberRegister() {
             return Utils.getLocalForm(FAMILY_MEMBER_REGISTER, locale, assetManager);
+        }
+
+        public static String getChildSickForm() {
+            return Utils.getLocalForm(CHILD_SICK_FORM, locale, assetManager);
         }
 
         public static String getChildRegister() {

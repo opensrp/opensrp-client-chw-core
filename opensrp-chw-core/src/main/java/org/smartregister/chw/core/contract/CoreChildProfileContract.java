@@ -152,6 +152,8 @@ public interface CoreChildProfileContract {
 
         void startSickChildReferralForm();
 
+        void startSickChildForm(CommonPersonObjectClient client);
+
         void refreshProfileTopSection(CommonPersonObjectClient client);
 
         void hideProgressBar();
