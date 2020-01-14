@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.presenter;
 
+import androidx.annotation.Nullable;
+
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
@@ -32,6 +34,7 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
     }
 
     @Override
+    @Nullable
     public CoreFamilyPlanningMemberProfileContract.View getView() {
         if (view != null) {
             return (CoreFamilyPlanningMemberProfileContract.View) view.get();
