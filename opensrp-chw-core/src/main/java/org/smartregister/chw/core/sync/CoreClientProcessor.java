@@ -205,6 +205,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.ANC_REFERRAL:
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
