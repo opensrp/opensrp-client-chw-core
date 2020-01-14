@@ -6,12 +6,15 @@
         android:id="@+id/action_pnc_member_registration"
         android:enabled="true"
         android:title="@string/registration_info"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_pnc_registration"
         android:enabled="true"
+        android:visible="false"
         android:title="@string/edit_child_form_title"
+        android:orderInCategory="200"
         app:showAsAction="never" />
 
     <item
@@ -19,6 +22,7 @@
         android:enabled="true"
         android:title="@string/malaria_registration"
         android:visible="false"
+        android:orderInCategory="300"
         app:showAsAction="never" />
 
     <item
@@ -26,6 +30,7 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/hf_malaria_follow_up"
+        android:orderInCategory="400"
         app:showAsAction="never" />
 
     <item
@@ -33,6 +38,7 @@
         android:enabled="true"
         android:title="@string/family_planning_initiation"
         android:visible="false"
+        android:orderInCategory="500"
         app:showAsAction="never" />
 
     <item
@@ -40,12 +46,14 @@
         android:enabled="true"
         android:title="@string/family_planning_change"
         android:visible="false"
+        android:orderInCategory="600"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action__pnc_remove_member"
         android:enabled="true"
         android:title="@string/remove_this_person"
+        android:orderInCategory="700"
         app:showAsAction="never" />
 
     <item
@@ -53,6 +61,7 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/pnc_danger_sign_outcome"
+        android:orderInCategory="800"
         app:showAsAction="never" />
 
     <item
@@ -60,6 +69,7 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/malaria_diagnosis"
+        android:orderInCategory="900"
         app:showAsAction="never" />
 
 </menu>

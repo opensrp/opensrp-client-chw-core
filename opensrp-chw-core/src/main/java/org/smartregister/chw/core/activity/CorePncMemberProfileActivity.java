@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
+import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
@@ -20,7 +23,9 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.family.util.JsonFormUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -29,6 +34,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected ImageView imageViewCross;
     protected boolean hasDueServices = false;
     protected CorePncMemberProfileInteractor pncMemberProfileInteractor = getPncMemberProfileInteractor();
+    private HashMap<String, String> menuItemNames = new HashMap<>();
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -41,18 +48,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
         } else if (itemId == R.id.action_pnc_registration) {
-            CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
-
-            List<CommonPersonObjectClient> children = pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
-            if (!children.isEmpty()) {
-                CommonPersonObjectClient client = children.get(0);
-                JSONObject childEnrollmentForm = childProfileInteractor.getAutoPopulatedJsonEditFormString(CoreConstants.JSON_FORM.getChildRegister(), getString(R.string.edit_child_form_title), this, client);
-
-                startFormForEdit(org.smartregister.chw.anc.util.JsonFormUtils.setRequiredFieldsToFalseForPncChild(childEnrollmentForm, memberObject.getFamilyBaseEntityId(),
-                        memberObject.getBaseEntityId()));
-            }
-            return true;
-
+            getMenuItem(item);
         } else if (itemId == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
@@ -62,7 +58,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_fp_initiation) {
             startFpRegister();
             return true;
-        }else if (itemId == R.id.action_fp_change) {
+        } else if (itemId == R.id.action_fp_change) {
             startFpChangeMethod();
             return true;
         } else if (itemId == R.id.action__pnc_remove_member) {
@@ -72,9 +68,37 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         return super.onOptionsItemSelected(item);
     }
 
+    private List<CommonPersonObjectClient> getChildren(MemberObject memberObject) {
+        return pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pnc_member_profile_menu, menu);
+        if (getChildren(memberObject).size() > 0 && PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()) != null) {
+            for (ChildModel childDetails : PNCDao.childrenForPncWoman(memberObject.getBaseEntityId())) {
+                for (int i = 0; i < PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()).size(); i++) {
+                    menu.add(0, R.id.action_pnc_registration, 100 + i, getString(R.string.edit_child_form_title, childDetails.getFirstName()));
+                    menuItemNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean getMenuItem(MenuItem item) {
+        if (getChildren(memberObject).size() > 0) {
+            for (CommonPersonObjectClient child : getChildren(memberObject)) {
+                for (Map.Entry<String, String> entry : menuItemNames.entrySet()) {
+                    if (entry.getKey().equalsIgnoreCase(item.getTitle().toString()) && entry.getValue().equalsIgnoreCase(child.entityId())) {
+                        CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
+                        JSONObject childEnrollmentForm = childProfileInteractor.getAutoPopulatedJsonEditFormString(CoreConstants.JSON_FORM.getChildRegister(), entry.getKey(), this, child);
+                        startFormForEdit(org.smartregister.chw.anc.util.JsonFormUtils.setRequiredFieldsToFalseForPncChild(childEnrollmentForm, memberObject.getFamilyBaseEntityId(),
+                                memberObject.getBaseEntityId()));
+                    }
+                }
+            }
+        }
         return true;
     }
 
