@@ -316,6 +316,15 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     }
 
     @Override
+    public void startSickChildForm(CommonPersonObjectClient client) {
+        try {
+            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getChildSickForm()));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    @Override
     public void refreshProfileTopSection(CommonPersonObjectClient client) {
         if (client == null || client.getColumnmaps() == null) {
             return;

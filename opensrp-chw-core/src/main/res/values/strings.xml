@@ -440,4 +440,5 @@
     <string name="date_months">Months</string>
 
     <string name="last_visit_x_days_ago">Last visit %1$s days ago</string>
+    <string name="sick_child_form">Sick child form</string>
 </resources>
