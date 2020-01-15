@@ -6,19 +6,13 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
-import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.Date;
 
-//All date formats ISO 8601 yyyy-mm-dd
+public class RoutineHouseHoldVisitRule implements ICommonRule {
 
-/**
- * Created by mahmud on 23/07/2019.
- */
-public class WashCheckAlertRule implements ICommonRule {
-
-    private final int[] monthNames = {R.string.january, R.string.february, R.string.march, R.string.april, R.string.may, R.string.june, R.string.july, R.string.august, R.string.september, R.string.october, R.string.november, R.string.december};
+    private final int[] monthNames = {org.smartregister.chw.core.R.string.january, org.smartregister.chw.core.R.string.february, org.smartregister.chw.core.R.string.march, org.smartregister.chw.core.R.string.april, org.smartregister.chw.core.R.string.may, org.smartregister.chw.core.R.string.june, org.smartregister.chw.core.R.string.july, org.smartregister.chw.core.R.string.august, org.smartregister.chw.core.R.string.september, org.smartregister.chw.core.R.string.october, org.smartregister.chw.core.R.string.november, org.smartregister.chw.core.R.string.december};
     public String buttonStatus = CoreConstants.VisitType.DUE.name();
     public String noOfMonthDue;
     public String noOfDayDue;
@@ -28,7 +22,7 @@ public class WashCheckAlertRule implements ICommonRule {
     private LocalDate lastVisitDate;
     private Context context;
 
-    public WashCheckAlertRule(Context context, long lastVisitDateLong, long dateCreatedLong) {
+    public RoutineHouseHoldVisitRule(Context context, long lastVisitDateLong, long dateCreatedLong) {
 
         this.context = context;
 
@@ -87,7 +81,7 @@ public class WashCheckAlertRule implements ICommonRule {
 
     public boolean isVisitWithinTwentyFour() {
         visitMonthName = theMonth(todayDate.getMonthOfYear() - 1);
-        noOfDayDue = context.getString(R.string.less_than_twenty_four);
+        noOfDayDue = context.getString(org.smartregister.chw.core.R.string.less_than_twenty_four);
         return (lastVisitDate != null) && !(lastVisitDate.isBefore(todayDate.minusDays(1)) && lastVisitDate.isBefore(todayDate));
     }
 
@@ -156,7 +150,7 @@ public class WashCheckAlertRule implements ICommonRule {
 
     @Override
     public String getRuleKey() {
-        return "washCheckAlertRule";
+        return "routineHouseHoldVisitRule";
     }
 
     @Override
