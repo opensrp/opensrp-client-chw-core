@@ -57,6 +57,7 @@ import timber.log.Timber;
 
 public class CoreChildProfileActivity extends BaseProfileActivity implements CoreChildProfileContract.View, CoreChildRegisterContract.InteractorCallBack {
     public static IntentFilter sIntentFilter;
+    private static boolean isStartedFromReferrals;
 
     static {
         sIntentFilter = new IntentFilter();
@@ -87,6 +88,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     protected CircleImageView imageViewProfile;
     protected View recordVisitPanel;
     protected MemberObject memberObject;
+    protected ImageView imageViewCrossChild;
     private boolean appBarTitleIsShown = true;
     private int appBarLayoutScrollRange = -1;
     private TextView textViewTitle, textViewChildName, textViewGender, textViewAddress, textViewId, textViewRecord, textViewVisitNot, tvEdit;
@@ -96,9 +98,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private View viewLastVisitRow, viewMostDueRow, viewFamilyRow;
     private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas;
     private ImageView imageViewCross;
-    protected ImageView imageViewCrossChild;
     private ProgressBar progressBar;
-    private static boolean isStartedFromReferrals;
 
     public static void startMe(Activity activity, boolean isComesFromFamily, MemberObject memberObject, Class<?> cls) {
         isStartedFromReferrals = CoreReferralUtils.checkIfStartedFromReferrals(activity);
@@ -553,8 +553,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         } else if (i == R.id.action_registration) {
             CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
             if (profilePresenter != null) {
-                profilePresenter.startFormForEdit(getResources().getString(R.string.edit_child_form_title),
-                        profilePresenter.getChildClient());
+                profilePresenter.startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), profilePresenter.getChildClient());
             }
             return true;
         }

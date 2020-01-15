@@ -34,7 +34,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected ImageView imageViewCross;
     protected boolean hasDueServices = false;
     protected CorePncMemberProfileInteractor pncMemberProfileInteractor = getPncMemberProfileInteractor();
-    private HashMap<String, String> menuItemNames = new HashMap<>();
+    protected HashMap<String, String> menuItemEditNames = new HashMap<>();
+    protected HashMap<String, String> menuItemRemoveNames = new HashMap<>();
 
 
     @Override
@@ -48,7 +49,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
         } else if (itemId == R.id.action_pnc_registration) {
-            getMenuItem(item);
+            getEditMenuItem(item);
         } else if (itemId == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
@@ -64,11 +65,14 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
+        } else if (itemId == R.id.action_pnc_remove_baby) {
+            getRemoveBabyMenuItem(item);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private List<CommonPersonObjectClient> getChildren(MemberObject memberObject) {
+    protected List<CommonPersonObjectClient> getChildren(MemberObject memberObject) {
         return pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
     }
 
@@ -79,17 +83,19 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             for (ChildModel childDetails : PNCDao.childrenForPncWoman(memberObject.getBaseEntityId())) {
                 for (int i = 0; i < PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()).size(); i++) {
                     menu.add(0, R.id.action_pnc_registration, 100 + i, getString(R.string.edit_child_form_title, childDetails.getFirstName()));
-                    menuItemNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
+                    menuItemEditNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
+                    menu.add(0, R.id.action_pnc_remove_baby, 700 + i, getString(R.string.remove_child_form_title, childDetails.getFirstName()));
+                    menuItemRemoveNames.put(getString(R.string.remove_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
                 }
             }
         }
         return true;
     }
 
-    private boolean getMenuItem(MenuItem item) {
+    private boolean getEditMenuItem(MenuItem item) {
         if (getChildren(memberObject).size() > 0) {
             for (CommonPersonObjectClient child : getChildren(memberObject)) {
-                for (Map.Entry<String, String> entry : menuItemNames.entrySet()) {
+                for (Map.Entry<String, String> entry : menuItemEditNames.entrySet()) {
                     if (entry.getKey().equalsIgnoreCase(item.getTitle().toString()) && entry.getValue().equalsIgnoreCase(child.entityId())) {
                         CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
                         JSONObject childEnrollmentForm = childProfileInteractor.getAutoPopulatedJsonEditFormString(CoreConstants.JSON_FORM.getChildRegister(), entry.getKey(), this, child);
@@ -182,4 +188,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void startFpChangeMethod();
 
     protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void getRemoveBabyMenuItem(MenuItem item);
+
 }

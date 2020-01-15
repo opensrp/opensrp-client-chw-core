@@ -123,6 +123,7 @@
     <string name="edu_level_secondary">Sekondari</string>
     <string name="edu_level_post_secondary">Chuo kikuu</string>
     <string name="remove_this_person">Ondoa huyu mtu</string>
+    <string name="remove_the_mother">Ondoa mama</string>
     <string name="registration_info">Taarifa za usajili</string>
     <string name="anc_registration">Usajili wa wajawazito</string>
     <string name="malaria_registration">Uthibitisho wa Malaria</string>
@@ -130,6 +131,7 @@
     <string name="malaria_diagnosis">Uchunguzi wa malaria</string>
     <string name="sick_child_follow_up">Ufuatiliaji wa mtoto mgonjwa</string>
     <string name="edit_child_form_title">Hariri huduma ya mtoto %1$s</string>
+    <string name="remove_child_form_title">Ondoa mtoto %1$s</string>
     <string name="visit_month">%1$s hudhurio limekamilika</string>
     <string name="refer_to_facility">Rufaa kwenda kituo cha kutolea huduma</string>
     <string name="updating">Updating....</string>
