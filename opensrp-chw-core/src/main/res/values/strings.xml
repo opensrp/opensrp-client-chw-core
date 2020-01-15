@@ -433,6 +433,7 @@
     <string name="pnc_medical_history_family_planning_title">Family Planning</string>
     <string name="pnc_medical_history_child_immunizations_title">Immunizations (at birth)</string>
     <string name="pnc_medical_history_child_exclusive_breastfeeding_title">Exclusive breastfeeding</string>
+    <string name="pnc_medical_history_hf_visit">Visit {0}: {}</string>
 
     <!--Wcaro Upcoming Services -->
     <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
