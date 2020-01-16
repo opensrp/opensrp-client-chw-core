@@ -5,27 +5,14 @@
     android:orientation="vertical">
 
     <org.smartregister.view.customcontrols.CustomFontTextView
-        android:id="@+id/pncChildVaccineCardReceived"
-        style="@style/CustomFontTextViewStyle.ClientList"
+        android:id="@+id/pncChildExclusiveBreastfeeding"
+        style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:text="@string/pnc_medical_history_child_vaccine_card_received"
-        android:textColor="@color/medical_text_inner"
-        android:textSize="16sp"
-        />
-
-    <org.smartregister.view.customcontrols.CustomFontTextView
-        android:id="@+id/pncChildVaccineCardDate"
-        style="@style/CustomFontTextViewStyle.ClientList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:text="@string/pnc_medical_history_child_vaccine_card_date"
-        android:textColor="@color/medical_text_inner"
-        android:textSize="16sp"
-        android:visibility="visible"
-        />
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Exclusive 0 month"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/darker_gray" />
 
 </LinearLayout>
