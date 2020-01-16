@@ -48,6 +48,7 @@ public class CoreConstants {
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
         String FP_VISIT = "FP_VISIT";
+        String ROUTINE_HOUSEHOLD_VISIT = "ROUTINE_HOUSEHOLD_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
@@ -122,6 +123,7 @@ public class CoreConstants {
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
 
+        public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
     }
 
     public static final class EncounterType {
@@ -151,6 +153,7 @@ public class CoreConstants {
         private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
         private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
         private static final String WASH_CHECK = "wash_check";
+        private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
@@ -263,6 +266,10 @@ public class CoreConstants {
 
         public static String getWashCheck() {
             return Utils.getLocalForm(WASH_CHECK, locale, assetManager);
+        }
+
+        public static String getRoutineHouseholdVisit() {
+            return Utils.getLocalForm(ROUTINE_HOUSEHOLD_VISIT, locale, assetManager);
         }
 
         public static class CHILD_HOME_VISIT {

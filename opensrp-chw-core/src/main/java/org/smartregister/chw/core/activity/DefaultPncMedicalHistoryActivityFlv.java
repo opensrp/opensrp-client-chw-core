@@ -72,7 +72,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         linearLayoutHealthFacilityVisitDetails = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisitDetails);
         linearLayoutPncFamilyPlanningDetails = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanningDetails);
 
-        linearLayoutMotherVisitDetails.addView(linearLayoutMotherPncHFVisit); // Should this be in process hf visit?
+        View motherVisitDetailsView = inflater.inflate(R.layout.pnc_mother_medical_history_details, null);
+        linearLayoutMotherVisitDetails.addView(motherContainerView); // Should this be in process hf visit?
 
         linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
         linearLayoutPncHomeVisit = view.findViewById(R.id.linearLayoutPncHomeVisit);
