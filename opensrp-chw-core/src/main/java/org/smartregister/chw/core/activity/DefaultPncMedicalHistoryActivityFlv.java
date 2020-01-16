@@ -64,8 +64,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         customFontTextViewMotherTitle = motherContainerView.findViewById(R.id.customFontTextViewPncHealthFacilityVisitMotherTitle);
         linearLayoutPncHealthFacilityVisit = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
         viewHFVisitsRow = motherContainerView.findViewById(R.id.viewHealthFacilityVisitsRow);
-        linearLayoutPncFamilyPlanning = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanning);
         linearLayoutHealthFacilityVisitDetails = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisitDetails);
+        linearLayoutPncFamilyPlanning = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanning);
         linearLayoutPncFamilyPlanningDetails = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanningDetails);
 
         linearLayoutMotherVisitDetails.addView(motherContainerView); // Should this be in process hf visit?
@@ -166,7 +166,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
             processLastVisit(days, context);
             processHealthFacilityVisit(healthFacility_visit, context);
-            // processFamilyPlanning(family_planning, context);
+            processFamilyPlanning(family_planning, context);
             // processVaccineCard(vaccineCard, context);
             // processImmunization(immunization, context);
             // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
@@ -226,9 +226,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
             for (Map.Entry<String, String> entry : family_plnning.entrySet()
             ) {
-                View view = inflater.inflate(R.layout.pnc_wcaro_family_planning, null);
+                View familyPlanningDetailsView = inflater.inflate(R.layout.medical_history_pnc_family_planning_details, null);
                 if (entry.getKey() != null) {
-                    TextView tvPncFamilyPlanningMethod = view.findViewById(R.id.pncFamilyPlanningMethod);
+                    TextView tvPncFamilyPlanningMethod = familyPlanningDetailsView.findViewById(R.id.pncFamilyPlanningMethod);
                     String method = "";
                     switch (entry.getKey()) {
                         case "None":
@@ -261,12 +261,12 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
                 }
                 if (entry.getValue() != null) {
-                    TextView tvPncFamilyPlanningDate = view.findViewById(R.id.pncFamilyPlanningDate);
+                    TextView tvPncFamilyPlanningDate = familyPlanningDetailsView.findViewById(R.id.pncFamilyPlanningDate);
                     tvPncFamilyPlanningDate.setVisibility(View.VISIBLE);
-                    tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), entry.getValue()));
+                    tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue())? entry.getValue() : "n/a"));
 
                 }
-                linearLayoutPncFamilyPlanningDetails.addView(view, 0);
+                linearLayoutPncFamilyPlanningDetails.addView(familyPlanningDetailsView, 0);
             }
 
         }
