@@ -41,14 +41,26 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected LinearLayout linearLayoutPncGrowthAndNutrition;
     protected LinearLayout linearLayoutPncGrowthAndNutritionDetails;
 
+    // Initialize new layouts
+    protected LinearLayout linearLayoutMotherVisit;
+    protected LinearLayout linearLayoutChildVisit;
+    protected LinearLayout linearLayoutChildVisitDetails;
+    protected LinearLayout linearLayoutMotherVisitDetails;
 
     @Override
     public View bindViews(Activity activity) {
         inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.medical_history_details, null);
+        View view = inflater.inflate(R.layout.pnc_medical_history_details, null);
+        View motherContainerView = inflater.inflate(R.layout.pnc_mother_medical_history_details, null);
+        View childContainerView = inflater.inflate(R.layout.pnc_child_medical_history_details, null);
 
+        linearLayoutMotherVisit = view.findViewById(R.id.linearLayoutMotherVisit);
+        linearLayoutChildVisit = view.findViewById(R.id.linearLayoutChildVisit);
+        linearLayoutMotherVisitDetails = view.findViewById(R.id.linearLayoutMotherVisitDetails);
+        linearLayoutChildVisitDetails = view.findViewById(R.id.linearLayoutChildVisitDetails);
         linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
         customFontTextViewLastVisit = view.findViewById(R.id.customFontTextViewLastVisit);
+
         linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
         linearLayoutHealthFacilityVisitDetails = view.findViewById(R.id.linearLayoutPncHealthFacilityVisitDetails);
         linearLayoutPncHomeVisit = view.findViewById(R.id.linearLayoutPncHomeVisit);
@@ -148,11 +160,11 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 }
             }
             processLastVisit(days, context);
-            processHealthFacilityVisit(healthFacility_visit, context);
-            processFamilyPlanning(family_planning, context);
-            processVaccineCard(vaccineCard, context);
-            processImmunization(immunization, context);
-            processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
+            // processHealthFacilityVisit(healthFacility_visit, context);
+            // processFamilyPlanning(family_planning, context);
+            // processVaccineCard(vaccineCard, context);
+            // processImmunization(immunization, context);
+            // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
 
         }
     }
