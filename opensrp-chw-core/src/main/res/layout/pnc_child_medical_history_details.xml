@@ -48,7 +48,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="@string/pnc_health_facility_visits_title"
+                android:text="@string/pnc_medical_history_child_vaccine_title"
                 android:textColor="@color/medical_text_inner"
                 android:textSize="14sp" />
 

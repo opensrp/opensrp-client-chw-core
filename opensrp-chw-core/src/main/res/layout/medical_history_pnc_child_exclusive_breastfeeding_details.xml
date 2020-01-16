@@ -5,37 +5,24 @@
     android:orientation="vertical">
 
     <org.smartregister.view.customcontrols.CustomFontTextView
-        android:id="@+id/pncHealthFacilityVisit"
+        android:id="@+id/pncChildVaccineCardReceived"
         style="@style/CustomFontTextViewStyle.ClientList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:text="@string/pnc_medical_history_hf_visit"
+        android:text="@string/pnc_medical_history_child_vaccine_card_received"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
         />
 
     <org.smartregister.view.customcontrols.CustomFontTextView
-        android:id="@+id/babyWeight"
+        android:id="@+id/pncChildVaccineCardDate"
         style="@style/CustomFontTextViewStyle.ClientList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
-        android:text="@string/pnc_baby_weight"
-        android:textColor="@color/medical_text_inner"
-        android:textSize="16sp"
-        android:visibility="visible"
-        />
-
-
-    <org.smartregister.view.customcontrols.CustomFontTextView
-        android:id="@+id/babyTemp"
-        style="@style/CustomFontTextViewStyle.ClientList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:text="@string/pnc_baby_temp"
+        android:text="@string/pnc_medical_history_child_vaccine_card_date"
         android:textColor="@color/medical_text_inner"
         android:textSize="16sp"
         android:visibility="visible"
