@@ -49,39 +49,21 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutMotherVisit"
+                android:id="@+id/linearLayoutMotherVisitDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
-
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutMotherVisitDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="20dp">
-
-                </LinearLayout>
+                android:paddingBottom="20dp"
+                >
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutChildVisit"
+                android:id="@+id/linearLayoutChildVisitDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutChildVisitDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="20dp">
-
-                </LinearLayout>
+                android:paddingBottom="20dp">
 
             </LinearLayout>
 

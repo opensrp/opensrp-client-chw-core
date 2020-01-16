@@ -42,8 +42,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected LinearLayout linearLayoutPncGrowthAndNutritionDetails;
 
     // Initialize new layouts
-    protected LinearLayout linearLayoutMotherVisit;
-    protected LinearLayout linearLayoutChildVisit;
     protected LinearLayout linearLayoutChildVisitDetails;
     protected LinearLayout linearLayoutMotherVisitDetails;
     protected LinearLayout linearLayoutMotherPncHFVisit;
@@ -58,8 +56,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         View motherContainerView = inflater.inflate(R.layout.pnc_mother_medical_history_details, null);
         View childContainerView = inflater.inflate(R.layout.pnc_child_medical_history_details, null);
 
-        linearLayoutMotherVisit = view.findViewById(R.id.linearLayoutMotherVisit);
-        linearLayoutChildVisit = view.findViewById(R.id.linearLayoutChildVisit);
         linearLayoutMotherVisitDetails = view.findViewById(R.id.linearLayoutMotherVisitDetails);
         linearLayoutChildVisitDetails = view.findViewById(R.id.linearLayoutChildVisitDetails);
         linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
@@ -72,10 +68,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         linearLayoutHealthFacilityVisitDetails = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisitDetails);
         linearLayoutPncFamilyPlanningDetails = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanningDetails);
 
-        View motherVisitDetailsView = inflater.inflate(R.layout.pnc_mother_medical_history_details, null);
         linearLayoutMotherVisitDetails.addView(motherContainerView); // Should this be in process hf visit?
 
-        linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
+        /* linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
         linearLayoutPncHomeVisit = view.findViewById(R.id.linearLayoutPncHomeVisit);
         linearLayoutPncHomeVisitDetails = view.findViewById(R.id.linearLayoutPncHomeVisitDetails);
         linearLayoutPncChildVaccine = view.findViewById(R.id.linearLayoutPncChildVaccine);
@@ -83,7 +78,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         linearLayoutPncImmunization = view.findViewById(R.id.linearLayoutPncImmunization);
         linearLayoutPncImmunizationDetails = view.findViewById(R.id.linearLayoutPncImmunizationDetails);
         linearLayoutPncGrowthAndNutrition = view.findViewById(R.id.linearLayoutPncGrowthAndNutrition);
-        linearLayoutPncGrowthAndNutritionDetails = view.findViewById(R.id.linearLayoutPncGrowthAndNutritionDetails);
+        linearLayoutPncGrowthAndNutritionDetails = view.findViewById(R.id.linearLayoutPncGrowthAndNutritionDetails); */
 
         return view;
     }
@@ -202,7 +197,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacility_visit, Context context) {
         if (healthFacility_visit != null && healthFacility_visit.size() > 0) {
             linearLayoutMotherPncHFVisit.setVisibility(View.VISIBLE);
-
+            linearLayoutPncHealthFacilityVisit.setVisibility(View.VISIBLE);
             for (Map.Entry<String, Map<String, String>> entry : healthFacility_visit.entrySet()) {
                 View visitDetailsView = inflater.inflate(R.layout.medical_history_pnc_hf_visit_details, null);
 
