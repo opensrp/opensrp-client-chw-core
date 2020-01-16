@@ -186,7 +186,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
     protected void processLastVisit(int days, Context context) {
         linearLayoutLastVisit.setVisibility(View.VISIBLE);
-        customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), String.valueOf(days))));
+        customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
     }
 
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacility_visit, Context context) {
