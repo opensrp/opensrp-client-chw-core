@@ -22,6 +22,7 @@ public abstract class CorePncMedicalHistoryActivityInteractor extends BasePncMed
 
             List<Visit> visits = VisitDao.getPNCVisitsMedicalHistory(memberID);
 
+            // TODO :: Get visit details grouped with separate multiple babies details
             List<VisitDetail> detailList = VisitDao.getPNCMedicalHistory(memberID);
             Map<String, List<VisitDetail>> detailsMap = new HashMap<>();
             if (detailList != null) {

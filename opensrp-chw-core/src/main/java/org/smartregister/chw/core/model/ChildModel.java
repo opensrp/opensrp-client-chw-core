@@ -4,6 +4,7 @@ public class ChildModel {
 
     private String childFullName;
     private String dateOfBirth;
+    private String baseEntityId;
 
     public ChildModel(String childFullName, String dateOfBirth) {
         this.childFullName = childFullName;
@@ -16,5 +17,13 @@ public class ChildModel {
 
     public String getDateOfBirth() {
         return dateOfBirth;
+    }
+
+    public String getBaseEntityId() {
+        return baseEntityId;
+    }
+
+    public void setBaseEntityId(String baseEntityId) {
+        this.baseEntityId = baseEntityId;
     }
 }
