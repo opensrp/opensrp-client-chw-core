@@ -26,8 +26,7 @@ import java.util.Map;
 public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedicalHistoryActivity.Flavor {
 
     protected LayoutInflater inflater;
-    protected LinearLayout linearLayoutPncImmunization;
-    protected LinearLayout linearLayoutPncImmunizationDetails;
+
     protected LinearLayout linearLayoutPncGrowthAndNutrition;
     protected LinearLayout linearLayoutPncGrowthAndNutritionDetails;
 
@@ -47,6 +46,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected TextView customFontTextViewChildTitle;
     protected LinearLayout linearLayoutPncChildVaccineCard;
     protected LinearLayout linearLayoutPncChildVaccineDetails;
+    protected View viewVaccineCardRow;
+    protected LinearLayout linearLayoutPncImmunization;
+    protected LinearLayout linearLayoutPncImmunizationDetails;
+    protected View viewImmunizationRow;
 
     @Override
     public View bindViews(Activity activity) {
@@ -70,16 +73,14 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         customFontTextViewChildTitle = childContainerView.findViewById(R.id.customFontTextViewPncChildVisitTitle);
         linearLayoutPncChildVaccineCard = childContainerView.findViewById(R.id.linearLayoutPncChildVisitVaccineCard);
         linearLayoutPncChildVaccineDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitVaccineCardDetails);
-
+        viewVaccineCardRow = childContainerView.findViewById(R.id.viewChildVaccineCardRow);
+        linearLayoutPncImmunization = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizations);
+        linearLayoutPncImmunizationDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizationsDetails);
+        viewImmunizationRow = childContainerView.findViewById(R.id.viewChildImmunizationsRow);
         linearLayoutMotherVisitDetails.addView(motherContainerView);
         linearLayoutChildVisitDetails.addView(childContainerView);
 
-        /* linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
-        linearLayoutPncHomeVisit = view.findViewById(R.id.linearLayoutPncHomeVisit);
-        linearLayoutPncHomeVisitDetails = view.findViewById(R.id.linearLayoutPncHomeVisitDetails);
-
-        linearLayoutPncImmunization = view.findViewById(R.id.linearLayoutPncImmunization);
-        linearLayoutPncImmunizationDetails = view.findViewById(R.id.linearLayoutPncImmunizationDetails);
+        /*
         linearLayoutPncGrowthAndNutrition = view.findViewById(R.id.linearLayoutPncGrowthAndNutrition);
         linearLayoutPncGrowthAndNutritionDetails = view.findViewById(R.id.linearLayoutPncGrowthAndNutritionDetails); */
 
@@ -172,8 +173,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             processLastVisit(days, context);
             processHealthFacilityVisit(healthFacility_visit, context);
             processFamilyPlanning(family_planning, context);
+
+            // TODO :: Implement Call this for every child
             processVaccineCard(vaccineCard, vaccineCardDate, context);
-            // processImmunization(immunization, context);
+            processImmunization(immunization, context);
             // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
 
             // TODO -> Set mother and child names
@@ -221,7 +224,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                     tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
                     linearLayoutHealthFacilityVisitDetails.addView(visitDetailsView, 0);
                 }
-
             }
             viewHFVisitsRow.setVisibility(View.VISIBLE);
         }
@@ -285,33 +287,31 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             View vaccineDetailsView = inflater.inflate(R.layout.medical_history_pnc_child_vaccine_card_details, null);
 
             TextView tvPncVaccineCardReceived = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardReceived);
-            tvPncVaccineCardReceived.setText(MessageFormat.format(context.getString(R.string.pnc_child_vaccine_card), received));
+            tvPncVaccineCardReceived.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_received), received));
             TextView tvPncVaccineCardDate = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardDate);
-            tvPncVaccineCardDate.setText(MessageFormat.format(context.getString(R.string.pnc_child_vaccine_card), StringUtils.isNotBlank(vaccineCardDate)? vaccineCardDate : "n/a"));
+            tvPncVaccineCardDate.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_date), StringUtils.isNotBlank(vaccineCardDate)? vaccineCardDate : "n/a"));
             linearLayoutPncChildVaccineDetails.addView(vaccineDetailsView, 0);
+            viewVaccineCardRow.setVisibility(View.VISIBLE);
         }
     }
 
     protected void processImmunization(Map<String, String> immunization, Context context) {
         if (immunization != null && immunization.size() > 0) {
             linearLayoutPncImmunization.setVisibility(View.VISIBLE);
-            View view = inflater.inflate(R.layout.pnc_wcaro_immunization, null);
+            View immunizationDetailsView = inflater.inflate(R.layout.medical_history_pnc_immunization_details, null);
 
-            TextView tvBirth = view.findViewById(R.id.pncBirth);
-            tvBirth.setVisibility(View.VISIBLE);
-            tvBirth.setText(context.getString(R.string.pnc_birth));
             for (Map.Entry<String, String> entry : immunization.entrySet()) {
                 if (entry.getValue() != null) {
                     String entryValue = entry.getValue().equalsIgnoreCase("Vaccine not given") ? context.getString(R.string.pnc_vaccine_not_given) : entry.getValue();
                     if (entry.getKey().equals("bcg")) {
-                        TextView tvBcg = view.findViewById(R.id.pncBcg);
+                        TextView tvBcg = immunizationDetailsView.findViewById(R.id.pncBcg);
                         tvBcg.setVisibility(View.VISIBLE);
                         if (entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
                             tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg_not_done), entryValue));
                         else
                             tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
                     } else if (entry.getKey().equals("opv0")) {
-                        TextView tvOpv0 = view.findViewById(R.id.pncOpv0);
+                        TextView tvOpv0 = immunizationDetailsView.findViewById(R.id.pncOpv0);
                         tvOpv0.setVisibility(View.VISIBLE);
                         if (entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
                             tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0_not_done), entryValue));
@@ -320,7 +320,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                     }
                 }
             }
-            linearLayoutPncImmunizationDetails.addView(view, 0);
+            linearLayoutPncImmunizationDetails.addView(immunizationDetailsView, 0);
         }
     }
 

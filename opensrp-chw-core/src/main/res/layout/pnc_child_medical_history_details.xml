@@ -70,14 +70,14 @@
             android:layout_height="1px"
             android:layout_below="@+id/linearLayoutPncChildVisitVaccineCard"
             android:background="@color/light_grey"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayoutPncChildVisitImmunizations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/customFontTextViewPncChildVisitImmunizationsTitle"
@@ -109,7 +109,7 @@
             android:layout_height="1px"
             android:layout_below="@+id/linearLayoutPncChildVisitImmunizations"
             android:background="@color/light_grey"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayoutPncChildVisitExclusiveBreastfeeding"
