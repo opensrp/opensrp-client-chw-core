@@ -94,7 +94,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void processHomeVisits(Map<Integer, String> home_visits, Context context) {
         if (home_visits != null && home_visits.size() > 0) {
-            linearLayoutPncHomeVisit.setVisibility(View.VISIBLE);
+            // linearLayoutPncHomeVisit.setVisibility(View.VISIBLE);
 
             for (Map.Entry<Integer, String> entry : home_visits.entrySet()) {
                 View view = inflater.inflate(R.layout.medical_history_pnc_visit, null);
@@ -116,7 +116,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                     tvTitle.setText(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_thirty_five_to_forty_one_visit), entry.getValue()));
                 }
 
-                linearLayoutPncHomeVisitDetails.addView(view, 0);
+                // linearLayoutPncHomeVisitDetails.addView(view, 0);
 
             }
         }
@@ -125,7 +125,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void processHealthFVisit(Map<String, String> hf_visits, Context context) {
         if (hf_visits != null && hf_visits.size() > 0) {
-            linearLayoutHealthFacilityVisit.setVisibility(View.VISIBLE);
+            // linearLayoutHealthFacilityVisit.setVisibility(View.VISIBLE);
 
             for (Map.Entry<String, String> entry : hf_visits.entrySet()) {
                 View view = inflater.inflate(R.layout.medical_history_pnc_visit, null);
@@ -200,7 +200,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacility_visit, Context context) {
         if (healthFacility_visit != null && healthFacility_visit.size() > 0) {
-            linearLayoutHealthFacilityVisit.setVisibility(View.VISIBLE);
+            // linearLayoutHealthFacilityVisit.setVisibility(View.VISIBLE);
 
             for (Map.Entry<String, Map<String, String>> entry : healthFacility_visit.entrySet()) {
                 View view = inflater.inflate(R.layout.pnc_wcaro_health_facility_visit, null);
