@@ -26,11 +26,6 @@ import java.util.Map;
 public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedicalHistoryActivity.Flavor {
 
     protected LayoutInflater inflater;
-
-    protected LinearLayout linearLayoutPncGrowthAndNutrition;
-    protected LinearLayout linearLayoutPncGrowthAndNutritionDetails;
-
-    // Initialize new split layouts
     protected LinearLayout linearLayoutLastVisit;
     protected TextView customFontTextViewLastVisit;
     protected LinearLayout linearLayoutChildVisitDetails;
@@ -50,6 +45,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected LinearLayout linearLayoutPncImmunization;
     protected LinearLayout linearLayoutPncImmunizationDetails;
     protected View viewImmunizationRow;
+    protected LinearLayout linearLayoutPncExclusiveBreastfeeding;
+    protected LinearLayout linearLayoutPncExclusiveBreastfeedingDetails;
 
     @Override
     public View bindViews(Activity activity) {
@@ -77,12 +74,12 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         linearLayoutPncImmunization = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizations);
         linearLayoutPncImmunizationDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizationsDetails);
         viewImmunizationRow = childContainerView.findViewById(R.id.viewChildImmunizationsRow);
+        linearLayoutPncExclusiveBreastfeeding = childContainerView.findViewById(R.id.linearLayoutPncChildVisitExclusiveBreastfeeding);
+        linearLayoutPncExclusiveBreastfeedingDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitExclusiveBreastfeedingDetails);
+
         linearLayoutMotherVisitDetails.addView(motherContainerView);
         linearLayoutChildVisitDetails.addView(childContainerView);
 
-        /*
-        linearLayoutPncGrowthAndNutrition = view.findViewById(R.id.linearLayoutPncGrowthAndNutrition);
-        linearLayoutPncGrowthAndNutritionDetails = view.findViewById(R.id.linearLayoutPncGrowthAndNutritionDetails); */
 
         return view;
     }
@@ -174,10 +171,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             processHealthFacilityVisit(healthFacility_visit, context);
             processFamilyPlanning(family_planning, context);
 
-            // TODO :: Implement Call this for every child
+            // TODO :: Implement Call this for every child (in list)
             processVaccineCard(vaccineCard, vaccineCardDate, context);
             processImmunization(immunization, context);
-            // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
+            processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
 
             // TODO -> Set mother and child names
             linearLayoutMotherPncHFVisit.setVisibility(View.VISIBLE);
@@ -222,8 +219,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (entry.getValue().get("baby_temp") != null) {
                     tvbabyTemp.setVisibility(View.VISIBLE);
                     tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
-                    linearLayoutHealthFacilityVisitDetails.addView(visitDetailsView, 0);
                 }
+                linearLayoutHealthFacilityVisitDetails.addView(visitDetailsView, 0);
             }
             viewHFVisitsRow.setVisibility(View.VISIBLE);
         }
@@ -289,7 +286,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             TextView tvPncVaccineCardReceived = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardReceived);
             tvPncVaccineCardReceived.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_received), received));
             TextView tvPncVaccineCardDate = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardDate);
-            tvPncVaccineCardDate.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_date), StringUtils.isNotBlank(vaccineCardDate)? vaccineCardDate : "n/a"));
+            tvPncVaccineCardDate.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_date), StringUtils.isNotBlank(vaccineCardDate) ? vaccineCardDate : "n/a"));
             linearLayoutPncChildVaccineDetails.addView(vaccineDetailsView, 0);
             viewVaccineCardRow.setVisibility(View.VISIBLE);
         }
@@ -319,22 +316,18 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                             tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
                     }
                 }
+                linearLayoutPncImmunizationDetails.addView(immunizationDetailsView, 0);
             }
-            linearLayoutPncImmunizationDetails.addView(immunizationDetailsView, 0);
+            viewImmunizationRow.setVisibility(View.VISIBLE);
         }
     }
 
     protected void processGrowthAndNutrition(Map<String, String> growth_data, Context context, String earlyBreastFeeding) {
         if (growth_data != null && growth_data.size() > 0) {
-            linearLayoutPncGrowthAndNutrition.setVisibility(View.VISIBLE);
-            View view = inflater.inflate(R.layout.pnc_wcaro_growth_and_nutrition, null);
-            if (earlyBreastFeeding != null) {
-                TextView tvPncEarlyInitiationBf = view.findViewById(R.id.pncEarlyInitiationBf);
-                tvPncEarlyInitiationBf.setVisibility(View.VISIBLE);
-                tvPncEarlyInitiationBf.setText(MessageFormat.format(context.getString(R.string.pnc_early_initiation_bf), earlyBreastFeeding));
-            }
+            linearLayoutPncExclusiveBreastfeeding.setVisibility(View.VISIBLE);
+            View viewExclusiveBreastfeedingDetails = inflater.inflate(R.layout.medical_history_pnc_child_exclusive_breastfeeding_details, null);
             for (Map.Entry<String, String> entry : growth_data.entrySet()) {
-                TextView tvpncExcussiveBf = view.findViewById(R.id.pncExcussiveBf);
+                TextView tvpncExcussiveBf = viewExclusiveBreastfeedingDetails.findViewById(R.id.pncChildExclusiveBreastfeeding);
                 tvpncExcussiveBf.setVisibility(View.VISIBLE);
                 if (entry.getValue().equalsIgnoreCase("YES")) {
                     tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_no)));
@@ -342,7 +335,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                     tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_yes)));
                 }
             }
-            linearLayoutPncGrowthAndNutritionDetails.addView(view, 0);
+            linearLayoutPncExclusiveBreastfeedingDetails.addView(viewExclusiveBreastfeedingDetails, 0);
         }
     }
 
