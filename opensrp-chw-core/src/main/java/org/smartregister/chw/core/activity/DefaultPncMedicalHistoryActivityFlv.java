@@ -89,106 +89,21 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     @Override
     public void processViewData(List<GroupedVisit> groupedVisits, Context context, MemberObject memberObject) {
         if (groupedVisits.size() > 0) {
+
+            linearLayoutMotherPncHFVisit.setVisibility(View.VISIBLE);
+            linearLayoutPncChildVisit.setVisibility(View.VISIBLE);
+
             for (GroupedVisit groupedVisit : groupedVisits) {
                 // Process mother's details
                 if (groupedVisit.getBaseEntityId().equals(memberObject.getBaseEntityId())) {
-
+                    customFontTextViewMotherTitle.setText(memberObject.getFullName());
+                    processMotherDetails(groupedVisit.getVisitList(), context);
                 } else {
                     // Process child's details
-
+                    customFontTextViewChildTitle.setText(groupedVisit.getName());
+                    processChildDetails(groupedVisit.getVisitList(), context);
                 }
             }
-            int days = 0;
-            int x = 0;
-            Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
-            Map<String, String> family_planning = new HashMap<>();
-            String vaccineCard = context.getString(R.string.pnc_no);
-            String vaccineCardDate = "";
-            String earlyBreastFeeding = "";
-            Map<String, String> immunization = new HashMap<>();
-            Map<String, String> growth_data = new HashMap<>();
-
-            while (x < visits.size()) {
-                // the first object in this list is the days difference
-                if (x == 0) {
-                    days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
-                }
-                x++;
-            }
-            // process the data
-            for (Visit v : visits) {
-                for (Map.Entry<String, List<VisitDetail>> entry : v.getVisitDetails().entrySet()) {
-                    String val = getText(entry.getValue());
-
-                    switch (entry.getKey()) {
-                        // health facility
-                        case "pnc_visit_1":
-                        case "pnc_visit_2":
-                        case "pnc_visit_3":
-
-                            String date_key = "pnc_hf_visit1_date";
-                            if (entry.getKey().equals("pnc_visit_2")) {
-                                date_key = "pnc_hf_visit2_date";
-                            }
-                            if (entry.getKey().equals("pnc_visit_3")) {
-                                date_key = "pnc_hf_visit3_date";
-                            }
-
-                            if ("Yes".equalsIgnoreCase(val)) {
-                                Map<String, String> map = new HashMap<>();
-                                // add details
-                                map.put("pnc_hf_visit_date", getText(v.getVisitDetails().get(date_key)));
-                                map.put("baby_weight", getText(v.getVisitDetails().get("baby_weight")));
-                                map.put("baby_temp", getText(v.getVisitDetails().get("baby_temp")));
-                                healthFacility_visit.put(entry.getKey(), map);
-                            }
-                            break;
-
-                        // family planing
-                        case "fp_method":
-                        case "fp_start_date":
-                            family_planning.put(getText(v.getVisitDetails().get("fp_method")), getText(v.getVisitDetails().get("fp_start_date")));
-                            break;
-
-                        // vaccine card
-                        case "vaccine_card":
-                            if ("No".equalsIgnoreCase(vaccineCard) && "Yes".equalsIgnoreCase(val)) {
-                                vaccineCard = context.getString(R.string.pnc_yes);
-                            }
-                            // TODO :: Get vaccine card date
-                            break;
-                        // immunization
-                        case "opv0":
-                        case "bcg":
-                            immunization.put(entry.getKey(), val);
-                            break;
-
-                        // growth and nutrition
-                        case "exclusive_breast_feeding":
-                            growth_data.put(entry.getKey(), val);
-                            break;
-                    }
-                }
-
-                earlyBreastFeeding = PNCDao.earlyBreastFeeding(v.getBaseEntityId(), v.getVisitId());
-                if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("Yes")) {
-                    earlyBreastFeeding = context.getString(R.string.pnc_yes);
-                } else if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("No")) {
-                    earlyBreastFeeding = context.getString(R.string.pnc_no);
-                }
-            }
-            processLastVisit(days, context);
-            processHealthFacilityVisit(healthFacility_visit, context);
-            processFamilyPlanning(family_planning, context);
-
-            // TODO :: Implement Call this for every child (in list)
-            processVaccineCard(vaccineCard, vaccineCardDate, context);
-            processImmunization(immunization, context);
-            processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
-
-            // TODO -> Set mother and child names
-            linearLayoutMotherPncHFVisit.setVisibility(View.VISIBLE);
-            linearLayoutPncChildVisit.setVisibility(View.VISIBLE);
         }
     }
 
@@ -205,6 +120,106 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
         }
         return toCSV(vals);
+    }
+
+    protected void processMotherDetails(List<Visit> visits, Context context) {
+        int days = 0;
+        int x = 0;
+        Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
+        Map<String, String> family_planning = new HashMap<>();
+
+        while (x < visits.size()) {
+            // the first object in this list is the days difference
+            if (x == 0) {
+                days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
+            }
+            x++;
+        }
+
+        for (Visit visit : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
+                String val = getText(entry.getValue());
+
+                switch (entry.getKey()) {
+                    // health facility
+                    case "pnc_visit_1":
+                    case "pnc_visit_2":
+                    case "pnc_visit_3":
+
+                        String date_key = "pnc_hf_visit1_date";
+                        if (entry.getKey().equals("pnc_visit_2")) {
+                            date_key = "pnc_hf_visit2_date";
+                        }
+                        if (entry.getKey().equals("pnc_visit_3")) {
+                            date_key = "pnc_hf_visit3_date";
+                        }
+
+                        if ("Yes".equalsIgnoreCase(val)) {
+                            Map<String, String> map = new HashMap<>();
+                            // add details
+                            map.put("pnc_hf_visit_date", getText(visit.getVisitDetails().get(date_key)));
+                            map.put("baby_weight", getText(visit.getVisitDetails().get("baby_weight")));
+                            map.put("baby_temp", getText(visit.getVisitDetails().get("baby_temp")));
+                            healthFacility_visit.put(entry.getKey(), map);
+                        }
+                        break;
+
+                    // family planing
+                    case "fp_method":
+                    case "fp_start_date":
+                        family_planning.put(getText(visit.getVisitDetails().get("fp_method")), getText(visit.getVisitDetails().get("fp_start_date")));
+                        break;
+                }
+            }
+        }
+
+        processLastVisit(days, context);
+        processHealthFacilityVisit(healthFacility_visit, context);
+        processFamilyPlanning(family_planning, context);
+    }
+
+    protected void processChildDetails(List<Visit> visits, Context context) {
+        String vaccineCard = context.getString(R.string.pnc_no);
+        String vaccineCardDate = "";
+        String earlyBreastFeeding = "";
+        Map<String, String> immunization = new HashMap<>();
+        Map<String, String> growth_data = new HashMap<>();
+
+        for (Visit visit : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
+                String val = getText(entry.getValue());
+
+                switch (entry.getKey()) {
+                    // vaccine card
+                    case "vaccine_card":
+                        if ("No".equalsIgnoreCase(vaccineCard) && "Yes".equalsIgnoreCase(val)) {
+                            vaccineCard = context.getString(R.string.pnc_yes);
+                        }
+                        break;
+                    // immunization
+                    case "opv0":
+                    case "bcg":
+                        immunization.put(entry.getKey(), val);
+                        break;
+                    // growth and nutrition
+                    case "exclusive_breast_feeding":
+                        growth_data.put(entry.getKey(), val);
+                        break;
+                }
+            }
+
+            earlyBreastFeeding = PNCDao.earlyBreastFeeding(visit.getBaseEntityId(), visit.getVisitId());
+
+            if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("Yes")) {
+                earlyBreastFeeding = context.getString(R.string.pnc_yes);
+            } else if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("No")) {
+                earlyBreastFeeding = context.getString(R.string.pnc_no);
+            }
+        }
+
+        processVaccineCard(vaccineCard, vaccineCardDate, context);
+        processImmunization(immunization, context);
+        processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
     }
 
     protected void processLastVisit(int days, Context context) {
