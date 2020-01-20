@@ -10,17 +10,20 @@ public class ChildDBConstants {
     private static final int FIVE_YEAR = 5;
 
     public static String childAgeLimitFilter() {
-        return childAgeLimitFilter(DBConstants.KEY.DOB, FIVE_YEAR, ChildDBConstants.KEY.ENTRY_POINT);
+        return childAgeLimitFilter(DBConstants.KEY.DOB, FIVE_YEAR, ChildDBConstants.KEY.ENTRY_POINT,ChildDBConstants.KEY.MOTHER_ENTITY_ID);
     }
 
-    private static String childAgeLimitFilter(String dateColumn, int age, String entryPoint) {
+    private static String childAgeLimitFilter(String dateColumn, int age, String entryPoint, String motherEntityId) {
         return " ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + "))/365.25) <" + age + ")  " +
-                " and (( ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') <> 'PNC' ) or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') = 'PNC' and date(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + ", '+28 days') < date())) " +
+                " and (( ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') <> 'PNC' ) " +
+                " or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') = 'PNC' " +
+                " and date(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + ", '+28 days') < date()  " +
+                " and ((SELECT CASE WHEN p.is_closed = 1 OR fm.is_closed = 1 THEN 1 ELSE 0 END AS closed FROM ec_pregnancy_outcome p INNER JOIN ec_family_member fm on fm.base_entity_id = p.base_entity_id WHERE p.base_entity_id = " + CoreConstants.TABLE_NAME.CHILD + "." + motherEntityId + ") < 1 ))) " +
                 " and ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + "))/365.25) < 5) ";
     }
 
     public static String childAgeLimitFilter(String tableName) {
-        return childAgeLimitFilter(tableColConcat(tableName, DBConstants.KEY.DOB), FIVE_YEAR, tableColConcat(tableName, ChildDBConstants.KEY.ENTRY_POINT));
+        return childAgeLimitFilter(tableColConcat(tableName, DBConstants.KEY.DOB), FIVE_YEAR, tableColConcat(tableName, ChildDBConstants.KEY.ENTRY_POINT), tableColConcat(tableName, ChildDBConstants.KEY.MOTHER_ENTITY_ID));
     }
 
     private static String tableColConcat(String tableName, String columnName) {
