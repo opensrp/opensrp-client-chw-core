@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.smartregister.chw.anc.domain.GroupedVisit;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.R;
@@ -85,9 +87,17 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     }
 
     @Override
-    public void processViewData(List<Visit> visits, Context context) {
-        if (visits.size() > 0) {
+    public void processViewData(List<GroupedVisit> groupedVisits, Context context, MemberObject memberObject) {
+        if (groupedVisits.size() > 0) {
+            for (GroupedVisit groupedVisit : groupedVisits) {
+                // Process mother's details
+                if (groupedVisit.getBaseEntityId().equals(memberObject.getBaseEntityId())) {
 
+                } else {
+                    // Process child's details
+
+                }
+            }
             int days = 0;
             int x = 0;
             Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
