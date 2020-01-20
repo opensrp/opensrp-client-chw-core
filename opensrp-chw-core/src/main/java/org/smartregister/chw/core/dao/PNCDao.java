@@ -101,11 +101,11 @@ public class PNCDao extends AbstractDao {
     }
 
     public static List<ChildModel> childrenForPncWoman(String baseEntityId) {
-        String sql = String.format("select first_name || ' ' || middle_name || ' ' || last_name as child_name, dob " +
+        String sql = String.format("select first_name || ' ' || middle_name || ' ' || last_name as child_name, dob, base_entity_id " +
                 "FROM ec_child WHERE mother_entity_id ='%s' AND  entry_point = '%s'", baseEntityId, "PNC");
 
         DataMap<ChildModel> dataMap = cursor ->
-                new ChildModel(getCursorValue(cursor, "child_name"), getCursorValue(cursor, "dob"));
+                new ChildModel(getCursorValue(cursor, "child_name"), getCursorValue(cursor, "dob"),  getCursorValue(cursor, "base_entity_id"));
 
         return readData(sql, dataMap);
     }

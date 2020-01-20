@@ -11,6 +11,12 @@ public class ChildModel {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public ChildModel(String childFullName, String dob, String baseEntityId) {
+        this.childFullName = childFullName;
+        this.dateOfBirth = dob;
+        this.baseEntityId = baseEntityId;
+    }
+
     public String getChildFullName() {
         return childFullName;
     }
