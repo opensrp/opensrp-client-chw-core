@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,65 +30,24 @@ import java.util.Map;
 public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedicalHistoryActivity.Flavor {
 
     protected LayoutInflater inflater;
-    protected LinearLayout linearLayoutLastVisit;
-    protected TextView customFontTextViewLastVisit;
-    protected LinearLayout linearLayoutChildVisitDetails;
-    protected LinearLayout linearLayoutMotherVisitDetails;
-    protected LinearLayout linearLayoutMotherPncHFVisit;
-    protected TextView customFontTextViewMotherTitle;
-    protected LinearLayout linearLayoutPncHealthFacilityVisit;
-    protected LinearLayout linearLayoutHealthFacilityVisitDetails;
-    protected LinearLayout linearLayoutPncFamilyPlanning;
-    protected LinearLayout linearLayoutPncFamilyPlanningDetails;
-    protected View viewHFVisitsRow;
-    protected LinearLayout linearLayoutPncChildVisit;
-    protected TextView customFontTextViewChildTitle;
-    protected LinearLayout linearLayoutPncChildVaccineCard;
-    protected LinearLayout linearLayoutPncChildVaccineDetails;
-    protected View viewVaccineCardRow;
-    protected LinearLayout linearLayoutPncImmunization;
-    protected LinearLayout linearLayoutPncImmunizationDetails;
-    protected View viewImmunizationRow;
-    protected LinearLayout linearLayoutPncExclusiveBreastfeeding;
-    protected LinearLayout linearLayoutPncExclusiveBreastfeedingDetails;
+    private Context context;
+    private List<Visit> visits;
+    private LinearLayout parentView;
+    @LayoutRes
+    private int childLayout = R.layout.pnc_medical_history_nested_sub_item;
 
     @Override
     public View bindViews(Activity activity) {
         inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.pnc_medical_history_details, null);
-        View motherContainerView = inflater.inflate(R.layout.pnc_mother_medical_history_details, null);
-        View childContainerView = inflater.inflate(R.layout.pnc_child_medical_history_details, null);
-
-        linearLayoutMotherVisitDetails = view.findViewById(R.id.linearLayoutMotherVisitDetails);
-        linearLayoutChildVisitDetails = view.findViewById(R.id.linearLayoutChildVisitDetails);
-        linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
-        customFontTextViewLastVisit = view.findViewById(R.id.customFontTextViewLastVisit);
-        linearLayoutMotherPncHFVisit = motherContainerView.findViewById(R.id.linearLayoutMotherPncHealthFacilityVisit);
-        customFontTextViewMotherTitle = motherContainerView.findViewById(R.id.customFontTextViewPncHealthFacilityVisitMotherTitle);
-        linearLayoutPncHealthFacilityVisit = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisit);
-        viewHFVisitsRow = motherContainerView.findViewById(R.id.viewHealthFacilityVisitsRow);
-        linearLayoutHealthFacilityVisitDetails = motherContainerView.findViewById(R.id.linearLayoutPncHealthFacilityVisitDetails);
-        linearLayoutPncFamilyPlanning = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanning);
-        linearLayoutPncFamilyPlanningDetails = motherContainerView.findViewById(R.id.linearLayoutPncFamilyPlanningDetails);
-        linearLayoutPncChildVisit = childContainerView.findViewById(R.id.linearLayoutPncChildVisit);
-        customFontTextViewChildTitle = childContainerView.findViewById(R.id.customFontTextViewPncChildVisitTitle);
-        linearLayoutPncChildVaccineCard = childContainerView.findViewById(R.id.linearLayoutPncChildVisitVaccineCard);
-        linearLayoutPncChildVaccineDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitVaccineCardDetails);
-        viewVaccineCardRow = childContainerView.findViewById(R.id.viewChildVaccineCardRow);
-        linearLayoutPncImmunization = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizations);
-        linearLayoutPncImmunizationDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitImmunizationsDetails);
-        viewImmunizationRow = childContainerView.findViewById(R.id.viewChildImmunizationsRow);
-        linearLayoutPncExclusiveBreastfeeding = childContainerView.findViewById(R.id.linearLayoutPncChildVisitExclusiveBreastfeeding);
-        linearLayoutPncExclusiveBreastfeedingDetails = childContainerView.findViewById(R.id.linearLayoutPncChildVisitExclusiveBreastfeedingDetails);
-
-        linearLayoutMotherVisitDetails.addView(motherContainerView);
-        linearLayoutChildVisitDetails.addView(childContainerView);
-
-
-        return view;
+        this.context = activity;
+        parentView = new LinearLayout(activity);
+        parentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        parentView.setOrientation(LinearLayout.VERTICAL);
+        return parentView;
     }
 
-    @Override
+    /*@Override
+
     public void processViewData(List<GroupedVisit> groupedVisits, Context context, MemberObject memberObject) {
         if (groupedVisits.size() > 0) {
 
@@ -100,12 +61,12 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                     processMotherDetails(groupedVisit.getVisitList(), context);
                 } else {
                     // Process child's details
-                    customFontTextViewChildTitle.setText(groupedVisit.getName());
                     processChildDetails(groupedVisit.getVisitList(), context);
                 }
             }
         }
     }
+*/
 
     @NotNull
     protected String getText(@Nullable List<VisitDetail> visitDetails) {
@@ -173,9 +134,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
         }
 
-        processLastVisit(days, context);
-        processHealthFacilityVisit(healthFacility_visit, context);
-        processFamilyPlanning(family_planning, context);
+        // processLastVisit(days, context);
+        // processHealthFacilityVisit(healthFacility_visit, context);
+        // processFamilyPlanning(family_planning, context);
     }
 
     protected void processChildDetails(List<Visit> visits, Context context) {
@@ -217,16 +178,19 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
         }
 
-        processVaccineCard(vaccineCard, vaccineCardDate, context);
-        processImmunization(immunization, context);
-        processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
+        // processVaccineCard(vaccineCard, vaccineCardDate, context);
+        // processImmunization(immunization, context);
+        // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
     }
 
+/*
     protected void processLastVisit(int days, Context context) {
         linearLayoutLastVisit.setVisibility(View.VISIBLE);
         customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
     }
+*/
 
+/*
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacility_visit, Context context) {
         if (healthFacility_visit != null && healthFacility_visit.size() > 0) {
             linearLayoutPncHealthFacilityVisit.setVisibility(View.VISIBLE);
@@ -250,7 +214,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             viewHFVisitsRow.setVisibility(View.VISIBLE);
         }
     }
+*/
 
+/*
     protected void processFamilyPlanning(Map<String, String> family_plnning, Context context) {
         if (family_plnning != null && family_plnning.size() > 0) {
             linearLayoutPncFamilyPlanning.setVisibility(View.VISIBLE);
@@ -302,7 +268,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
         }
     }
+*/
 
+/*
     protected void processVaccineCard(String received, String vaccineCardDate, Context context) {
         if (received != null) {
             linearLayoutPncChildVaccineCard.setVisibility(View.VISIBLE); // TODO :: Move this to where list of vaccinations are defined
@@ -316,7 +284,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             viewVaccineCardRow.setVisibility(View.VISIBLE);
         }
     }
+*/
 
+/*
     protected void processImmunization(Map<String, String> immunization, Context context) {
         if (immunization != null && immunization.size() > 0) {
             linearLayoutPncImmunization.setVisibility(View.VISIBLE);
@@ -346,7 +316,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             viewImmunizationRow.setVisibility(View.VISIBLE);
         }
     }
+*/
 
+/*
     protected void processGrowthAndNutrition(Map<String, String> growth_data, Context context, String earlyBreastFeeding) {
         if (growth_data != null && growth_data.size() > 0) {
             linearLayoutPncExclusiveBreastfeeding.setVisibility(View.VISIBLE);
@@ -363,6 +335,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             linearLayoutPncExclusiveBreastfeedingDetails.addView(viewExclusiveBreastfeedingDetails, 0);
         }
     }
+*/
 
     /**
      * Extract value from VisitDetail
