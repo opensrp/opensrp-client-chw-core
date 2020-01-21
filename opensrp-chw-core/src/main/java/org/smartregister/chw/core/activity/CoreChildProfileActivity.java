@@ -557,13 +557,20 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
                         profilePresenter.getChildClient());
             }
             return true;
+        } else if (i == R.id.action_sick_child_form) {
+            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
+            if (profilePresenter != null) {
+                profilePresenter.startSickChildForm(profilePresenter.getChildClient());
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.other_member_menu, menu);
+        getMenuInflater().inflate(R.menu.child_profile_menu, menu);
+        menu.findItem(R.id.action_sick_child_form).setVisible(false);
         menu.findItem(R.id.action_anc_registration).setVisible(false);
         menu.findItem(R.id.action_sick_child_follow_up).setVisible(false);
         menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);

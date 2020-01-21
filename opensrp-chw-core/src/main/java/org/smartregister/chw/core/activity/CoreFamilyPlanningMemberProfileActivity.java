@@ -17,6 +17,7 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
+import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
@@ -46,7 +47,7 @@ import timber.log.Timber;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements
-        FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack {
+        FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
 
     @Override
     protected void onCreation() {
@@ -159,7 +160,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
     public void onMemberDetailsReloaded(FpMemberObject fpMemberObject) {
         super.onMemberDetailsReloaded(fpMemberObject);
-
     }
 
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
@@ -212,8 +212,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
-    private void startFormActivity(JSONObject jsonForm, FpMemberObject fpMemberObject) {
-        Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
+    @Override
+    public void startFormActivity(JSONObject formJson, FpMemberObject fpMemberObject) {
+        Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, formJson.toString());
         intent.putExtra(FamilyPlanningConstants.FamilyPlanningMemberObject.MEMBER_OBJECT, fpMemberObject);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
