@@ -77,7 +77,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
 
-    api('org.smartregister:opensrp-client-core:1.8.19-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.8.20-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -150,7 +150,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    api('org.smartregister:opensrp-client-chw-referral:1.1.1-TEST-2-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-referral:1.1.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
