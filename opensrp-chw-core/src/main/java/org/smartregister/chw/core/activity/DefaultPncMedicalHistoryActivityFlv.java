@@ -31,10 +31,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
     protected LayoutInflater inflater;
     private Context context;
-    private List<Visit> visits;
-    private LinearLayout parentView;
+    protected List<Visit> visits;
+    protected LinearLayout parentView;
     @LayoutRes
-    private int childLayout = R.layout.pnc_medical_history_nested_sub_item;
+    protected int childLayout = R.layout.pnc_medical_history_nested_sub_item;
 
     @Override
     public View bindViews(Activity activity) {
@@ -79,8 +79,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected void processMotherDetails(List<Visit> visits, MemberObject memberObject) {
         this.visits = visits;
         // process the data
-        Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
-        Map<String, String> family_planning = new HashMap<>();
+        Map<String, Map<String, String>> healthFacilityVisitMap = new HashMap<>();
 
         for (Visit v : visits) {
             for (Map.Entry<String, List<VisitDetail>> entry : v.getVisitDetails().entrySet()) {
@@ -106,14 +105,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                             map.put("pnc_hf_visit_date", getText(v.getVisitDetails().get(date_key)));
                             map.put("baby_weight", getText(v.getVisitDetails().get("baby_weight")));
                             map.put("baby_temp", getText(v.getVisitDetails().get("baby_temp")));
-                            healthFacility_visit.put(entry.getKey(), map);
+                            healthFacilityVisitMap.put(entry.getKey(), map);
                         }
-                        break;
-
-                    // family planing
-                    case "fp_method":
-                    case "fp_start_date":
-                        family_planning.put(getText(v.getVisitDetails().get("fp_method")), getText(v.getVisitDetails().get("fp_start_date")));
                         break;
                 }
             }
@@ -128,8 +121,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 .build();
         parentView.addView(view);
 
-        processHealthFacilityVisit(healthFacility_visit, memberObject.getFullName());
-        processFamilyPlanning(family_planning);
+        processHealthFacilityVisit(healthFacilityVisitMap);
+        processFamilyPlanning(visits);
     }
 
     protected void processLastVisitDate() {
@@ -149,7 +142,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         }
     }
 
-    protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisit, String motherFullName) {
+    protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisit) {
         if (healthFacilityVisit != null && healthFacilityVisit.size() > 0) {
             List<MedicalHistory> medicalHistories = new ArrayList<>();
             MedicalHistory medicalHistory;
@@ -180,14 +173,13 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         }
     }
 
-    protected void processFamilyPlanning(Map<String, String> familyPlanning) {
-        if (familyPlanning != null && familyPlanning.size() > 0) {
-            List<MedicalHistory> medicalHistories = new ArrayList<>();
-            MedicalHistory medicalHistory;
-            for (Map.Entry<String, String> entry : familyPlanning.entrySet()) {
-                medicalHistory = new MedicalHistory();
-                medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
-                List<String> fpDetails = new ArrayList<>();
+    protected void processFamilyPlanning(List<Visit> visits) {
+        Map<String, String> familyPlanningMap = new HashMap<>();
+        extractFamilyPlanningMethods(visits, familyPlanningMap);
+
+        if (familyPlanningMap.size() > 0) {
+            List<String> fpDetails = new ArrayList<>();
+            for (Map.Entry<String, String> entry : familyPlanningMap.entrySet()) {
                 if (entry.getKey() != null) {
                     String method = "";
                     switch (entry.getKey()) {
@@ -221,9 +213,14 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (entry.getValue() != null) {
                     fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue()) ? entry.getValue() : "n/a"));
                 }
-                medicalHistory.setText(fpDetails);
-                medicalHistories.add(medicalHistory);
+
             }
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
+            medicalHistory.setText(fpDetails);
+            medicalHistories.add(medicalHistory);
+
             View view = new MedicalHistoryViewBuilder(inflater, context)
                     .withChildLayout(childLayout)
                     .withHistory(medicalHistories)
@@ -317,7 +314,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         if (entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
                             immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_opv0_not_done), entryValue));
                         else
-                           immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
+                            immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
                     }
                 }
             }
@@ -396,5 +393,17 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         return result;
     }
 
+    protected void extractFamilyPlanningMethods(List<Visit> visits, Map<String, String> familyPlanningMap) {
+        for (Visit v : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : v.getVisitDetails().entrySet()) {
+                switch (entry.getKey()) {
+                    case "fp_method":
+                    case "fp_start_date":
+                        familyPlanningMap.put(getText(v.getVisitDetails().get("fp_method")), getText(v.getVisitDetails().get("fp_start_date")));
+                        break;
+                }
+            }
+        }
+    }
 
 }
