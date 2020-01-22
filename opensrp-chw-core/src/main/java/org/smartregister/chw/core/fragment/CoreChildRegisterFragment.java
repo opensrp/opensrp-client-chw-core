@@ -3,9 +3,9 @@ package org.smartregister.chw.core.fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -257,6 +257,44 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
             };
         }// An invalid id was passed in
         return null;
+    }
+
+
+    @Override
+    public void countExecute() {
+        Cursor c = null;
+        try {
+            c = commonRepository().rawCustomQueryForAdapter(getCountSelect());
+            c.moveToFirst();
+            clientAdapter.setTotalcount(c.getInt(0));
+
+            clientAdapter.setCurrentlimit(20);
+            clientAdapter.setCurrentoffset(0);
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    private String getCountSelect() {
+        SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(countSelect);
+
+        String query = countSelect;
+        try {
+            if (StringUtils.isNotBlank(filters))
+                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
+
+            if (dueFilterActive)
+                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
+            query = sqb.Endquery(query);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return query;
     }
 
     private String filterandSortQuery() {

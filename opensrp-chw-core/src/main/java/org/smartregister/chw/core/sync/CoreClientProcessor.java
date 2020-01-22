@@ -9,7 +9,8 @@ import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.Utils;
-import org.smartregister.chw.core.utils.WashCheck;
+import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.fp.util.FpUtil;
 import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
@@ -124,6 +125,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
+            case CoreConstants.EventType.WASH_CHECK:
+            case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -152,6 +155,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE_UNDO:
             case CoreConstants.EventType.PNC_HOME_VISIT:
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
+            case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
                 if (eventClient.getEvent() == null) {
                     return;
                 }
@@ -170,6 +174,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
                 processRemoveMember(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
                 break;
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+
+                List<Obs> observations = event.getObs();
+                for (Obs obs : observations) {
+                    if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
+                        break;
+                    }
+                }
+                break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
                     return;
@@ -183,15 +202,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
-            case CoreConstants.EventType.WASH_CHECK:
-                processWashCheckEvent(eventClient);
-                processVisitEvent(eventClient);
-                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                break;
             case CoreConstants.EventType.CHILD_REFERRAL:
             case CoreConstants.EventType.ANC_REFERRAL:
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
@@ -461,23 +476,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
 
         }
-    }
-
-    private void processWashCheckEvent(EventClient eventClient) {
-        WashCheck washCheck = new WashCheck();
-        for (Obs obs : eventClient.getEvent().getObs()) {
-
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.FAMILY_ID)) {
-                washCheck.setFamilyBaseEntityId((String) obs.getValue());
-            }
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.WASH_CHECK_DETAILS)) {
-                washCheck.setDetailsJson((String) obs.getValue());
-            }
-            if (obs.getFormSubmissionField().equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.WASH_CHECK_LAST_VISIT)) {
-                washCheck.setLastVisit(Long.parseLong((String) obs.getValue()));
-            }
-        }
-        CoreChwApplication.getWashCheckRepository().add(washCheck);
     }
 
     private ContentValues processCaseModel(EventClient eventClient, Table table) {

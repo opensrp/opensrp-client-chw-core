@@ -3,35 +3,50 @@ package org.smartregister.chw.hf.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CorePncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
+import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.adapter.ReferralCardViewAdapter;
 import org.smartregister.chw.hf.contract.PncMemberProfileContract;
 import org.smartregister.chw.hf.interactor.PncMemberProfileInteractor;
+import org.smartregister.chw.hf.model.FamilyProfileModel;
 import org.smartregister.chw.hf.presenter.PncMemberProfilePresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.contract.FamilyProfileContract;
+import org.smartregister.family.domain.FamilyEventClient;
+import org.smartregister.family.interactor.FamilyProfileInteractor;
+import org.smartregister.family.util.JsonFormUtils;
+import org.smartregister.family.util.Utils;
 
 import java.util.Date;
 import java.util.Set;
+
+import timber.log.Timber;
 
 public class PncMemberProfileActivity extends CorePncMemberProfileActivity implements PncMemberProfileContract.View {
 
     public RelativeLayout referralRow;
     public RecyclerView referralRecyclerView;
     private CommonPersonObjectClient commonPersonObjectClient;
+    private PncMemberProfilePresenter pncMemberProfilePresenter;
 
     public static void startMe(Activity activity, String baseEntityID, CommonPersonObjectClient commonPersonObjectClient) {
         Intent intent = new Intent(activity, PncMemberProfileActivity.class);
@@ -46,36 +61,19 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     }
 
     @Override
-    public void setupViews() {
-        super.setupViews();
+    protected void startMalariaRegister() {
+        MalariaRegisterActivity.startMalariaRegistrationActivity(this, memberObject.getBaseEntityId());
     }
 
     @Override
-    public void setFamilyStatus(AlertStatus status) {
-        view_family_row.setVisibility(View.GONE);
-        rlFamilyServicesDue.setVisibility(View.GONE);
+    protected void startFpRegister() {
+        //TODO implement start FP register for HF
     }
 
     @Override
-    protected Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass() {
-        return FamilyProfileActivity.class;
+    protected void startFpChangeMethod() {
+        //TODO implement start FP change method for HF
     }
-
-    @Override
-    protected CorePncMemberProfileInteractor getPncMemberProfileInteractor() {
-        return new PncMemberProfileInteractor();
-    }
-
-    @Override
-    protected void removePncMember() {
-        //TODO implement functionality to remove PNC member
-    }
-
-    @Override
-    protected Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass() {
-        return PncRegisterActivity.class;
-    }
-
 
     public void setReferralTasks(Set<Task> taskList) {
         if (referralRecyclerView != null && taskList.size() > 0) {
@@ -144,5 +142,82 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
         if (referralRecyclerView != null && referralRecyclerView.getAdapter() != null) {
             referralRecyclerView.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.findItem(R.id.action_pnc_registration).setVisible(false);
+        menu.findItem(R.id.action__pnc_remove_member).setVisible(false);
+        menu.findItem(R.id.action__pnc_danger_sign_outcome).setVisible(true);
+        if (MalariaDao.isRegisteredForMalaria(baseEntityID)) {
+            menu.findItem(R.id.action_malaria_followup_visit).setVisible(true);
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == JsonFormUtils.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
+            String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
+            try {
+                JSONObject form = new JSONObject(jsonString);
+                if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
+
+                    FamilyEventClient familyEventClient =
+                            new FamilyProfileModel(memberObject.getFamilyName()).processUpdateMemberRegistration(jsonString, memberObject.getBaseEntityId());
+                    new FamilyProfileInteractor().saveRegistration(familyEventClient, jsonString, true, (FamilyProfileContract.InteractorCallBack) pncMemberProfilePresenter());
+                }
+            } catch (JSONException jsonException) {
+                Timber.e(jsonException);
+            }
+        }
+    }
+
+    @Override
+    public void setupViews() {
+        super.setupViews();
+    }
+
+    @Override
+    public void setFamilyStatus(AlertStatus status) {
+        view_family_row.setVisibility(View.GONE);
+        rlFamilyServicesDue.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass() {
+        return FamilyProfileActivity.class;
+    }
+
+    @Override
+    protected CorePncMemberProfileInteractor getPncMemberProfileInteractor() {
+        return new PncMemberProfileInteractor();
+    }
+
+    @Override
+    protected void removePncMember() {
+        //TODO implement functionality to remove PNC member
+    }
+
+    @Override
+    protected Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass() {
+        return PncRegisterActivity.class;
+    }
+
+    @Override
+    protected void startMalariaFollowUpVisit() {
+//        TODO implement functionality to malaria home visit
+    }
+
+    public PncMemberProfileContract.Presenter pncMemberProfilePresenter() {
+        if (pncMemberProfilePresenter == null) {
+            pncMemberProfilePresenter = new PncMemberProfilePresenter(this, new PncMemberProfileInteractor(), memberObject);
+        }
+        return pncMemberProfilePresenter;
     }
 }

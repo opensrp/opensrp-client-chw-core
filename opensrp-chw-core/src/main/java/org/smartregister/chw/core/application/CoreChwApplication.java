@@ -12,7 +12,6 @@ import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
-import org.smartregister.chw.core.repository.WashCheckRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -51,7 +50,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     protected static TaskRepository taskRepository;
     private static PncRegisterRepository pncRegisterRepository;
     private static PlanDefinitionRepository planDefinitionRepository;
-    private static WashCheckRepository washCheckRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
     public JsonSpecHelper jsonSpecHelper;
@@ -77,28 +75,21 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public static AncRegisterRepository ancRegisterRepository() {
         if (ancRegisterRepository == null) {
-            ancRegisterRepository = new AncRegisterRepository(getInstance().getRepository());
+            ancRegisterRepository = new AncRegisterRepository();
         }
         return ancRegisterRepository;
     }
 
     public static PncRegisterRepository pncRegisterRepository() {
         if (pncRegisterRepository == null) {
-            pncRegisterRepository = new PncRegisterRepository(getInstance().getRepository());
+            pncRegisterRepository = new PncRegisterRepository();
         }
         return pncRegisterRepository;
     }
 
-    public static WashCheckRepository getWashCheckRepository() {
-        if (washCheckRepository == null) {
-            washCheckRepository = new WashCheckRepository(getInstance().getRepository());
-        }
-        return washCheckRepository;
-    }
-
     public static MalariaRegisterRepository malariaRegisterRepository() {
         if (malariaRegisterRepository == null) {
-            malariaRegisterRepository = new MalariaRegisterRepository(getInstance().getRepository());
+            malariaRegisterRepository = new MalariaRegisterRepository();
         }
 
         return malariaRegisterRepository;
@@ -113,21 +104,21 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public TaskRepository getTaskRepository() {
         if (taskRepository == null) {
-            taskRepository = new TaskRepository(getRepository(), new TaskNotesRepository(getRepository()));
+            taskRepository = new TaskRepository(new TaskNotesRepository());
         }
         return taskRepository;
     }
 
     public PlanDefinitionRepository getPlanDefinitionRepository() {
         if (planDefinitionRepository == null) {
-            planDefinitionRepository = new PlanDefinitionRepository(getRepository());
+            planDefinitionRepository = new PlanDefinitionRepository();
         }
         return planDefinitionRepository;
     }
 
     public ScheduleRepository getScheduleRepository() {
         if (scheduleRepository == null) {
-            scheduleRepository = new ScheduleRepository(getRepository());
+            scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
     }
@@ -175,7 +166,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public LocationRepository getLocationRepository() {
         if (locationRepository == null) {
-            locationRepository = new LocationRepository(getRepository());
+            locationRepository = new LocationRepository();
         }
         return locationRepository;
     }
@@ -213,7 +204,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public UniqueIdRepository getUniqueIdRepository() {
         if (this.uniqueIdRepository == null) {
-            this.uniqueIdRepository = new UniqueIdRepository(this.getRepository());
+            this.uniqueIdRepository = new UniqueIdRepository();
         }
 
         return this.uniqueIdRepository;

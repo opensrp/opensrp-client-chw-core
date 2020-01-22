@@ -32,15 +32,15 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == android.R.id.home) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
             onBackPressed();
             return true;
-        } else if (i == R.id.action_pnc_member_registration) {
+        } else if (itemId == R.id.action_pnc_member_registration) {
             JSONObject form = CoreJsonFormUtils.getAncPncForm(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister(), memberObject, this);
-            startFormForEdit(form);
+            startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
-        } else if (i == R.id.action_pnc_registration) {
+        } else if (itemId == R.id.action_pnc_registration) {
             CoreChildProfileInteractor childProfileInteractor = new CoreChildProfileInteractor();
 
             List<CommonPersonObjectClient> children = pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
@@ -52,7 +52,20 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
                         memberObject.getBaseEntityId()));
             }
             return true;
-        } else if (i == R.id.action__pnc_remove_member) {
+
+        } else if (itemId == R.id.action_malaria_registration) {
+            startMalariaRegister();
+            return true;
+        } else if (itemId == R.id.action_malaria_followup_visit) {
+            startMalariaFollowUpVisit();
+            return true;
+        } else if (itemId == R.id.action_fp_initiation) {
+            startFpRegister();
+            return true;
+        }else if (itemId == R.id.action_fp_change) {
+            startFpChangeMethod();
+            return true;
+        } else if (itemId == R.id.action__pnc_remove_member) {
             removePncMember();
             return true;
         }
@@ -113,20 +126,20 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public void setFamilyStatus(AlertStatus status) {
         TextView tvFamilyStatus;
-        tvFamilyStatus = findViewById(org.smartregister.chw.opensrp_chw_anc.R.id.textview_family_has);
+        tvFamilyStatus = findViewById(R.id.textview_family_has);
 
         view_family_row.setVisibility(View.VISIBLE);
         rlFamilyServicesDue.setVisibility(View.VISIBLE);
 
         if (status == AlertStatus.complete) {
             hasDueServices = false;
-            tvFamilyStatus.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_nothing_due));
+            tvFamilyStatus.setText(getString(R.string.family_has_nothing_due));
         } else if (status == AlertStatus.normal) {
             hasDueServices = true;
-            tvFamilyStatus.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_services_due));
+            tvFamilyStatus.setText(R.string.family_has_services_due);
         } else if (status == AlertStatus.urgent) {
             hasDueServices = true;
-            tvFamilyStatus.setText(NCUtils.fromHtml(getString(org.smartregister.chw.opensrp_chw_anc.R.string.family_has_service_overdue)));
+            tvFamilyStatus.setText(NCUtils.fromHtml(getString(R.string.family_has_service_overdue)));
         }
     }
 
@@ -137,4 +150,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void removePncMember();
 
     protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
+
+    protected abstract void startMalariaRegister();
+
+    protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
+
+    protected abstract void startMalariaFollowUpVisit();
 }

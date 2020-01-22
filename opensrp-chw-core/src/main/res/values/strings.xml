@@ -126,6 +126,7 @@
     <string name="registration_info">Registration info</string>
     <string name="anc_registration">ANC Registration</string>
     <string name="malaria_registration">Malaria Confirmation</string>
+    <string name="fp_registration">Family planning registration</string>
     <string name="malaria_follow_up">Follow-up Visit</string>
     <string name="malaria_diagnosis">Malaria Diagnosis</string>
     <string name="sick_child_follow_up">Sick child follow-up</string>
@@ -283,7 +284,7 @@
 
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
-    <string name="anc_card">ANC CARD</string>
+    <string name="anc_card">ANC Card</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -301,6 +302,14 @@
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
     <string name="tt_done">TT{0} - done {1}</string>
     <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="st">st</string>
+    <string name="nd">nd</string>
+    <string name="rd">rd</string>
+    <string name="th">th</string>
+
 
     <string name="child_details">Child details %1$s</string>
 
@@ -345,8 +354,10 @@
     <string name="pnc_other">Other</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - done [{0}]</string>
-    <string name="pnc_opv0">OPV 0 - done [{0}]</string>
+    <string name="pnc_bcg">BCG - done {0}</string>
+    <string name="pnc_opv0">OPV 0 - done {0}</string>
+    <string name="pnc_bcg_not_done">BCG - {0}</string>
+    <string name="pnc_opv0_not_done">OPV 0 - {0}</string>
     <string name="pnc_birth">Birth</string>
     <string name="pnc_yes">Yes</string>
     <string name="pnc_no">No</string>
@@ -407,4 +418,25 @@
     <string name="standard_day_method"> Standard day method</string>
     <string name="permanent_blt"> Permanent (BTL)</string>
     <string name="permanent_vasectomy"> Permanent (Vasectomy)</string>
+    <string name="hf_malaria_follow_up">Malaria follow-up</string>
+    <string name="family_planning_initiation">FP initiation</string>
+    <string name="family_planning_change">FP method change</string>
+    <string name="pregnancy_confirmation">Pregnancy confirmation</string>
+    <string name="pnc_danger_sign_outcome">PNC danger signs outcome</string>
+    <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
+
+    <!-- Medical history -->
+    <string name="dose_number">Dose %s</string>
+
+    <!--Wcaro Upcoming Services -->
+    <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Immunizations (%s) \n%s </string>
+
+    <!-- dates -->
+    <string name="date_days">Days</string>
+    <string name="date_weeks">Weeks</string>
+    <string name="date_months">Months</string>
+
+    <string name="last_visit_x_days_ago">Last visit %1$s days ago</string>
+    <string name="sick_child_form">Sick child form</string>
 </resources>

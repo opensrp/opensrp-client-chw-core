@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
 
 import org.apache.commons.lang3.StringUtils;
@@ -74,7 +74,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
         //   Runnable runnable = () -> {
         if (saveRegistration(pair, jsonString, isEditMode)) {
-            callBack.onRegistrationSaved(isEditMode);
+            callBack.onRegistrationSaved(isEditMode, true, null);
         }
         //    appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode));
         // };

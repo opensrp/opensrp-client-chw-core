@@ -119,6 +119,9 @@ public class PNCDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "early_bf_1hr");
 
         List<String> res = readData(sql, dataMap);
-        return res.get(0);
+        if( res != null && res.size()> 0){
+            return res.get(0);
+        }
+        return null;
     }
 }

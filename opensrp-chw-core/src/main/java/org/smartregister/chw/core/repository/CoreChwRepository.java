@@ -55,7 +55,6 @@ public class CoreChwRepository extends Repository {
         VaccineRepository.createTable(database);
         VaccineNameRepository.createTable(database);
         VaccineTypeRepository.createTable(database);
-        WashCheckRepository.createTable(database);
         ConfigurableViewsRepository.createTable(database);
         LocationRepository.createTable(database);
 
@@ -76,7 +75,6 @@ public class CoreChwRepository extends Repository {
         PlanDefinitionSearchRepository.createTable(database);
         TaskRepository.createTable(database);
         //LocationRepository.createTable(database);    //TODO verify why this causes a break in code
-
 
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();

@@ -2,12 +2,13 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.fragment.BaseAncRegisterFragment;
@@ -200,28 +201,17 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(mainSelect);
 
         String query = "";
-        StringBuilder customFilter = new StringBuilder();
-        if (StringUtils.isNotBlank(filters)) {
-            customFilter.append(MessageFormat.format(" and ( {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.FIRST_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.LAST_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.MIDDLE_NAME, filters));
-            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ) ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, filters));
-        }
-
-        if (dueFilterActive) {
-            customFilter.append(getDueCondition());
-        }
-
+        String customFilter = getFilterString();
         try {
             if (isValidFilterForFts(commonRepository())) {
 
-                String myquery = QueryBuilder.getQuery(joinTables, mainCondition, tablename, customFilter.toString(), clientAdapter, Sortqueries);
+                String myquery = QueryBuilder.getQuery(joinTables, mainCondition, tablename, customFilter, clientAdapter, Sortqueries);
                 List<String> ids = commonRepository().findSearchIds(myquery);
                 query = sqb.toStringFts(ids, tablename, CommonRepository.ID_COLUMN,
                         Sortqueries);
                 query = sqb.Endquery(query);
             } else {
-                sqb.addCondition(customFilter.toString());
+                sqb.addCondition(customFilter);
                 query = sqb.orderbyCondition(Sortqueries);
                 query = sqb.Endquery(sqb.addlimitandOffset(query, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset()));
 
@@ -231,6 +221,21 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         }
 
         return query;
+    }
+
+    private String getFilterString() {
+        StringBuilder customFilter = new StringBuilder();
+        if (StringUtils.isNotBlank(filters)) {
+            customFilter.append(MessageFormat.format(" and ( {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.FIRST_NAME, filters));
+            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.LAST_NAME, filters));
+            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.MIDDLE_NAME, filters));
+            customFilter.append(MessageFormat.format(" or {0}.{1} like ''%{2}%'' ) ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, filters));
+        }
+
+        if (dueFilterActive)
+            customFilter.append(getDueCondition());
+
+        return customFilter.toString();
     }
 
     @Override
@@ -266,13 +271,8 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
                     CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
                     " where " + presenter().getMainCondition();
 
-            if (StringUtils.isNotBlank(filters)) {
-                query = query + " and ( " + filters + " ) ";
-            }
-
-            if (dueFilterActive) {
-                query = query + getDueCondition();
-            }
+            if (StringUtils.isNotBlank(filters))
+                query = query + getFilterString();
 
             cursor = commonRepository().rawCustomQueryForAdapter(query);
             cursor.moveToFirst();

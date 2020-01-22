@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Display;
@@ -165,7 +165,7 @@ public abstract class CoreFamilyProfileChangeDialog extends DialogFragment imple
         progressBar.setVisibility(View.INVISIBLE);
 
 
-        if (actionType.equals(CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER)) {
+        if (CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER.equals(actionType)) {
             tvTitle.setText(getString(R.string.select_caregiver));
             tvInfo.setText(getString(R.string.remove_caregiver_warning_message));
         } else {

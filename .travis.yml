@@ -19,7 +19,7 @@ android:
     # tools required
     - tools
     # The BuildTools version used by your project
-    - build-tools-28.0.0
+    - build-tools-28.0.3
     # The SDK version used to compile your projects
     - android-22
     - android-28
@@ -33,7 +33,7 @@ script:
   - chmod 755 gradlew
   - ls -la
   #Run jacocoTestReport -> Runs all unit tests & instrumentation tests
-  - travis_wait ./gradlew cleanBuildCache && ./gradlew :opensrp-chw-core:jacocoTestReport coveralls --stacktrace
+  - travis_wait ./gradlew :opensrp-chw-core:clean :opensrp-chw-core:jacocoTestReport coveralls --stacktrace
 
 notifications:
   slack:

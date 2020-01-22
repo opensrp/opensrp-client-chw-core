@@ -8,6 +8,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.family.contract.FamilyProfileContract;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
@@ -54,7 +55,7 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
     }
 
     @Override
-    public void onRegistrationSaved(boolean isEditMode) {
+    public void onRegistrationSaved(boolean b, boolean b1, FamilyEventClient familyEventClient) {
 //     TODO Implement
         Timber.d("onRegistrationSaved unimplemented");
     }

@@ -30,11 +30,6 @@ public class AncRegisterRepository extends BaseRepository {
     public static final String[] TABLE_COLUMNS = {FIRST_NAME, MIDDLE_NAME, LAST_NAME, PHONE_NUMBER};
     public static final String[] LAST_MENSTRUAL_PERIOD_COLUMNS = {LAST_MENSTRUAL_PERIOD};
 
-
-    public AncRegisterRepository(Repository repository) {
-        super(repository);
-    }
-
     public HashMap<String, String> getFamilyNameAndPhone(String baseEntityID) {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = null;

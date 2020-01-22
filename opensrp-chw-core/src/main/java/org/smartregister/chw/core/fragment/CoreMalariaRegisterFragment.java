@@ -2,9 +2,9 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -40,7 +40,7 @@ public abstract class CoreMalariaRegisterFragment extends BaseMalariaRegisterFra
 
     @Override
     public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        ChwMalariaRegisterProvider malariaRegisterProvider = new ChwMalariaRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns, commonRepository());
+        ChwMalariaRegisterProvider malariaRegisterProvider = new ChwMalariaRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, malariaRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);

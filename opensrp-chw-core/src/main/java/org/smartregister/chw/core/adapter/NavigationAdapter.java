@@ -3,8 +3,8 @@ package org.smartregister.chw.core.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,12 +67,12 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
 
 
         if (selectedView != null && selectedView.equals(model.getMenuTitle())) {
-            holder.tvCount.setTextColor(context.getResources().getColor(R.color.holo_blue));
-            holder.tvName.setTextColor(context.getResources().getColor(R.color.holo_blue));
+            holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.ivIcon.setImageResource(model.getResourceActiveID());
         } else {
-            holder.tvCount.setTextColor(Color.WHITE);
-            holder.tvName.setTextColor(Color.WHITE);
+            holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.ivIcon.setImageResource(model.getResourceID());
         }
     }
