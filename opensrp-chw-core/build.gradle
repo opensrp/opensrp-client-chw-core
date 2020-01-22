@@ -46,6 +46,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -66,8 +67,7 @@ android {
     }
 
     dexOptions {
-        incremental true
-        javaMaxHeapSize "2048M"
+        javaMaxHeapSize "4g"
     }
 
     // avoid errors with message 'Duplicate files copied in APK ...'
