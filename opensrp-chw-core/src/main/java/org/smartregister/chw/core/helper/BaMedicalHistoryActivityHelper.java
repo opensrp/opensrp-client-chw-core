@@ -28,7 +28,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
     private String VisitDateFormattedString;
 
     public void processViewData(List<Visit> visits, Context context) {
-        super.processViewData(visits, context);
+        // super.processViewData(visits, context);
         Map<Integer, String> home_visits = new LinkedHashMap<>();
         Map<String, String> hf_visits = new LinkedHashMap<>();
         int x = 0;
@@ -143,7 +143,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 if (entry.getKey().equalsIgnoreCase("pnc_visit_4")) {
                     tvTitle.setText(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_twenty_nine_to_forty_two), entry.getValue()));
                 }
-                linearLayoutHealthFacilityVisitDetails.addView(view, 0);
+                // linearLayoutHealthFacilityVisitDetails.addView(view, 0);
             }
 
 
@@ -152,7 +152,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void processFamilyPlanning(Map<String, String> family_plnning, Context context) {
         if (family_plnning != null && family_plnning.size() > 0) {
-            linearLayoutPncFamilyPlanning.setVisibility(View.VISIBLE);
+            // linearLayoutPncFamilyPlanning.setVisibility(View.VISIBLE);
             for (Map.Entry<String, String> entry : family_plnning.entrySet()
             ) {
                 View view = inflater.inflate(R.layout.pnc_wcaro_family_planning, null);
@@ -193,7 +193,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                     tvPncFamilyPlanningDate.setVisibility(View.VISIBLE);
                     tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), entry.getValue()));
                 }
-                linearLayoutPncFamilyPlanningDetails.addView(view, 0);
+                // linearLayoutPncFamilyPlanningDetails.addView(view, 0);
             }
         }
     }
@@ -215,7 +215,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 if(entry.getValue().get("baby_temp") != null)
                     tvbabyTemp.setVisibility(View.GONE);
                 tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
-                linearLayoutHealthFacilityVisitDetails.addView(view, 0);
+                // linearLayoutHealthFacilityVisitDetails.addView(view, 0);
             }
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 
@@ -19,7 +18,8 @@ import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.dao.PNCDao;
+import org.smartregister.chw.core.domain.MedicalHistory;
+import org.smartregister.chw.core.utils.MedicalHistoryViewBuilder;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -46,27 +46,20 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         return parentView;
     }
 
-    /*@Override
-
+    @Override
     public void processViewData(List<GroupedVisit> groupedVisits, Context context, MemberObject memberObject) {
         if (groupedVisits.size() > 0) {
-
-            linearLayoutMotherPncHFVisit.setVisibility(View.VISIBLE);
-            linearLayoutPncChildVisit.setVisibility(View.VISIBLE);
-
             for (GroupedVisit groupedVisit : groupedVisits) {
                 // Process mother's details
                 if (groupedVisit.getBaseEntityId().equals(memberObject.getBaseEntityId())) {
-                    customFontTextViewMotherTitle.setText(memberObject.getFullName());
-                    processMotherDetails(groupedVisit.getVisitList(), context);
+                    processMotherDetails(groupedVisit.getVisitList(), memberObject);
                 } else {
                     // Process child's details
-                    processChildDetails(groupedVisit.getVisitList(), context);
+                    processChildDetails(groupedVisit.getVisitList(), groupedVisit.getName());
                 }
             }
         }
     }
-*/
 
     @NotNull
     protected String getText(@Nullable List<VisitDetail> visitDetails) {
@@ -83,22 +76,14 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         return toCSV(vals);
     }
 
-    protected void processMotherDetails(List<Visit> visits, Context context) {
-        int days = 0;
-        int x = 0;
+    protected void processMotherDetails(List<Visit> visits, MemberObject memberObject) {
+        this.visits = visits;
+        // process the data
         Map<String, Map<String, String>> healthFacility_visit = new HashMap<>();
         Map<String, String> family_planning = new HashMap<>();
 
-        while (x < visits.size()) {
-            // the first object in this list is the days difference
-            if (x == 0) {
-                days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
-            }
-            x++;
-        }
-
-        for (Visit visit : visits) {
-            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
+        for (Visit v : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : v.getVisitDetails().entrySet()) {
                 String val = getText(entry.getValue());
 
                 switch (entry.getKey()) {
@@ -118,9 +103,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         if ("Yes".equalsIgnoreCase(val)) {
                             Map<String, String> map = new HashMap<>();
                             // add details
-                            map.put("pnc_hf_visit_date", getText(visit.getVisitDetails().get(date_key)));
-                            map.put("baby_weight", getText(visit.getVisitDetails().get("baby_weight")));
-                            map.put("baby_temp", getText(visit.getVisitDetails().get("baby_temp")));
+                            map.put("pnc_hf_visit_date", getText(v.getVisitDetails().get(date_key)));
+                            map.put("baby_weight", getText(v.getVisitDetails().get("baby_weight")));
+                            map.put("baby_temp", getText(v.getVisitDetails().get("baby_temp")));
                             healthFacility_visit.put(entry.getKey(), map);
                         }
                         break;
@@ -128,104 +113,82 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                     // family planing
                     case "fp_method":
                     case "fp_start_date":
-                        family_planning.put(getText(visit.getVisitDetails().get("fp_method")), getText(visit.getVisitDetails().get("fp_start_date")));
+                        family_planning.put(getText(v.getVisitDetails().get("fp_method")), getText(v.getVisitDetails().get("fp_start_date")));
                         break;
                 }
             }
         }
 
-        // processLastVisit(days, context);
-        // processHealthFacilityVisit(healthFacility_visit, context);
-        // processFamilyPlanning(family_planning, context);
+        processLastVisitDate();
+
+        View view = new MedicalHistoryViewBuilder(inflater, context)
+                .withChildLayout(childLayout)
+                .withSeparator(true)
+                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_mother_title), memberObject.getFullName()).toUpperCase())
+                .build();
+        parentView.addView(view);
+
+        processHealthFacilityVisit(healthFacility_visit, memberObject.getFullName());
+        processFamilyPlanning(family_planning);
     }
 
-    protected void processChildDetails(List<Visit> visits, Context context) {
-        String vaccineCard = context.getString(R.string.pnc_no);
-        String vaccineCardDate = "";
-        String earlyBreastFeeding = "";
-        Map<String, String> immunization = new HashMap<>();
-        Map<String, String> growth_data = new HashMap<>();
+    protected void processLastVisitDate() {
+        if (visits.size() > 0) {
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            MedicalHistory history = new MedicalHistory();
+            int days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
+            history.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
+            medicalHistories.add(history);
 
-        for (Visit visit : visits) {
-            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
-                String val = getText(entry.getValue());
-
-                switch (entry.getKey()) {
-                    // vaccine card
-                    case "vaccine_card":
-                        if ("No".equalsIgnoreCase(vaccineCard) && "Yes".equalsIgnoreCase(val)) {
-                            vaccineCard = context.getString(R.string.pnc_yes);
-                        }
-                        break;
-                    // immunization
-                    case "opv0":
-                    case "bcg":
-                        immunization.put(entry.getKey(), val);
-                        break;
-                    // growth and nutrition
-                    case "exclusive_breast_feeding":
-                        growth_data.put(entry.getKey(), val);
-                        break;
-                }
-            }
-
-            earlyBreastFeeding = PNCDao.earlyBreastFeeding(visit.getBaseEntityId(), visit.getVisitId());
-
-            if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("Yes")) {
-                earlyBreastFeeding = context.getString(R.string.pnc_yes);
-            } else if (earlyBreastFeeding != null && earlyBreastFeeding.equalsIgnoreCase("No")) {
-                earlyBreastFeeding = context.getString(R.string.pnc_no);
-            }
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .withTitle(context.getString(R.string.last_visit))
+                    .build();
+            parentView.addView(view);
         }
-
-        // processVaccineCard(vaccineCard, vaccineCardDate, context);
-        // processImmunization(immunization, context);
-        // processGrowthAndNutrition(growth_data, context, earlyBreastFeeding);
     }
 
-/*
-    protected void processLastVisit(int days, Context context) {
-        linearLayoutLastVisit.setVisibility(View.VISIBLE);
-        customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
-    }
-*/
-
-/*
-    protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacility_visit, Context context) {
-        if (healthFacility_visit != null && healthFacility_visit.size() > 0) {
-            linearLayoutPncHealthFacilityVisit.setVisibility(View.VISIBLE);
-            for (Map.Entry<String, Map<String, String>> entry : healthFacility_visit.entrySet()) {
-                View visitDetailsView = inflater.inflate(R.layout.medical_history_pnc_hf_visit_details, null);
-
-                TextView tvTitle = visitDetailsView.findViewById(R.id.pncHealthFacilityVisit);
-                TextView tvbabyWeight = visitDetailsView.findViewById(R.id.babyWeight);
-                TextView tvbabyTemp = visitDetailsView.findViewById(R.id.babyTemp);
-                tvTitle.setText(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
+    protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisit, String motherFullName) {
+        if (healthFacilityVisit != null && healthFacilityVisit.size() > 0) {
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            MedicalHistory medicalHistory;
+            for (Map.Entry<String, Map<String, String>> entry : healthFacilityVisit.entrySet()) {
+                medicalHistory = new MedicalHistory();
+                List<String> hfDetails = new ArrayList<>();
+                hfDetails.add(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
                 if (entry.getValue().get("baby_weight") != null) {
-                    tvbabyWeight.setVisibility(View.VISIBLE);
-                    tvbabyWeight.setText(context.getString(R.string.pnc_baby_weight, entry.getValue().get("baby_weight")));
+                    hfDetails.add(context.getString(R.string.pnc_baby_weight, entry.getValue().get("baby_weight")));
                 }
                 if (entry.getValue().get("baby_temp") != null) {
-                    tvbabyTemp.setVisibility(View.VISIBLE);
-                    tvbabyTemp.setText(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
+                    hfDetails.add(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
                 }
-                linearLayoutHealthFacilityVisitDetails.addView(visitDetailsView, 0);
+                medicalHistory.setText(hfDetails);
+                if (medicalHistories.size() == 0) {
+                    medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
+                }
+                medicalHistories.add(medicalHistory);
             }
-            viewHFVisitsRow.setVisibility(View.VISIBLE);
+
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
         }
     }
-*/
 
-/*
-    protected void processFamilyPlanning(Map<String, String> family_plnning, Context context) {
-        if (family_plnning != null && family_plnning.size() > 0) {
-            linearLayoutPncFamilyPlanning.setVisibility(View.VISIBLE);
-
-            for (Map.Entry<String, String> entry : family_plnning.entrySet()
-            ) {
-                View familyPlanningDetailsView = inflater.inflate(R.layout.medical_history_pnc_family_planning_details, null);
+    protected void processFamilyPlanning(Map<String, String> familyPlanning) {
+        if (familyPlanning != null && familyPlanning.size() > 0) {
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            MedicalHistory medicalHistory;
+            for (Map.Entry<String, String> entry : familyPlanning.entrySet()) {
+                medicalHistory = new MedicalHistory();
+                medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
+                List<String> fpDetails = new ArrayList<>();
                 if (entry.getKey() != null) {
-                    TextView tvPncFamilyPlanningMethod = familyPlanningDetailsView.findViewById(R.id.pncFamilyPlanningMethod);
                     String method = "";
                     switch (entry.getKey()) {
                         case "None":
@@ -253,89 +216,154 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                             method = context.getString(R.string.pnc_other);
                             break;
                     }
-                    tvPncFamilyPlanningMethod.setVisibility(View.VISIBLE);
-                    tvPncFamilyPlanningMethod.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_method), method));
-
+                    fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_method), method));
                 }
                 if (entry.getValue() != null) {
-                    TextView tvPncFamilyPlanningDate = familyPlanningDetailsView.findViewById(R.id.pncFamilyPlanningDate);
-                    tvPncFamilyPlanningDate.setVisibility(View.VISIBLE);
-                    tvPncFamilyPlanningDate.setText(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue()) ? entry.getValue() : "n/a"));
-
+                    fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue()) ? entry.getValue() : "n/a"));
                 }
-                linearLayoutPncFamilyPlanningDetails.addView(familyPlanningDetailsView, 0);
+                medicalHistory.setText(fpDetails);
+                medicalHistories.add(medicalHistory);
             }
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .build();
 
+            parentView.addView(view);
         }
     }
-*/
 
-/*
-    protected void processVaccineCard(String received, String vaccineCardDate, Context context) {
+
+    protected void processChildDetails(List<Visit> visits, String memberName) {
+        this.visits = visits;
+        String vaccineCard = context.getString(R.string.pnc_no);
+        String vaccineCardDate = "";
+        Map<String, String> immunization = new HashMap<>();
+        Map<String, String> growth_data = new HashMap<>();
+
+        for (Visit visit : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
+                String val = getText(entry.getValue());
+
+                switch (entry.getKey()) {
+                    // vaccine card
+                    case "vaccine_card":
+                        if ("No".equalsIgnoreCase(vaccineCard) && "Yes".equalsIgnoreCase(val)) {
+                            vaccineCard = context.getString(R.string.pnc_yes);
+                        }
+                        break;
+                    // immunization
+                    case "opv0":
+                    case "bcg":
+                        immunization.put(entry.getKey(), val);
+                        break;
+                    // growth and nutrition
+                    case "exclusive_breast_feeding":
+                        growth_data.put(entry.getKey(), val);
+                        break;
+                }
+            }
+        }
+
+        View view = new MedicalHistoryViewBuilder(inflater, context)
+                .withChildLayout(childLayout)
+                .withSeparator(true)
+                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_title), memberName).toUpperCase())
+                .build();
+        parentView.addView(view);
+
+        processVaccineCard(vaccineCard, vaccineCardDate);
+        processImmunization(immunization);
+        processGrowthAndNutrition(growth_data);
+    }
+
+    protected void processVaccineCard(String received, String vaccineCardDate) {
         if (received != null) {
-            linearLayoutPncChildVaccineCard.setVisibility(View.VISIBLE); // TODO :: Move this to where list of vaccinations are defined
-            View vaccineDetailsView = inflater.inflate(R.layout.medical_history_pnc_child_vaccine_card_details, null);
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
 
-            TextView tvPncVaccineCardReceived = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardReceived);
-            tvPncVaccineCardReceived.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_received), received));
-            TextView tvPncVaccineCardDate = vaccineDetailsView.findViewById(R.id.pncChildVaccineCardDate);
-            tvPncVaccineCardDate.setText(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_date), StringUtils.isNotBlank(vaccineCardDate) ? vaccineCardDate : "n/a"));
-            linearLayoutPncChildVaccineDetails.addView(vaccineDetailsView, 0);
-            viewVaccineCardRow.setVisibility(View.VISIBLE);
+            List<String> vaccinationDetails = new ArrayList<>();
+            vaccinationDetails.add(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_received), received));
+            vaccinationDetails.add(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_vaccine_card_date), StringUtils.isNotBlank(vaccineCardDate) ? vaccineCardDate : "n/a"));
+
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_vaccine_title));
+            medicalHistory.setText(vaccinationDetails);
+            medicalHistories.add(medicalHistory);
+
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
         }
     }
-*/
 
-/*
-    protected void processImmunization(Map<String, String> immunization, Context context) {
+    protected void processImmunization(Map<String, String> immunization) {
         if (immunization != null && immunization.size() > 0) {
-            linearLayoutPncImmunization.setVisibility(View.VISIBLE);
-            View immunizationDetailsView = inflater.inflate(R.layout.medical_history_pnc_immunization_details, null);
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
 
+            List<String> immunizationDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : immunization.entrySet()) {
                 if (entry.getValue() != null) {
                     String entryValue = entry.getValue().equalsIgnoreCase("Vaccine not given") ? context.getString(R.string.pnc_vaccine_not_given) : entry.getValue();
                     if (entry.getKey().equals("bcg")) {
-                        TextView tvBcg = immunizationDetailsView.findViewById(R.id.pncBcg);
-                        tvBcg.setVisibility(View.VISIBLE);
                         if (entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
-                            tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg_not_done), entryValue));
+                            immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_bcg_not_done), entryValue));
                         else
-                            tvBcg.setText(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
+                            immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_bcg), entryValue));
                     } else if (entry.getKey().equals("opv0")) {
-                        TextView tvOpv0 = immunizationDetailsView.findViewById(R.id.pncOpv0);
-                        tvOpv0.setVisibility(View.VISIBLE);
                         if (entryValue.equalsIgnoreCase(context.getString(R.string.pnc_vaccine_not_given)))
-                            tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0_not_done), entryValue));
+                            immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_opv0_not_done), entryValue));
                         else
-                            tvOpv0.setText(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
+                           immunizationDetails.add(MessageFormat.format(context.getString(R.string.pnc_opv0), entryValue));
                     }
                 }
-                linearLayoutPncImmunizationDetails.addView(immunizationDetailsView, 0);
             }
-            viewImmunizationRow.setVisibility(View.VISIBLE);
+
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_immunizations_title));
+            medicalHistory.setText(immunizationDetails);
+            medicalHistories.add(medicalHistory);
+
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
         }
     }
-*/
 
-/*
-    protected void processGrowthAndNutrition(Map<String, String> growth_data, Context context, String earlyBreastFeeding) {
+    protected void processGrowthAndNutrition(Map<String, String> growth_data) {
         if (growth_data != null && growth_data.size() > 0) {
-            linearLayoutPncExclusiveBreastfeeding.setVisibility(View.VISIBLE);
-            View viewExclusiveBreastfeedingDetails = inflater.inflate(R.layout.medical_history_pnc_child_exclusive_breastfeeding_details, null);
+            List<MedicalHistory> medicalHistories = new ArrayList<>();
+
+            List<String> nutritionDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : growth_data.entrySet()) {
-                TextView tvpncExcussiveBf = viewExclusiveBreastfeedingDetails.findViewById(R.id.pncChildExclusiveBreastfeeding);
-                tvpncExcussiveBf.setVisibility(View.VISIBLE);
                 if (entry.getValue().equalsIgnoreCase("YES")) {
-                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_no)));
+                    nutritionDetails.add(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_no)));
                 } else {
-                    tvpncExcussiveBf.setText(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_yes)));
+                    nutritionDetails.add(MessageFormat.format(context.getString(R.string.pnc_exclusive_bf_0_months), context.getString(R.string.pnc_yes)));
                 }
             }
-            linearLayoutPncExclusiveBreastfeedingDetails.addView(viewExclusiveBreastfeedingDetails, 0);
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_exclusive_breastfeeding_title));
+            medicalHistory.setText(nutritionDetails);
+
+            medicalHistories.add(medicalHistory);
+
+            View view = new MedicalHistoryViewBuilder(inflater, context)
+                    .withChildLayout(childLayout)
+                    .withHistory(medicalHistories)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
         }
     }
-*/
 
     /**
      * Extract value from VisitDetail

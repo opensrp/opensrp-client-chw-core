@@ -48,15 +48,17 @@ public abstract class CorePncMedicalHistoryActivityInteractor extends BasePncMed
             }
 
             // Group visits by entities
+            // Group mother visits
+            List<GroupedVisit> groupedVisits = new ArrayList<>();
+            groupedVisits.addAll(VisitUtils.getGroupedVisitsByEntity(memberID, "", visits));
 
             // Group child visits
             List<ChildModel> children = PNCDao.childrenForPncWoman(memberID);
-            List<GroupedVisit> groupedVisits = new ArrayList<>();
+
             for (ChildModel child : children) {
-                VisitUtils.getGroupedVisitsByEntity(child.getBaseEntityId(), child.getChildFullName(), groupedVisits, visits);
+                groupedVisits.addAll(VisitUtils.getGroupedVisitsByEntity(child.getBaseEntityId(), child.getChildFullName(), visits));
             }
-            // Group mother visits
-            VisitUtils.getGroupedVisitsByEntity(memberID, "", groupedVisits, visits);
+
 
             appExecutors.mainThread().execute(() -> callBack.onDataFetched(groupedVisits));
         };
