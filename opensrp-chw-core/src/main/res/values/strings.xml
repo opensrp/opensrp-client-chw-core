@@ -432,6 +432,7 @@
     <string name="pnc_medical_history_mother_title">{0} (MOTHER)</string>
     <string name="pnc_medical_history_child_title">{0} (BABY)</string>
     <string name="pnc_health_facility_visits_title">PNC Health Facility Visits</string>
+    <string name="pnc_home_visits_title">PNC Home Visits</string>
     <string name="pnc_medical_history_family_planning_title">Family Planning</string>
     <string name="pnc_medical_history_child_vaccine_title">Child vaccine card</string>
     <string name="pnc_medical_history_child_immunizations_title">Immunizations (at birth)</string>

@@ -117,6 +117,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         extractHomeVisits(visits, homeVisitMap);
 
         super.processLastVisitDate();
+
+        View view = new MedicalHistoryViewBuilder(inflater, context)
+                .withChildLayout(childLayout)
+                .withSeparator(true)
+                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_mother_title), memberObject.getFullName()).toUpperCase())
+                .build();
+        parentView.addView(view);
+
         processHFacilityVisit(healthFacilityVisitMap);
         processHomeVisits(homeVisitMap);
         processFamilyPlanning(visits);
@@ -143,14 +151,13 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 }
             }
             MedicalHistory medicalHistory = new MedicalHistory();
-            medicalHistory.setTitle(context.getString(R.string.pnc_home_visit_title));
+            medicalHistory.setTitle(context.getString(R.string.pnc_home_visits_title));
             medicalHistory.setText(homeVisitDetails);
-            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            medicalHistories = new ArrayList<>();
             medicalHistories.add(medicalHistory);
 
             View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withChildLayout(childLayout)
-                    .withHistory(medicalHistories)
+                    .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();
 
@@ -177,14 +184,13 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 }
             }
 
-            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            medicalHistories = new ArrayList<>();
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
 
             View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withChildLayout(childLayout)
-                    .withHistory(medicalHistories)
+                    .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();
 
@@ -196,7 +202,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         Map<String, String> familyPlanningMap = new HashMap<>();
         extractFamilyPlanningMethods(visits, familyPlanningMap);
 
-        if (familyPlanningMap != null && familyPlanningMap.size() > 0) {
+        if (familyPlanningMap.size() > 0) {
             List<String> fpDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : familyPlanningMap.entrySet()) {
                 if (entry.getKey() != null) {
@@ -234,15 +240,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 }
             }
             MedicalHistory medicalHistory = new MedicalHistory();
-            medicalHistory.setTitle(context.getString(R.string.pnc_family_planning_title));
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
             medicalHistory.setText(fpDetails);
-            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            medicalHistories = new ArrayList<>();
             medicalHistories.add(medicalHistory);
 
 
             View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withChildLayout(childLayout)
-                    .withHistory(medicalHistories)
+                    .withAdapter(getAdapter())
                     .build();
 
             parentView.addView(view);
@@ -258,21 +263,17 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                     hfVisitDetails.add(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
             }
 
-            List<MedicalHistory> medicalHistories = new ArrayList<>();
+            medicalHistories = new ArrayList<>();
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
 
             View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withChildLayout(childLayout)
-                    .withHistory(medicalHistories)
+                    .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();
 
             parentView.addView(view);
         }
-    }
-
-    protected void processGrowthAndNutrition(Map<String, String> growth_data) {
     }
 }

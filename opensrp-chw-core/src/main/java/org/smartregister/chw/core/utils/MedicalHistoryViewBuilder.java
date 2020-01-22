@@ -28,6 +28,7 @@ public class MedicalHistoryViewBuilder {
     private int childLayout = R.layout.medical_history_nested_sub_item;
     private LayoutInflater inflater;
     private Context context;
+    private MedicalHistoryAdapter adapter;
 
     public MedicalHistoryViewBuilder(LayoutInflater inflater, Context context) {
         this.inflater = inflater;
@@ -59,6 +60,11 @@ public class MedicalHistoryViewBuilder {
         return this;
     }
 
+    public MedicalHistoryViewBuilder withAdapter(MedicalHistoryAdapter medicalHistoryAdapter) {
+        this.adapter = medicalHistoryAdapter;
+        return this;
+    }
+
     public View build() {
         View view = inflater.inflate(rootLayout, null);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
@@ -69,9 +75,13 @@ public class MedicalHistoryViewBuilder {
             tvTitle.setAllCaps(true);
         }
 
+        if (adapter == null) {
+            adapter = new MedicalHistoryAdapter(histories, childLayout);
+        }
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new MedicalHistoryAdapter(histories, childLayout));
+        recyclerView.setAdapter(adapter);
 
         if (hasSeparator)
             recyclerView.addItemDecoration(new CustomDividerItemDecoration(ContextCompat.getDrawable(context, R.drawable.divider)));
