@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.MedicalHistoryAdapter;
 import org.smartregister.chw.core.domain.MedicalHistory;
@@ -31,9 +32,6 @@ public class MedicalHistoryViewBuilder {
     public MedicalHistoryViewBuilder(LayoutInflater inflater, Context context) {
         this.inflater = inflater;
         this.context = context;
-    }
-
-    public MedicalHistoryViewBuilder() {
     }
 
     public MedicalHistoryViewBuilder withRootLayout(int rootLayout) {
@@ -64,8 +62,12 @@ public class MedicalHistoryViewBuilder {
     public View build() {
         View view = inflater.inflate(rootLayout, null);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setText(title);
-        tvTitle.setAllCaps(true);
+        if (StringUtils.isBlank(title)) {
+            tvTitle.setVisibility(View.GONE);
+        } else {
+            tvTitle.setText(title);
+            tvTitle.setAllCaps(true);
+        }
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

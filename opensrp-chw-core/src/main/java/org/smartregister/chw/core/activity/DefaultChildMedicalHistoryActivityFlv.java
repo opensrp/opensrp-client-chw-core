@@ -98,7 +98,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             history.setText(context.getString(R.string.last_visit_x_days_ago, Integer.toString(days)));
             medicalHistories.add(history);
 
-            View view = new MedicalHistoryViewBuilder()
+            View view = new MedicalHistoryViewBuilder(inflater, context)
                     .withHistory(medicalHistories)
                     .withTitle(context.getString(R.string.last_visit))
                     .build();
@@ -127,7 +127,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 medicalHistories.add(history);
             }
 
-            View view = new MedicalHistoryViewBuilder()
+            View view = new MedicalHistoryViewBuilder(inflater, context)
                     .withTitle(context.getString(R.string.immunization))
                     .withHistory(medicalHistories)
                     .withSeparator(false)
@@ -162,7 +162,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         history.setText(String.format("%s %s", context.getString(R.string.vaccine_card_text), value));
         medicalHistories.add(history);
 
-        View view = new MedicalHistoryViewBuilder()
+        View view = new MedicalHistoryViewBuilder(inflater, context)
                 .withTitle(context.getString(R.string.vaccine_card_title))
                 .withHistory(medicalHistories)
                 .withSeparator(true)
@@ -213,7 +213,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             medicalHistory(medicalHistories, CoreConstants.EventType.MUAC, context.getString(R.string.muac_title), getMUACFormatter());
 
             if (medicalHistories.size() > 0) {
-                View view = new MedicalHistoryViewBuilder()
+                View view = new MedicalHistoryViewBuilder(inflater, context)
                         .withHistory(medicalHistories)
                         .withTitle(context.getString(R.string.growth_and_nutrition))
                         .build();
@@ -367,7 +367,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
 
                 if (medicalHistories.size() > 0) {
-                    View view = new MedicalHistoryViewBuilder()
+                    View view = new MedicalHistoryViewBuilder(inflater, context)
                             .withHistory(medicalHistories)
                             .withTitle(context.getString(R.string.ecd_title))
                             .withSeparator(false)
@@ -395,7 +395,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             medicalHistory(medicalHistories, CoreConstants.EventType.LLITN, null, llitn);
 
             if (medicalHistories.size() > 0) {
-                View view = new MedicalHistoryViewBuilder()
+                View view = new MedicalHistoryViewBuilder(inflater, context)
                         .withHistory(medicalHistories)
                         .withTitle(context.getString(R.string.llitn_title))
                         .build();
