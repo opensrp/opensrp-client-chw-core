@@ -11,4 +11,6 @@
     <color name="navigation_item_selected">#81D4FA</color>
     <color name="navigation_item_unselected">#FFFFFF</color>
 
+    <color name="medical_history_item_grey">#9f9f9f</color>
+
 </resources>
