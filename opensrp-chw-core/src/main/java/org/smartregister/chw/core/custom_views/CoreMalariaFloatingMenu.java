@@ -2,12 +2,13 @@ package org.smartregister.chw.core.custom_views;
 
 import android.app.Activity;
 import android.content.Context;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;

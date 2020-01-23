@@ -2,13 +2,14 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;

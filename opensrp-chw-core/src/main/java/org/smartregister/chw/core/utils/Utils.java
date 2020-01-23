@@ -16,14 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -31,7 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.internal.Preconditions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
@@ -668,6 +665,17 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         return null;
+    }
+
+    public static MemberObject referralToAncMember(org.smartregister.chw.referral.domain.MemberObject memberObject) {
+        try {
+            JSONObject referralJson = new JSONObject(org.smartregister.family.util.JsonFormUtils.gson.toJson(memberObject));
+            MemberObject memberObject1 = (MemberObject)convert(referralJson.toString(), MemberObject.class);
+            return memberObject1;
+        } catch (JSONException var3) {
+            Timber.e(var3);
+            return null;
+        }
     }
 
     public static String getFamilyDueFilter() {

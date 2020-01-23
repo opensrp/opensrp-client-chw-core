@@ -4,7 +4,6 @@ package org.smartregister.chw.core.fragment;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.fragment.app.DialogFragment;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -14,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.DialogFragment;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
