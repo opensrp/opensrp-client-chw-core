@@ -28,10 +28,6 @@ jacoco {
     toolVersion = "0.8.0"
 }
 
-//For publishing dependency to GitHub package
-def githubProperties = new Properties()
-//Read the github properties content
-githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
 allprojects {
 
     tasks.whenTaskAdded { task ->
@@ -41,34 +37,21 @@ allprojects {
     }
 
     repositories {
-        maven { url 'https://maven.google.com' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+
+        google()
+        jcenter()
         mavenLocal()
         mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'https://jitpack.io' }
         maven { url "http://acra.googlecode.com/svn/repository/releases" }
         maven { url "http://repo.maven.apache.org/maven2" }
         maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         maven { url 'https://maven.fabric.io/public' }
-        maven {
-            url "https://s3.amazonaws.com/repo.commonsware.com"
-        }
-        google()
-        jcenter()
+        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://dl.bintray.com/ona/rdt-capture" }
-        maven {
-            name = "GitHubPackages"
-            /**
-             * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */
-            url = uri("https://maven.pkg.github.com/ellykits/neat-form")
-            credentials {
-                /** get credentials from local.properties in root project folder file with
-                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
-        }
     }
 }
 
@@ -81,8 +64,8 @@ configure(allprojects) { project ->
             google()
             jcenter()
             mavenCentral()
-            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
             mavenLocal()
+            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         }
     }
 }
@@ -124,12 +107,12 @@ task jacocoTestReport(type: JacocoReport) {
     executionData = files()
 
     reports {
-        html{
+        html {
             html.enabled = true
             destination file("${buildDir}/reports/jacoco/jacocoRootReport/jacocoFullReport")
         }
 
-        xml{
+        xml {
             xml.enabled = true
             destination file("${buildDir}/reports/jacoco/jacocoRootReport/jacocoFullReport.xml")
         }
@@ -151,7 +134,7 @@ task jacocoTestReport(type: JacocoReport) {
             subproject.pluginManager.hasPlugin('java')
         }.each { subproject ->
             additionalSourceDirs files((Set<File>) subproject.sourceSets.main.allJava.srcDirs)
-            additionalClassDirs ((FileCollection) subproject.sourceSets.main.output)
+            additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
             if (subproject.pluginManager.hasPlugin('jacoco')) {
                 executionData subproject.tasks.jacocoTestReport.executionData
             }
