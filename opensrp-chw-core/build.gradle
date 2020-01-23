@@ -144,13 +144,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
     }
-<<<<<<< HEAD
-    
-    api('org.smartregister:opensrp-client-chw-anc:0.1.47-SNAPSHOT@aar') {
-=======
 
-    api('org.smartregister:opensrp-client-chw-anc:0.1.46-SNAPSHOT@aar') {
->>>>>>> e02851d41c382c90ca512e29f2c20eb2d62e67e1
+    api('org.smartregister:opensrp-client-chw-anc:0.1.47-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
