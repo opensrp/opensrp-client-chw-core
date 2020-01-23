@@ -137,7 +137,6 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
     private Triple<List<FamilyMember>, String, String> processFamily(String familyID) {
         Triple<List<FamilyMember>, String, String> res;
 
-
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyRegister.tableName);
 
         final CommonPersonObject personObject = commonRepository.findByBaseEntityId(familyID);
