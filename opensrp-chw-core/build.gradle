@@ -204,14 +204,14 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    testImplementation 'org.mockito:mockito-core:3.0.0'
+    testImplementation 'org.mockito:mockito-core:3.1.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation 'org.robolectric:shadows-multidex:4.0.1'
     testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
 
     // PowerMock
-    def powerMockVersion = '1.7.1'
+    def powerMockVersion = '2.0.4'
     testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
     testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
     testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"

@@ -58,7 +58,6 @@ public class CoreFamilyChangeContractInteractorTest implements Executor {
 
             @Override
             protected void setFlavour() {
-                this.flavor = flavor;
             }
         });
     }
