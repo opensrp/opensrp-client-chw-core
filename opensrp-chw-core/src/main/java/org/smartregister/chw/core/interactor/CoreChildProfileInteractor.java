@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
@@ -110,19 +111,19 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         });
     }
 
-    private String getTranslatedService(Context context, String _name){
+    private String getTranslatedService(Context context, String _name) {
         String name = _name.toLowerCase();
 
-        String num = name.replaceAll("\\D+","");
-        if(name.contains("breastfeeding")){
+        String num = name.replaceAll("\\D+", "");
+        if (name.contains("breastfeeding")) {
             return context.getString(R.string.exclusive_breastfeeding_months, num);
-        }else if(name.contains("deworming")){
+        } else if (name.contains("deworming")) {
             return context.getString(R.string.deworming_number_dose, num);
-        }else if(name.contains("vitamin")){
+        } else if (name.contains("vitamin")) {
             return context.getString(R.string.vitamin_a, num);
-        }else if(name.contains("mnp")){
+        } else if (name.contains("mnp")) {
             return context.getString(R.string.mnp_number_pack, num);
-        }else{
+        } else {
             String val = name.replace(" ", "_");
             return Utils.getStringResourceByName(val, context);
         }
@@ -385,6 +386,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     @Override
     public void setChildBaseEntityId(String childBaseEntityId) {
         this.childBaseEntityId = childBaseEntityId;
+    }
+
+    @Override
+    public void processJson(String eventType, String tableName, String jsonString, CoreChildProfileContract.Presenter presenter) {
+        // save the event in event table
+        try {
+            final Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(org.smartregister.family.util.Utils.getAllSharedPreferences(), jsonString, tableName);
+            NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
+            presenter.onJsonProcessed(eventType, jsonString);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     public void processPopulatableFields(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray) throws JSONException {

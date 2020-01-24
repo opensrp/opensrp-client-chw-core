@@ -2,6 +2,7 @@ package org.smartregister.chw.core.presenter;
 
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.json.JSONObject;
@@ -219,6 +220,22 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     @Override
     public void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
         interactor.createSickChildEvent(allSharedPreferences, jsonString);
+    }
+
+    @Override
+    public void processJson(String eventType, @Nullable String tableName, String jsonString) {
+        if (getView() != null)
+            getView().setProgressBarState(true);
+
+        interactor.processJson(eventType, (tableName == null) ? "" : tableName, jsonString, this);
+    }
+
+    @Override
+    public void onJsonProcessed(String eventType, String event) {
+        if (getView() != null) {
+            getView().setProgressBarState(false);
+            getView().onJsonProcessed(eventType, event);
+        }
     }
 
     public void setView(WeakReference<CoreChildProfileContract.View> view) {

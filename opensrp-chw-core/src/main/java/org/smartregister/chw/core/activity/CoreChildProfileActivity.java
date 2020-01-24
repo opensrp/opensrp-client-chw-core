@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -151,11 +152,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.textview_visit_not) {
-            showProgressBar();
+            setProgressBarState(true);
             presenter().updateVisitNotDone(System.currentTimeMillis());
             tvEdit.setVisibility(View.GONE);
         } else if (i == R.id.textview_undo) {
-            showProgressBar();
+            setProgressBarState(true);
             presenter().updateVisitNotDone(0);
         }
     }
@@ -243,10 +244,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             appBarTitleIsShown = false;
         }
 
-    }
-
-    private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void setUpToolbar() {
@@ -507,6 +504,16 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         //// TODO: 06/08/19
     }
 
+    @Override
+    public void setProgressBarState(@NotNull Boolean state) {
+        progressBar.setVisibility(state ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onJsonProcessed(String eventType, String event) {
+
+    }
+
     protected void updateTopBar(String gender) {
         if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
             imageViewProfile.setBorderColor(getResources().getColor(R.color.light_blue));
@@ -604,11 +611,14 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
                 try {
                     String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
                     JSONObject form = new JSONObject(jsonString);
-                    if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.UPDATE_CHILD_REGISTRATION)) {
+                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
+                    if (encounterType.equals(CoreConstants.EventType.UPDATE_CHILD_REGISTRATION)) {
                         presenter().updateChildProfile(jsonString);
                     } else if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.CHILD_REFERRAL)) {
                         presenter().createSickChildEvent(Utils.getAllSharedPreferences(), jsonString);
                         displayToast(R.string.referral_submitted);
+                    } else {
+                        presenter().processJson(encounterType, "", jsonString);
                     }
                 } catch (Exception e) {
                     Timber.e(e, "CoreChildProfileActivity --> onActivityResult");

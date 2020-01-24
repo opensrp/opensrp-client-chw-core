@@ -3,6 +3,8 @@ package org.smartregister.chw.core.contract;
 import android.content.Context;
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreChildService;
@@ -85,6 +87,10 @@ public interface CoreChildProfileContract {
         void updateAfterBackgroundProcessed();
 
         void setClientTasks(Set<Task> taskList);
+
+        void setProgressBarState(@NotNull Boolean state);
+
+        void onJsonProcessed(String eventType, String event);
     }
 
     interface Presenter extends BaseProfileContract.Presenter {
@@ -111,6 +117,9 @@ public interface CoreChildProfileContract {
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
+        void processJson(String eventType, @Nullable String tableName, String jsonString);
+
+        void onJsonProcessed(String eventType, String event);
     }
 
     interface Interactor {
@@ -139,6 +148,8 @@ public interface CoreChildProfileContract {
         String getChildBaseEntityId();
 
         void setChildBaseEntityId(String childBaseEntityId);
+
+        void processJson(String eventType, String tableName, String jsonString, Presenter presenter);
     }
 
     interface InteractorCallBack {
