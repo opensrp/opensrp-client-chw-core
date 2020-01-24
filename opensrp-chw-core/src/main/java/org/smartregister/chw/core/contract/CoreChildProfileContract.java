@@ -3,9 +3,12 @@ package org.smartregister.chw.core.contract;
 import android.content.Context;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.clientandeventmodel.Client;
@@ -91,6 +94,10 @@ public interface CoreChildProfileContract {
         void setProgressBarState(@NotNull Boolean state);
 
         void onJsonProcessed(String eventType, String event);
+
+        void fetchProfileTasks();
+
+        void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
     }
 
     interface Presenter extends BaseProfileContract.Presenter {
@@ -116,6 +123,10 @@ public interface CoreChildProfileContract {
         void processBackGroundEvent();
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
+
+        void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID);
+
+        void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
 
         void processJson(String eventType, @Nullable String tableName, String jsonString);
 
@@ -149,7 +160,9 @@ public interface CoreChildProfileContract {
 
         void setChildBaseEntityId(String childBaseEntityId);
 
-        void processJson(String eventType, String tableName, String jsonString, Presenter presenter);
+        void processJson(String eventType, String tableName, String jsonString, @NonNull Presenter presenter);
+
+        void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, @Nullable Presenter presenter);
     }
 
     interface InteractorCallBack {
@@ -188,14 +201,9 @@ public interface CoreChildProfileContract {
         void setClientTasks(Set<Task> taskList);
     }
 
-    interface InteractorCallBack2 {
-
-    }
-
     interface Model {
 
         JSONObject getFormAsJson(String formName, String entityId, String currentLocationId, String familyID) throws Exception;
-
     }
 
 }

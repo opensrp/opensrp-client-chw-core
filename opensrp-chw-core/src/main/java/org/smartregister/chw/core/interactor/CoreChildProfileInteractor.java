@@ -7,15 +7,20 @@ import android.util.Pair;
 import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.AncLibrary;
+import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.ChwServiceSchedule;
@@ -50,9 +55,11 @@ import org.smartregister.util.FormUtils;
 import org.smartregister.util.ImageUtils;
 import org.smartregister.view.LocationPickerView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,7 +68,7 @@ import timber.log.Timber;
 
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
-    private AppExecutors appExecutors;
+    protected AppExecutors appExecutors;
     private CommonPersonObjectClient pClient;
     private Map<String, Date> vaccineList = new LinkedHashMap<>();
     private String childBaseEntityId;
@@ -398,6 +405,29 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    @Override
+    public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, CoreChildProfileContract.@Nullable Presenter presenter) {
+        Runnable runnable = () -> {
+            Visit visit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, CoreConstants.EventType.SICK_CHILD);
+
+            String taskType = CoreConstants.EventType.SICK_CHILD;
+            ProfileTask task = null;
+            if(visit != null){
+                task = new ProfileTask();
+                task.setResourceID(R.drawable.rowicon_sickchild);
+                task.setTitle(context.getString(R.string.sick_visit_on, new SimpleDateFormat("dd MMM", Locale.ENGLISH).format(visit.getDate())));
+                task.setTaskDate(visit.getDate());
+            }
+
+            if (presenter != null) {
+                ProfileTask finalTask = task;
+                appExecutors.mainThread().execute(() -> presenter.onProfileTaskFetched(taskType, finalTask));
+            }
+        };
+
+        appExecutors.diskIO().execute(runnable);
     }
 
     public void processPopulatableFields(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray) throws JSONException {

@@ -1,7 +1,12 @@
 package org.smartregister.chw.core.presenter;
 
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -9,6 +14,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -220,6 +226,18 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     @Override
     public void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
         interactor.createSickChildEvent(allSharedPreferences, jsonString);
+    }
+
+    @Override
+    public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID) {
+        interactor.fetchProfileTask(context, baseEntityID, this);
+    }
+
+    @Override
+    public void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask) {
+        if (getView() == null) return;
+
+        getView().onProfileTaskFetched(taskType, profileTask);
     }
 
     @Override

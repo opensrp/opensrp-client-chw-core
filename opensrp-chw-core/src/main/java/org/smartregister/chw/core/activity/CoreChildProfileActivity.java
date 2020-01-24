@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -28,12 +29,14 @@ import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 import org.smartregister.chw.core.model.CoreChildProfileModel;
 import org.smartregister.chw.core.presenter.CoreChildProfilePresenter;
@@ -91,11 +94,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private boolean appBarTitleIsShown = true;
     private int appBarLayoutScrollRange = -1;
     private TextView textViewTitle, textViewChildName, textViewGender, textViewAddress, textViewId, textViewRecord, textViewVisitNot, tvEdit;
-    private RelativeLayout layoutNotRecordView, layoutLastVisitRow, layoutMostDueOverdue;
+    private RelativeLayout layoutNotRecordView, layoutLastVisitRow, layoutMostDueOverdue, layoutSickVisit;
     private RelativeLayout layoutRecordButtonDone;
     private LinearLayout layoutRecordView;
-    private View viewLastVisitRow, viewMostDueRow, viewFamilyRow;
-    private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas;
+    private View viewLastVisitRow, viewMostDueRow, viewFamilyRow, textViewSickChildArrow;
+    private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas, textViewSickChild;
     private ImageView imageViewCross;
     protected ImageView imageViewCrossChild;
     private ProgressBar progressBar;
@@ -216,6 +219,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutMostDueOverdue.setOnClickListener(this);
         layoutFamilyHasRow.setOnClickListener(this);
         layoutRecordButtonDone.setOnClickListener(this);
+
+        layoutSickVisit = findViewById(R.id.sick_visit_row);
+        textViewSickChild = findViewById(R.id.textview_sick_visit_has);
+        textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
+        fetchProfileTasks();
     }
 
     @Override
@@ -511,7 +519,29 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     @Override
     public void onJsonProcessed(String eventType, String event) {
+        Timber.v("Refresh this ui or something after saving");
+    }
 
+    @Override
+    public void fetchProfileTasks() {
+        setProgressBarState(true);
+        presenter().fetchProfileTask(getContext(), childBaseEntityId);
+    }
+
+    @Override
+    public void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask) {
+        if (profileTask != null) {
+            layoutSickVisit.setVisibility(View.VISIBLE);
+            layoutSickVisit = findViewById(R.id.sick_visit_row);
+            textViewSickChild.setText(profileTask.getTitle());
+            textViewSickChildArrow.setOnClickListener(getSickListener());
+
+        }
+        setProgressBarState(false);
+    }
+
+    protected View.OnClickListener getSickListener() {
+        return null;
     }
 
     protected void updateTopBar(String gender) {
