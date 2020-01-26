@@ -8,7 +8,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.smartregister.chw.core.contract.ScheduleTask;
 import org.smartregister.chw.core.domain.BaseScheduleTask;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.Repository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -198,6 +197,15 @@ public class ScheduleRepository extends BaseRepository {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             getWritableDatabase().delete(TABLE_NAME, SCHEDULE_NAME + "= ? and " + CREATED_AT + "<= ?", new String[]{name, sdf.format(last_edit_date)});
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    public void deleteSchedulesNotCreatedToday(String name, String groupName) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            getWritableDatabase().delete(TABLE_NAME, SCHEDULE_NAME + " = ? and " + SCHEDULE_GROUP_NAME + " = ? and " + CREATED_AT + " <> ? ", new String[]{name, groupName, sdf.format(new Date())});
         } catch (Exception e) {
             Timber.e(e);
         }
