@@ -21,7 +21,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.MedicalHistoryAdapter;
 import org.smartregister.chw.core.adapter.PncMedicalHistoryAdapter;
 import org.smartregister.chw.core.domain.MedicalHistory;
-import org.smartregister.chw.core.utils.MedicalHistoryViewBuilder;
+import org.smartregister.chw.core.utils.PncMedicalHistoryViewBuilder;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -37,6 +37,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected LinearLayout parentView;
     @LayoutRes
     protected int childLayout = R.layout.pnc_medical_history_nested_sub_item;
+    @LayoutRes
+    protected int rootLayout = R.layout.pnc_medical_history_nested;
     protected List<MedicalHistory> medicalHistories = null;
 
     @Override
@@ -117,8 +119,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
         processLastVisitDate();
 
-        View view = new MedicalHistoryViewBuilder(inflater, context)
+        View view = new PncMedicalHistoryViewBuilder(inflater, context)
                 .withChildLayout(childLayout)
+                .withRootLayout(rootLayout)
                 .withSeparator(true)
                 .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_mother_title), memberObject.getFullName()).toUpperCase())
                 .build();
@@ -126,6 +129,16 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
         processHealthFacilityVisit(healthFacilityVisitMap);
         processFamilyPlanning(visits);
+
+        if (medicalHistories != null) {
+            view = new PncMedicalHistoryViewBuilder(inflater, context)
+                    .withAdapter(getAdapter())
+                    .withRootLayout(rootLayout)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
+        }
     }
 
     protected void processLastVisitDate() {
@@ -136,8 +149,10 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             history.setTitle(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
             medicalHistories.add(history);
 
-            View view = new MedicalHistoryViewBuilder(inflater, context)
+            View view = new PncMedicalHistoryViewBuilder(inflater, context)
                     .withAdapter(getAdapter())
+                    .withRootLayout(rootLayout)
+                    .withSeparator(false)
                     .withTitle(context.getString(R.string.last_visit))
                     .build();
             parentView.addView(view);
@@ -164,13 +179,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 }
                 medicalHistories.add(medicalHistory);
             }
-
-            View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
         }
     }
 
@@ -178,8 +186,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         Map<String, String> familyPlanningMap = new HashMap<>();
         extractFamilyPlanningMethods(visits, familyPlanningMap);
 
+        List<String> fpDetails = null;
         if (familyPlanningMap.size() > 0) {
-            List<String> fpDetails = new ArrayList<>();
+            fpDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : familyPlanningMap.entrySet()) {
                 if (entry.getKey() != null) {
                     String method = "";
@@ -214,20 +223,17 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (entry.getValue() != null) {
                     fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue()) ? entry.getValue() : "n/a"));
                 }
-
             }
-            medicalHistories = new ArrayList<>();
-            MedicalHistory medicalHistory = new MedicalHistory();
-            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
-            medicalHistory.setText(fpDetails);
-            medicalHistories.add(medicalHistory);
-
-            View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .build();
-
-            parentView.addView(view);
         }
+
+        MedicalHistory medicalHistory = new MedicalHistory();
+        medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
+        medicalHistory.setText(fpDetails);
+
+        if (medicalHistories == null) {
+            medicalHistories = new ArrayList<>();
+        }
+        medicalHistories.add(medicalHistory);
     }
 
 
@@ -262,7 +268,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
         }
 
-        View view = new MedicalHistoryViewBuilder(inflater, context)
+        View view = new PncMedicalHistoryViewBuilder(inflater, context)
                 .withChildLayout(childLayout)
                 .withSeparator(true)
                 .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_title), memberName).toUpperCase())
@@ -272,6 +278,16 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         processVaccineCard(vaccineCard, vaccineCardDate);
         processImmunization(immunization);
         processGrowthAndNutrition(growth_data);
+
+        if (medicalHistories != null) {
+            view = new PncMedicalHistoryViewBuilder(inflater, context)
+                    .withAdapter(getAdapter())
+                    .withRootLayout(rootLayout)
+                    .withSeparator(true)
+                    .build();
+
+            parentView.addView(view);
+        }
     }
 
     protected void processVaccineCard(String received, String vaccineCardDate) {
@@ -286,19 +302,11 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_vaccine_title));
             medicalHistory.setText(vaccinationDetails);
             medicalHistories.add(medicalHistory);
-
-            View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
         }
     }
 
     protected void processImmunization(Map<String, String> immunization) {
         if (immunization != null && immunization.size() > 0) {
-            medicalHistories = new ArrayList<>();
 
             List<String> immunizationDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : immunization.entrySet()) {
@@ -318,23 +326,19 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 }
             }
 
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
+
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_immunizations_title));
             medicalHistory.setText(immunizationDetails);
             medicalHistories.add(medicalHistory);
-
-            View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
         }
     }
 
     protected void processGrowthAndNutrition(Map<String, String> growth_data) {
         if (growth_data != null && growth_data.size() > 0) {
-            medicalHistories = new ArrayList<>();
 
             List<String> nutritionDetails = new ArrayList<>();
             for (Map.Entry<String, String> entry : growth_data.entrySet()) {
@@ -348,14 +352,11 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_child_exclusive_breastfeeding_title));
             medicalHistory.setText(nutritionDetails);
 
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
+
             medicalHistories.add(medicalHistory);
-
-            View view = new MedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
         }
     }
 

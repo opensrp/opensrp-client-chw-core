@@ -154,7 +154,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-pnc:0.0.25-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pnc:0.0.26-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -185,6 +185,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
 
     api 'com.google.guava:guava:20.0'

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="20dp"
+        android:paddingLeft="10dp"
         android:singleLine="false"
         android:textColor="@color/medical_history_item_grey"
         android:textSize="@dimen/px_15_to_sp" />

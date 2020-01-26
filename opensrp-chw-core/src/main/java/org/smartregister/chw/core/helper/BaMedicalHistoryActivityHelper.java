@@ -2,7 +2,6 @@ package org.smartregister.chw.core.helper;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 
@@ -15,7 +14,7 @@ import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.DefaultPncMedicalHistoryActivityFlv;
 import org.smartregister.chw.core.domain.MedicalHistory;
-import org.smartregister.chw.core.utils.MedicalHistoryViewBuilder;
+import org.smartregister.chw.core.utils.PncMedicalHistoryViewBuilder;
 import org.smartregister.dao.AbstractDao;
 
 import java.text.DateFormat;
@@ -118,7 +117,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
         super.processLastVisitDate();
 
-        View view = new MedicalHistoryViewBuilder(inflater, context)
+        View view = new PncMedicalHistoryViewBuilder(inflater, context)
                 .withChildLayout(childLayout)
                 .withSeparator(true)
                 .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_mother_title), memberObject.getFullName()).toUpperCase())
@@ -153,10 +152,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_home_visits_title));
             medicalHistory.setText(homeVisitDetails);
-            medicalHistories = new ArrayList<>();
+
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
+
             medicalHistories.add(medicalHistory);
 
-            View view = new MedicalHistoryViewBuilder(inflater, context)
+            View view = new PncMedicalHistoryViewBuilder(inflater, context)
                     .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();
@@ -189,7 +192,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
 
-            View view = new MedicalHistoryViewBuilder(inflater, context)
+            View view = new PncMedicalHistoryViewBuilder(inflater, context)
                     .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();
@@ -242,11 +245,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
             medicalHistory.setText(fpDetails);
-            medicalHistories = new ArrayList<>();
+
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
             medicalHistories.add(medicalHistory);
 
 
-            View view = new MedicalHistoryViewBuilder(inflater, context)
+            View view = new PncMedicalHistoryViewBuilder(inflater, context)
                     .withAdapter(getAdapter())
                     .build();
 
@@ -263,12 +269,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                     hfVisitDetails.add(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
             }
 
-            medicalHistories = new ArrayList<>();
+           if (medicalHistories == null) {
+               medicalHistories = new ArrayList<>();
+           }
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
 
-            View view = new MedicalHistoryViewBuilder(inflater, context)
+            View view = new PncMedicalHistoryViewBuilder(inflater, context)
                     .withAdapter(getAdapter())
                     .withSeparator(true)
                     .build();

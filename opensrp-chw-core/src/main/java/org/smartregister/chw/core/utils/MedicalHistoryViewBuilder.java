@@ -20,15 +20,15 @@ import java.util.List;
 
 public class MedicalHistoryViewBuilder {
     @LayoutRes
-    private int rootLayout = R.layout.medical_history_nested;
-    private String title = null;
-    private List<MedicalHistory> histories = new ArrayList<>();
-    private boolean hasSeparator = true;
+    protected int rootLayout = R.layout.medical_history_nested;
+    protected String title = null;
+    protected List<MedicalHistory> histories = new ArrayList<>();
+    protected boolean hasSeparator = true;
     @LayoutRes
-    private int childLayout = R.layout.medical_history_nested_sub_item;
-    private LayoutInflater inflater;
-    private Context context;
-    private MedicalHistoryAdapter adapter;
+    protected int childLayout = R.layout.medical_history_nested_sub_item;
+    protected LayoutInflater inflater;
+    protected Context context;
+    protected MedicalHistoryAdapter adapter;
 
     public MedicalHistoryViewBuilder(LayoutInflater inflater, Context context) {
         this.inflater = inflater;
