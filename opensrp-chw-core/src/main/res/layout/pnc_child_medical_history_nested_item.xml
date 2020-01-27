@@ -12,7 +12,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
-        android:paddingBottom="5dp"
+        android:paddingBottom="6dp"
         android:textColor="@color/medical_text_inner"
         android:textSize="@dimen/px_15_to_sp" />
 

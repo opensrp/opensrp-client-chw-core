@@ -26,6 +26,7 @@ import org.smartregister.chw.core.utils.PncMedicalHistoryViewBuilder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -162,10 +163,12 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisit) {
         if (healthFacilityVisit != null && healthFacilityVisit.size() > 0) {
             medicalHistories = new ArrayList<>();
-            MedicalHistory medicalHistory;
-            for (Map.Entry<String, Map<String, String>> entry : healthFacilityVisit.entrySet()) {
-                medicalHistory = new MedicalHistory();
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
+            Iterator<Map.Entry<String, Map<String, String>>> mapIterator = healthFacilityVisit.entrySet().iterator();
+            while (mapIterator.hasNext()) {
                 List<String> hfDetails = new ArrayList<>();
+                Map.Entry<String, Map<String, String>> entry = mapIterator.next();
                 hfDetails.add(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
                 if (entry.getValue().get("baby_weight") != null) {
                     hfDetails.add(context.getString(R.string.pnc_baby_weight, entry.getValue().get("baby_weight")));
@@ -173,12 +176,13 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (entry.getValue().get("baby_temp") != null) {
                     hfDetails.add(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
                 }
-                medicalHistory.setText(hfDetails);
-                if (medicalHistories.size() == 0) {
-                    medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
+
+                if (mapIterator.hasNext()) {
+                    hfDetails.add("");
                 }
-                medicalHistories.add(medicalHistory);
+                medicalHistory.setText(hfDetails);
             }
+            medicalHistories.add(medicalHistory);
         }
     }
 

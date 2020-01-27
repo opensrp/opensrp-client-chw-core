@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
     android:gravity="center_vertical"
     android:paddingBottom="10dp"
     android:orientation="horizontal">
 
     <org.smartregister.view.customcontrols.CustomFontTextView
         android:id="@+id/tvContent"
-        style="@style/CustomFontTextViewStyle.ClientList.Light"
+        style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
