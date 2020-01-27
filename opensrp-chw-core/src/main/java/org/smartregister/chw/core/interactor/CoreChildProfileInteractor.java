@@ -396,34 +396,39 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     }
 
     @Override
-    public void processJson(String eventType, String tableName, String jsonString, CoreChildProfileContract.Presenter presenter) {
+    public void processJson(@NotNull Context context, String eventType, String tableName, String jsonString, CoreChildProfileContract.Presenter presenter) {
         // save the event in event table
         try {
             final Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(org.smartregister.family.util.Utils.getAllSharedPreferences(), jsonString, tableName);
             NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
-            presenter.onJsonProcessed(eventType, jsonString);
+            presenter.onJsonProcessed(eventType, CoreConstants.EventType.SICK_CHILD, getSickChildVisit(context, baseEvent.getBaseEntityId()));
         } catch (Exception e) {
             Timber.e(e);
         }
     }
 
+    private ProfileTask getSickChildVisit(@NotNull Context context, @NotNull String baseEntityID) {
+        Visit visit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, CoreConstants.EventType.SICK_CHILD);
+        ProfileTask task = null;
+        if (visit != null) {
+            task = new ProfileTask();
+            task.setResourceID(R.drawable.rowicon_sickchild);
+            task.setTitle(context.getString(R.string.sick_visit_on, new SimpleDateFormat("dd MMM", Locale.ENGLISH).format(visit.getDate())));
+            task.setTaskDate(visit.getDate());
+        }
+
+        return task;
+    }
+
     @Override
     public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, CoreChildProfileContract.@Nullable Presenter presenter) {
         Runnable runnable = () -> {
-            Visit visit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, CoreConstants.EventType.SICK_CHILD);
 
             String taskType = CoreConstants.EventType.SICK_CHILD;
-            ProfileTask task = null;
-            if(visit != null){
-                task = new ProfileTask();
-                task.setResourceID(R.drawable.rowicon_sickchild);
-                task.setTitle(context.getString(R.string.sick_visit_on, new SimpleDateFormat("dd MMM", Locale.ENGLISH).format(visit.getDate())));
-                task.setTaskDate(visit.getDate());
-            }
+            ProfileTask task = getSickChildVisit(context, baseEntityID);
 
             if (presenter != null) {
-                ProfileTask finalTask = task;
-                appExecutors.mainThread().execute(() -> presenter.onProfileTaskFetched(taskType, finalTask));
+                appExecutors.mainThread().execute(() -> presenter.onProfileTaskFetched(taskType, task));
             }
         };
 

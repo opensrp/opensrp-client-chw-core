@@ -136,7 +136,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     public void updateVisitNotDone() {
         hideProgressBar();
         getView().openVisitMonthView();
-
     }
 
     @Override
@@ -172,17 +171,15 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
     @Override
     public CoreChildProfileContract.View getView() {
-        if (view != null) {
+        if (view != null)
             return view.get();
-        } else {
-            return null;
-        }
+
+        return null;
     }
 
     @Override
     public void fetchProfileData() {
         interactor.refreshProfileView(childBaseEntityId, false, this);
-
     }
 
     @Override
@@ -220,7 +217,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     @Override
     public void processBackGroundEvent() {
         interactor.processBackGroundEvent(this);
-
     }
 
     @Override
@@ -241,19 +237,19 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     }
 
     @Override
-    public void processJson(String eventType, @Nullable String tableName, String jsonString) {
+    public void processJson(@NotNull Context context, String eventType, @Nullable String tableName, String jsonString) {
         if (getView() != null)
             getView().setProgressBarState(true);
 
-        interactor.processJson(eventType, (tableName == null) ? "" : tableName, jsonString, this);
+        interactor.processJson(context, eventType, (tableName == null) ? "" : tableName, jsonString, this);
     }
 
     @Override
-    public void onJsonProcessed(String eventType, String event) {
-        if (getView() != null) {
-            getView().setProgressBarState(false);
-            getView().onJsonProcessed(eventType, event);
-        }
+    public void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask) {
+        if (getView() == null) return;
+
+        getView().setProgressBarState(false);
+        getView().onJsonProcessed(eventType, taskType , profileTask);
     }
 
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
@@ -288,9 +284,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             if (!childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name()) && childVisit.getLastVisitTime() != 0) {
                 getView().enableEdit(new Period(new DateTime(childVisit.getLastVisitTime()), DateTime.now()).getHours() <= 24);
             }
-
         }
-
     }
 
     @Override
@@ -390,9 +384,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         uniqueId = String.format(getView().getString(org.smartregister.family.R.string.unique_id_text), uniqueId);
         getView().setId(uniqueId);
 
-
         getView().setProfileImage(client.getCaseId());
-
     }
 
     @Override

@@ -97,7 +97,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private RelativeLayout layoutNotRecordView, layoutLastVisitRow, layoutMostDueOverdue, layoutSickVisit;
     private RelativeLayout layoutRecordButtonDone;
     private LinearLayout layoutRecordView;
-    private View viewLastVisitRow, viewMostDueRow, viewFamilyRow, textViewSickChildArrow;
+    private View viewLastVisitRow, viewMostDueRow, viewFamilyRow, viewDividerSickRow, textViewSickChildArrow;
     private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas, textViewSickChild;
     private ImageView imageViewCross;
     protected ImageView imageViewCrossChild;
@@ -220,6 +220,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutFamilyHasRow.setOnClickListener(this);
         layoutRecordButtonDone.setOnClickListener(this);
 
+        viewDividerSickRow = findViewById(R.id.view_sick_visit_row);
         layoutSickVisit = findViewById(R.id.sick_visit_row);
         textViewSickChild = findViewById(R.id.textview_sick_visit_has);
         textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
@@ -518,8 +519,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void onJsonProcessed(String eventType, String event) {
-        Timber.v("Refresh this ui or something after saving");
+    public void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask) {
+        onProfileTaskFetched(taskType, profileTask);
     }
 
     @Override
@@ -532,7 +533,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask) {
         if (profileTask != null) {
             layoutSickVisit.setVisibility(View.VISIBLE);
-            layoutSickVisit = findViewById(R.id.sick_visit_row);
+            viewDividerSickRow.setVisibility(View.VISIBLE);
+
             textViewSickChild.setText(profileTask.getTitle());
             textViewSickChildArrow.setOnClickListener(getSickListener());
 
@@ -648,7 +650,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
                         presenter().createSickChildEvent(Utils.getAllSharedPreferences(), jsonString);
                         displayToast(R.string.referral_submitted);
                     } else {
-                        presenter().processJson(encounterType, "", jsonString);
+                        presenter().processJson(getContext(), encounterType, "", jsonString);
                     }
                 } catch (Exception e) {
                     Timber.e(e, "CoreChildProfileActivity --> onActivityResult");

@@ -93,7 +93,7 @@ public interface CoreChildProfileContract {
 
         void setProgressBarState(@NotNull Boolean state);
 
-        void onJsonProcessed(String eventType, String event);
+        void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask);
 
         void fetchProfileTasks();
 
@@ -128,9 +128,9 @@ public interface CoreChildProfileContract {
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
 
-        void processJson(String eventType, @Nullable String tableName, String jsonString);
+        void processJson(@NotNull Context context, String eventType, @Nullable String tableName, String jsonString);
 
-        void onJsonProcessed(String eventType, String event);
+        void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask);
     }
 
     interface Interactor {
@@ -160,7 +160,7 @@ public interface CoreChildProfileContract {
 
         void setChildBaseEntityId(String childBaseEntityId);
 
-        void processJson(String eventType, String tableName, String jsonString, @NonNull Presenter presenter);
+        void processJson(@NotNull Context context, String eventType, String tableName, String jsonString, @NonNull Presenter presenter);
 
         void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, @Nullable Presenter presenter);
     }
