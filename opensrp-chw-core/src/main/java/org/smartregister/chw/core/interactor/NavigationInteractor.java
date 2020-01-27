@@ -4,6 +4,7 @@ import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.family.util.AppExecutors;
 
@@ -48,6 +49,22 @@ public class NavigationInteractor implements NavigationContract.Interactor {
             });
 
         }
+    }
+
+    @Override
+    public Date sync() {
+        Date res = null;
+        try {
+            res = new Date(getLastCheckTimeStamp());
+        } catch (Exception e) {
+            Timber.e(e.toString());
+        }
+        return res;
+    }
+
+    @Override
+    public void setApplication(CoreApplication coreApplication) {
+        this.coreApplication = coreApplication;
     }
 
     private int getCount(String tableName) {
@@ -175,25 +192,17 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "     )\n";
                 return NavigationDao.getQueryCount(allClients);
 
+            case Constants.TABLES.REFERRAL:
+                String sqlReferral = "select count(*) " +
+                        "from " + Constants.TABLES.REFERRAL + " p " +
+                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                        "where m.date_removed is null and p.referral_status = '"+Constants.REFERRAL_STATUS.PENDING+"' ";
+                return NavigationDao.getQueryCount(sqlReferral);
+
             default:
                 return NavigationDao.getTableCount(tableName);
         }
-    }
-
-    @Override
-    public Date sync() {
-        Date res = null;
-        try {
-            res = new Date(getLastCheckTimeStamp());
-        } catch (Exception e) {
-            Timber.e(e.toString());
-        }
-        return res;
-    }
-
-    @Override
-    public void setApplication(CoreApplication coreApplication) {
-        this.coreApplication = coreApplication;
     }
 
     private Long getLastCheckTimeStamp() {
