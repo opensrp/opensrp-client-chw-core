@@ -10,15 +10,12 @@ public class ChildDBConstants {
     private static final int FIVE_YEAR = 5;
 
     public static String childAgeLimitFilter() {
-        return childAgeLimitFilter(DBConstants.KEY.DOB, FIVE_YEAR, ChildDBConstants.KEY.ENTRY_POINT,ChildDBConstants.KEY.MOTHER_ENTITY_ID);
+        return childAgeLimitFilter(DBConstants.KEY.DOB, FIVE_YEAR, ChildDBConstants.KEY.ENTRY_POINT, ChildDBConstants.KEY.MOTHER_ENTITY_ID);
     }
 
     private static String childAgeLimitFilter(String dateColumn, int age, String entryPoint, String motherEntityId) {
         return " ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + "))/365.25) <" + age + ")  " +
-                " and (( ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') <> 'PNC' ) " +
-                " or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') = 'PNC' " +
-                " and date(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + ", '+28 days') < date()  " +
-                " and ((SELECT CASE WHEN p.is_closed = 1 OR fm.is_closed = 1 THEN 1 ELSE 0 END AS closed FROM ec_pregnancy_outcome p INNER JOIN ec_family_member fm on fm.base_entity_id = p.base_entity_id WHERE p.base_entity_id = " + CoreConstants.TABLE_NAME.CHILD + "." + motherEntityId + ") < 1 ))) " +
+                " and (( ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') <> 'PNC' ) or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') = 'PNC' and ( date(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + ", '+28 days') < date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = " + CoreConstants.TABLE_NAME.CHILD + "." + motherEntityId + " ) = 0)))  or (ifnull(ec_child.entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 1)) " +
                 " and ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + "))/365.25) < 5) ";
     }
 
