@@ -124,6 +124,7 @@ public class CoreConstants {
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
+        public static final String SICK_CHILD = "Sick Child";
     }
 
     public static final class EncounterType {
