@@ -166,8 +166,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
             Iterator<Map.Entry<String, Map<String, String>>> mapIterator = healthFacilityVisit.entrySet().iterator();
+            List<String> hfDetails = new ArrayList<>();
             while (mapIterator.hasNext()) {
-                List<String> hfDetails = new ArrayList<>();
                 Map.Entry<String, Map<String, String>> entry = mapIterator.next();
                 hfDetails.add(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
                 if (entry.getValue().get("baby_weight") != null) {
@@ -180,8 +180,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (mapIterator.hasNext()) {
                     hfDetails.add("");
                 }
-                medicalHistory.setText(hfDetails);
             }
+            medicalHistory.setText(hfDetails);
             medicalHistories.add(medicalHistory);
         }
     }
@@ -190,10 +190,13 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         Map<String, String> familyPlanningMap = new HashMap<>();
         extractFamilyPlanningMethods(visits, familyPlanningMap);
 
-        List<String> fpDetails = null;
         if (familyPlanningMap.size() > 0) {
-            fpDetails = new ArrayList<>();
-            for (Map.Entry<String, String> entry : familyPlanningMap.entrySet()) {
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
+            List<String> fpDetails = new ArrayList<>();
+            Iterator<Map.Entry<String, String>> mapIterator = familyPlanningMap.entrySet().iterator();
+            while (mapIterator.hasNext()) {
+                Map.Entry<String, String> entry = mapIterator.next();
                 if (entry.getKey() != null) {
                     String method = "";
                     switch (entry.getKey()) {
@@ -227,17 +230,17 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                 if (entry.getValue() != null) {
                     fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), StringUtils.isNotBlank(entry.getValue()) ? entry.getValue() : "n/a"));
                 }
+                if (mapIterator.hasNext()) {
+                    fpDetails.add("");
+                }
             }
-        }
+            medicalHistory.setText(fpDetails);
 
-        MedicalHistory medicalHistory = new MedicalHistory();
-        medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
-        medicalHistory.setText(fpDetails);
-
-        if (medicalHistories == null) {
-            medicalHistories = new ArrayList<>();
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
+            medicalHistories.add(medicalHistory);
         }
-        medicalHistories.add(medicalHistory);
     }
 
 
@@ -247,6 +250,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         String vaccineCardDate = "";
         Map<String, String> immunization = new HashMap<>();
         Map<String, String> growth_data = new HashMap<>();
+        String childName = StringUtils.isNotBlank(memberName) ? memberName : "";
 
         for (Visit visit : visits) {
             for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
@@ -275,7 +279,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         View view = new PncMedicalHistoryViewBuilder(inflater, context)
                 .withChildLayout(childLayout)
                 .withSeparator(true)
-                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_title), memberName).toUpperCase())
+                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_child_title), childName).toUpperCase())
                 .build();
         parentView.addView(view);
 

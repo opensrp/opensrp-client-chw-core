@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,14 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         processHFacilityVisit(healthFacilityVisitMap);
         processHomeVisits(homeVisitMap);
         processFamilyPlanning(visits);
+        if (medicalHistories != null) {
+            view = new PncMedicalHistoryViewBuilder(inflater, context)
+                    .withAdapter(getAdapter())
+                    .withRootLayout(rootLayout)
+                    .build();
+
+            parentView.addView(view);
+        }
     }
 
     protected void processHomeVisits(Map<Integer, String> homeVisits) {
@@ -156,16 +165,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
             if (medicalHistories == null) {
                 medicalHistories = new ArrayList<>();
             }
-
             medicalHistories.add(medicalHistory);
-
-            View view = new PncMedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
-
         }
     }
 
@@ -191,13 +191,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
-
-            View view = new PncMedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
+            medicalHistories.add(medicalHistory);
         }
     }
 
@@ -207,7 +201,11 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
         if (familyPlanningMap.size() > 0) {
             List<String> fpDetails = new ArrayList<>();
-            for (Map.Entry<String, String> entry : familyPlanningMap.entrySet()) {
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
+            Iterator<Map.Entry<String, String>> mapIterator = familyPlanningMap.entrySet().iterator();
+            while (mapIterator.hasNext()) {
+                Map.Entry<String, String> entry = mapIterator.next();
                 if (entry.getKey() != null) {
                     String method = "";
                     switch (entry.getKey()) {
@@ -241,47 +239,39 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 if (entry.getValue() != null) {
                     fpDetails.add(MessageFormat.format(context.getString(R.string.pnc_family_planning_date), entry.getValue()));
                 }
+                if (mapIterator.hasNext()) {
+                    fpDetails.add("");
+                }
             }
-            MedicalHistory medicalHistory = new MedicalHistory();
-            medicalHistory.setTitle(context.getString(R.string.pnc_medical_history_family_planning_title));
             medicalHistory.setText(fpDetails);
 
             if (medicalHistories == null) {
                 medicalHistories = new ArrayList<>();
             }
             medicalHistories.add(medicalHistory);
-
-
-            View view = new PncMedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .build();
-
-            parentView.addView(view);
         }
     }
 
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisitMap) {
         if (healthFacilityVisitMap != null && healthFacilityVisitMap.size() > 0) {
+            MedicalHistory medicalHistory = new MedicalHistory();
+            medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
+            Iterator<Map.Entry<String, Map<String, String>>> mapIterator = healthFacilityVisitMap.entrySet().iterator();
             List<String> hfVisitDetails = new ArrayList<>();
-            for (Map.Entry<String, Map<String, String>> entry : healthFacilityVisitMap.entrySet()) {
+            while (mapIterator.hasNext()) {
+                Map.Entry<String, Map<String, String>> entry = mapIterator.next();
                 hfVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_wcaro_health_facility_visit), entry.getValue().get("pnc_hf_visit_date")));
                 if (entry.getValue().get("baby_temp") != null)
                     hfVisitDetails.add(context.getString(R.string.pnc_baby_temp, entry.getValue().get("baby_temp")));
+                if (mapIterator.hasNext()) {
+                    hfVisitDetails.add("");
+                }
             }
-
-           if (medicalHistories == null) {
-               medicalHistories = new ArrayList<>();
-           }
-            MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
-            medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
-
-            View view = new PncMedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withSeparator(true)
-                    .build();
-
-            parentView.addView(view);
+            if (medicalHistories == null) {
+                medicalHistories = new ArrayList<>();
+            }
+            medicalHistories.add(medicalHistory);
         }
     }
 }
