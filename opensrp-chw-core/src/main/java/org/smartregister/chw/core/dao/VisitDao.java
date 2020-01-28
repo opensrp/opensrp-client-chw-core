@@ -1,8 +1,5 @@
 package org.smartregister.chw.core.dao;
 
-import android.util.Pair;
-
-import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.domain.VisitSummary;
@@ -41,8 +38,7 @@ public class VisitDao extends AbstractDao {
         };
 
         List<VisitSummary> summaries = AbstractDao.readData(sql, dataMap);
-        if (summaries == null)
-            return null;
+        if (summaries == null) return null;
 
         Map<String, VisitSummary> map = new HashMap<>();
         for (VisitSummary summary : summaries) {
@@ -57,8 +53,7 @@ public class VisitDao extends AbstractDao {
 
         DataMap<String> dataMap = c -> getCursorValue(c, "date_created");
         List<String> values = AbstractDao.readData(sql, dataMap);
-        if (values == null || values.size() == 0)
-            return null;
+        if (values == null || values.size() == 0) return null;
 
         try {
             return getDobDateFormat().parse(values.get(0)).getTime();
@@ -129,14 +124,20 @@ public class VisitDao extends AbstractDao {
 
         Map<String, Date> res = new HashMap<>();
 
-        DataMap<Pair<String, String>> dataMap = c -> Pair.create(getCursorValue(c, "visit_key"), getCursorValue(c, "details"));
-        List<Pair<String, String>> values = AbstractDao.readData(sql, dataMap);
+        DataMap<VisitDetail> dataMap = c -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setVisitKey(getCursorValue(c, "visit_key"));
+            detail.setDetails(getCursorValue(c, "details"));
+            return detail;
+        };
+
+        List<VisitDetail> values = AbstractDao.readData(sql, dataMap);
         if (values == null || values.size() == 0)
             return res;
 
-        for (Pair<String, String> pair : values) {
+        for (VisitDetail det : values) {
             try {
-                res.put(pair.first, getDobDateFormat().parse(pair.second));
+                res.put(det.getVisitKey(), getDobDateFormat().parse(det.getDetails()));
             } catch (ParseException e) {
                 Timber.e(e);
             }
@@ -264,7 +265,7 @@ public class VisitDao extends AbstractDao {
         return detailsMap;
     }
 
-    public static List<Visit> getVisitsByMemberID(String baseEntityID){
+    public static List<Visit> getVisitsByMemberID(String baseEntityID) {
         String sql = "SELECT * from visits WHERE base_entity_id  = '" + baseEntityID + "' COLLATE NOCASE " +
                 " OR base_entity_id = (SELECT base_entity_id from ec_child WHERE mother_entity_id  = '" + baseEntityID + "' COLLATE NOCASE )";
 
@@ -331,25 +332,29 @@ public class VisitDao extends AbstractDao {
                 "AND vd.visit_key IN ('baby_temp', 'baby_weight','pnc_hf_visit1_date','pnc_hf_visit2_date','pnc_hf_visit3_date','pnc_visit_date') " +
                 "order by v.visit_date desc ";
 
-        DataMap<Triple<String, String, String>> dataMap = cursor -> Triple.of(getCursorValue(cursor, "visit_id"), getCursorValue(cursor, "visit_key"), getCursorValue(cursor, "details"));
+        DataMap<VisitDetail> dataMap = cursor -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setVisitId(getCursorValue(cursor, "visit_id"));
+            detail.setVisitKey(getCursorValue(cursor, "visit_key"));
+            detail.setDetails(getCursorValue(cursor, "details"));
+            return detail;
+        };
 
-        List<Triple<String, String, String>> results = readData(sql, dataMap);
+        List<VisitDetail> results = readData(sql, dataMap);
 
         Map<String, Map<String, String>> hfVisits = new HashMap<>();
 
         Map<String, String> details = new HashMap<>();
         ArrayList<String> visitIds = new ArrayList<>();
 
-        if (results != null || results.size() > 0) {
-            for (Triple<String, String, String> res : results) {
-                visitIds.add(res.getLeft());
+        if (results != null && results.size() > 0) {
+            for (VisitDetail res : results) {
+                visitIds.add(res.getVisitId());
 
-                if (visitIds != null || visitIds.size() > 0) {
-                    for (String ids : visitIds) {
-                        if (ids.equalsIgnoreCase(res.getLeft())) {
-                            details.put(res.getMiddle(), res.getRight());
-                            hfVisits.put(res.getLeft(), details);
-                        }
+                for (String ids : visitIds) {
+                    if (ids.equalsIgnoreCase(res.getVisitId())) {
+                        details.put(res.getVisitKey(), res.getDetails());
+                        hfVisits.put(res.getVisitId(), details);
                     }
                 }
             }

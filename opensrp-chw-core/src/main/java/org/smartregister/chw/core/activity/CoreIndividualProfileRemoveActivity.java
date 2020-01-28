@@ -1,8 +1,9 @@
 package org.smartregister.chw.core.activity;
 
 import android.content.Intent;
-import androidx.fragment.app.FragmentManager;
 import android.view.View;
+
+import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;

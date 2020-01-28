@@ -1,9 +1,10 @@
 package org.smartregister.chw.core.fragment;
 
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;

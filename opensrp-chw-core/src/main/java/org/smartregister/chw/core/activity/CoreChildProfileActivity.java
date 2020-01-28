@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -27,12 +28,15 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 import org.smartregister.chw.core.model.CoreChildProfileModel;
 import org.smartregister.chw.core.presenter.CoreChildProfilePresenter;
@@ -84,19 +88,39 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         }
     };
     public RelativeLayout layoutFamilyHasRow;
-    protected TextView textViewParentName, textViewLastVisit, textViewMedicalHistory;
+    protected TextView textViewParentName;
+    protected TextView textViewLastVisit;
+    protected TextView textViewMedicalHistory;
     protected CircleImageView imageViewProfile;
     protected View recordVisitPanel;
     protected MemberObject memberObject;
     protected ImageView imageViewCrossChild;
     private boolean appBarTitleIsShown = true;
     private int appBarLayoutScrollRange = -1;
-    private TextView textViewTitle, textViewChildName, textViewGender, textViewAddress, textViewId, textViewRecord, textViewVisitNot, tvEdit;
-    private RelativeLayout layoutNotRecordView, layoutLastVisitRow, layoutMostDueOverdue;
+    private TextView textViewTitle;
+    private TextView textViewChildName;
+    private TextView textViewGender;
+    private TextView textViewAddress;
+    private TextView textViewId;
+    private TextView textViewRecord;
+    private TextView textViewVisitNot;
+    private TextView tvEdit;
+    private RelativeLayout layoutNotRecordView;
+    private RelativeLayout layoutLastVisitRow;
+    private RelativeLayout layoutMostDueOverdue;
+    private RelativeLayout layoutSickVisit;
     private RelativeLayout layoutRecordButtonDone;
     private LinearLayout layoutRecordView;
-    private View viewLastVisitRow, viewMostDueRow, viewFamilyRow;
-    private TextView textViewNotVisitMonth, textViewUndo, textViewNameDue, textViewFamilyHas;
+    private View viewLastVisitRow;
+    private View viewMostDueRow;
+    private View viewFamilyRow;
+    private View viewDividerSickRow;
+    private View textViewSickChildArrow;
+    private TextView textViewNotVisitMonth;
+    private TextView textViewUndo;
+    private TextView textViewNameDue;
+    private TextView textViewFamilyHas;
+    private TextView textViewSickChild;
     private ImageView imageViewCross;
     private ProgressBar progressBar;
 
@@ -151,11 +175,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.textview_visit_not) {
-            showProgressBar();
+            setProgressBarState(true);
             presenter().updateVisitNotDone(System.currentTimeMillis());
             tvEdit.setVisibility(View.GONE);
         } else if (i == R.id.textview_undo) {
-            showProgressBar();
+            setProgressBarState(true);
             presenter().updateVisitNotDone(0);
         }
     }
@@ -215,6 +239,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutMostDueOverdue.setOnClickListener(this);
         layoutFamilyHasRow.setOnClickListener(this);
         layoutRecordButtonDone.setOnClickListener(this);
+
+        viewDividerSickRow = findViewById(R.id.view_sick_visit_row);
+        layoutSickVisit = findViewById(R.id.sick_visit_row);
+        textViewSickChild = findViewById(R.id.textview_sick_visit_has);
+        textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
+        fetchProfileTasks();
     }
 
     @Override
@@ -243,10 +273,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             appBarTitleIsShown = false;
         }
 
-    }
-
-    private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void setUpToolbar() {
@@ -507,6 +533,39 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         //// TODO: 06/08/19
     }
 
+    @Override
+    public void setProgressBarState(@NotNull Boolean state) {
+        progressBar.setVisibility(state ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask) {
+        onProfileTaskFetched(taskType, profileTask);
+    }
+
+    @Override
+    public void fetchProfileTasks() {
+        setProgressBarState(true);
+        presenter().fetchProfileTask(getContext(), childBaseEntityId);
+    }
+
+    @Override
+    public void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask) {
+        if (profileTask != null) {
+            layoutSickVisit.setVisibility(View.VISIBLE);
+            viewDividerSickRow.setVisibility(View.VISIBLE);
+
+            textViewSickChild.setText(profileTask.getTitle());
+            textViewSickChildArrow.setOnClickListener(getSickListener());
+
+        }
+        setProgressBarState(false);
+    }
+
+    protected View.OnClickListener getSickListener() {
+        return null;
+    }
+
     protected void updateTopBar(String gender) {
         if (gender.equalsIgnoreCase(Gender.MALE.toString())) {
             imageViewProfile.setBorderColor(getResources().getColor(R.color.light_blue));
@@ -556,13 +615,20 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
                 profilePresenter.startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), profilePresenter.getChildClient());
             }
             return true;
+        } else if (i == R.id.action_sick_child_form) {
+            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
+            if (profilePresenter != null) {
+                profilePresenter.startSickChildForm(profilePresenter.getChildClient());
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.other_member_menu, menu);
+        getMenuInflater().inflate(R.menu.child_profile_menu, menu);
+        menu.findItem(R.id.action_sick_child_form).setVisible(false);
         menu.findItem(R.id.action_anc_registration).setVisible(false);
         menu.findItem(R.id.action_sick_child_follow_up).setVisible(false);
         menu.findItem(R.id.action_malaria_diagnosis).setVisible(false);
@@ -596,11 +662,14 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
                 try {
                     String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
                     JSONObject form = new JSONObject(jsonString);
-                    if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.UPDATE_CHILD_REGISTRATION)) {
+                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
+                    if (encounterType.equals(CoreConstants.EventType.UPDATE_CHILD_REGISTRATION)) {
                         presenter().updateChildProfile(jsonString);
                     } else if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.CHILD_REFERRAL)) {
                         presenter().createSickChildEvent(Utils.getAllSharedPreferences(), jsonString);
                         displayToast(R.string.referral_submitted);
+                    } else {
+                        presenter().processJson(getContext(), encounterType, "", jsonString);
                     }
                 } catch (Exception e) {
                     Timber.e(e, "CoreChildProfileActivity --> onActivityResult");

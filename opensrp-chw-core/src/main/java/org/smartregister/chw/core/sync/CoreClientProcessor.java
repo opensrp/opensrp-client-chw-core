@@ -126,6 +126,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
             case CoreConstants.EventType.WASH_CHECK:
+            case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -146,6 +147,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.UMBILICAL_CORD_CARE:
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
+            case CoreConstants.EventType.SICK_CHILD:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -205,6 +207,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.ANC_REFERRAL:
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }

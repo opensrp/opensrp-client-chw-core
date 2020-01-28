@@ -103,7 +103,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             } else {
                 return null;
             }
-        }catch (OutOfMemoryError e){
+        } catch (OutOfMemoryError e) {
             Timber.e(e);
         }
 
@@ -343,7 +343,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void refreshSyncProgressSpinner() {
-        if(syncProgressBar == null || ivSync == null)
+        if (syncProgressBar == null || ivSync == null)
             return;
 
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
@@ -430,10 +430,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         Timber.v("Drawer state is changed");
     }
 
-    public interface Flavour {
-        String[] getSupportedLanguages();
-    }
-
     private void recomputeCounts() {
         try {
             if (timer == null) {
@@ -451,5 +447,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         } catch (Exception e) {
             Timber.v(e);
         }
+    }
+
+    public interface Flavour {
+        String[] getSupportedLanguages();
     }
 }

@@ -2,8 +2,9 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -135,7 +136,6 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
 
     private Triple<List<FamilyMember>, String, String> processFamily(String familyID) {
         Triple<List<FamilyMember>, String, String> res;
-
 
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyRegister.tableName);
 

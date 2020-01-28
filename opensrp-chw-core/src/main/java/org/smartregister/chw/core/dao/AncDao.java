@@ -93,6 +93,6 @@ public class AncDao extends AlertDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        return res.get(0);
+        return (res == null || res.size() < 1) ? 0 : res.get(0);
     }
 }
