@@ -47,7 +47,7 @@ deploy:
   github_token: $GITHUB_TOKEN
   local_dir: opensrp-chw-core/build/docs/javadoc/
   on:
-    branch: travis-deploy-javadoc
+    branch: master
 
 env:
   global:
