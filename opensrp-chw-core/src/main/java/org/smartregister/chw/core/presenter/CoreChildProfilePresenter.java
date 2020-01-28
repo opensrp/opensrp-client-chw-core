@@ -1,13 +1,20 @@
 package org.smartregister.chw.core.presenter;
 
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -129,7 +136,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     public void updateVisitNotDone() {
         hideProgressBar();
         getView().openVisitMonthView();
-
     }
 
     @Override
@@ -165,17 +171,15 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
     @Override
     public CoreChildProfileContract.View getView() {
-        if (view != null) {
+        if (view != null)
             return view.get();
-        } else {
-            return null;
-        }
+
+        return null;
     }
 
     @Override
     public void fetchProfileData() {
         interactor.refreshProfileView(childBaseEntityId, false, this);
-
     }
 
     @Override
@@ -213,12 +217,39 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     @Override
     public void processBackGroundEvent() {
         interactor.processBackGroundEvent(this);
-
     }
 
     @Override
     public void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
         interactor.createSickChildEvent(allSharedPreferences, jsonString);
+    }
+
+    @Override
+    public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID) {
+        interactor.fetchProfileTask(context, baseEntityID, this);
+    }
+
+    @Override
+    public void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask) {
+        if (getView() == null) return;
+
+        getView().onProfileTaskFetched(taskType, profileTask);
+    }
+
+    @Override
+    public void processJson(@NotNull Context context, String eventType, @Nullable String tableName, String jsonString) {
+        if (getView() != null)
+            getView().setProgressBarState(true);
+
+        interactor.processJson(context, eventType, (tableName == null) ? "" : tableName, jsonString, this);
+    }
+
+    @Override
+    public void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask) {
+        if (getView() == null) return;
+
+        getView().setProgressBarState(false);
+        getView().onJsonProcessed(eventType, taskType , profileTask);
     }
 
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
@@ -253,9 +284,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             if (!childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name()) && childVisit.getLastVisitTime() != 0) {
                 getView().enableEdit(new Period(new DateTime(childVisit.getLastVisitTime()), DateTime.now()).getHours() <= 24);
             }
-
         }
-
     }
 
     @Override
@@ -355,9 +384,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         uniqueId = String.format(getView().getString(org.smartregister.family.R.string.unique_id_text), uniqueId);
         getView().setId(uniqueId);
 
-
         getView().setProfileImage(client.getCaseId());
-
     }
 
     @Override
