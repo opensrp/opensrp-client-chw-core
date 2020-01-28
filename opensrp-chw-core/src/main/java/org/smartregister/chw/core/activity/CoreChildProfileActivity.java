@@ -556,7 +556,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             viewDividerSickRow.setVisibility(View.VISIBLE);
 
             textViewSickChild.setText(profileTask.getTitle());
-            textViewSickChildArrow.setOnClickListener(getSickListener());
+            layoutSickVisit.setOnClickListener(getSickListener());
 
         }
         setProgressBarState(false);
