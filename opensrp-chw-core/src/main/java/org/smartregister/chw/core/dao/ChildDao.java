@@ -96,18 +96,12 @@ public class ChildDao extends AbstractDao {
 
         return res.get(0) > 0;
     }
-
     public static boolean isMotherAlive(String motherBaseEntityId) {
         String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "is_closed");
 
         List<Integer> res = readData(sql, dataMap);
-        if(res.equals(0)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return res != null && res.equals(0);
     }
 }
