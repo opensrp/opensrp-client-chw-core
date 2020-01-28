@@ -34,7 +34,22 @@ script:
   - ls -la
   #Run jacocoTestReport -> Runs all unit tests & instrumentation tests
   - travis_wait ./gradlew :opensrp-chw-core:clean :opensrp-chw-core:jacocoTestReport coveralls --stacktrace
+  # Generate javadoc
+  - ./gradlew javadoc
 
 notifications:
   slack:
     secure: fAiZ4yA7DM6nUKh7nqsCTqZBb03VEAvi5NcRu5mNh5coNn/50XNeZl+qpv7Dw70Ef85Y/k68uc6KwTGVqPXEmVq9Hk3e7lqpBNN8rufvgCYDDGPmywBmU5BhSeykKo0Ee7llM3mRR/EipjIWw1+YvMcS3hCoygf/UlMDDhG0Jo0=
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: opensrp-chw-core/build/docs/javadoc/
+  on:
+    branch: master
+
+env:
+  global:
+    # git hub token
+    secure: y513xIibYyuV9/jKX1Hzj6saz2k6eoEcEoGJ0IApfGKTI9kIURUa1HnEux/nqh9BM4P60bODqw+ndH1SvGCuU0grAqxzpLnJ1O5Vcra2daVcWobfBEFrG+tliPrRWNaHRbtn6e6j+lXYsOeaTxY9RW4/mis1PlAR+bGJS4E8bprMQyavF81UtWqIQuGq+Z8vBT1hI7ONcRhlCWOvTkswNXxp1QfTYigZklp7uEc0zo/YP4Iu1FdlqXiM0pAkZSdlgqPUiIa9Coq7+hKAToBUyRYfE0YVGQjGtNpNaCMq7IIFvBCcUlvG7KhFFPRWIJwZS/kuzFqB80Zbiu0jp1V8XTRoAqYhvoCsFn2p3RcjtUMswbmm8gwx814dfa0MWWd4rbd1X+vdJSyPp8qzguMvygWb0yBDkCVrVtNqWWe5j3+ASsNHDQWoBwKLDmituQNi1ninSKZBe3277kHQaB4sQtdre0SK+SLL4jvHwkRF2UTjFXTrjobLvAwRbWSZz9OGmcLTlL7DuS1X4N4k0JPknmsoUFVw64kbt7IxXZc2ZR/2avNiXCZfJCKsZ7AmkKdtGwdTkw0zPAsIrZLTm8nG+5zwCiLoWoQt3zH51LqYfVvc178To+VkKREiGl4tUCKyrR2jcRi12PL1ub/Ufa7CA/oViNb7H2/bOOh0/uyMMjg=
