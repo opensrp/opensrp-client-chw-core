@@ -101,7 +101,6 @@ public class PNCDao extends AbstractDao {
     }
 
     public static List<ChildModel> childrenForPncWoman(String baseEntityId) {
-
         String sql = String.format("select c.first_name || ' ' || c.middle_name || ' ' || c.last_name as child_name, c.dob , c.first_name, c.base_entity_id " +
                 "FROM ec_child c " +
                 "INNER JOIN ec_family_member fm on fm.base_entity_id = c.base_entity_id " +
