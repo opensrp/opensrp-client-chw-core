@@ -41,7 +41,8 @@ public class CoreMemberRegisterProvider extends FamilyMemberRegisterProvider {
     public void getView(Cursor cursor, SmartRegisterClient client, FamilyMemberRegisterProvider.RegisterViewHolder viewHolder) {
         super.getView(cursor, client, viewHolder);
 
-        // Update UI cutoffs
+        // Update UI cutoffs       // return " and (( ifnull( " + CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.ENTRY_POINT + ",'') <> 'PNC' ) or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.ENTRY_POINT + ",'') = 'PNC' and date(" + CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DOB + ", '+28 days') < date())) ";
+
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewHolder.profile.getLayoutParams();
         layoutParams.width = context.getResources().getDimensionPixelSize(R.dimen.member_profile_pic_width);
         layoutParams.height = context.getResources().getDimensionPixelSize(R.dimen.member_profile_pic_width);

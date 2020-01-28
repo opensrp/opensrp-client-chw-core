@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -112,7 +113,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
             for (Map<String, String> map : list) {
                 if ("PNC".equals(map.get(CoreConstants.DB_CONSTANTS.ENTRY_POINT))) {
                     String dob = map.get(DBConstants.KEY.DOB);
-                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29) {
+                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29 && ChildDao.isMotherAlive(map.get( ChildDBConstants.KEY.MOTHER_ENTITY_ID)) ) {
                         return;
                     }
                 }
