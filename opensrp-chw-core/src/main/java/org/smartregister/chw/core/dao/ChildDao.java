@@ -103,11 +103,11 @@ public class ChildDao extends AbstractDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "is_closed");
 
         List<Integer> res = readData(sql, dataMap);
-        if (res == null || res.size() != 1 || res.equals(1) ) {
-            return false;
+        if(res.equals(0)){
+            return true;
         }
         else {
-            return true;
+            return false;
         }
     }
 }
