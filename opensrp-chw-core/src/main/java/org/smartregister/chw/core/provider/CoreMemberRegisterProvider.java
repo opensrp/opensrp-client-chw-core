@@ -110,7 +110,7 @@ public class CoreMemberRegisterProvider extends FamilyMemberRegisterProvider {
         TextUtils.isEmpty(lastVisitDate);
         TextUtils.isEmpty(visitNotDone);
         TextUtils.isEmpty(strDateCreated);
-        return null;// CoreChildUtils.getChildVisitStatus(context, rules, dobString, lastVisit, visitNot, dateCreated);
+        return null;
     }
 
     private void updateDueColumn(FamilyMemberRegisterProvider.RegisterViewHolder viewHolder, ChildVisit childVisit) {
