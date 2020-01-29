@@ -8,9 +8,6 @@ import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
-import org.smartregister.util.FormUtils;
-
-import timber.log.Timber;
 
 public class CoreFamilyPlanningProfilePresenterTest {
     @Mock
@@ -37,7 +34,6 @@ public class CoreFamilyPlanningProfilePresenterTest {
         CoreFamilyPlanningMemberProfileContract.View myView = profilePresenter.getView();
         Assert.assertEquals(view, myView);
     }
-
 
 
 }
