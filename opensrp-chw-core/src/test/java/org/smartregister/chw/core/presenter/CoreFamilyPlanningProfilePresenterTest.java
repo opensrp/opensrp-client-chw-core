@@ -42,18 +42,6 @@ public class CoreFamilyPlanningProfilePresenterTest {
         Assert.assertEquals(view, myView);
     }
 
-    @Test
-    public void testGetFormUtils() {
-        try {
-            formUtils  = FormUtils.getInstance(org.smartregister.family.util.Utils.context().applicationContext());
-
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
-        Assert.assertEquals(formUtils, formUtils);
-
-    }
 
 
 }
