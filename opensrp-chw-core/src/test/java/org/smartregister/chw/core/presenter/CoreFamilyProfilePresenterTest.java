@@ -80,9 +80,4 @@ public class CoreFamilyProfilePresenterTest {
         profilePresenter.saveChildRegistration(pair, jsonString, false, callBack);
         Mockito.verify(childRegisterInteractor).saveRegistration(pair, jsonString, false, profilePresenter);
     }
-
-    @Test
-    public void testSaveChildForm() {
-
-    }
 }
