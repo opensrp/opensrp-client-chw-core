@@ -26,10 +26,6 @@ public class CoreFamilyPlanningProfilePresenterTest {
     @Mock
     private FpMemberObject fpMemberObject;
 
-    @Mock
-    private FormUtils formUtils;
-
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
