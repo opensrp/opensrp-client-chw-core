@@ -7,7 +7,7 @@ public class ChildModel {
     private String firstName;
     private String baseEntityId;
 
-    public ChildModel(String childFullName, String dateOfBirth, String firstName, String baseEntityId) {
+  public ChildModel(String childFullName, String dateOfBirth, String firstName, String baseEntityId) {
         this.childFullName = childFullName;
         this.dateOfBirth = dateOfBirth;
         this.firstName = firstName;
