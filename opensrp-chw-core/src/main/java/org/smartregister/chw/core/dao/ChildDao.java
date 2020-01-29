@@ -28,7 +28,7 @@ public class ChildDao extends AbstractDao {
                 "where f.base_entity_id = '" + familyBaseEntityID + "' " +
                 "and  m.date_removed is null and m.is_closed = 0 " +
                 "and ((( julianday('now') - julianday(c.dob))/365.25) < 5) and c.is_closed = 0  " +
-                "and (( ifnull(entry_point,'') <> 'PNC' ) or (ifnull(entry_point,'') = 'PNC' and date(c.dob, '+28 days') > date()))";
+                " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
 
         List<Child> values = AbstractDao.readData(sql, getChildDataMap());
         if (values == null || values.size() == 0)
@@ -57,7 +57,7 @@ public class ChildDao extends AbstractDao {
                 "where c.base_entity_id = '" + baseEntityID + "' " +
                 "and  m.date_removed is null and m.is_closed = 0 " +
                 "and ((( julianday('now') - julianday(c.dob))/365.25) < 5) and c.is_closed = 0  " +
-                "and (( ifnull(entry_point,'') <> 'PNC' ) or (ifnull(entry_point,'') = 'PNC' and date(c.dob, '+28 days') > date()))";
+                " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
 
         List<Child> values = AbstractDao.readData(sql, getChildDataMap());
         if (values == null || values.size() != 1)
@@ -85,7 +85,8 @@ public class ChildDao extends AbstractDao {
 
     public static boolean isChild(String baseEntityID) {
         String sql = "select count(c.base_entity_id) count from ec_child c where c.base_entity_id = '" + baseEntityID + "' " +
-                "and c.is_closed = 0 and (( ifnull(entry_point,'') <> 'PNC' ) or (ifnull(entry_point,'') = 'PNC' and date(c.dob, '+28 days') > date()))";
+                "and c.is_closed = 0" +
+                " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
@@ -94,5 +95,13 @@ public class ChildDao extends AbstractDao {
             return false;
 
         return res.get(0) > 0;
+    }
+    public static boolean isMotherAlive(String motherBaseEntityId) {
+        String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "is_closed");
+
+        List<Integer> res = readData(sql, dataMap);
+        return res != null && res.equals(0);
     }
 }
