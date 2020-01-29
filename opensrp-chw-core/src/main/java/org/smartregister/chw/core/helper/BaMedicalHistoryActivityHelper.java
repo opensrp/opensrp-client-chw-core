@@ -96,8 +96,8 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                         } catch (ParseException e) {
                             Timber.e(e, e.toString());
                         }
-                        int res = Days.daysBetween((new DateTime(this.deliveryDate)), new DateTime(visit.getDate())).getDays();
-                        homeVisitMap.put(res, visitDateFormattedString);
+                        int daysBetween = Days.daysBetween((new DateTime(this.deliveryDate)), new DateTime(visit.getDate())).getDays();
+                        homeVisitMap.put(daysBetween, visitDateFormattedString);
                     }
                 }
             }
@@ -141,20 +141,22 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
     protected void processHomeVisits(Map<Integer, String> homeVisits) {
         if (homeVisits != null && homeVisits.size() > 0) {
             List<String> homeVisitDetails = new ArrayList<>();
+            int key;
             for (Map.Entry<Integer, String> entry : homeVisits.entrySet()) {
-                if (entry.getKey() <= 2) {
+                key = entry.getKey();
+                if (key <= 2) {
                     homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_one_visit), entry.getValue()));
                 }
-                if ((entry.getKey() > 2) && (entry.getKey() <= 3)) {
+                if (key == 3) {
                     homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_three_visit), entry.getValue()));
                 }
-                if ((entry.getKey() > 3) && (entry.getKey() <= 8)) {
+                if (key > 3 && key <= 8) {
                     homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_eight_visit), entry.getValue()));
                 }
-                if ((entry.getKey() > 8) && (entry.getKey() <= 27)) {
+                if (key > 8 && key <= 27) {
                     homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_twenty_one_to_twenty_seven_visit), entry.getValue()));
                 }
-                if ((entry.getKey() > 27) && (entry.getKey() <= 42)) {
+                if (key > 27 && key <= 42) {
                     homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_thirty_five_to_forty_one_visit), entry.getValue()));
                 }
             }
