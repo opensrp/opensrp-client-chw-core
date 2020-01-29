@@ -142,24 +142,13 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         if (homeVisits != null && homeVisits.size() > 0) {
             List<String> homeVisitDetails = new ArrayList<>();
             int key;
+            String date;
             for (Map.Entry<Integer, String> entry : homeVisits.entrySet()) {
                 key = entry.getKey();
-                if (key <= 2) {
-                    homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_one_visit), entry.getValue()));
-                }
-                if (key == 3) {
-                    homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_three_visit), entry.getValue()));
-                }
-                if (key > 3 && key <= 8) {
-                    homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_eight_visit), entry.getValue()));
-                }
-                if (key > 8 && key <= 27) {
-                    homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_twenty_one_to_twenty_seven_visit), entry.getValue()));
-                }
-                if (key > 27 && key <= 42) {
-                    homeVisitDetails.add(MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_thirty_five_to_forty_one_visit), entry.getValue()));
-                }
+                date = entry.getValue();
+                homeVisitDetails.add(getHomeVisitDetail(key, date));
             }
+
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_home_visits_title));
             medicalHistory.setText(homeVisitDetails);
@@ -274,6 +263,26 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 medicalHistories = new ArrayList<>();
             }
             medicalHistories.add(medicalHistory);
+        }
+    }
+
+    private String getHomeVisitDetail(int key, String date) {
+        if (key <= 2) {
+            return MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_one_visit), date);
+        }
+        if (key == 3) {
+            return MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_three_visit), date);
+        }
+        if (key <= 8) {
+            return MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_eight_visit), date);
+        }
+        if (key <= 27) {
+            return MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_twenty_one_to_twenty_seven_visit), date);
+        }
+        if (key <= 42) {
+            return MessageFormat.format(context.getString(R.string.pnc_visit_date), context.getString(R.string.pnc_home_day_thirty_five_to_forty_one_visit), date);
+        } else {
+            return "";
         }
     }
 }
