@@ -123,6 +123,7 @@
     <string name="edu_level_secondary">Secondary</string>
     <string name="edu_level_post_secondary">Post-secondary</string>
     <string name="remove_this_person">Remove this person</string>
+    <string name="remove_the_mother">Remove the mother</string>
     <string name="registration_info">Registration info</string>
     <string name="anc_registration">ANC Registration</string>
     <string name="malaria_registration">Malaria Confirmation</string>
@@ -130,7 +131,8 @@
     <string name="malaria_follow_up">Follow-up Visit</string>
     <string name="malaria_diagnosis">Malaria Diagnosis</string>
     <string name="sick_child_follow_up">Sick child follow-up</string>
-    <string name="edit_child_form_title">Edit Child Under 5</string>
+    <string name="edit_child_form_title">Edit baby %1$s\'s details</string>
+    <string name="remove_child_form_title">Remove Baby %1$s</string>
     <string name="visit_month">%1$s visit done</string>
     <string name="refer_to_facility">Refer to facility</string>
     <string name="updating">Updating....</string>
