@@ -7,19 +7,19 @@ public class ChildModel {
     private String firstName;
     private String baseEntityId;
 
+  public ChildModel(String childFullName, String dateOfBirth, String firstName, String baseEntityId) {
+        this.childFullName = childFullName;
+        this.dateOfBirth = dateOfBirth;
+        this.firstName = firstName;
+        this.baseEntityId = baseEntityId;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
     public String getBaseEnityId() {
         return baseEntityId;
-    }
-
-    public ChildModel(String childFullName, String dateOfBirth, String firstName, String baseEntityId) {
-        this.childFullName = childFullName;
-        this.dateOfBirth = dateOfBirth;
-        this.firstName = firstName;
-        this.baseEntityId = baseEntityId;
     }
 
     public String getChildFullName() {
