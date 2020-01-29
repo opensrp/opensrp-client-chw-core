@@ -32,8 +32,8 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActivityFlv {
-    private Date DeliveryDateFormatted;
-    private String VisitDateFormattedString;
+    private Date deliveryDate;
+    private String visitDateFormattedString;
     private Context context;
     @LayoutRes
     private int childLayout = R.layout.pnc_medical_history_nested_sub_item;
@@ -55,7 +55,8 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void extractHealthFacilityVisits(List<Visit> visits, Map<String, String> healthFacilityVisitMap, int count) {
         int x = 1;
-        while (x <= 4) {
+        int maxNumOfVisits = 4;
+        while (x <= maxNumOfVisits) {
             if (visits != null) {
                 List<VisitDetail> visitDetails = visits.get(count).getVisitDetails().get("pnc_visit_" + x);
                 if (visitDetails != null) {
@@ -80,24 +81,23 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
     protected void extractHomeVisits(List<Visit> visits, Map<Integer, String> homeVisitMap) {
         if (visits != null) {
-            String id = visits.get(0).getBaseEntityId();
-            if (id != null) {
-                String DeliveryDateSql = "SELECT delivery_date FROM ec_pregnancy_outcome where base_entity_id = ? ";
-                List<Map<String, Object>> valus = AbstractDao.readData(DeliveryDateSql, new String[]{id});
-                if (valus.size() > 0) {
-                    String deliveryDate = valus.get(0).get("delivery_date").toString();
-                    for (Visit visit : visits
-                    ) {
+            String baseEntityId = visits.get(0).getBaseEntityId();
+            if (baseEntityId != null) {
+                String deliveryDateSql = "SELECT delivery_date FROM ec_pregnancy_outcome where base_entity_id = ? ";
+                List<Map<String, Object>> deliveryDateResults = AbstractDao.readData(deliveryDateSql, new String[]{baseEntityId});
+                if (deliveryDateResults.size() > 0) {
+                    String deliveryDate = deliveryDateResults.get(0).get("delivery_date").toString();
+                    for (Visit visit : visits) {
                         try {
-                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                            DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-                            DeliveryDateFormatted = dateFormat.parse(deliveryDate);
-                            VisitDateFormattedString = dateFormat1.format(visit.getDate());
+                            DateFormat deliveryDateDF = new SimpleDateFormat("dd-MM-yyyy");
+                            DateFormat visitDateDF = new SimpleDateFormat("yyyy-MM-dd");
+                            this.deliveryDate = deliveryDateDF.parse(deliveryDate);
+                            visitDateFormattedString = visitDateDF.format(visit.getDate());
                         } catch (ParseException e) {
                             Timber.e(e, e.toString());
                         }
-                        int res = Days.daysBetween((new DateTime(DeliveryDateFormatted)), new DateTime(visit.getDate())).getDays();
-                        homeVisitMap.put(res, VisitDateFormattedString);
+                        int res = Days.daysBetween((new DateTime(this.deliveryDate)), new DateTime(visit.getDate())).getDays();
+                        homeVisitMap.put(res, visitDateFormattedString);
                     }
                 }
             }
