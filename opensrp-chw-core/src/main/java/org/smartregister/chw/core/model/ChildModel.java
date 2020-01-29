@@ -4,17 +4,18 @@ public class ChildModel {
 
     private String childFullName;
     private String dateOfBirth;
+    private String firstName;
     private String baseEntityId;
 
-    public ChildModel(String childFullName, String dateOfBirth) {
+    public ChildModel(String childFullName, String dateOfBirth, String firstName, String baseEntityId) {
         this.childFullName = childFullName;
         this.dateOfBirth = dateOfBirth;
+        this.firstName = firstName;
+        this.baseEntityId = baseEntityId;
     }
 
-    public ChildModel(String childFullName, String dob, String baseEntityId) {
-        this.childFullName = childFullName;
-        this.dateOfBirth = dob;
-        this.baseEntityId = baseEntityId;
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getChildFullName() {
