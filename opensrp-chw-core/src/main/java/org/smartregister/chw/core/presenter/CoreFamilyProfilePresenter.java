@@ -96,7 +96,6 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
         JSONObject form = childProfileModel.getFormAsJson(formName, entityId, currentLocationId, familyBaseEntityId);
         getView().startFormActivity(form);
-
     }
 
 
