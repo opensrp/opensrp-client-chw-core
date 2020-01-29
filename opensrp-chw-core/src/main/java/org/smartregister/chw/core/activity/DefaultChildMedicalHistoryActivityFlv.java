@@ -144,8 +144,8 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         }
     }
 
-    private String toLowerCase(@Nullable String s){
-        if(s ==null) return "";
+    private String toLowerCase(@Nullable String s) {
+        if (s == null) return "";
 
         return s.toLowerCase();
     }
@@ -421,7 +421,8 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                     }
                 }
             }
-            medicalHistories.add(history);
+            if (history.getText() != null && !history.getText().isEmpty())
+                medicalHistories.add(history);
         }
     }
 
