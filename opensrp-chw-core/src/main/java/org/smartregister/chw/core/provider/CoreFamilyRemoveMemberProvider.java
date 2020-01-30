@@ -3,9 +3,10 @@ package org.smartregister.chw.core.provider;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;

@@ -240,7 +240,8 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
             if (payload != null) {
                 String message = payload.get("message");
                 memberName = payload.get("name");
-                closeFamily(String.format(getString(R.string.family), memberName), message);
+                closeFamily(String.format(
+                        getString(R.string.family), memberName), message);
             }
         }
     }

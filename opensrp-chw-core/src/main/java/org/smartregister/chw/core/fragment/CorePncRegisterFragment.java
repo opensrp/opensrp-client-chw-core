@@ -37,10 +37,10 @@ import timber.log.Timber;
 public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
 
     private static final String DUE_FILTER_TAG = "PRESSED";
+    protected View dueOnlyLayout;
     private View view;
     private boolean dueFilterActive = false;
     private CommonPersonObjectClient client;
-    protected View dueOnlyLayout;
 
     @Override
     protected void onViewClicked(View view) {
@@ -248,8 +248,8 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
                     .withMainTable(mainTable)
                     .withColumn("count(*)")
                     .withJoinClause("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON "
-                    + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
-                    + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
+                            + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
+                            + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
 
                     .withWhereClause(presenter().getMainCondition());
 

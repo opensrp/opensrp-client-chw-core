@@ -2,6 +2,7 @@ package org.smartregister.chw.core.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 
 import org.smartregister.chw.core.R;
