@@ -83,9 +83,9 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             for (ChildModel childDetails : PNCDao.childrenForPncWoman(memberObject.getBaseEntityId())) {
                 for (int i = 0; i < PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()).size(); i++) {
                     menu.add(0, R.id.action_pnc_registration, 100 + i, getString(R.string.edit_child_form_title, childDetails.getFirstName()));
-                    menuItemEditNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
+                    menuItemEditNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEntityId());
                     menu.add(0, R.id.action_pnc_remove_baby, 700 + i, getString(R.string.remove_child_form_title, childDetails.getFirstName()));
-                    menuItemRemoveNames.put(getString(R.string.remove_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
+                    menuItemRemoveNames.put(getString(R.string.remove_child_form_title, childDetails.getFirstName()), childDetails.getBaseEntityId());
                 }
             }
         }

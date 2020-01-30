@@ -428,7 +428,22 @@
     <string name="anc_danger_signs_outcome">ANC danger signs outcome</string>
 
     <!-- Medical history -->
+    <string name="days_ago_for_pnc_home_visit">{0} days ago for PNC Home Visit</string>
     <string name="dose_number">Dose %s</string>
+
+    <string name="pnc_medical_history_mother_title">{0} (MOTHER)</string>
+    <string name="pnc_medical_history_child_title">{0} (BABY)</string>
+    <string name="pnc_health_facility_visits_title">PNC Health Facility Visits</string>
+    <string name="pnc_home_visits_title">PNC Home Visits</string>
+    <string name="pnc_medical_history_family_planning_title">Family Planning</string>
+    <string name="pnc_medical_history_child_vaccine_title">Child vaccine card</string>
+    <string name="pnc_medical_history_child_immunizations_title">Immunizations (at birth)</string>
+    <string name="pnc_medical_history_child_exclusive_breastfeeding_title">Exclusive breastfeeding</string>
+    <string name="pnc_medical_history_hf_visit">Visit {0}: {}</string>
+    <string name="pnc_medical_history_child_vaccine_card_received">Received: {0}</string>
+    <string name="pnc_medical_history_child_vaccine_card_date">Date: {0}</string>
+    <string name="pnc_medical_history_child_immunization_opv0">OPV 0: {0}</string>
+    <string name="pnc_medical_history_child_immunization_bcg">BCG: {0}</string>
 
     <!--Wcaro Upcoming Services -->
     <string name="upcoming_immunizations">Immunizations (%s) \n%s \n%s</string>
