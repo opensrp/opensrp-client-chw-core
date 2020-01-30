@@ -79,9 +79,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pnc_member_profile_menu, menu);
-        if (getChildren(memberObject).size() > 0 && PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()) != null) {
-            for (ChildModel childDetails : PNCDao.childrenForPncWoman(memberObject.getBaseEntityId())) {
-                for (int i = 0; i < PNCDao.childrenForPncWoman(memberObject.getBaseEntityId()).size(); i++) {
+        List<ChildModel> childModels = PNCDao.childrenForPncWoman(memberObject.getBaseEntityId());
+        if (getChildren(memberObject).size() > 0 && childModels != null) {
+            for (ChildModel childDetails : childModels) {
+                for (int i = 0; i < childModels.size(); i++) {
                     menu.add(0, R.id.action_pnc_registration, 100 + i, getString(R.string.edit_child_form_title, childDetails.getFirstName()));
                     menuItemEditNames.put(getString(R.string.edit_child_form_title, childDetails.getFirstName()), childDetails.getBaseEnityId());
                     menu.add(0, R.id.action_pnc_remove_baby, 700 + i, getString(R.string.remove_child_form_title, childDetails.getFirstName()));
