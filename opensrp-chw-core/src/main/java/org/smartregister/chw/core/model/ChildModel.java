@@ -18,15 +18,19 @@ public class ChildModel {
         return firstName;
     }
 
-    public String getBaseEnityId() {
-        return baseEntityId;
-    }
-
     public String getChildFullName() {
         return childFullName;
     }
 
     public String getDateOfBirth() {
         return dateOfBirth;
+    }
+
+    public String getBaseEntityId() {
+        return baseEntityId;
+    }
+
+    public void setBaseEntityId(String baseEntityId) {
+        this.baseEntityId = baseEntityId;
     }
 }
