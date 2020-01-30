@@ -28,6 +28,7 @@ import org.smartregister.chw.core.utils.BaChildUtilsFlv;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CustomDividerItemDecoration;
+import org.smartregister.chw.core.utils.MedicalHistoryViewBuilder;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
@@ -97,7 +98,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             history.setText(context.getString(R.string.last_visit_x_days_ago, Integer.toString(days)));
             medicalHistories.add(history);
 
-            View view = new ViewBuilder()
+            View view = new MedicalHistoryViewBuilder(inflater, context)
                     .withHistory(medicalHistories)
                     .withTitle(context.getString(R.string.last_visit))
                     .build();
@@ -126,7 +127,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
                 medicalHistories.add(history);
             }
 
-            View view = new ViewBuilder()
+            View view = new MedicalHistoryViewBuilder(inflater, context)
                     .withTitle(context.getString(R.string.immunization))
                     .withHistory(medicalHistories)
                     .withSeparator(false)
@@ -161,7 +162,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         history.setText(String.format("%s %s", context.getString(R.string.vaccine_card_text), value));
         medicalHistories.add(history);
 
-        View view = new ViewBuilder()
+        View view = new MedicalHistoryViewBuilder(inflater, context)
                 .withTitle(context.getString(R.string.vaccine_card_title))
                 .withHistory(medicalHistories)
                 .withSeparator(true)
@@ -212,7 +213,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             medicalHistory(medicalHistories, CoreConstants.EventType.MUAC, context.getString(R.string.muac_title), getMUACFormatter());
 
             if (medicalHistories.size() > 0) {
-                View view = new ViewBuilder()
+                View view = new MedicalHistoryViewBuilder(inflater, context)
                         .withHistory(medicalHistories)
                         .withTitle(context.getString(R.string.growth_and_nutrition))
                         .build();
@@ -366,7 +367,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
 
                 if (medicalHistories.size() > 0) {
-                    View view = new ViewBuilder()
+                    View view = new MedicalHistoryViewBuilder(inflater, context)
                             .withHistory(medicalHistories)
                             .withTitle(context.getString(R.string.ecd_title))
                             .withSeparator(false)
@@ -394,7 +395,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
             medicalHistory(medicalHistories, CoreConstants.EventType.LLITN, null, llitn);
 
             if (medicalHistories.size() > 0) {
-                View view = new ViewBuilder()
+                View view = new MedicalHistoryViewBuilder(inflater, context)
                         .withHistory(medicalHistories)
                         .withTitle(context.getString(R.string.llitn_title))
                         .build();
@@ -428,56 +429,5 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
     private interface VisitDetailsFormatter {
         String format(String title, List<VisitDetail> details, Date visitDate);
-    }
-
-    private class ViewBuilder {
-        @LayoutRes
-        private int rootLayout = R.layout.medical_history_nested;
-        private String title = null;
-        private List<MedicalHistory> histories = new ArrayList<>();
-        private boolean hasSeparator = true;
-        @LayoutRes
-        private int childLayout = R.layout.medical_history_nested_sub_item;
-
-        public ViewBuilder withRootLayout(int rootLayout) {
-            this.rootLayout = rootLayout;
-            return this;
-        }
-
-        public ViewBuilder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public ViewBuilder withHistory(List<MedicalHistory> histories) {
-            this.histories = histories;
-            return this;
-        }
-
-        public ViewBuilder withSeparator(boolean hasSeparator) {
-            this.hasSeparator = hasSeparator;
-            return this;
-        }
-
-        public ViewBuilder withChildLayout(int childLayout) {
-            this.childLayout = childLayout;
-            return this;
-        }
-
-        public View build() {
-            View view = inflater.inflate(rootLayout, null);
-            TextView tvTitle = view.findViewById(R.id.tvTitle);
-            tvTitle.setText(title);
-            tvTitle.setAllCaps(true);
-
-            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new MedicalHistoryAdapter(histories, childLayout));
-
-            if (hasSeparator)
-                recyclerView.addItemDecoration(new CustomDividerItemDecoration(ContextCompat.getDrawable(context, R.drawable.divider)));
-
-            return view;
-        }
     }
 }

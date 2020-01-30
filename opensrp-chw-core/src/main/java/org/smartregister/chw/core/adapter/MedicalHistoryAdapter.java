@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MedicalHistoryAdapter extends RecyclerView.Adapter<MedicalHistoryAdapter.MyViewHolder> {
     private List<MedicalHistory> items;
-    private LayoutInflater inflater;
+    protected LayoutInflater inflater;
     private int layoutID;
 
     public MedicalHistoryAdapter(List<MedicalHistory> items, @LayoutRes int layoutID) {
@@ -59,11 +59,11 @@ public class MedicalHistoryAdapter extends RecyclerView.Adapter<MedicalHistoryAd
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvSubTitle;
         private LinearLayout llItems;
 
-        private MyViewHolder(View view) {
+         MyViewHolder(View view) {
             super(view);
             tvSubTitle = view.findViewById(R.id.tvSubTitle);
             llItems = view.findViewById(R.id.llItems);
