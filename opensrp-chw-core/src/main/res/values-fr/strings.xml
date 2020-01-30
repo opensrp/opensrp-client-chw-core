@@ -129,7 +129,7 @@
     <string name="malaria_follow_up">Visite de suivi du paludisme</string>
     <string name="malaria_diagnosis">Diagnostic du paludisme</string>
     <string name="sick_child_follow_up">Suivi de l\'enfant malade</string>
-    <string name="edit_child_form_title">Corriger enfant de moins de 5 ans</string>
+    <string name="edit_child_form_title">Corriger enfant %1$s\'s détails</string>
     <string name="visit_month">Visite de %1$s faite</string>
     <string name="refer_to_facility">Référer au centre de santé</string>
     <string name="updating">Mise à jour en cours...</string>
