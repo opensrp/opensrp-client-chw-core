@@ -108,6 +108,7 @@ public class PNCDao extends AbstractDao {
                 "AND c.entry_point = 'PNC' " +
                 "AND c.is_closed = 0 " +
                 "AND fm.is_closed = 0 " +
+                "AND ( date (c.dob, '+28 days') > date()) " +
                 "ORDER by c.first_name ASC");
 
         DataMap<ChildModel> dataMap = cursor ->
