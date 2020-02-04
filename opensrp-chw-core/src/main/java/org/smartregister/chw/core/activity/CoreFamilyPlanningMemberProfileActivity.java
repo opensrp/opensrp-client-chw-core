@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
@@ -16,11 +13,9 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
-import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -32,6 +27,10 @@ import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.presenter.BaseFpProfilePresenter;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.family.contract.FamilyProfileContract;
+import org.smartregister.family.domain.FamilyEventClient;
+import org.smartregister.family.interactor.FamilyProfileInteractor;
+import org.smartregister.family.model.BaseFamilyProfileModel;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
@@ -46,8 +45,7 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
-public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements
-        FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
+public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
 
     @Override
     protected void onCreation() {
@@ -108,7 +106,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
                         String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
                         JSONObject form = new JSONObject(jsonString);
                         if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                            presenter().updateFamilyMember(jsonString);
+                            FamilyEventClient familyEventClient =
+                                    new BaseFamilyProfileModel(fpMemberObject.getFamilyName()).processUpdateMemberRegistration(jsonString, fpMemberObject.getBaseEntityId());
+                            new FamilyProfileInteractor().saveRegistration(familyEventClient, jsonString, true, (FamilyProfileContract.InteractorCallBack) fpProfilePresenter);
                         }
                     } catch (Exception e) {
                         Timber.e(e);
@@ -165,28 +165,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
 
     protected abstract void removeMember();
-
-    @NonNull
-    @Override
-    public abstract CoreFamilyOtherMemberActivityPresenter presenter();
-
-    @Override
-    public void setProfileName(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_name);
-        textView.setText(s);
-    }
-
-    @Override
-    public void setProfileDetailOne(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
-        textView.setText(s);
-    }
-
-    @Override
-    public void setProfileDetailTwo(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_address);
-        textView.setText(s);
-    }
 
     public void startFormForEdit(Integer title_resource, String formName) {
 
