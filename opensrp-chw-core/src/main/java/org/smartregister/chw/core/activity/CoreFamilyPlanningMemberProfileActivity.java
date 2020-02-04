@@ -16,6 +16,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
+import org.smartregister.chw.core.presenter.CoreFamilyPlanningProfilePresenter;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -61,7 +62,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        fpProfilePresenter = new BaseFpProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
+        fpProfilePresenter = new CoreFamilyPlanningProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
         fetchProfileData();
     }
 
@@ -78,6 +79,8 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         } else if (itemId == R.id.action_remove_member) {
             removeMember();
             return true;
+        } else if (itemId == R.id.action_fp_change) {
+            startFamilyPlanningRegistrationActivity();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -123,6 +126,8 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
+
+
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
             Visit lastVisit = FpDao.getLatestVisit(fpMemberObject.getBaseEntityId(), FP_FOLLOW_UP_VISIT);
@@ -164,20 +169,22 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
     protected abstract void removeMember();
 
-    public void startFormForEdit(Integer title_resource, String formName) {
+    protected abstract void startFamilyPlanningRegistrationActivity();
+
+    public void startFormForEdit(Integer titleResource, String formName) {
 
         JSONObject form = null;
         CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(fpMemberObject.getBaseEntityId());
 
         if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
             form = CoreJsonFormUtils.getAutoPopulatedJsonEditMemberFormString(
-                    (title_resource != null) ? getResources().getString(title_resource) : null,
+                    (titleResource != null) ? getResources().getString(titleResource) : null,
                     CoreConstants.JSON_FORM.getFamilyMemberRegister(),
                     this, client,
                     Utils.metadata().familyMemberRegister.updateEventType, fpMemberObject.getLastName(), false);
         } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
-                    fpMemberObject.getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(title_resource));
+                    fpMemberObject.getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(titleResource));
         }
 
         try {
