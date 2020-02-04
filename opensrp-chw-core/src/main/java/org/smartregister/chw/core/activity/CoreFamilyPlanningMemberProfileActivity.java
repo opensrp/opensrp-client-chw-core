@@ -94,7 +94,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         switch (requestCode) {
             case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
                 if (resultCode == Activity.RESULT_OK) {
-                    Intent intent = new Intent(this, getFamilyProfileActivityClass());
+                    Intent intent = new Intent(this, CoreFpRegisterActivity.class);
                     intent.putExtras(getIntent().getExtras());
                     startActivity(intent);
                     finish();
@@ -161,8 +161,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     public void onMemberDetailsReloaded(FpMemberObject fpMemberObject) {
         super.onMemberDetailsReloaded(fpMemberObject);
     }
-
-    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
 
     protected abstract void removeMember();
 
