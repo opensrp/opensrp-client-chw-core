@@ -186,7 +186,7 @@ public class VisitDao extends AbstractDao {
     public static List<Visit> getPNCVisitsMedicalHistory(String motherBaseEntityId) {
         String sql = "SELECT  visit_id , visit_date , base_entity_id from visits " +
                 "WHERE base_entity_id  = '" + motherBaseEntityId + "' COLLATE NOCASE " +
-                "OR base_entity_id = (SELECT base_entity_id from ec_child WHERE mother_entity_id  = '" + motherBaseEntityId + "' COLLATE NOCASE )";
+                "OR base_entity_id in (SELECT base_entity_id from ec_child WHERE mother_entity_id  = '" + motherBaseEntityId + "' COLLATE NOCASE )";
 
         DataMap<Visit> dataMap = c -> {
             Visit visit = new Visit();
@@ -202,7 +202,7 @@ public class VisitDao extends AbstractDao {
         return new ArrayList<>();
     }
 
-    public static List<VisitDetail> getPNCMedicalHistory(String baseEntityID) {
+    public static List<VisitDetail> getPNCMedicalHistoryVisitDetails(String baseEntityID) {
         String sql = "select v.visit_date,  vd.visit_key , vd.parent_code , vd.preprocessed_type , vd.details, vd.human_readable_details , vd.visit_id , v.base_entity_id " +
                 "from visit_details vd " +
                 "inner join visits v on vd.visit_id = v.visit_id " +

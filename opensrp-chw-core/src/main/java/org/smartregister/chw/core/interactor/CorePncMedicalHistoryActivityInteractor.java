@@ -2,7 +2,6 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 
-import org.smartregister.chw.anc.contract.BaseAncMedicalHistoryContract;
 import org.smartregister.chw.anc.domain.GroupedVisit;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
@@ -26,24 +25,27 @@ public abstract class CorePncMedicalHistoryActivityInteractor extends BasePncMed
 
             List<Visit> visits = VisitDao.getPNCVisitsMedicalHistory(memberID);
 
-            List<VisitDetail> detailList = VisitDao.getPNCMedicalHistory(memberID);
+            List<VisitDetail> detailList = VisitDao.getPNCMedicalHistoryVisitDetails(memberID);
             Map<String, List<VisitDetail>> detailsMap = new HashMap<>();
             if (detailList != null) {
-                for (VisitDetail d : detailList) {
-                    List<VisitDetail> currentDetails = detailsMap.get(d.getVisitId());
-                    if (currentDetails == null) currentDetails = new ArrayList<>();
+                for (VisitDetail detail : detailList) {
+                    List<VisitDetail> currentDetails = detailsMap.get(detail.getVisitId());
+                    if (currentDetails == null) {
+                        currentDetails = new ArrayList<>();
+                    }
 
-                    currentDetails.add(d);
-                    detailsMap.put(d.getVisitId(), currentDetails);
+                    currentDetails.add(detail);
+                    detailsMap.put(detail.getVisitId(), currentDetails);
                 }
             }
 
             if (visits.size() > 0) {
-                for (int x = 0; x < visits.size(); x++) {
-                    String visitID = visits.get(x).getVisitId();
+                for (int i = 0; i < visits.size(); i++) {
+                    String visitID = visits.get(i).getVisitId();
                     List<VisitDetail> idDetails = detailsMap.get(visitID);
-                    if (idDetails != null)
-                        visits.get(x).setVisitDetails(VisitUtils.getVisitGroups(idDetails));
+                    if (idDetails != null) {
+                        visits.get(i).setVisitDetails(VisitUtils.getVisitGroups(idDetails));
+                    }
                 }
             }
 
