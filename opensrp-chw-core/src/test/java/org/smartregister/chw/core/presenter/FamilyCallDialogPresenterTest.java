@@ -16,13 +16,13 @@ import java.lang.ref.WeakReference;
 public class FamilyCallDialogPresenterTest {
 
     @Mock
-    FamilyCallDialogContract.Interactor mInteractor;
+    private FamilyCallDialogContract.Interactor mInteractor;
 
     @Mock
-    FamilyCallDialogContract.View view;
+    private FamilyCallDialogContract.View view;
 
     @Mock
-    FamilyCallDialogContract.Model model;
+    private FamilyCallDialogContract.Model model;
 
     private FamilyCallDialogPresenter presenter;
 
