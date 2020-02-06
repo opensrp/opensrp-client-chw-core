@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.Visit;
@@ -25,9 +27,10 @@ import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.domain.FpMemberObject;
-import org.smartregister.chw.fp.presenter.BaseFpProfilePresenter;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.interactor.FamilyProfileInteractor;
@@ -127,7 +130,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     }
 
 
-
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
             Visit lastVisit = FpDao.getLatestVisit(fpMemberObject.getBaseEntityId(), FP_FOLLOW_UP_VISIT);
@@ -217,6 +219,17 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
 
     private void updateFollowUpVisitStatusRow(Visit lastVisit) {
         setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
+
+        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
+        final CommonPersonObjectClient client =
+                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
+        client.setColumnmaps(commonPersonObject.getColumnmaps());
+        return client;
+
     }
 
     @Override
