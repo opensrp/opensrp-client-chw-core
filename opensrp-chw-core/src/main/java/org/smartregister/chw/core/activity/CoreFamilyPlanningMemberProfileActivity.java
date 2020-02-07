@@ -17,6 +17,10 @@ import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.ChildDao;
+import org.smartregister.chw.core.dao.PNCDao;
+import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyPlanningProfilePresenter;
 import org.smartregister.chw.core.rule.FpAlertRule;
@@ -129,6 +133,56 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
+    public interface onMemberTypeLoadedListener {
+        void onMemberTypeLoaded(MemberType memberType);
+    }
+
+    protected Observable<MemberType> getMemberType() {
+        return Observable.create(e -> {
+            org.smartregister.chw.anc.domain.MemberObject memberObject = PNCDao.getMember(fpMemberObject.getBaseEntityId());
+            String type = null;
+
+            if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.ANC_MEMBER;
+            } else if (PNCDao.isPNCMember(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.PNC_MEMBER;
+            } else if (ChildDao.isChild(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.CHILD;
+            }
+
+            MemberType memberType = new MemberType(memberObject, type);
+            e.onNext(memberType);
+            e.onComplete();
+        });
+    }
+
+    protected void executeOnLoaded(CoreFamilyPlanningMemberProfileActivity.onMemberTypeLoadedListener listener) {
+        final Disposable[] disposable = new Disposable[1];
+        getMemberType().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MemberType>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable[0] = d;
+                    }
+
+                    @Override
+                    public void onNext(MemberType memberType) {
+                        listener.onMemberTypeLoaded(memberType);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable[0].dispose();
+                        disposable[0] = null;
+                    }
+                });
+    }
 
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
@@ -270,5 +324,4 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             updateFollowUpVisitStatusRow(lastVisit);
         }
     }
-
 }
