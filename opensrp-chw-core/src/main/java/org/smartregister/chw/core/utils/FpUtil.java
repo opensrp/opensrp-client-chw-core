@@ -1,7 +1,9 @@
 package org.smartregister.chw.core.utils;
 
 import org.jeasy.rules.api.Rules;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
 import java.text.ParseException;
@@ -50,5 +52,15 @@ public class FpUtil extends org.smartregister.chw.fp.util.FpUtil {
         }
 
         return null;
+    }
+
+    public static MemberObject toMember(FpMemberObject memberObject) {
+        MemberObject res = new MemberObject();
+        res.setBaseEntityId(memberObject.getBaseEntityId());
+        res.setFirstName(memberObject.getFirstName());
+        res.setLastName(memberObject.getLastName());
+        res.setMiddleName(memberObject.getMiddleName());
+        res.setDob(memberObject.getAge());
+        return res;
     }
 }
