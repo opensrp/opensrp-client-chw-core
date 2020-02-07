@@ -272,7 +272,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
-    private void updateFollowUpVisitStatusRow(Visit lastVisit) {
+    public void updateFollowUpVisitStatusRow(Visit lastVisit) {
         setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
     }
 
