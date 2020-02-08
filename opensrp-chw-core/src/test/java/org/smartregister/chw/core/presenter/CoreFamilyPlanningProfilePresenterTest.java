@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.presenter;
 
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +21,6 @@ public class CoreFamilyPlanningProfilePresenterTest {
 
     @Mock
     private BaseFpProfileContract.Interactor interactor;
-
-    @Mock
-    private JSONObject jsonForm;
 
     @Mock
     private FpMemberObject fpMemberObject;
