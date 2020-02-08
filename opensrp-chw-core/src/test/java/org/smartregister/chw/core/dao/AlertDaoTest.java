@@ -72,7 +72,7 @@ public class AlertDaoTest extends AlertDao {
     }
 
     @Test
-    public void getFamilyAlertStatus_ReturnsCorrectStatus() {
+    public void getFamilyAlertStatusReturnsCorrectStatus() {
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"case"});
         matrixCursor.addRow(new Object[]{"2"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
