@@ -38,7 +38,7 @@ public class CorePncMedicalHistoryInteractorTest implements Executor {
     private SQLiteDatabase sqLiteDatabase;
 
     @Mock
-    BasePncMedicalHistoryContract.InteractorCallBack callBack;
+    private BasePncMedicalHistoryContract.InteractorCallBack callBack;
 
     @Before
     public void setUp() {
