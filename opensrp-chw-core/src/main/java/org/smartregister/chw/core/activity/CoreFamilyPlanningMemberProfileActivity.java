@@ -134,13 +134,13 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
-    public interface onMemberTypeLoadedListener {
+    public interface OnMemberTypeLoadedListener {
         void onMemberTypeLoaded(MemberType memberType);
     }
 
     protected Observable<MemberType> getMemberType() {
         return Observable.create(e -> {
-            org.smartregister.chw.anc.domain.MemberObject memberObject = PNCDao.getMember(fpMemberObject.getBaseEntityId());
+            MemberObject memberObject = PNCDao.getMember(fpMemberObject.getBaseEntityId());
             String type = null;
 
             if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
@@ -157,7 +157,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         });
     }
 
-    protected void executeOnLoaded(CoreFamilyPlanningMemberProfileActivity.onMemberTypeLoadedListener listener) {
+    protected void executeOnLoaded(OnMemberTypeLoadedListener listener) {
         final Disposable[] disposable = new Disposable[1];
         getMemberType().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
