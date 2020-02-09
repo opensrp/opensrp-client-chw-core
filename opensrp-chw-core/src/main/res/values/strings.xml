@@ -440,7 +440,7 @@
     <string name="pnc_medical_history_child_immunizations_title">Immunizations (at birth)</string>
     <string name="pnc_medical_history_child_exclusive_breastfeeding_title">Exclusive breastfeeding</string>
     <string name="pnc_medical_history_hf_visit">Visit {0}: {}</string>
-    <string name="pnc_medical_history_child_vaccine_card_received">Received: {0}</string>
+    <string name="pnc_medical_history_child_vaccine_card_received">Child vaccine card received: {0}</string>
     <string name="pnc_medical_history_child_vaccine_card_date">Date: {0}</string>
     <string name="pnc_medical_history_child_immunization_opv0">OPV 0: {0}</string>
     <string name="pnc_medical_history_child_immunization_bcg">BCG: {0}</string>
