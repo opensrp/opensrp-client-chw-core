@@ -1,10 +1,8 @@
 package org.smartregister.chw.core.helper;
 
 import android.content.Context;
-import android.view.View;
 
-import androidx.annotation.LayoutRes;
-
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.smartregister.chw.anc.domain.GroupedVisit;
@@ -14,7 +12,6 @@ import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.DefaultPncMedicalHistoryActivityFlv;
 import org.smartregister.chw.core.domain.MedicalHistory;
-import org.smartregister.chw.core.utils.PncMedicalHistoryViewBuilder;
 import org.smartregister.dao.AbstractDao;
 
 import java.text.DateFormat;
@@ -35,8 +32,6 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
     private Date deliveryDate;
     private String visitDateFormattedString;
     private Context context;
-    @LayoutRes
-    private int childLayout = R.layout.pnc_medical_history_nested_sub_item;
 
     public void processViewData(List<GroupedVisit> groupedVisits, Context context, MemberObject memberObject) {
         this.context = context;
@@ -47,7 +42,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                     processMotherDetails(groupedVisit.getVisitList(), memberObject);
                 } else {
                     // Process child's details
-                    super.processChildDetails(groupedVisit.getVisitList(), groupedVisit.getName());
+                    processChildDetails(groupedVisit.getVisitList(), groupedVisit.getName());
                 }
             }
         }
@@ -118,24 +113,46 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
 
         super.processLastVisitDate();
 
-        View view = new PncMedicalHistoryViewBuilder(inflater, context)
-                .withChildLayout(childLayout)
-                .withSeparator(true)
-                .withTitle(MessageFormat.format(context.getString(R.string.pnc_medical_history_mother_title), memberObject.getFullName()).toUpperCase())
-                .build();
-        parentView.addView(view);
+        addMotherDetailsView(memberObject.getFullName());
 
         processHFacilityVisit(healthFacilityVisitMap);
         processHomeVisits(homeVisitMap);
         processFamilyPlanning(visits);
-        if (medicalHistories != null) {
-            view = new PncMedicalHistoryViewBuilder(inflater, context)
-                    .withAdapter(getAdapter())
-                    .withRootLayout(rootLayout)
-                    .build();
 
-            parentView.addView(view);
+        addMedicalHistoriesView();
+    }
+
+    protected void processChildDetails(List<Visit> visits, String memberName) {
+        this.visits = visits;
+        Map<String, String> immunization = new HashMap<>();
+        Map<String, String> growthData = new HashMap<>();
+        String childName = StringUtils.isNotBlank(memberName) ? memberName : "";
+
+        for (Visit visit : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
+                String val = getText(entry.getValue());
+
+                switch (entry.getKey()) {
+                    // immunization
+                    case "opv0":
+                    case "bcg":
+                        immunization.put(entry.getKey(), val);
+                        break;
+                    // growth and nutrition
+                    case "exclusive_breast_feeding":
+                        growthData.put(entry.getKey(), val);
+                        break;
+                }
+            }
         }
+
+        addChildDetailsView(childName);
+
+        medicalHistories = new ArrayList<>(); // New history list for child details
+        super.processImmunization(immunization);
+        super.processGrowthAndNutrition(growthData);
+
+        addMedicalHistoriesView();
     }
 
     protected void processHomeVisits(Map<Integer, String> homeVisits) {

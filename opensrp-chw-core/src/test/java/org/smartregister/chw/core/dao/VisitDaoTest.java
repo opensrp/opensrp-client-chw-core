@@ -148,7 +148,7 @@ public class VisitDaoTest extends VisitDao {
         matrixCursor.addRow(new Object[]{"4"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
-        VisitDao.getPNCMedicalHistory("123456");
+        VisitDao.getPNCMedicalHistoryVisitDetails("123456");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
     }
 
