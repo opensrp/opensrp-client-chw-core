@@ -6,21 +6,24 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.ChildDao;
+import org.smartregister.chw.core.dao.PNCDao;
+import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreFamilyPlanningProfileInteractor;
-import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.presenter.CoreFamilyPlanningProfilePresenter;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -29,9 +32,14 @@ import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.domain.FpMemberObject;
-import org.smartregister.chw.fp.presenter.BaseFpProfilePresenter;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.commonregistry.CommonRepository;
+import org.smartregister.family.contract.FamilyProfileContract;
+import org.smartregister.family.domain.FamilyEventClient;
+import org.smartregister.family.interactor.FamilyProfileInteractor;
+import org.smartregister.family.model.BaseFamilyProfileModel;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
@@ -46,8 +54,7 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
-public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements
-        FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
+public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
 
     @Override
     protected void onCreation() {
@@ -63,7 +70,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        fpProfilePresenter = new BaseFpProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(), fpMemberObject);
+        fpProfilePresenter = new CoreFamilyPlanningProfilePresenter(this, new CoreFamilyPlanningProfileInteractor(this), fpMemberObject);
         fetchProfileData();
     }
 
@@ -80,6 +87,8 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         } else if (itemId == R.id.action_remove_member) {
             removeMember();
             return true;
+        } else if (itemId == R.id.action_fp_change) {
+            startFamilyPlanningRegistrationActivity();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -96,7 +105,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         switch (requestCode) {
             case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
                 if (resultCode == Activity.RESULT_OK) {
-                    Intent intent = new Intent(this, getFamilyProfileActivityClass());
+                    Intent intent = new Intent(this, CoreFpRegisterActivity.class);
                     intent.putExtras(getIntent().getExtras());
                     startActivity(intent);
                     finish();
@@ -108,7 +117,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
                         String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
                         JSONObject form = new JSONObject(jsonString);
                         if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                            presenter().updateFamilyMember(jsonString);
+                            FamilyEventClient familyEventClient =
+                                    new BaseFamilyProfileModel(fpMemberObject.getFamilyName()).processUpdateMemberRegistration(jsonString, fpMemberObject.getBaseEntityId());
+                            new FamilyProfileInteractor().saveRegistration(familyEventClient, jsonString, true, (FamilyProfileContract.InteractorCallBack) fpProfilePresenter);
                         }
                     } catch (Exception e) {
                         Timber.e(e);
@@ -121,6 +132,57 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             default:
                 break;
         }
+    }
+
+    public interface OnMemberTypeLoadedListener {
+        void onMemberTypeLoaded(MemberType memberType);
+    }
+
+    protected Observable<MemberType> getMemberType() {
+        return Observable.create(e -> {
+            MemberObject memberObject = PNCDao.getMember(fpMemberObject.getBaseEntityId());
+            String type = null;
+
+            if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.ANC_MEMBER;
+            } else if (PNCDao.isPNCMember(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.PNC_MEMBER;
+            } else if (ChildDao.isChild(memberObject.getBaseEntityId())) {
+                type = CoreConstants.TABLE_NAME.CHILD;
+            }
+
+            MemberType memberType = new MemberType(memberObject, type);
+            e.onNext(memberType);
+            e.onComplete();
+        });
+    }
+
+    protected void executeOnLoaded(OnMemberTypeLoadedListener listener) {
+        final Disposable[] disposable = new Disposable[1];
+        getMemberType().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MemberType>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable[0] = d;
+                    }
+
+                    @Override
+                    public void onNext(MemberType memberType) {
+                        listener.onMemberTypeLoaded(memberType);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable[0].dispose();
+                        disposable[0] = null;
+                    }
+                });
     }
 
     private void refreshViewOnHomeVisitResult() {
@@ -162,46 +224,24 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         super.onMemberDetailsReloaded(fpMemberObject);
     }
 
-    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
-
     protected abstract void removeMember();
 
-    @NonNull
-    @Override
-    public abstract CoreFamilyOtherMemberActivityPresenter presenter();
+    protected abstract void startFamilyPlanningRegistrationActivity();
 
-    @Override
-    public void setProfileName(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_name);
-        textView.setText(s);
-    }
-
-    @Override
-    public void setProfileDetailOne(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
-        textView.setText(s);
-    }
-
-    @Override
-    public void setProfileDetailTwo(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_address);
-        textView.setText(s);
-    }
-
-    public void startFormForEdit(Integer title_resource, String formName) {
+    public void startFormForEdit(Integer titleResource, String formName) {
 
         JSONObject form = null;
         CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(fpMemberObject.getBaseEntityId());
 
         if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
             form = CoreJsonFormUtils.getAutoPopulatedJsonEditMemberFormString(
-                    (title_resource != null) ? getResources().getString(title_resource) : null,
+                    (titleResource != null) ? getResources().getString(titleResource) : null,
                     CoreConstants.JSON_FORM.getFamilyMemberRegister(),
                     this, client,
                     Utils.metadata().familyMemberRegister.updateEventType, fpMemberObject.getLastName(), false);
         } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
-                    fpMemberObject.getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(title_resource));
+                    fpMemberObject.getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(titleResource));
         }
 
         try {
@@ -232,8 +272,19 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         }
     }
 
-    private void updateFollowUpVisitStatusRow(Visit lastVisit) {
+    public void updateFollowUpVisitStatusRow(Visit lastVisit) {
         setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
+
+        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
+        final CommonPersonObjectClient client =
+                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
+        client.setColumnmaps(commonPersonObject.getColumnmaps());
+        return client;
+
     }
 
     @Override
@@ -274,5 +325,4 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             updateFollowUpVisitStatusRow(lastVisit);
         }
     }
-
 }
