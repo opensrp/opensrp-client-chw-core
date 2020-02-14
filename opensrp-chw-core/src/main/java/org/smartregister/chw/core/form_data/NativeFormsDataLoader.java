@@ -13,8 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.util.Constants;
-import org.smartregister.chw.dao.EventDao;
-import org.smartregister.chw.util.JsonFormUtils;
+import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
@@ -32,6 +32,7 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.AssetHandler;
+import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.LocationPickerView;
 
 import java.util.ArrayList;
@@ -133,7 +134,7 @@ public class NativeFormsDataLoader implements DataLoader {
     @Override
     public void loadForm(Context context, JSONObject formJsonObject, String baseEntityID) throws JSONException {
         eventName = formJsonObject.optString(Constants.JSON_FORM_EXTRA.ENCOUNTER_TYPE);
-        List<JSONObject> steps = JsonFormUtils.getFormSteps(formJsonObject);
+        List<JSONObject> steps = CoreJsonFormUtils.getFormSteps(formJsonObject);
         for (JSONObject step : steps) {
             JSONArray jsonArray = step.getJSONArray(org.smartregister.family.util.JsonFormUtils.FIELDS);
             this.jsonArray = jsonArray;
