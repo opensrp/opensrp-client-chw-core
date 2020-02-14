@@ -195,7 +195,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
             case Constants.TABLES.REFERRAL:
                 String sqlReferral = "select count(*) " +
                         "from " + Constants.TABLES.REFERRAL + " p " +
-                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                        "inner join ec_family_member m on p.entity_id = m.base_entity_id COLLATE NOCASE " +
                         "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                         "where m.date_removed is null and p.referral_status = '"+Constants.REFERRAL_STATUS.PENDING+"' ";
                 return NavigationDao.getQueryCount(sqlReferral);
