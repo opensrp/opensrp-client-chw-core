@@ -116,12 +116,10 @@ public class CoreFamilyPlanningProfileInteractor extends BaseFpProfileInteractor
                 Collections.sort(baseUpcomingServices, comparator);
 
                 BaseUpcomingService baseUpcomingService = baseUpcomingServices.get(0);
-                return new Alert(
-                        baseEntityID,
-                        baseUpcomingService.getServiceName(),
-                        baseUpcomingService.getServiceName(),
-                        baseUpcomingService.getServiceDate().before(new Date()) ? AlertStatus.urgent : AlertStatus.normal,
-                        AbstractDao.getDobDateFormat().format(baseUpcomingService.getServiceDate()),
+                Date serviceDate = baseUpcomingService.getServiceDate();
+                String serviceName = baseUpcomingService.getServiceName();
+                return new Alert(baseEntityID, serviceName, serviceName, serviceDate != null && serviceDate.before(new Date()) ? AlertStatus.urgent : AlertStatus.normal,
+                        serviceDate != null ? AbstractDao.getDobDateFormat().format(serviceDate) : null,
                         "",
                         true
                 );
