@@ -521,6 +521,7 @@ public class CoreConstants {
         public static final String ANC_MEMBER = "ec_anc_register";
         public static final String PNC_MEMBER = "ec_pregnancy_outcome";
         public static final String ANC_MEMBER_LOG = "ec_anc_log";
+        public static final String FP_MEMBER = "ec_family_planning";
         public static final String MALARIA_CONFIRMATION = "ec_malaria_confirmation";
         public static final String ANC_PREGNANCY_OUTCOME = "ec_pregnancy_outcome";
         public static final String TASK = "task";
