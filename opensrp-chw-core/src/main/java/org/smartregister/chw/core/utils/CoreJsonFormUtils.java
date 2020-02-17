@@ -967,4 +967,19 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getAutoPopulatedJsonEditMemberFormString(String title, String formName, Context context, CommonPersonObjectClient client, String eventType, String familyName, boolean isPrimaryCaregiver) {
         return new BAJsonFormUtils(CoreChwApplication.getInstance()).getAutoJsonEditMemberFormString(title, formName, context, client, eventType, familyName, isPrimaryCaregiver);
     }
+
+    public static List<JSONObject> getFormSteps(JSONObject jsonObject) throws JSONException {
+        List<JSONObject> steps = new ArrayList<>();
+        int x = 1;
+        while (true) {
+            String step_name = "step" + x;
+            if (jsonObject.has(step_name)) {
+                steps.add(jsonObject.getJSONObject(step_name));
+            } else {
+                break;
+            }
+            x++;
+        }
+        return steps;
+    }
 }
