@@ -14,13 +14,13 @@ import java.util.HashMap;
 
 public class NavigationPresenterTest {
     @Mock
-    CoreApplication coreApplication;
+    private CoreApplication coreApplication;
 
     @Mock
-    NavigationContract.View view;
+    private NavigationContract.View view;
 
     @Mock
-    NavigationModel.Flavor flavor;
+    private NavigationModel.Flavor flavor;
 
     private NavigationPresenter navigationPresenter;
 
