@@ -45,6 +45,7 @@ import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -118,6 +119,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             parentView = myParentView;
             mPresenter = new NavigationPresenter(application, this, modelFlavor);
             prepareViews(activity);
+            mPresenter.updateTableMap(menuFlavor.getTableMapValues());
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -451,5 +453,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     public interface Flavour {
         String[] getSupportedLanguages();
+        HashMap<String, String> getTableMapValues();
     }
 }

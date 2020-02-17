@@ -20,7 +20,9 @@ import org.smartregister.job.SyncTaskServiceJob;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -62,6 +64,12 @@ public class NavigationPresenter implements NavigationContract.Presenter {
 
     public void setTableMap(HashMap<String, String> tableMap) {
         this.tableMap = tableMap;
+    }
+
+    public void updateTableMap(HashMap<String, String> mp) {
+        for (Map.Entry<String, String> stringEntry : mp.entrySet()) {
+            tableMap.put(stringEntry.getKey(), stringEntry.getValue());
+        }
     }
 
     @Override
