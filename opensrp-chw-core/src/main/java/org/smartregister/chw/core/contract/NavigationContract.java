@@ -6,6 +6,7 @@ import org.smartregister.chw.core.model.NavigationModel;
 import org.smartregister.chw.core.model.NavigationOption;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public interface NavigationContract {
@@ -23,6 +24,8 @@ public interface NavigationContract {
         void sync(Activity activity);
 
         List<NavigationOption> getOptions();
+
+        void updateTableMap(HashMap<String, String> tableMap);
     }
 
     interface View {
