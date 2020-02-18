@@ -89,7 +89,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         return new BaChildUtilsFlv();
     }
 
-    private void evaluateLastVisitDate() {
+    protected void evaluateLastVisitDate() {
         if (visits.size() > 0) {
 
             List<MedicalHistory> medicalHistories = new ArrayList<>();
@@ -107,7 +107,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         }
     }
 
-    private void evaluateImmunizations() {
+    protected void evaluateImmunizations() {
         if (vaccineMap != null && vaccineMap.size() > 0) {
 
             List<String> vaccineGiven = new ArrayList<>();
@@ -151,7 +151,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         return s.toLowerCase();
     }
 
-    private void evaluateVaccineCard() {
+    protected void evaluateVaccineCard() {
 
         List<Visit> visits = visitMap.get(CoreConstants.EventType.CHILD_VACCINE_CARD_RECEIVED);
 
@@ -196,7 +196,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         return StringUtils.capitalize(res);
     }
 
-    private void evaluateGrowthAndNutrition() {
+    protected void evaluateGrowthAndNutrition() {
         if (visitMap.size() > 0) {
 
             // generate data
@@ -315,7 +315,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         };
     }
 
-    private void evaluateECD() {
+    protected void evaluateECD() {
         if (visits.size() > 0) {
 
             List<Visit> visits = visitMap.get(CoreConstants.EventType.ECD);
@@ -379,7 +379,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         }
     }
 
-    private void evaluateLLITN() {
+    protected void evaluateLLITN() {
         if (visits.size() > 0) {
             List<MedicalHistory> medicalHistories = new ArrayList<>();
 
