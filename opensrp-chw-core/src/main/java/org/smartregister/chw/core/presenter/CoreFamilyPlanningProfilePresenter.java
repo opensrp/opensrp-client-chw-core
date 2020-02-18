@@ -91,7 +91,7 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
     @Override
     public void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient) {
         if (isSaved) {
-            super.refreshProfileData();
+            refreshProfileData();
             Timber.d("On member profile registration saved");
         }
     }
