@@ -47,9 +47,9 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
 
     protected LayoutInflater inflater;
     private Context context;
-    private List<Visit> visits;
-    private Map<String, List<Visit>> visitMap = new LinkedHashMap<>();
-    private Map<String, List<Vaccine>> vaccineMap = new LinkedHashMap<>();
+    protected List<Visit> visits;
+    protected Map<String, List<Visit>> visitMap = new LinkedHashMap<>();
+    protected Map<String, List<Vaccine>> vaccineMap = new LinkedHashMap<>();
     private LinearLayout parentView;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
