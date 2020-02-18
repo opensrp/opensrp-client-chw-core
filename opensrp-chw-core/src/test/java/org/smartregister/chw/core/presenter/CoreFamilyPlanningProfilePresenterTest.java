@@ -8,19 +8,20 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.reflect.Whitebox;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
-import org.smartregister.chw.fp.contract.BaseFpProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
+import org.smartregister.family.domain.FamilyEventClient;
+import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
 public class CoreFamilyPlanningProfilePresenterTest {
+
     @Mock
     private CoreFamilyPlanningMemberProfileContract.View view;
-
 
     private CoreFamilyPlanningProfilePresenter profilePresenter;
 
     @Mock
-    private BaseFpProfileContract.Interactor interactor;
+    private CoreFamilyPlanningMemberProfileContract.Interactor interactor;
 
     @Mock
     private FpMemberObject fpMemberObject;
@@ -28,10 +29,16 @@ public class CoreFamilyPlanningProfilePresenterTest {
     @Mock
     private FormUtils formUtils;
 
+    @Mock
+    private AllSharedPreferences allSharedPreferences;
+
+    @Mock
+    private FamilyEventClient familyEventClient;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new CoreFamilyPlanningProfilePresenter(view, interactor, fpMemberObject);
+        profilePresenter = Mockito.spy(new CoreFamilyPlanningProfilePresenter(view, interactor, fpMemberObject));
     }
 
     @Test
@@ -45,6 +52,19 @@ public class CoreFamilyPlanningProfilePresenterTest {
         Whitebox.setInternalState(profilePresenter, "formUtils", formUtils);
         profilePresenter.startFamilyPlanningReferral();
         Mockito.verify(profilePresenter.getView()).startFormActivity(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    public void createReferralEventInitiatesInteractorCreateEvent() throws Exception {
+        String jsonString = "{}";
+        profilePresenter.createReferralEvent(allSharedPreferences, jsonString);
+        Mockito.verify(interactor).createReferralEvent(allSharedPreferences, jsonString, fpMemberObject.getBaseEntityId());
+    }
+
+    @Test
+    public void onRegistrationSavedRefreshesProfileData() {
+        profilePresenter.onRegistrationSaved(false, true, familyEventClient);
+        Mockito.verify(profilePresenter, Mockito.times(1)).refreshProfileData();
     }
 
 }
