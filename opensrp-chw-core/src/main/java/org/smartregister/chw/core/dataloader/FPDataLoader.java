@@ -29,11 +29,11 @@ public class FPDataLoader extends NativeFormsDataLoader {
     }
 
     @Override
-    protected List<String> getEventTypes() {
-        List<String> res = new ArrayList<>();
-        res.add(FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION);
-        res.add(FamilyPlanningConstants.EventType.UPDATE_FAMILY_PLANNING_REGISTRATION);
-        return res;
+    public List<String> getEventTypes() {
+        List<String> eventTypeList = new ArrayList<>();
+        eventTypeList.add(FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION);
+        eventTypeList.add(FamilyPlanningConstants.EventType.UPDATE_FAMILY_PLANNING_REGISTRATION);
+        return eventTypeList;
     }
 
 }
