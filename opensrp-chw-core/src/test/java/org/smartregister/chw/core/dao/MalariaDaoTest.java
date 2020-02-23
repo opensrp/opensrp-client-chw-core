@@ -37,13 +37,6 @@ public class MalariaDaoTest extends MalariaDao {
     }
 
     @Test
-    public void testCloseMemberFromRegister() {
-        Mockito.doReturn(database).when(repository).getWritableDatabase();
-        MalariaDao.closeMemberFromRegister("123456");
-        Mockito.verify(database).rawExecSQL(Mockito.anyString());
-    }
-
-    @Test
     public void testIsRegisteredForMalaria() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
