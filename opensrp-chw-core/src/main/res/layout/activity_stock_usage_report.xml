@@ -15,14 +15,14 @@
         android:background="@color/light_gray">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/skt_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             android:theme="@style/FamilyTheme.AppBarOverlay.Light">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/toolbar_title"
+                android:id="@+id/tv_skt_toolbar_title"
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -41,19 +41,19 @@
 
         <Spinner
             android:id="@+id/spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_stock_usage_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner"
             tools:itemCount="5"
             tools:listitem="@layout/stock_usage_report_item" />

@@ -84,8 +84,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
     @Override
     protected void onCreation() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        CustomFontTextView customFontTextView = findViewById(R.id.toolbar_title);
+        Toolbar toolbar = findViewById(R.id.skt_toolbar);
+        CustomFontTextView customFontTextView = findViewById(R.id.tv_skt_toolbar_title);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -95,7 +95,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
             upArrow.setColorFilter(getResources().getColor(R.color.text_blue), PorterDuff.Mode.SRC_ATOP);
             actionBar.setHomeAsUpIndicator(upArrow);
         }
-        //  customFontTextView.setText(getString(R.string.stock_usage_report));
+         //customFontTextView.setText(getString(R.string.stock_usage_report));
     }
 
     @Override
