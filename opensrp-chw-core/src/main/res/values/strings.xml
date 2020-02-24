@@ -458,4 +458,8 @@
     <string name="sick_child_form">Sick child form</string>
     <string name="sick_visit_on">Sick visit on %s</string>
     <string name="view_sick_visits">View sick visits</string>
+
+    <!--ba stockUsageModel inv reporting-->
+    <string name="stock_inventory_report"></string>
+    <string name="stock_usage_report">Stock Usage Report</string>
 </resources>
