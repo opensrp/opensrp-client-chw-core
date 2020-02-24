@@ -29,6 +29,7 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
+import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -195,6 +196,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
         registerSync(activity);
         registerLanguageSwitcher(activity);
+        registerStockReport(activity);
 
         registerDeviceToDeviceSync(activity);
         // update all actions
@@ -241,6 +243,21 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    private void registerStockReport( Activity activity){
+        if(menuFlavor.stockReport()){
+            View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
+            //final ImageView imageView = rootView.findViewById(R.id.ivIconStockReport);
+           // final TextView tvStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.tvStockReport);
+            rlIconStockReport.setVisibility(View.VISIBLE);
+             rlIconStockReport.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                     activity.startActivity(intent);
+                 }
+             });
+        }
+    }
     private void registerDrawer(Activity parentActivity) {
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -453,6 +470,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     public interface Flavour {
         String[] getSupportedLanguages();
+
         HashMap<String, String> getTableMapValues();
+
+        boolean stockReport();
     }
 }
