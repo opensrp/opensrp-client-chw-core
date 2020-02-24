@@ -110,7 +110,7 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         }
 
         extractHomeVisits(visits, homeVisitMap);
-        processLastVisitDate();
+        processLastVisitDate(memberObject.getBaseEntityId());
         addMotherDetailsView(memberObject.getFullName());
 
         medicalHistories = new ArrayList<>(); // New history list for mother's details

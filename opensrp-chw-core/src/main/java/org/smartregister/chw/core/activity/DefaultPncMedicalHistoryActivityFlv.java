@@ -22,6 +22,7 @@ import org.smartregister.chw.core.adapter.MedicalHistoryAdapter;
 import org.smartregister.chw.core.adapter.PncMedicalHistoryAdapter;
 import org.smartregister.chw.core.domain.MedicalHistory;
 import org.smartregister.chw.core.utils.PncMedicalHistoryViewBuilder;
+import org.smartregister.chw.pnc.PncLibrary;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 
 public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedicalHistoryActivity.Flavor {
 
@@ -87,8 +89,8 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         // process the data
         Map<String, Map<String, String>> healthFacilityVisitMap = new HashMap<>();
 
-        for (Visit v : visits) {
-            for (Map.Entry<String, List<VisitDetail>> entry : v.getVisitDetails().entrySet()) {
+        for (Visit visit : visits) {
+            for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
                 String val = getText(entry.getValue());
 
                 switch (entry.getKey()) {
@@ -108,9 +110,9 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
                         if ("Yes".equalsIgnoreCase(val)) {
                             Map<String, String> map = new HashMap<>();
                             // add details
-                            map.put("pnc_hf_visit_date", getText(v.getVisitDetails().get(date_key)));
-                            map.put("baby_weight", getText(v.getVisitDetails().get("baby_weight")));
-                            map.put("baby_temp", getText(v.getVisitDetails().get("baby_temp")));
+                            map.put("pnc_hf_visit_date", getText(visit.getVisitDetails().get(date_key)));
+                            map.put("baby_weight", getText(visit.getVisitDetails().get("baby_weight")));
+                            map.put("baby_temp", getText(visit.getVisitDetails().get("baby_temp")));
                             healthFacilityVisitMap.put(entry.getKey(), map);
                         }
                         break;
@@ -118,7 +120,7 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
             }
         }
 
-        processLastVisitDate();
+        processLastVisitDate(memberObject.getBaseEntityId());
         addMotherDetailsView(memberObject.getFullName());
 
         medicalHistories = new ArrayList<>(); // New history list for mother's details
@@ -127,12 +129,14 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         addMedicalHistoriesView();
     }
 
-    protected void processLastVisitDate() {
-        if (visits.size() > 0) {
-            medicalHistories = new ArrayList<>();
+    protected void processLastVisitDate(String baseEntityId) {
+        medicalHistories = new ArrayList<>();
+        Long pncLastVisitDate = PncLibrary.getInstance().profileRepository().getLastVisit(baseEntityId);
+        if (pncLastVisitDate != null) {
             MedicalHistory history = new MedicalHistory();
-            int days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
+            int days = Days.daysBetween(new DateTime(pncLastVisitDate), new DateTime()).getDays();
             history.setTitle(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago_for_pnc_home_visit), String.valueOf(days))));
+
             medicalHistories.add(history);
 
             View view = new PncMedicalHistoryViewBuilder(inflater, context)
