@@ -14,10 +14,10 @@ import static org.mockito.ArgumentMatchers.any;
 @PrepareForTest(FamilyCallDialogFragmentTest.class)
 public class FamilyCallDialogFragmentTest {
     @Mock
-    public FamilyCallDialogFragment familyCallDialogFragment;
+    private FamilyCallDialogFragment familyCallDialogFragment;
 
     @Mock
-    FamilyCallDialogContract.Model model;
+    private FamilyCallDialogContract.Model model;
 
     @Before
     public void setUp() {
@@ -29,9 +29,10 @@ public class FamilyCallDialogFragmentTest {
         Mockito.when(model.getPhoneNumber()).thenReturn("0777777777");
         Mockito.when(model.getName()).thenReturn("Family head Name");
         Mockito.when(model.getRole()).thenReturn("Family Head");
-
+        Assert.assertNotNull(model);
         Mockito.doAnswer(invocation -> {
             FamilyCallDialogContract.Model answeredModel = invocation.getArgument(0);
+            Assert.assertNotNull(answeredModel);
             Assert.assertEquals("0777777777", answeredModel.getPhoneNumber());
             Assert.assertEquals("Family head Name", answeredModel.getName());
             Assert.assertEquals("Family Head", answeredModel.getRole());
@@ -45,9 +46,10 @@ public class FamilyCallDialogFragmentTest {
         Mockito.when(model.getPhoneNumber()).thenReturn("0777777777");
         Mockito.when(model.getName()).thenReturn("Care giver Name");
         Mockito.when(model.getRole()).thenReturn("Care Giver");
-
+        Assert.assertNotNull(model);
         Mockito.doAnswer(invocation -> {
             FamilyCallDialogContract.Model answeredModel = invocation.getArgument(0);
+            Assert.assertNotNull(answeredModel);
             Assert.assertEquals("0777777777", answeredModel.getPhoneNumber());
             Assert.assertEquals("Care giver Name", answeredModel.getName());
             Assert.assertEquals("Care Giver", answeredModel.getRole());
