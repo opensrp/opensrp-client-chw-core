@@ -460,6 +460,19 @@
     <string name="view_sick_visits">View sick visits</string>
 
     <!--ba stockUsageModel inv reporting-->
-    <string name="stock_inventory_report"></string>
     <string name="stock_usage_report">Stock Usage Report</string>
+    <string name="ors_5">ORS 5</string>
+    <string name="zinc_10"> Zinc 10	</string>
+    <string name="paracetamol">Paracetamol</string>
+    <string name="rdts">RDTs</string>
+    <string name="al_6">AL 6</string>
+    <string name="al_12">AL 12</string>
+    <string name="al_18">AL 18</string>
+    <string name="al_24">AL 24</string>
+    <string name="packets">Packets</string>
+    <string name="tablets">Tablets</string>
+    <string name="packs">Packs</string>
+    <string name="pieces">Pieces</string>
+    <string name="tests">Tests</string>
+
 </resources>
