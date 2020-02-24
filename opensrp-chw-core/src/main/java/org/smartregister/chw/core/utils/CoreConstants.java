@@ -589,6 +589,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
+        public static final String STOCK_USAGE_REPORT = "StockUsageModel usage report";
     }
 
     public static final class RULE_FILE {

@@ -1,4 +1,8 @@
 package org.smartregister.chw.core.dao;
 
-public class StockUsageReportDao {
+import org.smartregister.dao.AbstractDao;
+
+public class StockUsageReportDao  extends AbstractDao {
+
+
 }
