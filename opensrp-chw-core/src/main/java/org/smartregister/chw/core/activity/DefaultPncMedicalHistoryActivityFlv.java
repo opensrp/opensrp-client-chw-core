@@ -119,12 +119,11 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         }
 
         processLastVisitDate();
-
         addMotherDetailsView(memberObject.getFullName());
 
+        medicalHistories = new ArrayList<>(); // New history list for mother's details
         processHealthFacilityVisit(healthFacilityVisitMap);
         processFamilyPlanning(visits);
-
         addMedicalHistoriesView();
     }
 
@@ -148,7 +147,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
 
     protected void processHealthFacilityVisit(Map<String, Map<String, String>> healthFacilityVisit) {
         if (healthFacilityVisit != null && healthFacilityVisit.size() > 0) {
-            medicalHistories = new ArrayList<>();
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
             Iterator<Map.Entry<String, Map<String, String>>> mapIterator = healthFacilityVisit.entrySet().iterator();

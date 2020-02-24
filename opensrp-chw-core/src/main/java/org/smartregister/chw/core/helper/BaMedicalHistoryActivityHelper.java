@@ -110,15 +110,13 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
         }
 
         extractHomeVisits(visits, homeVisitMap);
-
-        super.processLastVisitDate();
-
+        processLastVisitDate();
         addMotherDetailsView(memberObject.getFullName());
 
+        medicalHistories = new ArrayList<>(); // New history list for mother's details
         processHFacilityVisit(healthFacilityVisitMap);
         processHomeVisits(homeVisitMap);
         processFamilyPlanning(visits);
-
         addMedicalHistoriesView();
     }
 
@@ -195,7 +193,6 @@ public class BaMedicalHistoryActivityHelper extends DefaultPncMedicalHistoryActi
                 }
             }
 
-            medicalHistories = new ArrayList<>();
             MedicalHistory medicalHistory = new MedicalHistory();
             medicalHistory.setText(hfVisitDetails);
             medicalHistory.setTitle(context.getString(R.string.pnc_health_facility_visits_title));
