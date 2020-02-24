@@ -1,24 +1,19 @@
 package org.smartregister.chw.core.model;
 
-import org.smartregister.chw.core.utils.expandable_recycler_view.ExpandableGroup;
-
-import java.util.List;
-import java.util.Map;
-
-public class StockInventoryMonths extends ExpandableGroup<StockUsageModel> {
+public class MonthStockUsageModel {
     private String month;
     private String year;
-    private Map<String, String> stockReportsMonths;
 
-    public StockInventoryMonths(String title, List<StockUsageModel> items) {
-        super(title, items);
+    public MonthStockUsageModel(String month, String year) {
+        this.year = year;
+        this.month = month;
     }
 
-    public Map<String, String> getStockReportsMonths() {
-        return stockReportsMonths;
+    public String getMonth() {
+        return month;
     }
 
-    public void setStockReportsMonths(Map<String, String> stockReportsMonths) {
-        this.stockReportsMonths = stockReportsMonths;
+    public String getYear() {
+        return year;
     }
 }
