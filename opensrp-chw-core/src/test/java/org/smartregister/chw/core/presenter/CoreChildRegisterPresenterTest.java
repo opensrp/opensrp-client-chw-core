@@ -53,16 +53,6 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void setModel() {
-        //TODO
-    }
-
-    @Test
-    public void setInteractor() {
-        //TODO
-    }
-
-    @Test
     public void registerViewConfigurations() {
         profilePresenter.registerViewConfigurations(viewIdentifiers);
         Mockito.verify(model).registerViewConfigurations(viewIdentifiers);
@@ -78,11 +68,6 @@ public class CoreChildRegisterPresenterTest {
     public void onDestroy() {
         profilePresenter.onDestroy(true);
         Mockito.verify(interactor).onDestroy(true);
-    }
-
-    @Test
-    public void updateInitials() {
-        //TODO
     }
 
     @Test
@@ -111,16 +96,6 @@ public class CoreChildRegisterPresenterTest {
         } catch (Exception e) {
             Timber.v(e.toString());
         }
-    }
-
-    @Test
-    public void saveForm() {
-        //TODO
-    }
-
-    @Test
-    public void closeFamilyRecord() {
-        //TODO
     }
 
     @Test
