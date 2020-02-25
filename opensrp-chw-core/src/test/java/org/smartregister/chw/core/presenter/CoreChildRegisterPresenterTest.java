@@ -1,5 +1,4 @@
 package org.smartregister.chw.core.presenter;
-import com.google.gson.JsonObject;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -55,7 +54,7 @@ public class CoreChildRegisterPresenterTest {
 
     @Test
     public void setModel() {
-      //TODO
+        //TODO
     }
 
     @Test
@@ -98,15 +97,14 @@ public class CoreChildRegisterPresenterTest {
             String entityId = Mockito.anyString();
             String familyId = Mockito.anyString();
             profilePresenter.startForm(Mockito.anyString(), entityId, Mockito.anyString(), Mockito.anyString(), familyId);
-            if(entityId.equals("")){
+            if (entityId.equals("")) {
                 String anyString = Mockito.anyString();
                 Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
                 Mockito.verify(interactor).getNextUniqueId(triple, callBack, Mockito.anyString());
             }
-            if(familyId.equals("")){
+            if (familyId.equals("")) {
                 Mockito.verify(view).startFormActivity(jsonObject);
-            }
-            else {
+            } else {
                 Mockito.verify(view).startFormActivity(jsonObject);
             }
 
