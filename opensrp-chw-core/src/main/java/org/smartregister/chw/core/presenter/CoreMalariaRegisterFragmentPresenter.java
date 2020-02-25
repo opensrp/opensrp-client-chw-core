@@ -16,8 +16,8 @@ public abstract class CoreMalariaRegisterFragmentPresenter extends BaseMalariaRe
     @Override
     public String getMainCondition() {
         return " " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.malaria.util.DBConstants.KEY.DATE_REMOVED + " is null " +
-                "AND " + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.MALARIA + " = 1 AND "
-                + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.IS_CLOSED + " = 0";
+                "AND " + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.MALARIA + " = 1 AND datetime('NOW') <= datetime(" + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.LAST_INTERACTED_WITH + "/1000, 'unixepoch', 'localtime','+15 days') AND " + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.IS_CLOSED + " = 0";
+
     }
 
     @Override
