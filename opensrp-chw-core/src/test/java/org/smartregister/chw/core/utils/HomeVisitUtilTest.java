@@ -3,6 +3,7 @@ package org.smartregister.chw.core.utils;
 import android.content.Context;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -16,15 +17,20 @@ public class HomeVisitUtilTest {
 
     @Test
     public void canGetVisitSummaryFromVisitAlert() {
-        String visitDate = "12-12-2019";
-        String visitNotDate = "01-01-2020";
+        String visitDate = "15-01-2020";
+        String visitNotDoneDate = "05-01-2020";
 
-        DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyy-MMM-dd");
-        DateTime dateTime = FORMATTER.parseDateTime("2020-jan-01");
-        LocalDate dateCreated = dateTime.toLocalDate();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MMM-dd");
+        LocalDate dateCreated = formatter.parseDateTime("2020-jan-01").toLocalDate();
 
-        AncVisitAlertRule ancVisitAlertRule = new AncVisitAlertRule(context, DateTimeFormat.forPattern("dd-MM-yyyy").print(dateCreated), visitDate, visitNotDate, dateCreated);
+        formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+        LocalDate lastVisitDate = formatter.parseDateTime(visitDate).toLocalDate();
+
+        int noOfDaysDue = Days.daysBetween(lastVisitDate, new LocalDate()).getDays();
+
+        AncVisitAlertRule ancVisitAlertRule = new AncVisitAlertRule(context, DateTimeFormat.forPattern("dd-MM-yyyy").print(dateCreated), visitDate, visitNotDoneDate, dateCreated);
         VisitSummary summary = HomeVisitUtil.getAncVisitStatus(ancVisitAlertRule, null);
         Assert.assertNotNull(summary);
+        Assert.assertEquals(noOfDaysDue + " days", summary.getNoOfDaysDue());
     }
 }
