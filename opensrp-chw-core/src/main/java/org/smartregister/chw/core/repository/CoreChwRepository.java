@@ -23,6 +23,7 @@ import org.smartregister.reporting.repository.IndicatorRepository;
 import org.smartregister.repository.DrishtiRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.LocationRepository;
+import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
@@ -75,6 +76,7 @@ public class CoreChwRepository extends Repository {
         PlanDefinitionSearchRepository.createTable(database);
         TaskRepository.createTable(database);
         //LocationRepository.createTable(database);    //TODO verify why this causes a break in code
+        LocationTagRepository.createTable(database);
 
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
