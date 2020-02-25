@@ -82,12 +82,12 @@ public class CoreChildRegisterPresenterTest {
             String entityId = Mockito.anyString();
             String familyId = Mockito.anyString();
             profilePresenter.startForm(Mockito.anyString(), entityId, Mockito.anyString(), Mockito.anyString(), familyId);
-            if (entityId.equals("")) {
+            if ("".equals(entityId)) {
                 String anyString = Mockito.anyString();
                 Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
                 Mockito.verify(interactor).getNextUniqueId(triple, callBack, Mockito.anyString());
             }
-            if (familyId.equals("")) {
+            if ("".equals(familyId)) {
                 Mockito.verify(view).startFormActivity(jsonObject);
             } else {
                 Mockito.verify(view).startFormActivity(jsonObject);
