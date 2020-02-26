@@ -29,6 +29,7 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -276,7 +277,10 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
                 getView().setVisitAboveTwentyFourView();
             }
             if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name())) {
-                getView().setVisitNotDoneThisMonth();
+                Calendar today = Calendar.getInstance();
+                today.add(Calendar.HOUR, 24);
+                boolean withinEditPeriod = (childVisit.getLastVisitTime() < today.getTime().getTime());
+                getView().setVisitNotDoneThisMonth(withinEditPeriod);
             }
             if (childVisit.getLastVisitTime() != 0) {
                 getView().setLastVisitRowView(childVisit.getLastVisitDays());

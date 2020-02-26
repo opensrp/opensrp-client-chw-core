@@ -55,7 +55,7 @@ public interface CoreChildProfileContract {
 
         void setVisitButtonOverdueStatus();
 
-        void setVisitNotDoneThisMonth();
+        void setVisitNotDoneThisMonth(boolean withinEditPeriod);
 
         void setLastVisitRowView(String days);
 
