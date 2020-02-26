@@ -250,7 +250,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         if (getView() == null) return;
 
         getView().setProgressBarState(false);
-        getView().onJsonProcessed(eventType, taskType , profileTask);
+        getView().onJsonProcessed(eventType, taskType, profileTask);
     }
 
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
@@ -277,9 +277,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
                 getView().setVisitAboveTwentyFourView();
             }
             if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name())) {
-                Calendar today = Calendar.getInstance();
-                today.add(Calendar.HOUR, 24);
-                boolean withinEditPeriod = (childVisit.getLastVisitTime() < today.getTime().getTime());
+                boolean withinEditPeriod = isWithinEditPeriod(childVisit.getLastNotVisitDate());
                 getView().setVisitNotDoneThisMonth(withinEditPeriod);
             }
             if (childVisit.getLastVisitTime() != 0) {
@@ -289,6 +287,15 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
                 getView().enableEdit(new Period(new DateTime(childVisit.getLastVisitTime()), DateTime.now()).getHours() <= 24);
             }
         }
+    }
+
+    private boolean isWithinEditPeriod(@Nullable Long checkDate) {
+        if (checkDate == null)
+            return false;
+
+        Calendar start = Calendar.getInstance();
+        start.add(Calendar.HOUR, -24);
+        return checkDate > start.getTime().getTime();
     }
 
     @Override
