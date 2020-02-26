@@ -1,11 +1,11 @@
 package org.smartregister.chw.core.model;
 
-public class StockUsageDetailsModel {
+public class StockUsageItemDetailsModel {
     private String itemDetailsMonth;
     private String itemDetailsYear;
     private int itemDetailsStockCount;
 
-    public StockUsageDetailsModel(String itemDetailsMonth, String itemDetailsYear, int itemDetailsStockUsage) {
+    public StockUsageItemDetailsModel(String itemDetailsMonth, String itemDetailsYear, int itemDetailsStockUsage) {
         this.itemDetailsYear = itemDetailsYear;
         this.itemDetailsMonth = itemDetailsMonth;
         this.itemDetailsStockCount = itemDetailsStockUsage;
