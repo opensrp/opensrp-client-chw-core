@@ -13,33 +13,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreStockInventoryItemDetailsReportActivity;
-import org.smartregister.chw.core.model.StockUsageModel;
+import org.smartregister.chw.core.model.StockUsageItemModel;
 
 import java.util.List;
 
-public class CoreStockUsageRecyclerViewAdapter extends RecyclerView.Adapter<CoreStockUsageRecyclerViewAdapter.CoreStockUsageReportViewHolder> {
+public class CoreStockUsageItemRecyclerViewAdapter extends RecyclerView.Adapter<CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder> {
     protected LayoutInflater inflater;
-    private List<StockUsageModel> stockUsageModelList;
+    private List<StockUsageItemModel> stockUsageItemModelList;
     private Context context;
 
 
-    public CoreStockUsageRecyclerViewAdapter(List<StockUsageModel> stockUsageModelList, Context context) {
-        this.stockUsageModelList = stockUsageModelList;
+    public CoreStockUsageItemRecyclerViewAdapter(List<StockUsageItemModel> stockUsageItemModelList, Context context) {
+        this.stockUsageItemModelList = stockUsageItemModelList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CoreStockUsageRecyclerViewAdapter.CoreStockUsageReportViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                               int viewType) {
+    public CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                                   int viewType) {
         inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.stock_usage_report_item, parent, false);
-        return new CoreStockUsageRecyclerViewAdapter.CoreStockUsageReportViewHolder(v);
+        return new CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(CoreStockUsageReportViewHolder holder, int position) {
-        StockUsageModel usageModelItem = stockUsageModelList.get(position);
+        StockUsageItemModel usageModelItem = stockUsageItemModelList.get(position);
         holder.stockName.setText(usageModelItem.getStockName());
         holder.stockUnitOfMeasure.setText(usageModelItem.getUnitsOfMeasure());
         holder.stockCount.setText(String.format("%s", usageModelItem.getStockUsage()));
@@ -56,7 +56,7 @@ public class CoreStockUsageRecyclerViewAdapter extends RecyclerView.Adapter<Core
 
     @Override
     public int getItemCount() {
-        return stockUsageModelList.size();
+        return stockUsageItemModelList.size();
     }
 
     public static class CoreStockUsageReportViewHolder extends RecyclerView.ViewHolder {
