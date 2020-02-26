@@ -11,9 +11,9 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.MalariaVisitUtil;
-import org.smartregister.chw.malaria.provider.MalariaRegisterProvider;
 import org.smartregister.chw.malaria.util.DBConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.provider.MalariaRegisterProvider;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
 
@@ -42,7 +42,7 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         viewHolder.dueButton.setVisibility(View.GONE);
         viewHolder.dueButton.setOnClickListener(null);
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
-        Utils.startAsyncTask(new UpdateAsyncTask(viewHolder, pc), null);
+        Utils.startAsyncTask(new UpdateDueButtonStatusTask(viewHolder, pc), null);
     }
 
     private void updateDueColumn(Button dueButton, String followStatus) {
@@ -58,12 +58,12 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         }
     }
 
-    private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
+    private class UpdateDueButtonStatusTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
         private final CommonPersonObjectClient pc;
         private MalariaFollowUpRule malariaFollowUpRule;
 
-        private UpdateAsyncTask(RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
+        private UpdateDueButtonStatusTask(RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
             this.viewHolder = viewHolder;
             this.pc = pc;
         }

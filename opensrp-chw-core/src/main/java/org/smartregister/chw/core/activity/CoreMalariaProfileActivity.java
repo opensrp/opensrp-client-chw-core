@@ -3,27 +3,38 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreMalariaProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
+import org.smartregister.chw.core.utils.MalariaVisitUtil;
 import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
 import org.smartregister.chw.malaria.util.Constants;
+import org.smartregister.chw.malaria.util.DBConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
+import org.smartregister.provider.MalariaRegisterProvider;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -122,6 +133,12 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
         textView.setText(s);
     }
 
+    @Override
+    public void setRecordFollowUpButton() {
+        profilePresenter.recordMalariaButton(null);
+
+    }
+
     public void startFormForEdit(Integer title_resource, String formName) {
 
         JSONObject form = null;
@@ -155,5 +172,37 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     public Context getContext() {
         return this;
+    }
+
+
+    private class UpdateVisitDueTask extends AsyncTask<Void, Void, Void> {
+        private final MalariaRegisterProvider.RegisterViewHolder viewHolder;
+        private final CommonPersonObjectClient pc;
+        private MalariaFollowUpRule malariaFollowUpRule;
+
+        private UpdateVisitDueTask(MalariaRegisterProvider.RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
+            this.viewHolder = viewHolder;
+            this.pc = pc;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Date date = new SimpleDateFormat(CoreConstants.DATE_FORMATS.NATIVE_FORMS, Locale.getDefault()).parse(org.smartregister.util.Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MALARIA_TEST_DATE, false));
+                malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(date);
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            if (malariaFollowUpRule != null && StringUtils.isNotBlank(malariaFollowUpRule.getButtonStatus()) &&
+                    !CoreConstants.VISIT_STATE.EXPIRED.equalsIgnoreCase(malariaFollowUpRule.getButtonStatus())) {
+                profilePresenter.recordMalariaButton(malariaFollowUpRule.getButtonStatus());
+//                updateDueColumn(viewHolder.dueButton, malariaFollowUpRule.getButtonStatus());
+            }
+        }
     }
 }

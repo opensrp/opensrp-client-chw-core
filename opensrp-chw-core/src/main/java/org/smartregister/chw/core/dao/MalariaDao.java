@@ -21,12 +21,11 @@ public class MalariaDao extends AbstractDao {
     }
     
     public static boolean isRegisteredForMalaria(String baseEntityID) {
-        String sql = String.format(
-                "select count(ec_malaria_confirmation.base_entity_id) count\n" +
-                        "from ec_malaria_confirmation\n" +
-                        "where base_entity_id = '%s'\n" +
-                        "  and ec_malaria_confirmation.is_closed = 0\n" +
-                        "  and ec_malaria_confirmation.malaria_test_date IS NOT NULL", baseEntityID);
+        String sql = String.format("select count(p.base_entity_id) count " +
+                "from ec_malaria_confirmation p where base_entity_id = '%s' " +
+                "AND p.is_closed = 0 AND p.malaria  = 1 " +
+                "AND datetime('NOW') <= datetime(ec_malaria_confirmation.last_interacted_with/1000, 'unixepoch', 'localtime','+15 days') " +
+                "AND ec_malaria_confirmation.malaria_test_date IS NOT NULL", baseEntityID);
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
