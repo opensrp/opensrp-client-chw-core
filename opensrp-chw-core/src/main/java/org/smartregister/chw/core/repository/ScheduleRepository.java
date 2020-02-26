@@ -259,12 +259,12 @@ public class ScheduleRepository extends BaseRepository {
         return scheduleTasks;
     }
 
+
     private String getDateForDB(Date date) {
         if (date == null) return null;
 
         return sdf.format(date);
     }
-
     private Date getCursorDate(Cursor c, String column_name) {
         String val = c.getType(c.getColumnIndex(column_name)) == Cursor.FIELD_TYPE_NULL ? null : c.getString(c.getColumnIndex(column_name));
         if (val == null)
