@@ -8,7 +8,7 @@
     android:background="@color/white">
 
     <LinearLayout
-        android:id="@+id/stock_usage_column"
+        android:id="@+id/stock_usage_item_detail_column"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <org.smartregister.view.customcontrols.CustomFontTextView
-            android:id="@+id/stock_name"
+            android:id="@+id/item_detail_month"
             style="@style/CustomFontTextViewStyle.ClientList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,10 +36,10 @@
             android:singleLine="true"
             android:textColor="@color/text_black"
             android:textSize="@dimen/register_list_title_size"
-            tools:text="ORS 5" />
+            tools:text="January" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
-            android:id="@+id/stock_unit_of_measure"
+            android:id="@+id/item_detail_year"
             style="@style/CustomFontTextViewStyle.ClientList.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,12 +49,12 @@
             android:textColor="@color/light_grey_text"
             android:textSize="@dimen/register_list_desc_size"
             android:textStyle="bold"
-            tools:text="Packets" />
+            tools:text="2020" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/monthly_count"
+        android:id="@+id/item_detail_monthly_count"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/register_list_item_height"
         android:layout_alignParentEnd="true"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <org.smartregister.view.customcontrols.CustomFontTextView
-            android:id="@+id/stock_count"
+            android:id="@+id/item_detail_stock_count"
             style="@style/CustomFontTextViewStyle.ClientList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,24 +83,6 @@
             android:textColor="@color/black_tranparent_50"
             android:textSize="24sp"
             tools:text="15" />
-
-        <com.rey.material.widget.ImageView
-            android:id="@+id/go_to_item_details_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:background="@color/transparent"
-            android:gravity="center"
-            android:hapticFeedbackEnabled="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/ic_arrow_forward_ios"
-            android:textAllCaps="true"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/vaccine_blue_bg_st"
-            android:textSize="15sp"
-            android:typeface="normal" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
