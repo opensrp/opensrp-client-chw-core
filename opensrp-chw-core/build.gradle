@@ -194,7 +194,7 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.12'
     api 'com.evernote:android-job:1.2.6'
     api 'org.greenrobot:eventbus:3.1.1'
-    api "org.smartregister:android-p2p-sync:0.3.3-SNAPSHOT"
+    api "org.smartregister:android-p2p-sync:0.3.5-SNAPSHOT"
 
     api('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
