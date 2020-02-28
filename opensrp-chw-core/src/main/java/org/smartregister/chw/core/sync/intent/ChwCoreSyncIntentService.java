@@ -33,6 +33,7 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
             try {
                 if (getHttpAgent() == null) {
                     complete(FetchStatus.fetchedFailed);
+                    return;
                 }
 
                 if (tasksWithMissingClientsEvents.isEmpty()) {
