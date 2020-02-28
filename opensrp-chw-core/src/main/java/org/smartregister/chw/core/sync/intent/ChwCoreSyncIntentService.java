@@ -90,6 +90,7 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
                     }
 
                     processClientEvent(jsonObject);//Process the client and his/her events
+                    complete(FetchStatus.fetched);
 
                 }
             } catch (Exception e) {
