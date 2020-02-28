@@ -10,7 +10,7 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyChangeContract;
-import org.smartregister.chw.core.shadows.ShadowFamilyLibrary;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.family.FamilyLibrary;
@@ -73,7 +73,7 @@ public class CoreFamilyChangeContractInteractorTest extends BaseUnitTest impleme
         metadata.familyMemberRegister = Mockito.mock(FamilyMetadata.FamilyMemberRegister.class);
         Mockito.doReturn(metadata).when(familyLibrary).metadata();
 
-        ShadowFamilyLibrary.setInstance(familyLibrary);
+        FamilyLibraryShadowUtil.setInstance(familyLibrary);
 
         interactor.getAdultMembersExcludeHOF("123445", presenter);
         Mockito.verify(presenter).renderAdultMembersExcludeHOF(Mockito.any(), Mockito.any(), Mockito.any());
@@ -94,7 +94,7 @@ public class CoreFamilyChangeContractInteractorTest extends BaseUnitTest impleme
         metadata.familyMemberRegister = Mockito.mock(FamilyMetadata.FamilyMemberRegister.class);
         Mockito.doReturn(metadata).when(familyLibrary).metadata();
 
-        ShadowFamilyLibrary.setInstance(familyLibrary);
+        FamilyLibraryShadowUtil.setInstance(familyLibrary);
 
         interactor.getAdultMembersExcludePCG("123445", presenter);
         Mockito.verify(presenter).renderAdultMembersExcludePCG(Mockito.any(), Mockito.any(), Mockito.any());
