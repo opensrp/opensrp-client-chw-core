@@ -36,24 +36,14 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
                     return;
                 }
 
-                if (tasksWithMissingClientsEvents.isEmpty()) {
-                    return;
-                }
-
                 Response resp = fetchClientEventsByBaseEntityId(task.getForEntity());
-                if (resp.isTimeoutError()) {
-                    FetchStatus.fetchedFailed.setDisplayValue(resp.status().displayValue());
-                    complete(FetchStatus.fetchedFailed);
-                }
-
-                if (resp.isUrlError()) {
+                if (resp.isTimeoutError() || resp.isUrlError()) {
                     FetchStatus.fetchedFailed.setDisplayValue(resp.status().displayValue());
                     complete(FetchStatus.fetchedFailed);
                     return;
-                }
-
-                if (resp.isFailure() && !resp.isUrlError() && !resp.isTimeoutError()) {
+                } else if (resp.isFailure()) {
                     fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
+                    return;
                 }
 
                 int eCount;
@@ -68,6 +58,7 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
 
                 if (eCount < 0) {
                     fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
+                    return;
                 } else {
                     processMissingEventsObject(jsonObject,count,tasksWithMissingClientsEvents);
                 }
