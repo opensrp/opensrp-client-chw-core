@@ -397,11 +397,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void setVisitNotDoneThisMonth() {
+    public void setVisitNotDoneThisMonth(boolean withinEditPeriod) {
         openVisitMonthView();
         textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
         textViewUndo.setText(getString(R.string.undo));
-        textViewUndo.setVisibility(View.VISIBLE);
+        textViewUndo.setVisibility(withinEditPeriod ? View.VISIBLE : View.GONE);
         imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
 

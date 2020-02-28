@@ -29,6 +29,7 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -249,7 +250,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         if (getView() == null) return;
 
         getView().setProgressBarState(false);
-        getView().onJsonProcessed(eventType, taskType , profileTask);
+        getView().onJsonProcessed(eventType, taskType, profileTask);
     }
 
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
@@ -276,7 +277,8 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
                 getView().setVisitAboveTwentyFourView();
             }
             if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name())) {
-                getView().setVisitNotDoneThisMonth();
+                boolean withinEditPeriod = isWithinEditPeriod(childVisit.getLastNotVisitDate());
+                getView().setVisitNotDoneThisMonth(withinEditPeriod);
             }
             if (childVisit.getLastVisitTime() != 0) {
                 getView().setLastVisitRowView(childVisit.getLastVisitDays());
@@ -285,6 +287,15 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
                 getView().enableEdit(new Period(new DateTime(childVisit.getLastVisitTime()), DateTime.now()).getHours() <= 24);
             }
         }
+    }
+
+    private boolean isWithinEditPeriod(@Nullable Long checkDate) {
+        if (checkDate == null)
+            return false;
+
+        Calendar start = Calendar.getInstance();
+        start.add(Calendar.HOUR, -24);
+        return checkDate > start.getTime().getTime();
     }
 
     @Override

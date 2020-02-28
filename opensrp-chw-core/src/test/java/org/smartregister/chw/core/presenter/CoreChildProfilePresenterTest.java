@@ -92,7 +92,7 @@ public class CoreChildProfilePresenterTest {
 
         profilePresenter.updateChildVisit(childVisit);
 
-        Mockito.verify(view).setVisitNotDoneThisMonth();
+        Mockito.verify(view).setVisitNotDoneThisMonth(Mockito.anyBoolean());
         Mockito.verify(view).setLastVisitRowView(childVisit.getLastVisitDays());
 
     }
