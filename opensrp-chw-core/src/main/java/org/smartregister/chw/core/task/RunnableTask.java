@@ -14,7 +14,7 @@ public class RunnableTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        if(runnable != null){
+        if (runnable != null) {
             runnable.run();
         }
         return null;

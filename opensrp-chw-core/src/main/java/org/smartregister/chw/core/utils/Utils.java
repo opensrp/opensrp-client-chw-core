@@ -670,7 +670,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static MemberObject referralToAncMember(org.smartregister.chw.referral.domain.MemberObject memberObject) {
         try {
             JSONObject referralJson = new JSONObject(org.smartregister.family.util.JsonFormUtils.gson.toJson(memberObject));
-            MemberObject memberObject1 = (MemberObject)convert(referralJson.toString(), MemberObject.class);
+            MemberObject memberObject1 = convert(referralJson.toString(), MemberObject.class);
             return memberObject1;
         } catch (JSONException var3) {
             Timber.e(var3);

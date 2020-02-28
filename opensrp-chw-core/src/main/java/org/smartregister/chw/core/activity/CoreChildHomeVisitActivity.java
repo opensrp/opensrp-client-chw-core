@@ -43,7 +43,7 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
                 JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
                 JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
                 JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "birth_cert_issue_date");
-                if(min_date != null){
+                if (min_date != null) {
                     int days = CoreJsonFormUtils.getDayFromDate(memberObject.getDob());
 
                     min_date.put("min_date", "today-" + days + "d");

@@ -28,7 +28,7 @@ public class NavigationDaoTest extends NavigationDao {
     }
 
     @Test
-    public void testGetQueryCount(){
+    public void testGetQueryCount() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"count"});
@@ -42,7 +42,7 @@ public class NavigationDaoTest extends NavigationDao {
     }
 
     @Test
-    public void testGetTableCount(){
+    public void testGetTableCount() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
         String sql = "table_a";
         NavigationDao.getTableCount(sql);

@@ -56,6 +56,17 @@ import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
 
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
+
+        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
+        final CommonPersonObjectClient client =
+                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
+        client.setColumnmaps(commonPersonObject.getColumnmaps());
+        return client;
+
+    }
+
     @Override
     protected void onCreation() {
         super.onCreation();
@@ -132,10 +143,6 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             default:
                 break;
         }
-    }
-
-    public interface OnMemberTypeLoadedListener {
-        void onMemberTypeLoaded(MemberType memberType);
     }
 
     protected Observable<MemberType> getMemberType() {
@@ -276,20 +283,13 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         setupFollowupVisitEditViews(VisitUtils.isVisitWithin24Hours(lastVisit));
     }
 
-    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
-        CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
-
-        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
-        final CommonPersonObjectClient client =
-                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
-        client.setColumnmaps(commonPersonObject.getColumnmaps());
-        return client;
-
-    }
-
     @Override
     public Context getContext() {
         return this;
+    }
+
+    public interface OnMemberTypeLoadedListener {
+        void onMemberTypeLoaded(MemberType memberType);
     }
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {

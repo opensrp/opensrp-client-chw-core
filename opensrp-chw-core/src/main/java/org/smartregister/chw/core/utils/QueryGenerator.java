@@ -19,6 +19,10 @@ public class QueryGenerator {
     private LimitClause limitClause;
     private SortClause sortClause;
 
+    public static String getFtsQuery(String tableName, String searchPhrase) {
+        return "select object_id from " + tableName + "_search where phrase match '\"" + searchPhrase + "\"*'";
+    }
+
     public String generateQuery() throws InvalidQueryException {
         if (columns == null && mainSelect == null)
             throw new InvalidQueryException("Missing columns statement");
@@ -39,10 +43,6 @@ public class QueryGenerator {
             builder.append(limitClause.generateQuery());
 
         return builder.toString();
-    }
-
-    public static String getFtsQuery(String tableName, String searchPhrase) {
-        return "select object_id from " + tableName + "_search where phrase match '\"" + searchPhrase + "\"*'";
     }
 
     private String getMainSelect() {
@@ -150,6 +150,12 @@ public class QueryGenerator {
     public QueryGenerator withSortColumn(String value) {
         getSortClause().addSortColumn(value);
         return this;
+    }
+
+    public interface QueryValue {
+
+        String generateQuery();
+
     }
 
     public static class Columns implements QueryValue {
@@ -306,12 +312,6 @@ public class QueryGenerator {
             }
             return builder.toString().trim();
         }
-    }
-
-    public interface QueryValue {
-
-        String generateQuery();
-
     }
 
     public static class InvalidQueryException extends Exception {

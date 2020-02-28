@@ -5,13 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -22,12 +17,10 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.adapter.MedicalHistoryAdapter;
 import org.smartregister.chw.core.domain.MedicalHistory;
 import org.smartregister.chw.core.utils.BaChildUtilsFlv;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.core.utils.CustomDividerItemDecoration;
 import org.smartregister.chw.core.utils.MedicalHistoryViewBuilder;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.immunization.domain.ServiceRecord;
@@ -46,10 +39,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChildMedicalHistoryActivity.Flavor {
 
     protected LayoutInflater inflater;
-    private Context context;
     protected List<Visit> visits;
     protected Map<String, List<Visit>> visitMap = new LinkedHashMap<>();
     protected Map<String, List<Vaccine>> vaccineMap = new LinkedHashMap<>();
+    private Context context;
     private LinearLayout parentView;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 

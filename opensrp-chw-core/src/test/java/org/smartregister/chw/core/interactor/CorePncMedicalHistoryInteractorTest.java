@@ -6,24 +6,19 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
-import org.smartregister.chw.core.dao.VisitDao;
-import org.smartregister.chw.pnc.contract.BasePncMedicalHistoryContract;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.anc.util.AppExecutors;
+import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.pnc.contract.BasePncMedicalHistoryContract;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.repository.Repository;
 
 import java.util.concurrent.Executor;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({VisitDao.class, AbstractDao.class})
-public class CorePncMedicalHistoryInteractorTest implements Executor {
+public class CorePncMedicalHistoryInteractorTest extends BaseUnitTest implements Executor {
 
     private CorePncMedicalHistoryActivityInteractor interactor;
     private AppExecutors appExecutors;
@@ -51,8 +46,8 @@ public class CorePncMedicalHistoryInteractorTest implements Executor {
 
     @Test
     public void getMemberHistoryCallBackIsExecutedWithVisitDetails() {
-        Whitebox.setInternalState(interactor, "appExecutors", appExecutors);
-        Whitebox.setInternalState(AbstractDao.class, "repository", repository);
+        ReflectionHelpers.setField(interactor, "appExecutors", appExecutors);
+        ReflectionHelpers.setStaticField(AbstractDao.class, "repository", repository);
         interactor.getMemberHistory("ID1234", context, callBack);
         Mockito.verify(callBack).onDataFetched(Mockito.anyList());
     }

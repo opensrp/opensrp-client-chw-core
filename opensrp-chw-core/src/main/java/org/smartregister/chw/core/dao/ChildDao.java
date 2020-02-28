@@ -96,6 +96,7 @@ public class ChildDao extends AbstractDao {
 
         return res.get(0) > 0;
     }
+
     public static boolean isMotherAlive(String motherBaseEntityId) {
         String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
 

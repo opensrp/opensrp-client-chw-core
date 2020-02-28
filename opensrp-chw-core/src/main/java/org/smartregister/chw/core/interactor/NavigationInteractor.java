@@ -4,8 +4,8 @@ import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
 
 import java.util.Date;

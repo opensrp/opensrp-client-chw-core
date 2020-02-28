@@ -31,6 +31,16 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
         initUi();
     }
 
+    public FamilyFloatingMenu(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initUi();
+    }
+
+    public FamilyFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initUi();
+    }
+
     private void initUi() {
         inflate(getContext(), R.layout.view_family_floating_menu, this);
         activityMain = findViewById(R.id.activity_main);
@@ -89,16 +99,6 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
 
             isFabMenuOpen = true;
         }
-    }
-
-    public FamilyFloatingMenu(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initUi();
-    }
-
-    public FamilyFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initUi();
     }
 
     /**

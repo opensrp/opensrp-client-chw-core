@@ -263,6 +263,7 @@ public abstract class CoreMalariaRegisterFragment extends BaseMalariaRegisterFra
         dueOnlyLayout.setTag(DUE_FILTER_TAG);
         switchViews(dueOnlyLayout, true);
     }
+
     protected void normalFilter(View dueOnlyLayout) {
         filterDue(searchText(), "", presenter().getMainCondition());
         dueOnlyLayout.setTag(null);

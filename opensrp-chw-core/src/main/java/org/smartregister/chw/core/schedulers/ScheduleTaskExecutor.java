@@ -38,7 +38,7 @@ public abstract class ScheduleTaskExecutor {
                 List<ScheduleTask> services = service.generateTasks(baseEntityID, eventName, eventDate);
                 if (services != null && services.size() > 0)
                     CoreChwApplication.getInstance().getScheduleRepository().addSchedules(services);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Timber.e(e);
             }
         }
