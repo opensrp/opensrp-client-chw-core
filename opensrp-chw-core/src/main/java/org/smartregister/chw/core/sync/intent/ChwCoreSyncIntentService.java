@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.sync.intent;
 
+import android.content.Intent;
 import android.util.Pair;
 
 import com.google.gson.Gson;
@@ -18,7 +19,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class ChwCoreSyncIntentService extends SyncIntentService {
+public abstract class ChwCoreSyncIntentService extends SyncIntentService {
 
     public ChwCoreSyncIntentService(String name) {
         super(name);
@@ -138,5 +139,7 @@ public class ChwCoreSyncIntentService extends SyncIntentService {
         }
     }
 
+    @Override
+    abstract protected void onHandleIntent(Intent intent);
 }
 
