@@ -68,30 +68,7 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
                 if (eCount < 0) {
                     fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
                 } else {
-
-                    //fetch clients family registration event
-                    JSONArray clients = jsonObject.has("clients") ? jsonObject.getJSONArray("clients") : new JSONArray();
-
-                    if (clients.length() == 1) {
-                        JSONArray familyObject = clients.getJSONObject(0)
-                                .getJSONObject("relationships").has("family")
-                                ? clients.getJSONObject(0).getJSONObject("relationships")
-                                .getJSONArray("family") : new JSONArray();
-
-                        for (int i = 0; i < familyObject.length(); i++) {
-                            Response familyResponse = fetchClientEventsByBaseEntityId(familyObject.getString(i));
-                            if (familyResponse.isFailure() && !familyResponse.isUrlError() && !familyResponse.isTimeoutError()) {
-                                fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
-                            } else {
-                                processClientEvent(new JSONObject((String) familyResponse.payload())); //process the family events
-                            }
-
-                        }
-                    }
-
-                    processClientEvent(jsonObject);//Process the client and his/her events
-                    complete(FetchStatus.fetched);
-
+                    processMissingEventsObject(jsonObject,count,tasksWithMissingClientsEvents);
                 }
             } catch (Exception e) {
                 Timber.e(e, "Fetch Retry Exception:  %s", e.getMessage());
@@ -138,6 +115,31 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
         } else {
             complete(FetchStatus.fetchedFailed);
         }
+    }
+
+    public void processMissingEventsObject(JSONObject jsonObject,int count, List<Task> tasksWithMissingClientsEvents) throws Exception{
+        //fetch clients family registration event
+        JSONArray clients = jsonObject.has("clients") ? jsonObject.getJSONArray("clients") : new JSONArray();
+
+        if (clients.length() == 1) {
+            JSONArray familyObject = clients.getJSONObject(0)
+                    .getJSONObject("relationships").has("family")
+                    ? clients.getJSONObject(0).getJSONObject("relationships")
+                    .getJSONArray("family") : new JSONArray();
+
+            for (int i = 0; i < familyObject.length(); i++) {
+                Response familyResponse = fetchClientEventsByBaseEntityId(familyObject.getString(i));
+                if (familyResponse.isFailure() && !familyResponse.isUrlError() && !familyResponse.isTimeoutError()) {
+                    fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
+                } else {
+                    processClientEvent(new JSONObject((String) familyResponse.payload())); //process the family events
+                }
+
+            }
+        }
+
+        processClientEvent(jsonObject);//Process the client and his/her events
+        complete(FetchStatus.fetched);
     }
 
     @Override
