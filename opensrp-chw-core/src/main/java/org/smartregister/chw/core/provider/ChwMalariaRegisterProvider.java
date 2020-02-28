@@ -11,19 +11,14 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.MalariaVisitUtil;
-import org.smartregister.chw.malaria.util.DBConstants;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.provider.MalariaRegisterProvider;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
-
-import timber.log.Timber;
 
 public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
@@ -41,8 +36,8 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
         viewHolder.dueButton.setVisibility(View.GONE);
         viewHolder.dueButton.setOnClickListener(null);
-        CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
-        Utils.startAsyncTask(new UpdateDueButtonStatusTask(viewHolder, pc), null);
+        Date memberObject = MalariaDao.getMalariaTestDate(((CommonPersonObjectClient) client).getCaseId());
+        Utils.startAsyncTask(new UpdateDueButtonStatusTask(viewHolder, memberObject), null);
     }
 
     private void updateDueColumn(Button dueButton, String followStatus) {
@@ -60,22 +55,17 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
     private class UpdateDueButtonStatusTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
-        private final CommonPersonObjectClient pc;
+        private final Date malariaTestDate;
         private MalariaFollowUpRule malariaFollowUpRule;
 
-        private UpdateDueButtonStatusTask(RegisterViewHolder viewHolder, CommonPersonObjectClient pc) {
+        private UpdateDueButtonStatusTask(RegisterViewHolder viewHolder, Date malariaTestDate) {
             this.viewHolder = viewHolder;
-            this.pc = pc;
+            this.malariaTestDate = malariaTestDate;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                Date date = new SimpleDateFormat(CoreConstants.DATE_FORMATS.NATIVE_FORMS, Locale.getDefault()).parse(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MALARIA_TEST_DATE, false));
-                malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(date);
-            } catch (ParseException e) {
-                Timber.e(e);
-            }
+            malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(malariaTestDate);
             return null;
         }
 
