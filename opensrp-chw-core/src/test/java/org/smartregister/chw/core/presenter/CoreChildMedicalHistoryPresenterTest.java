@@ -47,9 +47,9 @@ public class CoreChildMedicalHistoryPresenterTest {
         Map<String, List<Vaccine>> vaccines = new HashMap<>();
         List<ServiceRecord> serviceRecords = new ArrayList<>();
 
-        profilePresenter.onDataFetched(visitsList,vaccines,serviceRecords);
+        profilePresenter.onDataFetched(visitsList, vaccines, serviceRecords);
 
-        Mockito.verify(view).onDataReceived(visitsList,vaccines,serviceRecords);
+        Mockito.verify(view).onDataReceived(visitsList, vaccines, serviceRecords);
     }
 
 

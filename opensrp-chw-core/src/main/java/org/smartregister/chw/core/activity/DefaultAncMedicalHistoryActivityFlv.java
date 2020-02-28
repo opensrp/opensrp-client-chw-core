@@ -96,8 +96,9 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
             processIPTp(services, context);
         }
     }
-    private String getString(String x, Context context){
-        switch (x.toLowerCase().trim()){
+
+    private String getString(String x, Context context) {
+        switch (x.toLowerCase().trim()) {
             case "none":
                 return context.getString(R.string.edu_level_none);
             case "urine analysis":
@@ -106,19 +107,19 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
                 return context.getString(R.string.hiv_test);
             case "syphilis test":
                 return context.getString(R.string.syphilis_test);
-                default:
-                    return x;
+            default:
+                return x;
         }
     }
 
-    public String getTexts(Context context, List<VisitDetail> visitDetails){
-        if(visitDetails == null)
+    public String getTexts(Context context, List<VisitDetail> visitDetails) {
+        if (visitDetails == null)
             return "";
 
         List<String> texts = new ArrayList<>();
-        for (VisitDetail vd: visitDetails){
+        for (VisitDetail vd : visitDetails) {
             String val = NCUtils.getText(vd);
-            if(StringUtils.isNotBlank(val))
+            if (StringUtils.isNotBlank(val))
                 texts.add(getString(val.trim(), context));
         }
         return NCUtils.toCSV(texts);
@@ -133,7 +134,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
                 Map<String, String> map = new HashMap<>();
                 for (String param : hf_params) {
                     List<VisitDetail> details = sourceVisits.get(iteration).getVisitDetails().get(param);
-                    map.put(param, getTexts(context,details));
+                    map.put(param, getTexts(context, details));
                 }
                 hf_visits.add(map);
             }
@@ -170,17 +171,16 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
     private void processLastVisit(int days, Context context) {
         linearLayoutLastVisit.setVisibility(View.VISIBLE);
-        if( days < 1){
+        if (days < 1) {
             customFontTextViewLastVisit.setText(R.string.less_than_twenty_four);
-        }
-        else  {
+        } else {
             customFontTextViewLastVisit.setText(StringUtils.capitalize(MessageFormat.format(context.getString(R.string.days_ago), String.valueOf(days))));
         }
     }
 
     protected void processAncCard(String has_card, Context context) {
         linearLayoutAncCard.setVisibility(View.VISIBLE);
-        customFontTextViewAncCard.setText(MessageFormat.format("{0}: {1}", context.getString(R.string.anc_home_visit_anc_card_received),getTranslatedText(context, has_card.toLowerCase())));
+        customFontTextViewAncCard.setText(MessageFormat.format("{0}: {1}", context.getString(R.string.anc_home_visit_anc_card_received), getTranslatedText(context, has_card.toLowerCase())));
     }
 
     protected void processHealthFacilityVisit(List<Map<String, String>> hf_visits, Context context) {
@@ -212,15 +212,15 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
         }
     }
 
-    private String getTranslatedText(Context context, String val){
+    private String getTranslatedText(Context context, String val) {
 
-        switch (val.toLowerCase()){
+        switch (val.toLowerCase()) {
             case "yes":
                 return context.getString(R.string.yes);
             case "no":
                 return context.getString(R.string.no);
-                default:
-                    return val;
+            default:
+                return val;
         }
 
     }

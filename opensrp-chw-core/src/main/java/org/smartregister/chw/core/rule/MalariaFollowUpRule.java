@@ -20,10 +20,6 @@ public class MalariaFollowUpRule implements ICommonRule {
         return Days.daysBetween(new DateTime(testDate), new DateTime()).getDays();
     }
 
-    public void setButtonStatus(String buttonStatus) {
-        this.buttonStatus = buttonStatus;
-    }
-
     @Override
     public String getRuleKey() {
         return "malariaFollowUpRule";
@@ -32,5 +28,9 @@ public class MalariaFollowUpRule implements ICommonRule {
     @Override
     public String getButtonStatus() {
         return buttonStatus;
+    }
+
+    public void setButtonStatus(String buttonStatus) {
+        this.buttonStatus = buttonStatus;
     }
 }

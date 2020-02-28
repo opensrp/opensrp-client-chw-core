@@ -13,22 +13,22 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadow;
+import org.smartregister.chw.core.shadows.UtilsShadow;
 import org.smartregister.family.FamilyLibrary;
-import org.smartregister.family.domain.FamilyMetadata;
 
 import java.util.List;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FamilyLibrary.class, Utils.class})
-public class CoreJsonFormUtilsTest {
+@RunWith(RobolectricTestRunner.class)
+@Config(application = TestApplication.class, sdk = 22, shadows = {ContextShadow.class, FamilyLibraryShadow.class, UtilsShadow.class})
+public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
-
-    @Mock
-    private FamilyMetadata familyMetadata;
 
     @Mock
     private FamilyLibrary familyLibraryInstance;
@@ -48,11 +48,8 @@ public class CoreJsonFormUtilsTest {
     @Test
     public void getAncPncStartFormIntentReturnsIntent() throws Exception {
         Context context = Mockito.mock(Context.class);
-        PowerMockito.mockStatic(FamilyLibrary.class);
-        PowerMockito.mockStatic(Utils.class);
-        PowerMockito.when(FamilyLibrary.getInstance()).thenReturn(familyLibraryInstance);
-        PowerMockito.when(Utils.metadata()).thenReturn(familyMetadata);
-        PowerMockito.when(familyLibraryInstance.metadata()).thenReturn(familyMetadata);
+        FamilyLibraryShadow.setInstance(familyLibraryInstance);
+
         Intent ancPncIntent = CoreJsonFormUtils.getAncPncStartFormIntent(jsonForm, context);
         Assert.assertNotNull(ancPncIntent);
     }

@@ -453,6 +453,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     public interface Flavour {
         String[] getSupportedLanguages();
+
         HashMap<String, String> getTableMapValues();
     }
 }

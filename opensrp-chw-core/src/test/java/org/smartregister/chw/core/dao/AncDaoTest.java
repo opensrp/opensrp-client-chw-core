@@ -52,7 +52,7 @@ public class AncDaoTest extends AncDao {
 
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
         matrixCursor.addRow(new Object[]{"12345"});
-        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(),Mockito.any());
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
         MemberObject memberObject = AncDao.getMember("123456");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
