@@ -155,8 +155,6 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
             if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
                 if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
                     anchor = getLastDayOfMonth(todayDate.toDate());
-                } else {
-
                 }
             } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
                 anchor = visitNotDoneDate.toDate();

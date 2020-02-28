@@ -9,7 +9,7 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 @Implements(Utils.class)
-public class UtilsShadow {
+public class ShadowUtils {
 
     private static FamilyMetadata metadata;
 
@@ -23,6 +23,6 @@ public class UtilsShadow {
     }
 
     public static void setMetadata(FamilyMetadata metadata) {
-        UtilsShadow.metadata = metadata;
+        ShadowUtils.metadata = metadata;
     }
 }

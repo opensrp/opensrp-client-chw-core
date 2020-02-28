@@ -18,14 +18,14 @@ import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.shadows.ContextShadow;
-import org.smartregister.chw.core.shadows.FamilyLibraryShadow;
-import org.smartregister.chw.core.shadows.UtilsShadow;
+import org.smartregister.chw.core.shadows.ShadowFamilyLibrary;
+import org.smartregister.chw.core.shadows.ShadowUtils;
 import org.smartregister.family.FamilyLibrary;
 
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, sdk = 22, shadows = {ContextShadow.class, FamilyLibraryShadow.class, UtilsShadow.class})
+@Config(application = TestApplication.class, sdk = 22, shadows = {ContextShadow.class, ShadowFamilyLibrary.class, ShadowUtils.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -48,7 +48,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     @Test
     public void getAncPncStartFormIntentReturnsIntent() throws Exception {
         Context context = Mockito.mock(Context.class);
-        FamilyLibraryShadow.setInstance(familyLibraryInstance);
+        ShadowFamilyLibrary.setInstance(familyLibraryInstance);
 
         Intent ancPncIntent = CoreJsonFormUtils.getAncPncStartFormIntent(jsonForm, context);
         Assert.assertNotNull(ancPncIntent);

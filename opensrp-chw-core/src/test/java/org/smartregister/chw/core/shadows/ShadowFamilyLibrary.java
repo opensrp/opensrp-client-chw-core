@@ -10,7 +10,7 @@ import org.smartregister.family.FamilyLibrary;
  */
 
 @Implements(FamilyLibrary.class)
-public class FamilyLibraryShadow {
+public class ShadowFamilyLibrary {
 
     private static FamilyLibrary instance;
 
@@ -24,6 +24,6 @@ public class FamilyLibraryShadow {
     }
 
     public static void setInstance(FamilyLibrary instance) {
-        FamilyLibraryShadow.instance = instance;
+        ShadowFamilyLibrary.instance = instance;
     }
 }
