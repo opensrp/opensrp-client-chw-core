@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -49,7 +49,7 @@ public class CoreFamilyPlanningProfilePresenterTest {
 
     @Test
     public void startFamilyPlanningReferralStartsReferralForm() {
-        Whitebox.setInternalState(profilePresenter, "formUtils", formUtils);
+        ReflectionHelpers.setField(profilePresenter, "formUtils", formUtils);
         profilePresenter.startFamilyPlanningReferral();
         Mockito.verify(profilePresenter.getView()).startFormActivity(Mockito.any(), Mockito.any());
     }

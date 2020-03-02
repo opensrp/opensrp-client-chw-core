@@ -138,7 +138,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_anc_registration) {
             startAncRegister();
             return true;
-        }  else if (i == R.id.action_fp_initiation) {
+        } else if (i == R.id.action_fp_initiation) {
             startFpRegister();
             return true;
         } else if (i == R.id.action_fp_change) {
@@ -147,7 +147,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
-        }else if (i == R.id.action_malaria_followup_visit) {
+        } else if (i == R.id.action_malaria_followup_visit) {
             startMalariaFollowUpVisit();
             return true;
         } else if (i == R.id.action_registration) {

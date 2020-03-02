@@ -45,20 +45,19 @@ import timber.log.Timber;
 
 public abstract class CoreChwApplication extends DrishtiApplication implements CoreApplication {
 
+    protected static TaskRepository taskRepository;
     private static ClientProcessorForJava clientProcessor;
-
     private static CommonFtsObject commonFtsObject = null;
     private static AncRegisterRepository ancRegisterRepository;
-    protected static TaskRepository taskRepository;
     private static PncRegisterRepository pncRegisterRepository;
     private static PlanDefinitionRepository planDefinitionRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
     public JsonSpecHelper jsonSpecHelper;
+    protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
     private ECSyncHelper ecSyncHelper;
     private String password;
-    protected ClientProcessorForJava clientProcessorForJava;
     private UniqueIdRepository uniqueIdRepository;
 
     private RulesEngineHelper rulesEngineHelper;
@@ -104,6 +103,13 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
      */
     public static Locale getCurrentLocale() {
         return mInstance == null ? Locale.getDefault() : mInstance.getResources().getConfiguration().locale;
+    }
+
+    public static ClientProcessorForJava getClientProcessor(android.content.Context context) {
+        if (clientProcessor == null) {
+            clientProcessor = CoreClientProcessor.getInstance(context);
+        }
+        return clientProcessor;
     }
 
     public TaskRepository getTaskRepository() {
@@ -163,13 +169,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     @Override
     public ClientProcessorForJava getClientProcessor() {
         return CoreChwApplication.getClientProcessor(CoreChwApplication.getInstance().getApplicationContext());
-    }
-
-    public static ClientProcessorForJava getClientProcessor(android.content.Context context) {
-        if (clientProcessor == null) {
-            clientProcessor = CoreClientProcessor.getInstance(context);
-        }
-        return clientProcessor;
     }
 
     public VaccineRepository vaccineRepository() {

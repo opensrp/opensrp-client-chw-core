@@ -117,7 +117,7 @@ public class PNCDao extends AbstractDao {
         return readData(sql, dataMap);
     }
 
-    public static  String earlyBreastFeeding(String motherBaseEntityId, String visitId){
+    public static String earlyBreastFeeding(String motherBaseEntityId, String visitId) {
         String sql = "SELECT early_bf_1hr " +
                 "FROM ec_child " +
                 "INNER JOIN visits v ON v.visit_id = '" + visitId + "' COLLATE NOCASE " +
@@ -126,7 +126,7 @@ public class PNCDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "early_bf_1hr");
 
         List<String> res = readData(sql, dataMap);
-        if( res != null && res.size()> 0){
+        if (res != null && res.size() > 0) {
             return res.get(0);
         }
         return null;

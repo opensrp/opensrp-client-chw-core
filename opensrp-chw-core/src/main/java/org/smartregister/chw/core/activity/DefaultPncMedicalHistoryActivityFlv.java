@@ -35,7 +35,6 @@ import java.util.Map;
 public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedicalHistoryActivity.Flavor {
 
     protected LayoutInflater inflater;
-    private Context context;
     protected List<Visit> visits;
     protected LinearLayout parentView;
     @LayoutRes
@@ -43,6 +42,19 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
     @LayoutRes
     protected int rootLayout = R.layout.pnc_medical_history_nested;
     protected List<MedicalHistory> medicalHistories = null;
+    private Context context;
+
+    protected static String toCSV(List<String> list) {
+        String result = "";
+        if (list.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : list) {
+                sb.append(s).append(",");
+            }
+            result = sb.deleteCharAt(sb.length() - 1).toString();
+        }
+        return result;
+    }
 
     @Override
     public View bindViews(Activity activity) {
@@ -231,7 +243,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         }
     }
 
-
     protected void processChildDetails(List<Visit> visits, String memberName) {
         this.visits = visits;
         String vaccineCard = context.getString(R.string.pnc_no);
@@ -358,18 +369,6 @@ public abstract class DefaultPncMedicalHistoryActivityFlv implements CorePncMedi
         }
 
         return (StringUtils.isNotBlank(visitDetail.getDetails())) ? visitDetail.getDetails().trim() : "";
-    }
-
-    protected static String toCSV(List<String> list) {
-        String result = "";
-        if (list.size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (String s : list) {
-                sb.append(s).append(",");
-            }
-            result = sb.deleteCharAt(sb.length() - 1).toString();
-        }
-        return result;
     }
 
     protected void extractFamilyPlanningMethods(List<Visit> visits, Map<String, String> familyPlanningMap) {

@@ -33,7 +33,7 @@ public class ApplicationUtils {
                     DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
                     DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, DBConstants.KEY.RELATIONAL_ID
             };
-        }else if(tableName.equals(CoreConstants.TABLE_NAME.CHILD)){
+        } else if (tableName.equals(CoreConstants.TABLE_NAME.CHILD)) {
             return new String[]{
                     DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
                     DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, ChildDBConstants.KEY.ENTRY_POINT, DBConstants.KEY.DOB, DBConstants.KEY.DATE_REMOVED

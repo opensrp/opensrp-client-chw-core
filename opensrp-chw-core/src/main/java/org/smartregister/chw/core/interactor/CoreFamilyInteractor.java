@@ -22,6 +22,16 @@ public abstract class CoreFamilyInteractor {
         return ImmunizationState.NO_ALERT;
     }
 
+    private static String toStringFamilyState(ImmunizationState state) {
+        if (state.equals(ImmunizationState.DUE)) {
+            return CoreConstants.FamilyServiceType.DUE.name();
+        } else if (state.equals(ImmunizationState.OVERDUE)) {
+            return CoreConstants.FamilyServiceType.OVERDUE.name();
+        } else {
+            return CoreConstants.FamilyServiceType.NOTHING.name();
+        }
+    }
+
     public Observable<String> updateFamilyDueStatus(final Context context, final String childId, final String familyId) {
         return Observable.create(e -> {
             ImmunizationState familyImmunizationState = getFamilyImmunizationState(context, childId, familyId);
@@ -67,16 +77,6 @@ public abstract class CoreFamilyInteractor {
                 break;
         }
         return finalState;
-    }
-
-    private static String toStringFamilyState(ImmunizationState state) {
-        if (state.equals(ImmunizationState.DUE)) {
-            return CoreConstants.FamilyServiceType.DUE.name();
-        } else if (state.equals(ImmunizationState.OVERDUE)) {
-            return CoreConstants.FamilyServiceType.OVERDUE.name();
-        } else {
-            return CoreConstants.FamilyServiceType.NOTHING.name();
-        }
     }
 
     public abstract ImmunizationState getChildStatus(Context context, final String childId, Cursor cursor);
