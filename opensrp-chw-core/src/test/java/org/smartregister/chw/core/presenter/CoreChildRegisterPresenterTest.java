@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -47,37 +47,37 @@ public class CoreChildRegisterPresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         profilePresenter = Mockito.mock(CoreChildRegisterPresenter.class, Mockito.CALLS_REAL_METHODS);
-        Whitebox.setInternalState(profilePresenter, "viewReference", new WeakReference<>(view));
-        Whitebox.setInternalState(profilePresenter, "interactor", interactor);
-        Whitebox.setInternalState(profilePresenter, "model", model);
+        ReflectionHelpers.setField(profilePresenter, "viewReference", new WeakReference<>(view));
+        ReflectionHelpers.setField(profilePresenter, "interactor", interactor);
+        ReflectionHelpers.setField(profilePresenter, "model", model);
     }
 
     @Test
-    public void registerViewConfigurations() {
+    public void TestRegisterViewConfigurations() {
         profilePresenter.registerViewConfigurations(viewIdentifiers);
         Mockito.verify(model).registerViewConfigurations(viewIdentifiers);
     }
 
     @Test
-    public void unregisterViewConfiguration() {
+    public void TestUnregisterViewConfiguration() {
         profilePresenter.unregisterViewConfiguration(viewIdentifiers);
         Mockito.verify(model).unregisterViewConfiguration(viewIdentifiers);
     }
 
     @Test
-    public void onDestroy() {
+    public void TestOnDestroy() {
         profilePresenter.onDestroy(true);
         Mockito.verify(interactor).onDestroy(true);
     }
 
     @Test
-    public void saveLanguage() {
+    public void TestSaveLanguage() {
         profilePresenter.saveLanguage(Mockito.anyString());
         Mockito.verify(view).displayToast(Mockito.anyString());
     }
 
     @Test
-    public void startForm() {
+    public void TestStartForm() {
         try {
             String entityId = Mockito.anyString();
             String familyId = Mockito.anyString();
@@ -99,13 +99,13 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void onNoUniqueId() {
+    public void TestOnNoUniqueId() {
         profilePresenter.onNoUniqueId();
         Mockito.verify(view).displayShortToast(Mockito.anyInt());
     }
 
     @Test
-    public void onUniqueIdFetched() {
+    public void TestOnUniqueIdFetched() {
         String anyString = Mockito.anyString();
         Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
         profilePresenter.onUniqueIdFetched(triple, Mockito.anyString(), Mockito.anyString());
@@ -113,7 +113,7 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void onRegistrationSaved() {
+    public void TestOnRegistrationSaved() {
         FetchStatus fetchStatus = FetchStatus.fetched;
         Mockito.anyString();
         profilePresenter.onRegistrationSaved(Mockito.anyBoolean(), Mockito.anyBoolean(), familyEventClient);
