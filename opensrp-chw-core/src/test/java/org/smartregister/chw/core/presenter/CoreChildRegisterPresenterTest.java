@@ -53,31 +53,31 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void TestRegisterViewConfigurations() {
+    public void testRegisterViewConfigurations() {
         profilePresenter.registerViewConfigurations(viewIdentifiers);
         Mockito.verify(model).registerViewConfigurations(viewIdentifiers);
     }
 
     @Test
-    public void TestUnregisterViewConfiguration() {
+    public void testUnregisterViewConfiguration() {
         profilePresenter.unregisterViewConfiguration(viewIdentifiers);
         Mockito.verify(model).unregisterViewConfiguration(viewIdentifiers);
     }
 
     @Test
-    public void TestOnDestroy() {
+    public void testOnDestroy() {
         profilePresenter.onDestroy(true);
         Mockito.verify(interactor).onDestroy(true);
     }
 
     @Test
-    public void TestSaveLanguage() {
+    public void testSaveLanguage() {
         profilePresenter.saveLanguage(Mockito.anyString());
         Mockito.verify(view).displayToast(Mockito.anyString());
     }
 
     @Test
-    public void TestStartForm() {
+    public void testStartForm() {
         try {
             String entityId = Mockito.anyString();
             String familyId = Mockito.anyString();
@@ -99,13 +99,13 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void TestOnNoUniqueId() {
+    public void testOnNoUniqueId() {
         profilePresenter.onNoUniqueId();
         Mockito.verify(view).displayShortToast(Mockito.anyInt());
     }
 
     @Test
-    public void TestOnUniqueIdFetched() {
+    public void testOnUniqueIdFetched() {
         String anyString = Mockito.anyString();
         Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
         profilePresenter.onUniqueIdFetched(triple, Mockito.anyString(), Mockito.anyString());
@@ -113,7 +113,7 @@ public class CoreChildRegisterPresenterTest {
     }
 
     @Test
-    public void TestOnRegistrationSaved() {
+    public void testOnRegistrationSaved() {
         FetchStatus fetchStatus = FetchStatus.fetched;
         Mockito.anyString();
         profilePresenter.onRegistrationSaved(Mockito.anyBoolean(), Mockito.anyBoolean(), familyEventClient);

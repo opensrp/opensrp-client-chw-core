@@ -20,7 +20,6 @@ import java.util.List;
 
 public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
     private Context context = RuntimeEnvironment.application;
-    private StockUsageItemModel stockUsageItemModel;
     private CoreStockUsageItemAdapter adapter;
 
     @Mock
@@ -37,6 +36,7 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
 
     @Test
     public void testItemAtPosition() {
+        StockUsageItemModel stockUsageItemModel;
         stockUsageItemModel = stockUsageItemModelList.get(0);
         Assert.assertEquals(stockUsageItemModel.getStockName(), stockUsageItemModelList.get(0).getStockName());
     }

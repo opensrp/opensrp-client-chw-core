@@ -31,7 +31,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     protected AppBarLayout appBarLayout;
     private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
-    private String evaluateStockName(String stockName){
+    private String evaluateStockName(String stockName) {
         String stock_name;
         switch (stockName) {
             case ("Male Condoms"):
@@ -50,7 +50,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         return stock_name;
     }
 
-    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName){
+    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName) {
         String stockMonth;
         String stockYear;
         String stockUsage;
@@ -117,6 +117,6 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
 
     @Override
     protected void onResumption() {
-
+        //Implements Method From super Class
     }
 }

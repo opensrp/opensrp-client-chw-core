@@ -14,10 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CoreStockUsageItemDetailsAdapterTest {
-    @Mock
-    CoreStockUsageItemDetailsAdapter.CoreStockUsageReportDetailsViewHolder viewHolder;
+
     private CoreStockUsageItemDetailsAdapter adapter;
     private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList;
+
+    @Mock
+    private CoreStockUsageItemDetailsAdapter.CoreStockUsageReportDetailsViewHolder viewHolder;
 
     @Before
     public void setUp() {

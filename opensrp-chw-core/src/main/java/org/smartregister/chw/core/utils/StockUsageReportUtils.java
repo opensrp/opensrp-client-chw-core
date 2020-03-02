@@ -58,6 +58,7 @@ public class StockUsageReportUtils {
                 break;
             case "Dec":
                 valMonth = "12";
+                break;
             default:
                 break;
         }

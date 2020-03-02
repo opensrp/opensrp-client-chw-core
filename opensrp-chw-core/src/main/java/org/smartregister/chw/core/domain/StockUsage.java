@@ -8,6 +8,8 @@ public class StockUsage {
     private String stockUsage;
     private String year;
     private String month;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Date getCreatedAt() {
         return createdAt;
@@ -24,11 +26,6 @@ public class StockUsage {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    private Date createdAt;
-    private Date updatedAt;
-
-
 
     public void setId(String id) {
         this.id = id;

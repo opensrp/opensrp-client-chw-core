@@ -102,7 +102,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                   //Implements Method From super Class
             }
         });
 
@@ -135,6 +135,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
     @Override
     protected void onResumption() {
+//Implements Method From super Class
 
     }
 }
