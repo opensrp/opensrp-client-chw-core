@@ -64,7 +64,7 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
         private ImageView goToDetails;
         private View view;
 
-        public CoreStockUsageReportViewHolder(View v) {
+        private CoreStockUsageReportViewHolder(View v) {
             super(v);
             view = v;
             stockName = v.findViewById(R.id.stock_name);

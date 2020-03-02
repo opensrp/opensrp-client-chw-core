@@ -3,8 +3,7 @@ package org.smartregister.chw.core.activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
-import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.CoreStockMonthlyReportAdapter;
 import org.smartregister.chw.core.adapter.CoreStockUsageItemAdapter;
@@ -28,57 +26,21 @@ import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.view.activity.SecuredActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CoreStockInventoryReportActivity extends SecuredActivity {
-    private RecyclerView recyclerView;
     protected AppBarLayout appBarLayout;
-    private  StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
+    private RecyclerView recyclerView;
+    private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
+
     private static List<String> getItems() {
         List<String> itemList = new ArrayList<>(
                 Arrays.asList("ORS 5", "Zinc 10", "Paracetamol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
         );
-
         return itemList;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stock_usage_report);
-
-        Spinner spinner = findViewById(R.id.spinner);
-
-        /*List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
-
-        monthStockUsageReportList.add(new MonthStockUsageModel("February", "2020"));
-        monthStockUsageReportList.add(new MonthStockUsageModel("January", "2020"));
-        monthStockUsageReportList.add(new MonthStockUsageModel("December", "2019"));
-        monthStockUsageReportList.add(new MonthStockUsageModel("November", "2019"));
-        monthStockUsageReportList.add(new MonthStockUsageModel("October", "2019"));
-
-*/
-        CoreStockMonthlyReportAdapter adapter = new CoreStockMonthlyReportAdapter(getMonthStockUsageReportList(), this);
-        spinner.setAdapter(adapter);
-
-        recyclerView = findViewById(R.id.rv_stock_usage_report);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MonthStockUsageModel selected = getMonthStockUsageReportList().get(position);
-                reloadRecycler(selected);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private List<MonthStockUsageModel> getMonthStockUsageReportList() {
@@ -92,9 +54,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         return monthStockUsageReportList;
     }
 
-
     private List<StockUsageItemModel> getStockUsageItemReportList(String month, String year) {
-      List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
+        List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
         StockUsageReportDao stockUsageReportDao = new StockUsageReportDao();
         for (String item : getItems()) {
             String usage = stockUsageReportDao.getStockUsageForMonth(month, item, year);
@@ -106,20 +67,11 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         }
         return stockUsageItemModelsList;
     }
+
     private void reloadRecycler(MonthStockUsageModel selected) {
         String stockMonth = stockUsageReportUtils.monthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
-/*
-        stockUsageItemModelsList.add(new StockUsageItemModel(
-                "ORS 5",
-                "Packets",
-                "15"
-        ));
-        stockUsageItemModelsList.add(new StockUsageItemModel(
-                "Zinc 10",
-                "Tablets",
-                "28"
-        ));*/
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         CoreStockUsageItemAdapter coreStockUsageItemAdapter = new CoreStockUsageItemAdapter(getStockUsageItemReportList(stockMonth, stockYear), this);
@@ -134,6 +86,26 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     @Override
     protected void onCreation() {
         setContentView(R.layout.activity_stock_usage_report);
+
+        Spinner spinner = findViewById(R.id.spinner);
+        CoreStockMonthlyReportAdapter adapter = new CoreStockMonthlyReportAdapter(getMonthStockUsageReportList(), this);
+        spinner.setAdapter(adapter);
+
+        recyclerView = findViewById(R.id.rv_stock_usage_report);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MonthStockUsageModel selected = getMonthStockUsageReportList().get(position);
+                reloadRecycler(selected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
@@ -157,30 +129,12 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
+
+    @Override
     protected void onResumption() {
 
     }
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //adapter.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        //adapter.onRestoreInstanceState(savedInstanceState);
-    }
-*/
-
 }
