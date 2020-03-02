@@ -220,7 +220,7 @@ public abstract class CoreChildUtils {
                 || display.toLowerCase().contains("rubella")) {
             vaccineDisplay = WordUtils.capitalize(vaccineDisplay.toLowerCase());
         }
-        vaccineDisplay = vaccineDisplay.replace("_"," ");
+        vaccineDisplay = vaccineDisplay.replace("_", " ");
         return vaccineDisplay;
     }
 
@@ -369,11 +369,11 @@ public abstract class CoreChildUtils {
             if (obs.getFormSubmissionField().equalsIgnoreCase(formSubmissionId)) {
                 List<Object> values = obs.getValues();
                 String value = "";
-                if(values.size()>0){
+                if (values.size() > 0) {
                     for (Object object : values) {
                         value = (String) object;
                     }
-                }else{
+                } else {
                     List<Object> hu = obs.getHumanReadableValues();
                     for (Object object : hu) {
                         value = (String) object;
@@ -387,7 +387,8 @@ public abstract class CoreChildUtils {
         return serviceTask;
 
     }
-    public static String getValueFromJsonFormSubmission(String details,String formSubmissionId){
+
+    public static String getValueFromJsonFormSubmission(String details, String formSubmissionId) {
         Event event = CoreChildUtils.gsonConverter.fromJson(details, new TypeToken<Event>() {
         }.getType());
         List<org.smartregister.clientandeventmodel.Obs> observations = event.getObs();
@@ -396,11 +397,11 @@ public abstract class CoreChildUtils {
         for (org.smartregister.clientandeventmodel.Obs obs : observations) {
             if (obs.getFormSubmissionField().equalsIgnoreCase(formSubmissionId)) {
                 List<Object> values = obs.getValues();
-                if(values.size()>0){
+                if (values.size() > 0) {
                     for (Object object : values) {
                         value = (String) object;
                     }
-                }else{
+                } else {
                     List<Object> hu = obs.getHumanReadableValues();
                     for (Object object : hu) {
                         value = (String) object;

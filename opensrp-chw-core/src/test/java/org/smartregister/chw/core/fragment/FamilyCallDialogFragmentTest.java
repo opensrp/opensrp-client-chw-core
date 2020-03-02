@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 
 import static org.mockito.ArgumentMatchers.any;
 
-@PrepareForTest(FamilyCallDialogFragmentTest.class)
-public class FamilyCallDialogFragmentTest {
+public class FamilyCallDialogFragmentTest extends BaseUnitTest {
     @Mock
     private FamilyCallDialogFragment familyCallDialogFragment;
 

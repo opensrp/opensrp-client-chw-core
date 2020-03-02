@@ -36,8 +36,8 @@ import timber.log.Timber;
 public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragment {
     private static final String DUE_FILTER_TAG = "PRESSED";
     protected View dueOnlyLayout;
-    private View view;
     protected boolean dueFilterActive = false;
+    private View view;
 
     @Override
     protected void initializePresenter() {

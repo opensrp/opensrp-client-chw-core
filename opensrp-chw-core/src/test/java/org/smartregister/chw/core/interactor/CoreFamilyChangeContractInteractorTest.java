@@ -2,29 +2,24 @@ package org.smartregister.chw.core.interactor;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
+import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyChangeContract;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.AppExecutors;
-import org.smartregister.reporting.ReportingLibrary;
 
 import java.util.concurrent.Executor;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ReportingLibrary.class, FamilyLibrary.class})
-public class CoreFamilyChangeContractInteractorTest implements Executor {
+public class CoreFamilyChangeContractInteractorTest extends BaseUnitTest implements Executor {
 
     private CoreFamilyChangeContractInteractor interactor;
 
@@ -65,9 +60,8 @@ public class CoreFamilyChangeContractInteractorTest implements Executor {
 
     @Test
     public void testGetAdultMembersExcludeHOF() {
-        PowerMockito.mockStatic(FamilyLibrary.class);
 
-        Whitebox.setInternalState(interactor, "flavor", flavor);
+        ReflectionHelpers.setField(interactor, "flavor", flavor);
         CommonRepository commonRepository = Mockito.mock(CommonRepository.class);
         CommonPersonObject personObject = Mockito.mock(CommonPersonObject.class);
         Mockito.doReturn(personObject).when(commonRepository).findByBaseEntityId(Mockito.anyString());
@@ -79,7 +73,7 @@ public class CoreFamilyChangeContractInteractorTest implements Executor {
         metadata.familyMemberRegister = Mockito.mock(FamilyMetadata.FamilyMemberRegister.class);
         Mockito.doReturn(metadata).when(familyLibrary).metadata();
 
-        PowerMockito.when(FamilyLibrary.getInstance()).thenReturn(familyLibrary);
+        FamilyLibraryShadowUtil.setInstance(familyLibrary);
 
         interactor.getAdultMembersExcludeHOF("123445", presenter);
         Mockito.verify(presenter).renderAdultMembersExcludeHOF(Mockito.any(), Mockito.any(), Mockito.any());
@@ -87,9 +81,8 @@ public class CoreFamilyChangeContractInteractorTest implements Executor {
 
     @Test
     public void testGetAdultMembersExcludePCG() {
-        PowerMockito.mockStatic(FamilyLibrary.class);
 
-        Whitebox.setInternalState(interactor, "flavor", flavor);
+        ReflectionHelpers.setField(interactor, "flavor", flavor);
         CommonRepository commonRepository = Mockito.mock(CommonRepository.class);
         CommonPersonObject personObject = Mockito.mock(CommonPersonObject.class);
         Mockito.doReturn(personObject).when(commonRepository).findByBaseEntityId(Mockito.anyString());
@@ -101,7 +94,7 @@ public class CoreFamilyChangeContractInteractorTest implements Executor {
         metadata.familyMemberRegister = Mockito.mock(FamilyMetadata.FamilyMemberRegister.class);
         Mockito.doReturn(metadata).when(familyLibrary).metadata();
 
-        PowerMockito.when(FamilyLibrary.getInstance()).thenReturn(familyLibrary);
+        FamilyLibraryShadowUtil.setInstance(familyLibrary);
 
         interactor.getAdultMembersExcludePCG("123445", presenter);
         Mockito.verify(presenter).renderAdultMembersExcludePCG(Mockito.any(), Mockito.any(), Mockito.any());

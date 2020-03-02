@@ -178,6 +178,10 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         return null;
     }
 
+    public void setView(WeakReference<CoreChildProfileContract.View> view) {
+        this.view = view;
+    }
+
     @Override
     public void fetchProfileData() {
         interactor.refreshProfileView(childBaseEntityId, false, this);
@@ -251,10 +255,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
         getView().setProgressBarState(false);
         getView().onJsonProcessed(eventType, taskType, profileTask);
-    }
-
-    public void setView(WeakReference<CoreChildProfileContract.View> view) {
-        this.view = view;
     }
 
     public String getFamilyId() {

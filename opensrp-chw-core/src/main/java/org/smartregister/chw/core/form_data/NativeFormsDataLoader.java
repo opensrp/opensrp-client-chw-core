@@ -44,13 +44,13 @@ import timber.log.Timber;
 
 public class NativeFormsDataLoader implements DataLoader {
 
+    protected JSONArray jsonArray;
     private ClientField clientField;
     private ClientClassification clientClassification;
     private Client client;
     private String eventName;
     private List<String> tableCache;
     private Map<String, Table> tableMap;
-    protected JSONArray jsonArray;
     private Map<String, Map<String, Object>> dbData = new HashMap<>();
 
     private Event latestEvent;

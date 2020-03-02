@@ -75,18 +75,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public String lastVisitDay;
     public OnClickFloatingMenu onClickFloatingMenu;
     public Handler handler = new Handler();
-    public final BroadcastReceiver mDateTimeChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            assert action != null;
-            if (action.equals(Intent.ACTION_TIME_CHANGED) ||
-                    action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
-                fetchProfileData();
-
-            }
-        }
-    };
     public RelativeLayout layoutFamilyHasRow;
     protected TextView textViewParentName;
     protected TextView textViewLastVisit;
@@ -113,6 +101,18 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private LinearLayout layoutRecordView;
     private View viewLastVisitRow;
     private View viewMostDueRow;
+    public final BroadcastReceiver mDateTimeChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            assert action != null;
+            if (action.equals(Intent.ACTION_TIME_CHANGED) ||
+                    action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+                fetchProfileData();
+
+            }
+        }
+    };
     private View viewFamilyRow;
     private View viewDividerSickRow;
     private View textViewSickChildArrow;

@@ -20,12 +20,12 @@ import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
 
 public abstract class CoreAncFloatingMenu extends BaseAncFloatingMenu {
     public FloatingActionButton fab;
+    protected View referLayout;
     private Animation fabOpen;
     private Animation fabClose;
     private Animation rotateForward;
     private Animation rotateBack;
     private View callLayout;
-    protected View referLayout;
     private RelativeLayout activityMain;
     private boolean isFabMenuOpen = false;
     private LinearLayout menuBar;
@@ -111,7 +111,7 @@ public abstract class CoreAncFloatingMenu extends BaseAncFloatingMenu {
                 getPhoneNumber(), getFamilyHeadName(), getFamilyHeadPhone(), getWomanProfileType());
     }
 
-    public void redraw(boolean hasPhoneNumber){
+    public void redraw(boolean hasPhoneNumber) {
         redrawWithOption(this, hasPhoneNumber);
     }
 
