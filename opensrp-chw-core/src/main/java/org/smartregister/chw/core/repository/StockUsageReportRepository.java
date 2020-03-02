@@ -46,7 +46,6 @@ public class StockUsageReportRepository extends BaseRepository {
         database.execSQL(BASE_ID_INDEX);
     }
 
-    // TODO
     public void addStockUsage(StockUsage stockUsage){
         addStockUsage(stockUsage, getWritableDatabase());
     }

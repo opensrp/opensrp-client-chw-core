@@ -81,28 +81,6 @@ public class StockUsageReportDao extends AbstractDao {
         return (res != null && !(res.get(0).equals("0")));
     }
 
-    /*public  List<StockUsage> getMonthlyStockUsage(String month, String year) {
-        String sql = "select * from stock_usage_report " +
-                "WHERE month= '" + month + "' " +
-                "AND year= '" + year + "'" +
-                "GROUP BY stock_name";
-
-        DataMap<StockUsage> dataMap = cursor -> {
-            StockUsage stockUsage = new StockUsage();
-            stockUsage.setStockName(getCursorValue(cursor, "stock_name"));
-            stockUsage.setStockUsage(getCursorValue(cursor, "stock_usage"));
-            stockUsage.setYear(getCursorValue(cursor, "year"));
-            stockUsage.setMonth(getCursorValue(cursor, "month"));
-            return stockUsage;
-        };
-
-        List<StockUsage> res = readData(sql, dataMap);
-        if (res == null) {
-            return new ArrayList<>();
-        }
-        return res;
-    }
-*/
     public  String getStockUsageForMonth(String month, String stockName, String year) {
         String sql = "select stock_usage from stock_usage_report " +
                 "WHERE month= '" + month + "' " +
