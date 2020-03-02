@@ -9,32 +9,83 @@
     android:background="@color/white"
     tools:context=".activity.CoreStockInventoryItemDetailsReportActivity">
 
-
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/app_bar_layout"
-        android:background="@color/light_gray">
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/skt_detail_toolbar"
+            android:id="@+id/back_stock_usage_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            android:theme="@style/FamilyTheme.AppBarOverlay.Light">
+            android:contentInsetStart="0dp"
+            android:contentInsetLeft="0dp"
+            android:contentInsetEnd="0dp"
+            android:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/tv_skt_detail_toolbar_title"
+                android:id="@+id/toolbar_title"
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/stock_item_detail"
-                android:textColor="@color/customAppThemeBlue"
-                android:textSize="17sp" />
+                android:gravity="center_vertical|start"
+                android:paddingStart="0dp"
+                android:paddingLeft="0dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/stock_usage_item_name_column"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/item_detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stock_item_detail"
+            android:maxLines="2"
+            android:paddingBottom="4dp"
+            android:singleLine="true"
+            android:textColor="@color/text_black"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            android:textSize="@dimen/register_list_title_size" />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:gravity="center_vertical"
+        android:paddingTop="1dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_grey" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_stock_usage_item_detail_report"

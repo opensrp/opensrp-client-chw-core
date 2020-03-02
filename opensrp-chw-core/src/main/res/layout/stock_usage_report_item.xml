@@ -98,7 +98,7 @@
             android:src="@drawable/ic_arrow_forward_ios"
             android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/vaccine_blue_bg_st"
+            android:textColor="@color/lighter_grey_text"
             android:textSize="15sp"
             android:typeface="normal" />
 
