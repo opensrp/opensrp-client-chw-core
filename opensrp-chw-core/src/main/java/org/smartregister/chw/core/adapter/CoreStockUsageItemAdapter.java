@@ -17,24 +17,22 @@ import org.smartregister.chw.core.model.StockUsageItemModel;
 
 import java.util.List;
 
-public class CoreStockUsageItemRecyclerViewAdapter extends RecyclerView.Adapter<CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder> {
+public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsageItemAdapter.CoreStockUsageReportViewHolder> {
     protected LayoutInflater inflater;
     private List<StockUsageItemModel> stockUsageItemModelList;
     private Context context;
-
-
-    public CoreStockUsageItemRecyclerViewAdapter(List<StockUsageItemModel> stockUsageItemModelList, Context context) {
+    public CoreStockUsageItemAdapter(List<StockUsageItemModel> stockUsageItemModelList, Context context) {
         this.stockUsageItemModelList = stockUsageItemModelList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                                   int viewType) {
+    public CoreStockUsageItemAdapter.CoreStockUsageReportViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                       int viewType) {
         inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.stock_usage_report_item, parent, false);
-        return new CoreStockUsageItemRecyclerViewAdapter.CoreStockUsageReportViewHolder(v);
+        return new CoreStockUsageItemAdapter.CoreStockUsageReportViewHolder(v);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class CoreStockUsageItemRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.stockName.setText(usageModelItem.getStockName());
         holder.stockUnitOfMeasure.setText(usageModelItem.getUnitsOfMeasure());
         holder.stockCount.setText(String.format("%s", usageModelItem.getStockUsage()));
-        holder.goToDetails.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String stockName = "stock Name";
@@ -63,16 +61,16 @@ public class CoreStockUsageItemRecyclerViewAdapter extends RecyclerView.Adapter<
         private TextView stockName;
         private TextView stockUnitOfMeasure;
         private TextView stockCount;
-        private ImageView  goToDetails;
-
+        private ImageView goToDetails;
+        private View view;
 
         public CoreStockUsageReportViewHolder(View v) {
             super(v);
+            view = v;
             stockName = v.findViewById(R.id.stock_name);
             stockUnitOfMeasure = v.findViewById(R.id.stock_unit_of_measure);
             stockCount = v.findViewById(R.id.stock_count);
             goToDetails = v.findViewById(R.id.go_to_item_details_image_view);
-
         }
 
     }

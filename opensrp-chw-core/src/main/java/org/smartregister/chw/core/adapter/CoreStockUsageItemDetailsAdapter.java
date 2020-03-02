@@ -13,22 +13,21 @@ import org.smartregister.chw.core.model.StockUsageItemDetailsModel;
 
 import java.util.List;
 
-public class CoreStockUsageItemDetailsRecyclerViewAdapter extends RecyclerView.Adapter<CoreStockUsageItemDetailsRecyclerViewAdapter.CoreStockUsageReportDetailsViewHolder> {
+public class CoreStockUsageItemDetailsAdapter extends RecyclerView.Adapter<CoreStockUsageItemDetailsAdapter.CoreStockUsageReportDetailsViewHolder> {
     protected LayoutInflater inflater;
     private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList;
 
-
-    public CoreStockUsageItemDetailsRecyclerViewAdapter(List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList) {
+    public CoreStockUsageItemDetailsAdapter(List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList) {
         this.stockUsageItemDetailsModelList = stockUsageItemDetailsModelList;
     }
 
     @NonNull
     @Override
-    public CoreStockUsageItemDetailsRecyclerViewAdapter.CoreStockUsageReportDetailsViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                                                 int viewType) {
+    public CoreStockUsageItemDetailsAdapter.CoreStockUsageReportDetailsViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                                     int viewType) {
         inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.stock_usage_report_item_details, parent, false);
-        return new CoreStockUsageItemDetailsRecyclerViewAdapter.CoreStockUsageReportDetailsViewHolder(v);
+        return new CoreStockUsageItemDetailsAdapter.CoreStockUsageReportDetailsViewHolder(v);
     }
 
     @Override
@@ -49,8 +48,7 @@ public class CoreStockUsageItemDetailsRecyclerViewAdapter extends RecyclerView.A
         private TextView itemDetailsYear;
         private TextView itemDetailsStockCount;
 
-
-        public CoreStockUsageReportDetailsViewHolder(View v) {
+        private CoreStockUsageReportDetailsViewHolder(View v) {
             super(v);
             itemDetailsMonth = v.findViewById(R.id.item_detail_month);
             itemDetailsYear = v.findViewById(R.id.item_detail_year);

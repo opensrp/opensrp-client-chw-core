@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.dao;
 
 import org.smartregister.chw.core.domain.StockUsage;
-import org.smartregister.chw.core.model.StockUsageItemModel;
 import org.smartregister.dao.AbstractDao;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class StockUsageReportDao extends AbstractDao {
                 "\tfrom ec_malaria_confirmation mc\n" +
                 "where mc.malaria_results in('Negative','Positive')\n" +
                 "and mc.malaria_test_date is not NULL\n" +
-                "  group by mc.malaria_treat, substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
+                "  group by substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
                 "order by Year DESC, Month DESC";
 
         DataMap<StockUsage> dataMap = cursor -> {
@@ -72,7 +71,7 @@ public class StockUsageReportDao extends AbstractDao {
      * @return
      */
     public static boolean lastInteractedWithinMonth() {
-        String sql = "select count(id) as count\n" +
+        String sql = "select count(stock_name) as count\n" +
                 "from stock_usage_report\n" +
                 "WHERE strftime('%Y',(updated_at)) == strftime('%Y',('NOW'))\n" +
                 "AND strftime('%m',(updated_at)) == strftime('%m',('NOW'))";
@@ -82,18 +81,49 @@ public class StockUsageReportDao extends AbstractDao {
         return (res != null && !(res.get(0).equals("0")));
     }
 
-    public static List<StockUsageItemModel> getMonthlyStockUsage(String month, String year){
-        String sql = "select * from stock_usage_report\n" +
+    /*public  List<StockUsage> getMonthlyStockUsage(String month, String year) {
+        String sql = "select * from stock_usage_report " +
                 "WHERE month= '" + month + "' " +
-                "AND year= '" + year + "'";
-        DataMap<StockUsageItemModel> dataMap = cursor -> {
-            StockUsageItemModel stockUsageItemModel = new StockUsageItemModel(
-                    getCursorValue(cursor, "stock_name"),
-                    getCursorValue(cursor, )
-            );
+                "AND year= '" + year + "'" +
+                "GROUP BY stock_name";
+
+        DataMap<StockUsage> dataMap = cursor -> {
+            StockUsage stockUsage = new StockUsage();
+            stockUsage.setStockName(getCursorValue(cursor, "stock_name"));
+            stockUsage.setStockUsage(getCursorValue(cursor, "stock_usage"));
+            stockUsage.setYear(getCursorValue(cursor, "year"));
+            stockUsage.setMonth(getCursorValue(cursor, "month"));
+            return stockUsage;
+        };
+
+        List<StockUsage> res = readData(sql, dataMap);
+        if (res == null) {
+            return new ArrayList<>();
         }
-
+        return res;
     }
+*/
+    public  String getStockUsageForMonth(String month, String stockName, String year) {
+        String sql = "select stock_usage from stock_usage_report " +
+                "WHERE month= '" + month + "' " +
+                "AND stock_name LIKE '%" + stockName + "%' " +
+                "AND year= '" + year + "'" +
+                "GROUP by stock_name";
 
+        DataMap<StockUsage> dataMap = cursor -> {
+            StockUsage stockUsage = new StockUsage();
+            stockUsage.setYear(year);
+            stockUsage.setMonth(month);
+            stockUsage.setStockName(stockName);
+            stockUsage.setStockUsage(getCursorValue(cursor, "stock_usage"));
+            return stockUsage;
+        };
+
+        List<StockUsage> res = readData(sql, dataMap);
+        if (res == null || res.size() == 0) {
+            return " ";
+        }
+        return res.get(0).getStockUsage();
+    }
 
 }
