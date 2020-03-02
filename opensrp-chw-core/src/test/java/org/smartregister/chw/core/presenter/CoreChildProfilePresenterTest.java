@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
@@ -143,7 +143,7 @@ public class CoreChildProfilePresenterTest {
 
         Context context = Mockito.mock(Context.class);
         Mockito.doReturn(context).when(view).getContext();
-        Whitebox.setInternalState(profilePresenter, "familyID", "familyID");
+        ReflectionHelpers.setField(profilePresenter, "familyID", "familyID");
 
         profilePresenter.fetchUpcomingServiceAndFamilyDue(childBaseEntityId);
         Mockito.verify(interactor).refreshUpcomingServiceAndFamilyDue(context, "familyID", childBaseEntityId, profilePresenter);

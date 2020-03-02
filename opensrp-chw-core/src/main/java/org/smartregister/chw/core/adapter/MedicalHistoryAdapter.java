@@ -17,8 +17,8 @@ import org.smartregister.chw.core.domain.MedicalHistory;
 import java.util.List;
 
 public class MedicalHistoryAdapter extends RecyclerView.Adapter<MedicalHistoryAdapter.MyViewHolder> {
-    private List<MedicalHistory> items;
     protected LayoutInflater inflater;
+    private List<MedicalHistory> items;
     private int layoutID;
 
     public MedicalHistoryAdapter(List<MedicalHistory> items, @LayoutRes int layoutID) {
@@ -59,11 +59,11 @@ public class MedicalHistoryAdapter extends RecyclerView.Adapter<MedicalHistoryAd
     }
 
 
-     class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvSubTitle;
         private LinearLayout llItems;
 
-         MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             tvSubTitle = view.findViewById(R.id.tvSubTitle);
             llItems = view.findViewById(R.id.llItems);

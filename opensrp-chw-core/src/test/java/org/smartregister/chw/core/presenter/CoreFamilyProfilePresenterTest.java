@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.interactor.CoreChildRegisterInteractor;
@@ -34,9 +34,9 @@ public class CoreFamilyProfilePresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         profilePresenter = Mockito.mock(CoreFamilyProfilePresenter.class, Mockito.CALLS_REAL_METHODS);
-        Whitebox.setInternalState(profilePresenter, "viewReference", new WeakReference<>(view));
-        Whitebox.setInternalState(profilePresenter, "childProfileModel", childProfileModel);
-        Whitebox.setInternalState(profilePresenter, "childRegisterInteractor", childRegisterInteractor);
+        ReflectionHelpers.setField(profilePresenter, "viewReference", new WeakReference<>(view));
+        ReflectionHelpers.setField(profilePresenter, "childProfileModel", childProfileModel);
+        ReflectionHelpers.setField(profilePresenter, "childRegisterInteractor", childRegisterInteractor);
     }
 
     @Test

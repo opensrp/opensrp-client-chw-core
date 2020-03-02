@@ -53,14 +53,6 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
         CoreAncRegisterActivity.form_name = form_name;
     }
 
-    @Override
-    public Class getRegisterActivity(String register) {
-        if (register.equals(CoreConstants.SERVICE_GROUPS.ANC))
-            return CoreAncRegisterActivity.class;
-        else
-            return CorePncRegisterActivity.class;
-    }
-
     public static String getUniqueId() {
         return unique_id;
     }
@@ -83,6 +75,14 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
 
     public static void setFamilyName(String familyName) {
         CoreAncRegisterActivity.familyName = familyName;
+    }
+
+    @Override
+    public Class getRegisterActivity(String register) {
+        if (register.equals(CoreConstants.SERVICE_GROUPS.ANC))
+            return CoreAncRegisterActivity.class;
+        else
+            return CorePncRegisterActivity.class;
     }
 
     @Override

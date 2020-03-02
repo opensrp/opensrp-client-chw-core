@@ -49,6 +49,12 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
         this.context = context;
     }
 
+    protected static void fillValue(TextView v, String value) {
+        if (v != null) {
+            v.setText(value);
+        }
+    }
+
     @Override
     public void getView(Cursor cursor, SmartRegisterClient client, RegisterViewHolder viewHolder) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
@@ -146,12 +152,6 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
 
     protected void populateIdentifierColumn(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
         //fillValue(viewHolder.ancId, String.format(context.getString(R.string.unique_id_text), uniqueId));
-    }
-
-    protected static void fillValue(TextView v, String value) {
-        if (v != null) {
-            v.setText(value);
-        }
     }
 
     public void setAddressAndGender(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
