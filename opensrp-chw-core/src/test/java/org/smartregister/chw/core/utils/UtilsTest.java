@@ -27,7 +27,6 @@ public class UtilsTest {
     private Map<String, String> details;
     private Map<String, String> columnMap;
     private CommonPersonObjectClient client;
-    private Context context;
 
     @Before
     public void setUp() {
@@ -72,8 +71,8 @@ public class UtilsTest {
     public void formatReferralDurationReturnsCorrectString() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.DAY_OF_YEAR,-1);
-        Date oneDayBefore= cal.getTime();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date oneDayBefore = cal.getTime();
 
         DateTime referralTime = new DateTime(oneDayBefore);
         Assert.assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.application));
