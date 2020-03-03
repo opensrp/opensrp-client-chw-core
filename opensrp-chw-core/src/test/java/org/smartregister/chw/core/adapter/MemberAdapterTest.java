@@ -63,8 +63,6 @@ public class MemberAdapterTest extends BaseUnitTest {
         TextView tvGender = Mockito.mock(TextView.class);
         RadioButton radioButton = Mockito.mock(RadioButton.class);
         LinearLayout llQuestions = Mockito.mock(LinearLayout.class);
-        LinearLayout llNewPhone = Mockito.mock(LinearLayout.class);
-        LinearLayout llAltPhone = Mockito.mock(LinearLayout.class);
         View view = Mockito.mock(View.class);
         EditText etPhone = Mockito.mock(EditText.class);
         EditText etAlternatePhone = Mockito.mock(EditText.class);
