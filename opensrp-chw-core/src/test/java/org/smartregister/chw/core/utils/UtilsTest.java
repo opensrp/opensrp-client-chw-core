@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.smartregister.Context;
 import org.smartregister.chw.referral.domain.MemberObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 
