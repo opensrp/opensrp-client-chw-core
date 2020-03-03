@@ -76,7 +76,7 @@ public class UtilsTest {
         Date oneDayBefore= cal.getTime();
 
         DateTime referralTime = new DateTime(oneDayBefore);
-        Assert.assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.systemContext));
+        Assert.assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.application));
     }
 
     @After
