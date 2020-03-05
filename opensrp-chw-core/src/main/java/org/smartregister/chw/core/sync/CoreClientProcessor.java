@@ -229,6 +229,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 List<Obs> observations = event.getObs();
                 for (Obs obs : observations) {
                     if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        processVisitEvent(eventClient);
                         FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
                         break;
                     }
