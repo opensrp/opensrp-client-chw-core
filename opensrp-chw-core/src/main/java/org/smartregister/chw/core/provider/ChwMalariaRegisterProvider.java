@@ -12,7 +12,6 @@ import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.MalariaVisitUtil;
 import org.smartregister.chw.malaria.dao.MalariaDao;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.provider.MalariaRegisterProvider;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
@@ -36,8 +35,8 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
         viewHolder.dueButton.setVisibility(View.GONE);
         viewHolder.dueButton.setOnClickListener(null);
-        Date memberObject = MalariaDao.getMalariaTestDate(((CommonPersonObjectClient) client).getCaseId());
-        Utils.startAsyncTask(new UpdateDueButtonStatusTask(viewHolder, memberObject), null);
+        String baseEntityId = client.entityId();
+        Utils.startAsyncTask(new UpdateMalariaDueButtonStatusTask(viewHolder, baseEntityId), null);
     }
 
     private void updateDueColumn(Button dueButton, String followStatus) {
@@ -53,19 +52,21 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
         }
     }
 
-    private class UpdateDueButtonStatusTask extends AsyncTask<Void, Void, Void> {
+    private class UpdateMalariaDueButtonStatusTask extends AsyncTask<Void, Void, Void> {
         private final RegisterViewHolder viewHolder;
-        private final Date malariaTestDate;
+        private final String baseEntityId;
         private MalariaFollowUpRule malariaFollowUpRule;
 
-        private UpdateDueButtonStatusTask(RegisterViewHolder viewHolder, Date malariaTestDate) {
+        private UpdateMalariaDueButtonStatusTask(RegisterViewHolder viewHolder, String baseEntityId) {
             this.viewHolder = viewHolder;
-            this.malariaTestDate = malariaTestDate;
+            this.baseEntityId = baseEntityId;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(malariaTestDate);
+            Date malariaTestDate = MalariaDao.getMalariaTestDate(baseEntityId);
+            Date followUpDate = MalariaDao.getMalariaFollowUpVisitDate(baseEntityId);
+            malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(malariaTestDate, followUpDate);
             return null;
         }
 

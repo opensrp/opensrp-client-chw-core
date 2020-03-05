@@ -10,7 +10,6 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +24,7 @@ public class MalariaRegisterRepository extends BaseRepository {
     public static final String LAST_NAME = "last_name";
     public static final String PHONE_NUMBER = "phone_number";
     public static final String BASE_ENTITY_ID = "base_entity_id";
-    public static final String MALARIA_TEST_DATE = "malaria_test_datea";
-
     public static final String[] TABLE_COLUMNS = {FIRST_NAME, MIDDLE_NAME, LAST_NAME, PHONE_NUMBER};
-    public static final String[] MALARIA_COUNT_TABLE_COLUMNS = {BASE_ENTITY_ID};
-
 
     public HashMap<String, String> getFamilyNameAndPhone(String baseEntityID) {
         SQLiteDatabase database = getReadableDatabase();
