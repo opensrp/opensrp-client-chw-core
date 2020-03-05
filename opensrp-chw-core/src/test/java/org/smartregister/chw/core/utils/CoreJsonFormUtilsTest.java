@@ -57,8 +57,6 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     @Test
     public void getFormStepsReturnsListOfJsonObjectSteps() throws JSONException {
         List<JSONObject> steps = CoreJsonFormUtils.getFormSteps(jsonForm);
-        Assert.assertEquals(steps.size(), 2);
-        Assert.assertEquals(steps.get(0).optString("next"), "step2");
         Assert.assertEquals(steps.get(1).optString("title"), "Family Registration Page two");
     }
 }

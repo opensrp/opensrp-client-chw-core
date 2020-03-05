@@ -9,6 +9,7 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
@@ -113,9 +114,8 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     }
 
     public TaskRepository getTaskRepository() {
-        taskRepository = ReferralLibrary.getInstance().getTaskRepository();
         if (taskRepository == null) {
-            taskRepository = new TaskRepository(new TaskNotesRepository());
+            taskRepository = new ChwTaskRepository(new TaskNotesRepository());
         }
         return taskRepository;
     }
