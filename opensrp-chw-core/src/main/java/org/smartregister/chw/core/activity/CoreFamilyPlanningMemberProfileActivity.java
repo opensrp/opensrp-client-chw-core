@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -311,7 +312,10 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
             Rules rule = FpUtil.getFpRules(fpMemberObject.getFpMethod());
-            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), fpMemberObject.getPillCycles(), fpMemberObject.getFpMethod());
+            String pillCycles = FpDao.getLastPillCycle(fpMemberObject.getBaseEntityId(),fpMemberObject.getFpMethod() );
+            Integer pills = StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
+
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), pills, fpMemberObject.getFpMethod());
             return null;
         }
 

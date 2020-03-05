@@ -9,7 +9,7 @@ import java.util.List;
 public class StockUsageReportDao extends AbstractDao {
 
     public static List<StockUsage> getStockUsage() {
-        String sql = "SELECT strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Year\",\n" +
+        String sql = "  SELECT strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Year\",\n" +
                 "\tstrftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Month\",\n" +
                 "\tvd.human_readable_details as StockName,\n" +
                 "\tcount(1) as Usage\n" +
@@ -18,18 +18,30 @@ public class StockUsageReportDao extends AbstractDao {
                 "  WHERE  vd.human_readable_details LIKE 'ORS%' or vd.human_readable_details LIKE 'Zinc%' or vd.human_readable_details LIKE 'Panadol%'\n" +
                 "  group by vd.human_readable_details, strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))), strftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime')))\n" +
                 " UNION ALL\n" +
+                "  SELECT strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Year\",\n" +
+                "\tstrftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Month\",\n" +
+                "\tvdd.details as StockName,\n" +
+                "\tsum(vd.details) as Usage\n" +
+                " FROM visit_details vd\n" +
+                " INNER JOIN visit_details vdd\n" +
+                " on vd.visit_id  = vdd.visit_id\n" +
+                "  INNER JOIN visits v on vd.visit_id = v.visit_id\n" +
+                "  WHERE  vd.visit_key LIKE '%no_condoms%'\n" +
+                "  AND vdd.visit_key LIKE 'fp_method_accepted'\n" +
+                "  AND vdd.details LIKE '%condom' \n" +
+                "  group by vdd.details, strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))), strftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime')))\n" +
+                " UNION ALL\n" +
                 " SELECT substr(fp.fp_start_date, 7, 4) as \"Year\",\n" +
                 "\tsubstr(fp.fp_start_date, 4, 2) as \"Month\",\n" +
                 "\tfp.fp_method_accepted as StockName,\n" +
                 "\tcount(1) as Usage\n" +
                 " FROM ec_family_planning fp\n" +
-                "  WHERE (fp.fp_method_accepted LIKE 'COC%' or fp.fp_method_accepted LIKE 'POP%' or fp.fp_method_accepted LIKE '%condom%' \n" +
-                "  or fp.fp_method_accepted like '%Standard day method%' or fp.fp_method_accepted like '%Emergency contraceptive%')\n" +
+                "  WHERE ( fp.fp_method_accepted like 'Standard day method' or fp.fp_method_accepted like 'Emergency contraceptive')\n" +
                 "  AND fp.fp_start_date is not NULL\n" +
                 "  group by fp.fp_method_accepted, substr(fp.fp_start_date, 7, 4), substr(fp.fp_start_date, 4, 2)\n" +
                 "UNION ALL\n" +
                 "SELECT \n" +
-                " substr(mc.malaria_test_date, 7, 4) as Year, \n" +
+                " substr(mc.malaria_test_date, 7, 4) as Year,\n" +
                 " substr(mc.malaria_test_date, 4, 2) as Month,\n" +
                 " mc.malaria_treat as StockName,\n" +
                 " count(1) as Usage\n" +
@@ -45,7 +57,7 @@ public class StockUsageReportDao extends AbstractDao {
                 "\tfrom ec_malaria_confirmation mc\n" +
                 "where mc.malaria_results in('Negative','Positive')\n" +
                 "and mc.malaria_test_date is not NULL\n" +
-                "  group by substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
+                "  group by mc.malaria_treat, substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
                 "order by Year DESC, Month DESC";
 
         DataMap<StockUsage> dataMap = cursor -> {
@@ -70,11 +82,12 @@ public class StockUsageReportDao extends AbstractDao {
      *
      * @return
      */
-    public static boolean lastInteractedWithinMonth() {
+    public static boolean lastInteractedWithinDay() {
         String sql = "select count(stock_name) as count\n" +
                 "from stock_usage_report\n" +
                 "WHERE strftime('%Y',(updated_at)) == strftime('%Y',('NOW'))\n" +
-                "AND strftime('%m',(updated_at)) == strftime('%m',('NOW'))";
+                "AND strftime('%m',(updated_at)) == strftime('%m',('NOW'))" +
+                " AND strftime('%d',(updated_at)) == strftime('%d',('NOW'))";
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "count");
 
         List<String> res = readData(sql, dataMap);

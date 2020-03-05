@@ -43,6 +43,9 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
             case ("Cycle beads (Standard day method)"):
                 stock_name = "Standard day method";
                 break;
+            case ("Paracetamol"):
+                 stock_name = "Panadol";
+             break;
             default:
                 stock_name = stockName;
                 break;

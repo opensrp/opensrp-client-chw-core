@@ -11,7 +11,7 @@ public class StockUsageReportUtils {
     public Map<Integer, Integer> previousMonths() {
         Map<Integer, Integer> monthsAndYearsList = new LinkedHashMap<>();
 
-        for (int i = 1; i < 13; i++) {
+        for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
             int month = prevDate.getMonthOfYear();
             int year = prevDate.getYear();
@@ -75,7 +75,7 @@ public class StockUsageReportUtils {
             case "Zinc 10":
                 formattedItem = CoreChwApplication.getInstance().getString(R.string.zinc_10);
                 break;
-            case "Paracetamol":
+            case "Panadol":
                 formattedItem = CoreChwApplication.getInstance().getString(R.string.paracetamol);
                 break;
             case "ALU 6":
@@ -124,7 +124,7 @@ public class StockUsageReportUtils {
                 unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.packets);
                 break;
             case "Zinc 10":
-            case "Paracetamol":
+            case "Panadol":
             case "ALU 6":
             case "ALU 12":
             case "ALU 18":

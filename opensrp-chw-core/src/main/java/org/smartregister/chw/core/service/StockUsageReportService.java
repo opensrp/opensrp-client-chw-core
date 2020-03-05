@@ -25,7 +25,7 @@ public class StockUsageReportService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        if (!StockUsageReportDao.lastInteractedWithinMonth()) {
+        if (!StockUsageReportDao.lastInteractedWithinDay()) {
 
             StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
 

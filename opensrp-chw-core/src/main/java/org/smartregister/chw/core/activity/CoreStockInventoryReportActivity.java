@@ -38,7 +38,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
     private static List<String> getItems() {
         List<String> itemList = new ArrayList<>(
-                Arrays.asList("ORS 5", "Zinc 10", "Paracetamol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
+                Arrays.asList("ORS 5", "Zinc 10", "Panadol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
         );
         return itemList;
     }
@@ -136,6 +136,5 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     @Override
     protected void onResumption() {
 //Implements Method From super Class
-
     }
 }

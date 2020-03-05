@@ -2,6 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -37,7 +38,7 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
     private void evaluateFp(List<BaseUpcomingService> serviceList) {
         String fpMethod = null;
         String fp_date = null;
-        Integer fp_pillCycles = null;
+        String fp_pillCycles = null;
         Rules rule = null;
         Integer count = null;
         Date serviceDueDate = null;
@@ -49,7 +50,7 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
             for (FpAlertObject familyPlanning : familyPlanningList) {
                 fpMethodUsed = familyPlanning.getFpMethod();
                 fp_date = familyPlanning.getFpStartDate();
-                fp_pillCycles = familyPlanning.getFpPillCycles();
+                fp_pillCycles = FpDao.getLastPillCycle(memberObject.getBaseEntityId(), fpMethodUsed );
                 rule = FpUtil.getFpRules(fpMethodUsed);
             }
         }
@@ -65,7 +66,8 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
         }
-        FpAlertRule alertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, fp_pillCycles, fpMethod);
+        Integer pills = StringUtils.isBlank(fp_pillCycles) ? 0 : Integer.parseInt(fp_pillCycles);
+        FpAlertRule alertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
         if (fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_COC) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_POP) ||
                 fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
             serviceDueDate = alertRule.getDueDate();
