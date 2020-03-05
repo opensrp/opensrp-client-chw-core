@@ -44,4 +44,5 @@ public class MalariaFollowUpRule implements ICommonRule {
     public String getButtonStatus() {
         return buttonStatus;
     }
+
 }

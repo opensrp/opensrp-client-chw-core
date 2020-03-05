@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 
 import java.lang.ref.WeakReference;
@@ -31,8 +31,8 @@ public class FamilyCallDialogPresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         presenter = Mockito.mock(FamilyCallDialogPresenter.class, Mockito.CALLS_REAL_METHODS);
-        Whitebox.setInternalState(presenter, "mView", new WeakReference<>(view));
-        Whitebox.setInternalState(presenter, "mInteractor", mInteractor);
+        ReflectionHelpers.setField(presenter, "mView", new WeakReference<>(view));
+        ReflectionHelpers.setField(presenter, "mInteractor", mInteractor);
         initalize();
     }
 

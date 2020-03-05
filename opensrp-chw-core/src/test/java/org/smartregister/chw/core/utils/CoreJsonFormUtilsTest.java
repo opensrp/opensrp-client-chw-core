@@ -13,22 +13,22 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
+import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.family.FamilyLibrary;
-import org.smartregister.family.domain.FamilyMetadata;
 
 import java.util.List;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FamilyLibrary.class, Utils.class})
-public class CoreJsonFormUtilsTest {
+@RunWith(RobolectricTestRunner.class)
+@Config(application = TestApplication.class, sdk = 22, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, UtilsShadowUtil.class})
+public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
-
-    @Mock
-    private FamilyMetadata familyMetadata;
 
     @Mock
     private FamilyLibrary familyLibraryInstance;
@@ -48,11 +48,8 @@ public class CoreJsonFormUtilsTest {
     @Test
     public void getAncPncStartFormIntentReturnsIntent() throws Exception {
         Context context = Mockito.mock(Context.class);
-        PowerMockito.mockStatic(FamilyLibrary.class);
-        PowerMockito.mockStatic(Utils.class);
-        PowerMockito.when(FamilyLibrary.getInstance()).thenReturn(familyLibraryInstance);
-        PowerMockito.when(Utils.metadata()).thenReturn(familyMetadata);
-        PowerMockito.when(familyLibraryInstance.metadata()).thenReturn(familyMetadata);
+        FamilyLibraryShadowUtil.setInstance(familyLibraryInstance);
+
         Intent ancPncIntent = CoreJsonFormUtils.getAncPncStartFormIntent(jsonForm, context);
         Assert.assertNotNull(ancPncIntent);
     }
@@ -60,8 +57,6 @@ public class CoreJsonFormUtilsTest {
     @Test
     public void getFormStepsReturnsListOfJsonObjectSteps() throws JSONException {
         List<JSONObject> steps = CoreJsonFormUtils.getFormSteps(jsonForm);
-        Assert.assertEquals(steps.size(), 2);
-        Assert.assertEquals(steps.get(0).optString("next"), "step2");
         Assert.assertEquals(steps.get(1).optString("title"), "Family Registration Page two");
     }
 }

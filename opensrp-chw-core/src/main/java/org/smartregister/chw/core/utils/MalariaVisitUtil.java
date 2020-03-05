@@ -15,7 +15,7 @@ public class MalariaVisitUtil {
         MalariaFollowUpRule malariaFollowUpRule = new MalariaFollowUpRule(malariaTestDate, followUpDate);
         try {
             CoreChwApplication.getInstance().getRulesEngineHelper().getMalariaRule(malariaFollowUpRule, CoreConstants.RULE_FILE.MALARIA_FOLLOW_UP_VISIT);
-        }catch (Exception e){
+        } catch (Exception e) {
             Timber.e(e);
         }
         return malariaFollowUpRule;

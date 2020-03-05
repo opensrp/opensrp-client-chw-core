@@ -2,9 +2,7 @@ package org.smartregister.chw.core.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
