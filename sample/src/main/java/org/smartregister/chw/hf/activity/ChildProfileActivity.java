@@ -27,6 +27,7 @@ import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.adapter.ReferralCardViewAdapter;
 import org.smartregister.chw.hf.custom_view.FamilyMemberFloatingMenu;
 import org.smartregister.chw.hf.presenter.HfChildProfilePresenter;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.Constants;
 
