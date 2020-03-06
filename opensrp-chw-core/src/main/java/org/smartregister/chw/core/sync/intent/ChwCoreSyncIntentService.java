@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.domain.FetchStatus;
@@ -83,7 +84,6 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
         JSONObject syncParams = new JSONObject();
         syncParams.put("baseEntityIds", baseEntityIds);
         syncParams.put("withFamilyEvents", true);
-        syncParams.put("serverVersion", 0);
         return getHttpAgent().postWithJsonResponse(url, syncParams.toString());
     }
 
@@ -108,5 +108,19 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
 
     @Override
     abstract protected void onHandleIntent(Intent intent);
+
+    @Override
+    protected int fetchNumberOfEvents(JSONObject jsonObject) {
+        int count = -1;
+        final String events = "events";
+        try {
+            if (jsonObject != null && jsonObject.has(events)) {
+                count = jsonObject.getJSONArray(events).length();
+            }
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+        return count;
+    }
 }
 
