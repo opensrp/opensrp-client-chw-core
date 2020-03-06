@@ -20,7 +20,7 @@ public class ChwTaskRepository extends TaskRepository {
         super(taskNotesRepository);
     }
 
-    public List<Task> getTasksWithClientsAndEvents() {
+    public List<Task> getTasksWithoutClientsAndEvents() {
         List<Task> tasks = new ArrayList<>();
         try (Cursor cursor = getReadableDatabase().rawQuery(String.format(
                 "SELECT * FROM %s " +
