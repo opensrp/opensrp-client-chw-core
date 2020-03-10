@@ -9,10 +9,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
+import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreMalariaProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -114,6 +118,19 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     public void setProfileDetailOne(@NonNull String s) {
         TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
         textView.setText(s);
+    }
+
+    @Override
+    public void setProfileImage(String baseEntityId, String s1) {
+        DateTime deliveryDate = new DateTime(PNCDao.getPNCDeliveryDate(baseEntityId));
+        int dayPnc = (Days.daysBetween(deliveryDate, new DateTime()).getDays());
+
+        if (dayPnc >= 29) {
+            imageRenderHelper.refreshProfileImage(baseEntityId, imageView, NCUtils.getMemberProfileImageResourceIDentifier("pnc"));
+        } else {
+            imageRenderHelper.refreshProfileImage(baseEntityId, imageView, org.smartregister.chw.pnc.R.drawable.pnc_less_twenty_nine_days);
+        }
+        //Overridden from abstract class not yet implemented
     }
 
     @Override

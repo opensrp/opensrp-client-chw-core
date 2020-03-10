@@ -22,10 +22,6 @@ import static org.smartregister.chw.malaria.util.Constants.ACTIVITY_PAYLOAD.BASE
 
 public class MalariaProfileActivity extends CoreMalariaProfileActivity {
 
-    private static final String CLIENT = "client";
-
-
-
     @Override
     public void setProfileImage(String s, String s1) {
         //Overridden from abstract class not yet implemented
