@@ -458,4 +458,9 @@
     <string name="sick_child_form">Sick child form</string>
     <string name="sick_visit_on">Sick visit on %s</string>
     <string name="view_sick_visits">View sick visits</string>
+
+    <string name="indicator">Indicator</string>
+    <string name="value">Value</string>
+    <string name="report">Reports</string>
+    <string name="draft">Draft</string>
 </resources>

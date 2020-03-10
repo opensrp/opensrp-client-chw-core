@@ -49,6 +49,8 @@ import org.smartregister.chw.core.custom_views.CoreAncFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreFamilyPlanningFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreMalariaFloatingMenu;
+import org.smartregister.chw.core.domain.Hia2Indicator;
+import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.fragment.CopyToClipboardDialog;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
@@ -680,5 +682,29 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static String getFamilyDueFilter() {
         return "and ec_family.base_entity_id in ( select ec_family_member.relational_id from schedule_service inner join ec_family_member on ec_family_member.base_entity_id = schedule_service.base_entity_id " +
                 " where strftime('%Y-%m-%d') BETWEEN schedule_service.due_date and schedule_service.expiry_date and ifnull(schedule_service.not_done_date,'') = '' and ifnull(schedule_service.completion_date,'') = ''  ) ";
+    }
+
+    public static Locale getLocale(Context context) {
+        if (context == null) {
+            return Locale.getDefault();
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
+    public static String retrieveValue(List<MonthlyTally> monthlyTallies, Hia2Indicator hia2Indicator) {
+        String defaultValue = "0";
+        if (hia2Indicator == null || monthlyTallies == null) {
+            return defaultValue;
+        }
+
+        for (MonthlyTally monthlyTally : monthlyTallies) {
+            if (monthlyTally.getIndicator() != null && monthlyTally.getIndicator().getIndicatorCode()
+                    .equalsIgnoreCase(hia2Indicator.getIndicatorCode())) {
+                return monthlyTally.getValue();
+            }
+        }
+
+        return defaultValue;
     }
 }

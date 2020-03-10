@@ -29,6 +29,7 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
+import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -165,6 +166,23 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         //
     }
 
+
+    private void registerServiceActivity(Activity activity) {
+        if (menuFlavor.serviceReport()) {
+            View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
+            final ImageView imageView = rootView.findViewById(R.id.ivIconServiceReport);
+            final TextView tvStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.tvServiceReport);
+            rlIconServiceReport.setVisibility(View.VISIBLE);
+            rlIconServiceReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, HIA2ReportsActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }
+    }
+
     @Override
     public void prepareViews(Activity activity) {
 
@@ -195,6 +213,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
         registerSync(activity);
         registerLanguageSwitcher(activity);
+        registerServiceActivity(activity);
+
 
         registerDeviceToDeviceSync(activity);
         // update all actions
@@ -245,7 +265,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
@@ -427,6 +448,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             timer = null;
     }
 
+
     @Override
     public void onDrawerStateChanged(int newState) {
         Timber.v("Drawer state is changed");
@@ -451,9 +473,17 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
     public interface Flavour {
         String[] getSupportedLanguages();
 
         HashMap<String, String> getTableMapValues();
+
+        boolean stockReport();
+
+        boolean serviceReport();
     }
 }

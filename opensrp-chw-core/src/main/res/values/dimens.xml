@@ -46,5 +46,10 @@
     <dimen name="referral_item_margin">8dp</dimen>
     <dimen name="referral_text_size">13sp</dimen>
 
+    <!--in app reporting-->
+    <dimen name="noti_message_text_size">20sp</dimen>
+    <dimen name="noti_button_text_size">16sp</dimen>
+
+
 
 </resources>

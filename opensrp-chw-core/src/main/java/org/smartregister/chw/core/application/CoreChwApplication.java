@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.application;
 
 import android.content.Intent;
+import android.util.Log;
 import android.util.Pair;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -10,9 +11,13 @@ import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
+import org.smartregister.chw.core.repository.DailyTalliesRepository;
+import org.smartregister.chw.core.repository.HIA2IndicatorsRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
+import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
+import org.smartregister.chw.core.repository.ServiceRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -27,8 +32,10 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
+import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
+import org.smartregister.repository.Repository;
 import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
@@ -59,6 +66,12 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private ECSyncHelper ecSyncHelper;
     private String password;
     private UniqueIdRepository uniqueIdRepository;
+    private static ServiceRepository serviceRepository;
+    private HIA2IndicatorsRepository hIA2IndicatorsRepository;
+    private DailyTalliesRepository dailyTalliesRepository;
+    private MonthlyTalliesRepository monthlyTalliesRepository;
+    private Hia2ReportRepository hia2ReportRepository;
+
 
     private RulesEngineHelper rulesEngineHelper;
 
@@ -252,4 +265,42 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         list.add(Pair.create(JsonFormConstants.STEP1, "nearest_facility"));
         return list;
     }
+
+
+    public DailyTalliesRepository dailyTalliesRepository() {
+        if (dailyTalliesRepository == null) {
+            dailyTalliesRepository = new DailyTalliesRepository();
+        }
+        return dailyTalliesRepository;
+    }
+
+    public HIA2IndicatorsRepository hIA2IndicatorsRepository() {
+        if (hIA2IndicatorsRepository == null) {
+            hIA2IndicatorsRepository = new HIA2IndicatorsRepository();
+        }
+        return hIA2IndicatorsRepository;
+    }
+
+    public MonthlyTalliesRepository monthlyTalliesRepository() {
+        if (monthlyTalliesRepository == null) {
+            monthlyTalliesRepository = new MonthlyTalliesRepository();
+        }
+
+        return monthlyTalliesRepository;
+    }
+
+    public Hia2ReportRepository hia2ReportRepository() {
+        if (hia2ReportRepository == null) {
+            hia2ReportRepository = new Hia2ReportRepository();
+        }
+        return hia2ReportRepository;
+    }
+
+    public ServiceRepository getServiceRepository() {
+        if (serviceRepository == null) {
+            serviceRepository = new ServiceRepository();
+        }
+        return serviceRepository;
+    }
+
 }

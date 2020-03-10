@@ -13,5 +13,7 @@
 
     <color name="medical_history_item_grey">#9f9f9f</color>
     <color name="divider_item_grey">#bbbbbb</color>
+    <color name="colorGreen">#51B86B</color>
+
 
 </resources>
