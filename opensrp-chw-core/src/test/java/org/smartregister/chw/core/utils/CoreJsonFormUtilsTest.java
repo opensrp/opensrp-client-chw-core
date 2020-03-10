@@ -59,7 +59,8 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     @Test
     public void processRemoveMemberEventReturnsCorrectTriple() throws JSONException {
-        String encounterType = "Remove Family Member", baseEntityId = "16847ab9-5cce-4b88-a666-bb9f8291a4bb";
+        String encounterType = "Remove Family Member";
+        String baseEntityId = "16847ab9-5cce-4b88-a666-bb9f8291a4bb";
         CoreLibrary.init(org.smartregister.Context.getInstance());
         JSONObject removeMemberJsonObject = new JSONObject(getRemoveMemberJsonString(encounterType, baseEntityId));
         Triple<Pair<Date, String>, String, List<Event>> eventTriple = CoreJsonFormUtils.processRemoveMemberEvent(null, Utils.getAllSharedPreferences(), removeMemberJsonObject, null);
