@@ -9,22 +9,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.json.JSONObject;
-import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
-import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreMalariaProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
-import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
+import org.smartregister.chw.malaria.util.Constants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -42,7 +38,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        profilePresenter = new BaseMalariaProfilePresenter(this, new CoreMalariaProfileInteractor(), MalariaDao.getMember(memberObject.getBaseEntityId()));
+        profilePresenter = new BaseMalariaProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
         fetchProfileData();
         profilePresenter.refreshProfileBottom();
     }
@@ -118,19 +114,6 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     public void setProfileDetailOne(@NonNull String s) {
         TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
         textView.setText(s);
-    }
-
-    @Override
-    public void setProfileImage(String baseEntityId, String s1) {
-        DateTime deliveryDate = new DateTime(PNCDao.getPNCDeliveryDate(baseEntityId));
-        int dayPnc = (Days.daysBetween(deliveryDate, new DateTime()).getDays());
-
-        if (dayPnc >= 29) {
-            imageRenderHelper.refreshProfileImage(baseEntityId, imageView, NCUtils.getMemberProfileImageResourceIDentifier("pnc"));
-        } else {
-            imageRenderHelper.refreshProfileImage(baseEntityId, imageView, org.smartregister.chw.pnc.R.drawable.pnc_less_twenty_nine_days);
-        }
-        //Overridden from abstract class not yet implemented
     }
 
     @Override

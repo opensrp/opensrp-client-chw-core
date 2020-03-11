@@ -496,7 +496,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             ancFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (!has_phone && menu instanceof CoreMalariaFloatingMenu) {
             CoreMalariaFloatingMenu malariaFloatingMenu = (CoreMalariaFloatingMenu) menu;
-            malariaFloatingMenu.getMalariaCallLayout().setOnClickListener(null);
+            malariaFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (has_phone && menu instanceof CoreFamilyPlanningFloatingMenu) {
             fpFloatingMenu = (CoreFamilyPlanningFloatingMenu) menu;
             fpFloatingMenu.getCallLayout().setOnClickListener(fpFloatingMenu);
