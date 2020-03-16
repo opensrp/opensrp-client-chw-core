@@ -2,6 +2,7 @@ package org.smartregister.chw.core.shadows;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
+import org.smartregister.Context;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
@@ -24,5 +25,10 @@ public class UtilsShadowUtil {
 
     public static void setMetadata(FamilyMetadata metadata) {
         UtilsShadowUtil.metadata = metadata;
+    }
+
+    @Implementation
+    public static Context context() {
+        return Context.getInstance();
     }
 }

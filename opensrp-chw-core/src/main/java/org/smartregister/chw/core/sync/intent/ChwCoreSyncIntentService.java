@@ -3,12 +3,12 @@ package org.smartregister.chw.core.sync.intent;
 import android.content.Intent;
 import android.util.Pair;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
-import org.smartregister.SyncConfiguration;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Response;
 import org.smartregister.domain.Task;
@@ -20,6 +20,7 @@ import java.util.List;
 import timber.log.Timber;
 
 public abstract class ChwCoreSyncIntentService extends SyncIntentService {
+    public static final String SYNC_URL = "/rest/event/sync-by-base-entity-ids";
 
     public ChwCoreSyncIntentService(String name) {
         super(name);
@@ -27,16 +28,19 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
 
     public synchronized void fetchMissingEventsRetry(final int count, List<Task> tasksWithMissingClientsEvents) {
         Timber.i("Tasks with missing clients and/or events = %s", new Gson().toJson(tasksWithMissingClientsEvents));
-
-        //TODO implement an additional endpoint to query client events using multiple baseEntityIds at once and remove the use of a loop
-        for (Task task : tasksWithMissingClientsEvents) {
+        List<List<Task>> tasksWithMissingClientsEventsBatches = Lists.partition(tasksWithMissingClientsEvents, 1000);
+        for (List<Task> tasksList : tasksWithMissingClientsEventsBatches) {
+            JSONArray baseEntityIdsArray = new JSONArray();
+            for (Task task : tasksList) {
+                baseEntityIdsArray.put(task.getForEntity());
+            }
             try {
                 if (getHttpAgent() == null) {
                     complete(FetchStatus.fetchedFailed);
                     return;
                 }
 
-                Response resp = fetchClientEventsByBaseEntityId(task.getForEntity());
+                Response resp = fetchClientEventsByBaseEntityIds(baseEntityIdsArray);
                 if (resp.isTimeoutError() || resp.isUrlError()) {
                     FetchStatus.fetchedFailed.setDisplayValue(resp.status().displayValue());
                     complete(FetchStatus.fetchedFailed);
@@ -46,49 +50,41 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
                     return;
                 }
 
-                int eCount;
-                JSONObject jsonObject = new JSONObject();
-                if (resp.payload() == null) {
-                    eCount = 0;
-                } else {
-                    jsonObject = new JSONObject((String) resp.payload());
-                    eCount = fetchNumberOfEvents(jsonObject);
-                    Timber.i("Parse Network Event Count: %s", eCount);
-                }
 
-                if (eCount < 0) {
-                    fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
-                    return;
-                } else {
-                    processMissingEventsObject(jsonObject,count,tasksWithMissingClientsEvents);
+                JSONArray jsonArray = new JSONArray((String) resp.payload());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    int eCount = fetchNumberOfEvents(jsonObject);
+                    if (eCount < 0) {
+                        fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
+                        return;
+                    } else {
+                        processClientEvent(jsonObject); //Process the client and his/her events
+                    }
                 }
             } catch (Exception e) {
                 Timber.e(e, "Fetch Retry Exception:  %s", e.getMessage());
                 fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
             }
         }
+        complete(FetchStatus.fetched);
 
     }
 
-    public Response fetchClientEventsByBaseEntityId(String baseEntityId) throws Exception {
+    public Response fetchClientEventsByBaseEntityIds(JSONArray baseEntityIds) throws Exception {
         String baseUrl = CoreLibrary.getInstance().context().
                 configuration().dristhiBaseURL();
         if (baseUrl.endsWith("/")) {
             baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf("/"));
         }
-        SyncConfiguration configs = CoreLibrary.getInstance().getSyncConfiguration();
+
         String url = baseUrl + SYNC_URL;
-        Response resp;
-        if (configs.isSyncUsingPost()) {
-            JSONObject syncParams = new JSONObject();
-            syncParams.put("baseEntityId", baseEntityId);
-            syncParams.put("serverVersion", 0);
-            resp = getHttpAgent().postWithJsonResponse(url, syncParams.toString());
-        } else {
-            url += "?baseEntityId=" + baseEntityId + "&serverVersion=0";
-            resp = getHttpAgent().fetch(url);
-        }
-        return resp;
+        JSONObject syncParams = new JSONObject();
+        syncParams.put("baseEntityIds", baseEntityIds);
+        syncParams.put("withFamilyEvents", true);
+        syncParams.put("serverVersion", 0);
+        return getHttpAgent().postWithJsonResponse(url, syncParams.toString());
     }
 
     private void processClientEvent(JSONObject jsonObject) {
@@ -109,30 +105,6 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
         }
     }
 
-    public void processMissingEventsObject(JSONObject jsonObject,int count, List<Task> tasksWithMissingClientsEvents) throws Exception{
-        //fetch clients family registration event
-        JSONArray clients = jsonObject.has("clients") ? jsonObject.getJSONArray("clients") : new JSONArray();
-
-        if (clients.length() == 1) {
-            JSONArray familyObject = clients.getJSONObject(0)
-                    .getJSONObject("relationships").has("family")
-                    ? clients.getJSONObject(0).getJSONObject("relationships")
-                    .getJSONArray("family") : new JSONArray();
-
-            for (int i = 0; i < familyObject.length(); i++) {
-                Response familyResponse = fetchClientEventsByBaseEntityId(familyObject.getString(i));
-                if (familyResponse.isFailure() && !familyResponse.isUrlError() && !familyResponse.isTimeoutError()) {
-                    fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
-                } else {
-                    processClientEvent(new JSONObject((String) familyResponse.payload())); //process the family events
-                }
-
-            }
-        }
-
-        processClientEvent(jsonObject);//Process the client and his/her events
-        complete(FetchStatus.fetched);
-    }
 
     @Override
     abstract protected void onHandleIntent(Intent intent);

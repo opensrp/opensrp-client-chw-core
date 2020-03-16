@@ -20,7 +20,7 @@ public class ChwTaskRepository extends TaskRepository {
         super(taskNotesRepository);
     }
 
-    public List<Task> getTasksWithClientsAndEvents() {
+    public List<Task> getTasksWithoutClientsAndEvents() {
         List<Task> tasks = new ArrayList<>();
         try (Cursor cursor = getReadableDatabase().rawQuery(String.format(
                 "SELECT * FROM %s " +
@@ -28,10 +28,10 @@ public class ChwTaskRepository extends TaskRepository {
                         " (SELECT %s FROM %s " +
                         " INNER JOIN %s ON %s.%s = %s.%s " +
                         " INNER JOIN %s ON %s.%s = %s.%s " +
-                        " WHERE %s =? OR %s IS NULL) AND %s IS NOT NULL "
+                        " WHERE %s =? OR %s IS NULL) AND %s <> %S AND %s IS NOT NULL "
                 , "task", "_id", "_id", "task", "ec_family_member", "ec_family_member", "base_entity_id",
                 "task", "for", EventClientRepository.Table.event.name(), EventClientRepository.Table.event.name(), Event.form_submission_id_key,
-                "task", "reason_reference", "sync_status", "server_version", "reason_reference"), new String[]{BaseRepository.TYPE_Created})) {
+                "task", "reason_reference", "sync_status", "server_version","status","'COMPLETED'","reason_reference"), new String[]{BaseRepository.TYPE_Created})) {
             while (cursor.moveToNext()) {
                 tasks.add(readCursor(cursor));
             }
