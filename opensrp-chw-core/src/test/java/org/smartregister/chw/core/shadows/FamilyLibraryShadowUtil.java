@@ -3,6 +3,7 @@ package org.smartregister.chw.core.shadows;
 import org.mockito.Mockito;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
+import org.smartregister.Context;
 import org.smartregister.family.FamilyLibrary;
 
 /**
@@ -25,5 +26,10 @@ public class FamilyLibraryShadowUtil {
 
     public static void setInstance(FamilyLibrary instance) {
         FamilyLibraryShadowUtil.instance = instance;
+    }
+
+    @Implementation
+    public Context context() {
+        return Context.getInstance();
     }
 }
