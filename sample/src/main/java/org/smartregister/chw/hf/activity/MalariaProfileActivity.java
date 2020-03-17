@@ -4,23 +4,30 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CoreMalariaProfileActivity;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.presenter.FamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.malaria.dao.MalariaDao;
-import org.smartregister.chw.malaria.domain.MemberObject;
-import org.smartregister.chw.malaria.util.Constants;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.model.BaseFamilyOtherMemberProfileActivityModel;
+
+import timber.log.Timber;
 
 import static org.smartregister.chw.malaria.util.Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID;
 
 public class MalariaProfileActivity extends CoreMalariaProfileActivity {
+
+    public static void startMalariaActivity(Activity activity, String baseEntityId) {
+        Intent intent = new Intent(activity, MalariaProfileActivity.class);
+        intent.putExtra(BASE_ENTITY_ID, baseEntityId);
+        activity.startActivity(intent);
+    }
 
     @Override
     public void setProfileImage(String s, String s1) {
@@ -96,5 +103,33 @@ public class MalariaProfileActivity extends CoreMalariaProfileActivity {
     @Override
     public void notifyHasPhone(boolean hasPhone) {
         //Overridden from abstract class not yet implemented
+    }
+
+    @Override
+    protected void onCreation() {
+        super.onCreation();
+        this.setOnMemberTypeLoadedListener(memberType -> {
+            switch (memberType.getMemberType()) {
+                case CoreConstants.TABLE_NAME.ANC_MEMBER:
+                    AncMedicalHistoryActivity.startMe(MalariaProfileActivity.this, memberType.getMemberObject());
+                    break;
+                case CoreConstants.TABLE_NAME.PNC_MEMBER:
+                    PncMedicalHistoryActivity.startMe(MalariaProfileActivity.this, memberType.getMemberObject());
+                    break;
+                case CoreConstants.TABLE_NAME.CHILD:
+                    ChildMedicalHistoryActivity.startMe(MalariaProfileActivity.this, memberType.getMemberObject());
+                    break;
+                default:
+                    Timber.v("Member info undefined");
+                    break;
+            }
+        });
+    }
+
+    @Override
+    protected void setupViews() {
+        super.setupViews();
+        rlFamilyServicesDue.setVisibility(View.GONE);
+        rlMalariaPositiveDate.setVisibility(View.GONE);
     }
 }

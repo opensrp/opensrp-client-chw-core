@@ -93,10 +93,13 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
         } else {
             activityMain.setBackgroundResource(R.color.grey_tranparent_50);
 
-            fab.setImageResource(R.drawable.ic_input_add);
+            fab.setImageResource(R.drawable.ic_edit_white);
 
             callLayout.startAnimation(fabOpen);
             callLayout.setClickable(true);
+
+            referLayout.startAnimation(fabOpen);
+            referLayout.setClickable(true);
             isFabMenuOpen = true;
         }
     }
