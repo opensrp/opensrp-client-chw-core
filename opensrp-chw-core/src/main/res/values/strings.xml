@@ -465,7 +465,7 @@
     <string name="draft">Draft</string>
 
     <!---daily Reporting-->
-    <string name="newpreg_mama_visit_label">New, pregnant mothers visited this month</string>
+    <string name="newpreg_mama_visit_label">New pregnant mothers visited this month</string>
     <string name="oldpreg_mama_visit_label">Prior pregnant mothers visited this month</string>
     <string name="total_preg_visit_label">Total pregnant mother visited this month</string>
     <string name="pnc_visit_label">Number of PNC women visited this month</string>

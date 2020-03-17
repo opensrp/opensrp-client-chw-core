@@ -8,6 +8,7 @@ import android.util.Log;
 import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.joda.time.LocalDate;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.DailyTally;
 import org.smartregister.chw.core.domain.Hia2Indicator;
@@ -65,6 +66,9 @@ public class MonthlyTalliesRepository extends BaseRepository {
             " ON " + TABLE_NAME + "(" + COLUMN_EDITED + ");";
     private static final String INDEX_DATE_SENT = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_DATE_SENT + "_index" +
             " ON " + TABLE_NAME + "(" + COLUMN_DATE_SENT + ");";
+
+    private Date maxDate = LocalDate.now().plusDays(1).toDate();
+    private Date minDate = LocalDate.now().minusYears(10).toDate();
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_QUERY);
@@ -245,7 +249,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
                             tallies.put(dateFormat.format(curTally.getMonth()),
                                     new ArrayList<MonthlyTally>());
                         }
-
+                        if (curTally.getMonth().getTime() > minDate.getTime() && curTally.getMonth().getTime() < maxDate.getTime())
                         tallies.get(dateFormat.format(curTally.getMonth())).add(curTally);
                     }
                 }
@@ -395,8 +399,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             curTally.setUpdatedAt(
                     new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_UPDATED_AT)))
             );
-
-            return curTally;
+                return curTally;
         }
 
         return null;

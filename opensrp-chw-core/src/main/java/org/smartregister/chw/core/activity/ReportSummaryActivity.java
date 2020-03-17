@@ -17,16 +17,30 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.child.activity.BaseActivity;
 import org.smartregister.child.toolbar.SimpleToolbar;
+import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.Tally;
+import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.view.IndicatorCategoryView;
+import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
+import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public class ReportSummaryActivity extends BaseActivity {
     public static final String EXTRA_TALLIES = "tallies";
@@ -35,6 +49,7 @@ public class ReportSummaryActivity extends BaseActivity {
     protected AppBarLayout appBarLayout;
     private LinkedHashMap<String, ArrayList<Tally>> tallies;
     private String subTitle;
+    private SimpleDateFormat simpleDateFormat;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -44,21 +59,12 @@ public class ReportSummaryActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        SimpleDateFormat simpleDateFormat;
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-            upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-            actionBar.setHomeAsUpIndicator(upArrow);
-            actionBar.setElevation(0);
-        }
         toolbar.setNavigationOnClickListener(v -> finish());
         toolBarTextView.setOnClickListener(v -> finish());
+        refreshViewsOnResult();
         appBarLayout = findViewById(R.id.app_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
@@ -83,7 +89,39 @@ public class ReportSummaryActivity extends BaseActivity {
             }
         }
     }
+    private void refreshViewsOnResult() {
+        Observable<MonthlyTalliesRepository> observable = Observable.create(monthlyTallyEmitter -> {
+            MonthlyTalliesRepository monthlyTalliesRepository = new MonthlyTalliesRepository();
+            monthlyTallyEmitter.onNext(monthlyTalliesRepository);
+            monthlyTallyEmitter.onComplete();
+        });
 
+        final Disposable[] disposable = new Disposable[1];
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MonthlyTalliesRepository>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable[0] = d;
+                    }
+
+                    @Override
+                    public void onNext(MonthlyTalliesRepository monthlyTally) {
+                        monthlyTally.findAllSent(simpleDateFormat);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable[0].dispose();
+                        disposable[0] = null;
+                    }
+                });
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;

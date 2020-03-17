@@ -92,9 +92,6 @@ public class HIA2ReportsActivity extends BaseActivity {
         setContentView(R.layout.app_hia2_reports);
 
         tabLayout = findViewById(R.id.hia_tabs);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
 
         // Set up the ViewPager with the sections adapter.
@@ -102,15 +99,6 @@ public class HIA2ReportsActivity extends BaseActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout.setupWithViewPager(mViewPager);
-
-        // set up nav drawer
-        //   LinearLayout registerView = findViewById(R.id.activity_base);
-       // RelativeLayout reportView = findViewById(R.id.rlServiceReport);
-
-        //reportView.setBackgroundColor(getResources().getColor(R.color.primary));
-        //registerView.setBackgroundColor(Color.TRANSPARENT);
-
-        // Update Draft Monthly Title
         refreshDraftMonthlyTitle();
     }
 

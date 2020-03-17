@@ -1,13 +1,11 @@
 package org.smartregister.chw.core.application;
 
 import android.content.Intent;
-import android.util.Log;
 import android.util.Pair;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.smartregister.Context;
-import org.smartregister.chw.core.BuildConfig;
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
@@ -18,11 +16,9 @@ import org.smartregister.chw.core.repository.MalariaRegisterRepository;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
-import org.smartregister.chw.core.repository.ServiceRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.referral.ReferralLibrary;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
@@ -33,11 +29,9 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
-import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
-import org.smartregister.repository.Repository;
 import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
@@ -68,7 +62,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private ECSyncHelper ecSyncHelper;
     private String password;
     private UniqueIdRepository uniqueIdRepository;
-    private static ServiceRepository serviceRepository;
     private HIA2IndicatorsRepository hIA2IndicatorsRepository;
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
