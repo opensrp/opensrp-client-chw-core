@@ -38,7 +38,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        profilePresenter = new BaseMalariaProfilePresenter(this, new CoreMalariaProfileInteractor(), MEMBER_OBJECT);
+        profilePresenter = new BaseMalariaProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
         fetchProfileData();
         profilePresenter.refreshProfileBottom();
     }
@@ -125,22 +125,22 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     public void startFormForEdit(Integer title_resource, String formName) {
 
         JSONObject form = null;
-        CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(MEMBER_OBJECT.getBaseEntityId());
+        CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(memberObject.getBaseEntityId());
 
         if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
             form = CoreJsonFormUtils.getAutoPopulatedJsonEditMemberFormString(
                     (title_resource != null) ? getResources().getString(title_resource) : null,
                     CoreConstants.JSON_FORM.getFamilyMemberRegister(),
                     this, client,
-                    Utils.metadata().familyMemberRegister.updateEventType, MEMBER_OBJECT.getLastName(), false);
+                    Utils.metadata().familyMemberRegister.updateEventType, memberObject.getLastName(), false);
         } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
-                    MEMBER_OBJECT.getBaseEntityId(), this, formName, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, getResources().getString(title_resource));
+                    memberObject.getBaseEntityId(), this, formName, CoreConstants.EventType.UPDATE_ANC_REGISTRATION, getResources().getString(title_resource));
         }
 
         try {
             assert form != null;
-            startFormActivity(form, MEMBER_OBJECT);
+            startFormActivity(form, memberObject);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -148,7 +148,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
 
     private void startFormActivity(JSONObject jsonForm, MemberObject memberObject) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
-        intent.putExtra(Constants.MALARIA_MEMBER_OBJECT.MEMBER_OBJECT, memberObject);
+//        intent.putExtra(Constants.MALARIA_memberObject.memberObject, memberObject);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 

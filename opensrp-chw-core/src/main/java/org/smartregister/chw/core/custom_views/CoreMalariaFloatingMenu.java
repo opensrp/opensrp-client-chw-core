@@ -65,6 +65,7 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
         referLayout.setOnClickListener(this);
         referLayout.setClickable(false);
 
+
         menuBar.setVisibility(GONE);
 
     }

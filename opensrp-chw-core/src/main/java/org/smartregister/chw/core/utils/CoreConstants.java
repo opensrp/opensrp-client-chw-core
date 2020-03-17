@@ -112,8 +112,6 @@ public class CoreConstants {
         public static final String PNC_HOME_VISIT = "PNC Home Visit";
         public static final String ANC_HOME_VISIT_NOT_DONE = "ANC Home Visit Not Done";
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
-        public static final String MALARIA_FOLLOW_UP_VISIT = "Malaria Follow-up Visit";
-        public static final String MALARIA_CONFIRMATION = "Malaria Confirmation";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
@@ -164,6 +162,7 @@ public class CoreConstants {
         private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
         private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
         private static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
+        private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
         private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
         public static AssetManager assetManager;
@@ -207,6 +206,10 @@ public class CoreConstants {
 
         public static String getFamilyPlanningReferralForm() {
             return FAMILY_PLANNING_REFERRAL_FORM;
+        }
+
+        public static String getMalariaReferralForm() {
+            return MALARIA_REFERRAL_FORM;
         }
 
         public static String getBirthCertification() {

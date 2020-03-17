@@ -18,9 +18,4 @@ public class MalariaRegisterFragment extends CoreMalariaRegisterFragment {
         String viewConfigurationIdentifier = ((BaseRegisterActivity) getActivity()).getViewIdentifiers().get(0);
         presenter = new MalariaRegisterFragmentPresenter(this, new CoreMalariaRegisterFragmentModel(), viewConfigurationIdentifier);
     }
-
-    @Override
-    protected void openProfile(CommonPersonObjectClient client) {
-        MalariaProfileActivity.openProfile(getActivity(), new MemberObject(client), client);
-    }
 }

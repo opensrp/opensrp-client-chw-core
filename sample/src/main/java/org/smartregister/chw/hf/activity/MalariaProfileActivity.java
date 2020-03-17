@@ -12,21 +12,15 @@ import org.smartregister.chw.core.activity.CoreMalariaProfileActivity;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.presenter.FamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.util.Constants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.model.BaseFamilyOtherMemberProfileActivityModel;
 
+import static org.smartregister.chw.malaria.util.Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID;
+
 public class MalariaProfileActivity extends CoreMalariaProfileActivity {
-
-    private static final String CLIENT = "client";
-
-    public static void openProfile(Activity activity, MemberObject memberObject, CommonPersonObjectClient client) {
-        Intent intent = new Intent(activity, MalariaProfileActivity.class);
-        intent.putExtra(Constants.MALARIA_MEMBER_OBJECT.MEMBER_OBJECT, memberObject);
-        intent.putExtra(CLIENT, client);
-        activity.startActivity(intent);
-    }
 
     @Override
     public void setProfileImage(String s, String s1) {
@@ -71,7 +65,8 @@ public class MalariaProfileActivity extends CoreMalariaProfileActivity {
     @NonNull
     @Override
     public CoreFamilyOtherMemberActivityPresenter presenter() {
-        MemberObject memberObject = (MemberObject) getIntent().getSerializableExtra(Constants.MALARIA_MEMBER_OBJECT.MEMBER_OBJECT);
+        String baseEntityId = getIntent().getStringExtra(BASE_ENTITY_ID);
+        memberObject = MalariaDao.getMember(baseEntityId);
         return new FamilyOtherMemberActivityPresenter(this, new BaseFamilyOtherMemberProfileActivityModel(),
                 null, memberObject.getRelationalId(), memberObject.getBaseEntityId(),
                 memberObject.getFamilyHead(), memberObject.getPrimaryCareGiver(), memberObject.getAddress(),

@@ -4,7 +4,6 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.malaria.contract.MalariaRegisterFragmentContract;
 import org.smartregister.chw.malaria.presenter.BaseMalariaRegisterFragmentPresenter;
-import org.smartregister.chw.malaria.util.DBConstants;
 
 public abstract class CoreMalariaRegisterFragmentPresenter extends BaseMalariaRegisterFragmentPresenter {
 
@@ -15,9 +14,9 @@ public abstract class CoreMalariaRegisterFragmentPresenter extends BaseMalariaRe
 
     @Override
     public String getMainCondition() {
-        return " " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + org.smartregister.chw.malaria.util.DBConstants.KEY.DATE_REMOVED + " is null " +
-                "AND " + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.MALARIA + " = 1 AND "
-                + CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION + "." + DBConstants.KEY.IS_CLOSED + " = 0";
+        return " ec_family_member.date_removed is null AND ec_malaria_confirmation.malaria  = 1 " +
+                "AND datetime('NOW') <= datetime(ec_malaria_confirmation.last_interacted_with/1000, 'unixepoch', 'localtime','+15 days') AND ec_malaria_confirmation.is_closed = 0";
+
     }
 
     @Override
