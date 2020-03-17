@@ -20,6 +20,7 @@ import org.smartregister.chw.core.interactor.CoreMalariaProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
@@ -118,6 +119,9 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
                         JSONObject form = new JSONObject(jsonString);
                         if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
                             presenter().updateFamilyMember(jsonString);
+                        }else if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
+                            CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
+                            showToast(this.getString(R.string.referral_submitted));
                         }
                     } catch (Exception e) {
                         Timber.e(e);
@@ -177,15 +181,14 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
 
         try {
             assert form != null;
-            startFormActivity(form, memberObject);
+            startFormActivity(form);
         } catch (Exception e) {
             Timber.e(e);
         }
     }
 
-    private void startFormActivity(JSONObject jsonForm, MemberObject memberObject) {
+    protected void startFormActivity(JSONObject jsonForm) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
-//        intent.putExtra(Constants.MALARIA_memberObject.memberObject, memberObject);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
