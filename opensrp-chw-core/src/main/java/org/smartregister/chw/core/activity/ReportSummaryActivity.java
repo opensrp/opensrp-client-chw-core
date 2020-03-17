@@ -1,10 +1,18 @@
 package org.smartregister.chw.core.activity;
 
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.child.activity.BaseActivity;
@@ -24,6 +32,7 @@ public class ReportSummaryActivity extends BaseActivity {
     public static final String EXTRA_TALLIES = "tallies";
     public static final String EXTRA_SUB_TITLE = "sub_title";
     public static final String EXTRA_TITLE = "title";
+    protected AppBarLayout appBarLayout;
     private LinkedHashMap<String, ArrayList<Tally>> tallies;
     private String subTitle;
 
@@ -36,14 +45,24 @@ public class ReportSummaryActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        SimpleToolbar toolbar = (SimpleToolbar) getToolbar();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        toolbar.setBackground(new ColorDrawable(getResources().getColor(R.color.colorGreen)));
+        Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
+        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+            actionBar.setHomeAsUpIndicator(upArrow);
+            actionBar.setElevation(0);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+        toolBarTextView.setOnClickListener(v -> finish());
+        appBarLayout = findViewById(R.id.app_bar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appBarLayout.setOutlineProvider(null);
+        }
 
         Bundle extras = this.getIntent().getExtras();
         if (extras != null) {
@@ -60,9 +79,14 @@ public class ReportSummaryActivity extends BaseActivity {
 
             Serializable titleSerializable = extras.getSerializable(EXTRA_TITLE);
             if (titleSerializable != null && titleSerializable instanceof String) {
-                toolbar.setTitle((String) titleSerializable);
+                toolBarTextView.setText((String) titleSerializable);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
     }
 
     @Override
@@ -138,16 +162,17 @@ public class ReportSummaryActivity extends BaseActivity {
 
     @Override
     public void onUniqueIdFetched(Triple<String, String, String> triple, String entityId) {
-
+        //Override Super
     }
 
     @Override
     public void onNoUniqueId() {
+        //Override Super
 
     }
 
     @Override
     public void onRegistrationSaved(boolean isEdit) {
-
+        //Override Super
     }
 }

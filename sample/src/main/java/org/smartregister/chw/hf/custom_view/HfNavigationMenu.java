@@ -17,4 +17,14 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
         tableMap.put(CoreConstants.DrawerMenu.REFERRALS,  CoreConstants.TABLE_NAME.TASK);
         return tableMap;
     }
+
+    @Override
+    public boolean stockReport() {
+        return false;
+    }
+
+    @Override
+    public boolean serviceReport() {
+        return false;
+    }
 }

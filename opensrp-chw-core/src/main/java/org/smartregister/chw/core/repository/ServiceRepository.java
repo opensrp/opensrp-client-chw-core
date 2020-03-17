@@ -14,7 +14,7 @@ import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
 
 public class ServiceRepository extends BaseRepository {
-    private String indicatorsConfigFile = "config/indicator-definitions.yml";
+   /* private String indicatorsConfigFile = "config/indicator-definitions.yml";
     private String indicatorDataInitialisedPref = "INDICATOR_DATA_INITIALISED";
     private String appVersionCodePref = "APP_VERSION_CODE";
 
@@ -50,5 +50,5 @@ public class ServiceRepository extends BaseRepository {
             int savedVersion = Integer.parseInt(savedAppVersion);
             return (BuildConfig.VERSION_CODE > savedVersion);
         }
-    }
+    }*/
 }

@@ -18,6 +18,8 @@ import org.smartregister.chw.core.domain.Tally;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class IndicatorCategoryView extends LinearLayout {
     private Context context;
     private TableLayout indicatorTable;
@@ -78,14 +80,20 @@ public class IndicatorCategoryView extends LinearLayout {
                 nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.indicator_table_contents_text_size));
                 nameTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                nameTextView.setMaxWidth(430);
+                nameTextView.setMaxWidth(990);
                 nameTextView.setPadding(
                         getResources().getDimensionPixelSize(R.dimen.table_row_side_margin),
+
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
-                int resourceId = this.getResources().getIdentifier(curTally.getIndicator().getDescription(), "string", getContext().getPackageName());
-                nameTextView.setText(getResources().getString(resourceId));
+
+                try{
+                    int resourceId = this.getResources().getIdentifier(curTally.getIndicator().getDescription(), "string", getContext().getPackageName());
+                    nameTextView.setText(getResources().getString(resourceId));
+                }catch (Exception ex){
+                    Timber.e(ex);
+                }
                 nameTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 curRow.addView(nameTextView);
 

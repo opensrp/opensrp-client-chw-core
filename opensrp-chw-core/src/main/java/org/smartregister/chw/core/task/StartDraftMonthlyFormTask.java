@@ -68,6 +68,12 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             JSONObject step4 = form.getJSONObject("step4");
             JSONObject step5 = form.getJSONObject("step5");
             JSONObject step6 = form.getJSONObject("step6");
+            JSONObject step7 = form.getJSONObject("step7");
+            JSONObject step8 = form.getJSONObject("step8");
+            JSONObject step9 = form.getJSONObject("step9");
+            JSONObject step10 = form.getJSONObject("step10");
+            JSONObject step11 = form.getJSONObject("step11");
+            JSONObject step12 = form.getJSONObject("step12");
 
             JSONArray fieldsArray = step1.getJSONArray("fields");
             JSONArray fieldsArray2 = step2.getJSONArray("fields");
@@ -75,8 +81,14 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             JSONArray fieldsArray4 = step4.getJSONArray("fields");
             JSONArray fieldsArray5 = step5.getJSONArray("fields");
             JSONArray fieldsArray6 = step6.getJSONArray("fields");
+            JSONArray fieldsArray7 = step7.getJSONArray("fields");
+            JSONArray fieldsArray8 = step8.getJSONArray("fields");
+            JSONArray fieldsArray9 = step9.getJSONArray("fields");
+            JSONArray fieldsArray10= step10.getJSONArray("fields");
+            JSONArray fieldsArray11 = step11.getJSONArray("fields");
+            JSONArray fieldsArray12 = step12.getJSONArray("fields");
 
-            int i = 0;
+            int i = 1;
             // This map holds each category as key and all the fields for that category as the
             // value (jsonarray)
             for (Hia2Indicator hia2Indicator : hia2Indicators) {
@@ -96,7 +108,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
 
                 jsonObject.put(JsonFormConstants.KEY, hia2Indicator.getIndicatorCode());
                 jsonObject.put(JsonFormConstants.TYPE, "edit_text");
-                jsonObject.put(JsonFormConstants.READ_ONLY, readOnlyList.contains(hia2Indicator.getIndicatorCode()));
+                //jsonObject.put(JsonFormConstants.READ_ONLY, HIA2ReportsActivity.getReadOnlyList().contains(hia2Indicator.getIndicatorCode()));
                 jsonObject.put(JsonFormConstants.HINT, label);
                 jsonObject.put(JsonFormConstants.VALUE, Utils.retrieveValue(monthlyTallies, hia2Indicator));
                 jsonObject.put(JsonFormConstants.V_REQUIRED, vRequired);
@@ -106,23 +118,43 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                 jsonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
                 jsonObject.put(CoreConstants.KEY.HIA_2_INDICATOR, hia2Indicator.getIndicatorCode());
 
-                if (i <= 86) {
+                if (i <= 5) {
                     fieldsArray.put(jsonObject);
                     i++;
-                } else if (i <= 166) {
+                }else if (i <= 9) {
                     fieldsArray2.put(jsonObject);
                     i++;
-                } else if (i <= 196) {
+                } else if (i <= 10) {
                     fieldsArray3.put(jsonObject);
                     i++;
-                } else if (i <= 287) {
+                } else if (i <= 15) {
                     fieldsArray4.put(jsonObject);
                     i++;
-                } else if (i <= 377) {
+                } else if (i <= 17) {
                     fieldsArray5.put(jsonObject);
                     i++;
-                } else {
+                }
+                else if (i <= 29) {
                     fieldsArray6.put(jsonObject);
+                    i++;
+                }else if (i <= 44) {
+                    fieldsArray7.put(jsonObject);
+                    i++;
+                } else if (i <= 64) {
+                    fieldsArray8.put(jsonObject);
+                    i++;
+                } else if (i <= 79) {
+                    fieldsArray9.put(jsonObject);
+                    i++;
+                } else if (i <= 84) {
+                    fieldsArray10.put(jsonObject);
+                    i++;
+                }
+                else if (i <= 99) {
+                    fieldsArray11.put(jsonObject);
+                    i++;
+                }else {
+                    fieldsArray12.put(jsonObject);
                     i++;
                 }
             }
@@ -140,7 +172,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             action.put(JsonFormConstants.BEHAVIOUR, "finish_form");
             buttonObject.put(JsonFormConstants.ACTION, action);
 
-            fieldsArray6.put(buttonObject);
+            fieldsArray12.put(buttonObject);
 
             form.put(REPORT_MONTH, HIA2ReportsActivity.dfyymmdd.format(date));
             form.put("identifier", "HIA2ReportForm");

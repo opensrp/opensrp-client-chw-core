@@ -20,11 +20,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.Login"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -140,6 +135,16 @@
             android:name=".activity.AboveFiveChildProfileActivity"
             android:label="@string/child_details"
             android:theme="@style/HFTheme.NoActionBar" />
+
+        <activity
+            android:name="org.smartregister.chw.core.activity.HIA2ReportsActivity"
+            android:theme="@style/HFTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
 
         <activity android:name="org.smartregister.chw.core.activity.ChwP2pModeSelectActivity" />

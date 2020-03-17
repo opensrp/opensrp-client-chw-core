@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.smartregister.Context;
+import org.smartregister.chw.core.BuildConfig;
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
@@ -32,6 +33,7 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
+import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
@@ -295,12 +297,4 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         }
         return hia2ReportRepository;
     }
-
-    public ServiceRepository getServiceRepository() {
-        if (serviceRepository == null) {
-            serviceRepository = new ServiceRepository();
-        }
-        return serviceRepository;
-    }
-
 }

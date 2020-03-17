@@ -66,7 +66,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
     private static final String INDEX_DATE_SENT = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_DATE_SENT + "_index" +
             " ON " + TABLE_NAME + "(" + COLUMN_DATE_SENT + ");";
 
-    protected static void createTable(SQLiteDatabase database) {
+    public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_QUERY);
         database.execSQL(INDEX_PROVIDER_ID);
         database.execSQL(INDEX_INDICATOR_ID);

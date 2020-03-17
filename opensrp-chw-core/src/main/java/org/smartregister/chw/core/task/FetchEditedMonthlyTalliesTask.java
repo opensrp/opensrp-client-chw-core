@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class FetchEditedMonthlyTalliesTask extends AsyncTask<Void, Void, List<MonthlyTally>> {
-    private final FetchEditedMonthlyTalliesTask.TaskListener taskListener;
+    private final TaskListener taskListener;
 
-    public FetchEditedMonthlyTalliesTask(FetchEditedMonthlyTalliesTask.TaskListener taskListener) {
+    public FetchEditedMonthlyTalliesTask(TaskListener taskListener) {
         this.taskListener = taskListener;
     }
 
