@@ -8,8 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".activity.ReportSummaryActivity"
->
+    tools:context=".activity.ReportSummaryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -28,7 +27,7 @@
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
-            app:contentInsetStart="5dp"
+            app:contentInsetStart="50dp"
             app:contentInsetStartWithNavigation="0dp"
             app:layout_collapseMode="pin">
 
@@ -38,10 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|start"
-                android:paddingStart="5dp"
-                android:paddingLeft="0dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
+                android:paddingTop="5dp"
                 android:text=""
                 android:textColor="@color/colorWhite"
                 android:textSize="17sp" />

@@ -5,6 +5,7 @@ import android.database.SQLException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.joda.time.LocalDate;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.DailyTally;
 import org.smartregister.chw.core.domain.Hia2Indicator;
@@ -33,6 +34,9 @@ public class DailyTalliesRepository extends BaseRepository {
     private static final String[] TABLE_COLUMNS = {
             COLUMN_ID, COLUMN_INDICATOR_CODE, COLUMN_INDICATOR_VALUE, COLUMN_DAY
     };
+
+    private Date maxDate = LocalDate.now().plusDays(1).toDate();
+    private Date minDate = LocalDate.now().minusYears(10).toDate();
 
     /**
      * Returns a list of dates for distinct months with daily tallies
@@ -228,7 +232,8 @@ public class DailyTalliesRepository extends BaseRepository {
                 day = DAY_FORMATTER.parse((cursor.getString(cursor.getColumnIndex(COLUMN_DAY))));
             }
             curTally.setDay(day);
-            return curTally;
+            if (day.getTime() > minDate.getTime() && day.getTime() < maxDate.getTime())
+                return curTally;
         }
 
         return null;
