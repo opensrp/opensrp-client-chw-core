@@ -130,8 +130,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (parentView != null) {
             rootView = parentView;
         } else {
-            // get current view
-            // ViewGroup current = parentActivity.getWindow().getDecorView().findViewById(android.R.id.content);
             ViewGroup current = (ViewGroup) ((ViewGroup) (activity.findViewById(android.R.id.content))).getChildAt(0);
             if (!(current instanceof DrawerLayout)) {
 
@@ -172,7 +170,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         drawer = activity.findViewById(R.id.drawer_layout);
         drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
-        // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
@@ -243,21 +240,20 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerStockReport( Activity activity){
-        if(menuFlavor.stockReport()){
+    private void registerStockReport(Activity activity) {
+        if (menuFlavor.stockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
-            //final ImageView imageView = rootView.findViewById(R.id.ivIconStockReport);
-           // final TextView tvStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.tvStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
-             rlIconStockReport.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
-                     activity.startActivity(intent);
-                 }
-             });
+            rlIconStockReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
+
     private void registerDrawer(Activity parentActivity) {
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -420,7 +416,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         // update the time
         mPresenter.refreshLastSync();
         // refreshLastSync(new Date());
-
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
