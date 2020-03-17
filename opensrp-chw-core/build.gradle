@@ -187,6 +187,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
+    implementation ('org.smartregister:opensrp-client-opd:0.0.11-SNAPSHOT@aar'){
+        transitive = true
+        exclude group: 'com.github.lecho', module: 'hellocharts-android'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+
     api 'com.google.guava:guava:20.0'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
