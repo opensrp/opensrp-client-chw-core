@@ -3,11 +3,9 @@ package org.smartregister.chw.core.utils;
 import android.content.res.AssetManager;
 
 import org.json.JSONObject;
+import org.smartregister.chw.malaria.util.Constants;
 
 import java.util.Locale;
-
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.ENCOUNTER_TYPE;
-import static org.smartregister.chw.malaria.util.Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT;
 
 public class CoreConstants {
 
@@ -278,8 +276,8 @@ public class CoreConstants {
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
-            String encounterType = jsonForm.optString(ENCOUNTER_TYPE);
-            return !encounterType.equals(MALARIA_FOLLOW_UP_VISIT);
+            String encounterType = jsonForm.optString(CoreJsonFormUtils.ENCOUNTER_TYPE);
+            return !encounterType.equals(Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT);
         }
 
         public static String getMalariaFollowUpVisitForm() {
