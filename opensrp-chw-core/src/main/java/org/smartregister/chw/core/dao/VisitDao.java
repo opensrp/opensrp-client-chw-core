@@ -105,7 +105,7 @@ public class VisitDao extends AbstractDao {
     }
 
     public static boolean memberHasVisits(String baseEntityID) {
-        String sql = "select count(*) total from visits where base_entity_id = '" + baseEntityID + "'";
+        String sql = "select count(*) total from visits where base_entity_id = '" + baseEntityID + "' AND visit_type NOT LIKE 'ANC Home Visit Not Done%'";
 
         DataMap<String> dataMap = c -> getCursorValue(c, "total");
         List<String> values = AbstractDao.readData(sql, dataMap);
