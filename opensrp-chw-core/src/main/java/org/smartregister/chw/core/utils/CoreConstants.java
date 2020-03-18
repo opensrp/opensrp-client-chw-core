@@ -794,4 +794,13 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
     }
+
+    public static final class REGISTER_TYPE {
+        public static final String CHILD = "Child";
+        public static final String ANC = "ANC";
+        public static final String PNC = "PNC";
+        public static final String MALARIA = "Malaria";
+        public static final String FAMILY_PLANNING = "Family Planning";
+        public static final String OTHER = "OTHER";
+    }
 }
