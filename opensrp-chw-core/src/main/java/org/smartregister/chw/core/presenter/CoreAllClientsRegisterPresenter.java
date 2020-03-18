@@ -7,9 +7,9 @@ import org.smartregister.opd.contract.OpdRegisterActivityContract;
 import org.smartregister.opd.pojo.RegisterParams;
 import org.smartregister.opd.presenter.BaseOpdRegisterActivityPresenter;
 
-public class AllClientsRegisterPresenter extends BaseOpdRegisterActivityPresenter {
+public class CoreAllClientsRegisterPresenter extends BaseOpdRegisterActivityPresenter {
 
-    public AllClientsRegisterPresenter(OpdRegisterActivityContract.View view, OpdRegisterActivityContract.Model model) {
+    public CoreAllClientsRegisterPresenter(OpdRegisterActivityContract.View view, OpdRegisterActivityContract.Model model) {
         super(view, model);
     }
 

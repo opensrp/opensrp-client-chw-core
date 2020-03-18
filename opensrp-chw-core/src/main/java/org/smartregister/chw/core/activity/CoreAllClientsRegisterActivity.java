@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONObject;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.fragment.CoreAllClientsRegisterFragment;
-import org.smartregister.chw.core.presenter.AllClientsRegisterPresenter;
+import org.smartregister.chw.core.presenter.CoreAllClientsRegisterPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.opd.activity.BaseOpdRegisterActivity;
 import org.smartregister.opd.contract.OpdRegisterActivityContract;
@@ -40,7 +40,7 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
 
     @Override
     protected BaseOpdRegisterActivityPresenter createPresenter(@NonNull OpdRegisterActivityContract.View view, @NonNull OpdRegisterActivityContract.Model model) {
-        return new AllClientsRegisterPresenter(view, model);
+        return new CoreAllClientsRegisterPresenter(view, model);
     }
 
     @Override

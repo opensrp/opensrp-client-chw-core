@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import org.smartregister.opd.configuration.OpdRegisterQueryProviderContract;
 
-public class AllClientsRegisterQueryProvider extends OpdRegisterQueryProviderContract {
+public class CoreAllClientsRegisterQueryProvider extends OpdRegisterQueryProviderContract {
 
     /**
      * DO NOT TOUCH 😁
