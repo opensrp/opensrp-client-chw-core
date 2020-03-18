@@ -19,6 +19,7 @@ public class ReportHia2Indicator implements Serializable {
 
 
     public ReportHia2Indicator() {
+        //empty constructorqq
     }
 
     public ReportHia2Indicator(String indicatorCode, String label, String dhisId, String description, String category, String value, String providerId, String createdAt, String updatedAt) {
