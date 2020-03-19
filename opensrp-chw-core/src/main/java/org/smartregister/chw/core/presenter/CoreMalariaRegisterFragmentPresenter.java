@@ -5,7 +5,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.malaria.contract.MalariaRegisterFragmentContract;
 import org.smartregister.chw.malaria.presenter.BaseMalariaRegisterFragmentPresenter;
 
-public abstract class CoreMalariaRegisterFragmentPresenter extends BaseMalariaRegisterFragmentPresenter {
+public class CoreMalariaRegisterFragmentPresenter extends BaseMalariaRegisterFragmentPresenter {
 
     public CoreMalariaRegisterFragmentPresenter(MalariaRegisterFragmentContract.View view,
                                                 MalariaRegisterFragmentContract.Model model, String viewConfigurationIdentifier) {
