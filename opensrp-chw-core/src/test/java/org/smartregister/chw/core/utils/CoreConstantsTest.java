@@ -13,6 +13,14 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void getReferralForms() {
+        Assert.assertEquals(CoreConstants.JSON_FORM.getChildReferralForm(), "child_referral_form");
+        Assert.assertEquals(CoreConstants.JSON_FORM.getAncReferralForm(), "anc_referral_form");
+        Assert.assertEquals(CoreConstants.JSON_FORM.getPncReferralForm(), "pnc_referral_form");
+    }
+
+
+    @Test
     public void getRegisterType() {
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.ANC, "ANC");
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.PNC, "PNC");
