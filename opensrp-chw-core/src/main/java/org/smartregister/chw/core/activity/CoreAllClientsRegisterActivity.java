@@ -24,12 +24,12 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
 
     @Override
     public void startFormActivity(JSONObject jsonObject) {
-        //Overridden from the extended abstract class - feature not required for HF app
+        //implement
     }
 
     @Override
     protected void onActivityResultExtended(int i, int i1, Intent intent) {
-        //Overridden from the extended abstract class - feature not required for HF app
+        //implement
     }
 
     @Override
@@ -62,6 +62,6 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
 
     @Override
     public void startRegistration() {
-        //Overridden from the abstract class - registration feature not required for HF app
+        //implement
     }
 }

@@ -15,21 +15,21 @@ public class CoreAllClientsRegisterPresenter extends BaseOpdRegisterActivityPres
 
     @Override
     public void onNoUniqueId() {
-        //Overridden from the abstract class - implementation not needed
+        //implement
     }
 
     @Override
     public void onRegistrationSaved(boolean b) {
-        //Overridden from the  abstract class - implementation not needed
+        //implement
     }
 
     @Override
     public void onUniqueIdFetched(Triple<String, String, String> triple, String s) {
-        //Overridden from the  abstract class - implementation not needed
+        //implement
     }
 
     @Override
     public void saveForm(String s, @NonNull RegisterParams registerParams) {
-        //Overridden from the  abstract class - implementation not needed
+        //implement
     }
 }
