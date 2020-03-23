@@ -22,7 +22,6 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
-import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
@@ -241,6 +240,8 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
                 type = CoreConstants.TABLE_NAME.PNC_MEMBER;
             } else if (ChildDao.isChild(ancMemberObject.getBaseEntityId())) {
                 type = CoreConstants.TABLE_NAME.CHILD;
+            } else {
+                type = CoreConstants.TABLE_NAME.PNC_MEMBER;
             }
 
             MemberType memberType = new MemberType(ancMemberObject, type);

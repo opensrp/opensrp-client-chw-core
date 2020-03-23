@@ -72,8 +72,7 @@ public class ChwMalariaRegisterProvider extends MalariaRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            if (malariaFollowUpRule != null && StringUtils.isNotBlank(malariaFollowUpRule.getButtonStatus()) &&
-                    !CoreConstants.VISIT_STATE.EXPIRED.equalsIgnoreCase(malariaFollowUpRule.getButtonStatus())) {
+            if (malariaFollowUpRule != null && StringUtils.isNotBlank(malariaFollowUpRule.getButtonStatus()) && !CoreConstants.VISIT_STATE.EXPIRED.equalsIgnoreCase(malariaFollowUpRule.getButtonStatus())) {
                 updateDueColumn(viewHolder.dueButton, malariaFollowUpRule.getButtonStatus());
             }
         }

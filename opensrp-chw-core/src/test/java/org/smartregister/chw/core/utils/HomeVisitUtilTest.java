@@ -2,6 +2,7 @@ package org.smartregister.chw.core.utils;
 
 import android.content.Context;
 
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -9,6 +10,10 @@ import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
+import org.smartregister.chw.core.rule.MalariaFollowUpRule;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class HomeVisitUtilTest {
 
@@ -31,5 +36,18 @@ public class HomeVisitUtilTest {
         VisitSummary summary = HomeVisitUtil.getAncVisitStatus(ancVisitAlertRule, null);
         Assert.assertNotNull(summary);
         Assert.assertEquals(noOfDaysDue + " days", summary.getNoOfDaysDue());
+    }
+
+    @Test
+    public void testMalariaRUleStatus() {
+
+        Date dueDate = new DateTime().minusDays(8).toDate();
+        DateTime overDueDate = new DateTime().minusDays(11);
+        DateTime expiredDate = new DateTime().minusDays(15);
+
+
+        MalariaFollowUpRule malariaFollowUpRule = MalariaVisitUtil.getMalariaStatus(dueDate, null);
+
+        Assert.assertEquals(malariaFollowUpRule.getButtonStatus(), CoreConstants.VISIT_STATE.DUE);
     }
 }
