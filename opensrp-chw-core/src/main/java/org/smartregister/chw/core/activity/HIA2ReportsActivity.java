@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -71,7 +70,7 @@ public class HIA2ReportsActivity extends BaseActivity {
     public static final int REQUEST_CODE_GET_JSON = 3432;
     public static final String FORM_KEY_CONFIRM = "confirm";
     private static final String TAG = HIA2ReportsActivity.class.getCanonicalName();
-    private static final List<String> readOnlyList = new ArrayList<>(Arrays.asList("newpreg_mama_visit","oldpreg_mama_visit","total_preg_visit","pnc_visit","total_F_visited","less1m_visit","1m1yr_visit","1yr5yr_visit","total_U5_visit","hh_visited","F_referral_hf","less1m_referral_hf","1m1yr_referral_hf","1yr5yr_referral_hf","total_referral","no_healthedu_meet","no_ppl_attend_meet","F_death_home","no_maternal_death","less1m_death_home","total_less1m_deaths","1m1yr_death_home","total_1m1yr_deaths","1yr5yr_death_home","total_1yr5yr_deaths","birth_home","birth_home_healer","birth_way_hf","total_birth_home","10y14y_new_clients","10y14y_return_clients","10y14y_total_clients","15y19y_new_clients","15y19y_return_clients","15y19y_total_clients","20y24y_new_clients","20y24y_return_clients","20y24y_total_clients","25_new_clients","25_return_clients","25_total_clients","total_new_clients","total_return_clients","total_total_clients","10y14y_pop","10y14y_coc","10y14y_emc","10y14y_total_pills","15y19y_pop","15y19y_coc","15y19y_emc","15y19y_total_pills","20y24y_pop","20y24y_coc","20y24y_emc","20y24y_total_pills","25_pop","25_coc","25_emc","25_total_pills","total_pop","total_coc","total_emc","total_total_pills","10y14y_F_mcondom","10y14y_F_fcondom","10y14y_total_condoms","15y19y_F_mcondom","15y19y_F_fcondom","15y19y_total_condoms","20y24y_F_mcondom","20y24y_F_fcondom","20y24y_total_condoms","25_F_mcondom","25_F_fcondom","25_total_condoms","total_F_mcondom","total_F_fcondom","total_total_condoms","10y14y_beads","15y19y_beads","20y24y_beads","25_beads","total_beads","10y14y_cousel_ANC","15y19y_cousel_ANC","20y24y_cousel_ANC","25_cousel_ANC","total_cousel_ANC","10y14y_cousel_delivery","15y19y_cousel_delivery","20y24y_cousel_delivery","25_cousel_delivery","total_cousel_delivery","10y14y_cousel_PNC","15y19y_cousel_PNC","20y24y_cousel_PNC","25_cousel_PNC","total_cousel_PNC","10y14y_referral","15y19y_referral","20y24y_referral","25_referral","total_fp_referral"));
+    private static final List<String> readOnlyList = new ArrayList<>(Arrays.asList("newpreg_mama_visit", "oldpreg_mama_visit", "total_preg_visit", "pnc_visit", "total_F_visited", "less1m_visit", "1m1yr_visit", "1yr5yr_visit", "total_U5_visit", "hh_visited", "F_referral_hf", "less1m_referral_hf", "1m1yr_referral_hf", "1yr5yr_referral_hf", "total_referral", "no_healthedu_meet", "no_ppl_attend_meet", "F_death_home", "no_maternal_death", "less1m_death_home", "total_less1m_deaths", "1m1yr_death_home", "total_1m1yr_deaths", "1yr5yr_death_home", "total_1yr5yr_deaths", "birth_home", "birth_home_healer", "birth_way_hf", "total_birth_home", "10y14y_new_clients", "10y14y_return_clients", "10y14y_total_clients", "15y19y_new_clients", "15y19y_return_clients", "15y19y_total_clients", "20y24y_new_clients", "20y24y_return_clients", "20y24y_total_clients", "25_new_clients", "25_return_clients", "25_total_clients", "total_new_clients", "total_return_clients", "total_total_clients", "10y14y_pop", "10y14y_coc", "10y14y_emc", "10y14y_total_pills", "15y19y_pop", "15y19y_coc", "15y19y_emc", "15y19y_total_pills", "20y24y_pop", "20y24y_coc", "20y24y_emc", "20y24y_total_pills", "25_pop", "25_coc", "25_emc", "25_total_pills", "total_pop", "total_coc", "total_emc", "total_total_pills", "10y14y_F_mcondom", "10y14y_F_fcondom", "10y14y_total_condoms", "15y19y_F_mcondom", "15y19y_F_fcondom", "15y19y_total_condoms", "20y24y_F_mcondom", "20y24y_F_fcondom", "20y24y_total_condoms", "25_F_mcondom", "25_F_fcondom", "25_total_condoms", "total_F_mcondom", "total_F_fcondom", "total_total_condoms", "10y14y_beads", "15y19y_beads", "20y24y_beads", "25_beads", "total_beads", "10y14y_cousel_ANC", "15y19y_cousel_ANC", "20y24y_cousel_ANC", "25_cousel_ANC", "total_cousel_ANC", "10y14y_cousel_delivery", "15y19y_cousel_delivery", "20y24y_cousel_delivery", "25_cousel_delivery", "total_cousel_delivery", "10y14y_cousel_PNC", "15y19y_cousel_PNC", "20y24y_cousel_PNC", "25_cousel_PNC", "total_cousel_PNC", "10y14y_referral", "15y19y_referral", "20y24y_referral", "25_referral", "total_fp_referral"));
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -100,6 +99,8 @@ public class HIA2ReportsActivity extends BaseActivity {
 
         tabLayout.setupWithViewPager(mViewPager);
         refreshDraftMonthlyTitle();
+        //  mSectionsPagerAdapter.getItem(1);
+        mViewPager.setCurrentItem(1);
     }
 
     @Override
@@ -193,7 +194,7 @@ public class HIA2ReportsActivity extends BaseActivity {
             } catch (JSONException e) {
                 Timber.e("JSONException " + e.getMessage());
             } catch (ParseException e) {
-                Timber.e("JSONException"+ e.getMessage());
+                Timber.e("JSONException" + e.getMessage());
             }
         }
     }
@@ -330,6 +331,15 @@ public class HIA2ReportsActivity extends BaseActivity {
         protected void onPostExecute(Boolean res) {
             super.onPostExecute(res);
             hideProgressDialog();
+            // update drafts view
+            refreshDraftMonthlyTitle();
+            Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(new FetchEditedMonthlyTalliesTask.TaskListener() {
+                @Override
+                public void onPostExecute(List<MonthlyTally> monthlyTallies) {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+                    ((DraftMonthlyFragment) fragment).updateDraftsReportListView(monthlyTallies);
+                }
+            }), null);
         }
 
         private void generateMonthlyReport(Date month) {

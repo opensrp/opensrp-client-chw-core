@@ -13,7 +13,7 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/indicator_table_divider_height">
+            android:layout_height="30dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,6 +33,7 @@
                 android:layout_height="@dimen/table_contents_text_height"
                 android:gravity="end|center_vertical"
                 android:textAlignment="viewEnd"
+                android:maxWidth="430dp"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/table_row_middle_margin"
                 android:paddingEnd="@dimen/table_row_side_margin"

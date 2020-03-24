@@ -1,15 +1,13 @@
 package org.smartregister.chw.core.activity;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -17,13 +15,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.child.activity.BaseActivity;
 import org.smartregister.child.toolbar.SimpleToolbar;
-import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.Tally;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.view.IndicatorCategoryView;
-import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.io.Serializable;
@@ -39,8 +34,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-
-import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public class ReportSummaryActivity extends BaseActivity {
     public static final String EXTRA_TALLIES = "tallies";
@@ -61,9 +54,11 @@ public class ReportSummaryActivity extends BaseActivity {
         }
         SimpleDateFormat simpleDateFormat;
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
+        ImageView imageView = findViewById(R.id.arrow_image);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         toolbar.setNavigationOnClickListener(v -> finish());
         toolBarTextView.setOnClickListener(v -> finish());
+        imageView.setOnClickListener(v -> finish());
         refreshViewsOnResult();
         appBarLayout = findViewById(R.id.app_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -89,6 +84,7 @@ public class ReportSummaryActivity extends BaseActivity {
             }
         }
     }
+
     private void refreshViewsOnResult() {
         Observable<MonthlyTalliesRepository> observable = Observable.create(monthlyTallyEmitter -> {
             MonthlyTalliesRepository monthlyTalliesRepository = new MonthlyTalliesRepository();
@@ -122,6 +118,7 @@ public class ReportSummaryActivity extends BaseActivity {
                     }
                 });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
