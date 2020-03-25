@@ -80,7 +80,7 @@ public class IndicatorCategoryView extends LinearLayout {
                 nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.indicator_table_contents_text_size));
                 nameTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                nameTextView.setMaxWidth(990);
+                nameTextView.setMaxWidth(700);
                 nameTextView.setPadding(
                         getResources().getDimensionPixelSize(R.dimen.table_row_side_margin),
 
