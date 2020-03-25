@@ -37,11 +37,9 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
     private static List<String> getItems() {
-        List<String> itemList = new ArrayList<>(
+      return  new ArrayList<>(
                 Arrays.asList("ORS 5", "Zinc 10", "Panadol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
-        );
-        return itemList;
-    }
+        ); }
 
     private List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
@@ -69,7 +67,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     }
 
     private void reloadRecycler(MonthStockUsageModel selected) {
-        String stockMonth = stockUsageReportUtils.monthNumber(selected.getMonth().substring(0, 3));
+        String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

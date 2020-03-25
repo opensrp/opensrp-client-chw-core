@@ -29,8 +29,6 @@ import java.util.Map;
 
 public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
-    private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
-
     private String evaluateStockName(String stockName) {
         String stock_name;
         switch (stockName) {
@@ -54,6 +52,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     }
 
     private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName) {
+        StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
         String stockMonth;
         String stockYear;
         String stockUsage;
@@ -63,7 +62,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
             for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.previousMonths().entrySet()) {
                 stockMonth = stockUsageReportUtils.monthConverter(entry.getKey());
                 stockYear = entry.getValue().toString();
-                stockUsage = stockUsageReportDao.getStockUsageForMonth(stockUsageReportUtils.monthNumber(stockMonth.substring(0, 3)), evaluateStockName(stockName), stockYear);
+                stockUsage = stockUsageReportDao.getStockUsageForMonth(stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3)), evaluateStockName(stockName), stockYear);
                 if (!(" ").equals(stockUsage)) {
                     stockUsageItemDetailsModelList.add(new StockUsageItemDetailsModel(stockMonth, stockYear, stockUsage));
                 } else {

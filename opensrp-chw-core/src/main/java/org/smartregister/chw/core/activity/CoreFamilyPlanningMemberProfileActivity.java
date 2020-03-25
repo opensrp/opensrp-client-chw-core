@@ -312,10 +312,9 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
             Rules rule = FpUtil.getFpRules(fpMemberObject.getFpMethod());
-            String pillCycles = FpDao.getLastPillCycle(fpMemberObject.getBaseEntityId(),fpMemberObject.getFpMethod() );
-            Integer pills = StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
+            Integer pillCycles = FpDao.getLastPillCycle(fpMemberObject.getBaseEntityId(),fpMemberObject.getFpMethod());
 
-            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), pills, fpMemberObject.getFpMethod());
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, FpUtil.parseFpStartDate(fpMemberObject.getFpStartDate()), pillCycles, fpMemberObject.getFpMethod());
             return null;
         }
 

@@ -20,7 +20,7 @@ public class StockUsageReportUtils {
         return monthsAndYearsList;
     }
 
-    public String monthNumber(String month) {
+    public String getMonthNumber(String month) {
         String valMonth = "";
         switch (month) {
             case "Jan":

@@ -77,8 +77,8 @@ public class StockUsageReportDao extends AbstractDao {
     }
 
     /**
-     * Reads the min last update date and compares to today's date
-     * if last update date is not in same month as today return false
+     * Reads the  last update date and compares to today's date
+     * if last update date is not in same Day as today return false
      *
      * @return
      */

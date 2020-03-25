@@ -241,7 +241,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void registerStockReport(Activity activity) {
-        if (menuFlavor.stockReport()) {
+        if (menuFlavor.hasStockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
             rlIconStockReport.setOnClickListener(new View.OnClickListener() {
@@ -468,6 +468,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         HashMap<String, String> getTableMapValues();
 
-        boolean stockReport();
+        boolean hasStockReport();
     }
 }

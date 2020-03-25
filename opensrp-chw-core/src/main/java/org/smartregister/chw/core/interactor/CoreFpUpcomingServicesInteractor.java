@@ -36,11 +36,11 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
     }
 
     private void evaluateFp(List<BaseUpcomingService> serviceList) {
-        String fpMethod = null;
+        String fpMethod;
         String fp_date = null;
-        String fp_pillCycles = null;
+        Integer fp_pillCycles = null;
         Rules rule = null;
-        Integer count = null;
+        Integer count;
         Date serviceDueDate = null;
         Date serviceOverDueDate = null;
         String serviceName = null;
@@ -56,7 +56,7 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         }
         fpMethod = FpUtil.getTranslatedMethodValue(fpMethodUsed, context);
         Date lastVisitDate = null;
-        Visit lastVisit = null;
+        Visit lastVisit;
         Date fpDate = FpUtil.parseFpStartDate(fp_date);
         if (fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
             lastVisit = FpDao.getLatestInjectionVisit(memberObject.getBaseEntityId(), fpMethodUsed);
@@ -66,8 +66,7 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
         }
-        Integer pills = StringUtils.isBlank(fp_pillCycles) ? 0 : Integer.parseInt(fp_pillCycles);
-        FpAlertRule alertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
+        FpAlertRule alertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, fp_pillCycles, fpMethod);
         if (fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_COC) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_POP) ||
                 fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM) || fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
             serviceDueDate = alertRule.getDueDate();
