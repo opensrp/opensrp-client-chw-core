@@ -2,7 +2,6 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -50,7 +49,7 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
             for (FpAlertObject familyPlanning : familyPlanningList) {
                 fpMethodUsed = familyPlanning.getFpMethod();
                 fp_date = familyPlanning.getFpStartDate();
-                fp_pillCycles = FpDao.getLastPillCycle(memberObject.getBaseEntityId(), fpMethodUsed );
+                fp_pillCycles = FpDao.getLastPillCycle(memberObject.getBaseEntityId(), fpMethodUsed);
                 rule = FpUtil.getFpRules(fpMethodUsed);
             }
         }

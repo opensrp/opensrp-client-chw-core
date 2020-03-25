@@ -3,7 +3,6 @@ package org.smartregister.chw.core.rule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.Months;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
@@ -53,16 +52,14 @@ public class FpAlertRule implements ICommonRule {
     public boolean isCondomValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
             int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
-            if (( monthOfYear == DateTime.now().getMonthOfYear()) && ( new DateTime(lastVisitDate).getYear() == DateTime.now().getYear())){
+            if ((monthOfYear == DateTime.now().getMonthOfYear()) && (new DateTime(lastVisitDate).getYear() == DateTime.now().getYear())) {
                 this.dueDate = new DateTime().plusMonths(1).withDayOfMonth(dueDay);
                 this.overDueDate = new DateTime().plusMonths(1).withDayOfMonth(overdueDate);
-            }
-            else{
-                if(( new DateTime(lastVisitDate).getYear() == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)){
+            } else {
+                if ((new DateTime(lastVisitDate).getYear() == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)) {
                     this.dueDate = new DateTime().withDayOfMonth(dueDay);
                     this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
-                }
-                else {
+                } else {
                     this.dueDate = lastVisitDate.withDayOfMonth(dueDay).plusMonths(1);
                     this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate).plusMonths(1);
                 }
@@ -191,7 +188,7 @@ public class FpAlertRule implements ICommonRule {
 
                     return CoreConstants.VISIT_STATE.VISIT_DONE;
                 } else {
-                    if (( monthOfYear == DateTime.now().getMonthOfYear()) && ( new DateTime(lastVisitDate).getYear() == DateTime.now().getYear())){
+                    if ((monthOfYear == DateTime.now().getMonthOfYear()) && (new DateTime(lastVisitDate).getYear() == DateTime.now().getYear())) {
                         return CoreConstants.VISIT_STATE.VISIT_DONE;
                     }
                     if (currentDate.isBefore(overDueDate))
