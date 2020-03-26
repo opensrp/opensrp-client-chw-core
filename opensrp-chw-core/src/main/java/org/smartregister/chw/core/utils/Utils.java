@@ -391,6 +391,10 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return form_name;
     }
 
+    @Deprecated
+    /**
+     * To be removed in a future build
+     */
     public static String getLocalForm(String form_name, Locale locale, AssetManager assetManager) {
         return getFileName(form_name, locale, assetManager);
     }
