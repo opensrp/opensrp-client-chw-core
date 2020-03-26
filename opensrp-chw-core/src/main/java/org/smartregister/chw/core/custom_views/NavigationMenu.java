@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
@@ -295,32 +295,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         View rlIconLang = rootView.findViewById(R.id.rlIconLang);
         final TextView tvLang = rootView.findViewById(R.id.tvLang);
 
-        final String[] languages = menuFlavor.getSupportedLanguages();
+        final List<Pair<String, Locale>> locales = menuFlavor.getSupportedLanguages();
+
+        String[] languages = new String[locales.size()];
         Locale current = context.getResources().getConfiguration().locale;
-        tvLang.setText(StringUtils.capitalize(current.getDisplayLanguage()));
+        int x = 0;
+        while (x < locales.size()) {
+            languages[x] = locales.get(x).getKey();
+            if(current.getLanguage().equals(locales.get(x).getValue().getLanguage())){
+                tvLang.setText(locales.get(x).getKey());
+            }
+            x++;
+        }
 
         rlIconLang.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(context.getString(R.string.choose_language));
             builder.setItems(languages, (dialog, which) -> {
-                String lang = languages[which];
-                Locale LOCALE;
-                switch (lang) {
-                    case "English":
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                    case "Français":
-                        LOCALE = Locale.FRENCH;
-                        break;
-                    case "Kiswahili":
-                        LOCALE = new Locale("sw");
-                        break;
-                    default:
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                }
-                tvLang.setText(languages[which]);
-                LangUtils.saveLanguage(context.getApplicationContext(), LOCALE.getLanguage());
+                Pair<String, Locale> lang = locales.get(which);
+                tvLang.setText(lang.getLeft());
+                LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
 
                 // destroy current instance
                 drawer.closeDrawers();
@@ -452,7 +446,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     public interface Flavour {
-        String[] getSupportedLanguages();
+        List<Pair<String, Locale>> getSupportedLanguages();
 
         HashMap<String, String> getTableMapValues();
     }
