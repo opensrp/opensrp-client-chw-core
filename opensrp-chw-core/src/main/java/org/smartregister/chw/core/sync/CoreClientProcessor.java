@@ -200,6 +200,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_HOME_VISIT:
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
             case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION:
                 if (eventClient.getEvent() == null) {
                     return;
                 }
@@ -228,6 +229,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 List<Obs> observations = event.getObs();
                 for (Obs obs : observations) {
                     if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        processVisitEvent(eventClient);
                         FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
                         break;
                     }
