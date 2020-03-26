@@ -7,10 +7,11 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.application.TestApplication;
-import org.smartregister.chw.core.shadows.ShadowAssetHandler;
-import org.smartregister.chw.core.shadows.ShadowBaseJob;
+import org.smartregister.chw.core.shadows.AssetHandlerShadow;
+import org.smartregister.chw.core.shadows.BaseJobShadow;
+
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = {27}, shadows = {ShadowBaseJob.class, ShadowAssetHandler.class}, application = TestApplication.class)
+@Config(sdk = {27}, shadows = {BaseJobShadow.class, AssetHandlerShadow.class}, application = TestApplication.class)
 public abstract class BaseRobolectricTest {
 
     @Rule

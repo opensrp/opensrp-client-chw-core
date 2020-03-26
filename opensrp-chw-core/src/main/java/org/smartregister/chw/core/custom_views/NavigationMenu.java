@@ -163,15 +163,11 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 rootView = current;
             }
         }
-        //
     }
-
 
     private void registerServiceActivity(Activity activity) {
         if (menuFlavor.serviceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
-            final ImageView imageView = rootView.findViewById(R.id.ivIconServiceReport);
-            final TextView tvStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.tvServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(new View.OnClickListener() {
                 @Override

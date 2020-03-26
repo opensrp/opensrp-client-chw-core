@@ -11,9 +11,6 @@ public class Tally implements Serializable {
     @JsonProperty
     private String value;
 
-    public Tally() {
-    }
-
     public Hia2Indicator getIndicator() {
         return indicator;
     }

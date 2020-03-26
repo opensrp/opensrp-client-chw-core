@@ -7,16 +7,10 @@ import org.robolectric.annotation.Implements;
 import org.smartregister.util.AssetHandler;
 
 @Implements(AssetHandler.class)
-public class ShadowAssetHandler {
+public class AssetHandlerShadow {
 
     @Implementation
     public static String readFileFromAssetsFolder(String fileName, Context context) {
-       /* if ("special_vaccines.json".equals(fileName)) {
-            return VaccineDataUtils.SPECIAL_VACCINES_JSON;
-        } else if ("vaccines.json".equals(fileName)) {
-            return VaccineDataUtils.VACCINES_JSON;
-        }*/
-
         return "";
     }
 }

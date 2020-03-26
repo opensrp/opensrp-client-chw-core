@@ -8,14 +8,12 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 public class MonthlyTallyTest {
 
     private MonthlyTally monthlyTally = new MonthlyTally();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -36,6 +34,7 @@ public class MonthlyTallyTest {
         monthlyTally.setEdited(true);
         Assert.assertTrue(monthlyTally.isEdited());
     }
+
     @Test
     public void testGetAndSetProviderId() {
         String providerId = Mockito.anyString();

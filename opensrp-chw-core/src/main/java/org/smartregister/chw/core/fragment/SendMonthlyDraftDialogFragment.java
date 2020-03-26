@@ -22,10 +22,6 @@ public class SendMonthlyDraftDialogFragment extends DialogFragment {
     private String month;
     private View.OnClickListener onSendClickedListener;
 
-    public SendMonthlyDraftDialogFragment() {
-        super();
-    }
-
     public static SendMonthlyDraftDialogFragment newInstance(String month, String date, View.OnClickListener onSendClickedListener) {
         SendMonthlyDraftDialogFragment f = new SendMonthlyDraftDialogFragment();
         f.setMonth(month);

@@ -5,11 +5,10 @@ import org.robolectric.annotation.Implements;
 import org.smartregister.job.BaseJob;
 
 @Implements(BaseJob.class)
-public class ShadowBaseJob {
-
-    private static ShadowHelper shadowHelper = new ShadowHelper();
+public class BaseJobShadow {
     public static String scheduleJobMN = "scheduleJob(String, Long, Long)";
     public static String scheduleJobImmediatelyMN = "scheduleJobImmediately(String)";
+    private static ShadowHelper shadowHelper = new ShadowHelper();
 
     @Implementation
     public static void scheduleJob(String jobTag, Long start, Long flex) {

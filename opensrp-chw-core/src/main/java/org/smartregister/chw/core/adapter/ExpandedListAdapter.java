@@ -52,8 +52,8 @@ public class ExpandedListAdapter<K, L, T> extends BaseExpandableListAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
-
+                             boolean isLastChild, View providedConvertView, ViewGroup parent) {
+        View convertView = providedConvertView;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(childLayout, null);
@@ -61,13 +61,11 @@ public class ExpandedListAdapter<K, L, T> extends BaseExpandableListAdapter {
 
         ItemData<L, T> childObject = getChild(groupPosition, childPosition);
         if (childObject != null) {
-
             String text = null;
             String details = null;
 
             if (childObject.getLabelData() instanceof String) {
                 text = (String) getChild(groupPosition, childPosition).getLabelData();
-
             } else if (childObject.getLabelData() instanceof Pair) {
                 Pair<String, String> pair = (Pair<String, String>) getChild(groupPosition, childPosition).getLabelData();
                 text = pair.first;
@@ -76,28 +74,19 @@ public class ExpandedListAdapter<K, L, T> extends BaseExpandableListAdapter {
                 Triple<String, String, String> triple = (Triple<String, String, String>) getChild(groupPosition, childPosition).getLabelData();
                 text = triple.getLeft();
                 details = triple.getMiddle();
-
             }
 
-            View tvView = convertView.findViewById(R.id.tv);
-            if (tvView != null && text != null) {
-                TextView tv = (TextView) tvView;
-                tv.setText(text);
-                convertView.setTag(text);
-            }
-
-            View detailView = convertView.findViewById(R.id.details);
-            if (detailView != null && details != null) {
-                TextView detailTextView = (TextView) detailView;
-                detailTextView.setText(details);
-
-                detailTextView.setTextColor(context.getResources().getColor(R.color.black));
-                if (childObject.isFinalized()) {
-                    detailTextView.setTextColor(context.getResources().getColor(R.color.bluetext));
-                }
-            }
+            populateTitleView(convertView, text);
+            populateDetailView(convertView, childObject, details);
         }
 
+        setBottomDivider(groupPosition, childPosition, convertView);
+        convertView.setTag(R.id.item_data, childObject.getTagData());
+
+        return convertView;
+    }
+
+    private void setBottomDivider(int groupPosition, int childPosition, View convertView) {
         View dividerBottom = convertView.findViewById(R.id.adapter_divider_bottom);
         if (dividerBottom != null) {
             boolean lastChild = (getChildrenCount(groupPosition) - 1) == childPosition;
@@ -107,10 +96,28 @@ public class ExpandedListAdapter<K, L, T> extends BaseExpandableListAdapter {
                 dividerBottom.setVisibility(View.GONE);
             }
         }
+    }
 
-        convertView.setTag(R.id.item_data, childObject.getTagData());
+    private void populateTitleView(View convertView, String text) {
+        View tvView = convertView.findViewById(R.id.tv);
+        if (tvView != null && text != null) {
+            TextView tv = (TextView) tvView;
+            tv.setText(text);
+            convertView.setTag(text);
+        }
+    }
 
-        return convertView;
+    private void populateDetailView(View convertView, ItemData<L, T> childObject, String details) {
+        View detailView = convertView.findViewById(R.id.details);
+        if (detailView != null && details != null) {
+            TextView detailTextView = (TextView) detailView;
+            detailTextView.setText(details);
+
+            detailTextView.setTextColor(context.getResources().getColor(R.color.black));
+            if (childObject.isFinalized()) {
+                detailTextView.setTextColor(context.getResources().getColor(R.color.bluetext));
+            }
+        }
     }
 
     @Override

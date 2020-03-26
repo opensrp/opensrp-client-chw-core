@@ -52,7 +52,6 @@ public class ReportSummaryActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        SimpleDateFormat simpleDateFormat;
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
         ImageView imageView = findViewById(R.id.arrow_image);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);

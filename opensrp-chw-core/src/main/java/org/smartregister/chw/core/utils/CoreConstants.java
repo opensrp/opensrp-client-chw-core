@@ -13,6 +13,8 @@ public class CoreConstants {
 
     public static final String ENTITY_ID = "entity_id";
     public static final String REFERRAL_PLAN_ID = "5270285b-5a3b-4647-b772-c0b3c52e2b71";
+    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
 
@@ -795,13 +797,10 @@ public class CoreConstants {
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
     }
 
-    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
-
-    public static final class KEY {
+    public static final class KEY_INDICATORS {
         public static final String HIA_2_INDICATOR = "hia2_indicator";
         public static final String STEPNAME = "stepName";
     }
-    public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
 
 
 }
