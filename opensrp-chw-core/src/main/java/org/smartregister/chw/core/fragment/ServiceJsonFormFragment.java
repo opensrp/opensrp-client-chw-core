@@ -14,7 +14,7 @@ public class ServiceJsonFormFragment extends JsonWizardFormFragment {
     public static ServiceJsonFormFragment getFormFragment(String stepName) {
         ServiceJsonFormFragment jsonFormFragment = new ServiceJsonFormFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CoreConstants.KEY_INDICATORS.STEPNAME, stepName);
+        bundle.putString(CoreConstants.KeyIndicatorsUtil.STEPNAME, stepName);
         jsonFormFragment.setArguments(bundle);
         return jsonFormFragment;
     }

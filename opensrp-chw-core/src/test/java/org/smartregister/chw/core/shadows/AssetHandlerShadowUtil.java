@@ -7,7 +7,7 @@ import org.robolectric.annotation.Implements;
 import org.smartregister.util.AssetHandler;
 
 @Implements(AssetHandler.class)
-public class AssetHandlerShadow {
+public class AssetHandlerShadowUtil {
 
     @Implementation
     public static String readFileFromAssetsFolder(String fileName, Context context) {

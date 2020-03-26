@@ -797,7 +797,7 @@ public class CoreConstants {
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
     }
 
-    public static final class KEY_INDICATORS {
+    public static final class KeyIndicatorsUtil {
         public static final String HIA_2_INDICATOR = "hia2_indicator";
         public static final String STEPNAME = "stepName";
     }

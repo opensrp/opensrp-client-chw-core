@@ -57,9 +57,9 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             if (hia2Indicators == null || hia2Indicators.isEmpty()) {
                 return null;
             }
-            int i = 1;
+
             JSONObject form = new FormUtils(baseActivity).getFormJson(formName);
-            FieldArrays(form, i, hia2Indicators);
+            setFieldArrays(form, hia2Indicators);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -67,7 +67,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         return null;
     }
 
-    private void FieldArrays(JSONObject form, int i, List<Hia2Indicator> hia2Indicators) {
+    private void setFieldArrays(JSONObject form, List<Hia2Indicator> hia2Indicators) {
         try {
 
             JSONArray fieldsArray = form.getJSONObject("step1").getJSONArray("fields");
@@ -82,6 +82,8 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             JSONArray fieldsArray10 = form.getJSONObject("step10").getJSONArray("fields");
             JSONArray fieldsArray11 = form.getJSONObject("step11").getJSONArray("fields");
             JSONArray fieldsArray12 = form.getJSONObject("step12").getJSONArray("fields");
+
+            int i = 1;
 
             for (Hia2Indicator hia2Indicator : hia2Indicators) {
                 JSONObject jsonObject = new JSONObject();
@@ -162,7 +164,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             jsonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
             jsonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
             jsonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
-            jsonObject.put(CoreConstants.KEY_INDICATORS.HIA_2_INDICATOR, hia2Indicator.getIndicatorCode());
+            jsonObject.put(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR, hia2Indicator.getIndicatorCode());
 
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));

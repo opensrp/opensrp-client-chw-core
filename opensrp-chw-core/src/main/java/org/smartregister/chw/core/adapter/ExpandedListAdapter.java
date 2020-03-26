@@ -144,13 +144,12 @@ public class ExpandedListAdapter<K, L, T> extends BaseExpandableListAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
-
+                             View providedConvertView, ViewGroup parent) {
+        View convertView = providedConvertView;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(headerLayout, null);
         }
-
         Object group = getGroup(groupPosition);
 
         if (group != null) {

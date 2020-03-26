@@ -18,10 +18,10 @@ public class ServiceEditTextFactory extends ChildEditTextFactory {
                              MaterialEditText editText, ImageView editable) throws Exception {
         super.attachLayout(stepName, context, formFragment, jsonObject, editText, editable);
 
-        if (jsonObject.has(CoreConstants.KEY_INDICATORS.HIA_2_INDICATOR)) {
-            editText.setTag(jsonObject.get(CoreConstants.KEY_INDICATORS.HIA_2_INDICATOR));
+        if (jsonObject.has(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR)) {
+            editText.setTag(jsonObject.get(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR));
 
-            editText.addTextChangedListener(new HIA2ReportFormTextWatcher(formFragment, jsonObject.get(CoreConstants.KEY_INDICATORS.HIA_2_INDICATOR).toString()));
+            editText.addTextChangedListener(new HIA2ReportFormTextWatcher(formFragment, jsonObject.get(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR).toString()));
         }
     }
 }
