@@ -13,6 +13,7 @@ import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -61,6 +62,8 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private UniqueIdRepository uniqueIdRepository;
 
     private RulesEngineHelper rulesEngineHelper;
+    private static StockUsageReportRepository stockUsageReportRepository;
+
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return getInstance().jsonSpecHelper;
@@ -129,6 +132,13 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
             scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
+    }
+
+    public StockUsageReportRepository getStockUsageRepository() {
+        if (stockUsageReportRepository == null) {
+            stockUsageReportRepository = new StockUsageReportRepository();
+        }
+        return stockUsageReportRepository;
     }
 
     @Override

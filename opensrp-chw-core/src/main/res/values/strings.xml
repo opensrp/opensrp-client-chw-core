@@ -459,6 +459,24 @@
     <string name="sick_visit_on">Sick visit on %s</string>
     <string name="view_sick_visits">View sick visits</string>
 
+    <!--ba stockUsageModel inv reporting-->
+    <string name="stock_usage_report">Stock usage report</string>
+    <string name="stock_item_detail">%s Stock Used</string>
+    <string name="ors_5">ORS 5</string>
+    <string name="zinc_10"> Zinc 10	</string>
+    <string name="paracetamol">Paracetamol</string>
+    <string name="cycle_beads">Cycle beads (Standard day method)</string>
+    <string name="male_condoms">Male Condoms</string>
+    <string name="female_condoms">Female Condoms</string>
+    <string name="rdts">RDTs</string>
+    <string name="alu_6">ALU 6</string>
+    <string name="alu_12">ALU 12</string>
+    <string name="alu_18">ALU 18</string>
+    <string name="alu_24">ALU 24</string>
+    <string name="packets">Packets</string>
+    <string name="packs">Packs</string>
+    <string name="pieces">Pieces</string>
+    <string name="tests">Tests</string>
     <!-- IMCI -->
     <string name="sick_child">SICK CHILD</string>
 </resources>

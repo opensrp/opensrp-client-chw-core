@@ -29,6 +29,7 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
+import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -129,8 +130,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (parentView != null) {
             rootView = parentView;
         } else {
-            // get current view
-            // ViewGroup current = parentActivity.getWindow().getDecorView().findViewById(android.R.id.content);
             ViewGroup current = (ViewGroup) ((ViewGroup) (activity.findViewById(android.R.id.content))).getChildAt(0);
             if (!(current instanceof DrawerLayout)) {
 
@@ -171,7 +170,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         drawer = activity.findViewById(R.id.drawer_layout);
         drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
-        // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
@@ -195,6 +193,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
         registerSync(activity);
         registerLanguageSwitcher(activity);
+        registerStockReport(activity);
 
         registerDeviceToDeviceSync(activity);
         // update all actions
@@ -238,6 +237,20 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void displayToast(Activity activity, String message) {
         if (activity != null) {
             Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void registerStockReport(Activity activity) {
+        if (menuFlavor.hasStockReport()) {
+            View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
+            rlIconStockReport.setVisibility(View.VISIBLE);
+            rlIconStockReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -403,7 +416,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         // update the time
         mPresenter.refreshLastSync();
         // refreshLastSync(new Date());
-
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
@@ -455,5 +467,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         String[] getSupportedLanguages();
 
         HashMap<String, String> getTableMapValues();
+
+        boolean hasStockReport();
     }
 }
