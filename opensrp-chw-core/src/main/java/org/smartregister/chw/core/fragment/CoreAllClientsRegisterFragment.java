@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
-
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.R;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
