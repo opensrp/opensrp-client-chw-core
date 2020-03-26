@@ -11,10 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
-import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.presenter.CoreAllClientsRegisterFragmentPresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.opd.fragment.BaseOpdRegisterFragment;
+import org.smartregister.opd.model.OpdRegisterFragmentModel;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 public class CoreAllClientsRegisterFragment extends BaseOpdRegisterFragment {
@@ -104,5 +106,10 @@ public class CoreAllClientsRegisterFragment extends BaseOpdRegisterFragment {
         } else {
             dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_off, 0);
         }
+    }
+
+    @Override
+    protected void initializePresenter() {
+        presenter = new CoreAllClientsRegisterFragmentPresenter(this, new OpdRegisterFragmentModel());
     }
 }
