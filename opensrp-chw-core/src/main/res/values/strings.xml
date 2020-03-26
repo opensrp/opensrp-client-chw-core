@@ -461,4 +461,6 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Return to All Clients</string>
+    <!-- IMCI -->
+    <string name="sick_child">SICK CHILD</string>
 </resources>
