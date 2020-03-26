@@ -3,7 +3,6 @@ package org.smartregister.chw.core.rule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.Months;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
@@ -52,12 +51,19 @@ public class FpAlertRule implements ICommonRule {
 
     public boolean isCondomValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
-            if (Months.monthsBetween(new DateTime(lastVisitDate), new DateTime()).getMonths() <= 1) {
-                this.dueDate = new DateTime().withDayOfMonth(dueDay);
-                this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+            int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
+            int year = new DateTime(lastVisitDate).getYear();
+            if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
+                this.dueDate = new DateTime().plusMonths(1).withDayOfMonth(dueDay);
+                this.overDueDate = new DateTime().plusMonths(1).withDayOfMonth(overdueDate);
             } else {
-                this.dueDate = lastVisitDate.withDayOfMonth(dueDay);
-                this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate);
+                if ((year == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)) {
+                    this.dueDate = new DateTime().withDayOfMonth(dueDay);
+                    this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+                } else {
+                    this.dueDate = lastVisitDate.withDayOfMonth(dueDay).plusMonths(1);
+                    this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate).plusMonths(1);
+                }
             }
         } else {
             this.dueDate = fpDate.plusMonths(1).withDayOfMonth(dueDay);
@@ -158,6 +164,8 @@ public class FpAlertRule implements ICommonRule {
     public String getButtonStatus() {
         DateTime lastVisit = lastVisitDate;
         DateTime currentDate = new DateTime(new LocalDate().toDate());
+        int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
+        int year = new DateTime(lastVisitDate).getYear();
 
         if (lastVisitDate != null) {
             if (expiryDate != null) {
@@ -182,7 +190,7 @@ public class FpAlertRule implements ICommonRule {
 
                     return CoreConstants.VISIT_STATE.VISIT_DONE;
                 } else {
-                    if (lastVisit.isAfter(dueDate) && Months.monthsBetween(lastVisit, new DateTime()).getMonths() < 1) {
+                    if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
                         return CoreConstants.VISIT_STATE.VISIT_DONE;
                     }
                     if (currentDate.isBefore(overDueDate))
