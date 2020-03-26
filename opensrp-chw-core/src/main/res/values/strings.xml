@@ -477,5 +477,6 @@
     <string name="packs">Packs</string>
     <string name="pieces">Pieces</string>
     <string name="tests">Tests</string>
-
+    <!-- IMCI -->
+    <string name="sick_child">SICK CHILD</string>
 </resources>
