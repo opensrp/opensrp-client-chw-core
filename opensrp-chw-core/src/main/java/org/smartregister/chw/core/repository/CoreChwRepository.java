@@ -10,6 +10,7 @@ import org.smartregister.chw.anc.repository.VisitRepository;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.repository.RecurringServiceRecordRepository;
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
@@ -84,6 +85,8 @@ public class CoreChwRepository extends Repository {
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
+
+        WeightForHeightRepository.createTable(database);
 
         onUpgrade(database, 1, databaseVersion);
 

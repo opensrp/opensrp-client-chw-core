@@ -569,4 +569,6 @@
     <string name="reporting_20y24y_referral_label">Number of women given referrals (20 -24 years) </string>
     <string name="reporting_25_referral_label">Number of women given referrals (25 + years) </string>
     <string name="total_fp_referral_label">Total number of women given referrals</string>
+    <!-- IMCI -->
+    <string name="sick_child">SICK CHILD</string>
 </resources>
