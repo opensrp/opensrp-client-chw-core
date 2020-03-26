@@ -458,4 +458,7 @@
     <string name="sick_child_form">Sick child form</string>
     <string name="sick_visit_on">Sick visit on %s</string>
     <string name="view_sick_visits">View sick visits</string>
+
+    <!-- IMCI -->
+    <string name="sick_child">SICK CHILD</string>
 </resources>
