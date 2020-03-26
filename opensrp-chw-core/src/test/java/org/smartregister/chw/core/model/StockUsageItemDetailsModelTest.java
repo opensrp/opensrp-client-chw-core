@@ -32,6 +32,6 @@ public class StockUsageItemDetailsModelTest {
     @Test
     public void getItemDetailsStockUsage() {
         StockUsageItemDetailsModel stockUsageItemDetailsModel = new StockUsageItemDetailsModel(itemDetailsMonth, itemDetailsYear, itemDetailsStockCount);
-        Assert.assertEquals("20", stockUsageItemDetailsModel.getItemDetailsStockUsage());
+        Assert.assertEquals("20", stockUsageItemDetailsModel.getItemDetailsStockValue());
     }
 }

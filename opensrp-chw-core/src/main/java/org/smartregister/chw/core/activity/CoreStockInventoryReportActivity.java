@@ -44,8 +44,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     private List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
-        if (stockUsageReportUtils.previousMonths().size() > 0) {
-            for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.previousMonths().entrySet()) {
+        if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
+            for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
                 monthStockUsageReportList.add(new MonthStockUsageModel(stockUsageReportUtils.monthConverter(entry.getKey()), entry.getValue().toString()));
             }
         }
@@ -57,11 +57,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         StockUsageReportDao stockUsageReportDao = new StockUsageReportDao();
         for (String item : getItems()) {
             String usage = stockUsageReportDao.getStockUsageForMonth(month, item, year);
-            if (!(" ").equals(usage)) {
-                stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage));
-            } else {
-                stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), "0"));
-            }
+            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage));
         }
         return stockUsageItemModelsList;
     }

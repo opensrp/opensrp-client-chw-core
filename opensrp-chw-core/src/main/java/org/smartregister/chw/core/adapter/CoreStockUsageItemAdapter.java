@@ -40,7 +40,7 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
         StockUsageItemModel usageModelItem = stockUsageItemModelList.get(position);
         holder.stockName.setText(usageModelItem.getStockName());
         holder.stockUnitOfMeasure.setText(usageModelItem.getUnitsOfMeasure());
-        holder.stockCount.setText(String.format("%s", usageModelItem.getStockUsage()));
+        holder.stockCount.setText(String.format("%s", usageModelItem.getStockValue()));
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

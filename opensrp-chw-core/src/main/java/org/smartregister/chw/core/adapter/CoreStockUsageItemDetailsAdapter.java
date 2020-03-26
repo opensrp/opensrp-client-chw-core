@@ -35,7 +35,7 @@ public class CoreStockUsageItemDetailsAdapter extends RecyclerView.Adapter<CoreS
         StockUsageItemDetailsModel stockUsageItemDetailsModel = stockUsageItemDetailsModelList.get(position);
         holder.itemDetailsMonth.setText(stockUsageItemDetailsModel.getItemDetailsMonth());
         holder.itemDetailsYear.setText(stockUsageItemDetailsModel.getItemDetailsYear());
-        holder.itemDetailsStockCount.setText(String.format("%s", stockUsageItemDetailsModel.getItemDetailsStockUsage()));
+        holder.itemDetailsStockCount.setText(String.format("%s", stockUsageItemDetailsModel.getItemDetailsStockValue()));
     }
 
     @Override

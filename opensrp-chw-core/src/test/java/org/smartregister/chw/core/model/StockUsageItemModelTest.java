@@ -31,6 +31,6 @@ public class StockUsageItemModelTest {
     @Test
     public void getStockUsage() {
         StockUsageItemModel stockUsageItemModel = new StockUsageItemModel(stockName, unitsOfMeasure, stockUsage);
-        Assert.assertEquals("20", stockUsageItemModel.getStockUsage());
+        Assert.assertEquals("20", stockUsageItemModel.getStockValue());
     }
 }

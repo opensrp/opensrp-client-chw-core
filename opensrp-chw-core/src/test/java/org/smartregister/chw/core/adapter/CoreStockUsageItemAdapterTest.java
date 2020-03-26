@@ -58,7 +58,7 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
 
         Mockito.verify(stockName).setText(stockUsageItemModel.getStockName());
         Mockito.verify(stockUnitOfMeasure).setText(stockUsageItemModel.getUnitsOfMeasure());
-        Mockito.verify(stockCount).setText(stockUsageItemModel.getStockUsage());
+        Mockito.verify(stockCount).setText(stockUsageItemModel.getStockValue());
     }
 
     @Test

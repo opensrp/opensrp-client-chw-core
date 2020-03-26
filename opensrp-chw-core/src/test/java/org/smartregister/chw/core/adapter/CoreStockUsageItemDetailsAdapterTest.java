@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.adapter;
 
 import android.widget.TextView;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class CoreStockUsageItemDetailsAdapterTest {
         adapter.onBindViewHolder(viewHolder, 0);
         Mockito.verify(month).setText(stockUsageItemDetailsModel.getItemDetailsMonth());
         Mockito.verify(year).setText(stockUsageItemDetailsModel.getItemDetailsYear());
-        Mockito.verify(usage).setText(stockUsageItemDetailsModel.getItemDetailsStockUsage());
+        Mockito.verify(usage).setText(stockUsageItemDetailsModel.getItemDetailsStockValue());
     }
 
     @Test

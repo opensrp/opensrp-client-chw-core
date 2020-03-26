@@ -3,12 +3,12 @@ package org.smartregister.chw.core.model;
 public class StockUsageItemModel {
     private String stockName;
     private String unitsOfMeasure;
-    private String stockUsage;
+    private String stockUsageValue;
 
-    public StockUsageItemModel(String stockName, String unitsOfMeasure, String stockUsage) {
+    public StockUsageItemModel(String stockName, String unitsOfMeasure, String stockUsageValue) {
         this.stockName = stockName;
         this.unitsOfMeasure = unitsOfMeasure;
-        this.stockUsage = stockUsage;
+        this.stockUsageValue = stockUsageValue;
     }
 
     public String getStockName() {
@@ -19,7 +19,7 @@ public class StockUsageItemModel {
         return unitsOfMeasure;
     }
 
-    public String getStockUsage() {
-        return stockUsage;
+    public String getStockValue() {
+        return stockUsageValue;
     }
 }

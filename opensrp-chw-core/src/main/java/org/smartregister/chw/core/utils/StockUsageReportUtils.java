@@ -8,16 +8,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class StockUsageReportUtils {
-    public Map<Integer, Integer> previousMonths() {
-        Map<Integer, Integer> monthsAndYearsList = new LinkedHashMap<>();
+    public Map<Integer, Integer> getPreviousMonths() {
+        Map<Integer, Integer> monthsAndYearsMap = new LinkedHashMap<>();
 
         for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
             int month = prevDate.getMonthOfYear();
             int year = prevDate.getYear();
-            monthsAndYearsList.put(month, year);
+            monthsAndYearsMap.put(month, year);
         }
-        return monthsAndYearsList;
+        return monthsAndYearsMap;
     }
 
     public String getMonthNumber(String month) {
