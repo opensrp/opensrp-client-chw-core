@@ -23,29 +23,21 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         aggregateFieldsMap.put("15y19y_total_clients", new String[]{"15y19y_new_clients", "15y19y_return_clients"});
         aggregateFieldsMap.put("20y24y_total_clients", new String[]{"20y24y_new_clients", "20y24y_return_clients"});
         aggregateFieldsMap.put("25_total_clients", new String[]{"25_new_clients", "25_return_clients"});
-       // aggregateFieldsMap.put("total_new_clients", new String[]{"10y14y_new_clients", "15y19y_new_clients", "20y24y_new_clients", "25_new_clients"});
-        //aggregateFieldsMap.put("total_return_clients", new String[]{"10y14y_return_clients", "15y19y_return_clients", "20y24y_return_clients", "25_return_clients"});
         aggregateFieldsMap.put("total_total_clients", new String[]{"total_new_clients", "total_return_clients"});
         aggregateFieldsMap.put("10y14y_total_pills", new String[]{"10y14y_pop", "10y14y_coc", "10y14y_emc"});
         aggregateFieldsMap.put("15y19y_total_pills", new String[]{"15y19y_pop", "15y19y_coc", "15y19y_emc"});
         aggregateFieldsMap.put("20y24y_total_pills", new String[]{"20y24y_pop", "20y24y_coc", "20y24y_emc"});
         aggregateFieldsMap.put("25_total_pills", new String[]{"25_pop", "25_coc", "25_emc"});
-       // aggregateFieldsMap.put("total_pop", new String[]{"10y14y_pop", "15y19y_pop", "20y24y_pop", "25_pop"});
-       // aggregateFieldsMap.put("total_coc", new String[]{"10y14y_coc", "15y19y_coc", "20y24y_coc", "25_coc"});
-      //  aggregateFieldsMap.put("total_emc", new String[]{"10y14y_emc", "15y19y_emc", "20y24y_emc", "25_emc"});
         aggregateFieldsMap.put("total_total_pills", new String[]{"total_pop", "total_coc", "total_emc"});
         aggregateFieldsMap.put("10y14y_total_condoms", new String[]{"10y14y_F_mcondom", "10y14y_F_fcondom"});
         aggregateFieldsMap.put("15y19y_total_condoms", new String[]{"15y19y_F_mcondom", "15y19y_F_fcondom"});
         aggregateFieldsMap.put("20y24y_total_condoms", new String[]{"20y24y_F_mcondom", "20y24y_F_fcondom"});
         aggregateFieldsMap.put("25_total_condoms", new String[]{"25_F_mcondom", "25_F_fcondom"});
-        //aggregateFieldsMap.put("total_F_mcondom", new String[]{"10y14y_F_mcondom", "15y19y_F_mcondom", "20y24y_F_mcondom", "25_F_mcondom"});
-        //aggregateFieldsMap.put("total_F_fcondom", new String[]{"10y14y_F_fcondom", "15y19y_F_fcondom", "20y24y_F_fcondom", "25_F_fcondom"});
         aggregateFieldsMap.put("total_total_condoms", new String[]{"total_F_mcondom", "total_F_fcondom"});
         aggregateFieldsMap.put("total_beads", new String[]{"10y14y_beads", "15y19y_beads", "20y24y_beads", "25_beads"});
         aggregateFieldsMap.put("total_cousel_ANC", new String[]{"10y14y_cousel_ANC", "15y19y_cousel_ANC", "20y24y_cousel_ANC", "25_cousel_ANC"});
         aggregateFieldsMap.put("total_cousel_delivery", new String[]{"10y14y_cousel_delivery", "15y19y_cousel_delivery", "20y24y_cousel_delivery", "25_cousel_delivery"});
         aggregateFieldsMap.put("total_cousel_PNC", new String[]{"10y14y_cousel_PNC", "15y19y_cousel_PNC", "20y24y_cousel_PNC", "25_cousel_PNC"});
-       // aggregateFieldsMap.put("total_emc", new String[]{"10y14y_emc", "15y19y_emc", "20y24y_emc", "25_emc"});
         aggregateFieldsMap.put("total_fp_referral", new String[]{"10y14y_referral", "15y19y_referral", "20y24y_referral", "25_referral"});
     }
 
@@ -118,10 +110,6 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         indicatorKeyMap.put("15y19y_cousel_PNC", "total_cousel_PNC");
         indicatorKeyMap.put("20y24y_cousel_PNC", "total_cousel_PNC");
         indicatorKeyMap.put("25_cousel_PNC", "total_cousel_PNC");
-       // indicatorKeyMap.put("10y14y_emc", "total_emc");
-      //  indicatorKeyMap.put("15y19y_emc", "total_emc");
-        //indicatorKeyMap.put("20y24y_emc", "total_emc");
-     //   indicatorKeyMap.put("25_emc", "total_emc");
         indicatorKeyMap.put("10y14y_referral", "total_fp_referral");
         indicatorKeyMap.put("15y19y_referral", "total_fp_referral");
         indicatorKeyMap.put("20y24y_referral", "total_fp_referral");
