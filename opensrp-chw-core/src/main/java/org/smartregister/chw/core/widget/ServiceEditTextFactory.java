@@ -55,7 +55,7 @@ public class ServiceEditTextFactory extends EditTextFactory {
                 }
                 lookupMap.put(entityId, lookUpViews);
 
-                editText.addTextChangedListener(new LookUpTextWatcherUtil(formFragment, editText, entityId));
+                editText.addTextChangedListener(new LookUpTextWatcherUtil(editText, entityId));
                 editText.setTag(com.vijay.jsonwizard.R.id.after_look_up, false);
             }
 

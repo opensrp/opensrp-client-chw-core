@@ -37,14 +37,12 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
     private final HIA2ReportsActivity baseActivity;
     private final Date date;
     private final String formName;
-    private final List<String> readOnlyList;
 
     public StartDraftMonthlyFormTask(HIA2ReportsActivity baseActivity,
-                                     Date date, String formName, List<String> readOnlyList) {
+                                     Date date, String formName) {
         this.baseActivity = baseActivity;
         this.date = date;
         this.formName = formName;
-        this.readOnlyList = readOnlyList;
     }
 
     @Override
@@ -75,9 +73,10 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             JSONArray fieldsArray7 = form.getJSONObject("step7").getJSONArray("fields");
             JSONArray fieldsArray8 = form.getJSONObject("step8").getJSONArray("fields");
             JSONArray fieldsArray9 = form.getJSONObject("step9").getJSONArray("fields");
-            JSONArray fieldsArray10= form.getJSONObject("step10").getJSONArray("fields");
+            JSONArray fieldsArray10 = form.getJSONObject("step10").getJSONArray("fields");
             JSONArray fieldsArray11 = form.getJSONObject("step11").getJSONArray("fields");
             JSONArray fieldsArray12 = form.getJSONObject("step12").getJSONArray("fields");
+
 
             int i = 1;
             // This map holds each category as key and all the fields for that category as the
@@ -90,82 +89,101 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                 int resourceId = baseActivity.getResources().getIdentifier(hia2Indicator.getDescription(), "string", baseActivity.getPackageName());
                 String label = baseActivity.getResources().getString(resourceId);
 
-                createJsonObject(jsonObject, hia2Indicator, label, monthlyTallies );
-
+                createJsonObject(jsonObject, hia2Indicator, label, monthlyTallies);
                 if (i <= 5) {
                     fieldsArray.put(jsonObject);
-                    i++;
-                }else if (i <= 9) {
+                } else if (i <= 9) {
                     fieldsArray2.put(jsonObject);
-                    i++;
                 } else if (i <= 10) {
                     fieldsArray3.put(jsonObject);
-                    i++;
                 } else if (i <= 15) {
                     fieldsArray4.put(jsonObject);
-                    i++;
                 } else if (i <= 17) {
                     fieldsArray5.put(jsonObject);
-                    i++;
-                }
-                else if (i <= 29) {
+                } else if (i <= 29) {
                     fieldsArray6.put(jsonObject);
-                    i++;
-                }else if (i <= 44) {
+                } else if (i <= 44) {
                     fieldsArray7.put(jsonObject);
-                    i++;
                 } else if (i <= 64) {
                     fieldsArray8.put(jsonObject);
-                    i++;
                 } else if (i <= 79) {
                     fieldsArray9.put(jsonObject);
-                    i++;
                 } else if (i <= 84) {
                     fieldsArray10.put(jsonObject);
-                    i++;
-                }
-                else if (i <= 99) {
+                } else if (i <= 99) {
                     fieldsArray11.put(jsonObject);
-                    i++;
-                }else {
+                } else {
                     fieldsArray12.put(jsonObject);
-                    i++;
                 }
+                i++;
             }
-
             // Add the confirm button
-
             JSONObject buttonObject = createFormConfirmButton();
             fieldsArray12.put(buttonObject);
-
             form.put(REPORT_MONTH, HIA2ReportsActivity.dfyymmdd.format(date));
             form.put("identifier", "HIA2ReportForm");
 
-            Intent intent = new Intent(baseActivity, ServiceJsonFormActivity.class);
-            intent.putExtra("json", form.toString());
-
-            SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
-            String title = DF_YYYYMM.format(date).concat(" " +
-                    baseActivity.getBaseContext().getString(R.string.draft));
-
-            Form paramForm = new Form();
-            paramForm.setName(title);
-            paramForm.setWizard(true);
-            paramForm.setHideNextButton(true);
-            paramForm.setHidePreviousButton(true);
-            paramForm.setNavigationBackground(R.color.due_profile_blue);
-            intent.putExtra("form", paramForm);
-
-            intent.putExtra(JsonFormConstants.SKIP_VALIDATION, false);
-
-            return intent;
+            return createServiceIntent(form);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
 
         return null;
     }
-    private void createJsonObject(JSONObject jsonObject, Hia2Indicator hia2Indicator, String label, List<MonthlyTally> monthlyTallies ) {
+
+    private void addJsonField(JSONObject form, int i, JSONObject child) throws JSONException {
+        int step;
+        if (i <= 5) {
+            step = 1;
+        } else if (i <= 9) {
+            step = 2;
+        } else if (i <= 10) {
+            step = 3;
+        } else if (i <= 15) {
+            step = 4;
+        } else if (i <= 17) {
+            step = 5;
+        } else if (i <= 29) {
+            step = 6;
+        } else if (i <= 44) {
+            step = 7;
+        } else if (i <= 64) {
+            step = 8;
+        } else if (i <= 79) {
+            step = 9;
+        } else if (i <= 84) {
+            step = 10;
+        } else if (i <= 99) {
+            step = 11;
+        } else {
+            step = 12;
+        }
+
+        form.getJSONObject("step" + step).getJSONArray("fields").put(child);
+    }
+
+    private Intent createServiceIntent(JSONObject form) {
+        Intent intent = new Intent(baseActivity, ServiceJsonFormActivity.class);
+        intent.putExtra("json", form.toString());
+
+        SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+        String title = DF_YYYYMM.format(date).concat(" " +
+                baseActivity.getBaseContext().getString(R.string.draft));
+
+        Form paramForm = new Form();
+        paramForm.setName(title);
+        paramForm.setWizard(true);
+        paramForm.setHideNextButton(true);
+        paramForm.setHidePreviousButton(true);
+        paramForm.setNavigationBackground(R.color.due_profile_blue);
+        intent.putExtra("form", paramForm);
+
+        intent.putExtra(JsonFormConstants.SKIP_VALIDATION, false);
+
+        return intent;
+    }
+
+    private void createJsonObject(JSONObject jsonObject, Hia2Indicator hia2Indicator, String label, List<MonthlyTally> monthlyTallies) {
         try {
 
             JSONObject vRequired = new JSONObject();

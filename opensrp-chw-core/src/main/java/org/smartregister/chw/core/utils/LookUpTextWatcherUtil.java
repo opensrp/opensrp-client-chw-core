@@ -4,37 +4,30 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import com.vijay.jsonwizard.fragments.JsonFormFragment;
-
 import org.apache.commons.lang3.StringUtils;
-import org.smartregister.commonregistry.CommonPersonObject;
-import org.smartregister.event.Listener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class LookUpTextWatcherUtil implements TextWatcher {
-    private static Map<String, EntityLookUpUtil> lookUpMap;
-
     private final View mView;
-    private final JsonFormFragment formFragment;
     private final String mEntityId;
+    private Map<String, EntityLookUpUtil> lookUpMap;
 
-
-    public LookUpTextWatcherUtil(JsonFormFragment formFragment, View view, String entityId) {
-        this.formFragment = formFragment;
+    public LookUpTextWatcherUtil(View view, String entityId) {
         mView = view;
         mEntityId = entityId;
         lookUpMap = new HashMap<>();
-
     }
 
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        Timber.v("beforeTextChanged");
     }
 
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
+        Timber.v("onTextChanged");
     }
 
     public void afterTextChanged(Editable editable) {
@@ -66,10 +59,6 @@ public class LookUpTextWatcherUtil implements TextWatcher {
         }
 
         lookUpMap.put(mEntityId, entityLookUp);
-
-
-        Listener<HashMap<CommonPersonObject, List<CommonPersonObject>>> listener = null;
-
     }
 
 }
