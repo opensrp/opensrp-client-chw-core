@@ -201,6 +201,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-anc'
         exclude group: 'com.google.guava', module: 'guava'
     }
 
