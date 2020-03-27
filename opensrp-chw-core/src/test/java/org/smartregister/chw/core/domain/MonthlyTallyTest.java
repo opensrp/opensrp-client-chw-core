@@ -37,7 +37,7 @@ public class MonthlyTallyTest {
 
     @Test
     public void testGetAndSetProviderId() {
-        String providerId = Mockito.anyString();
+        String providerId = "123";
         monthlyTally.setProviderId(providerId);
         Assert.assertEquals(monthlyTally.getProviderId(), providerId);
     }

@@ -23,27 +23,27 @@ public class ReportHia2IndicatorTest {
 
     @Test
     public void testGetAndSetIndicatorCode() {
-        reportHia2Indicator.setIndicatorCode(Mockito.anyString());
-        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(), Mockito.anyString());
+        reportHia2Indicator.setIndicatorCode("123");
+        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(),"123");
     }
 
     @Test
     public void testGetAndSetDescription() {
-        reportHia2Indicator.setIndicatorCode(Mockito.anyString());
-        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(), Mockito.anyString());
+        reportHia2Indicator.setIndicatorCode("123");
+        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(),"123");
     }
 
     @Test
     public void testGetAndSetCategory() {
-        reportHia2Indicator.setCategory(Mockito.anyString());
-        Assert.assertEquals(reportHia2Indicator.getCategory(), Mockito.anyString());
+        reportHia2Indicator.setCategory("123");
+        Assert.assertEquals(reportHia2Indicator.getCategory(),"123");
     }
 
 
     @Test
     public void testGetAndSetValue() {
-        reportHia2Indicator.setValue(Mockito.anyString());
-        Assert.assertEquals(reportHia2Indicator.getValue(), Mockito.anyString());
+        reportHia2Indicator.setValue("1");
+        Assert.assertEquals(reportHia2Indicator.getValue(), "1");
     }
 
     @Test

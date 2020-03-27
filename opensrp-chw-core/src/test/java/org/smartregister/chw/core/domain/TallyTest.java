@@ -3,7 +3,6 @@ package org.smartregister.chw.core.domain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public class TallyTest {
@@ -24,23 +23,23 @@ public class TallyTest {
 
     @Test
     public void testGetAndSetId() {
-        long identifier = Mockito.anyLong();
+        long identifier = 1L;
         tally.setId(identifier);
         Assert.assertEquals(tally.getId(), identifier);
     }
 
     @Test
     public void testGetAndSetValue() {
-        String value = Mockito.anyString();
+        String value = "12";
         tally.setValue(value);
         Assert.assertEquals(tally.getValue(), value);
     }
 
     @Test
     public void getReportHia2Indicator() {
-        reportHia2Indicator.setValue(Mockito.anyString());
+        reportHia2Indicator.setValue("1");
         reportHia2Indicator.setHia2Indicator(hia2Indicator);
-        Assert.assertEquals(reportHia2Indicator.getValue(), Mockito.anyString());
+        Assert.assertEquals(reportHia2Indicator.getValue(), "1");
         Assert.assertTrue(tally.getReportHia2Indicator() != null);
     }
 }
