@@ -131,37 +131,6 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         return null;
     }
 
-    private void addJsonField(JSONObject form, int i, JSONObject child) throws JSONException {
-        int step;
-        if (i <= 5) {
-            step = 1;
-        } else if (i <= 9) {
-            step = 2;
-        } else if (i <= 10) {
-            step = 3;
-        } else if (i <= 15) {
-            step = 4;
-        } else if (i <= 17) {
-            step = 5;
-        } else if (i <= 29) {
-            step = 6;
-        } else if (i <= 44) {
-            step = 7;
-        } else if (i <= 64) {
-            step = 8;
-        } else if (i <= 79) {
-            step = 9;
-        } else if (i <= 84) {
-            step = 10;
-        } else if (i <= 99) {
-            step = 11;
-        } else {
-            step = 12;
-        }
-
-        form.getJSONObject("step" + step).getJSONArray("fields").put(child);
-    }
-
     private Intent createServiceIntent(JSONObject form) {
         Intent intent = new Intent(baseActivity, ServiceJsonFormActivity.class);
         intent.putExtra("json", form.toString());
