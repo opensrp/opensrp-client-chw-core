@@ -4,10 +4,10 @@ import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.Report;
 import org.smartregister.chw.core.domain.ReportHia2Indicator;
+import org.smartregister.util.JsonFormUtils;
 
 import java.util.Calendar;
 import java.util.Date;

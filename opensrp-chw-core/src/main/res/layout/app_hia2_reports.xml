@@ -16,7 +16,7 @@
         android:background="@color/white"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <org.smartregister.child.toolbar.LocationSwitcherToolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/location_switching_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,8 +30,7 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/ic_action_menu"
-                android:onClick="onClickReport"/>
+                android:src="@drawable/ic_action_menu"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -56,7 +55,7 @@
                     android:visibility="invisible" />
             </FrameLayout>
 
-        </org.smartregister.child.toolbar.LocationSwitcherToolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/hia_tabs"

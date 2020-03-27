@@ -88,10 +88,10 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
 
-                try{
+                try {
                     int resourceId = this.getResources().getIdentifier(curTally.getIndicator().getDescription(), "string", getContext().getPackageName());
                     nameTextView.setText(getResources().getString(resourceId));
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     Timber.e(ex);
                 }
                 nameTextView.setTextColor(getResources().getColor(R.color.client_list_grey));

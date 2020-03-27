@@ -31,16 +31,20 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static com.vijay.jsonwizard.constants.JsonFormConstants.REPORT_MONTH;
+
 public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
     private final HIA2ReportsActivity baseActivity;
     private final Date date;
     private final String formName;
+    private final List<String> readOnlyList;
 
     public StartDraftMonthlyFormTask(HIA2ReportsActivity baseActivity,
-                                     Date date, String formName) {
+                                     Date date, String formName, List<String> readOnlyList) {
         this.baseActivity = baseActivity;
         this.date = date;
         this.formName = formName;
+        this.readOnlyList = readOnlyList;
     }
 
     @Override
@@ -52,23 +56,15 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
     @Override
     protected Intent doInBackground(Void... params) {
         try {
+            MonthlyTalliesRepository monthlyTalliesRepository = CoreChwApplication.getInstance().monthlyTalliesRepository();
+            List<MonthlyTally> monthlyTallies = monthlyTalliesRepository.findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(date));
+
             HIA2IndicatorsRepository hIA2IndicatorsRepository = CoreChwApplication.getInstance().hIA2IndicatorsRepository();
             List<Hia2Indicator> hia2Indicators = hIA2IndicatorsRepository.fetchAll();
             if (hia2Indicators == null || hia2Indicators.isEmpty()) {
                 return null;
             }
-
             JSONObject form = new FormUtils(baseActivity).getFormJson(formName);
-            setFieldArrays(form, hia2Indicators);
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-        }
-
-        return null;
-    }
-
-    private void setFieldArrays(JSONObject form, List<Hia2Indicator> hia2Indicators) {
-        try {
 
             JSONArray fieldsArray = form.getJSONObject("step1").getJSONArray("fields");
             JSONArray fieldsArray2 = form.getJSONObject("step2").getJSONArray("fields");
@@ -79,12 +75,13 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             JSONArray fieldsArray7 = form.getJSONObject("step7").getJSONArray("fields");
             JSONArray fieldsArray8 = form.getJSONObject("step8").getJSONArray("fields");
             JSONArray fieldsArray9 = form.getJSONObject("step9").getJSONArray("fields");
-            JSONArray fieldsArray10 = form.getJSONObject("step10").getJSONArray("fields");
+            JSONArray fieldsArray10= form.getJSONObject("step10").getJSONArray("fields");
             JSONArray fieldsArray11 = form.getJSONObject("step11").getJSONArray("fields");
             JSONArray fieldsArray12 = form.getJSONObject("step12").getJSONArray("fields");
 
             int i = 1;
-
+            // This map holds each category as key and all the fields for that category as the
+            // value (jsonarray)
             for (Hia2Indicator hia2Indicator : hia2Indicators) {
                 JSONObject jsonObject = new JSONObject();
                 if (hia2Indicator.getDescription() == null) {
@@ -93,12 +90,12 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                 int resourceId = baseActivity.getResources().getIdentifier(hia2Indicator.getDescription(), "string", baseActivity.getPackageName());
                 String label = baseActivity.getResources().getString(resourceId);
 
-                getJsonObject(jsonObject, hia2Indicator, label);
+                createJsonObject(jsonObject, hia2Indicator, label, monthlyTallies );
 
                 if (i <= 5) {
                     fieldsArray.put(jsonObject);
                     i++;
-                } else if (i <= 9) {
+                }else if (i <= 9) {
                     fieldsArray2.put(jsonObject);
                     i++;
                 } else if (i <= 10) {
@@ -110,10 +107,11 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                 } else if (i <= 17) {
                     fieldsArray5.put(jsonObject);
                     i++;
-                } else if (i <= 29) {
+                }
+                else if (i <= 29) {
                     fieldsArray6.put(jsonObject);
                     i++;
-                } else if (i <= 44) {
+                }else if (i <= 44) {
                     fieldsArray7.put(jsonObject);
                     i++;
                 } else if (i <= 64) {
@@ -125,28 +123,50 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                 } else if (i <= 84) {
                     fieldsArray10.put(jsonObject);
                     i++;
-                } else if (i <= 99) {
+                }
+                else if (i <= 99) {
                     fieldsArray11.put(jsonObject);
                     i++;
-                } else {
+                }else {
                     fieldsArray12.put(jsonObject);
                     i++;
                 }
-                JSONObject buttonObject = createFormConfirmButton();
-                form.put("identifier", "HIA2ReportForm");
-                fieldsArray12.put(buttonObject);
-                returnIntent(form);
             }
+
+            // Add the confirm button
+
+            JSONObject buttonObject = createFormConfirmButton();
+            fieldsArray12.put(buttonObject);
+
+            form.put(REPORT_MONTH, HIA2ReportsActivity.dfyymmdd.format(date));
+            form.put("identifier", "HIA2ReportForm");
+
+            Intent intent = new Intent(baseActivity, ServiceJsonFormActivity.class);
+            intent.putExtra("json", form.toString());
+
+            SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+            String title = DF_YYYYMM.format(date).concat(" " +
+                    baseActivity.getBaseContext().getString(R.string.draft));
+
+            Form paramForm = new Form();
+            paramForm.setName(title);
+            paramForm.setWizard(true);
+            paramForm.setHideNextButton(true);
+            paramForm.setHidePreviousButton(true);
+            paramForm.setNavigationBackground(R.color.due_profile_blue);
+            intent.putExtra("form", paramForm);
+
+            intent.putExtra(JsonFormConstants.SKIP_VALIDATION, false);
+
+            return intent;
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
 
+        return null;
     }
-
-    private void getJsonObject(JSONObject jsonObject, Hia2Indicator hia2Indicator, String label) {
+    private void createJsonObject(JSONObject jsonObject, Hia2Indicator hia2Indicator, String label, List<MonthlyTally> monthlyTallies ) {
         try {
-            MonthlyTalliesRepository monthlyTalliesRepository = CoreChwApplication.getInstance().monthlyTalliesRepository();
-            List<MonthlyTally> monthlyTallies = monthlyTalliesRepository.findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(date));
 
             JSONObject vRequired = new JSONObject();
             vRequired.put(JsonFormConstants.VALUE, "true");
@@ -157,6 +177,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
 
             jsonObject.put(JsonFormConstants.KEY, hia2Indicator.getIndicatorCode());
             jsonObject.put(JsonFormConstants.TYPE, "edit_text");
+            //jsonObject.put(JsonFormConstants.READ_ONLY, HIA2ReportsActivity.getReadOnlyList().contains(hia2Indicator.getIndicatorCode()));
             jsonObject.put(JsonFormConstants.HINT, label);
             jsonObject.put(JsonFormConstants.VALUE, Utils.retrieveValue(monthlyTallies, hia2Indicator));
             jsonObject.put(JsonFormConstants.V_REQUIRED, vRequired);
@@ -169,27 +190,6 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
-    }
-
-    private Intent returnIntent(JSONObject form) {
-        Intent intent = new Intent(baseActivity, ServiceJsonFormActivity.class);
-        intent.putExtra("json", form.toString());
-
-        SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
-        String title = DF_YYYYMM.format(date).concat(" " +
-                baseActivity.getBaseContext().getString(R.string.draft));
-
-        Form paramForm = new Form();
-        paramForm.setName(title);
-        paramForm.setWizard(true);
-        paramForm.setHideNextButton(true);
-        paramForm.setHidePreviousButton(true);
-        paramForm.setNavigationBackground(R.color.due_profile_blue);
-        intent.putExtra("form", paramForm);
-
-        intent.putExtra(JsonFormConstants.SKIP_VALIDATION, false);
-
-        return intent;
     }
 
     @NonNull

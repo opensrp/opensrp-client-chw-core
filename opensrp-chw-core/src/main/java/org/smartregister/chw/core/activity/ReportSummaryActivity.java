@@ -9,16 +9,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 
-import org.apache.commons.lang3.tuple.Triple;
-import org.smartregister.child.activity.BaseActivity;
-import org.smartregister.child.toolbar.SimpleToolbar;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.domain.Tally;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.view.IndicatorCategoryView;
+import org.smartregister.view.activity.MultiLanguageActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.io.Serializable;
@@ -35,10 +35,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class ReportSummaryActivity extends BaseActivity {
+public class ReportSummaryActivity extends MultiLanguageActivity {
     public static final String EXTRA_TALLIES = "tallies";
     public static final String EXTRA_SUB_TITLE = "sub_title";
     public static final String EXTRA_TITLE = "title";
+    public static final int TOOLBAR_ID = R.id.location_switching_toolbar;
     protected AppBarLayout appBarLayout;
     private LinkedHashMap<String, ArrayList<Tally>> tallies;
     private String subTitle;
@@ -48,11 +49,14 @@ public class ReportSummaryActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_summary);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
+        setSupportActionBar(toolbar);
+
         ImageView imageView = findViewById(R.id.arrow_image);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -136,24 +140,21 @@ public class ReportSummaryActivity extends BaseActivity {
         refreshIndicatorViews();
     }
 
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_report_summary;
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(getDrawerLayoutId());
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    @Override
     protected int getDrawerLayoutId() {
         return R.id.drawer_layout;
     }
 
-    @Override
     protected int getToolbarId() {
-        return SimpleToolbar.TOOLBAR_ID;
-    }
-
-    @Override
-    protected Class onBackActivity() {
-        return null;
+        return TOOLBAR_ID;
     }
 
     private void setTallies(ArrayList<Tally> tallies, boolean refreshViews) {
@@ -194,19 +195,4 @@ public class ReportSummaryActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onUniqueIdFetched(Triple<String, String, String> triple, String entityId) {
-        //Override Super
-    }
-
-    @Override
-    public void onNoUniqueId() {
-        //Override Super
-
-    }
-
-    @Override
-    public void onRegistrationSaved(boolean isEdit) {
-        //Override Super
-    }
 }
