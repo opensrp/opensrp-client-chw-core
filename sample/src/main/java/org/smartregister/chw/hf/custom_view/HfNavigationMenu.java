@@ -23,12 +23,12 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
     }
 
     @Override
-    public boolean stockReport() {
+    public boolean hasServiceReport() {
         return false;
     }
 
     @Override
-    public boolean serviceReport() {
+    public boolean hasStockReport() {
         return false;
     }
 }

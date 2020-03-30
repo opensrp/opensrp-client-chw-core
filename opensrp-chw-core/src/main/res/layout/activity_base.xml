@@ -134,7 +134,7 @@
                                 android:layout_alignParentStart="true"
                                 android:layout_centerVertical="true"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_daily_tallies" />
+                                android:src="@drawable/sidemenu_service_activity" />
 
                             <TextView
                                 android:id="@+id/tvServiceReport"
