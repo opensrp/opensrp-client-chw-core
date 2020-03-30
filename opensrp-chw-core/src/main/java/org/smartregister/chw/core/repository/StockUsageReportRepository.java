@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.repository.BaseRepository;
 
@@ -24,19 +25,21 @@ public class StockUsageReportRepository extends BaseRepository {
     public static final String STOCK_USAGE = "stock_usage";
     public static final String YEAR = "year";
     public static final String MONTH = "month";
+    private static final String PROVIDER_ID = "provider_id";
     private static final String UPDATED_AT = "updated_at";
     private static final String CREATED_AT = "created_at";
     public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + "(" +
-            ID + "  VARCHAR , " +
+            ID + "  VARCHAR, " +
             STOCK_NAME + "  VARCHAR, " +
             STOCK_USAGE + "  VARCHAR, " +
             YEAR + "  VARCHAR, " +
             MONTH + " VARCHAR, " +
+            PROVIDER_ID  + " VARCHAR NOT NULL," +
             UPDATED_AT + " VARCHAR, " +
             CREATED_AT + " VARCHAR " +
             ")";
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private String[] COLUMNS = {STOCK_NAME, STOCK_USAGE, YEAR, MONTH, UPDATED_AT, CREATED_AT};
+    private String[] COLUMNS = {STOCK_NAME, STOCK_USAGE, YEAR, MONTH, PROVIDER_ID, UPDATED_AT, CREATED_AT};
     public static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
 
 
@@ -64,6 +67,7 @@ public class StockUsageReportRepository extends BaseRepository {
         values.put(STOCK_USAGE, stockUsage.getStockUsage());
         values.put(YEAR, stockUsage.getYear());
         values.put(MONTH, stockUsage.getMonth());
+        values.put(PROVIDER_ID, stockUsage.getProviderId());
         values.put(UPDATED_AT, getDateForDB(new Date()));
         values.put(CREATED_AT, getDateForDB(new Date()));
         return values;
@@ -117,6 +121,7 @@ public class StockUsageReportRepository extends BaseRepository {
                     stockUsage.setStockUsage(cursor.getString(cursor.getColumnIndex(STOCK_USAGE)));
                     stockUsage.setYear(cursor.getString(cursor.getColumnIndex(YEAR)));
                     stockUsage.setMonth(cursor.getString(cursor.getColumnIndex(MONTH)));
+                    stockUsage.setProviderId(cursor.getString(cursor.getColumnIndex(PROVIDER_ID)));
                     stockUsage.setCreatedAt(getCursorDate(cursor, CREATED_AT));
                     stockUsage.setUpdatedAt(getCursorDate(cursor, UPDATED_AT));
 

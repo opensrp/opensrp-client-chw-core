@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.dao.AbstractDao;
 
@@ -59,11 +60,13 @@ public class StockUsageReportDao extends AbstractDao {
                 "and mc.malaria_test_date is not NULL\n" +
                 "  group by mc.malaria_treat, substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
                 "order by Year DESC, Month DESC";
+        String userName = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
 
         DataMap<StockUsage> dataMap = cursor -> {
             StockUsage stockUsage = new StockUsage();
             stockUsage.setYear(getCursorValue(cursor, "Year"));
             stockUsage.setMonth(getCursorValue(cursor, "Month"));
+            stockUsage.setProviderId(userName);
             stockUsage.setStockName(getCursorValue(cursor, "StockName"));
             stockUsage.setStockUsage(getCursorValue(cursor, "Usage"));
             return stockUsage;
