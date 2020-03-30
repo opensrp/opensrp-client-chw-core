@@ -99,11 +99,15 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
                 }
             }
         }
+
         BaseUpcomingService upcomingService = new BaseUpcomingService();
-        upcomingService.setServiceDate(serviceDueDate);
-        upcomingService.setOverDueDate(serviceOverDueDate);
-        upcomingService.setServiceName(serviceName);
-        serviceList.add(upcomingService);
+        if(serviceName != null){
+            upcomingService.setServiceDate(serviceDueDate);
+            upcomingService.setOverDueDate(serviceOverDueDate);
+            upcomingService.setServiceName(serviceName);
+            serviceList.add(upcomingService);
+        }
+
     }
 
 }

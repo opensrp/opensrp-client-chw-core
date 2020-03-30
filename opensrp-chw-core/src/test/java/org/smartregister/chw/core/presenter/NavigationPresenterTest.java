@@ -13,7 +13,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import java.util.HashMap;
 
 public class NavigationPresenterTest {
-    @Mock
+   @Mock
     private CoreApplication coreApplication;
 
     @Mock
