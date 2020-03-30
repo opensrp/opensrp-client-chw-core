@@ -8,6 +8,7 @@ public class StockUsage {
     private String stockUsage;
     private String year;
     private String month;
+    private String providerId;
     private Date createdAt;
     private Date updatedAt;
 
@@ -65,6 +66,13 @@ public class StockUsage {
 
     public String getMonth() {
         return month;
+    }
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 
 }
