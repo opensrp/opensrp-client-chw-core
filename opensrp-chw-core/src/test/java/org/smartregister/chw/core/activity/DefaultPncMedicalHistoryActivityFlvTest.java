@@ -25,9 +25,9 @@ import org.smartregister.chw.anc.domain.GroupedVisit;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.shadows.ContextShadow;
-import org.smartregister.chw.core.shadows.CustomFontTextViewShadow;
+import org.smartregister.chw.core.shadows.CustomFontTextViewShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
-import org.smartregister.chw.core.shadows.PncLibraryShadow;
+import org.smartregister.chw.core.shadows.PncLibraryShadowHelper;
 import org.smartregister.chw.core.shadows.PncMedicalHistoryViewBuilderShadow;
 import org.smartregister.chw.pnc.PncLibrary;
 import org.smartregister.chw.pnc.repository.ProfileRepository;
@@ -40,7 +40,7 @@ import java.util.List;
  * @author rkodev
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, CustomFontTextViewShadow.class, PncMedicalHistoryViewBuilderShadow.class, PncLibraryShadow.class})
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, CustomFontTextViewShadowHelper.class, PncMedicalHistoryViewBuilderShadow.class, PncLibraryShadowHelper.class})
 public class DefaultPncMedicalHistoryActivityFlvTest {
 
     @Rule
@@ -83,7 +83,7 @@ public class DefaultPncMedicalHistoryActivityFlvTest {
         Mockito.doReturn(repository).when(instance).profileRepository();
         Mockito.doReturn(new Date().getTime()).when(repository).getLastVisit(Mockito.anyString());
 
-        PncLibraryShadow.setInstance(instance);
+        PncLibraryShadowHelper.setInstance(instance);
 
 
         ReflectionHelpers.setField(pncMedicalHistoryActivityFlv, "parentView", parentView);

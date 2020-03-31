@@ -6,7 +6,7 @@ import org.robolectric.annotation.Implements;
 import org.smartregister.chw.pnc.PncLibrary;
 
 @Implements(PncLibrary.class)
-public class PncLibraryShadow {
+public class PncLibraryShadowHelper {
 
     private static PncLibrary instance = Mockito.mock(PncLibrary.class);
 
@@ -16,6 +16,6 @@ public class PncLibraryShadow {
     }
 
     public static void setInstance(PncLibrary instance) {
-        PncLibraryShadow.instance = instance;
+        PncLibraryShadowHelper.instance = instance;
     }
 }
