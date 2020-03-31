@@ -23,6 +23,7 @@ import org.smartregister.reporting.repository.IndicatorQueryRepository;
 import org.smartregister.reporting.repository.IndicatorRepository;
 import org.smartregister.repository.DrishtiRepository;
 import org.smartregister.repository.EventClientRepository;
+import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
@@ -69,6 +70,8 @@ public class CoreChwRepository extends Repository {
         IndicatorRepository.createTable(database);
         IndicatorQueryRepository.createTable(database);
         DailyIndicatorCountRepository.createTable(database);
+        MonthlyTalliesRepository.createTable(database);
+
 
         VisitRepository.createTable(database);
         VisitDetailsRepository.createTable(database);
@@ -86,6 +89,14 @@ public class CoreChwRepository extends Repository {
         WeightForHeightRepository.createTable(database);
 
         onUpgrade(database, 1, databaseVersion);
+
+        // initialize from yml file
+
+        // Check if indicator data initialised
+
+        //hia2
+        EventClientRepository.createTable(database, Hia2ReportRepository.Table.hia2_report, Hia2ReportRepository.report_column.values());
+
     }
 
     @Override

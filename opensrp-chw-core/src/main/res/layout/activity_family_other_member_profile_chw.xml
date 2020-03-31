@@ -7,6 +7,7 @@
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -16,35 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/other_member_profile_bg">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/family_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/other_member_profile_bg"
-                android:contentInsetStart="0dp"
-                android:contentInsetLeft="0dp"
-                android:contentInsetEnd="0dp"
-                android:contentInsetRight="0dp"
-                android:theme="@style/FamilyTheme.DarkAppBarOverlay"
-                app:contentInsetEnd="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetRight="0dp"
-                app:contentInsetStart="0dp"
-                app:contentInsetStartWithNavigation="0dp">
-
-                <org.smartregister.view.customcontrols.CustomFontTextView
-                    android:id="@+id/toolbar_title"
-                    style="@style/CustomFontTextViewStyle.ClientList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="0dp"
-                    android:paddingLeft="0dp"
-                    android:text="@string/return_to_family_profile"
-                    android:textColor="@color/text_black"
-                    android:textSize="@dimen/register_member_title_size" />
-
-            </androidx.appcompat.widget.Toolbar>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/family_two_toolbar"
@@ -246,5 +218,36 @@
 
         <include layout="@layout/content_base_profile" />
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/family_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/other_member_profile_bg"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetEnd="0dp"
+        android:contentInsetRight="0dp"
+        android:theme="@style/FamilyTheme.DarkAppBarOverlay"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_anchor="@+id/linearLayoutCompat"
+        app:layout_anchorGravity="top|center">
+
+        <org.smartregister.view.customcontrols.CustomFontTextView
+            android:id="@+id/toolbar_title"
+            style="@style/CustomFontTextViewStyle.ClientList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:text="@string/return_to_family_profile"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/register_member_title_size" />
+
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
