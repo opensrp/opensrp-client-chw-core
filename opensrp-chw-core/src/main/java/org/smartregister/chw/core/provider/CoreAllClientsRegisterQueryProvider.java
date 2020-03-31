@@ -99,6 +99,24 @@ public class CoreAllClientsRegisterQueryProvider extends OpdRegisterQueryProvide
                         "    UNION ALL\n" +
                         "    SELECT ec_child.base_entity_id AS base_entity_id\n" +
                         "    FROM ec_child\n" +
+                        ")",
+
+                "SELECT COUNT(*)\n" +
+                        "FROM ec_family_member\n" +
+                        "where ec_family_member.date_removed is null\n" +
+                        "  AND ec_family_member.relational_id is null\n" +
+                        "  AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "    SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "    FROM ec_anc_register\n" +
+                        "    UNION ALL\n" +
+                        "    SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "    FROM ec_pregnancy_outcome\n" +
+                        "    UNION ALL\n" +
+                        "    SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "    FROM ec_child\n" +
+                        "    UNION ALL\n" +
+                        "    SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "    FROM ec_malaria_confirmation\n" +
                         ")"
         };
     }
@@ -226,7 +244,40 @@ public class CoreAllClientsRegisterQueryProvider extends OpdRegisterQueryProvide
                 "    FROM ec_malaria_confirmation\n" +
                 ")\n" +
                 "UNION ALL\n" +
-                "\n" +
+                "/*OTHER INDEPENDENT FAMILY MEMBERS*/\n" +
+                "SELECT ec_family_member.first_name,\n" +
+                "       ec_family_member.middle_name,\n" +
+                "       ec_family_member.last_name,\n" +
+                "       ec_family_member.gender,\n" +
+                "       ec_family_member.dob,\n" +
+                "       ec_family_member.base_entity_id,\n" +
+                "       ec_family_member.id                   as _id,\n" +
+                "       NULL                                  AS register_type,\n" +
+                "       NULL                                  as relationalid,\n" +
+                "       NULL                                  as home_address,\n" +
+                "       NULL                                  AS mother_first_name,\n" +
+                "       NULL                                  AS mother_last_name,\n" +
+                "       NULL                                  AS mother_middle_name,\n" +
+                "       ec_family_member.last_interacted_with AS last_interacted_with\n" +
+                "FROM ec_family_member\n" +
+                "where ec_family_member.date_removed is null\n" +
+                "  AND ec_family_member.relational_id is null\n" +
+                "  AND ec_family_member.base_entity_id IN\n" +
+                "      (%s)\n" +
+                "  AND ec_family_member.base_entity_id NOT IN (\n" +
+                "    SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_anc_register\n" +
+                "    UNION ALL\n" +
+                "    SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_pregnancy_outcome\n" +
+                "    UNION ALL\n" +
+                "    SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_child\n" +
+                "    UNION ALL\n" +
+                "    SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_malaria_confirmation\n" +
+                ")\n" +
+                "UNION ALL"+
                 "/*ONLY MALARIA PATIENTS*/\n" +
                 "SELECT ec_family_member.first_name,\n" +
                 "       ec_family_member.middle_name,\n" +
