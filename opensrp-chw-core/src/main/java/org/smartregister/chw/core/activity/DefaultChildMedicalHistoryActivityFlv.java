@@ -61,6 +61,9 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         this.visits = visits;
         this.vaccineMap = vaccineMap;
 
+        if(visitMap == null)
+            visitMap = new LinkedHashMap<>();
+
         for (Visit v : this.visits) {
             List<Visit> type_visits = visitMap.get(v.getVisitType());
             if (type_visits == null) type_visits = new ArrayList<>();
