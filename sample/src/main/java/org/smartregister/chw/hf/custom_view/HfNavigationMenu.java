@@ -22,6 +22,10 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
         return tableMap;
     }
 
+    public boolean hasServiceReport() {
+        return false;
+    }
+
     @Override
     public boolean hasStockReport() {
         return false;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -116,6 +117,42 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginBottom="25dp"
                         android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/rlServiceReport"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:paddingStart="15dp"
+                            android:paddingLeft="15dp"
+                            android:paddingBottom="15dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/ivIconServiceReport"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/sidemenu_service_activity" />
+
+                            <TextView
+                                android:id="@+id/tvServiceReport"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_toEndOf="@+id/ivIconServiceReport"
+                                android:layout_toRightOf="@+id/ivIconServiceReport"
+                                android:fontFamily="sans-serif"
+                                android:text="Service activity"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                />
+
+                        </RelativeLayout>
+
 
                         <RelativeLayout
                             android:id="@+id/rlIconStockReport"
