@@ -26,9 +26,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
+import org.smartregister.chw.core.activity.HIA2ReportsActivity;
+import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -129,8 +131,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (parentView != null) {
             rootView = parentView;
         } else {
-            // get current view
-            // ViewGroup current = parentActivity.getWindow().getDecorView().findViewById(android.R.id.content);
             ViewGroup current = (ViewGroup) ((ViewGroup) (activity.findViewById(android.R.id.content))).getChildAt(0);
             if (!(current instanceof DrawerLayout)) {
 
@@ -162,7 +162,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 rootView = current;
             }
         }
-        //
     }
 
     @Override
@@ -171,7 +170,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         drawer = activity.findViewById(R.id.drawer_layout);
         drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
-        // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
@@ -195,6 +193,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
         registerSync(activity);
         registerLanguageSwitcher(activity);
+
+        registerServiceActivity(activity);
+
+        registerStockReport(activity);
 
         registerDeviceToDeviceSync(activity);
         // update all actions
@@ -241,11 +243,40 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    private void registerServiceActivity(Activity activity) {
+        if (menuFlavor.hasServiceReport()) {
+            View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
+            rlIconServiceReport.setVisibility(View.VISIBLE);
+            rlIconServiceReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, HIA2ReportsActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void registerStockReport(Activity activity) {
+        if (menuFlavor.hasStockReport()) {
+            View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
+            rlIconStockReport.setVisibility(View.VISIBLE);
+            rlIconStockReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }
+    }
+
     private void registerDrawer(Activity parentActivity) {
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
@@ -295,32 +326,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         View rlIconLang = rootView.findViewById(R.id.rlIconLang);
         final TextView tvLang = rootView.findViewById(R.id.tvLang);
 
-        final String[] languages = menuFlavor.getSupportedLanguages();
+        final List<Pair<String, Locale>> locales = menuFlavor.getSupportedLanguages();
+
+        String[] languages = new String[locales.size()];
         Locale current = context.getResources().getConfiguration().locale;
-        tvLang.setText(StringUtils.capitalize(current.getDisplayLanguage()));
+        int x = 0;
+        while (x < locales.size()) {
+            languages[x] = locales.get(x).getKey();
+            if(current.getLanguage().equals(locales.get(x).getValue().getLanguage())){
+                tvLang.setText(locales.get(x).getKey());
+            }
+            x++;
+        }
 
         rlIconLang.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(context.getString(R.string.choose_language));
             builder.setItems(languages, (dialog, which) -> {
-                String lang = languages[which];
-                Locale LOCALE;
-                switch (lang) {
-                    case "English":
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                    case "Français":
-                        LOCALE = Locale.FRENCH;
-                        break;
-                    case "Kiswahili":
-                        LOCALE = new Locale("sw");
-                        break;
-                    default:
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                }
-                tvLang.setText(languages[which]);
-                LangUtils.saveLanguage(context.getApplicationContext(), LOCALE.getLanguage());
+                Pair<String, Locale> lang = locales.get(which);
+                tvLang.setText(lang.getLeft());
+                LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
 
                 // destroy current instance
                 drawer.closeDrawers();
@@ -403,7 +428,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         // update the time
         mPresenter.refreshLastSync();
         // refreshLastSync(new Date());
-
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
@@ -426,6 +450,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (timer != null)
             timer = null;
     }
+
 
     @Override
     public void onDrawerStateChanged(int newState) {
@@ -451,9 +476,16 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
     public interface Flavour {
-        String[] getSupportedLanguages();
+        List<Pair<String, Locale>> getSupportedLanguages();
 
         HashMap<String, String> getTableMapValues();
+
+        boolean hasServiceReport();
+        boolean hasStockReport();
     }
 }

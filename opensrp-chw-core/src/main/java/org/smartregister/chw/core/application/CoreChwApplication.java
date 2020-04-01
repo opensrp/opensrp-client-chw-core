@@ -10,13 +10,16 @@ import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
+import org.smartregister.chw.core.repository.DailyTalliesRepository;
+import org.smartregister.chw.core.repository.HIA2IndicatorsRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
+import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.referral.ReferralLibrary;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
@@ -27,6 +30,7 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
+import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.TaskNotesRepository;
@@ -59,8 +63,15 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private ECSyncHelper ecSyncHelper;
     private String password;
     private UniqueIdRepository uniqueIdRepository;
+    private HIA2IndicatorsRepository hIA2IndicatorsRepository;
+    private DailyTalliesRepository dailyTalliesRepository;
+    private MonthlyTalliesRepository monthlyTalliesRepository;
+    private Hia2ReportRepository hia2ReportRepository;
+
 
     private RulesEngineHelper rulesEngineHelper;
+    private static StockUsageReportRepository stockUsageReportRepository;
+
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return getInstance().jsonSpecHelper;
@@ -129,6 +140,13 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
             scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
+    }
+
+    public StockUsageReportRepository getStockUsageRepository() {
+        if (stockUsageReportRepository == null) {
+            stockUsageReportRepository = new StockUsageReportRepository();
+        }
+        return stockUsageReportRepository;
     }
 
     @Override
@@ -251,5 +269,35 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         list.add(Pair.create(JsonFormConstants.STEP1, "nearest_facility"));
         return list;
+    }
+
+
+    public DailyTalliesRepository dailyTalliesRepository() {
+        if (dailyTalliesRepository == null) {
+            dailyTalliesRepository = new DailyTalliesRepository();
+        }
+        return dailyTalliesRepository;
+    }
+
+    public HIA2IndicatorsRepository hIA2IndicatorsRepository() {
+        if (hIA2IndicatorsRepository == null) {
+            hIA2IndicatorsRepository = new HIA2IndicatorsRepository();
+        }
+        return hIA2IndicatorsRepository;
+    }
+
+    public MonthlyTalliesRepository monthlyTalliesRepository() {
+        if (monthlyTalliesRepository == null) {
+            monthlyTalliesRepository = new MonthlyTalliesRepository();
+        }
+
+        return monthlyTalliesRepository;
+    }
+
+    public Hia2ReportRepository hia2ReportRepository() {
+        if (hia2ReportRepository == null) {
+            hia2ReportRepository = new Hia2ReportRepository();
+        }
+        return hia2ReportRepository;
     }
 }

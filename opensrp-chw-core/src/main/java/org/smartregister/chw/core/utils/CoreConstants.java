@@ -11,6 +11,8 @@ public class CoreConstants {
 
     public static final String ENTITY_ID = "entity_id";
     public static final String REFERRAL_PLAN_ID = "5270285b-5a3b-4647-b772-c0b3c52e2b71";
+    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
 
@@ -164,6 +166,7 @@ public class CoreConstants {
         private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
         private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
+
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -592,6 +595,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
+        public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
     }
 
     public static final class RULE_FILE {
@@ -798,4 +802,13 @@ public class CoreConstants {
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
     }
+
+    public static final class KeyIndicatorsUtil {
+        public static final String HIA_2_INDICATOR = "hia2_indicator";
+        public static final String STEPNAME = "stepName";
+        public static final String LOOK_UP = "look_up";
+        public static final String ENTITY_ID = "entity_id";
+    }
+
+
 }

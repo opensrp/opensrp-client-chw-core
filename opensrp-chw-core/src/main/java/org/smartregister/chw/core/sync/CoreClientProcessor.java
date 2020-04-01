@@ -226,6 +226,20 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT:
                 clientProcessByObs(eventClient, clientClassification, event, "fever_still", "Yes");
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+
+                List<Obs> observations = event.getObs();
+                for (Obs obs : observations) {
+                    if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        processVisitEvent(eventClient);
+                        FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
+                        break;
+                    }
+                }
                 break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {

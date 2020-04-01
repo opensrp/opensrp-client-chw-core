@@ -107,7 +107,7 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         private final Context context;
         private FpAlertRule fpAlertRule;
         private Visit lastVisit;
-        private String pillCycles;
+        private Integer pillCycles;
         private String dayFp;
         private String fpMethod;
 
@@ -121,8 +121,8 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
         protected Void doInBackground(Void... params) {
             String baseEntityID = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.BASE_ENTITY_ID, false);
             dayFp = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_FP_START_DATE, true);
-            pillCycles = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_PILL_CYCLES, true);
             fpMethod = Utils.getValue(pc.getColumnmaps(), FamilyPlanningConstants.DBConstants.FP_METHOD_ACCEPTED, false);
+            pillCycles = FpDao.getLastPillCycle (baseEntityID, fpMethod);
             if (fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
                 lastVisit = FpDao.getLatestInjectionVisit(baseEntityID, fpMethod);
             } else {
@@ -133,14 +133,13 @@ public class CoreFpProvider extends BaseFpRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            Integer pills = StringUtils.isBlank(pillCycles) ? 0 : Integer.parseInt(pillCycles);
             Date fpDate = FpUtil.parseFpStartDate(dayFp);
             Date lastVisitDate = null;
             if (lastVisit != null) {
                 lastVisitDate = lastVisit.getDate();
             }
             Rules rule = FpUtil.getFpRules(fpMethod);
-            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pills, fpMethod);
+            fpAlertRule = HomeVisitUtil.getFpVisitStatus(rule, lastVisitDate, fpDate, pillCycles, fpMethod);
             if (fpAlertRule != null
                     && StringUtils.isNotBlank(fpAlertRule.getVisitID())
                     && !fpAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)
