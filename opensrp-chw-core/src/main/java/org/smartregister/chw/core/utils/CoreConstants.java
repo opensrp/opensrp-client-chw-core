@@ -803,12 +803,19 @@ public class CoreConstants {
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
     }
 
+    public static final class REGISTER_TYPE {
+        public static final String CHILD = "Child";
+        public static final String ANC = "ANC";
+        public static final String PNC = "PNC";
+        public static final String MALARIA = "Malaria";
+        public static final String FAMILY_PLANNING = "Family Planning";
+        public static final String OTHER = "OTHER";
+    }
+    
     public static final class KeyIndicatorsUtil {
         public static final String HIA_2_INDICATOR = "hia2_indicator";
         public static final String STEPNAME = "stepName";
         public static final String LOOK_UP = "look_up";
         public static final String ENTITY_ID = "entity_id";
     }
-
-
 }
