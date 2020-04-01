@@ -95,7 +95,7 @@ tasks.withType(Test) {
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation 'androidx.multidex:multidex:2.0.1'
     api('org.smartregister:opensrp-client-native-form:1.7.27-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -197,6 +197,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
+    api('org.smartregister:opensrp-client-opd:0.0.13-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'com.github.lecho', module: 'hellocharts-android'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-anc'
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+
     api 'com.google.guava:guava:20.0'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -205,7 +214,15 @@ dependencies {
     //do not update for now- compatibility issues with client-core
     api 'com.evernote:android-job:1.2.6'
     api 'org.greenrobot:eventbus:3.1.1'
-    api "org.smartregister:android-p2p-sync:0.3.6-SNAPSHOT"
+
+    api("org.smartregister:android-p2p-sync:0.3.6-SNAPSHOT") {
+        transitive = true
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
+        exclude group: 'com.rengwuxian.materialedittext', module: 'library'
+    }
 
     api('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
