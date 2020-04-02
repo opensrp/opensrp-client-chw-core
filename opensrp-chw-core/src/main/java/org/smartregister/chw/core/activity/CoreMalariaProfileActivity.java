@@ -37,6 +37,8 @@ import timber.log.Timber;
 public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActivity implements
         FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
+    private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
+
     public interface OnMemberTypeLoadedListener {
         void onMemberTypeLoaded(CoreMalariaProfileActivity.MemberType memberType);
     }
@@ -59,9 +61,6 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
             return memberType;
         }
     }
-
-    private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
-
 
     @Override
     protected void onCreation() {
