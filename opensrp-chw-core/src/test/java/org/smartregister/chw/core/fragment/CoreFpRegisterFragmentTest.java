@@ -18,16 +18,16 @@ import java.util.Set;
 @RunWith(MockitoJUnitRunner.class)
 public class CoreFpRegisterFragmentTest {
     @Mock
+    private Bundle bundle;
+
+    @Mock
     private CoreFpRegisterFragment coreFpRegisterFragment;
 
     @Mock
-    View view;
+    private View view;
 
     @Mock
-    Bundle bundle;
-
-    @Mock
-    Set<org.smartregister.configurableviews.model.View> visibleColumns;
+    private Set<org.smartregister.configurableviews.model.View> visibleColumns;
 
     @Before
     public void setUp() {
