@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.fragment;
 
-import android.os.Bundle;
 import android.view.View;
 
 import org.junit.Assert;
