@@ -2,17 +2,33 @@ package org.smartregister.chw.core.utils;
 
 import android.content.Context;
 
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
+import org.smartregister.chw.core.rule.MalariaFollowUpRule;
+
+import java.util.Date;
 
 public class HomeVisitUtilTest {
 
     private Context context;
+    @Mock
+    private MalariaFollowUpRule malariaFollowUpRule;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        Date testDate = new DateTime().minusDays(10).toDate();
+        malariaFollowUpRule = new MalariaFollowUpRule(testDate, null);
+    }
 
     @Test
     public void canGetVisitSummaryFromVisitAlert() {
@@ -31,5 +47,26 @@ public class HomeVisitUtilTest {
         VisitSummary summary = HomeVisitUtil.getAncVisitStatus(ancVisitAlertRule, null);
         Assert.assertNotNull(summary);
         Assert.assertEquals(noOfDaysDue + " days", summary.getNoOfDaysDue());
+    }
+
+    @Test
+    public void testGetButtonStatus() {
+        Assert.assertEquals("", malariaFollowUpRule.getButtonStatus());
+        Assert.assertEquals(10, malariaFollowUpRule.getDatesDiff());
+    }
+
+    @Test
+    public void testGetDatesDiff() {
+        Assert.assertEquals(10, malariaFollowUpRule.getDatesDiff());
+    }
+
+    @Test
+    public void testIsExpired() {
+        Assert.assertEquals(false, malariaFollowUpRule.isExpired());
+    }
+
+    @Test
+    public void testGetRuleKey(){
+        Assert.assertEquals("malariaFollowUpRule", malariaFollowUpRule.getRuleKey());
     }
 }
