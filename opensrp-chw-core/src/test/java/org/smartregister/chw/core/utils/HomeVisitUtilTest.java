@@ -52,7 +52,6 @@ public class HomeVisitUtilTest {
     @Test
     public void testGetButtonStatus() {
         Assert.assertEquals("", malariaFollowUpRule.getButtonStatus());
-        Assert.assertEquals(10, malariaFollowUpRule.getDatesDiff());
     }
 
     @Test
