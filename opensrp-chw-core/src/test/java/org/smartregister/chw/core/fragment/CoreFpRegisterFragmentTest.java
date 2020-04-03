@@ -5,17 +5,15 @@ import android.view.View;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.smartregister.chw.core.BaseUnitTest;
 
 import java.util.Set;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CoreFpRegisterFragmentTest {
+public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
     @Mock
     private CoreFpRegisterFragment coreFpRegisterFragment;
