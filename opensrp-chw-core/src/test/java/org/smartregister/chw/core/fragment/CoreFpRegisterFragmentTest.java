@@ -17,8 +17,6 @@ import java.util.Set;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoreFpRegisterFragmentTest {
-    @Mock
-    private Bundle bundle;
 
     @Mock
     private CoreFpRegisterFragment coreFpRegisterFragment;
