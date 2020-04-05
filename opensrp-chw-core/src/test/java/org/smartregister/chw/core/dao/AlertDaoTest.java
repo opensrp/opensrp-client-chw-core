@@ -77,7 +77,7 @@ public class AlertDaoTest extends AlertDao {
         matrixCursor.addRow(new Object[]{"2"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
-        AlertStatus status  = AlertDao.getFamilyAlertStatus("entity-id-123");
+        AlertStatus status = AlertDao.getFamilyAlertStatus("entity-id-123");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertEquals(AlertStatus.complete, status);
     }

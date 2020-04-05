@@ -48,6 +48,17 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         this.onClickListener = onClickListener;
     }
 
+    public static int convertDpToPixel(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static int getAncWomenCount(String familyBaseID) {
+        return AncDao.getAncWomenCount(familyBaseID);
+    }
+
+    public static int getPncWomenCount(String familyBaseID) {
+        return PNCDao.getPncWomenCount(familyBaseID);
+    }
 
     @Override
     public void getView(Cursor cursor, SmartRegisterClient client, RegisterViewHolder viewHolder) {
@@ -86,10 +97,6 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         }
     }
 
-    public static int convertDpToPixel(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
-
     protected void updateMalariaIcons(RegisterViewHolder viewHolder, int malariaCount) {
         for (int i = 1; i <= malariaCount; i++) {
             addImageView(viewHolder, R.drawable.ic_row_malaria);
@@ -97,7 +104,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
     }
 
     protected void updateFpIcons(RegisterViewHolder viewHolder, int fpCount) {
-        if(fpCount != 0){
+        if (fpCount != 0) {
             for (int i = 1; i <= fpCount; i++) {
                 addImageView(viewHolder, R.mipmap.sidemenu_fp);
             }
@@ -113,7 +120,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
             for (Map<String, String> map : list) {
                 if ("PNC".equals(map.get(CoreConstants.DB_CONSTANTS.ENTRY_POINT))) {
                     String dob = map.get(DBConstants.KEY.DOB);
-                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29 && ChildDao.isMotherAlive(map.get( ChildDBConstants.KEY.MOTHER_ENTITY_ID)) ) {
+                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29 && ChildDao.isMotherAlive(map.get(ChildDBConstants.KEY.MOTHER_ENTITY_ID))) {
                         return;
                     }
                 }
@@ -202,14 +209,6 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         }
 
         return res;
-    }
-
-    public static int getAncWomenCount(String familyBaseID) {
-        return AncDao.getAncWomenCount(familyBaseID);
-    }
-
-    public static int getPncWomenCount(String familyBaseID) {
-        return PNCDao.getPncWomenCount(familyBaseID);
     }
 
     public abstract List<ChildVisit> retrieveChildVisitList(Rules rules, List<Map<String, String>> list);

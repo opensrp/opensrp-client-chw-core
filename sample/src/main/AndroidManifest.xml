@@ -141,6 +141,10 @@
             android:label="@string/child_details"
             android:theme="@style/HFTheme.NoActionBar" />
 
+        <activity
+            android:name="org.smartregister.chw.core.activity.HIA2ReportsActivity"
+            android:theme="@style/HFTheme.NoActionBar" />
+
 
         <activity android:name="org.smartregister.chw.core.activity.ChwP2pModeSelectActivity" />
 

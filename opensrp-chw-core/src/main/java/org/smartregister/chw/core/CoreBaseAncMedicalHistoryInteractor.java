@@ -19,7 +19,7 @@ public class CoreBaseAncMedicalHistoryInteractor extends BaseAncMedicalHistoryIn
             List<Visit> visits = VisitUtils.getVisits(memberID);
             final List<Visit> all_visits = new ArrayList<>(visits);
 
-            for(Visit visit : visits){
+            for (Visit visit : visits) {
                 List<Visit> child_visits = VisitUtils.getChildVisits(visit.getVisitId());
                 all_visits.addAll(child_visits);
             }

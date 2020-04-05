@@ -59,6 +59,49 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return instance;
     }
 
+    public static void addVaccine(VaccineRepository vaccineRepository, Vaccine vaccine) {
+        try {
+            if (vaccineRepository == null || vaccine == null) {
+                return;
+            }
+
+            // Add the vaccine
+            vaccineRepository.add(vaccine);
+
+            String name = vaccine.getName();
+            if (StringUtils.isBlank(name)) {
+                return;
+            }
+
+            // Update vaccines in the same group where either can be given
+            // For example measles 1 / mr 1
+            name = VaccineRepository.removeHyphen(name);
+            String ftsVaccineName = null;
+
+            if (VaccineRepo.Vaccine.measles1.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.mr1.display();
+            } else if (VaccineRepo.Vaccine.mr1.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.measles1.display();
+            } else if (VaccineRepo.Vaccine.measles2.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.mr2.display();
+            } else if (VaccineRepo.Vaccine.mr2.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.measles2.display();
+            }
+
+            if (ftsVaccineName != null) {
+                ftsVaccineName = VaccineRepository.addHyphen(ftsVaccineName.toLowerCase());
+                Vaccine ftsVaccine = new Vaccine();
+                ftsVaccine.setBaseEntityId(vaccine.getBaseEntityId());
+                ftsVaccine.setName(ftsVaccineName);
+                vaccineRepository.updateFtsSearch(ftsVaccine);
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+    }
+
     @Override
     public synchronized void processClient(List<EventClient> eventClients) throws Exception {
 
@@ -157,6 +200,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_HOME_VISIT:
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
             case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION:
                 if (eventClient.getEvent() == null) {
                     return;
                 }
@@ -185,6 +229,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 List<Obs> observations = event.getObs();
                 for (Obs obs : observations) {
                     if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        processVisitEvent(eventClient);
                         FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
                         break;
                     }
@@ -524,49 +569,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             }
         }
         return date;
-    }
-
-    public static void addVaccine(VaccineRepository vaccineRepository, Vaccine vaccine) {
-        try {
-            if (vaccineRepository == null || vaccine == null) {
-                return;
-            }
-
-            // Add the vaccine
-            vaccineRepository.add(vaccine);
-
-            String name = vaccine.getName();
-            if (StringUtils.isBlank(name)) {
-                return;
-            }
-
-            // Update vaccines in the same group where either can be given
-            // For example measles 1 / mr 1
-            name = VaccineRepository.removeHyphen(name);
-            String ftsVaccineName = null;
-
-            if (VaccineRepo.Vaccine.measles1.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.mr1.display();
-            } else if (VaccineRepo.Vaccine.mr1.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.measles1.display();
-            } else if (VaccineRepo.Vaccine.measles2.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.mr2.display();
-            } else if (VaccineRepo.Vaccine.mr2.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.measles2.display();
-            }
-
-            if (ftsVaccineName != null) {
-                ftsVaccineName = VaccineRepository.addHyphen(ftsVaccineName.toLowerCase());
-                Vaccine ftsVaccine = new Vaccine();
-                ftsVaccine.setBaseEntityId(vaccine.getBaseEntityId());
-                ftsVaccine.setName(ftsVaccineName);
-                vaccineRepository.updateFtsSearch(ftsVaccine);
-            }
-
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
     }
 
     @Override

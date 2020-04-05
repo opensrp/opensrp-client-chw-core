@@ -13,6 +13,8 @@ public class CoreConstants {
 
     public static final String ENTITY_ID = "entity_id";
     public static final String REFERRAL_PLAN_ID = "5270285b-5a3b-4647-b772-c0b3c52e2b71";
+    public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
 
@@ -149,23 +151,23 @@ public class CoreConstants {
         public static final String FAMILY_DETAILS_REMOVE_FAMILY = "family_details_remove_family";
         public static final String HOME_VISIT_COUNSELLING = "routine_home_visit";
 
-        private static final String ANC_REGISTRATION = "anc_member_registration";
-        private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
-        private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
-        private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
-        private static final String WASH_CHECK = "wash_check";
-        private static final String CHILD_REFERRAL_FORM = "child_referral_form";
-        private static final String ANC_REFERRAL_FORM = "anc_referral_form";
-        private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
-        private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
-        private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
-        private static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
-        private static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
-        private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
-        private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
-        private static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
-        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
-        private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
+        public static final String ANC_REGISTRATION = "anc_member_registration";
+        public static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
+        public static final String MALARIA_CONFIRMATION = "malaria_confirmation";
+        public static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
+        public static final String WASH_CHECK = "wash_check";
+        public static final String CHILD_REFERRAL_FORM = "child_referral_form";
+        public static final String ANC_REFERRAL_FORM = "anc_referral_form";
+        public static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        public static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
+        public static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
+        public static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
+        public static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
+        public static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
+        public static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
+        public static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
+        public static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
+        public static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -589,6 +591,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
+        public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
     }
 
     public static final class RULE_FILE {
@@ -793,5 +796,21 @@ public class CoreConstants {
         public static final String ANC_DANGER_SIGNS = "ANC Danger Signs";
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
+    }
+
+    public static final class REGISTER_TYPE {
+        public static final String CHILD = "Child";
+        public static final String ANC = "ANC";
+        public static final String PNC = "PNC";
+        public static final String MALARIA = "Malaria";
+        public static final String FAMILY_PLANNING = "Family Planning";
+        public static final String OTHER = "OTHER";
+    }
+    
+    public static final class KeyIndicatorsUtil {
+        public static final String HIA_2_INDICATOR = "hia2_indicator";
+        public static final String STEPNAME = "stepName";
+        public static final String LOOK_UP = "look_up";
+        public static final String ENTITY_ID = "entity_id";
     }
 }

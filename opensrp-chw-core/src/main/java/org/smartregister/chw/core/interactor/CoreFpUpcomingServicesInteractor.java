@@ -35,11 +35,11 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
     }
 
     private void evaluateFp(List<BaseUpcomingService> serviceList) {
-        String fpMethod = null;
+        String fpMethod;
         String fp_date = null;
         Integer fp_pillCycles = null;
         Rules rule = null;
-        Integer count = null;
+        Integer count;
         Date serviceDueDate = null;
         Date serviceOverDueDate = null;
         String serviceName = null;
@@ -49,13 +49,13 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
             for (FpAlertObject familyPlanning : familyPlanningList) {
                 fpMethodUsed = familyPlanning.getFpMethod();
                 fp_date = familyPlanning.getFpStartDate();
-                fp_pillCycles = familyPlanning.getFpPillCycles();
+                fp_pillCycles = FpDao.getLastPillCycle(memberObject.getBaseEntityId(), fpMethodUsed);
                 rule = FpUtil.getFpRules(fpMethodUsed);
             }
         }
         fpMethod = FpUtil.getTranslatedMethodValue(fpMethodUsed, context);
         Date lastVisitDate = null;
-        Visit lastVisit = null;
+        Visit lastVisit;
         Date fpDate = FpUtil.parseFpStartDate(fp_date);
         if (fpMethodUsed.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_INJECTABLE)) {
             lastVisit = FpDao.getLatestInjectionVisit(memberObject.getBaseEntityId(), fpMethodUsed);
@@ -99,11 +99,15 @@ public class CoreFpUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
                 }
             }
         }
+
         BaseUpcomingService upcomingService = new BaseUpcomingService();
-        upcomingService.setServiceDate(serviceDueDate);
-        upcomingService.setOverDueDate(serviceOverDueDate);
-        upcomingService.setServiceName(serviceName);
-        serviceList.add(upcomingService);
+        if(serviceName != null){
+            upcomingService.setServiceDate(serviceDueDate);
+            upcomingService.setOverDueDate(serviceOverDueDate);
+            upcomingService.setServiceName(serviceName);
+            serviceList.add(upcomingService);
+        }
+
     }
 
 }

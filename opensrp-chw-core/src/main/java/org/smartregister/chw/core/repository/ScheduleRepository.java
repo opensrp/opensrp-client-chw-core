@@ -29,11 +29,13 @@ public class ScheduleRepository extends BaseRepository {
     public static final String OVER_DUE_DATE = "over_due_date";
     public static final String EXPIRY_DATE = "expiry_date";
     public static final String COMPLETION_DATE = "completion_date";
+    public static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
+    public static final String USER_UNIQUE_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + SCHEDULE_NAME + "_index ON " +
+            TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE , " + SCHEDULE_GROUP_NAME + " COLLATE NOCASE , " + SCHEDULE_NAME + " COLLATE NOCASE " + ")";
+    public static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE " + ")";
+    public static final String SCHEDULE_GROUP_NAME_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + SCHEDULE_GROUP_NAME + "_index ON " + TABLE_NAME + "(" + SCHEDULE_GROUP_NAME + " COLLATE NOCASE " + ")";
     private static final String UPDATED_AT = "updated_at";
     private static final String CREATED_AT = "created_at";
-
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
     public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + "(" +
             ID + "  VARCHAR , " +
             BASE_ENTITY_ID + "  VARCHAR, " +
@@ -47,16 +49,8 @@ public class ScheduleRepository extends BaseRepository {
             UPDATED_AT + " VARCHAR, " +
             CREATED_AT + " VARCHAR " +
             ")";
-
-
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private String[] COLUMNS = {BASE_ENTITY_ID, SCHEDULE_GROUP_NAME, SCHEDULE_NAME, DUE_DATE, NOT_DONE_DATE, OVER_DUE_DATE, EXPIRY_DATE, COMPLETION_DATE, UPDATED_AT, CREATED_AT};
-
-    public static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
-    public static final String USER_UNIQUE_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + SCHEDULE_NAME + "_index ON " +
-            TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE , " + SCHEDULE_GROUP_NAME + " COLLATE NOCASE , " + SCHEDULE_NAME + " COLLATE NOCASE " + ")";
-    public static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE " + ")";
-    public static final String SCHEDULE_GROUP_NAME_INDEX = "CREATE INDEX " + TABLE_NAME + "_" + SCHEDULE_GROUP_NAME + "_index ON " + TABLE_NAME + "(" + SCHEDULE_GROUP_NAME + " COLLATE NOCASE " + ")";
-
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_SQL);
@@ -259,12 +253,12 @@ public class ScheduleRepository extends BaseRepository {
         return scheduleTasks;
     }
 
+
     private String getDateForDB(Date date) {
         if (date == null) return null;
 
         return sdf.format(date);
     }
-
     private Date getCursorDate(Cursor c, String column_name) {
         String val = c.getType(c.getColumnIndex(column_name)) == Cursor.FIELD_TYPE_NULL ? null : c.getString(c.getColumnIndex(column_name));
         if (val == null)

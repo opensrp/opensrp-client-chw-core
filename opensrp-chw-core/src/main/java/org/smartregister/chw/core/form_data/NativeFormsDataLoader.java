@@ -44,13 +44,13 @@ import timber.log.Timber;
 
 public class NativeFormsDataLoader implements DataLoader {
 
+    protected JSONArray jsonArray;
     private ClientField clientField;
     private ClientClassification clientClassification;
     private Client client;
     private String eventName;
     private List<String> tableCache;
     private Map<String, Table> tableMap;
-    protected JSONArray jsonArray;
     private Map<String, Map<String, Object>> dbData = new HashMap<>();
 
     private Event latestEvent;
@@ -193,6 +193,7 @@ public class NativeFormsDataLoader implements DataLoader {
 
     protected void readCheckBoxValue(String baseEntityID, JSONObject jsonObject, String key) throws JSONException {
         JSONArray optionsJson = jsonObject.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
+        String type = jsonObject.getString(JsonFormConstants.TYPE);
         List<Obs> obsList = getObs(baseEntityID, key);
         List<String> values = new ArrayList<>();
         if (obsList != null) {
@@ -206,6 +207,11 @@ public class NativeFormsDataLoader implements DataLoader {
         int x = optionsJson.length();
         while (x > 0) {
             JSONObject jo = optionsJson.getJSONObject(x - 1);
+            // Handle single checkbox options since radio buttons will have options > 1
+            if ((x == 1) && JsonFormConstants.CHECK_BOX.equalsIgnoreCase(type)) {
+                jo.put(JsonFormConstants.VALUE, (values.contains("true") || values.contains(jsonObject.getString(JsonFormConstants.KEY))) ? "true" : "false");
+            }
+
             if (jo.has(JsonFormConstants.OPENMRS_ENTITY_ID)) {
                 String entityID = jo.getString(JsonFormConstants.OPENMRS_ENTITY_ID);
                 jo.put(JsonFormConstants.VALUE, values.contains(entityID) ? "true" : "false");

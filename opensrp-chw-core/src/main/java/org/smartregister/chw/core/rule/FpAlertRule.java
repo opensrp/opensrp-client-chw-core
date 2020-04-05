@@ -3,7 +3,6 @@ package org.smartregister.chw.core.rule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.Months;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 
@@ -52,12 +51,19 @@ public class FpAlertRule implements ICommonRule {
 
     public boolean isCondomValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
-            if (Months.monthsBetween(new DateTime(lastVisitDate), new DateTime()).getMonths() <= 1) {
-                this.dueDate = new DateTime().withDayOfMonth(dueDay);
-                this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+            int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
+            int year = new DateTime(lastVisitDate).getYear();
+            if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
+                this.dueDate = new DateTime().plusMonths(1).withDayOfMonth(dueDay);
+                this.overDueDate = new DateTime().plusMonths(1).withDayOfMonth(overdueDate);
             } else {
-                this.dueDate = lastVisitDate.withDayOfMonth(dueDay);
-                this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate);
+                if ((year == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)) {
+                    this.dueDate = new DateTime().withDayOfMonth(dueDay);
+                    this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
+                } else {
+                    this.dueDate = lastVisitDate.withDayOfMonth(dueDay).plusMonths(1);
+                    this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate).plusMonths(1);
+                }
             }
         } else {
             this.dueDate = fpDate.plusMonths(1).withDayOfMonth(dueDay);
@@ -119,8 +125,7 @@ public class FpAlertRule implements ICommonRule {
             this.overDueDate = new DateTime(fpDate).plusMonths(overdueDate).plusDays(2);
             this.expiryDate = new DateTime(fpDate).plusMonths(expiry);
             return true;
-        }
-        else if(fpDifference < dueDiff && fpDifference <expiryDiff && dueDiff <= 31){
+        } else if (fpDifference < dueDiff && fpDifference < expiryDiff && dueDiff <= 31) {
             this.dueDate = new DateTime(fpDate).plusMonths(dueDay);
             return true;
         }
@@ -159,6 +164,8 @@ public class FpAlertRule implements ICommonRule {
     public String getButtonStatus() {
         DateTime lastVisit = lastVisitDate;
         DateTime currentDate = new DateTime(new LocalDate().toDate());
+        int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
+        int year = new DateTime(lastVisitDate).getYear();
 
         if (lastVisitDate != null) {
             if (expiryDate != null) {
@@ -170,21 +177,20 @@ public class FpAlertRule implements ICommonRule {
 
                     if (currentDate.isBefore(expiryDate) && (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                         return CoreConstants.VISIT_STATE.OVERDUE;
-                    if(currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)){
+                    if (currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)) {
                         return CoreConstants.VISIT_STATE.NOT_DUE_YET;
                     }
                 }
             } else {
-                if(!(fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM)) && !(fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM))){
+                if (!(fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_MALE_CONDOM)) && !(fpMethod.equalsIgnoreCase(FamilyPlanningConstants.DBConstants.FP_FEMALE_CONDOM))) {
                     if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
                         return CoreConstants.VISIT_STATE.DUE;
                     if (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate))
                         return CoreConstants.VISIT_STATE.OVERDUE;
 
                     return CoreConstants.VISIT_STATE.VISIT_DONE;
-                }
-                else {
-                    if(lastVisit.isAfter(dueDate) && Months.monthsBetween(lastVisit, new DateTime()).getMonths() < 1){
+                } else {
+                    if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
                         return CoreConstants.VISIT_STATE.VISIT_DONE;
                     }
                     if (currentDate.isBefore(overDueDate))
@@ -198,7 +204,7 @@ public class FpAlertRule implements ICommonRule {
 
         } else {
             if (expiryDate != null) {
-                if(currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)){
+                if (currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)) {
                     return CoreConstants.VISIT_STATE.NOT_DUE_YET;
                 }
                 if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
@@ -207,7 +213,7 @@ public class FpAlertRule implements ICommonRule {
                 if (currentDate.isBefore(expiryDate) && (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                     return CoreConstants.VISIT_STATE.OVERDUE;
             } else {
-                if(currentDate.isBefore(dueDate)){
+                if (currentDate.isBefore(dueDate)) {
                     return CoreConstants.VISIT_STATE.NOT_DUE_YET;
                 }
                 if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))

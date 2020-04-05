@@ -108,8 +108,8 @@ public class VisitDaoTest extends VisitDao {
     public void testGetUnprocessedVaccines() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"visit_key","details"});
-        matrixCursor.addRow(new Object[]{"asd","2019-01-01"});
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"visit_key", "details"});
+        matrixCursor.addRow(new Object[]{"asd", "2019-01-01"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
         VisitDao.getUnprocessedVaccines("123456");
