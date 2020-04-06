@@ -3,11 +3,9 @@ package org.smartregister.chw.core.utils;
 import android.content.res.AssetManager;
 
 import org.json.JSONObject;
+import org.smartregister.chw.malaria.util.Constants;
 
 import java.util.Locale;
-
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.ENCOUNTER_TYPE;
-import static org.smartregister.chw.malaria.util.Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT;
 
 public class CoreConstants {
 
@@ -81,6 +79,7 @@ public class CoreConstants {
         public static final String CHILD_REFERRAL = "Sick Child Referral";
         public static final String ANC_REFERRAL = "ANC Referral";
         public static final String PNC_REFERRAL = "PNC Referral";
+        public static final String MALARIA_REFERRAL = "Malaria Referral";
         public static final String FAMILY_PLANNING_REFERRAL = "Family Planning Referral";
         public static final String CHILD_VACCINE_CARD_RECEIVED = "Child vaccine card received";
         public static final String VACCINE_CARD_RECEIVED = "Vaccine Card Received";
@@ -114,8 +113,6 @@ public class CoreConstants {
         public static final String PNC_HOME_VISIT = "PNC Home Visit";
         public static final String ANC_HOME_VISIT_NOT_DONE = "ANC Home Visit Not Done";
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
-        public static final String MALARIA_FOLLOW_UP_VISIT = "Malaria Follow-up Visit";
-        public static final String MALARIA_CONFIRMATION = "Malaria Confirmation";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
@@ -151,23 +148,25 @@ public class CoreConstants {
         public static final String FAMILY_DETAILS_REMOVE_FAMILY = "family_details_remove_family";
         public static final String HOME_VISIT_COUNSELLING = "routine_home_visit";
 
-        public static final String ANC_REGISTRATION = "anc_member_registration";
-        public static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
-        public static final String MALARIA_CONFIRMATION = "malaria_confirmation";
-        public static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
-        public static final String WASH_CHECK = "wash_check";
-        public static final String CHILD_REFERRAL_FORM = "child_referral_form";
-        public static final String ANC_REFERRAL_FORM = "anc_referral_form";
-        public static final String PNC_REFERRAL_FORM = "pnc_referral_form";
-        public static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
-        public static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
-        public static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
-        public static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
-        public static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
-        public static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
-        public static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
-        public static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
-        public static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
+        private static final String ANC_REGISTRATION = "anc_member_registration";
+        private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
+        private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
+        private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
+        private static final String WASH_CHECK = "wash_check";
+        private static final String CHILD_REFERRAL_FORM = "child_referral_form";
+        private static final String ANC_REFERRAL_FORM = "anc_referral_form";
+        private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
+        private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
+        private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
+        private static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
+        private static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
+        private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
+        private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
+        private static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
+        private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
+        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
+        private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
+
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -209,6 +208,10 @@ public class CoreConstants {
 
         public static String getFamilyPlanningReferralForm() {
             return FAMILY_PLANNING_REFERRAL_FORM;
+        }
+
+        public static String getMalariaReferralForm() {
+            return MALARIA_REFERRAL_FORM;
         }
 
         public static String getBirthCertification() {
@@ -276,8 +279,8 @@ public class CoreConstants {
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
-            String encounterType = jsonForm.optString(ENCOUNTER_TYPE);
-            return !encounterType.equals(MALARIA_FOLLOW_UP_VISIT);
+            String encounterType = jsonForm.optString(CoreJsonFormUtils.ENCOUNTER_TYPE);
+            return !encounterType.equals(Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT);
         }
 
         public static String getMalariaFollowUpVisitForm() {
@@ -549,6 +552,7 @@ public class CoreConstants {
         public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
+        public static final String MALARIA_REFERRAL = "ec_malaria_referral";
     }
 
     public static final class INTENT_KEY {
@@ -796,6 +800,7 @@ public class CoreConstants {
         public static final String ANC_DANGER_SIGNS = "ANC Danger Signs";
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
+        public static final String SUSPECTED_MALARIA = "Suspected Malaria";
     }
 
     public static final class REGISTER_TYPE {
