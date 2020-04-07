@@ -12,8 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 
-import java.util.Set;
-
 public class CoreMalariaFloatingMenuTest extends BaseUnitTest {
 
     @Mock
@@ -24,9 +22,6 @@ public class CoreMalariaFloatingMenuTest extends BaseUnitTest {
 
     @Mock
     private OnClickFloatingMenu onClickFloatingMenu;
-
-    @Mock
-    private Set<org.smartregister.configurableviews.model.View> visibleColumns;
 
     @Before
     public void setUp() {
