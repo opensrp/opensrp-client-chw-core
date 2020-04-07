@@ -76,7 +76,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private View parentView;
     private Timer timer;
 
-    private NavigationMenu() {
+    public NavigationMenu() {
 
     }
 
@@ -243,7 +243,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerServiceActivity(Activity activity) {
+    public void registerServiceActivity(Activity activity) {
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
@@ -257,7 +257,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerStockReport(Activity activity) {
+    public void registerStockReport(Activity activity) {
         if (menuFlavor.hasStockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);

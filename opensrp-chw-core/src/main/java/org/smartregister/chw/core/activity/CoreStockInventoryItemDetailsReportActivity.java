@@ -51,7 +51,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         return stock_name;
     }
 
-    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName) {
+    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName, String providerId) {
         StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
         String stockMonth;
         String stockYear;
@@ -62,7 +62,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
             for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
                 stockMonth = stockUsageReportUtils.monthConverter(entry.getKey());
                 stockYear = entry.getValue().toString();
-                stockUsage = stockUsageReportDao.getStockUsageForMonth(stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3)), evaluateStockName(stockName), stockYear);
+                stockUsage = stockUsageReportDao.getStockUsageForMonth(stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3)), evaluateStockName(stockName), stockYear, providerId);
                 stockUsageItemDetailsModelList.add(new StockUsageItemDetailsModel(stockMonth, stockYear, stockUsage));
             }
         }
@@ -78,14 +78,16 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     protected void onCreation() {
         setContentView(R.layout.activity_stock_usage_item_details);
         Intent intent = getIntent();
-        String stockName = intent.getStringExtra("stock Name");
+        String stockName = intent.getStringExtra("stockName");
+        String providerName = intent.getStringExtra("providerName");
+
 
         TextView textViewName = findViewById(R.id.item_detail_name);
         textViewName.setText(String.format("%s Stock Used", stockName));
 
         RecyclerView recyclerView = findViewById(R.id.rv_stock_usage_item_detail_report);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        CoreStockUsageItemDetailsAdapter coreStockUsageItemDetailsAdapter = new CoreStockUsageItemDetailsAdapter(stockUsageItemDetailsModelList(stockName));
+        CoreStockUsageItemDetailsAdapter coreStockUsageItemDetailsAdapter = new CoreStockUsageItemDetailsAdapter(stockUsageItemDetailsModelList(stockName, providerName));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
