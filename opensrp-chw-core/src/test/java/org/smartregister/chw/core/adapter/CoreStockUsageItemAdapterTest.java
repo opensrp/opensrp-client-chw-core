@@ -29,8 +29,8 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        stockUsageItemModelList = Arrays.asList(new StockUsageItemModel("zinc 10", "packets", "10"),
-                new StockUsageItemModel("Paracetamol", "packets", "20"));
+        stockUsageItemModelList = Arrays.asList(new StockUsageItemModel("zinc 10", "packets", "10", "chwone"),
+                new StockUsageItemModel("Paracetamol", "packets", "20", "chwone"));
         adapter = new CoreStockUsageItemAdapter(stockUsageItemModelList, context);
     }
 
