@@ -340,14 +340,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public JSONObject getAutoPopulatedJsonEditFormString(String formName, String title, Context context, CommonPersonObjectClient client) {
         try {
             JSONObject form = FormUtils.getInstance(context).getFormJson(formName);
-            LocationPickerView lpv = new LocationPickerView(context);
-            lpv.init();
+
             if (form != null) {
                 form.put(JsonFormUtils.ENTITY_ID, client.getCaseId());
                 form.put(JsonFormUtils.ENCOUNTER_TYPE, CoreConstants.EventType.UPDATE_CHILD_REGISTRATION);
 
                 JSONObject metadata = form.getJSONObject(JsonFormUtils.METADATA);
-                String lastLocationId = LocationHelper.getInstance().getOpenMrsLocationId(lpv.getSelectedItem());
+                String lastLocationId = getCurrentLocationID(context);
 
                 metadata.put(JsonFormUtils.ENCOUNTER_LOCATION, lastLocationId);
 
@@ -373,6 +372,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         }
 
         return null;
+    }
+
+    @Override
+    public String getCurrentLocationID(Context context){
+        LocationPickerView lpv = new LocationPickerView(context);
+        lpv.init();
+        return LocationHelper.getInstance().getOpenMrsLocationId(lpv.getSelectedItem());
     }
 
     @Override

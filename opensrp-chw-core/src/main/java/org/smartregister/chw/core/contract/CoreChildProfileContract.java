@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -153,6 +154,8 @@ public interface CoreChildProfileContract {
         JSONObject getAutoPopulatedJsonEditFormString(String formName, String title, Context context, CommonPersonObjectClient client);
 
         void processBackGroundEvent(final CoreChildProfileContract.InteractorCallBack callback);
+
+        String getCurrentLocationID(Context context);
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
