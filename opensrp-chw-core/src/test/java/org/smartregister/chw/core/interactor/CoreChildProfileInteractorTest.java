@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
-import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +24,6 @@ import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.ImageUtilsShadowHelper;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.clientandeventmodel.Client;
-import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.AppExecutors;
 import org.smartregister.family.util.DBConstants;
@@ -92,7 +89,7 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
     }
 
     @Test
-    public void testSaveRegistration(){
+    public void testSaveRegistration() {
         CoreChildProfileContract.InteractorCallBack callBack = Mockito.mock(CoreChildProfileContract.InteractorCallBack.class);
         Mockito.doNothing().when(interactor).saveRegistration(null, null, true);
         interactor.saveRegistration(null, null, true, callBack);
