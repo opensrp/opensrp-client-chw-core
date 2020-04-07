@@ -5,11 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Date;
-
 public class PermissionEventTest {
-
-    PermissionEvent permissionEvent = new PermissionEvent();
 
     @Before
     public void setUp() {
@@ -18,19 +14,21 @@ public class PermissionEventTest {
 
     @Test
     public void testGetAndSetPermissionType() {
+        PermissionEvent permissionEvent = new PermissionEvent();
         permissionEvent.setPermissionType(1);
         Assert.assertEquals(permissionEvent.getPermissionType(), 1);
     }
 
     @Test
     public void testSetGranted() {
+        PermissionEvent permissionEvent = new PermissionEvent();
         permissionEvent.setGranted(true);
         Assert.assertEquals(permissionEvent.isGranted(), true);
     }
 
     @Test
     public void testisGranted() {
-        PermissionEvent permissionEvent1 = new PermissionEvent(1,true);
-        Assert.assertEquals(permissionEvent1.isGranted(), true);
+        PermissionEvent permissionEvent = new PermissionEvent(1, true);
+        Assert.assertEquals(permissionEvent.isGranted(), true);
     }
 }
