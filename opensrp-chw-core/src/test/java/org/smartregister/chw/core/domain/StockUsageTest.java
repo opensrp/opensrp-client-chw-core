@@ -5,26 +5,31 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class StockUsageTest {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private StockUsage stockUsage = new StockUsage();
+    private Date date;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        date = sdf.parse("2020-02-08");
     }
 
     @Test
     public void testGetAndSetCreatedAt() {
-        stockUsage.setCreatedAt(new Date());
-        Assert.assertEquals(stockUsage.getCreatedAt(), new Date());
+        stockUsage.setCreatedAt(date);
+        Assert.assertEquals(stockUsage.getCreatedAt(), date);
     }
 
     @Test
     public void testGetAndSetUpdatedAt() {
-        stockUsage.setUpdatedAt(new Date());
-        Assert.assertEquals(stockUsage.getUpdatedAt(), new Date());
+        stockUsage.setUpdatedAt(date);
+        Assert.assertEquals(stockUsage.getUpdatedAt(), date);
     }
 
     @Test
