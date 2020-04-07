@@ -106,11 +106,11 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(sqlPregnancy);
 
             case CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION:
-                String sqlMalaria = "select count(*) " +
-                        "from ec_malaria_confirmation p " +
+                String sqlMalaria = "select count (p.base_entity_id) from ec_malaria_confirmation p " +
                         "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                         "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and p.is_closed = 0 ";
+                        "where m.date_removed is null and p.is_closed = 0 AND p.malaria = 1 " +
+                        "AND datetime('NOW') <= datetime(p.last_interacted_with/1000, 'unixepoch', 'localtime','+15 days')";
                 return NavigationDao.getQueryCount(sqlMalaria);
 
             case FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE:
@@ -142,7 +142,25 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "         where ec_family_member.date_removed is null\n" +
                         "           and ec_anc_register.is_closed is 0\n" +
                         "\n" +
-                        "         UNION ALL\n" +
+                        "       UNION ALL\n" +
+                        "       SELECT COUNT(*)\n" +
+                        "       FROM ec_family_member\n" +
+                        "           where ec_family_member.date_removed is null\n" +
+                        "           AND ec_family_member.relational_id is null\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "                SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "                   FROM ec_anc_register\n" +
+                        "                UNION ALL\n" +
+                        "               SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "                   FROM ec_pregnancy_outcome\n" +
+                        "               UNION ALL\n" +
+                        "               SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "                   FROM ec_child\n" +
+                        "               UNION ALL\n" +
+                        "               SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "                   FROM ec_malaria_confirmation\n" +
+                        "           )\n" +
+                        "         UNION ALL\n"+
                         "         SELECT COUNT(*)\n" +
                         "         FROM ec_pregnancy_outcome\n" +
                         "                  inner join ec_family_member\n" +
