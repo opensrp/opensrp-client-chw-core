@@ -154,6 +154,8 @@ public interface CoreChildProfileContract {
 
         void processBackGroundEvent(final CoreChildProfileContract.InteractorCallBack callback);
 
+        String getCurrentLocationID(Context context);
+
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
         String getChildBaseEntityId();
