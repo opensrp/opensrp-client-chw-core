@@ -18,7 +18,6 @@ public class CoreMalariaProfileInteractor extends BaseMalariaProfileInteractor {
         Runnable runnable = () -> appExecutors.mainThread().execute(() -> {
             callback.refreshFamilyStatus(AlertStatus.normal);
             Alert alert = getLatestAlert(memberObject.getBaseEntityId());
-
             callback.refreshMedicalHistory(VisitDao.memberHasVisits(memberObject.getBaseEntityId()));
             if (alert != null)
                 callback.refreshUpComingServicesStatus(alert.scheduleName(), alert.status(), new LocalDate(alert.startDate()).toDate());

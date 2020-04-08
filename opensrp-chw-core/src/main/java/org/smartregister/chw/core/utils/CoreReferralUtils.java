@@ -199,6 +199,9 @@ public class CoreReferralUtils {
             case CoreConstants.TABLE_NAME.FP_REFERRAL:
                 focus = CoreConstants.TASKS_FOCUS.FP_SIDE_EFFECTS;
                 break;
+            case CoreConstants.TABLE_NAME.MALARIA_REFERRAL:
+                focus = CoreConstants.TASKS_FOCUS.SUSPECTED_MALARIA;
+                break;
             default:
                 focus = "";
                 break;

@@ -247,10 +247,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
+            Intent intent = menuFlavor.getServiceReportIntent(activity);
             rlIconServiceReport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, HIA2ReportsActivity.class);
                     activity.startActivity(intent);
                 }
             });
@@ -261,11 +261,11 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (menuFlavor.hasStockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
+            Intent intent = menuFlavor.getStockReportIntent(activity);
             rlIconStockReport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
-                    activity.startActivity(intent);
+                   activity.startActivity(intent);
                 }
             });
         }
@@ -487,5 +487,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         boolean hasServiceReport();
         boolean hasStockReport();
+
+        Intent getStockReportIntent(Activity activity);
+        Intent getServiceReportIntent(Activity activity);
+
     }
 }

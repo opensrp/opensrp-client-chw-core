@@ -1,7 +1,7 @@
 name: visit_expiry
 description: "visit expired"
 priority: 1
-condition: "malariaFollowUpRule.getDatesDiff() > 14 "
+condition: "malariaFollowUpRule.isExpired() || malariaFollowUpRule.getDatesDiff() > 14 "
 actions:
   - "malariaFollowUpRule.setButtonStatus('EXPIRED')"
 ---

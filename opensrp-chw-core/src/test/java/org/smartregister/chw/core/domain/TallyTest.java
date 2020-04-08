@@ -36,7 +36,7 @@ public class TallyTest {
     }
 
     @Test
-    public void getReportHia2Indicator() {
+    public void testGetReportHia2Indicator() {
         reportHia2Indicator.setValue("1");
         reportHia2Indicator.setHia2Indicator(hia2Indicator);
         Assert.assertEquals(reportHia2Indicator.getValue(), "1");
