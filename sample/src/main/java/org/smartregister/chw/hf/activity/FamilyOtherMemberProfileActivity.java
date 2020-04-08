@@ -20,11 +20,10 @@ import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.fragment.BaseFamilyOtherMemberProfileFragment;
 import org.smartregister.family.model.BaseFamilyOtherMemberProfileActivityModel;
+import org.smartregister.family.util.DBConstants;
 import org.smartregister.view.contract.BaseProfileContract;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.Utils.isWomanOfReproductiveAge;
 
 public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfileActivity {
     private FamilyMemberFloatingMenu familyFloatingMenu;
@@ -159,7 +158,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
             menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
         }
 
-        if (isWomanOfReproductiveAge(commonPersonObject, 10, 49)) {
+        if ("Female".equalsIgnoreCase(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.GENDER, false)) && Utils.isMemberOfReproductiveAge(commonPersonObject, 10, 49)) {
             menu.findItem(R.id.action_pregnancy_confirmation).setVisible(true);
             menu.findItem(R.id.action_family_planning_initiation).setVisible(true);
         }

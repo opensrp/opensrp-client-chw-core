@@ -50,7 +50,7 @@ public class UtilsTest {
         client.setColumnmaps(columnMap);
         int toAge = 50;
         int fromAge = 18;
-        Assert.assertTrue(Utils.isWomanOfReproductiveAge(client, fromAge, toAge));
+        Assert.assertTrue(Utils.isMemberOfReproductiveAge(client, fromAge, toAge));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class UtilsTest {
         client.setColumnmaps(columnMap);
         int toAge = 50;
         int fromAge = 18;
-        Assert.assertFalse(Utils.isWomanOfReproductiveAge(client, fromAge, toAge));
+        Assert.assertFalse(Utils.isMemberOfReproductiveAge(client, fromAge, toAge));
     }
 
     @Test
