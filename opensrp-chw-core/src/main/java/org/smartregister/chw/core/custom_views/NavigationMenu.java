@@ -29,8 +29,8 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.tuple.Pair;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
-import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
+import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -187,18 +187,18 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             syncProgressBar.setIndeterminateDrawable(circle);
         }
 
-        // register all objects
+        // register top section menu items
         registerDrawer(activity);
         registerNavigation(activity);
-        registerLogout(activity);
-        registerSync(activity);
+
+        /// register bottom section menu items after the separator
         registerLanguageSwitcher(activity);
-
         registerServiceActivity(activity);
-
         registerStockReport(activity);
-
         registerDeviceToDeviceSync(activity);
+        registerSync(activity);
+        registerLogout(activity);
+
         // update all actions
         mPresenter.refreshLastSync();
         mPresenter.refreshNavigationCount(activity);
@@ -247,12 +247,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
-            rlIconServiceReport.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(activity, HIA2ReportsActivity.class);
-                    activity.startActivity(intent);
-                }
+            rlIconServiceReport.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, HIA2ReportsActivity.class);
+                activity.startActivity(intent);
             });
         }
     }
@@ -261,12 +258,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (menuFlavor.hasStockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
-            rlIconStockReport.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
-                    activity.startActivity(intent);
-                }
+            rlIconStockReport.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                activity.startActivity(intent);
             });
         }
     }
@@ -486,6 +480,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         HashMap<String, String> getTableMapValues();
 
         boolean hasServiceReport();
+
         boolean hasStockReport();
     }
 }

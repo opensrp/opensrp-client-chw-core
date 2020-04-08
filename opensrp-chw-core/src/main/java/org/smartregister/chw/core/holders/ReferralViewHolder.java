@@ -18,9 +18,9 @@ public class ReferralViewHolder extends RecyclerView.ViewHolder {
     public ReferralViewHolder(@NonNull View itemView) {
         super(itemView);
         nameTextView = itemView.findViewById(R.id.patient_name_age);
-        reasonTextView = itemView.findViewById(R.id.referral_reason);
+        reasonTextView = itemView.findViewById(R.id.referral_type);
         referredByTextView = itemView.findViewById(R.id.referred_by);
-        executionStartTextView = itemView.findViewById(R.id.referral_start);
+        executionStartTextView = itemView.findViewById(R.id.notification_date);
     }
 
 

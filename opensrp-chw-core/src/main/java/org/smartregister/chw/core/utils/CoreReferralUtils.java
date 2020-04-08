@@ -1,6 +1,9 @@
 package org.smartregister.chw.core.utils;
 
 import android.app.Activity;
+import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.utils.FormUtils;
@@ -317,6 +320,25 @@ public class CoreReferralUtils {
             startedFromReferrals = true;
         }
         return startedFromReferrals;
+    }
+
+    @NotNull
+    public static String getFamilyMemberFtsSearchQuery(@Nullable String filters) {
+        if (TextUtils.isEmpty(filters)) {
+            return "SELECT object_id, last_interacted_with\n" +
+                    "FROM (SELECT object_id, last_interacted_with FROM ec_family_member_search WHERE date_removed IS NULL)\n" +
+                    "ORDER BY last_interacted_with DESC";
+        } else {
+            String query = "SELECT object_id\n" +
+                    "FROM (SELECT object_id, last_interacted_with\n" +
+                    "      FROM ec_family_member_search\n" +
+                    "      WHERE date_removed IS NULL\n" +
+                    "        AND phrase MATCH '%s*'\n" +
+                    "     )\n" +
+                    "ORDER BY last_interacted_with DESC";
+            query = query.replace("%s", filters);
+            return query;
+        }
     }
 
 }

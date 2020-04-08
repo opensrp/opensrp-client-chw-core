@@ -612,4 +612,10 @@
 
     <!-- IMCI -->
     <string name="sick_child">SICK CHILD</string>
+
+    <!--Navigation Menu String -->
+    <string name="service_activity">Service activity</string>
+    <string name="updates">Updates</string>
+
+    <string name="facility_visit">%1$s facility visit</string>
 </resources>

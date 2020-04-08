@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.QueryConstant;
 import org.smartregister.opd.configuration.OpdRegisterQueryProviderContract;
 
@@ -18,21 +20,7 @@ public class CoreAllClientsRegisterQueryProvider extends OpdRegisterQueryProvide
     @NonNull
     @Override
     public String getObjectIdsQuery(@Nullable String filters, @Nullable String mainCondition) {
-        if (TextUtils.isEmpty(filters)) {
-            return "SELECT object_id, last_interacted_with\n" +
-                    "FROM (SELECT object_id, last_interacted_with FROM ec_family_member_search WHERE date_removed IS NULL)\n" +
-                    "ORDER BY last_interacted_with DESC";
-        } else {
-            String query = "SELECT object_id\n" +
-                    "FROM (SELECT object_id, last_interacted_with\n" +
-                    "      FROM ec_family_member_search\n" +
-                    "      WHERE date_removed IS NULL\n" +
-                    "        AND phrase MATCH '%s*'\n" +
-                    "     )\n" +
-                    "ORDER BY last_interacted_with DESC";
-            query = query.replace("%s", filters);
-            return query;
-        }
+        return CoreReferralUtils.getFamilyMemberFtsSearchQuery(filters);
     }
 
     /**
