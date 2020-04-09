@@ -618,4 +618,21 @@
     <string name="updates">Updates</string>
 
     <string name="facility_visit">%1$s facility visit</string>
+
+    <!--Referral notification details -->
+    <string name="mark_as_done">Mark as done</string>
+    <string name="view_profile">View Profile</string>
+    <string name="back_to_updates">Back to Updates</string>
+    <string name="successful_referral_notification_title">Name: %1$s, %2$s</string>
+    <string name="followup_referral_notification_title">%1$s has attended the facility on %2$s</string>
+    <string name="referral_notification_danger_sign">Danger sign: %1$s</string>
+    <string name="referral_notification_action_taken">Action taken: %1$s</string>
+    <string name="referral_notification_village">Village: %1$s</string>
+    <string name="referral_notification_selected_method">Selected method: %1$s</string>
+    <string name="referral_notification_closure_date">Closure date: %1$s</string>
+    <string name="referral_notification_record_closed">Record closed</string>
+    <string name="referral_notification_phone">Household/Caregiver Phone: %1$s</string>
+    <string name="no_phone_provided">No phone provided</string>
+
+
 </resources>

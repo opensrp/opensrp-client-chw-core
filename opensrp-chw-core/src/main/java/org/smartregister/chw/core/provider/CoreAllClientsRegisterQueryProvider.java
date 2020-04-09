@@ -1,11 +1,8 @@
 package org.smartregister.chw.core.provider;
 
-import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.QueryConstant;
 import org.smartregister.opd.configuration.OpdRegisterQueryProviderContract;

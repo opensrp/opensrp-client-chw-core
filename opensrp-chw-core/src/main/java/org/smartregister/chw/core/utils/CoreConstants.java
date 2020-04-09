@@ -2,7 +2,6 @@ package org.smartregister.chw.core.utils;
 
 import android.content.res.AssetManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.chw.malaria.util.Constants;
 
@@ -36,6 +35,7 @@ public class CoreConstants {
         String LAST_MODIFIED = "last_modified";
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
+        String REFERRAL_TASK_ID = "referral_task_id";
     }
 
     public interface SERVICE_GROUPS {

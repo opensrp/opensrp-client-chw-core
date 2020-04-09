@@ -5,7 +5,6 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.repository.BaseRepository;
 

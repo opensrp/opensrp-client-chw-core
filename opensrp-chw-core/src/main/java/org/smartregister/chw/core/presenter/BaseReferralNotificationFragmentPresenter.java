@@ -2,25 +2,20 @@ package org.smartregister.chw.core.presenter;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseReferralNotificationFragmentContract;
-import org.smartregister.chw.core.interactor.CoreReferralNotificationInteractor;
 import org.smartregister.chw.core.model.BaseReferralNotificationModel;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 import java.lang.ref.WeakReference;
 
 public abstract class BaseReferralNotificationFragmentPresenter implements
-        BaseReferralNotificationFragmentContract.Presenter, BaseReferralNotificationFragmentContract.InteractorCallBack {
+        BaseReferralNotificationFragmentContract.Presenter {
 
-    private WeakReference<BaseReferralNotificationFragmentContract.View>viewReference;
+    private WeakReference<BaseReferralNotificationFragmentContract.View> viewReference;
     protected BaseReferralNotificationModel model;
-    protected BaseReferralNotificationFragmentContract.Interactor interactor;
-
 
     public BaseReferralNotificationFragmentPresenter(BaseReferralNotificationFragmentContract.View view,
-                                                    BaseReferralNotificationModel model) {
+                                                     BaseReferralNotificationModel model) {
         this.viewReference = new WeakReference<>(view);
         this.model = model;
-        interactor = new CoreReferralNotificationInteractor();
     }
 
     @Override
@@ -57,7 +52,5 @@ public abstract class BaseReferralNotificationFragmentPresenter implements
     }
 
     @Override
-    public void clientDetails(CommonPersonObjectClient client) {
-        getView().setClient(client);
-    }
+    abstract public void displayDetailsActivity(String referralTaskId, String notificationType);
 }

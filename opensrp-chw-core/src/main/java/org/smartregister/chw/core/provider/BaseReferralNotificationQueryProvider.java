@@ -58,6 +58,7 @@ public class BaseReferralNotificationQueryProvider {
               "       ec_family_member.last_name     AS last_name,\n" +
               "       ec_family_member.dob           AS dob,\n" +
               "       ec_family_member.id            AS _id,\n" +
+              "       task._id                       AS  referral_task_id,\n" +
               "       ec_family_member.relational_id AS relationalid,\n" +
               "       event.dateCreated              AS notification_date,\n" +
               "       'Successful referral'          AS notification_type\n" +

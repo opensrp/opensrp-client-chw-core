@@ -14,7 +14,6 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseReferralNotificationFragmentContract;
 import org.smartregister.chw.core.provider.BaseReferralNotificationProvider;
 import org.smartregister.chw.core.provider.BaseReferralNotificationQueryProvider;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
@@ -27,7 +26,6 @@ import timber.log.Timber;
 
 public abstract class BaseReferralNotificationFragment extends BaseChwRegisterFragment implements BaseReferralNotificationFragmentContract.View {
 
-    private CommonPersonObjectClient commonPersonObjectClient;
     private BaseReferralNotificationQueryProvider queryProvider;
 
     public BaseReferralNotificationFragment(){
@@ -61,11 +59,6 @@ public abstract class BaseReferralNotificationFragment extends BaseChwRegisterFr
     }
 
     @Override
-    public void setClient(CommonPersonObjectClient commonPersonObjectClient) {
-        setCommonPersonObjectClient(commonPersonObjectClient);
-    }
-
-    @Override
     public void setupViews(View view) {
         super.setupViews(view);
         view.findViewById(R.id.top_right_layout).setVisibility(View.GONE);
@@ -84,14 +77,6 @@ public abstract class BaseReferralNotificationFragment extends BaseChwRegisterFr
     @Override
     protected String getDefaultSortQuery() {
         return "";
-    }
-
-    public CommonPersonObjectClient getCommonPersonObjectClient() {
-        return commonPersonObjectClient;
-    }
-
-    public void setCommonPersonObjectClient(CommonPersonObjectClient commonPersonObjectClient) {
-        this.commonPersonObjectClient = commonPersonObjectClient;
     }
 
     @NotNull
