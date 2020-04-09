@@ -22,7 +22,6 @@ import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.util.Utils;
 
 import java.util.List;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -36,7 +35,7 @@ public abstract class BaseReferralNotificationFragment extends BaseChwRegisterFr
     }
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns, String tableName) {
+    public void initializeAdapter() {
         BaseReferralNotificationProvider registerProvider = new BaseReferralNotificationProvider(getActivity(), registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, registerProvider, context().commonrepository(tablename));
         clientAdapter.setCurrentlimit(20);

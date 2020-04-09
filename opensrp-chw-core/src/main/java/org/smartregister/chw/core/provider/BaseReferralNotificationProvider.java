@@ -19,6 +19,7 @@ import org.smartregister.cursoradapter.RecyclerViewProvider;
 import org.smartregister.family.fragment.BaseFamilyRegisterFragment;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.Utils;
+import org.smartregister.opd.utils.OpdUtils;
 import org.smartregister.view.contract.SmartRegisterClient;
 import org.smartregister.view.contract.SmartRegisterClients;
 import org.smartregister.view.dialog.FilterOption;
@@ -26,6 +27,7 @@ import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 import org.smartregister.view.viewholder.OnClickFormLauncher;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 
 public class BaseReferralNotificationProvider implements RecyclerViewProvider<ReferralNotificationViewHolder> {
@@ -52,15 +54,16 @@ public class BaseReferralNotificationProvider implements RecyclerViewProvider<Re
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String fullName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
-        String dateOfBirth = Utils.getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false));
-        viewHolder.setNameAndAge(StringUtils.capitalize(fullName) + ", " + StringUtils.capitalize(Utils.getTranslatedDate(dateOfBirth, context)));
+        String dobString = Utils.getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String translatedYearInitial = context.getResources().getString(org.smartregister.opd.R.string.abbrv_years);
+        viewHolder.setNameAndAge(StringUtils.capitalize(fullName) + ", " + StringUtils.capitalize(OpdUtils.getClientAge(dobString, translatedYearInitial)));
 
         String notificationType = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_TYPE, true);
-        viewHolder.setReferralTypeTextView(StringUtils.capitalize(notificationType));
+        viewHolder.setReferralTypeTextView(notificationType);
 
         String notificationEventDate = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_DATE, false);
         if (StringUtils.isNotBlank(notificationEventDate)) {
-            DateTime duration = new DateTime(Long.valueOf(notificationEventDate));
+            DateTime duration = new DateTime(Timestamp.valueOf(notificationEventDate));
             viewHolder.setNotificationDate(org.smartregister.chw.core.utils.Utils.formatReferralDuration(duration, context));
         }
         attachPatientOnclickListener(viewHolder.itemView, client);

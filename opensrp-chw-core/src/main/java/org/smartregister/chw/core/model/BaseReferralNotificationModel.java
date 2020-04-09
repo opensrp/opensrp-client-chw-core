@@ -1,33 +1,13 @@
 package org.smartregister.chw.core.model;
 
-import org.smartregister.chw.core.contract.BaseReferralNotificationFragmentContract;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
-import org.smartregister.domain.Task;
 import org.smartregister.family.util.DBConstants;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class BaseReferralNotificationModel implements BaseReferralNotificationFragmentContract.Model {
-
-    @Override
-    public String countQueryStatement(String taskTable, String mainCondition) {
-        SmartRegisterQueryBuilder countQueryBuilder = new SmartRegisterQueryBuilder();
-        countQueryBuilder.SelectInitiateMainTableCounts(taskTable);
-        return countQueryBuilder.mainCondition(mainCondition);
-    }
-
-    @Override
-    public String mainQueryStatement(String tableName, String entityTable, String mainCondition) {
-        SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
-        queryBuilder.selectInitiateMainTable(tableName, mainColumns(tableName, entityTable), CoreConstants.DB_CONSTANTS.ID);
-        queryBuilder.customJoin(String.format("INNER JOIN %s  ON  %s.%s = %s.%s AND %s.%s = '%s' COLLATE NOCASE ", entityTable, entityTable, DBConstants.KEY.BASE_ENTITY_ID, tableName, CoreConstants.DB_CONSTANTS.FOR, tableName, CoreConstants.DB_CONSTANTS.STATUS, Task.TaskStatus.COMPLETED.name()));
-        queryBuilder.customJoin("LEFT JOIN ec_family  ON  ec_family_member.relational_id = ec_family.id COLLATE NOCASE");
-
-        return queryBuilder.mainCondition(mainCondition);
-    }
+public abstract class BaseReferralNotificationModel {
 
     protected String[] mainColumns(String tableName, String entityTable) {
         Set<String> columns =

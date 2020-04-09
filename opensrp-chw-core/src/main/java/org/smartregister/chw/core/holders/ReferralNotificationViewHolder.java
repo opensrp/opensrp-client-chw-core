@@ -28,7 +28,8 @@ public class ReferralNotificationViewHolder extends RecyclerView.ViewHolder {
     public void setReferralTypeTextView(String referralType) {
         String formattedReferralType = referralTypeTextView.getContext()
                 .getString(R.string.facility_visit, referralType);
-        this.referralTypeTextView.setText(formattedReferralType);
+
+        this.referralTypeTextView.setText(referralType.contains("Successful") ? referralType : formattedReferralType);
     }
 
     public void setNotificationDate(String notificationDate) {
