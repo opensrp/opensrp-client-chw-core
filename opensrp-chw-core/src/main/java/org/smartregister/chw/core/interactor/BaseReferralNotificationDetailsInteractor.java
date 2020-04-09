@@ -32,11 +32,11 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
         if (referralType.contains("Successful")) {
             referralNotificationItem = getDetailsForSuccessfulReferral(referralTaskId);
         } else if (referralType.contains("PNC") || referralType.contains("ANC")) {
-            referralNotificationItem = getDetailsForPNCAndANCReferrals(referralTaskId);
+            referralNotificationItem = getDetailsForPNCAndANCReferrals();
         } else if (referralType.contains("Malaria")) {
-            referralNotificationItem = getDetailsForMalariaReferral(referralTaskId);
+            referralNotificationItem = getDetailsForMalariaReferral();
         } else if (referralType.contains("Family Planning")) {
-            referralNotificationItem = getDetailsForFamilyPlanningReferral(referralTaskId);
+            referralNotificationItem = getDetailsForFamilyPlanningReferral();
         }
         presenter.getView().onReferralDetailsFetched(referralNotificationItem);
     }
@@ -58,7 +58,7 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
     }
 
     @NotNull
-    private ReferralNotificationItem getDetailsForPNCAndANCReferrals(String referralTaskId) {
+    private ReferralNotificationItem getDetailsForPNCAndANCReferrals() {
         String title = context.getString(R.string.followup_referral_notification_title, "Victoria Rubadiri", "10 Jan 2019");
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.referral_notification_danger_sign, "Difficulty in breathing"));
@@ -68,7 +68,7 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
     }
 
     @NotNull
-    private ReferralNotificationItem getDetailsForFamilyPlanningReferral(String referralTaskId) {
+    private ReferralNotificationItem getDetailsForFamilyPlanningReferral() {
         String title = context.getString(R.string.followup_referral_notification_title, "Victoria Rubadiri", "10 Jan 2019");
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.referral_notification_danger_sign, "Difficulty in breathing"));
@@ -78,7 +78,7 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
     }
 
     @NotNull
-    private ReferralNotificationItem getDetailsForMalariaReferral(String referralTaskId) {
+    private ReferralNotificationItem getDetailsForMalariaReferral() {
         String title = context.getString(R.string.followup_referral_notification_title, "Victoria Rubadiri", "10 Jan 2019");
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.referral_notification_selected_method, "Male condoms"));

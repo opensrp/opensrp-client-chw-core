@@ -32,7 +32,6 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
 
     private TextView referralNotificationTitle;
     private LinearLayout referralNotificationDetails;
-    private BaseReferralNotificationDetailsContract.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
 
     @Override
     public void initPresenter() {
-        presenter = new BaseReferralNotificationDetailsPresenter(this);
+        BaseReferralNotificationDetailsContract.Presenter presenter = new BaseReferralNotificationDetailsPresenter(this);
         if (getIntent().getExtras() != null) {
             String referralTaskId = getIntent().getExtras().getString(REFERRAL_TASK_ID);
             String notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
