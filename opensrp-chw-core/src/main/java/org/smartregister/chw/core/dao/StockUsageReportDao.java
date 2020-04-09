@@ -10,6 +10,10 @@ import java.util.List;
 public class StockUsageReportDao extends AbstractDao {
 
     public static List<StockUsage> getStockUsage() {
+        return getStockUsage(CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM());
+    }
+
+    public static List<StockUsage> getStockUsage(String userName) {
         String sql = "  SELECT strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Year\",\n" +
                 "\tstrftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))) as \"Month\",\n" +
                 "\tvd.human_readable_details as StockName,\n" +
@@ -60,7 +64,6 @@ public class StockUsageReportDao extends AbstractDao {
                 "and mc.malaria_test_date is not NULL\n" +
                 "  group by mc.malaria_treat, substr(mc.malaria_test_date, 7, 4), substr(mc.malaria_test_date, 4, 2)\n" +
                 "order by Year DESC, Month DESC";
-        String userName = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
 
         DataMap<StockUsage> dataMap = cursor -> {
             StockUsage stockUsage = new StockUsage();
@@ -97,7 +100,7 @@ public class StockUsageReportDao extends AbstractDao {
         return (res != null && !(res.get(0).equals("0")));
     }
 
-    public String getStockUsageForMonth(String month, String stockName, String year) {
+    public static String getStockUsageForMonth(String month, String stockName, String year) {
         String sql = "select stock_usage from stock_usage_report " +
                 "WHERE month= '" + month + "' " +
                 "AND stock_name LIKE '%" + stockName + "%' " +
@@ -114,7 +117,7 @@ public class StockUsageReportDao extends AbstractDao {
         };
 
         List<StockUsage> res = readData(sql, dataMap);
-        return  (res == null || res.size() == 0) ? "0" : res.get(0).getStockUsage();
+        return (res == null || res.size() == 0) ? "0" : res.get(0).getStockUsage();
     }
 
 }
