@@ -1,17 +1,21 @@
 package org.smartregister.chw.core.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.smartregister.domain.db.Event;
 
 import java.util.List;
 
 public class StockUsageEvent extends Event {
-    private List<StockConsumption> usage_report;
 
-    public List<StockConsumption> getUsage_report() {
-        return usage_report;
+    @SerializedName("usage_report")
+    private List<StockConsumption> usageReport;
+
+    public List<StockConsumption> getUsageReport() {
+        return usageReport;
     }
 
-    public void setUsage_report(List<StockConsumption> usage_report) {
-        this.usage_report = usage_report;
+    public void setUsageReport(List<StockConsumption> usageReport) {
+        this.usageReport = usageReport;
     }
 }
