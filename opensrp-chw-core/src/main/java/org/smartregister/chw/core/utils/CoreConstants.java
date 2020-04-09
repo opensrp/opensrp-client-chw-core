@@ -124,6 +124,7 @@ public class CoreConstants {
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
+        public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
     }
 
     public static final class EncounterType {
@@ -553,6 +554,7 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
+        public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
     }
 
     public static final class INTENT_KEY {
@@ -811,7 +813,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String OTHER = "OTHER";
     }
-    
+
     public static final class KeyIndicatorsUtil {
         public static final String HIA_2_INDICATOR = "hia2_indicator";
         public static final String STEPNAME = "stepName";
