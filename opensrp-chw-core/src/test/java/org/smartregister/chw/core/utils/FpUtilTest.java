@@ -39,7 +39,7 @@ public class FpUtilTest {
     }
 
     @Test
-    public void parseFpStartDate() throws Exception {
+    public void testParseFpStartDate() throws Exception {
         String startDate = "2020-02-28";
         Date date = sdf.parse(startDate);
         Date date1 = fpUtil.parseFpStartDate(startDate);
@@ -47,7 +47,7 @@ public class FpUtilTest {
     }
 
     @Test
-    public void toMember() {
+    public void testToMember() {
         FpMemberObject memberObject = new FpMemberObject();
         memberObject.setBaseEntityId("12334");
         memberObject.setFirstName("Mira");
