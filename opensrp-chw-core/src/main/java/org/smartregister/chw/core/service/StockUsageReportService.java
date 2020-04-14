@@ -60,11 +60,7 @@ public class StockUsageReportService extends IntentService {
                     String baseEntityID = (usage.getProviderId() + "-" + usage.getYear() + "-" + usage.getMonth() + "-" + usage.getStockName()).replaceAll(" ", "-").toUpperCase();
                     CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);// tag docs
                     JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
-                    getSyncHelper().addEvent(baseEntityID, eventJson);
-                    long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-                    Date lastSyncDate = new Date(lastSyncTimeStamp);
-                    NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
-                    getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+                    getSyncHelper().addEvent(baseEntityID, eventJson, BaseRepository.TYPE_Unsynced);
                 }
 
             } catch (JSONException e) {

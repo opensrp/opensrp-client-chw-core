@@ -104,7 +104,6 @@ public class FormUtils {
         return null;
     }
 
-
     public static void updateFormField(JSONArray formFieldArrays, String formFieldKey, String updateValue) {
         if (updateValue != null) {
             JSONObject formObject = org.smartregister.util.JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
@@ -118,14 +117,4 @@ public class FormUtils {
             }
         }
     }
-
-
-    public static void createSaveStockEvent(final String jsonString, String table) throws Exception {
-        AllSharedPreferences allSharedPreferences = AncLibrary.getInstance().context().allSharedPreferences();
-        Event baseEvent = JsonFormUtils.processJsonForm(allSharedPreferences, jsonString, table);
-
-        NCUtils.addEvent(allSharedPreferences, baseEvent);
-        NCUtils.startClientProcessing();
-    }
-
 }
