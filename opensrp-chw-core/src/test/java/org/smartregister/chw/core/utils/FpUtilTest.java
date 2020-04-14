@@ -54,13 +54,7 @@ public class FpUtilTest {
         memberObject.setMiddleName("Moa");
         memberObject.setLastName("Pia");
 
-        MemberObject res = new MemberObject();
-        res.setBaseEntityId(memberObject.getBaseEntityId());
-        res.setFirstName(memberObject.getFirstName());
-        res.setLastName(memberObject.getLastName());
-        res.setMiddleName(memberObject.getMiddleName());
-
-        FpUtil.toMember(memberObject);
+        MemberObject res = FpUtil.toMember(memberObject);
         Assert.assertEquals(res.getBaseEntityId(), "12334");
         Assert.assertEquals(res.getFirstName(), "Mira");
         Assert.assertEquals(res.getMiddleName(), "Moa");
