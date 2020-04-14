@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -23,8 +22,12 @@ import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.family.util.Constants;
+import org.smartregister.family.util.DBConstants;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
@@ -70,6 +73,39 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(1, eventTriple.getRight().size());
     }
 
+    @Test
+    public void processPopulatableFieldsUpdatesJSONOptionsWithCorrectValues() throws JSONException {
+        JSONObject optionsObject;
+        JSONObject jsonObject;
+        String jsonString;
+
+        String id = "testCaseId";
+        String name = "tester";
+        String dob = "01-12-2020";
+        String streetName = "Matopeni";
+
+        HashMap<String, String> detailsMap = new HashMap<>();
+        HashMap<String, String> columnMaps = new HashMap<>();
+        columnMaps.put(DBConstants.KEY.DOB, dob);
+        columnMaps.put("fam_name", "Sonkos");
+        columnMaps.put(DBConstants.KEY.STREET, streetName);
+
+        CommonPersonObjectClient testClient = new CommonPersonObjectClient(id, detailsMap, name);
+        testClient.setColumnmaps(columnMaps);
+
+        jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + DBConstants.KEY.DOB + ", \"options\": [{}]}";
+        jsonObject = new JSONObject(jsonString);
+        CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
+        optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
+        Assert.assertEquals(dob, optionsObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+
+        jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + DBConstants.KEY.STREET + "}";
+        jsonObject = new JSONObject(jsonString);
+        CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
+        Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+
+    }
+
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
         return "{\"count\":\"1\",\"encounter_type\":\"" + encounterType + "\",\"entity_id\":\"" + baseEntityId + "\",\"relational_id\":\"\",\"metadata\":{},\"step1\":{\"title\":\"RemoveFamilyMember\",\"fields\":[{\"key\":\"details\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":" +
                 "\"label\",\"text\":\"MelissaYoJiwanji,25Female\",\"text_size\":\"25px\"},{\"key\":\"remove_reason\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"160417AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"selectone\",\"type\":\"spinner\",\"hint\":\"Reasonforremoval\",\"v_required\"" +
@@ -80,5 +116,4 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
                 ":\"text\",\"type\":\"date_picker\",\"label\":\"Dateofdeath\",\"hint\":\"Dateofdeath\",\"expanded\":false,\"min_date\":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedateofdeath\"},\"step\":\"step1\",\"is-rule-check\":false,\"is_visible\":false},{\"key\":\"age_at_death\",\"openmrs_entity_parent\"" +
                 ":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"label\":\"Ageatdeath\",\"hint\":\"Ageatdeath\",\"type\":\"edit_text\",\"read_only\":\"true\",\"is_visible\":false}]},\"invisible_required_fields\":\"[date_died,date_moved]\",\"details\":{\"appVersionName\":\"1.7.23-SNAPSHOT\",\"formVersion\":\"\"}}";
     }
-
 }
