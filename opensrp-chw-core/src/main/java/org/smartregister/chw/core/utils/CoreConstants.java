@@ -155,6 +155,7 @@ public class CoreConstants {
         private static final String WASH_CHECK = "wash_check";
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
+        private static final String STOCK_USAGE_REPORT_FORM = "stock_usage_report";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
         private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
         private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
@@ -188,6 +189,9 @@ public class CoreConstants {
 
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
+        }
+        public static String getStockUsageForm() {
+            return STOCK_USAGE_REPORT_FORM;
         }
 
         public static String getPncReferralForm() {
@@ -553,6 +557,7 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
+        public static final String STOCK_USAGE_REPORT= "ec_stock_usage_report";
     }
 
     public static final class INTENT_KEY {
@@ -654,6 +659,13 @@ public class CoreConstants {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
+        }
+
+        public static class STOCK_USAGE_REPORT {
+            public static final String STOCK_NAME = "stock_name";
+            public static final String STOCK_YEAR = "stock_year";
+            public static final String STOCK_MONTH = "stock_month";
+            public static final String STOCK_USAGE = "stock_usage";
         }
     }
 

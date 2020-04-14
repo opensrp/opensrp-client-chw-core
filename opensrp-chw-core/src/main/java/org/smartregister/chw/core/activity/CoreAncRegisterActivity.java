@@ -14,6 +14,7 @@ import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 import org.smartregister.view.fragment.BaseRegisterFragment;
@@ -102,10 +103,10 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
         try {
             JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
             JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
-            updateFormField(jsonArray, DBConstants.KEY.TEMP_UNIQUE_ID, unique_id);
-            updateFormField(jsonArray, CoreConstants.JsonAssets.FAM_NAME, familyName);
-            updateFormField(jsonArray, CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER, phone_number);
-            updateFormField(jsonArray, org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
+            FormUtils.updateFormField(jsonArray, DBConstants.KEY.TEMP_UNIQUE_ID, unique_id);
+            FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.FAM_NAME, familyName);
+            FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER, phone_number);
+            FormUtils.updateFormField(jsonArray, org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
 
             Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
             intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
@@ -153,20 +154,6 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
         this.finish();
-    }
-
-    private void updateFormField(JSONArray formFieldArrays, String formFieldKey, String updateValue) {
-        if (updateValue != null) {
-            JSONObject formObject = org.smartregister.util.JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
-            if (formObject != null) {
-                try {
-                    formObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
-                    formObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
-                } catch (JSONException e) {
-                    Timber.e(e);
-                }
-            }
-        }
     }
 
     @Override
