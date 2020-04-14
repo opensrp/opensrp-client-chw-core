@@ -3,30 +3,34 @@ package org.smartregister.chw.core.domain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class MonthlyTallyTest {
 
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private MonthlyTally monthlyTally = new MonthlyTally();
+    private Date date;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        date = sdf.parse("2020-02-08");
     }
-
+    
     @Test
     public void testGetDateAndSetDateSent() {
-        monthlyTally.setDateSent(new Date());
-        Assert.assertEquals(monthlyTally.getDateSent(), new Date());
+        monthlyTally.setDateSent(date);
+        Assert.assertEquals(monthlyTally.getDateSent(), date);
     }
 
     @Test
     public void testGetAndSetMonth() {
-        monthlyTally.setMonth(new Date());
-        Assert.assertEquals(monthlyTally.getMonth(), new Date());
+        monthlyTally.setMonth(date);
+        Assert.assertEquals(monthlyTally.getMonth(), date);
     }
 
     @Test
@@ -44,14 +48,14 @@ public class MonthlyTallyTest {
 
     @Test
     public void testGetAndSetUpdatedAt() {
-        monthlyTally.setUpdatedAt(new Date());
-        Assert.assertEquals(monthlyTally.getUpdatedAt(), new Date());
+        monthlyTally.setUpdatedAt(date);
+        Assert.assertEquals(monthlyTally.getUpdatedAt(), date);
     }
 
     @Test
     public void testGetAndSetCreatedAt() {
-        monthlyTally.setCreatedAt(new Date());
-        Assert.assertEquals(monthlyTally.getCreatedAt(), new Date());
+        monthlyTally.setCreatedAt(date);
+        Assert.assertEquals(monthlyTally.getCreatedAt(), date);
     }
 
 }
