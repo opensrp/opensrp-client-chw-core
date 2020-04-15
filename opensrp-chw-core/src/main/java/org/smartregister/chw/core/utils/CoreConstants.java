@@ -654,7 +654,11 @@ public class CoreConstants {
         public static final String GESTATION_AGE = "gestation_age";
         public static final String IS_PROBLEM = "is_problem";
         public static final String REFERRAL_CODE = "Referral";
-
+        public static final String STOCK_NAME = "stock_name";
+        public static final String STOCK_YEAR = "stock_year";
+        public static final String STOCK_MONTH = "stock_month";
+        public static final String STOCK_USAGE = "stock_usage";
+        public static final String STOCK_PROVIDER = "stock_provider";
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
@@ -662,13 +666,6 @@ public class CoreConstants {
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
         }
 
-        public static class StockUsageReport {
-            public static final String STOCK_NAME = "stock_name";
-            public static final String STOCK_YEAR = "stock_year";
-            public static final String STOCK_MONTH = "stock_month";
-            public static final String STOCK_USAGE = "stock_usage";
-            public static final String STOCK_PROVIDER = "stock_provider";
-        }
     }
 
     public static class ProfileActivityResults {

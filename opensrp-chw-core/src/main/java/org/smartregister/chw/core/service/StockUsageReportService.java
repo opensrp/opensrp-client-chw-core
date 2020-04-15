@@ -83,11 +83,11 @@ public class StockUsageReportService extends IntentService {
     }
 
     private void addEvent(JSONObject form, JSONArray jsonArray, StockUsage usage, AllSharedPreferences allSharedPreferences, String formSubmissionId) throws JSONException {
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_NAME, usage.getStockName());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_YEAR, usage.getYear());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_MONTH, usage.getMonth());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_USAGE, usage.getStockUsage());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_PROVIDER, usage.getProviderId());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_NAME, usage.getStockName());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_YEAR, usage.getYear());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_MONTH, usage.getMonth());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE, usage.getStockUsage());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_PROVIDER, usage.getProviderId());
 
         String baseEntityID = UUID.randomUUID().toString();
 

@@ -103,7 +103,7 @@ public class FormUtils {
 
     public static void updateFormField(JSONArray formFieldArrays, String formFieldKey, String updateValue) {
         if (updateValue != null) {
-            JSONObject formObject = JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
+            JSONObject formObject = getFieldJSONObject(formFieldArrays, formFieldKey);
             if (formObject != null) {
                 try {
                     formObject.remove(org.smartregister.util.JsonFormUtils.VALUE);

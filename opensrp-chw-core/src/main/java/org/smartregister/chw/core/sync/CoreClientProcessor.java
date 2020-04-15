@@ -286,35 +286,35 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private StockUsage getStockUsageFromObs(List<Obs> stockObs) {
         StockUsage usage = new StockUsage();
         for (Obs obs : stockObs) {
-            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.StockUsageReport.STOCK_NAME)) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_NAME)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
                     usage.setStockName(value);
                     continue;
                 } else
                     return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.StockUsageReport.STOCK_YEAR)) {
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_YEAR)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
                     usage.setYear(value);
                     continue;
                 } else
                     return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.StockUsageReport.STOCK_MONTH)) {
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_MONTH)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
                     usage.setMonth(value);
                     continue;
                 } else
                     return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.StockUsageReport.STOCK_USAGE)) {
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
                     usage.setStockUsage(value);
                     continue;
                 } else
                     return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.StockUsageReport.STOCK_PROVIDER)) {
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_PROVIDER)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null)
                     usage.setProviderId(value);
