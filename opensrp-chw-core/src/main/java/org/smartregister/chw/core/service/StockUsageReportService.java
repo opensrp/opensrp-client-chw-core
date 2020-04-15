@@ -47,23 +47,20 @@ public class StockUsageReportService extends IntentService {
             try {
 
                 StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
-
                 JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.getStockUsageForm());
                 JSONObject stepOne = form.getJSONObject(JsonFormUtils.STEP1);
                 JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
                 AllSharedPreferences allSharedPreferences = getAllSharedPreferences();
-
-
-                repo.deleteAll();
                 List<StockUsage> usages = StockUsageReportDao.getStockUsage();
 
                 for (StockUsage usage : usages) {
-                    if (StringUtils.isBlank(usage.getStockName()) || StringUtils.isBlank(usage.getYear()) && StringUtils.isBlank(usage.getMonth()) && StringUtils.isBlank(usage.getStockUsage())) {
+                    if (StringUtils.isBlank(usage.getStockName()) || StringUtils.isBlank(usage.getYear()) || StringUtils.isBlank(usage.getMonth()) || StringUtils.isBlank(usage.getStockUsage()))
                         return;
-                    }
 
-                    repo.addStockUsage(usage);
-                    addEvent(form, jsonArray, usage, allSharedPreferences);
+                    String formSubmissionId = getFormSubmissionID(usage);
+                    usage.setId(formSubmissionId);
+                    repo.addOrUpdateStockUsage(usage);
+                    addEvent(form, jsonArray, usage, allSharedPreferences, formSubmissionId);
                 }
 
                 long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
@@ -79,14 +76,20 @@ public class StockUsageReportService extends IntentService {
         }
     }
 
-    private void addEvent(JSONObject form, JSONArray jsonArray, StockUsage usage, AllSharedPreferences allSharedPreferences) throws JSONException {
+    private String getFormSubmissionID(StockUsage usage) {
+        if (usage != null)
+            return (usage.getProviderId() + "-" + usage.getYear() + "-" + usage.getMonth() + "-" + usage.getStockName()).replaceAll(" ", "-").toUpperCase();
+        return null;
+    }
+
+    private void addEvent(JSONObject form, JSONArray jsonArray, StockUsage usage, AllSharedPreferences allSharedPreferences, String formSubmissionId) throws JSONException {
         FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_NAME, usage.getStockName());
         FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_YEAR, usage.getYear());
         FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_MONTH, usage.getMonth());
         FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_USAGE, usage.getStockUsage());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_PROVIDER, usage.getProviderId());
 
         String baseEntityID = UUID.randomUUID().toString();
-        String formSubmissionId = (usage.getProviderId() + "-" + usage.getYear() + "-" + usage.getMonth() + "-" + usage.getStockName()).replaceAll(" ", "-").toUpperCase();
 
         JSONObject jsonEventStr = CoreLibrary.getInstance().context().getEventClientRepository().getEventsByFormSubmissionId(formSubmissionId);
         if (jsonEventStr != null)
@@ -94,8 +97,9 @@ public class StockUsageReportService extends IntentService {
 
         Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.STOCK_USAGE_REPORT);
         baseEvent.setFormSubmissionId(formSubmissionId);
+        baseEvent.setBaseEntityId(baseEntityID);
 
-        CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);// tag docs
+        CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);
         JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
         getSyncHelper().addEvent(baseEntityID, eventJson);
     }
