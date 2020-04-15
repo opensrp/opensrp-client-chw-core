@@ -7,7 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.fp.util.FpUtil;
@@ -241,6 +244,57 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     }
                 }
                 break;
+            case CoreConstants.EventType.STOCK_USAGE_REPORT:
+                List<Obs> stockObs = event.getObs();
+                StockUsage usage = new StockUsage();
+                for (Obs obs : stockObs) {
+                    if (obs.getFormSubmissionField().equals("stock_name")) {
+                        String value = StockUsageReportUtils.getObsValue(obs);
+                        if (value != null)
+                            usage.setStockName(value);
+                        else
+                            break;
+                    } else if (obs.getFormSubmissionField().equals("stock_year")) {
+                        String value = StockUsageReportUtils.getObsValue(obs);
+                        if (value != null) {
+                            usage.setYear(value);
+                            continue;
+                        } else
+                            break;
+                    } else if (obs.getFormSubmissionField().equals("stock_month")) {
+                        String value = StockUsageReportUtils.getObsValue(obs);
+                        if (value != null) {
+                            usage.setMonth(value);
+                            continue;
+                        } else
+                            break;
+                    } else if (obs.getFormSubmissionField().equals("stock_usage")) {
+                        String value = StockUsageReportUtils.getObsValue(obs);
+                        if (value != null) {
+                            usage.setStockUsage(value);
+                            continue;
+                        } else
+                            break;
+                    } else if (obs.getFormSubmissionField().equals("stock_provider")) {
+                        String value = StockUsageReportUtils.getObsValue(obs);
+                        if (value != null)
+                            usage.setProviderId(value);
+                        else
+                            break;
+                    }
+                }
+                if (usage != null) {
+                    StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
+                    String formSubmissionId = event.getFormSubmissionId();
+                    usage.setId(formSubmissionId);
+                    repo.addOrUpdateStockUsage(usage);
+                }
+                break;
+
+
+
+
+
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
                     return;
