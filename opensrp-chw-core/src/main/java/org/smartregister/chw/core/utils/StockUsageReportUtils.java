@@ -201,9 +201,7 @@ public class StockUsageReportUtils {
     public static String getObsValue(Obs obs) {
         List<Object> values = obs.getValues();
         if (values.size() > 0) {
-            for (Object object : values) {
-                return (String) object;
-            }
+            return (String) values.get(0);
         }
         return null;
     }

@@ -83,11 +83,11 @@ public class StockUsageReportService extends IntentService {
     }
 
     private void addEvent(JSONObject form, JSONArray jsonArray, StockUsage usage, AllSharedPreferences allSharedPreferences, String formSubmissionId) throws JSONException {
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_NAME, usage.getStockName());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_YEAR, usage.getYear());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_MONTH, usage.getMonth());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_USAGE, usage.getStockUsage());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_PROVIDER, usage.getProviderId());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_NAME, usage.getStockName());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_YEAR, usage.getYear());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_MONTH, usage.getMonth());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_USAGE, usage.getStockUsage());
+        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.StockUsageReport.STOCK_PROVIDER, usage.getProviderId());
 
         String baseEntityID = UUID.randomUUID().toString();
 
@@ -95,7 +95,7 @@ public class StockUsageReportService extends IntentService {
         if (jsonEventStr != null)
             baseEntityID = (new Gson().fromJson(jsonEventStr.toString(), Event.class)).getBaseEntityId();
 
-        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.STOCK_USAGE_REPORT);
+        Event baseEvent = JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.STOCK_USAGE_REPORT);
         baseEvent.setFormSubmissionId(formSubmissionId);
         baseEvent.setBaseEntityId(baseEntityID);
 

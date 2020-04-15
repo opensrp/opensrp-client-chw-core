@@ -8,9 +8,7 @@ import org.joda.time.Years;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.util.JsonFormUtils;
-import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
@@ -18,7 +16,6 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Utils;
-import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
@@ -106,7 +103,7 @@ public class FormUtils {
 
     public static void updateFormField(JSONArray formFieldArrays, String formFieldKey, String updateValue) {
         if (updateValue != null) {
-            JSONObject formObject = org.smartregister.util.JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
+            JSONObject formObject = JsonFormUtils.getFieldJSONObject(formFieldArrays, formFieldKey);
             if (formObject != null) {
                 try {
                     formObject.remove(org.smartregister.util.JsonFormUtils.VALUE);

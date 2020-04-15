@@ -662,7 +662,7 @@ public class CoreConstants {
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
         }
 
-        public static class STOCK_USAGE_REPORT {
+        public static class StockUsageReport {
             public static final String STOCK_NAME = "stock_name";
             public static final String STOCK_YEAR = "stock_year";
             public static final String STOCK_MONTH = "stock_month";
