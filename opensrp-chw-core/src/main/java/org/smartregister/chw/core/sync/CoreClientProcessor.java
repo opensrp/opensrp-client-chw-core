@@ -245,56 +245,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
                 break;
             case CoreConstants.EventType.STOCK_USAGE_REPORT:
-                List<Obs> stockObs = event.getObs();
-                StockUsage usage = new StockUsage();
-                for (Obs obs : stockObs) {
-                    if (obs.getFormSubmissionField().equals("stock_name")) {
-                        String value = StockUsageReportUtils.getObsValue(obs);
-                        if (value != null)
-                            usage.setStockName(value);
-                        else
-                            break;
-                    } else if (obs.getFormSubmissionField().equals("stock_year")) {
-                        String value = StockUsageReportUtils.getObsValue(obs);
-                        if (value != null) {
-                            usage.setYear(value);
-                            continue;
-                        } else
-                            break;
-                    } else if (obs.getFormSubmissionField().equals("stock_month")) {
-                        String value = StockUsageReportUtils.getObsValue(obs);
-                        if (value != null) {
-                            usage.setMonth(value);
-                            continue;
-                        } else
-                            break;
-                    } else if (obs.getFormSubmissionField().equals("stock_usage")) {
-                        String value = StockUsageReportUtils.getObsValue(obs);
-                        if (value != null) {
-                            usage.setStockUsage(value);
-                            continue;
-                        } else
-                            break;
-                    } else if (obs.getFormSubmissionField().equals("stock_provider")) {
-                        String value = StockUsageReportUtils.getObsValue(obs);
-                        if (value != null)
-                            usage.setProviderId(value);
-                        else
-                            break;
-                    }
-                }
-                if (usage != null) {
-                    StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
-                    String formSubmissionId = event.getFormSubmissionId();
-                    usage.setId(formSubmissionId);
-                    repo.addOrUpdateStockUsage(usage);
-                }
+                clientProcessStockEvent(event);
                 break;
-
-
-
-
-
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
                     return;
@@ -328,6 +280,59 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
                 break;
+        }
+    }
+
+    private StockUsage getStockUsageFromObs(List<Obs> stockObs) {
+        StockUsage usage = new StockUsage();
+        for (Obs obs : stockObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_YEAR)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setYear(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_MONTH)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setMonth(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_USAGE)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockUsage(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE_REPORT.STOCK_PROVIDER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null)
+                    usage.setProviderId(value);
+                else
+                    return null;
+            }
+        }
+        return usage;
+    }
+
+    private void clientProcessStockEvent(Event event) {
+        List<Obs> stockObs = event.getObs();
+        StockUsage usage = getStockUsageFromObs(stockObs);
+        if (usage != null) {
+            StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
+            String formSubmissionId = event.getFormSubmissionId();
+            usage.setId(formSubmissionId);
+            repo.addOrUpdateStockUsage(usage);
         }
     }
 
