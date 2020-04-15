@@ -42,8 +42,8 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
                 stock_name = "Standard day method";
                 break;
             case ("Paracetamol"):
-                 stock_name = "Panadol";
-             break;
+                stock_name = "Panadol";
+                break;
             default:
                 stock_name = stockName;
                 break;
@@ -51,7 +51,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         return stock_name;
     }
 
-    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName, String providerId) {
+    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName, String providerName) {
         StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
         String stockMonth;
         String stockYear;
@@ -62,7 +62,9 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
             for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
                 stockMonth = stockUsageReportUtils.monthConverter(entry.getKey());
                 stockYear = entry.getValue().toString();
-                stockUsage = stockUsageReportDao.getStockUsageForMonth(stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3)), evaluateStockName(stockName), stockYear, providerId);
+                String monthNo = stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3));
+                String stock_name = evaluateStockName(stockName);
+                stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? stockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear): stockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
                 stockUsageItemDetailsModelList.add(new StockUsageItemDetailsModel(stockMonth, stockYear, stockUsage));
             }
         }
