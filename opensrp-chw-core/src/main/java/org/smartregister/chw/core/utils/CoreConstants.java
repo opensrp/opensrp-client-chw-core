@@ -124,6 +124,7 @@ public class CoreConstants {
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
+        public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
     }
 
     public static final class EncounterType {
@@ -666,6 +667,7 @@ public class CoreConstants {
             public static final String STOCK_YEAR = "stock_year";
             public static final String STOCK_MONTH = "stock_month";
             public static final String STOCK_USAGE = "stock_usage";
+            public static final String STOCK_PROVIDER = "stock_provider";
         }
     }
 
