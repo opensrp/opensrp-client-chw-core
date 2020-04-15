@@ -104,6 +104,20 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
         }
     }
 
+    @Override
+    public void startAncDangerSignsOutcomeForm() {
+        try {
+            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getAncDangerSignsOutcomeForm()));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    @Override
+    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        interactor.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID);
+    }
+
     private FormUtils getFormUtils() {
 
         if (formUtils == null) {

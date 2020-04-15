@@ -12,6 +12,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONObject;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
 import org.smartregister.chw.anc.domain.Visit;
@@ -23,16 +24,21 @@ import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.interactor.CoreAncMemberProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.core.utils.VisitSummary;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.util.JsonFormUtils;
+import org.smartregister.family.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+
+import timber.log.Timber;
 
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
@@ -55,6 +61,9 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         } else if (itemId == R.id.action_anc_registration) {
             startFormForEdit(R.string.edit_anc_registration_form_title, CoreConstants.JSON_FORM.getAncRegistration());
             return true;
+        } else if (itemId == R.id.anc_danger_signs_outcome) {
+            ancMemberProfilePresenter().startAncDangerSignsOutcomeForm();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -68,14 +77,36 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override // to chw
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CoreConstants.ProfileActivityResults.CHANGE_COMPLETED && resultCode == Activity.RESULT_OK) {
-            Intent intent = new Intent(CoreAncMemberProfileActivity.this, CoreAncRegisterActivity.class);
-            intent.putExtras(getIntent().getExtras());
-            startActivity(intent);
-            finish();
-        } else if (requestCode == Constants.REQUEST_CODE_HOME_VISIT) {
-            this.displayView();
+        if (resultCode != Activity.RESULT_OK) return;
+
+        switch (requestCode) {
+            case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
+                Intent intent = new Intent(CoreAncMemberProfileActivity.this, CoreAncRegisterActivity.class);
+                intent.putExtras(getIntent().getExtras());
+                startActivity(intent);
+                finish();
+                break;
+            case Constants.REQUEST_CODE_HOME_VISIT:
+                this.displayView();
+                break;
+            case JsonFormUtils.REQUEST_CODE_GET_JSON:
+                try {
+                    String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
+                    JSONObject form = new JSONObject(jsonString);
+                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
+                    if (encounterType.equals(CoreConstants.EventType.ANC_DANGER_SIGNS_OUTCOME)) {
+                        ancMemberProfilePresenter().createAncDangerSignsOutcomeEvent(Utils.getAllSharedPreferences(), jsonString, baseEntityID);
+                    }
+                } catch (Exception ex) {
+                    Timber.e(ex);
+                }
+                break;
         }
+    }
+
+    public void startFormActivity(JSONObject formJson) {
+        startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, formJson,
+                Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     // to chw
