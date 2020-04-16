@@ -62,7 +62,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             startFormForEdit(R.string.edit_anc_registration_form_title, CoreConstants.JSON_FORM.getAncRegistration());
             return true;
         } else if (itemId == R.id.anc_danger_signs_outcome) {
-            ancMemberProfilePresenter().startAncDangerSignsOutcomeForm();
+            ancMemberProfilePresenter().startAncDangerSignsOutcomeForm(memberObject);
             return true;
         }
         return super.onOptionsItemSelected(item);

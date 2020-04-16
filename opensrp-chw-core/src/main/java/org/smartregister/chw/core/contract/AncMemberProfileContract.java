@@ -2,6 +2,8 @@ package org.smartregister.chw.core.contract;
 
 import org.json.JSONObject;
 import org.smartregister.chw.anc.contract.BaseAncMemberProfileContract;
+import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.AllSharedPreferences;
 
@@ -24,7 +26,7 @@ public interface AncMemberProfileContract {
 
         void startAncReferralForm();
 
-        void startAncDangerSignsOutcomeForm();
+        void startAncDangerSignsOutcomeForm(MemberObject memberObject);
 
         void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
 
