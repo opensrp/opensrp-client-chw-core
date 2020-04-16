@@ -100,7 +100,7 @@ public class StockUsageReportDao extends AbstractDao {
         return (res != null && !(res.get(0).equals("0")));
     }
 
-    public String getStockUsageForMonth(String month, String stockName, String year, String providerName) {
+    public static String getStockUsageForMonth(String month, String stockName, String year, String providerName) {
         String sql = "select stock_usage from stock_usage_report " +
                 "WHERE month= '" + month + "' " +
                 "AND stock_name LIKE '%" + stockName + "%' " +
@@ -121,7 +121,7 @@ public class StockUsageReportDao extends AbstractDao {
         return (res == null || res.size() == 0) ? "0" : res.get(0).getStockUsage();
     }
 
-    public String getAllStockUsageForMonth(String month, String stockName, String year) {
+    public static String getAllStockUsageForMonth(String month, String stockName, String year) {
         String sql = "select stock_usage from stock_usage_report " +
                 "WHERE month= '" + month + "' " +
                 "AND stock_name LIKE '%" + stockName + "%' " +
