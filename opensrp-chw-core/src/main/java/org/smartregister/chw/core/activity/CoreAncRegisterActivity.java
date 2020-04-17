@@ -20,7 +20,9 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -103,10 +105,15 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
         try {
             JSONObject stepOne = jsonForm.getJSONObject(JsonFormUtils.STEP1);
             JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
-            FormUtils.updateFormField(jsonArray, DBConstants.KEY.TEMP_UNIQUE_ID, unique_id);
-            FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.FAM_NAME, familyName);
-            FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER, phone_number);
-            FormUtils.updateFormField(jsonArray, org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
+
+            Map<String, String> values = new HashMap<>();
+
+            values.put(DBConstants.KEY.TEMP_UNIQUE_ID, unique_id);
+            values.put(CoreConstants.JsonAssets.FAM_NAME, familyName);
+            values.put(CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER, phone_number);
+            values.put(org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
+
+            FormUtils.updateFormField(jsonArray, values);
 
             Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
             intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());

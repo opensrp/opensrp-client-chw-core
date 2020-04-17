@@ -2,6 +2,8 @@ package org.smartregister.chw.core.utils;
 
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
@@ -20,6 +22,7 @@ import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -111,6 +114,23 @@ public class FormUtils {
                 } catch (JSONException e) {
                     Timber.e(e);
                 }
+            }
+        }
+    }
+
+    public static void updateFormField(@NonNull JSONArray jsonArray, @NonNull Map<String, String> values) throws JSONException {
+        if (jsonArray == null || values == null)
+            throw new IllegalArgumentException();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject currJsonObject = JsonFormUtils.getJSONObject(jsonArray, i);
+            String keyVal = JsonFormUtils.getString(currJsonObject, JsonFormUtils.KEY);
+
+            if (keyVal != null && values.containsKey(keyVal)) {
+                String updateValue = values.get(keyVal);
+
+                currJsonObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
+                currJsonObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
             }
         }
     }

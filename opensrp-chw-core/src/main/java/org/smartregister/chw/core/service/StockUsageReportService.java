@@ -26,7 +26,9 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
@@ -83,11 +85,15 @@ public class StockUsageReportService extends IntentService {
     }
 
     private void addEvent(JSONObject form, JSONArray jsonArray, StockUsage usage, AllSharedPreferences allSharedPreferences, String formSubmissionId) throws JSONException {
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_NAME, usage.getStockName());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_YEAR, usage.getYear());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_MONTH, usage.getMonth());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_USAGE, usage.getStockUsage());
-        FormUtils.updateFormField(jsonArray, CoreConstants.JsonAssets.STOCK_PROVIDER, usage.getProviderId());
+        Map<String, String> values = new HashMap<>();
+
+        values.put(CoreConstants.JsonAssets.STOCK_NAME, usage.getStockName());
+        values.put(CoreConstants.JsonAssets.STOCK_YEAR, usage.getYear());
+        values.put(CoreConstants.JsonAssets.STOCK_MONTH, usage.getMonth());
+        values.put(CoreConstants.JsonAssets.STOCK_USAGE, usage.getStockUsage());
+        values.put(CoreConstants.JsonAssets.STOCK_PROVIDER, usage.getProviderId());
+
+        FormUtils.updateFormField(jsonArray, values);
 
         String baseEntityID = UUID.randomUUID().toString();
 
