@@ -819,7 +819,7 @@ public class CoreConstants {
         public static final String ENTITY_ID = "entity_id";
     }
 
-    public static class HfStockUsage {
+    public static class HfStockUsageUtil {
         public static final String STOCK_NAME = "stockName";
         public static final String PROVIDER_NAME = "providerName";
 

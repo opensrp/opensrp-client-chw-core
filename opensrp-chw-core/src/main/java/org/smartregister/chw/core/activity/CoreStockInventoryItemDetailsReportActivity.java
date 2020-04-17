@@ -81,8 +81,8 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     protected void onCreation() {
         setContentView(R.layout.activity_stock_usage_item_details);
         Intent intent = getIntent();
-        String stockName = intent.getStringExtra(CoreConstants.HfStockUsage.STOCK_NAME);
-        String providerName = intent.getStringExtra(CoreConstants.HfStockUsage.PROVIDER_NAME);
+        String stockName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME);
+        String providerName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.PROVIDER_NAME);
 
 
         TextView textViewName = findViewById(R.id.item_detail_name);

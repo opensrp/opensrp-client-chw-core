@@ -46,8 +46,8 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String stockName = CoreConstants.HfStockUsage.STOCK_NAME;
-                String providerId = CoreConstants.HfStockUsage.PROVIDER_NAME;
+                String stockName = CoreConstants.HfStockUsageUtil.STOCK_NAME;
+                String providerId = CoreConstants.HfStockUsageUtil.PROVIDER_NAME;
                 Intent intent = new Intent(context, CoreStockInventoryItemDetailsReportActivity.class);
                 intent.putExtra(stockName, usageModelItem.getStockName());
                 intent.putExtra(providerId, usageModelItem.getProviderName());
