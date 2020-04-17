@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreStockInventoryItemDetailsReportActivity;
 import org.smartregister.chw.core.model.StockUsageItemModel;
+import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
     protected LayoutInflater inflater;
     private List<StockUsageItemModel> stockUsageItemModelList;
     private Context context;
+
     public CoreStockUsageItemAdapter(List<StockUsageItemModel> stockUsageItemModelList, Context context) {
         this.stockUsageItemModelList = stockUsageItemModelList;
         this.context = context;
@@ -44,8 +46,8 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String stockName = "stockName";
-                String providerId = "providerName";
+                String stockName = CoreConstants.HfStockUsage.STOCK_NAME;
+                String providerId = CoreConstants.HfStockUsage.PROVIDER_NAME;
                 Intent intent = new Intent(context, CoreStockInventoryItemDetailsReportActivity.class);
                 intent.putExtra(stockName, usageModelItem.getStockName());
                 intent.putExtra(providerId, usageModelItem.getProviderName());

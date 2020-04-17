@@ -19,6 +19,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.CoreStockUsageItemDetailsAdapter;
 import org.smartregister.chw.core.dao.StockUsageReportDao;
 import org.smartregister.chw.core.model.StockUsageItemDetailsModel;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.view.activity.SecuredActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
+
     private String evaluateStockName(String stockName) {
         String stock_name;
         switch (stockName) {
@@ -63,7 +65,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
                 stockYear = entry.getValue().toString();
                 String monthNo = stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3));
                 String stock_name = evaluateStockName(stockName);
-                stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? StockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear): StockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
+                stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? StockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear) : StockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
                 stockUsageItemDetailsModelList.add(new StockUsageItemDetailsModel(stockMonth, stockYear, stockUsage));
             }
         }
@@ -79,12 +81,12 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     protected void onCreation() {
         setContentView(R.layout.activity_stock_usage_item_details);
         Intent intent = getIntent();
-        String stockName = intent.getStringExtra("stockName");
-        String providerName = intent.getStringExtra("providerName");
+        String stockName = intent.getStringExtra(CoreConstants.HfStockUsage.STOCK_NAME);
+        String providerName = intent.getStringExtra(CoreConstants.HfStockUsage.PROVIDER_NAME);
 
 
         TextView textViewName = findViewById(R.id.item_detail_name);
-        textViewName.setText(String.format("%s Stock Used", stockName));
+        textViewName.setText(String.format(this.getString(R.string.stock_used_text), stockName));
 
         RecyclerView recyclerView = findViewById(R.id.rv_stock_usage_item_detail_report);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
