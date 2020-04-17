@@ -237,7 +237,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    public void registerServiceActivity(Activity activity) {
+    private void registerServiceActivity(Activity activity) {
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
@@ -251,7 +251,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    public void registerStockReport(Activity activity) {
+    private void registerStockReport(Activity activity) {
         if (menuFlavor.hasStockReport()) {
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
