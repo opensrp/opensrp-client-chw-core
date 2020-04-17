@@ -56,7 +56,6 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         String stockMonth;
         String stockYear;
         String stockUsage;
-        StockUsageReportDao stockUsageReportDao = new StockUsageReportDao();
         List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList = new ArrayList<>();
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
             for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
@@ -64,7 +63,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
                 stockYear = entry.getValue().toString();
                 String monthNo = stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3));
                 String stock_name = evaluateStockName(stockName);
-                stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? stockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear): stockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
+                stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? StockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear): StockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
                 stockUsageItemDetailsModelList.add(new StockUsageItemDetailsModel(stockMonth, stockYear, stockUsage));
             }
         }

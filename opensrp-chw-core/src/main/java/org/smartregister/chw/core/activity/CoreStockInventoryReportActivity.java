@@ -55,10 +55,9 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
     public List<StockUsageItemModel> getStockUsageItemReportList(String month, String year) {
         List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
-        StockUsageReportDao stockUsageReportDao = new StockUsageReportDao();
         String providerName = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
         for (String item : getItems()) {
-            String usage = stockUsageReportDao.getStockUsageForMonth(month, item, year, providerName);
+            String usage = StockUsageReportDao.getStockUsageForMonth(month, item, year, providerName);
             stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage, providerName));
         }
         return stockUsageItemModelsList;
