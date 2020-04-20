@@ -9,4 +9,9 @@ public class UpdatesFragmentPresenter extends BaseReferralNotificationFragmentPr
     public UpdatesFragmentPresenter(BaseReferralNotificationFragmentContract.View view) {
         super(view, new UpdatesRegisterModel());
     }
+
+    @Override
+    public void displayDetailsActivity(String referralTaskId, String notificationType) {
+        //Implementation to navigation details page not needed
+    }
 }

@@ -635,4 +635,10 @@
     <string name="no_phone_provided">No phone provided</string>
 
 
+    <!--stock usage reporting-->
+    <string name="stock_usage_title">Review CHW Stock Usage</string>
+    <string name="select_chw_to_review">Select a CHW to review</string>
+    <string name="provider_text">%s stock usage</string>
+    <string name="all_chw">All-CHWs</string>
+    <string name="stock_used_text">%s Stock Used</string>
 </resources>

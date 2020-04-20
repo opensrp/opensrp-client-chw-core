@@ -76,10 +76,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private View parentView;
     private Timer timer;
 
-    private NavigationMenu() {
-
-    }
-
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
                                            NavigationModel.Flavor modelFlavor, Map<String, Class> registeredActivities, boolean showDeviceToDeviceSync) {
         NavigationMenu.application = application;
@@ -327,7 +323,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         int x = 0;
         while (x < locales.size()) {
             languages[x] = locales.get(x).getKey();
-            if(current.getLanguage().equals(locales.get(x).getValue().getLanguage())){
+            if (current.getLanguage().equals(locales.get(x).getValue().getLanguage())) {
                 tvLang.setText(locales.get(x).getKey());
             }
             x++;
@@ -482,5 +478,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         boolean hasServiceReport();
 
         boolean hasStockReport();
+
+        Intent getStockReportIntent(Activity activity);
+
+        Intent getServiceReportIntent(Activity activity);
+
     }
 }

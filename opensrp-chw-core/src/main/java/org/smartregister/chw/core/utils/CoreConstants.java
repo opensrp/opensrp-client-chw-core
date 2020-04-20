@@ -817,11 +817,17 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String OTHER = "OTHER";
     }
-    
+
     public static final class KeyIndicatorsUtil {
         public static final String HIA_2_INDICATOR = "hia2_indicator";
         public static final String STEPNAME = "stepName";
         public static final String LOOK_UP = "look_up";
         public static final String ENTITY_ID = "entity_id";
+    }
+
+    public static class HfStockUsageUtil {
+        public static final String STOCK_NAME = "stockName";
+        public static final String PROVIDER_NAME = "providerName";
+
     }
 }
