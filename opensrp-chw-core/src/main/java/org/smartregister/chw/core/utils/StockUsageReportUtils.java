@@ -12,7 +12,6 @@ import java.util.Map;
 public class StockUsageReportUtils {
     public Map<String, String> getPreviousMonths() {
         Map<String, String> monthsAndYearsMap = new LinkedHashMap<>();
-
         for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
             String month = this.monthConverter(prevDate.getMonthOfYear());
