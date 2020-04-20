@@ -60,9 +60,9 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         String stockUsage;
         List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList = new ArrayList<>();
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
-            for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
-                stockMonth = stockUsageReportUtils.monthConverter(entry.getKey());
-                stockYear = entry.getValue().toString();
+            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
+                stockMonth = entry.getKey();
+                stockYear = entry.getValue();
                 String monthNo = stockUsageReportUtils.getMonthNumber(stockMonth.substring(0, 3));
                 String stock_name = evaluateStockName(stockName);
                 stockUsage = providerName.equalsIgnoreCase(this.getString(R.string.all_chw)) ? StockUsageReportDao.getAllStockUsageForMonth(monthNo, stock_name, stockYear) : StockUsageReportDao.getStockUsageForMonth(monthNo, stock_name, stockYear, providerName);
