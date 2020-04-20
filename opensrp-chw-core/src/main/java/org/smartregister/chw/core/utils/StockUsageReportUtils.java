@@ -3,8 +3,10 @@ package org.smartregister.chw.core.utils;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.domain.db.Obs;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StockUsageReportUtils {
@@ -194,5 +196,13 @@ public class StockUsageReportUtils {
                 break;
         }
         return formattedMonth;
+    }
+
+    public static String getObsValue(Obs obs) {
+        List<Object> values = obs.getValues();
+        if (values.size() > 0) {
+            return (String) values.get(0);
+        }
+        return null;
     }
 }
