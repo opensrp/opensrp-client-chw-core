@@ -64,7 +64,19 @@ public class StockUsageReportDaoTest extends StockUsageReportDao {
         matrixCursor.addRow(new Object[]{"2"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
-        String count = StockUsageReportDao.getStockUsageForMonth("12", "COC", "2019");
+        String count = StockUsageReportDao.getStockUsageForMonth("12", "COC", "2019", "chwone");
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(count, "2");
+    }
+
+    @Test
+    public void testGetAllStockUsageForMonth() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"stock_usage"});
+        matrixCursor.addRow(new Object[]{"2"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        String count = StockUsageReportDao.getAllStockUsageForMonth("12", "COC", "2019");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertEquals(count, "2");
     }
