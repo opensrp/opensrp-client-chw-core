@@ -160,7 +160,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
 
         if ("Female".equalsIgnoreCase(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.GENDER, false)) && Utils.isMemberOfReproductiveAge(commonPersonObject, 10, 49)) {
             menu.findItem(R.id.action_pregnancy_confirmation).setVisible(true);
-            menu.findItem(R.id.action_family_planning_initiation).setVisible(true);
+            menu.findItem(R.id.action_fp_initiation).setVisible(true);
         }
     }
 }
