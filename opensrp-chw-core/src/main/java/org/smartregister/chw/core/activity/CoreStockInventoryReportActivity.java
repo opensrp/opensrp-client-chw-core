@@ -46,8 +46,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
-            for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
-                monthStockUsageReportList.add(new MonthStockUsageModel(stockUsageReportUtils.monthConverter(entry.getKey()), entry.getValue().toString()));
+            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
+                monthStockUsageReportList.add(new MonthStockUsageModel(entry.getKey(), entry.getValue()));
             }
         }
         return monthStockUsageReportList;
