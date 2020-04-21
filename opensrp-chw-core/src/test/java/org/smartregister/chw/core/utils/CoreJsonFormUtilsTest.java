@@ -4,7 +4,10 @@ package org.smartregister.chw.core.utils;
 import android.content.Intent;
 import android.util.Pair;
 
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+
 import org.apache.commons.lang3.tuple.Triple;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -29,6 +32,7 @@ import org.smartregister.family.util.DBConstants;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, UtilsShadowUtil.class})
@@ -104,6 +108,22 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
         Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
 
+    }
+
+    @Test
+    public void canPopulateJsonFormWithMap() throws JSONException {
+        String key = "danger_signs_present";
+        String value = "lethargy";
+        String step = "step1";
+        String jsonString = "{\"" + step + "\": {\"title\": \"ANC Registration\",\"fields\": [{\"key\": \"" + key + "\"}]}}";
+        Map<String, String> valueMap = new HashMap<>();
+        valueMap.put(key, value);
+        JSONObject formObject = new JSONObject(jsonString);
+        CoreJsonFormUtils.populateJsonForm(formObject, valueMap);
+        JSONObject jsonStepObject = formObject.getJSONObject(step);
+        JSONArray fieldsArray = jsonStepObject.getJSONArray(JsonFormConstants.FIELDS);
+        JSONObject keyValueObject = fieldsArray.getJSONObject(0); // We only have one field
+        Assert.assertEquals(value, keyValueObject.optString(JsonFormConstants.VALUE));
     }
 
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {

@@ -137,18 +137,18 @@ public class CoreReferralUtils {
         createReferralTask(baseEvent.getBaseEntityId(), allSharedPreferences, assignReferralFocus(referralTable), getReferralProblems(jsonString));
     }
 
-    private static String setEntityId(String jsonString, String entityId) {
-        String referralForm = "";
+    public static String setEntityId(String jsonString, String entityId) {
+        String jsonForm = "";
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             jsonObject.put(CoreConstants.ENTITY_ID, entityId);
 
-            referralForm = jsonObject.toString();
+            jsonForm = jsonObject.toString();
         } catch (JSONException e) {
-            Timber.e(e, "CoreChildProfileInteractor --> setEntityId");
+            Timber.e(e, "Interactor --> setEntityId");
         }
 
-        return referralForm;
+        return jsonForm;
     }
 
     private static void createReferralTask(String baseEntityId, AllSharedPreferences allSharedPreferences, String focus, String referralProblems) {
