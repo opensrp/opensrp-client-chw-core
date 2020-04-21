@@ -3,6 +3,7 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -314,15 +315,8 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
             CommonPersonObjectClient commonPersonObjectClient = (CommonPersonObjectClient) view.getTag();
             String entityType = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.ENTITY_TYPE, false);
             if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
-                if (isAncMember(commonPersonObjectClient.entityId())) {
-                    goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (isPncMember(commonPersonObjectClient.entityId())) {
-                    gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (FpDao.isRegisteredForFp(commonPersonObjectClient.entityId())) {
-                    goToFpProfile(commonPersonObjectClient.entityId(), this);
-                } else {
-                    goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
-                }
+                org.smartregister.util.Utils.startAsyncTask(new GoToMemberProfileBaseOnRegisterTask(commonPersonObjectClient, fragmentArguments, this), null);
+
             } else {
                 goToChildProfileActivity(commonPersonObjectClient, fragmentArguments);
             }
@@ -379,6 +373,32 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, patient);
         intent.putExtra(TITLE_VIEW_TEXT, String.format(getString(org.smartregister.chw.core.R.string.return_to_family_name), ""));
         return intent;
+    }
+
+    private class GoToMemberProfileBaseOnRegisterTask extends AsyncTask<Void, Void, Void> {
+        private final CommonPersonObjectClient commonPersonObjectClient;
+        private final Bundle fragmentArguments;
+        private final Activity activity;
+
+        private GoToMemberProfileBaseOnRegisterTask(CommonPersonObjectClient commonPersonObjectClient, Bundle fragmentArguments, Activity activity) {
+            this.commonPersonObjectClient = commonPersonObjectClient;
+            this.fragmentArguments = fragmentArguments;
+            this.activity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (isAncMember(commonPersonObjectClient.entityId())) {
+                goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
+            } else if (isPncMember(commonPersonObjectClient.entityId())) {
+                gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
+            } else if (FpDao.isRegisteredForFp(commonPersonObjectClient.entityId())) {
+                goToFpProfile(commonPersonObjectClient.entityId(), activity);
+            } else {
+                goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
+            }
+            return null;
+        }
     }
 
     protected abstract Class<?> getFamilyOtherMemberProfileActivityClass();
