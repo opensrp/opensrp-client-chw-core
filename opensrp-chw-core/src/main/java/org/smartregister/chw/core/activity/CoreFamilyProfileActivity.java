@@ -31,6 +31,7 @@ import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -317,6 +318,8 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
                     goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
                 } else if (isPncMember(commonPersonObjectClient.entityId())) {
                     gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
+                } else if (FpDao.isRegisteredForFp(commonPersonObjectClient.entityId())) {
+                    goToFpProfile(commonPersonObjectClient.entityId(), this);
                 } else {
                     goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
                 }
@@ -366,6 +369,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         startActivity(initProfileActivityIntent(patient, bundle, getPncMemberProfileActivityClass()));
     }
 
+
     private Intent initProfileActivityIntent(CommonPersonObjectClient patient, Bundle bundle, Class activityClass) {
         Intent intent = new Intent(this, activityClass);
         if (bundle != null) {
@@ -386,6 +390,8 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected abstract Class<? extends BaseAncMemberProfileActivity> getAncMemberProfileActivityClass();
 
     protected abstract Class<? extends BasePncMemberProfileActivity> getPncMemberProfileActivityClass();
+
+    protected abstract void goToFpProfile(String baseEntityId, Activity activity);
 
     protected abstract boolean isAncMember(String baseEntityId);
 

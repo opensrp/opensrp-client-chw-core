@@ -1,5 +1,6 @@
 package org.smartregister.chw.hf.activity;
 
+import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -103,6 +104,11 @@ public class FamilyProfileActivity extends CoreFamilyProfileActivity {
     @Override
     protected Class<? extends BasePncMemberProfileActivity> getPncMemberProfileActivityClass() {
         return PncMemberProfileActivity.class;
+    }
+
+    @Override
+    protected void goToFpProfile(String baseEntityId, Activity activity) {
+//        TODO implement on HF
     }
 
     @Override
