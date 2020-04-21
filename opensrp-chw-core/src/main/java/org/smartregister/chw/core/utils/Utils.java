@@ -513,15 +513,14 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     }
 
 
-    public static boolean isWomanOfReproductiveAge(CommonPersonObjectClient commonPersonObject, int fromAge, int toAge) {
+    public static boolean isMemberOfReproductiveAge(CommonPersonObjectClient commonPersonObject, int fromAge, int toAge) {
         if (commonPersonObject == null) {
             return false;
         }
 
-        // check age and gender
+        // check for age
         String dobString = org.smartregister.util.Utils.getValue(commonPersonObject.getColumnmaps(), "dob", false);
-        String gender = org.smartregister.util.Utils.getValue(commonPersonObject.getColumnmaps(), "gender", false);
-        if (!TextUtils.isEmpty(dobString) && gender.trim().equalsIgnoreCase("Female")) {
+        if (!TextUtils.isEmpty(dobString)) {
             Period period = new Period(new DateTime(dobString), new DateTime());
             int age = period.getYears();
             return age >= fromAge && age <= toAge;

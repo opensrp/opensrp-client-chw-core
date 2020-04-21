@@ -34,7 +34,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_fp_initiation"
+        android:id="@+id/action_fp_initiation_pnc"
         android:enabled="true"
         android:title="@string/family_planning_initiation"
         android:visible="false"
