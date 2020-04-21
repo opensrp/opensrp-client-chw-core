@@ -171,13 +171,13 @@ public class CoreConstants {
         private static final String FEMALE_FAMILY_PLANNING_REFERRAL_FORM = "female_fp_referral_form";
         private static final String MALE_FAMILY_PLANNING_REFERRAL_FORM = "male_fp_referral_form";
         private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
+        private static final String ANC_DANGER_SIGNS_OUTCOME_FORM = "anc_danger_signs_outcome";
         private static final String FEMALE_FAMILY_PLANNING_REGISTRATION_FORM = "female_family_planning_registration";
         private static final String MALE_FAMILY_PLANNING_REGISTRATION_FORM = "male_family_planning_registration";
         private static final String FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "female_family_planning_change_method";
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
         private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
-        private static final String ANC_DANGER_SIGNS_OUTCOME_FORM = "anc_danger_signs_outcome";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
 
         public static AssetManager assetManager;
@@ -202,6 +202,7 @@ public class CoreConstants {
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
         }
+
         public static String getStockUsageForm() {
             return STOCK_USAGE_REPORT_FORM;
         }
@@ -579,7 +580,7 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
-        public static final String STOCK_USAGE_REPORT= "ec_stock_usage_report";
+        public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";

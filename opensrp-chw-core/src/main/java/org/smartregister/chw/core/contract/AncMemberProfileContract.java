@@ -3,7 +3,6 @@ package org.smartregister.chw.core.contract;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.contract.BaseAncMemberProfileContract;
 import org.smartregister.chw.anc.domain.MemberObject;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.AllSharedPreferences;
 
