@@ -27,4 +27,8 @@ public class BaseReferralNotificationDetailsPresenter implements BaseReferralNot
         }
         return null;
     }
+
+    public void setInteractor(BaseReferralNotificationDetailsContract.Interactor interactor) {
+        this.interactor = interactor;
+    }
 }
