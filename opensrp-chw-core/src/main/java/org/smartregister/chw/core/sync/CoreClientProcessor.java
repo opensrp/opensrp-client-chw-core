@@ -7,7 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.fp.util.FpUtil;
@@ -241,6 +244,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     }
                 }
                 break;
+            case CoreConstants.EventType.STOCK_USAGE_REPORT:
+                clientProcessStockEvent(event);
+                break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
                     return;
@@ -274,6 +280,59 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
                 break;
+        }
+    }
+
+    private StockUsage getStockUsageFromObs(List<Obs> stockObs) {
+        StockUsage usage = new StockUsage();
+        for (Obs obs : stockObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_YEAR)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setYear(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_MONTH)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setMonth(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockUsage(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_PROVIDER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null)
+                    usage.setProviderId(value);
+                else
+                    return null;
+            }
+        }
+        return usage;
+    }
+
+    private void clientProcessStockEvent(Event event) {
+        List<Obs> stockObs = event.getObs();
+        StockUsage usage = getStockUsageFromObs(stockObs);
+        if (usage != null) {
+            StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
+            String formSubmissionId = event.getFormSubmissionId();
+            usage.setId(formSubmissionId);
+            repo.addOrUpdateStockUsage(usage);
         }
     }
 

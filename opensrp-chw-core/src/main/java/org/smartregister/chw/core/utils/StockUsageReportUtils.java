@@ -3,18 +3,19 @@ package org.smartregister.chw.core.utils;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.domain.db.Obs;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StockUsageReportUtils {
-    public Map<Integer, Integer> getPreviousMonths() {
-        Map<Integer, Integer> monthsAndYearsMap = new LinkedHashMap<>();
-
+    public Map<String, String> getPreviousMonths() {
+        Map<String, String> monthsAndYearsMap = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
-            int month = prevDate.getMonthOfYear();
-            int year = prevDate.getYear();
+            String month = this.monthConverter(prevDate.getMonthOfYear());
+            String year = String.valueOf(prevDate.getYear());
             monthsAndYearsMap.put(month, year);
         }
         return monthsAndYearsMap;
@@ -194,5 +195,13 @@ public class StockUsageReportUtils {
                 break;
         }
         return formattedMonth;
+    }
+
+    public static String getObsValue(Obs obs) {
+        List<Object> values = obs.getValues();
+        if (values.size() > 0) {
+            return (String) values.get(0);
+        }
+        return null;
     }
 }

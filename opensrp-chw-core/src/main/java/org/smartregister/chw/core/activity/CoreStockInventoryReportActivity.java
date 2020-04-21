@@ -19,6 +19,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.CoreStockMonthlyReportAdapter;
 import org.smartregister.chw.core.adapter.CoreStockUsageItemAdapter;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.StockUsageReportDao;
 import org.smartregister.chw.core.model.MonthStockUsageModel;
 import org.smartregister.chw.core.model.StockUsageItemModel;
@@ -34,9 +35,9 @@ import java.util.Map;
 public class CoreStockInventoryReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
     private RecyclerView recyclerView;
-    private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
+    public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
-    private static List<String> getItems() {
+    public static List<String> getItems() {
       return  new ArrayList<>(
                 Arrays.asList("ORS 5", "Zinc 10", "Panadol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
         ); }
@@ -45,19 +46,19 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
-            for (Map.Entry<Integer, Integer> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
-                monthStockUsageReportList.add(new MonthStockUsageModel(stockUsageReportUtils.monthConverter(entry.getKey()), entry.getValue().toString()));
+            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
+                monthStockUsageReportList.add(new MonthStockUsageModel(entry.getKey(), entry.getValue()));
             }
         }
         return monthStockUsageReportList;
     }
 
-    private List<StockUsageItemModel> getStockUsageItemReportList(String month, String year) {
+    public List<StockUsageItemModel> getStockUsageItemReportList(String month, String year) {
         List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
-        StockUsageReportDao stockUsageReportDao = new StockUsageReportDao();
+        String providerName = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
         for (String item : getItems()) {
-            String usage = stockUsageReportDao.getStockUsageForMonth(month, item, year);
-            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage));
+            String usage = StockUsageReportDao.getStockUsageForMonth(month, item, year, providerName);
+            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage, providerName));
         }
         return stockUsageItemModelsList;
     }
@@ -65,6 +66,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     private void reloadRecycler(MonthStockUsageModel selected) {
         String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 

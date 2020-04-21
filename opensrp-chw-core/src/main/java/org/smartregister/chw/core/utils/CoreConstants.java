@@ -124,6 +124,7 @@ public class CoreConstants {
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
+        public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
@@ -158,6 +159,7 @@ public class CoreConstants {
         private static final String WASH_CHECK = "wash_check";
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
+        private static final String STOCK_USAGE_REPORT_FORM = "stock_usage_report";
         private static final String PNC_REFERRAL_FORM = "pnc_referral_form";
         private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
         private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
@@ -193,6 +195,9 @@ public class CoreConstants {
 
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
+        }
+        public static String getStockUsageForm() {
+            return STOCK_USAGE_REPORT_FORM;
         }
 
         public static String getPncReferralForm() {
@@ -566,6 +571,7 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
+        public static final String STOCK_USAGE_REPORT= "ec_stock_usage_report";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
@@ -664,13 +670,18 @@ public class CoreConstants {
         public static final String GESTATION_AGE = "gestation_age";
         public static final String IS_PROBLEM = "is_problem";
         public static final String REFERRAL_CODE = "Referral";
-
+        public static final String STOCK_NAME = "stock_name";
+        public static final String STOCK_YEAR = "stock_year";
+        public static final String STOCK_MONTH = "stock_month";
+        public static final String STOCK_USAGE = "stock_usage";
+        public static final String STOCK_PROVIDER = "stock_provider";
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
         }
+
     }
 
     public static class ProfileActivityResults {
@@ -833,5 +844,11 @@ public class CoreConstants {
         public static final String STEPNAME = "stepName";
         public static final String LOOK_UP = "look_up";
         public static final String ENTITY_ID = "entity_id";
+    }
+
+    public static class HfStockUsageUtil {
+        public static final String STOCK_NAME = "stockName";
+        public static final String PROVIDER_NAME = "providerName";
+
     }
 }
