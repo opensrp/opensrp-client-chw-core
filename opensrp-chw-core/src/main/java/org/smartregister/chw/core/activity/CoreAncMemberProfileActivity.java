@@ -101,6 +101,8 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
                     Timber.e(ex);
                 }
                 break;
+            default:
+                break;
         }
     }
 
