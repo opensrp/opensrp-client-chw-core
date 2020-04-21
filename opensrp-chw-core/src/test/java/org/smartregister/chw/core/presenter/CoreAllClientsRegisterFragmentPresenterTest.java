@@ -14,7 +14,7 @@ public class CoreAllClientsRegisterFragmentPresenterTest {
     private CoreAllClientsRegisterFragmentPresenter allClientsRegisterFragmentPresenter;
 
     @Mock
-    CoreAllClientsRegisterFragment view;
+    private CoreAllClientsRegisterFragment view;
 
     @Before
     public void setUp() {
