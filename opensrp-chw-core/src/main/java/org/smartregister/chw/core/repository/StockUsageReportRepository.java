@@ -28,7 +28,7 @@ public class StockUsageReportRepository extends BaseRepository {
     private static final String UPDATED_AT = "updated_at";
     private static final String CREATED_AT = "created_at";
     public static final String CREATE_TABLE_SQL = "CREATE TABLE " + TABLE_NAME + "(" +
-            ID + "  VARCHAR, " +
+            ID + "  VARCHAR NOT NULL PRIMARY KEY, " +
             STOCK_NAME + "  VARCHAR, " +
             STOCK_USAGE + "  VARCHAR, " +
             YEAR + "  VARCHAR, " +
@@ -48,15 +48,16 @@ public class StockUsageReportRepository extends BaseRepository {
         database.execSQL(BASE_ID_INDEX);
     }
 
-    public void addStockUsage(StockUsage stockUsage){
-        addStockUsage(stockUsage, getWritableDatabase());
+    public void addOrUpdateStockUsage(StockUsage stockUsage) {
+        addOrUpdateStockUsage(stockUsage, getWritableDatabase());
     }
 
-    public void addStockUsage(StockUsage stockUsage, SQLiteDatabase database) {
+    public void addOrUpdateStockUsage(StockUsage stockUsage, SQLiteDatabase database) {
         if (stockUsage == null) {
             return;
         }
-        database.insert(TABLE_NAME, null, createValues(stockUsage));
+        database.replace(TABLE_NAME, null, createValues(stockUsage));
+
     }
 
     private ContentValues createValues(StockUsage stockUsage) {
