@@ -50,7 +50,7 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
     @Override
     public void startFamilyPlanningReferral() {
         try {
-            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getFamilyPlanningReferralForm()), fpMemberObject);
+            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getFamilyPlanningReferralForm(fpMemberObject.getGender())), fpMemberObject);
         } catch (Exception e) {
             Timber.e(e);
         }
