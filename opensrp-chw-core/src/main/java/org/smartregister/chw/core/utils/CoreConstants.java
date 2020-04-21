@@ -3,6 +3,7 @@ package org.smartregister.chw.core.utils;
 import android.content.res.AssetManager;
 
 import org.json.JSONObject;
+import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.malaria.util.Constants;
 
 import java.util.Locale;
@@ -164,10 +165,13 @@ public class CoreConstants {
         private static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
         private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
         private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
-        private static final String FAMILY_PLANNING_REFERRAL_FORM = "fp_referral_form";
+        private static final String FEMALE_FAMILY_PLANNING_REFERRAL_FORM = "female_fp_referral_form";
+        private static final String MALE_FAMILY_PLANNING_REFERRAL_FORM = "male_fp_referral_form";
         private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
-        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
-        private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
+        private static final String FEMALE_FAMILY_PLANNING_REGISTRATION_FORM = "female_family_planning_registration";
+        private static final String MALE_FAMILY_PLANNING_REGISTRATION_FORM = "male_family_planning_registration";
+        private static final String FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "female_family_planning_change_method";
+        private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -211,8 +215,8 @@ public class CoreConstants {
             return PNC_UNIFIED_REFERRAL_FORM;
         }
 
-        public static String getFamilyPlanningReferralForm() {
-            return FAMILY_PLANNING_REFERRAL_FORM;
+        public static String getFamilyPlanningReferralForm(String gender) {
+            return gender.equalsIgnoreCase(Gender.MALE.toString()) ? MALE_FAMILY_PLANNING_REFERRAL_FORM : FEMALE_FAMILY_PLANNING_REFERRAL_FORM;
         }
 
         public static String getMalariaReferralForm() {
@@ -275,12 +279,14 @@ public class CoreConstants {
             return Utils.getLocalForm(MALARIA_CONFIRMATION, locale, assetManager);
         }
 
-        public static String getFpRegistrationForm() {
-            return Utils.getLocalForm(FAMILY_PLANNING_REGISTRATION_FORM, locale, assetManager);
+        public static String getFpRegistrationForm(String gender) {
+            String formName = gender.equalsIgnoreCase(Gender.MALE.toString()) ? MALE_FAMILY_PLANNING_REGISTRATION_FORM : FEMALE_FAMILY_PLANNING_REGISTRATION_FORM;
+            return Utils.getLocalForm(formName, locale, assetManager);
         }
 
-        public static String getFpChengeMethodForm() {
-            return Utils.getLocalForm(FAMILY_PLANNING_CHANGE_METHOD_FORM, locale, assetManager);
+        public static String getFpChangeMethodForm(String gender) {
+            String formName = gender.equalsIgnoreCase(Gender.MALE.toString()) ? MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM : FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM;
+            return Utils.getLocalForm(formName, locale, assetManager);
         }
 
         public static boolean isMultiPartForm(JSONObject jsonForm) {
