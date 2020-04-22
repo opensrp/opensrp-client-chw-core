@@ -33,6 +33,10 @@ public class CoreConstants {
         String START = "start";
         String ENTRY_POINT = "entry_point";
         String STATUS = "status";
+        String LAST_MODIFIED = "last_modified";
+        String NOTIFICATION_TYPE = "notification_type";
+        String NOTIFICATION_DATE = "notification_date";
+        String REFERRAL_TASK_ID = "referral_task_id";
     }
 
     public interface SERVICE_GROUPS {
@@ -126,6 +130,8 @@ public class CoreConstants {
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
         public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
+        public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
+        public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
     }
 
     public static final class EncounterType {
@@ -168,6 +174,7 @@ public class CoreConstants {
         private static final String FEMALE_FAMILY_PLANNING_REFERRAL_FORM = "female_fp_referral_form";
         private static final String MALE_FAMILY_PLANNING_REFERRAL_FORM = "male_fp_referral_form";
         private static final String MALARIA_REFERRAL_FORM = "malaria_referral_form";
+        private static final String ANC_DANGER_SIGNS_OUTCOME_FORM = "anc_danger_signs_outcome";
         private static final String FEMALE_FAMILY_PLANNING_REGISTRATION_FORM = "female_family_planning_registration";
         private static final String MALE_FAMILY_PLANNING_REGISTRATION_FORM = "male_family_planning_registration";
         private static final String FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "female_family_planning_change_method";
@@ -195,6 +202,7 @@ public class CoreConstants {
         public static String getAncReferralForm() {
             return ANC_REFERRAL_FORM;
         }
+
         public static String getStockUsageForm() {
             return STOCK_USAGE_REPORT_FORM;
         }
@@ -312,6 +320,10 @@ public class CoreConstants {
 
         public static String getReferralFollowupForm() {
             return Utils.getLocalForm(REFERRAL_FOLLOWUP_FORM, locale, assetManager);
+        }
+
+        public static String getAncDangerSignsOutcomeForm() {
+            return Utils.getLocalForm(ANC_DANGER_SIGNS_OUTCOME_FORM, locale, assetManager);
         }
 
         public static class CHILD_HOME_VISIT {
@@ -564,7 +576,9 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
-        public static final String STOCK_USAGE_REPORT= "ec_stock_usage_report";
+        public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
+        public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
+        public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
     }
 
     public static final class INTENT_KEY {
@@ -608,6 +622,7 @@ public class CoreConstants {
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
+        public static final String UPDATES = "Updates";
     }
 
     public static final class RULE_FILE {
@@ -803,6 +818,7 @@ public class CoreConstants {
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
+        public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {

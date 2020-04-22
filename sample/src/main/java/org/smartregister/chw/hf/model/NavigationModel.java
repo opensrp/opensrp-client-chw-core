@@ -21,6 +21,7 @@ public class NavigationModel implements org.smartregister.chw.core.model.Navigat
             navigationOptions.add(new NavigationOption(R.mipmap.sidemenu_fp, R.mipmap.sidemenu_fp_active, R.string.menu_family_planning, CoreConstants.DrawerMenu.FAMILY_PLANNING, 0));
             navigationOptions.add(new NavigationOption(R.mipmap.sidemenu_malaria, R.mipmap.sidemenu_malaria_active, R.string.menu_malaria, CoreConstants.DrawerMenu.MALARIA, 0));
             navigationOptions.add(new NavigationOption(R.mipmap.sidemenu_referrals, R.mipmap.sidemenu_referrals_active, R.string.menu_referrals, CoreConstants.DrawerMenu.REFERRALS, 0));
+            navigationOptions.add(new NavigationOption(R.mipmap.sidemenu_referrals, R.mipmap.sidemenu_referrals_active, R.string.updates, CoreConstants.DrawerMenu.UPDATES, 0));
         }
 
         return navigationOptions;
