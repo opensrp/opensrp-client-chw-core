@@ -29,16 +29,17 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
     public void fetchReferralDetails(String referralTaskId, String referralType) {
         ReferralNotificationItem referralNotificationItem = null;
 
-        if (referralType.contains("Successful")) {
+        if (referralType.contains(context.getString(R.string.referral_notification_type_successful))) {
             referralNotificationItem = getDetailsForSuccessfulReferral(referralTaskId);
-        } else if (referralType.contains("PNC") || referralType.contains("ANC")) {
+        } else if (referralType.contains(context.getString(R.string.referral_notification_type_pnc)) ||
+                referralType.contains(context.getString(R.string.referral_notification_type_anc))) {
             referralNotificationItem = getDetailsForPNCAndANCReferrals();
-        } else if (referralType.contains("Malaria")) {
+        } else if (referralType.contains(context.getString(R.string.referral_notification_type_malaria))) {
             referralNotificationItem = getDetailsForMalariaReferral();
-        } else if (referralType.contains("Family Planning")) {
+        } else if (referralType.contains(context.getString(R.string.referral_notification_type_fp))) {
             referralNotificationItem = getDetailsForFamilyPlanningReferral();
         }
-        presenter.getView().onReferralDetailsFetched(referralNotificationItem);
+        presenter.onReferralDetailsFetched(referralNotificationItem);
     }
 
     @NotNull

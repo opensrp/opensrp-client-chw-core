@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.presenter;
 
 import org.smartregister.chw.core.contract.BaseReferralNotificationDetailsContract;
+import org.smartregister.chw.core.domain.ReferralNotificationItem;
 import org.smartregister.chw.core.interactor.BaseReferralNotificationDetailsInteractor;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +27,11 @@ public class BaseReferralNotificationDetailsPresenter implements BaseReferralNot
             return view.get();
         }
         return null;
+    }
+
+    @Override
+    public void onReferralDetailsFetched(ReferralNotificationItem referralNotificationItem) {
+        getView().setReferralNotificationDetails(referralNotificationItem);
     }
 
     public void setInteractor(BaseReferralNotificationDetailsContract.Interactor interactor) {

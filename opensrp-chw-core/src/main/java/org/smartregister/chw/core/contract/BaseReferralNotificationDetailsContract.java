@@ -5,7 +5,7 @@ import org.smartregister.chw.core.domain.ReferralNotificationItem;
 public interface BaseReferralNotificationDetailsContract {
 
     interface View {
-        void onReferralDetailsFetched(ReferralNotificationItem referralNotificationItem);
+        void setReferralNotificationDetails(ReferralNotificationItem referralNotificationItem);
 
         void initPresenter();
     }
@@ -14,6 +14,8 @@ public interface BaseReferralNotificationDetailsContract {
         void getReferralDetails(String referralTaskId, String notificationType);
 
         View getView();
+
+        void onReferralDetailsFetched(ReferralNotificationItem referralNotificationItem);
     }
 
     interface Interactor {

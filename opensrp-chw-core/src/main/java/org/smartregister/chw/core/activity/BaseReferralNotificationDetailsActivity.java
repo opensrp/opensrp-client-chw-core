@@ -24,8 +24,8 @@ import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.List;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.REFERRAL_TASK_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFICATION_TYPE;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.REFERRAL_TASK_ID;
 
 public abstract class BaseReferralNotificationDetailsActivity extends MultiLanguageActivity
         implements BaseReferralNotificationDetailsContract.View {
@@ -71,7 +71,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     }
 
     @Override
-    public void onReferralDetailsFetched(ReferralNotificationItem notificationItem) {
+    public void setReferralNotificationDetails(ReferralNotificationItem notificationItem) {
         referralNotificationTitle.setText(notificationItem.getTitle());
         addNotificationInnerContent(notificationItem.getDetails());
     }

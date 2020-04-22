@@ -641,4 +641,11 @@
     <string name="provider_text">%s stock usage</string>
     <string name="all_chw">All-CHWs</string>
     <string name="stock_used_text">%s Stock Used</string>
+
+    <!--Referral notification types -->
+    <string name="referral_notification_type_successful">Successful</string>
+    <string name="referral_notification_type_pnc">PNC</string>
+    <string name="referral_notification_type_anc">ANC</string>
+    <string name="referral_notification_type_malaria">Malaria</string>
+    <string name="referral_notification_type_fp">Family Planning</string>
 </resources>

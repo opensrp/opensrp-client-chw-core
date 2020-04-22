@@ -41,7 +41,7 @@ public class BaseReferralNotificationDetailsActivityTest extends BaseUnitTest {
         details.add("Village: Mumbai");
         details.add("Referral Successful");
         ReferralNotificationItem referralNotificationItem = new ReferralNotificationItem("Mathew Lucas visited the facility on 03 Mar 2020.", details);
-        view.onReferralDetailsFetched(referralNotificationItem);
+        view.setReferralNotificationDetails(referralNotificationItem);
         Assert.assertNotNull(referralNotificationTitle.getText());
         Assert.assertEquals(2, referralNotificationDetails.getChildCount());
     }
