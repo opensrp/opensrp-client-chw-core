@@ -33,6 +33,10 @@ public class CoreConstants {
         String START = "start";
         String ENTRY_POINT = "entry_point";
         String STATUS = "status";
+        String LAST_MODIFIED = "last_modified";
+        String NOTIFICATION_TYPE = "notification_type";
+        String NOTIFICATION_DATE = "notification_date";
+        String REFERRAL_TASK_ID = "referral_task_id";
     }
 
     public interface SERVICE_GROUPS {
@@ -618,6 +622,7 @@ public class CoreConstants {
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
+        public static final String UPDATES = "Updates";
     }
 
     public static final class RULE_FILE {
@@ -813,6 +818,7 @@ public class CoreConstants {
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
+        public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
