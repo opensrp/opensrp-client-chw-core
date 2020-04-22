@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.commonregistry.CommonPersonObject;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.util.JsonFormUtils;
 
 public class CoreFamilyProfileActivityTest extends BaseUnitTest {
@@ -19,6 +20,7 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
     private CoreFamilyProfileActivity controller;
     private String baseID = JsonFormUtils.generateRandomUUIDString();
     private CommonPersonObject commonPersonObject;
+    private CommonPersonObjectClient commonPersonObjectClient;
 
     @Mock
     private View view;
@@ -30,6 +32,7 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
         MockitoAnnotations.initMocks(this);
         controller = Mockito.mock(CoreFamilyProfileActivity.class, Mockito.CALLS_REAL_METHODS);
         commonPersonObject = Mockito.mock(CommonPersonObject.class, Mockito.CALLS_REAL_METHODS);
+        commonPersonObjectClient = Mockito.mock(CommonPersonObjectClient.class, Mockito.CALLS_REAL_METHODS);
     }
 
     @Test
@@ -49,6 +52,17 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
         ArgumentCaptor<Bundle> bundleArgumentCaptor = ArgumentCaptor.forClass(Bundle.class);
         Mockito.verify(controller, Mockito.times(1)).goToProfileActivity(captor.capture(), bundleArgumentCaptor.capture());
         Assert.assertEquals(captor.getValue(), view);
+        Assert.assertEquals(bundleArgumentCaptor.getValue(), fragmentArguments);
+    }
+
+    @Test
+    public void goToOtherMemberProfileActivityAnswered() {
+        Mockito.doNothing().when(controller).goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
+        controller.goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
+        ArgumentCaptor<CommonPersonObjectClient> captor = ArgumentCaptor.forClass(CommonPersonObjectClient.class);
+        ArgumentCaptor<Bundle> bundleArgumentCaptor = ArgumentCaptor.forClass(Bundle.class);
+        Mockito.verify(controller, Mockito.times(1)).goToOtherMemberProfileActivity(captor.capture(), bundleArgumentCaptor.capture());
+        Assert.assertEquals(captor.getValue(), commonPersonObjectClient);
         Assert.assertEquals(bundleArgumentCaptor.getValue(), fragmentArguments);
     }
 
