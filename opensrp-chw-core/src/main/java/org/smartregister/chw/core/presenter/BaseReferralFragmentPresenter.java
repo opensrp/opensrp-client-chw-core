@@ -14,7 +14,7 @@ public class BaseReferralFragmentPresenter implements BaseReferralRegisterFragme
     protected BaseReferralRegisterFragmentContract.View view;
     protected BaseReferralRegisterFragmentContract.Model model;
     protected BaseReferralRegisterFragmentContract.Interactor interactor;
-    protected String taskFocus;
+    private String taskFocus;
 
     public BaseReferralFragmentPresenter(BaseReferralRegisterFragmentContract.View view) {
         this.view = view;
@@ -36,7 +36,6 @@ public class BaseReferralFragmentPresenter implements BaseReferralRegisterFragme
 
         view.initializeQueryParams(CoreConstants.TABLE_NAME.FAMILY_MEMBER, countSelect, mainSelect);
         view.initializeAdapter(new HashSet<>(), CoreConstants.TABLE_NAME.TASK);
-
         view.countExecute();
         view.filterandSortInInitializeQueries();
     }
@@ -53,7 +52,7 @@ public class BaseReferralFragmentPresenter implements BaseReferralRegisterFragme
 
     @Override
     public void fetchClient() {
-        interactor.getClientDetails(getBaseEntityId(), this, "");
+        interactor.getClientDetails(getBaseEntityId(), this, getTaskFocus());
     }
 
     @Override
@@ -76,5 +75,9 @@ public class BaseReferralFragmentPresenter implements BaseReferralRegisterFragme
     @Override
     public void clientDetails(CommonPersonObjectClient client) {
         view.setClient(client);
+    }
+
+    public void setInteractor(BaseReferralRegisterFragmentContract.Interactor interactor) {
+        this.interactor = interactor;
     }
 }
