@@ -1,10 +1,14 @@
 package org.smartregister.chw.core.presenter;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.presenter.BaseAncMemberProfilePresenter;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.family.contract.FamilyProfileContract;
@@ -14,6 +18,10 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -102,6 +110,30 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    @Override
+    public void startAncDangerSignsOutcomeForm(MemberObject memberObject) {
+        try {
+            JSONObject formJsonObject = getFormUtils().getFormJson(CoreConstants.JSON_FORM.getAncDangerSignsOutcomeForm());
+            Map<String, String> valueMap = new HashMap<>();
+            String lmp = memberObject.getLastMenstrualPeriod();
+            DateTime lmpDateTime = new DateTime(new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(lmp));
+            String edd = DateTimeFormat.forPattern("dd-MM-yyyy").print(lmpDateTime.plusDays(280));
+            valueMap.put("lmp", lmp);
+            valueMap.put("gest_age", String.valueOf(memberObject.getGestationAge()));
+            valueMap.put("edd", edd);
+
+            CoreJsonFormUtils.populateJsonForm(formJsonObject, valueMap);
+            getView().startFormActivity(formJsonObject);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    @Override
+    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        interactor.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID);
     }
 
     private FormUtils getFormUtils() {

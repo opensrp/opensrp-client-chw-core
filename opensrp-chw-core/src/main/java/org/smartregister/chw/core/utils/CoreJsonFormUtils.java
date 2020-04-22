@@ -12,6 +12,7 @@ import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -986,5 +987,29 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             x++;
         }
         return steps;
+    }
+
+    public static void populateJsonForm(@NotNull JSONObject jsonObject, @NotNull Map<String, String> valueMap) throws JSONException {
+        Map<String, String> _valueMap = new HashMap<>(valueMap);
+        int step = 1;
+        while (jsonObject.has("step" + step)) {
+            JSONObject jsonStepObject = jsonObject.getJSONObject("step" + step);
+            JSONArray array = jsonStepObject.getJSONArray(JsonFormConstants.FIELDS);
+            int position = 0;
+            while (position < array.length() && _valueMap.size() > 0) {
+
+                JSONObject object = array.getJSONObject(position);
+                String key = object.getString(JsonFormConstants.KEY);
+
+                if (_valueMap.containsKey(key)) {
+                    object.put(JsonFormConstants.VALUE, _valueMap.get(key));
+                    _valueMap.remove(key);
+                }
+
+                position++;
+            }
+
+            step++;
+        }
     }
 }
