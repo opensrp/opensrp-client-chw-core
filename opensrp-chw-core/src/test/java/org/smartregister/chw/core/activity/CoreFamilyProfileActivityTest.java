@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.BaseUnitTest;
@@ -16,7 +15,7 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
     private CoreFamilyProfileActivity controller;
     private String baseID = JsonFormUtils.generateRandomUUIDString();
 
-    CommonPersonObject commonPersonObject;
+    private CommonPersonObject commonPersonObject;
 
     @Before
     public void setUp() {
