@@ -81,6 +81,13 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
+    public void whenIsAncMemberAnswered() {
+        Mockito.when(controller.isAncMember(baseID))
+                .thenReturn(true);
+        Assert.assertEquals(true, controller.isAncMember(baseID));
+    }
+
+    @Test
     public void whenGetPncCommonPersonObjectAnswered() {
         Mockito.when(controller.getPncCommonPersonObject(baseID))
                 .thenReturn(commonPersonObject);
