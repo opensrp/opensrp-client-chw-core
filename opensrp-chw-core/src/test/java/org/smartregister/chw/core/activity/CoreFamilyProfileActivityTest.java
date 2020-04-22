@@ -18,12 +18,12 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
 
     private CoreFamilyProfileActivity controller;
     private String baseID = JsonFormUtils.generateRandomUUIDString();
-
     private CommonPersonObject commonPersonObject;
+
     @Mock
-    View view;
+    private View view;
     @Mock
-    Bundle fragmentArguments;
+    private Bundle fragmentArguments;
 
     @Before
     public void setUp() {
