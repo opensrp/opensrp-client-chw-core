@@ -1,9 +1,13 @@
 package org.smartregister.chw.core.activity;
 
+import android.os.Bundle;
+import android.view.View;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.BaseUnitTest;
@@ -16,6 +20,10 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
     private String baseID = JsonFormUtils.generateRandomUUIDString();
 
     private CommonPersonObject commonPersonObject;
+    @Mock
+    View view;
+    @Mock
+    Bundle fragmentArguments;
 
     @Before
     public void setUp() {
@@ -34,6 +42,17 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
+    public void goToProfileActivityAnswered() {
+        Mockito.doNothing().when(controller).goToProfileActivity(view, fragmentArguments);
+        controller.goToProfileActivity(view, fragmentArguments);
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        ArgumentCaptor<Bundle> bundleArgumentCaptor = ArgumentCaptor.forClass(Bundle.class);
+        Mockito.verify(controller, Mockito.times(1)).goToProfileActivity(captor.capture(), bundleArgumentCaptor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+        Assert.assertEquals(bundleArgumentCaptor.getValue(), fragmentArguments);
+    }
+
+    @Test
     public void whenGetFamilyBaseEntityIdAnswered() {
         Mockito.when(controller.getFamilyBaseEntityId())
                 .thenReturn(baseID);
@@ -45,6 +64,13 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
         Mockito.when(controller.getAncCommonPersonObject(baseID))
                 .thenReturn(commonPersonObject);
         Assert.assertEquals(commonPersonObject, controller.getAncCommonPersonObject(baseID));
+    }
+
+    @Test
+    public void whenGetPncCommonPersonObjectAnswered() {
+        Mockito.when(controller.getPncCommonPersonObject(baseID))
+                .thenReturn(commonPersonObject);
+        Assert.assertEquals(commonPersonObject, controller.getPncCommonPersonObject(baseID));
     }
 
 
