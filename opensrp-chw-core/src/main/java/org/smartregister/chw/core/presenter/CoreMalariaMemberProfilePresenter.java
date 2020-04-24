@@ -8,8 +8,6 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
-import java.lang.ref.WeakReference;
-
 import timber.log.Timber;
 
 public class CoreMalariaMemberProfilePresenter extends BaseMalariaProfilePresenter implements CoreMalariaProfileContract.Presenter {

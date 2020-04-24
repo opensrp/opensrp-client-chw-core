@@ -181,8 +181,6 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_REGISTRATION_FORM = "male_family_planning_registration";
         private static final String FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "female_family_planning_change_method";
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
-        private static final String FAMILY_PLANNING_REGISTRATION_FORM = "family_planning_registration";
-        private static final String FAMILY_PLANNING_CHANGE_METHOD_FORM = "family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
 
