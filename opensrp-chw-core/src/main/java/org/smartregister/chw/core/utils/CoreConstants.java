@@ -337,7 +337,7 @@ public class CoreConstants {
         }
 
         public static String getMalariaFollowUpHfForm() {
-            return MALARIA_FOLLOW_UP_HF_FORM;
+            return Utils.getLocalForm(MALARIA_FOLLOW_UP_HF_FORM, locale, assetManager);
         }
 
         public static class CHILD_HOME_VISIT {
