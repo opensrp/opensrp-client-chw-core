@@ -265,11 +265,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
             case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
+            case CoreConstants.EventType.REFERRAL_DISMISSAL:
             case CoreConstants.EventType.MALARIA_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                     org.smartregister.util.Utils.startAsyncTask(new MalariaUtil.CloseMalariaMemberFromRegister(event.getBaseEntityId()), null);
-
                 }
                 break;
             default:

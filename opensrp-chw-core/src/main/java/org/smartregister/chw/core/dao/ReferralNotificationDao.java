@@ -3,8 +3,15 @@ package org.smartregister.chw.core.dao;
 import org.smartregister.chw.core.domain.ReferralNotificationRecord;
 import org.smartregister.dao.AbstractDao;
 
+import java.util.List;
+
 public class ReferralNotificationDao extends AbstractDao {
 
+    /**
+     *This method is used to get details of referral notification with the provided task id
+     * @param referralId unique identifier for the task
+     * @return a notification record with details for the referral
+     */
     public static ReferralNotificationRecord getSuccessfulReferral(String referralId) {
         String sql = String.format(
                 "/* Get details for successful referral */\n" +
@@ -14,7 +21,8 @@ public class ReferralNotificationDao extends AbstractDao {
                 "       ec_family_member.dob          AS                                              dob,\n" +
                 "       ec_family.village_town        AS                                              village,\n" +
                 "       event.dateCreated             AS                                              notification_date,\n" +
-                "       ec_family_member.phone_number AS                                              phone_number\n" +
+                "       ec_family_member.phone_number AS                                              phone_number,\n" +
+                "       ec_family_member.base_entity_id AS                                            base_entity_id\n" +
                 "\n" +
                 "FROM task\n" +
                 "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
@@ -35,7 +43,7 @@ public class ReferralNotificationDao extends AbstractDao {
 
     private static DataMap<ReferralNotificationRecord> mapColumnValuesToModel() {
         return row -> {
-            ReferralNotificationRecord record = new ReferralNotificationRecord();
+            ReferralNotificationRecord record = new ReferralNotificationRecord(getCursorValue(row, "base_entity_id"));
             record.setClientName(getCursorValue(row, "full_name"));
             record.setClientDateOfBirth(getCursorValue(row, "dob"));
             record.setVillage(getCursorValue(row, "village"));
@@ -43,5 +51,22 @@ public class ReferralNotificationDao extends AbstractDao {
             record.setPhone(getCursorValue(row, "phone_number"));
             return record;
         };
+    }
+
+    /**
+     * This method is used to check whether a referral has been marked as done or not
+     * @param referralTaskId the unique identifier for the referral task
+     * @return true if the referral with the provided task id is already marked as done false otherwise
+     */
+    public static boolean isMarkedAsDone(String referralTaskId){
+        String sql = String.format("select count(*) count from ec_referral_dismissal where referral_task = '%s'" , referralTaskId);
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return false;
+
+        return res.get(0) > 0;
     }
 }

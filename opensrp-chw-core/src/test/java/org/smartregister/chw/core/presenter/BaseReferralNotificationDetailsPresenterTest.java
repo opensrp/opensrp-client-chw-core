@@ -65,6 +65,11 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
         Assert.assertNotNull(notificationDetailsPresenter.getView());
     }
 
+    @Test
+    public void dismissReferralNotification() {
+
+    }
+
     public static class TestableReferralNotificationDetailsActivity extends BaseReferralNotificationDetailsActivity {
 
     }
