@@ -14,4 +14,12 @@
         android:title="@string/remove_this_person"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_malaria_followup"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/hf_malaria_follow_up"
+        android:orderInCategory="400"
+        app:showAsAction="never" />
+
 </menu>
