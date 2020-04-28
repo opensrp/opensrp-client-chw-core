@@ -303,7 +303,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         if (report != null) {
             MonthlyTalliesRepository monthlyTalliesRepository = CoreChwApplication.getInstance().monthlyTalliesRepository();
             String formSubmissionId = event.getFormSubmissionId();
-            report.setSubmission_id(formSubmissionId);
+            report.setSubmissionId(formSubmissionId);
             report.setProviderId(event.getProviderId());
             if (!saveReportDateSent() && event.getEventType().equals(CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT))
                 report.setDateSent(null);

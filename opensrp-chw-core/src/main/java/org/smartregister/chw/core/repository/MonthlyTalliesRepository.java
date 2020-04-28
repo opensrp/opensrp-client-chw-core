@@ -394,7 +394,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             curTally.setProviderId(
                     cursor.getString(cursor.getColumnIndex(COLUMN_PROVIDER_ID)));
             curTally.setIndicator(indicatorMap.get(indicatorId));
-            curTally.setSubmission_id(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
+            curTally.setSubmissionId(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
             curTally.setValue(cursor.getString(cursor.getColumnIndex(COLUMN_VALUE)));
             curTally.setMonth(DF_YYYYMM.parse(cursor.getString(cursor.getColumnIndex(COLUMN_MONTH))));
             curTally.setEdited(
@@ -444,7 +444,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                     Long dateStarted = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED_AT));
                     MonthlyTally tally = new MonthlyTally();
-                    tally.setSubmission_id(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
+                    tally.setSubmissionId(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
                     tally.setMonth(month);
                     tally.setCreatedAt(new Date(dateStarted));
                     tallies.add(tally);

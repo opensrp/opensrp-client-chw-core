@@ -14,19 +14,19 @@ public class MonthlyTally extends Tally implements Serializable {
     @JsonProperty
     private String providerId;
     @JsonProperty
-    private String submission_id;
+    private String submissionId;
     @JsonProperty
     private Date updatedAt;
     @JsonProperty
     private Date createdAt;
 
 
-    public String getSubmission_id() {
-        return submission_id;
+    public String getSubmissionId() {
+        return submissionId;
     }
 
-    public void setSubmission_id(String submission_id) {
-        this.submission_id = submission_id;
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
     }
 
     public Date getDateSent() {

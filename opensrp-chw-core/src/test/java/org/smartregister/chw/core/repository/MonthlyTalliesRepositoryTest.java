@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class MonthlyTalliesRepositoryTest extends BaseRobolectricTest {
 
@@ -41,12 +42,12 @@ public class MonthlyTalliesRepositoryTest extends BaseRobolectricTest {
     }
 
     @Test
-    public void createTableShouldMake8CreateAndIndexQueries() {
+    public void createTableShouldMake9CreateAndIndexQueries() {
         SQLiteDatabase database = Mockito.mock(SQLiteDatabase.class);
 
         MonthlyTalliesRepository.createTable(database);
         ArgumentCaptor<String> queryStringsCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(database, Mockito.times(8)).execSQL(queryStringsCaptor.capture());
+        Mockito.verify(database, Mockito.times(9)).execSQL(queryStringsCaptor.capture());
 
         List<String> queryStrings = queryStringsCaptor.getAllValues();
         int countOfCreateTable = 0;
@@ -69,7 +70,7 @@ public class MonthlyTalliesRepositoryTest extends BaseRobolectricTest {
 
         Assert.assertEquals(1, countOfCreateTable);
         Assert.assertEquals(1, countCreateUniqueIndex);
-        Assert.assertEquals(6, countCreateIndex);
+        Assert.assertEquals(7, countCreateIndex);
     }
 
     @Test
@@ -125,20 +126,20 @@ public class MonthlyTalliesRepositoryTest extends BaseRobolectricTest {
     @Test
     public void findEditedDraftMonthsShouldReturnResultsWithinDateRange() {
         Date endDate = new Date();
+        String submissionId = UUID.randomUUID().toString();
         Calendar calendarStartDate = Calendar.getInstance();
         calendarStartDate.add(Calendar.MONTH, -24);
 
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"month", "created_at"}, 0);
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"month", "created_at", "submission_id"}, 0);
 
         Calendar tallyMonth = (Calendar) calendarStartDate.clone();
         tallyMonth.add(Calendar.MONTH, -12);
         for (int i = 0; i < 36; i++) {
             tallyMonth.add(Calendar.MONTH, 1);
-            matrixCursor.addRow(new Object[]{MonthlyTalliesRepository.DF_YYYYMM.format(tallyMonth.getTime()), new Date().getTime()});
+            matrixCursor.addRow(new Object[]{MonthlyTalliesRepository.DF_YYYYMM.format(tallyMonth.getTime()), new Date().getTime(), submissionId});
         }
 
-        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("monthly_tallies"), Mockito.any(String[].class)
-                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.eq("month"), Mockito.nullable(String.class), Mockito.nullable(String.class));
+        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("monthly_tallies"), Mockito.any(String[].class), Mockito.anyString(), Mockito.nullable(String[].class), Mockito.eq("month"), Mockito.nullable(String.class), Mockito.nullable(String.class));
 
         List<MonthlyTally> monthlyTallies = monthlyTalliesRepository.findEditedDraftMonths(calendarStartDate.getTime(), endDate);
         Assert.assertEquals(24, monthlyTallies.size());
