@@ -77,8 +77,7 @@ public class ReportUtils {
         return formSubmissionID != null ? formSubmissionID.replaceAll(" ", "-").toUpperCase() : null;
     }
 
-
-    public static void addEvent(Map<String, String> values, String formSubmissionId, String formName) throws JSONException {
+    public static void addEvent(Map<String, String> values, String formSubmissionId, String formName, String tableName) throws JSONException {
         JSONObject form = FormUtils.getFormUtils().getFormJson(formName);
         JSONObject stepOne = form.getJSONObject(org.smartregister.chw.anc.util.JsonFormUtils.STEP1);
         JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.chw.anc.util.JsonFormUtils.FIELDS);
@@ -86,12 +85,11 @@ public class ReportUtils {
         FormUtils.updateFormField(jsonArray, values);
 
         String baseEntityID = UUID.randomUUID().toString();
-
         JSONObject jsonEventStr = CoreLibrary.getInstance().context().getEventClientRepository().getEventsByFormSubmissionId(formSubmissionId);
         if (jsonEventStr != null)
             baseEntityID = (new Gson().fromJson(jsonEventStr.toString(), Event.class)).getBaseEntityId();
 
-        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.MONTHLY_TALLIES_REPORT);
+        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), tableName);
         baseEvent.setFormSubmissionId(formSubmissionId);
         baseEvent.setBaseEntityId(baseEntityID);
 
@@ -100,9 +98,16 @@ public class ReportUtils {
         getSyncHelper().addEvent(baseEntityID, eventJson);
     }
 
-    public static Map<String, String> geValues(MonthlyTally monthlyTally) {
-        if (monthlyTally != null) {
-            Map<String, String> values = new HashMap<>();
+    public static Map<String, String> geValues(@Nullable MonthlyTally monthlyTally, @Nullable StockUsage usage) {
+        Map<String, String> values = new HashMap<>();
+        if (usage != null) {
+            values.put(CoreConstants.JsonAssets.STOCK_NAME, usage.getStockName());
+            values.put(CoreConstants.JsonAssets.STOCK_YEAR, usage.getYear());
+            values.put(CoreConstants.JsonAssets.STOCK_MONTH, usage.getMonth());
+            values.put(CoreConstants.JsonAssets.STOCK_USAGE, usage.getStockUsage());
+            values.put(CoreConstants.JsonAssets.STOCK_PROVIDER, usage.getProviderId());
+            return values;
+        } else if (monthlyTally != null) {
             values.put(CoreConstants.JsonAssets.IN_APP_REPORT_INDICATOR_CODE, monthlyTally.getIndicator().getIndicatorCode());
             values.put(CoreConstants.JsonAssets.IN_APP_REPORT_MONTH, MonthlyTalliesRepository.DF_YYYYMM.format(monthlyTally.getMonth()));
             values.put(CoreConstants.JsonAssets.IN_APP_REPORT_EDITED, monthlyTally.isEdited() ? "1" : "0");
@@ -182,8 +187,7 @@ public class ReportUtils {
             } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.IN_APP_REPORT_EDITED)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
-                    boolean edited = value.equals("1");
-                    monthlyTally.setEdited(edited);
+                    monthlyTally.setEdited("1".equals(value));
                     continue;
                 } else
                     return null;
