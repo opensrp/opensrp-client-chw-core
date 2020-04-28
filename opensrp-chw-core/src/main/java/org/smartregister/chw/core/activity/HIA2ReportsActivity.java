@@ -361,7 +361,6 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                             Date dateCreated = curTally.getCreatedAt() != null ? curTally.getCreatedAt() : Calendar.getInstance().getTime();
                             curTally.setDateSent(dateSent);
                             curTally.setCreatedAt(dateCreated);
-//                            monthlyTalliesRepository.save(curTally);
                             ReportUtils.addEvent(ReportUtils.geValues(curTally), curTally.getSubmission_id(), CoreConstants.JSON_FORM.IN_APP_REPORT_FORM);
                         }
                         long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
