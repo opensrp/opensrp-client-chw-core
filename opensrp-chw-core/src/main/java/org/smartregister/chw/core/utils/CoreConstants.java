@@ -130,6 +130,8 @@ public class CoreConstants {
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
         public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
+        public static final String CHW_IN_APP_REPORT_EVENT = "CHW Monthly tallies Report";
+        public static final String HF_IN_APP_REPORT_EVENT = "HF Monthly tallies Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
     }
@@ -155,6 +157,7 @@ public class CoreConstants {
         public static final String FAMILY_DETAILS_REMOVE_CHILD = "family_details_remove_child";
         public static final String FAMILY_DETAILS_REMOVE_FAMILY = "family_details_remove_family";
         public static final String HOME_VISIT_COUNSELLING = "routine_home_visit";
+        public static final String IN_APP_REPORT_FORM = "in_app_monthly_tallies_report";
 
         private static final String ANC_REGISTRATION = "anc_member_registration";
         private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
@@ -576,7 +579,8 @@ public class CoreConstants {
         public static final String CLOSE_REFERRAL = "ec_close_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
-        public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
+        public static final String STOCK_USAGE_REPORT = "stock_usage_report";
+        public static final String MONTHLY_TALLIES_REPORT = "monthly_tallies";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
     }
@@ -680,6 +684,12 @@ public class CoreConstants {
         public static final String STOCK_MONTH = "stock_month";
         public static final String STOCK_USAGE = "stock_usage";
         public static final String STOCK_PROVIDER = "stock_provider";
+        public static final String IN_APP_REPORT_INDICATOR_CODE = "indicator_code";
+        public static final String IN_APP_REPORT_MONTH = "month";
+        public static final String IN_APP_REPORT_EDITED = "edited";
+        public static final String IN_APP_REPORT_DATE_SENT = "date_sent";
+        public static final String IN_APP_REPORT_CREATED_AT = "created_at";
+        public static final String IN_APP_REPORT_VALUE = "value";
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";

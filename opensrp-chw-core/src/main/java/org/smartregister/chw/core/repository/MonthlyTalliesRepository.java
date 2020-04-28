@@ -13,6 +13,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.DailyTally;
 import org.smartregister.chw.core.domain.Hia2Indicator;
 import org.smartregister.chw.core.domain.MonthlyTally;
+import org.smartregister.chw.core.utils.ReportUtils;
 import org.smartregister.repository.BaseRepository;
 
 import java.text.ParseException;
@@ -30,6 +31,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
     private static final String TAG = MonthlyTalliesRepository.class.getCanonicalName();
     private static final String TABLE_NAME = "monthly_tallies";
     private static final String COLUMN_ID = "_id";
+    private static final String COLUMN_SUBMISSION_ID = "submission_id";
     private static final String COLUMN_PROVIDER_ID = "provider_id";
     private static final String COLUMN_INDICATOR_CODE = "indicator_code";
     private static final String COLUMN_VALUE = "value";
@@ -41,11 +43,11 @@ public class MonthlyTalliesRepository extends BaseRepository {
     private static final String COLUMN_UPDATED_AT = "updated_at";
     private static final String COLUMN_CREATED_AT = "created_at";
     private static final String[] TABLE_COLUMNS = {
-            COLUMN_ID, COLUMN_INDICATOR_CODE, COLUMN_PROVIDER_ID,
-            COLUMN_VALUE, COLUMN_MONTH, COLUMN_EDITED, COLUMN_DATE_SENT, COLUMN_CREATED_AT, COLUMN_UPDATED_AT
-    };
+            COLUMN_ID, COLUMN_SUBMISSION_ID, COLUMN_INDICATOR_CODE, COLUMN_PROVIDER_ID,
+            COLUMN_VALUE, COLUMN_MONTH, COLUMN_EDITED, COLUMN_DATE_SENT, COLUMN_CREATED_AT, COLUMN_UPDATED_AT};
     private static final String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COLUMN_SUBMISSION_ID + " VARCHAR NOT NULL, " +
             COLUMN_INDICATOR_CODE + " VARCHAR NOT NULL," +
             COLUMN_PROVIDER_ID + " VARCHAR NOT NULL," +
             COLUMN_VALUE + " VARCHAR NOT NULL," +
@@ -53,9 +55,12 @@ public class MonthlyTalliesRepository extends BaseRepository {
             COLUMN_EDITED + " INTEGER NOT NULL DEFAULT 0," +
             COLUMN_DATE_SENT + " DATETIME NULL," +
             COLUMN_CREATED_AT + " DATETIME NULL," +
-            COLUMN_UPDATED_AT + " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+            COLUMN_UPDATED_AT + " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+            "CONSTRAINT " + COLUMN_SUBMISSION_ID + "_unique UNIQUE (" + COLUMN_SUBMISSION_ID + "))";
     private static final String INDEX_PROVIDER_ID = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_PROVIDER_ID + "_index" +
             " ON " + TABLE_NAME + "(" + COLUMN_PROVIDER_ID + " COLLATE NOCASE);";
+    private static final String INDEX_SUBMISSION_ID = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_SUBMISSION_ID + "_index" +
+            " ON " + TABLE_NAME + "(" + COLUMN_SUBMISSION_ID + " COLLATE NOCASE);";
     private static final String INDEX_INDICATOR_ID = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_INDICATOR_CODE + "_index" +
             " ON " + TABLE_NAME + "(" + COLUMN_INDICATOR_CODE + " COLLATE NOCASE);";
     private static final String INDEX_UPDATED_AT = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_UPDATED_AT + "_index" +
@@ -73,6 +78,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_QUERY);
         database.execSQL(INDEX_PROVIDER_ID);
+        database.execSQL(INDEX_SUBMISSION_ID);
         database.execSQL(INDEX_INDICATOR_ID);
         database.execSQL(INDEX_UPDATED_AT);
         database.execSQL(INDEX_MONTH);
@@ -278,11 +284,11 @@ public class MonthlyTalliesRepository extends BaseRepository {
                 cv.put(COLUMN_INDICATOR_CODE, tally.getIndicator().getIndicatorCode());
                 cv.put(COLUMN_VALUE, tally.getValue());
                 cv.put(COLUMN_PROVIDER_ID, tally.getProviderId());
+                cv.put(COLUMN_SUBMISSION_ID, ReportUtils.getFormSubmissionID(null, tally));
                 cv.put(COLUMN_MONTH, DF_YYYYMM.format(tally.getMonth()));
-                cv.put(COLUMN_DATE_SENT,
-                        tally.getDateSent() == null ? null : tally.getDateSent().getTime());
+                cv.put(COLUMN_DATE_SENT, tally.getDateSent() != null ? tally.getDateSent().getTime() : null);
                 cv.put(COLUMN_EDITED, tally.isEdited() ? 1 : 0);
-                cv.put(COLUMN_CREATED_AT, Calendar.getInstance().getTimeInMillis());
+                cv.put(COLUMN_CREATED_AT, tally.getCreatedAt().getTime());
                 database.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
                 database.setTransactionSuccessful();
 
@@ -330,6 +336,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
                     cv.put(COLUMN_EDITED, 1);
                     cv.put(COLUMN_PROVIDER_ID, userName);
                     cv.put(COLUMN_CREATED_AT, Calendar.getInstance().getTimeInMillis());
+                    cv.put(COLUMN_SUBMISSION_ID, userName + "-" + key + "-" + DF_YYYYMM.format(month));
 
                     Log.d("SAVING MONTHLy..", key + " & " + value + " & " + userName + " & " + month);
 
@@ -387,6 +394,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             curTally.setProviderId(
                     cursor.getString(cursor.getColumnIndex(COLUMN_PROVIDER_ID)));
             curTally.setIndicator(indicatorMap.get(indicatorId));
+            curTally.setSubmission_id(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
             curTally.setValue(cursor.getString(cursor.getColumnIndex(COLUMN_VALUE)));
             curTally.setMonth(DF_YYYYMM.parse(cursor.getString(cursor.getColumnIndex(COLUMN_MONTH))));
             curTally.setEdited(
@@ -420,7 +428,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
         try {
             cursor = getReadableDatabase().query(
-                    TABLE_NAME, new String[]{COLUMN_MONTH, COLUMN_CREATED_AT},
+                    TABLE_NAME, new String[]{COLUMN_MONTH, COLUMN_CREATED_AT, COLUMN_SUBMISSION_ID},
                     COLUMN_DATE_SENT + " IS NULL AND " + COLUMN_EDITED + " = 1",
                     null, COLUMN_MONTH, null, null);
 
@@ -436,6 +444,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                     Long dateStarted = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED_AT));
                     MonthlyTally tally = new MonthlyTally();
+                    tally.setSubmission_id(cursor.getString(cursor.getColumnIndex(COLUMN_SUBMISSION_ID)));
                     tally.setMonth(month);
                     tally.setCreatedAt(new Date(dateStarted));
                     tallies.add(tally);
@@ -450,7 +459,6 @@ public class MonthlyTalliesRepository extends BaseRepository {
                 cursor.close();
             }
         }
-
         return tallies;
     }
 }
