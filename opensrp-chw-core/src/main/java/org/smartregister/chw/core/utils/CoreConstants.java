@@ -833,6 +833,17 @@ public class CoreConstants {
     public static class HfStockUsageUtil {
         public static final String STOCK_NAME = "stockName";
         public static final String PROVIDER_NAME = "providerName";
+        public static final String STOCK_USAGE_TABLE_NAME = "stock_usage_report";
+        public static final String PROVIDER_TYPE = "stock_usage_providers";
 
     }
+
+    public static class HfInAppUtil {
+        public static final String IN_APP_TABLE_NAME = "monthly_tallies";
+        public static final String PROVIDER_TYPE = "in_app_providers";
+    }
+
+
+
+
 }

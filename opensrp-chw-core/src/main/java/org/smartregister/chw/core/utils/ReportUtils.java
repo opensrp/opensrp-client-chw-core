@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.Report;
 import org.smartregister.chw.core.domain.ReportHia2Indicator;
+import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.JsonFormUtils;
 
 import java.util.Calendar;
@@ -16,11 +17,11 @@ import java.util.List;
 public class ReportUtils {
     private static final String TAG = ReportUtils.class.getCanonicalName();
 
-
     public static void createReport(List<ReportHia2Indicator> hia2Indicators, Date month, String reportType) {
         try {
             String providerId = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
-            String locationId = CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(CoreConstants.CURRENT_LOCATION_ID);
+            String locationId = LocationHelper.getInstance().getDefaultLocation();
+            CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(CoreConstants.CURRENT_LOCATION_ID);
             Report report = new Report();
             report.setFormSubmissionId(JsonFormUtils.generateRandomUUIDString());
             report.setHia2Indicators(hia2Indicators);
