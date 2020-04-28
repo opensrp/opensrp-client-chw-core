@@ -18,7 +18,7 @@ import java.util.Set;
 public class CoreAncMemberProfilePresenterTest {
 
     @Mock
-    private org.smartregister.chw.core.contract.AncMemberProfileContract.View view;
+    private AncMemberProfileContract.View view;
 
     @Mock
     private AncMemberProfileContract.Interactor interactor;
