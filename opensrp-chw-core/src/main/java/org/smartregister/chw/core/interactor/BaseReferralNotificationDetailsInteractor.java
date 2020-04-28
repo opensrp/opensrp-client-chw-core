@@ -31,6 +31,8 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
 
         if (referralType.contains(context.getString(R.string.referral_notification_type_successful))) {
             referralNotificationItem = getDetailsForSuccessfulReferral(referralTaskId);
+        } else if (referralType.equals(context.getString(R.string.referral_notification_type_sick_child_follow_up))) {
+            referralNotificationItem = getDetailsForSickChildFollowUp(referralTaskId);
         } else if (referralType.contains(context.getString(R.string.referral_notification_type_pnc)) ||
                 referralType.contains(context.getString(R.string.referral_notification_type_anc))) {
             referralNotificationItem = getDetailsForPNCAndANCReferrals();
@@ -55,6 +57,20 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
             details.add(context.getString(R.string.referral_notification_village, record.getVillage()));
         }
         details.add(context.getString(R.string.referral_notification_record_closed));
+        return new ReferralNotificationItem(title, details);
+    }
+
+    @NotNull
+    private ReferralNotificationItem getDetailsForSickChildFollowUp(String baseEntityId) {
+        ReferralNotificationRecord notificationRecord = ReferralNotificationDao.getSickChildFollowUpRecord(baseEntityId);
+        String title = context.getString(R.string.followup_referral_notification_title, notificationRecord.getClientName(), getClientAge(notificationRecord.getClientDateOfBirth()));
+        List<String> details = new ArrayList<>();
+        if (notificationRecord.getVillage() != null) {
+            details.add(context.getString(R.string.referral_notification_village, notificationRecord.getVillage()));
+        }
+        details.add(context.getString(R.string.referral_notification_phone, notificationRecord.getPhone() != null ? notificationRecord.getPhone() : context.getString(R.string.no_phone_provided)));
+        details.add(context.getString(R.string.referral_notification_danger_sign, notificationRecord.getDangerSigns()));
+        details.add(context.getString(R.string.referral_notification_action_taken, notificationRecord.getActionTaken()));
         return new ReferralNotificationItem(title, details);
     }
 

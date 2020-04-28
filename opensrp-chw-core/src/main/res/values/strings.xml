@@ -648,4 +648,5 @@
     <string name="referral_notification_type_anc">ANC</string>
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
+    <string name="referral_notification_type_sick_child_follow_up">Sick Child Follow-up</string>
 </resources>
