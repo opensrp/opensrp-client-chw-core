@@ -182,7 +182,8 @@ public class ReportUtils {
             } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.IN_APP_REPORT_EDITED)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
                 if (value != null) {
-                    monthlyTally.setEdited(value.equals("1"));
+                    boolean edited = value.equals("1");
+                    monthlyTally.setEdited(edited);
                     continue;
                 } else
                     return null;
