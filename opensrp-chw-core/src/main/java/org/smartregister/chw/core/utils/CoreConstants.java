@@ -136,6 +136,8 @@ public class CoreConstants {
         public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
+        public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
+        public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
     }
 
     public static final class EncounterType {
@@ -183,6 +185,8 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_REGISTRATION_FORM = "male_family_planning_registration";
         private static final String FEMALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "female_family_planning_change_method";
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
+        private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
+        private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -328,6 +332,14 @@ public class CoreConstants {
 
         public static String getAncDangerSignsOutcomeForm() {
             return Utils.getLocalForm(ANC_DANGER_SIGNS_OUTCOME_FORM, locale, assetManager);
+        }
+
+        public static String getPncDangerSignsOutcomeForm() {
+            return PNC_DANGER_SIGNS_OUTCOME_FORM;
+        }
+
+        public static String getMalariaFollowUpHfForm() {
+            return Utils.getLocalForm(MALARIA_FOLLOW_UP_HF_FORM, locale, assetManager);
         }
 
         public static class CHILD_HOME_VISIT {
@@ -584,6 +596,8 @@ public class CoreConstants {
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
+        public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
+        public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
     }
 
     public static final class INTENT_KEY {

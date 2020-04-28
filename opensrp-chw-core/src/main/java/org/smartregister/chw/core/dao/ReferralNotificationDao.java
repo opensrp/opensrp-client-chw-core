@@ -32,10 +32,8 @@ public class ReferralNotificationDao extends AbstractDao {
                 "\n" +
                 "WHERE ec_family_member.is_closed = '0'\n" +
                 "  AND ec_family_member.date_removed is null\n" +
-                "  AND task.business_status = 'Complete'\n" +
-                "  AND task.status = 'COMPLETED'\n" +
                 "  AND task.code = 'Referral'\n" +
-                "  AND task._id = '%s'\n", referralId);
+                "  AND task._id = '%s' COLLATE NOCASE\n", referralId);
 
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
 

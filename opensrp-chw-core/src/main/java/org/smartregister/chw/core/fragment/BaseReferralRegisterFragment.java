@@ -64,7 +64,7 @@ public abstract class BaseReferralRegisterFragment extends BaseChwRegisterFragme
 
     @Override
     protected String getMainCondition() {
-        return "task.status = '" + Task.TaskStatus.READY.name() + "'";
+        return "task.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "'";
     }
 
     @Override

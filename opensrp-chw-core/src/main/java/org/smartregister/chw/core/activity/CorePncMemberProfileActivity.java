@@ -13,10 +13,12 @@ import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.contract.CorePncMemberProfileContract;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
 import org.smartregister.chw.core.model.ChildModel;
+import org.smartregister.chw.core.presenter.CorePncMemberProfilePresenter;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -35,7 +37,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileActivity {
+public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileActivity implements CorePncMemberProfileContract.View {
 
     protected ImageView imageViewCross;
     protected boolean hasDueServices = false;
@@ -74,12 +76,30 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_pnc_remove_baby) {
             getRemoveBabyMenuItem(item);
             return true;
+        } else if (itemId == R.id.action__pnc_danger_sign_outcome) {
+            getPncMemberProfilePresenter().startPncDangerSignsOutcomeForm();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void startFormActivity(JSONObject formJson) {
+        startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, formJson,
+                org.smartregister.family.util.Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
+    }
+
     protected List<CommonPersonObjectClient> getChildren(MemberObject memberObject) {
         return pncMemberProfileInteractor.pncChildrenUnder29Days(memberObject.getBaseEntityId());
+    }
+
+    public CorePncMemberProfilePresenter getPncMemberProfilePresenter() {
+        return (CorePncMemberProfilePresenter) presenter;
+    }
+
+    @Override
+    public void registerPresenter() {
+        presenter = new CorePncMemberProfilePresenter(this, new CorePncMemberProfileInteractor(), memberObject);
     }
 
     @Override

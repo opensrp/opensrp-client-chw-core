@@ -8,20 +8,21 @@ import java.util.List;
 
 public class ReferralTaskDao extends AbstractDao{
     /**
-     * This method return a list of referral tasks that were marked as done on CHW which are suppose to
-     * be dismissed (ended)
-     * @return list of referral tasks to be ended
+     * This method return a list of referral tasks that were marked as done on Facility and are now
+     * supposed to be dismissed (Completed) by the chw; 3 days after the CHW marked them as done.
+     * @return list of referral tasks to be completed
      */
-    public static List<Task> getToBeEndedReferralTasks(){
+    public static List<Task> getToBeCompletedReferralTasks(){
         String queryStatement =
-                "SELECT task.*\n" +
-                "FROM task\n" +
-                "         INNER JOIN ec_referral_dismissal on task._id = ec_referral_dismissal.referral_task\n" +
-                "WHERE (Cast((JulianDay(ec_referral_dismissal.notification_dismissal_date) -\n" +
-                "             JulianDay(date('now'))) As Integer) < 0\n" +
-                "    OR ec_referral_dismissal.notification_dismissal_date is null)\n" +
-                "  AND task.end is null\n" +
-                "\n";
+                        "SELECT task.*\n" +
+                        "FROM task\n" +
+                        "         INNER JOIN ec_referral_dismissal on task._id = ec_referral_dismissal.referral_task\n" +
+                        "WHERE (Cast((JulianDay(ec_referral_dismissal.notification_dismissal_date) -\n" +
+                        "             JulianDay(date('now'))) As Integer) < 0\n" +
+                        "    OR ec_referral_dismissal.notification_dismissal_date is null)\n" +
+                        "  AND task.status = 'READY'\n" +
+                        "  AND task.business_status = 'Complete'";
+
         return AbstractDao.readData(queryStatement, mapColumnValuesToTask());
     }
 

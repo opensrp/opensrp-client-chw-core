@@ -71,9 +71,8 @@ public class BaseReferralNotificationQueryProvider {
               "WHERE ec_family_member.is_closed = '0'\n" +
               "  AND ec_family_member.date_removed is null\n" +
               "  AND task.business_status = 'Complete'\n" +
-              "  AND task.status = 'COMPLETED'\n" +
+              "  AND (task.status = 'READY' OR task.status = 'IN_PROGRESS')\n" +
               "  AND task.code = 'Referral'\n" +
-              "  AND task.end is null\n" +
               "  AND ec_family_member.base_entity_id IN (%s)\n" +
               "ORDER BY event.dateCreated DESC";
     }

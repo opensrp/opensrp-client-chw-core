@@ -275,7 +275,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.REFERRAL_DISMISSAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                    CoreReferralUtils.endCompletedReferralTasks();
+                    CoreReferralUtils.completeClosedReferralTasks();
                 }
                 break;
             default:
