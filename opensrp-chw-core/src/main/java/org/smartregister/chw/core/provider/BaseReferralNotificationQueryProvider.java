@@ -28,18 +28,46 @@ public class BaseReferralNotificationQueryProvider {
     @NonNull
     public String[] countExecuteQueries() {
         return new String[]{
-            "/* COUNT NOTIFICATION REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
-                    "SELECT COUNT(*) AS c\n" +
-                    "FROM task\n" +
-                    "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
-                    "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
-                    "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
-                    "\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    "  AND ec_family_member.date_removed is null\n" +
-                    "  AND task.business_status = 'Complete'\n" +
-                    "  AND task.status = 'COMPLETED'\n" +
-                    "  AND task.code = 'Referral'\n"
+                "/* COUNT NOTIFICATION REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
+                        "SELECT COUNT(*) AS c\n" +
+                        "FROM task\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+                        "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
+                        "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND task.business_status = 'Complete'\n" +
+                        "  AND task.status = 'COMPLETED'\n" +
+                        "  AND task.code = 'Referral'\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE CHILD FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)  AS c\n" +
+                        "FROM ec_sick_child_followup\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE ANC DANGER SIGNS OUTCOME FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)  AS c\n" +
+                        "FROM ec_anc_danger_signs_outcome\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE PNC DANGER SIGNS OUTCOME FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)  AS c\n" +
+                        "FROM ec_pnc_danger_signs_outcome\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE MALARIA FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)  AS c\n" +
+                        "FROM ec_malaria_followup_hf\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n"
         };
     }
 
@@ -52,28 +80,28 @@ public class BaseReferralNotificationQueryProvider {
      */
     @NonNull
     public String mainSelectWhereIDsIn() {
-      return  "/* NOTIFICATION FROM REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
-              "SELECT ec_family_member.first_name    AS first_name,\n" +
-              "       ec_family_member.middle_name   AS middle_name,\n" +
-              "       ec_family_member.last_name     AS last_name,\n" +
-              "       ec_family_member.dob           AS dob,\n" +
-              "       ec_family_member.id            AS _id,\n" +
-              "       task._id                       AS  referral_task_id,\n" +
-              "       ec_family_member.relational_id AS relationalid,\n" +
-              "       event.dateCreated              AS notification_date,\n" +
-              "       'Successful referral'          AS notification_type\n" +
-              "FROM task\n" +
-              "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
-              "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
-              "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
-              "\n" +
-              "WHERE ec_family_member.is_closed = '0'\n" +
-              "  AND ec_family_member.date_removed is null\n" +
-              "  AND task.business_status = 'Complete'\n" +
-              "  AND task.status = 'COMPLETED'\n" +
-              "  AND task.code = 'Referral'\n" +
-              "  AND ec_family_member.base_entity_id IN (%s)\n" +
-              "ORDER BY event.dateCreated DESC\n" +
-              "\n";
+        return "/* NOTIFICATION FROM REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
+                "SELECT ec_family_member.first_name    AS first_name,\n" +
+                "       ec_family_member.middle_name   AS middle_name,\n" +
+                "       ec_family_member.last_name     AS last_name,\n" +
+                "       ec_family_member.dob           AS dob,\n" +
+                "       ec_family_member.id            AS _id,\n" +
+                "       task._id                       AS  referral_task_id,\n" +
+                "       ec_family_member.relational_id AS relationalid,\n" +
+                "       event.dateCreated              AS notification_date,\n" +
+                "       'Successful referral'          AS notification_type\n" +
+                "FROM task\n" +
+                "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+                "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
+                "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
+                "\n" +
+                "WHERE ec_family_member.is_closed = '0'\n" +
+                "  AND ec_family_member.date_removed is null\n" +
+                "  AND task.business_status = 'Complete'\n" +
+                "  AND task.status = 'COMPLETED'\n" +
+                "  AND task.code = 'Referral'\n" +
+                "  AND ec_family_member.base_entity_id IN (%s)\n" +
+                "ORDER BY event.dateCreated DESC\n" +
+                "\n";
     }
 }
