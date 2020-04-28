@@ -40,6 +40,8 @@ public class CoreConstants {
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
+        String PLAN_ID = "plan_id";
+        String BUSINESS_STATUS = "business_status";
     }
 
     public interface SERVICE_GROUPS {
