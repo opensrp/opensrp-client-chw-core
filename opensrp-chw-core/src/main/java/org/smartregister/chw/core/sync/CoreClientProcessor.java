@@ -10,6 +10,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
@@ -265,11 +266,16 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
             case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
-            case CoreConstants.EventType.REFERRAL_DISMISSAL:
             case CoreConstants.EventType.MALARIA_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                     org.smartregister.util.Utils.startAsyncTask(new MalariaUtil.CloseMalariaMemberFromRegister(event.getBaseEntityId()), null);
+                }
+                break;
+            case CoreConstants.EventType.REFERRAL_DISMISSAL:
+                if (eventClient.getClient() != null) {
+                    processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                    CoreReferralUtils.endCompletedReferralTasks();
                 }
                 break;
             default:

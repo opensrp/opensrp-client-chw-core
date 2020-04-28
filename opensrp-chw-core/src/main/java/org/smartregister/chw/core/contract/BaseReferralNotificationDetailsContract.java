@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.contract;
 
+import android.util.Pair;
+
 import org.smartregister.chw.core.domain.ReferralNotificationItem;
 
 public interface BaseReferralNotificationDetailsContract {
@@ -27,6 +29,10 @@ public interface BaseReferralNotificationDetailsContract {
         void dismissReferralNotification(String referralTaskId);
 
         void setClientBaseEntityId(String clientBaseEntityId);
+
+        void setNotificationDates(Pair<String, String > dates);
+
+        Pair<String, String> getNotificationDates();
     }
 
     interface Interactor {

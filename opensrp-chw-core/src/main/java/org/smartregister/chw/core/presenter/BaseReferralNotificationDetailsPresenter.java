@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.presenter;
 
+import android.util.Pair;
+
 import org.smartregister.chw.core.contract.BaseReferralNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ReferralNotificationDao;
 import org.smartregister.chw.core.domain.ReferralNotificationItem;
@@ -12,6 +14,7 @@ public class BaseReferralNotificationDetailsPresenter implements BaseReferralNot
     private WeakReference<BaseReferralNotificationDetailsContract.View> view;
     private BaseReferralNotificationDetailsContract.Interactor interactor;
     private String clientBaseEntityId;
+    private Pair<String, String> notificationDates;
 
     public BaseReferralNotificationDetailsPresenter(BaseReferralNotificationDetailsContract.View view) {
         this.view = new WeakReference<>(view);
@@ -61,5 +64,15 @@ public class BaseReferralNotificationDetailsPresenter implements BaseReferralNot
     @Override
     public void setClientBaseEntityId(String clientBaseEntityId) {
         this.clientBaseEntityId = clientBaseEntityId;
+    }
+
+    @Override
+    public void setNotificationDates(Pair<String, String> notificationDates) {
+        this.notificationDates = notificationDates;
+    }
+
+    @Override
+    public Pair<String, String> getNotificationDates() {
+        return notificationDates;
     }
 }

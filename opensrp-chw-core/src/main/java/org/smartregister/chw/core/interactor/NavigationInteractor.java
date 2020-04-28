@@ -231,6 +231,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                             "  AND ec_family_member.date_removed is null\n" +
                             "  AND task.business_status = 'Complete'\n" +
                             "  AND task.status = 'COMPLETED'\n" +
+                            "  AND task.end is null\n" +
                             "  AND task.code = 'Referral'\n";
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 

@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ReferralTaskDao;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -341,4 +342,25 @@ public class CoreReferralUtils {
         }
     }
 
+    public static void endCompletedReferralTasks(){
+        List<Task> toBeEndedTasks = ReferralTaskDao.getToBeEndedReferralTasks();
+        if (toBeEndedTasks != null) {
+            Timber.d("Tasks to be completed size: %s ", toBeEndedTasks.size());
+            for (Task task : toBeEndedTasks) {
+                completeTask(task, true);
+            }
+        }
+    }
+
+    public static void completeTask(Task currentTask, boolean endTask) {
+        DateTime now = new DateTime();
+        if (endTask){
+            currentTask.setExecutionEndDate(now);
+        }
+        currentTask.setLastModified(now);
+        currentTask.setStatus(Task.TaskStatus.COMPLETED);
+        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.COMPLETE);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+    }
 }

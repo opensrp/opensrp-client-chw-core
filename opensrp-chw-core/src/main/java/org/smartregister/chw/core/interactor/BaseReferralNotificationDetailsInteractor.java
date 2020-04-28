@@ -2,6 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Pair;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -22,9 +23,13 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.JsonFormUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -32,6 +37,7 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
 
     private BaseReferralNotificationDetailsContract.Presenter presenter;
     private Context context;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public BaseReferralNotificationDetailsInteractor(BaseReferralNotificationDetailsContract.Presenter presenter) {
         this.presenter = presenter;
@@ -80,6 +86,20 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
                     .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.TEXT)
                     .withParentCode("").withHumanReadableValues(new ArrayList<>()));
 
+            baseEvent.addObs((new Obs())
+                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DATE_CREATED)
+                    .withValue(presenter.getNotificationDates().first)
+                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DATE_CREATED)
+                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.DATE)
+                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
+
+            baseEvent.addObs((new Obs())
+                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DISMISSAL_DATE)
+                    .withValue(presenter.getNotificationDates().second)
+                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DISMISSAL_DATE)
+                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.DATE)
+                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
+
             CoreJsonFormUtils.tagSyncMetadata(sharedPreferences, baseEvent);
 
             baseEvent.setLocationId(userLocationId);
@@ -102,16 +122,45 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
         ReferralNotificationRecord record = ReferralNotificationDao.getSuccessfulReferral(referralTaskId);
         presenter.setClientBaseEntityId(record.getClientBaseEntityId());
 
+        Pair<String, String> notificationDatesPair = null;
+        String notificationDate = record.getNotificationDate();
+        try {
+            notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
+            notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
+        } catch (ParseException e) {
+            Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
+        }
+        presenter.setNotificationDates(notificationDatesPair);
+
         String title = context.getString(R.string.successful_referral_notification_title,
                 record.getClientName(), getClientAge(record.getClientDateOfBirth()));
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.referral_notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
-        details.add(context.getString(R.string.referral_notification_closure_date, record.getNotificationDate()));
+        details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
         if (record.getVillage() != null) {
             details.add(context.getString(R.string.referral_notification_village, record.getVillage()));
         }
         details.add(context.getString(R.string.referral_notification_record_closed));
         return new ReferralNotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
+    }
+
+    /**
+     * This method is used to obtain the date when the referral will be dismissed from the updates
+     * register
+     *
+     * @param eventCreationDate date the referral was created
+     * @return new date returned after adding 3 to the provided date
+     */
+    private String getDismissalDate(String eventCreationDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(eventCreationDate));
+        } catch (ParseException e) {
+            Timber.e(e);
+        }
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        return dateFormat.format(calendar.getTime());
     }
 
     @NotNull
