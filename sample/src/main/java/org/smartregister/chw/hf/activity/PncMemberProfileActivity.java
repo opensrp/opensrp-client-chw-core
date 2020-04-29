@@ -95,7 +95,7 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     }
 
     @Override
-    protected void registerPresenter() {
+    public void registerPresenter() {
         presenter = new PncMemberProfilePresenter(this, new PncMemberProfileInteractor(), memberObject);
     }
 
