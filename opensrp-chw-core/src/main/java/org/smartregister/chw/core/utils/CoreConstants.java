@@ -170,7 +170,10 @@ public class CoreConstants {
         private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
         private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
         private static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
-        private static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
+        private static final String HIV_REFERRAL_FORM = "referrals/hiv_referral_form";
+        private static final String TB_REFERRAL_FORM = "referrals/tb_referral_form";
+        private static final String GBV_REFERRAL_FORM = "referrals/gbv_referral_form";
+        private static final String CHILD_GBV_REFERRAL_FORM = "referrals/child_gbv_referral_form";
         private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
         private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
         private static final String FEMALE_FAMILY_PLANNING_REFERRAL_FORM = "female_fp_referral_form";
@@ -318,8 +321,20 @@ public class CoreConstants {
             return Utils.getLocalForm(ROUTINE_HOUSEHOLD_VISIT, locale, assetManager);
         }
 
-        public static String getGeneralReferralForm() {
-            return Utils.getLocalForm(GENERAL_REFERRAL_FORM, locale, assetManager);
+        public static String getHivReferralForm() {
+            return HIV_REFERRAL_FORM;
+        }
+
+        public static String getTbReferralForm() {
+            return TB_REFERRAL_FORM;
+        }
+
+        public static String getGbvReferralForm() {
+            return GBV_REFERRAL_FORM;
+        }
+
+        public static String getChildGbvReferralForm() {
+            return CHILD_GBV_REFERRAL_FORM;
         }
 
         public static String getReferralFollowupForm() {

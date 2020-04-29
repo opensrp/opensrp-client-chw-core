@@ -50,18 +50,13 @@ public abstract class ChwCoreSyncIntentService extends SyncIntentService {
                     return;
                 }
 
-
-                JSONArray jsonArray = new JSONArray((String) resp.payload());
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int eCount = fetchNumberOfEvents(jsonObject);
-                    if (eCount < 0) {
-                        fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
-                        return;
-                    } else {
-                        processClientEvent(jsonObject); //Process the client and his/her events
-                    }
+                JSONObject jsonObject = new JSONObject((String) resp.payload());
+                int eCount = fetchNumberOfEvents(jsonObject);
+                if (eCount < 0) {
+                    fetchMissingEventsFailed(count, tasksWithMissingClientsEvents);
+                    return;
+                } else {
+                    processClientEvent(jsonObject); //Process the client and his/her events
                 }
             } catch (Exception e) {
                 Timber.e(e, "Fetch Retry Exception:  %s", e.getMessage());
