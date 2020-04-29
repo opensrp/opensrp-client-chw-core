@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.contract.CoreMalariaProfileContract;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.dao.AncDao;
@@ -18,11 +19,11 @@ import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreMalariaProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.core.presenter.CoreMalariaMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.malaria.activity.BaseMalariaProfileActivity;
-import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -35,7 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActivity implements
-        FamilyOtherMemberProfileExtendedContract.View, FamilyProfileExtendedContract.PresenterCallBack {
+        FamilyOtherMemberProfileExtendedContract.View, CoreMalariaProfileContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
     private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
 
@@ -70,7 +71,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        profilePresenter = new BaseMalariaProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
+        profilePresenter = new CoreMalariaMemberProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
         fetchProfileData();
         profilePresenter.refreshProfileBottom();
     }
@@ -88,6 +89,8 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
         } else if (itemId == R.id.action_remove_member) {
             removeMember();
             return true;
+        } else if (itemId == R.id.action_malaria_followup) {
+            getPresenter().startHfMalariaFollowupForm();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -101,30 +104,35 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
         switch (requestCode) {
             case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
-                if (resultCode == Activity.RESULT_OK) {
-                    Intent intent = new Intent(this, getFamilyProfileActivityClass());
-                    intent.putExtras(getIntent().getExtras());
-                    startActivity(intent);
-                    finish();
-                }
+                Intent intent = new Intent(this, getFamilyProfileActivityClass());
+                intent.putExtras(getIntent().getExtras());
+                startActivity(intent);
+                finish();
+
                 break;
             case JsonFormUtils.REQUEST_CODE_GET_JSON:
-                if (resultCode == RESULT_OK) {
-                    try {
-                        String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
-                        JSONObject form = new JSONObject(jsonString);
-                        if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                            presenter().updateFamilyMember(jsonString);
-                        }else if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
-                            CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
-                            showToast(this.getString(R.string.referral_submitted));
-                        }
-                    } catch (Exception e) {
-                        Timber.e(e);
+                try {
+                    String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
+                    JSONObject form = new JSONObject(jsonString);
+                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
+                    if (encounterType.equals(Utils.metadata().familyMemberRegister.updateEventType)) {
+                        presenter().updateFamilyMember(jsonString);
+                    } else if (encounterType.equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
+                        CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
+                        showToast(this.getString(R.string.referral_submitted));
+                    } else if (encounterType.equals(CoreConstants.EventType.MALARIA_FOLLOW_UP_HF)) {
+                        getPresenter().createHfMalariaFollowupEvent(Utils.getAllSharedPreferences(), jsonString, memberObject.getBaseEntityId());
                     }
+                } catch (Exception e) {
+                    Timber.e(e);
                 }
+
                 break;
             default:
                 break;
@@ -138,6 +146,10 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @NonNull
     @Override
     public abstract CoreFamilyOtherMemberActivityPresenter presenter();
+
+    public CoreMalariaProfileContract.Presenter getPresenter() {
+        return (CoreMalariaProfileContract.Presenter) profilePresenter;
+    }
 
     public void setOnMemberTypeLoadedListener(OnMemberTypeLoadedListener onMemberTypeLoadedListener) {
         this.onMemberTypeLoadedListener = onMemberTypeLoadedListener;
@@ -185,7 +197,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
         }
     }
 
-    protected void startFormActivity(JSONObject jsonForm) {
+    public void startFormActivity(JSONObject jsonForm) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
