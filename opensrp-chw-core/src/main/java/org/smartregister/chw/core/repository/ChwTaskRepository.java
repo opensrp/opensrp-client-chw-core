@@ -41,4 +41,20 @@ public class ChwTaskRepository extends TaskRepository {
         return tasks;
     }
 
+    public List<Task> getReadyTasks() {
+        List<Task> tasks = new ArrayList<>();
+        try (Cursor cursor = getReadableDatabase().rawQuery(String.format(
+                "SELECT * FROM %s " +
+                        " WHERE " +
+                        " %s = %S AND %s IS NOT NULL "
+                , "task", "status", "'Ready'", "reason_reference"), new String[]{})) {
+            while (cursor.moveToNext()) {
+                tasks.add(readCursor(cursor));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return tasks;
+    }
+
 }
