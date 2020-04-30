@@ -49,10 +49,10 @@ public class DraftMonthlyFragment extends Fragment {
 
         }
     };
-    private Button startNewReportEnabled;
-    private Button startNewReportDisabled;
+    public Button startNewReportEnabled;
+    public Button startNewReportDisabled;
     private AlertDialog alertDialog;
-    private final View.OnClickListener monthClickListener = new View.OnClickListener() {
+    public final View.OnClickListener monthClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             alertDialog.dismiss();
@@ -65,8 +65,8 @@ public class DraftMonthlyFragment extends Fragment {
         }
     };
     private DraftsAdapter draftsAdapter;
-    private ListView listView;
-    private View noDraftsView;
+    public ListView listView;
+    public View noDraftsView;
 
     public static DraftMonthlyFragment newInstance() {
         DraftMonthlyFragment fragment = new DraftMonthlyFragment();
@@ -101,7 +101,7 @@ public class DraftMonthlyFragment extends Fragment {
         super.onPause();
     }
 
-    private void updateStartNewReportButton(final List<Date> dates) {
+    public void updateStartNewReportButton(final List<Date> dates) {
         boolean hia2ReportsReady = dates != null && !dates.isEmpty();
 
         startNewReportEnabled.setVisibility(View.GONE);
@@ -195,7 +195,7 @@ public class DraftMonthlyFragment extends Fragment {
         }
     }
 
-    private void updateResults(final List<Date> list, final View.OnClickListener clickListener) {
+    public void updateResults(final List<Date> list, final View.OnClickListener clickListener) {
         final SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Utils.getLocale(getContext()));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.month_results, null);
@@ -280,7 +280,7 @@ public class DraftMonthlyFragment extends Fragment {
 
     }
 
-    private void startMonthlyReportForm(Date date) {
+    public void startMonthlyReportForm(Date date) {
         ((HIA2ReportsActivity) getActivity()).startMonthlyReportForm("monthly_report", date);
     }
 
