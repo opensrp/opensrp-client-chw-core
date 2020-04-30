@@ -45,8 +45,8 @@ public class BaseReferralNotificationDetailsPresenter implements BaseReferralNot
     }
 
     @Override
-    public void showMemberProfile(String baseEntityId) {
-
+    public void showMemberProfile() {
+        //TODO implement functionality for navigating to member profile
     }
 
     @Override

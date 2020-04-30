@@ -24,7 +24,7 @@ public interface BaseReferralNotificationDetailsContract {
 
         void onReferralDetailsFetched(ReferralNotificationItem referralNotificationItem);
 
-        void showMemberProfile(String baseEntityId);
+        void showMemberProfile();
 
         void dismissReferralNotification(String referralTaskId);
 

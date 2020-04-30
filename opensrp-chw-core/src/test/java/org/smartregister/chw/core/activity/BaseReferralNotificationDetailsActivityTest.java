@@ -20,12 +20,14 @@ public class BaseReferralNotificationDetailsActivityTest extends BaseUnitTest {
 
     private BaseReferralNotificationDetailsContract.View view;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
+    private TextView markAsDoneTextView =  new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
 
     @Before
     public void setUp() {
         view = Robolectric.buildActivity(TestableReferralNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
+        ReflectionHelpers.setField(view, "markAsDoneTextView", markAsDoneTextView);
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
     }
 
@@ -44,6 +46,12 @@ public class BaseReferralNotificationDetailsActivityTest extends BaseUnitTest {
         view.setReferralNotificationDetails(referralNotificationItem);
         Assert.assertNotNull(referralNotificationTitle.getText());
         Assert.assertEquals(2, referralNotificationDetails.getChildCount());
+    }
+
+    @Test
+    public void testDisableMarkAsDoneAction(){
+        view.disableMarkAsDoneAction(true);
+        Assert.assertFalse(markAsDoneTextView.isEnabled());
     }
 
     public static class TestableReferralNotificationDetailsActivity extends BaseReferralNotificationDetailsActivity {

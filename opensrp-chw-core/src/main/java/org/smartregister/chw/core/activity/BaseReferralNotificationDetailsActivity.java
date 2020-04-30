@@ -131,7 +131,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.view_profile) {
-            getPresenter().showMemberProfile("baseEntityId");
+            getPresenter().showMemberProfile();
         } else if (view.getId() == R.id.mark_as_done) {
             getPresenter().dismissReferralNotification(referralTaskId);
         } else {
