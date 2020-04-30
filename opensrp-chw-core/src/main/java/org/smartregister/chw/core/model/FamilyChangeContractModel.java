@@ -16,16 +16,18 @@ public class FamilyChangeContractModel implements FamilyChangeContract.Model {
 
         for (FamilyMember client : clients) {
 
-            if (client.getMemberID().equalsIgnoreCase(primaryCareID)) {
-                client.setPrimaryCareGiver(true);
-            }
+            if (client.getMemberID() != null) {
+                if (client.getMemberID().equalsIgnoreCase(primaryCareID)) {
+                    client.setPrimaryCareGiver(true);
+                }
 
-            if (client.getMemberID().equalsIgnoreCase(headOfHouseID)) {
-                client.setFamilyHead(true);
-            }
+                if (client.getMemberID().equalsIgnoreCase(headOfHouseID)) {
+                    client.setFamilyHead(true);
+                }
 
-            if (!listIDs.contains(client.getMemberID())) {
-                members.add(client);
+                if (!listIDs.contains(client.getMemberID())) {
+                    members.add(client);
+                }
             }
         }
 

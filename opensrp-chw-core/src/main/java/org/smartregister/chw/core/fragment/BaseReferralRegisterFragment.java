@@ -16,7 +16,6 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
-import org.smartregister.domain.Task;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public abstract class BaseReferralRegisterFragment extends BaseChwRegisterFragme
 
     @Override
     protected String getMainCondition() {
-        return "task.status = '" + Task.TaskStatus.READY.name() + "'";
+        return "task.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "'";
     }
 
     @Override
