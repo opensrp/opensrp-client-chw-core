@@ -68,7 +68,7 @@ public class CoreStockUsageItemAdapter extends RecyclerView.Adapter<CoreStockUsa
         private TextView stockItemUnitOfMeasure;
         private TextView stockItemCount;
         private ImageView goToItemDetails;
-        public View view;
+        protected View view;
 
         private CoreStockUsageReportViewHolder(View v) {
             super(v);

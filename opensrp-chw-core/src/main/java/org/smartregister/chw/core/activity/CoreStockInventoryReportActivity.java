@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class CoreStockInventoryReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
-    public RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
     public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
     public static List<String> getItems() {
@@ -63,7 +63,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         return stockUsageItemModelsList;
     }
 
-    public void reloadRecycler(MonthStockUsageModel selected) {
+    protected void reloadRecycler(MonthStockUsageModel selected) {
         String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 

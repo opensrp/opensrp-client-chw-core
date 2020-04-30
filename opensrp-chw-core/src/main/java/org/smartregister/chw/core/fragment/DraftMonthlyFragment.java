@@ -49,10 +49,10 @@ public class DraftMonthlyFragment extends Fragment {
 
         }
     };
-    public Button startNewReportEnabled;
-    public Button startNewReportDisabled;
+    protected Button startNewReportEnabled;
+    protected Button startNewReportDisabled;
     private AlertDialog alertDialog;
-    public final View.OnClickListener monthClickListener = new View.OnClickListener() {
+    protected final View.OnClickListener monthClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             alertDialog.dismiss();
@@ -61,12 +61,11 @@ public class DraftMonthlyFragment extends Fragment {
             if (tag != null && tag instanceof Date) {
                 startMonthlyReportForm((Date) tag);
             }
-
         }
     };
     private DraftsAdapter draftsAdapter;
-    public ListView listView;
-    public View noDraftsView;
+    protected ListView listView;
+    protected View noDraftsView;
 
     public static DraftMonthlyFragment newInstance() {
         DraftMonthlyFragment fragment = new DraftMonthlyFragment();
@@ -80,7 +79,6 @@ public class DraftMonthlyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View fragmentview = inflater.inflate(R.layout.sent_monthly_fragment, container, false);
-
         listView = fragmentview.findViewById(R.id.list);
         noDraftsView = fragmentview.findViewById(R.id.empty_view);
         startNewReportEnabled = fragmentview.findViewById(R.id.start_new_report_enabled);
@@ -101,7 +99,7 @@ public class DraftMonthlyFragment extends Fragment {
         super.onPause();
     }
 
-    public void updateStartNewReportButton(final List<Date> dates) {
+    protected void updateStartNewReportButton(final List<Date> dates) {
         boolean hia2ReportsReady = dates != null && !dates.isEmpty();
 
         startNewReportEnabled.setVisibility(View.GONE);
@@ -195,7 +193,7 @@ public class DraftMonthlyFragment extends Fragment {
         }
     }
 
-    public void updateResults(final List<Date> list, final View.OnClickListener clickListener) {
+    protected void updateResults(final List<Date> list, final View.OnClickListener clickListener) {
         final SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Utils.getLocale(getContext()));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.month_results, null);
@@ -280,7 +278,7 @@ public class DraftMonthlyFragment extends Fragment {
 
     }
 
-    public void startMonthlyReportForm(Date date) {
+    protected void startMonthlyReportForm(Date date) {
         ((HIA2ReportsActivity) getActivity()).startMonthlyReportForm("monthly_report", date);
     }
 
