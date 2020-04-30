@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.presenter;
 
+import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
     private BaseReferralNotificationDetailsPresenter notificationDetailsPresenter;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
+    private String baseEntityId = "some-base-entity-id";
 
     @Before
     public void setUp() {
@@ -40,6 +42,8 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
         notificationDetailsPresenter = new BaseReferralNotificationDetailsPresenter(view);
         notificationDetailsPresenter.setInteractor(interactor);
+        notificationDetailsPresenter.setClientBaseEntityId(baseEntityId);
+        notificationDetailsPresenter.setNotificationDates(Pair.create("2020-04-28", "2020-05-01"));
     }
 
     @Test
@@ -63,6 +67,17 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
     @Test
     public void testGetView() {
         Assert.assertNotNull(notificationDetailsPresenter.getView());
+    }
+
+    @Test
+    public void testGetBaseEntityId (){
+        Assert.assertNotNull(notificationDetailsPresenter.getClientBaseEntityId());
+        Assert.assertEquals(baseEntityId, notificationDetailsPresenter.getClientBaseEntityId());
+    }
+
+    @Test
+    public void testGetNotificationDates() {
+       Assert.assertNotNull(notificationDetailsPresenter.getNotificationDates());
     }
 
     public static class TestableReferralNotificationDetailsActivity extends BaseReferralNotificationDetailsActivity {

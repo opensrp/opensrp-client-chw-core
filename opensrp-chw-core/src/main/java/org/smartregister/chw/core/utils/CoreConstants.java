@@ -14,6 +14,9 @@ public class CoreConstants {
     public static final String REFERRAL_PLAN_ID = "5270285b-5a3b-4647-b772-c0b3c52e2b71";
     public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
     public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
+    public static final String FORMSUBMISSION_FIELD = "formsubmissionField";
+    public static final String TEXT = "text";
+    public static final String DATE = "date";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
 
@@ -37,6 +40,8 @@ public class CoreConstants {
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
+        String PLAN_ID = "plan_id";
+        String BUSINESS_STATUS = "business_status";
     }
 
     public interface SERVICE_GROUPS {
@@ -126,6 +131,7 @@ public class CoreConstants {
         public static final String PNC_HOME_VISIT_NOT_DONE_UNDO = "PNC Home Visit Not Done Undo";
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
+        public static final String REFERRAL_DISMISSAL = "Referral Dismissal";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
@@ -606,6 +612,7 @@ public class CoreConstants {
         public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
+        public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
     }
@@ -785,8 +792,8 @@ public class CoreConstants {
             public static final String REFERRAL_TASK = "referral_task";
             public static final String REFERRAL_TASK_PREVIOUS_STATUS = "referral_task_previous_status";
             public static final String REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS = "referral_task_previous_business_status";
-
-
+            public static final String NOTIFICATION_DATE_CREATED = "notification_date_created";
+            public static final String NOTIFICATION_DISMISSAL_DATE = "notification_dismissal_date";
         }
     }
 
