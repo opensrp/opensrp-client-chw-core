@@ -1,23 +1,17 @@
 package org.smartregister.chw.core.interactor;
 
 import org.joda.time.LocalDate;
-import org.json.JSONObject;
-import org.smartregister.chw.anc.util.NCUtils;
-import org.smartregister.chw.core.contract.CoreMalariaProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
 import org.smartregister.chw.core.dao.VisitDao;
-import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.malaria.contract.MalariaProfileContract;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.interactor.BaseMalariaProfileInteractor;
-import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.domain.Alert;
 import org.smartregister.domain.AlertStatus;
-import org.smartregister.repository.AllSharedPreferences;
 
 import java.util.List;
 
-public class CoreMalariaProfileInteractor extends BaseMalariaProfileInteractor implements CoreMalariaProfileContract.Interactor {
+public class CoreMalariaProfileInteractor extends BaseMalariaProfileInteractor {
 
     @Override
     public void refreshProfileInfo(MemberObject memberObject, MalariaProfileContract.InteractorCallBack callback) {
@@ -39,11 +33,5 @@ public class CoreMalariaProfileInteractor extends BaseMalariaProfileInteractor i
             return alerts.get(0);
 
         return null;
-    }
-
-    @Override
-    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
-        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, org.smartregister.chw.core.utils.CoreReferralUtils.setEntityId(jsonString, entityID), CoreConstants.TABLE_NAME.MALARIA_FOLLOW_UP_HF);
-        NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
     }
 }

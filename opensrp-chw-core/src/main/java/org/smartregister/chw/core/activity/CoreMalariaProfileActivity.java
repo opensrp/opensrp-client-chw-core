@@ -126,8 +126,6 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
                     } else if (encounterType.equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
                         CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
                         showToast(this.getString(R.string.referral_submitted));
-                    } else if (encounterType.equals(CoreConstants.EventType.MALARIA_FOLLOW_UP_HF)) {
-                        getPresenter().createHfMalariaFollowupEvent(Utils.getAllSharedPreferences(), jsonString, memberObject.getBaseEntityId());
                     }
                 } catch (Exception e) {
                     Timber.e(e);
