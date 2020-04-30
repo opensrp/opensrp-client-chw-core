@@ -92,9 +92,9 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(sqlAncMember);
 
             case CoreConstants.TABLE_NAME.TASK:
-                String sqlTask = "select count(*) from task inner join " +
+                String sqlTask = String.format("select count(*) from task inner join " +
                         "ec_family_member member on member.base_entity_id = task.for COLLATE NOCASE " +
-                        "WHERE task.status =\"READY\" and member.date_removed is null ";
+                        "WHERE task.business_status = '%s' and member.date_removed is null ", CoreConstants.BUSINESS_STATUS.REFERRED);
                 return NavigationDao.getQueryCount(sqlTask);
 
             case CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME:
@@ -231,8 +231,8 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                             "WHERE ec_family_member.is_closed = '0'\n" +
                             "  AND ec_family_member.date_removed is null\n" +
                             "  AND task.business_status = 'Complete'\n" +
-                            "  AND task.status = 'COMPLETED'\n" +
-                            "  AND task.code = 'Referral'\n";
+                            "  AND (task.status = 'READY' OR task.status = 'IN_PROGRESS')\n" +
+                            "  AND task.code = 'Referral'";
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             default:
