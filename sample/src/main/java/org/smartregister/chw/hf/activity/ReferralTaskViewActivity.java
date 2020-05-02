@@ -17,14 +17,13 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.hf.BuildConfig;
 import org.smartregister.chw.hf.HealthFacilityApplication;
 import org.smartregister.chw.hf.R;
@@ -417,14 +416,8 @@ public class ReferralTaskViewActivity extends SecuredActivity {
 
     private void completeTask() {
         Task currentTask = getTask();
-        DateTime now = new DateTime();
-        currentTask.setExecutionEndDate(now);
-        currentTask.setLastModified(now);
         currentTask.setForEntity(getBaseEntityId());
-        currentTask.setStatus(Task.TaskStatus.COMPLETED);
-        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.COMPLETE);
-        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
-        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+        CoreReferralUtils.completeTask(currentTask, false);
     }
 
     public String getBaseEntityId() {

@@ -43,11 +43,8 @@ import timber.log.Timber;
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
     protected boolean hasDueServices = false;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-yyyy");
     private LocalDate ancCreatedDate;
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

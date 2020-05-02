@@ -16,12 +16,14 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.TaskRepository;
 
 import java.util.Date;
 import java.util.Set;
@@ -80,7 +82,8 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
 
     @Override
     public void getClientTasks(String planId, String baseEntityId, @NotNull AncMemberProfileContract.InteractorCallBack callback) {
-        Set<Task> taskList = CoreChwApplication.getInstance().getTaskRepository().getTasksByEntityAndStatus(planId, baseEntityId, Task.TaskStatus.READY);
+        TaskRepository taskRepository = CoreChwApplication.getInstance().getTaskRepository();
+        Set<Task> taskList = ((ChwTaskRepository)taskRepository).getReferralTasksForClientByStatus(planId, baseEntityId, CoreConstants.BUSINESS_STATUS.REFERRED);
         callback.setClientTasks(taskList);
     }
 

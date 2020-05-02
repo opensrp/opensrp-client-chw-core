@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,8 +18,10 @@ import com.google.android.material.appbar.AppBarLayout;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseReferralNotificationDetailsContract;
+import org.smartregister.chw.core.dao.ReferralNotificationDao;
 import org.smartregister.chw.core.domain.ReferralNotificationItem;
 import org.smartregister.chw.core.presenter.BaseReferralNotificationDetailsPresenter;
+import org.smartregister.util.Utils;
 import org.smartregister.view.activity.MultiLanguageActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
@@ -28,11 +31,15 @@ import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFI
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.REFERRAL_TASK_ID;
 
 public abstract class BaseReferralNotificationDetailsActivity extends MultiLanguageActivity
-        implements BaseReferralNotificationDetailsContract.View {
+        implements BaseReferralNotificationDetailsContract.View, View.OnClickListener {
 
-    private TextView referralNotificationTitle;
-    private LinearLayout referralNotificationDetails;
+    protected TextView referralNotificationTitle;
+    protected LinearLayout referralNotificationDetails;
+    protected TextView markAsDoneTextView;
+    protected TextView viewProfileTextView;
+
     private BaseReferralNotificationDetailsContract.Presenter presenter;
+    private String referralTaskId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
         inflateToolbar();
         setupViews();
         initPresenter();
+        disableMarkAsDoneAction(ReferralNotificationDao.isMarkedAsDone(referralTaskId));
     }
 
     private void inflateToolbar() {
@@ -65,9 +73,13 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
         }
     }
 
-    private void setupViews() {
+    protected void setupViews() {
         referralNotificationTitle = findViewById(R.id.referral_notification_title);
         referralNotificationDetails = findViewById(R.id.referral_notification_content);
+        markAsDoneTextView = findViewById(R.id.mark_as_done);
+        markAsDoneTextView.setOnClickListener(this);
+        viewProfileTextView = findViewById(R.id.view_profile);
+        viewProfileTextView.setOnClickListener(this);
     }
 
     @Override
@@ -80,9 +92,20 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     public void initPresenter() {
         presenter = new BaseReferralNotificationDetailsPresenter(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
-            String referralTaskId = getIntent().getExtras().getString(REFERRAL_TASK_ID);
+            referralTaskId = getIntent().getExtras().getString(REFERRAL_TASK_ID);
             String notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
             presenter.getReferralDetails(referralTaskId, notificationType);
+        }
+    }
+
+    @Override
+    public void disableMarkAsDoneAction(boolean disable) {
+        if (disable) {
+            markAsDoneTextView.setEnabled(false);
+            markAsDoneTextView.setBackground(ContextCompat.getDrawable(this,
+                    R.drawable.disabled_button_background));
+            markAsDoneTextView.setTextColor(ContextCompat.getColor(this,
+                    R.color.text_black));
         }
     }
 
@@ -103,5 +126,16 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
 
     public BaseReferralNotificationDetailsContract.Presenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.view_profile) {
+            getPresenter().showMemberProfile();
+        } else if (view.getId() == R.id.mark_as_done) {
+            getPresenter().dismissReferralNotification(referralTaskId);
+        } else {
+            Utils.showShortToast(this, getString(R.string.perform_click_action));
+        }
     }
 }
