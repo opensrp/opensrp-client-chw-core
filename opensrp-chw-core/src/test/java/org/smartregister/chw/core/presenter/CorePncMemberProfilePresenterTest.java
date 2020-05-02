@@ -35,8 +35,9 @@ public class CorePncMemberProfilePresenterTest {
         AllSharedPreferences allSharedPreferences = Mockito.mock(AllSharedPreferences.class);
         String jsonString = "{'Encounter':'PNC-Follow-up'}";
         String baseEntityId = "id-123-456";
-        pncMemberProfilePresenter.createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId);
-        Mockito.verify(interactor).createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId);
+        String locationID = "pangea";
+        pncMemberProfilePresenter.createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId, locationID);
+        Mockito.verify(interactor).createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId, locationID);
     }
 
     @Test
