@@ -69,7 +69,6 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         activity = controller.get();
     }
 
-
     @After
     public void tearDown() {
         try {

@@ -1,97 +1,63 @@
 package org.smartregister.chw.core.activity;
 
-import android.os.Bundle;
 import android.view.View;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.commonregistry.CommonPersonObject;
+import org.smartregister.chw.core.custom_views.FamilyFloatingMenu;
+import org.smartregister.chw.core.utils.ChildDBConstants;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.util.JsonFormUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoreFamilyProfileActivityTest extends BaseUnitTest {
 
-    private CoreFamilyProfileActivity controller;
-    private String baseID = JsonFormUtils.generateRandomUUIDString();
-    private CommonPersonObject commonPersonObject;
-    private CommonPersonObjectClient commonPersonObjectClient;
-
-    @Mock
-    private View view;
-    @Mock
-    private Bundle fragmentArguments;
+    private CoreFamilyProfileActivity activity;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = Mockito.mock(CoreFamilyProfileActivity.class, Mockito.CALLS_REAL_METHODS);
-        commonPersonObject = Mockito.mock(CommonPersonObject.class, Mockito.CALLS_REAL_METHODS);
-        commonPersonObjectClient = Mockito.mock(CommonPersonObjectClient.class, Mockito.CALLS_REAL_METHODS);
+        activity = Mockito.mock(CoreFamilyProfileActivity.class, Mockito.CALLS_REAL_METHODS);
     }
 
     @Test
     public void updateHasPhoneAnswered() {
-        Mockito.doNothing().when(controller).updateHasPhone(true);
-        controller.updateHasPhone(true);
-        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(boolean.class);
-        Mockito.verify(controller, Mockito.times(1)).updateHasPhone(captor.capture());
-        Assert.assertEquals(captor.getValue(), true);
+        FamilyFloatingMenu familyFloatingMenu = Mockito.mock(FamilyFloatingMenu.class);
+        ReflectionHelpers.setField(activity, "familyFloatingMenu", familyFloatingMenu);
+
+        activity.updateHasPhone(true);
+        Mockito.verify(familyFloatingMenu).reDraw(true);
     }
 
     @Test
     public void goToProfileActivityAnswered() {
-        Mockito.doNothing().when(controller).goToProfileActivity(view, fragmentArguments);
-        controller.goToProfileActivity(view, fragmentArguments);
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        ArgumentCaptor<Bundle> bundleArgumentCaptor = ArgumentCaptor.forClass(Bundle.class);
-        Mockito.verify(controller, Mockito.times(1)).goToProfileActivity(captor.capture(), bundleArgumentCaptor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-        Assert.assertEquals(bundleArgumentCaptor.getValue(), fragmentArguments);
-    }
+        View view = Mockito.mock(View.class);
+        activity = Mockito.spy(activity);
 
-    @Test
-    public void goToOtherMemberProfileActivityAnswered() {
-        Mockito.doNothing().when(controller).goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
-        controller.goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
-        ArgumentCaptor<CommonPersonObjectClient> captor = ArgumentCaptor.forClass(CommonPersonObjectClient.class);
-        ArgumentCaptor<Bundle> bundleArgumentCaptor = ArgumentCaptor.forClass(Bundle.class);
-        Mockito.verify(controller, Mockito.times(1)).goToOtherMemberProfileActivity(captor.capture(), bundleArgumentCaptor.capture());
-        Assert.assertEquals(captor.getValue(), commonPersonObjectClient);
-        Assert.assertEquals(bundleArgumentCaptor.getValue(), fragmentArguments);
+        Map<String, String> columnMap = new HashMap<>();
+        columnMap.put(ChildDBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.CHILD);
+        CommonPersonObjectClient client = Mockito.mock(CommonPersonObjectClient.class);
+        Mockito.doReturn(columnMap).when(client).getColumnmaps();
+
+        Mockito.doReturn(client).when(view).getTag();
+        Mockito.doNothing().when(activity).goToChildProfileActivity(Mockito.any(), Mockito.any());
+
+        activity.goToProfileActivity(view, null);
+
+        Mockito.verify(activity).goToChildProfileActivity(client, null);
     }
 
     @Test
     public void whenGetFamilyBaseEntityIdAnswered() {
-        Mockito.when(controller.getFamilyBaseEntityId())
-                .thenReturn(baseID);
-        Assert.assertEquals(baseID, controller.getFamilyBaseEntityId());
-    }
-
-    @Test
-    public void whenGetAncCommonPersonObjectAnswered() {
-        Mockito.when(controller.getAncCommonPersonObject(baseID))
-                .thenReturn(commonPersonObject);
-        Assert.assertEquals(commonPersonObject, controller.getAncCommonPersonObject(baseID));
-    }
-
-    @Test
-    public void whenIsAncMemberAnswered() {
-        Mockito.when(controller.isAncMember(baseID))
-                .thenReturn(true);
-        Assert.assertEquals(true, controller.isAncMember(baseID));
-    }
-
-    @Test
-    public void whenGetPncCommonPersonObjectAnswered() {
-        Mockito.when(controller.getPncCommonPersonObject(baseID))
-                .thenReturn(commonPersonObject);
-        Assert.assertEquals(commonPersonObject, controller.getPncCommonPersonObject(baseID));
+        ReflectionHelpers.setField(activity, "familyBaseEntityId", "12345");
+        Assert.assertEquals("12345", activity.getFamilyBaseEntityId());
     }
 
 
