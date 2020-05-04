@@ -11,5 +11,11 @@ public class CoreMalariaProfileContract {
 
     public interface Presenter extends MalariaProfileContract.Presenter {
         void startHfMalariaFollowupForm();
+
+        void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
+    }
+
+    public interface Interactor extends MalariaProfileContract.Interactor {
+        void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
     }
 }

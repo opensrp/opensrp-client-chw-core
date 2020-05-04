@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreMalariaProfileContract;
+import org.smartregister.repository.AllSharedPreferences;
 
 import java.lang.ref.WeakReference;
 
@@ -16,6 +17,9 @@ public class CoreMalariaMemberProfilePresenterTest {
     @Mock
     private CoreMalariaProfileContract.View view;
 
+    @Mock
+    private CoreMalariaProfileContract.Interactor interactor;
+
     private CoreMalariaMemberProfilePresenter memberProfilePresenter;
 
     @Before
@@ -23,6 +27,16 @@ public class CoreMalariaMemberProfilePresenterTest {
         MockitoAnnotations.initMocks(this);
         memberProfilePresenter = Mockito.mock(CoreMalariaMemberProfilePresenter.class, Mockito.CALLS_REAL_METHODS);
         ReflectionHelpers.setField(memberProfilePresenter, "view", new WeakReference<>(view));
+    }
+
+    @Test
+    public void createMalariaFollowUpEventInvokesInteractor() throws Exception {
+        AllSharedPreferences allSharedPreferences = Mockito.mock(AllSharedPreferences.class);
+        String jsonString = "{'Encounter':'Follow-up'}";
+        String baseEntityId = "id-123-456";
+        String locationId = "123-location-abc";
+        memberProfilePresenter.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId, locationId);
+        Mockito.verify(interactor).createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId, locationId);
     }
 
     @Test

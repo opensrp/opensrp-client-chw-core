@@ -2,19 +2,21 @@ package org.smartregister.chw.core.presenter;
 
 import org.smartregister.chw.core.contract.CoreMalariaProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.malaria.contract.MalariaProfileContract;
 import org.smartregister.chw.malaria.domain.MemberObject;
 import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
 import org.smartregister.family.util.Utils;
+import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
 import timber.log.Timber;
 
 public class CoreMalariaMemberProfilePresenter extends BaseMalariaProfilePresenter implements CoreMalariaProfileContract.Presenter {
     private FormUtils formUtils;
+    private CoreMalariaProfileContract.Interactor interactor;
 
-    public CoreMalariaMemberProfilePresenter(CoreMalariaProfileContract.View view, MalariaProfileContract.Interactor interactor, MemberObject memberObject) {
+    public CoreMalariaMemberProfilePresenter(CoreMalariaProfileContract.View view, CoreMalariaProfileContract.Interactor interactor, MemberObject memberObject) {
         super(view, interactor, memberObject);
+        this.interactor = interactor;
     }
 
     @Override
@@ -32,6 +34,11 @@ public class CoreMalariaMemberProfilePresenter extends BaseMalariaProfilePresent
         } catch (Exception ex) {
             Timber.e(ex);
         }
+    }
+
+    @Override
+    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
+        interactor.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, entityID, locationId);
     }
 
     private FormUtils getFormUtils() {
