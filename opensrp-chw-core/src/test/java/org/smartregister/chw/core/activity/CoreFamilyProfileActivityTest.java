@@ -109,6 +109,22 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
         Mockito.verify(activity, Mockito.times(3)).startActivityForResult(Mockito.any(), Mockito.eq(CoreConstants.ProfileActivityResults.CHANGE_COMPLETED));
     }
 
+    /*
+    @Test
+    public void testOnActivityResult() {
+        activity = Mockito.spy(activity);
+        FamilyProfileExtendedContract.Presenter presenter = Mockito.mock(FamilyProfileExtendedContract.Presenter.class);
+        Mockito.doReturn(presenter).when(activity).presenter();
+
+        Intent data = Mockito.mock(Intent.class);
+        String json = "{\"encounter_type\": \"Child Registration\"}";
+        Mockito.doReturn(json).when(data).getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
+
+        activity.onActivityResult(JsonFormUtils.REQUEST_CODE_GET_JSON, Activity.RESULT_OK, data);
+        Mockito.verify(presenter).saveChildForm(json, false);
+    }
+     */
+
     @Test
     public void updateHasPhoneAnswered() {
         FamilyFloatingMenu familyFloatingMenu = Mockito.mock(FamilyFloatingMenu.class);
