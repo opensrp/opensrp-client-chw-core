@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.Report;
 import org.smartregister.chw.core.domain.ReportHia2Indicator;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.JsonFormUtils;
 
 import java.util.Calendar;
