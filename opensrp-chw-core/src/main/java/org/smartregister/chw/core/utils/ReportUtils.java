@@ -20,8 +20,7 @@ public class ReportUtils {
     public static void createReport(List<ReportHia2Indicator> hia2Indicators, Date month, String reportType) {
         try {
             String providerId = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
-            String locationId = LocationHelper.getInstance().getDefaultLocation();
-            CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(CoreConstants.CURRENT_LOCATION_ID);
+            String locationId = CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(CoreConstants.CURRENT_LOCATION_ID);
             Report report = new Report();
             report.setFormSubmissionId(JsonFormUtils.generateRandomUUIDString());
             report.setHia2Indicators(hia2Indicators);
