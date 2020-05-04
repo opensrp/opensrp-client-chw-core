@@ -395,6 +395,17 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     }
 
     @Override
+    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString, String locationId) throws Exception {
+        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, getChildBaseEntityId()), CoreConstants.TABLE_NAME.SICK_CHILD_FOLLOW_UP);
+        org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
+        if (locationId != null) {
+            // Allows setting the ID for sync purposes
+            baseEvent.setLocationId(locationId);
+        }
+        NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
+    }
+
+    @Override
     public String getChildBaseEntityId() {
         return childBaseEntityId;
     }

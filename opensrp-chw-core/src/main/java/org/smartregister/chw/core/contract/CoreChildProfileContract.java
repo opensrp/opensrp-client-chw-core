@@ -124,6 +124,8 @@ public interface CoreChildProfileContract {
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
+        void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString, String locationId) throws Exception;
+
         void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID);
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
@@ -157,6 +159,8 @@ public interface CoreChildProfileContract {
         String getCurrentLocationID(Context context);
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
+
+        void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString, String locationId) throws Exception;
 
         String getChildBaseEntityId();
 
