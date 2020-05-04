@@ -74,14 +74,14 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     public static final int REQUEST_CODE_GET_JSON = 3432;
     public static final String FORM_KEY_CONFIRM = "confirm";
     public static final int TOOLBAR_ID = R.id.location_switching_toolbar;
-    public static final String TAG = HIA2ReportsActivity.class.getCanonicalName();
+    protected static final String TAG = HIA2ReportsActivity.class.getCanonicalName();
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    public ViewPager mViewPager;
-    public TabLayout tabLayout;
+    protected ViewPager mViewPager;
+    protected TabLayout tabLayout;
     private ProgressDialog progressDialog;
 
     @Override
