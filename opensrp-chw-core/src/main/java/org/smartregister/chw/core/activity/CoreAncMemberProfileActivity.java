@@ -38,8 +38,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
-import timber.log.Timber;
-
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
     protected boolean hasDueServices = false;
@@ -85,18 +83,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
                 break;
             case Constants.REQUEST_CODE_HOME_VISIT:
                 this.displayView();
-                break;
-            case JsonFormUtils.REQUEST_CODE_GET_JSON:
-                try {
-                    String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
-                    JSONObject form = new JSONObject(jsonString);
-                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
-                    if (encounterType.equals(CoreConstants.EventType.ANC_DANGER_SIGNS_OUTCOME)) {
-                        ancMemberProfilePresenter().createAncDangerSignsOutcomeEvent(Utils.getAllSharedPreferences(), jsonString, baseEntityID);
-                    }
-                } catch (Exception ex) {
-                    Timber.e(ex);
-                }
                 break;
             default:
                 break;

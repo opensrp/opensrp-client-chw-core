@@ -83,13 +83,18 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
     @Override
     public void getClientTasks(String planId, String baseEntityId, @NotNull AncMemberProfileContract.InteractorCallBack callback) {
         TaskRepository taskRepository = CoreChwApplication.getInstance().getTaskRepository();
-        Set<Task> taskList = ((ChwTaskRepository)taskRepository).getReferralTasksForClientByStatus(planId, baseEntityId, CoreConstants.BUSINESS_STATUS.REFERRED);
+        Set<Task> taskList = ((ChwTaskRepository) taskRepository).getReferralTasksForClientByStatus(planId, baseEntityId, CoreConstants.BUSINESS_STATUS.REFERRED);
         callback.setClientTasks(taskList);
     }
 
     @Override
-    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
         Event baseEvent = JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, entityID), CoreConstants.TABLE_NAME.ANC_DANGER_SIGNS_OUTCOME);
+        JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
+        if (locationId != null) {
+            // Allows setting the ID for sync purposes
+            baseEvent.setLocationId(locationId);
+        }
         NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseEvent)));
     }
 }
