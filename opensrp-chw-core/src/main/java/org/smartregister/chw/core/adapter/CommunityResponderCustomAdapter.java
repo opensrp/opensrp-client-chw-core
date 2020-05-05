@@ -14,9 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
-import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.model.CommunityResponderModel;
-import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.ArrayList;
 
@@ -50,9 +48,8 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
 
             // start the object
             try {
-                String json = EventDao.getLatestJson(communityResponderModel.getId(), CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION);
-                activity.startJsonActivity(json);
-            }catch (Exception e){
+                activity.startJsonActivity(communityResponderModel);
+            } catch (Exception e) {
                 Timber.e(e);
             }
 

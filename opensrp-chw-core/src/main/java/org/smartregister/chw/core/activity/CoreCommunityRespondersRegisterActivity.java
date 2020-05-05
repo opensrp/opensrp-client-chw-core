@@ -23,6 +23,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.model.CommunityResponderModel;
 import org.smartregister.chw.core.repository.CommunityResponderRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -35,6 +36,8 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
@@ -122,10 +125,20 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void startJsonActivity(String jsonObject) {
+    public void startJsonActivity(CommunityResponderModel communityResponderModel) throws Exception {
         // Intent intent = new Intent(getContext(), Utils.metadata().familyMemberFormActivity);
+
+        JSONObject jsonObject = org.smartregister.util.FormUtils.getInstance(CoreChwApplication.getInstance().getApplicationContext()).getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+        jsonObject.put("baseEntityId", communityResponderModel.getId());
+        Map<String, String> valueMap = new HashMap<>();
+        valueMap.put("responder_phone_number", communityResponderModel.getResponderPhoneNumber());
+        valueMap.put("responder_name", communityResponderModel.getResponderName());
+        valueMap.put("responder_gps", communityResponderModel.getResponderLocation());
+
+        CoreJsonFormUtils.populateJsonForm(jsonObject, valueMap);
+
         Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
-        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonObject);
+        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonObject.toString());
 
         Form form = new Form();
         form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
