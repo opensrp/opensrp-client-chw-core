@@ -13,14 +13,20 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
+import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.model.CommunityResponderModel;
+import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityResponderModel> implements View.OnClickListener {
 
     Context mContext;
     private int lastPosition = -1;
+    private CoreCommunityRespondersRegisterActivity activity;
 
     private static class ViewHolder {
         TextView txtName;
@@ -28,9 +34,10 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         ImageView editDelete;
     }
 
-    public CommunityResponderCustomAdapter(ArrayList<CommunityResponderModel> data, Context context) {
+    public CommunityResponderCustomAdapter(ArrayList<CommunityResponderModel> data, Context context, CoreCommunityRespondersRegisterActivity activity) {
         super(context, R.layout.row_item, data);
         this.mContext = context;
+        this.activity = activity;
     }
 
     @Override
@@ -40,6 +47,14 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         CommunityResponderModel communityResponderModel = (CommunityResponderModel) object;
 
         if (v.getId() == R.id.edit_delete) {
+
+            // start the object
+            try {
+                String json = EventDao.getLatestJson(communityResponderModel.getId(), CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION);
+                activity.startJsonActivity(json);
+            }catch (Exception e){
+                Timber.e(e);
+            }
 
             Snackbar.make(v, "Base ID " + communityResponderModel.getId(), Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();

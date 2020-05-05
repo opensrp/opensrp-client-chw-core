@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
+
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
@@ -25,6 +28,9 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.family.util.Constants;
+import org.smartregister.family.util.JsonFormUtils;
+import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 
@@ -61,7 +67,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         CommunityResponderRepository communityResponderRepository = CoreChwApplication.getInstance().communityResponderRepository();
-        CommunityResponderCustomAdapter adapter = communityResponderRepository.readAllRespondersAdapter(getApplicationContext());
+        CommunityResponderCustomAdapter adapter = communityResponderRepository.readAllRespondersAdapter(getApplicationContext(), this);
 
         lv_country.setAdapter(adapter);
         registerForContextMenu(lv_country);
@@ -114,6 +120,20 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void startJsonActivity(String jsonObject) {
+        // Intent intent = new Intent(getContext(), Utils.metadata().familyMemberFormActivity);
+        Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
+        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonObject);
+
+        Form form = new Form();
+        form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
+        form.setWizard(false);
+        form.setSaveLabel("Save");
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+
+        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override
