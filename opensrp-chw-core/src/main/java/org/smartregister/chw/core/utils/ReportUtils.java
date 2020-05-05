@@ -16,7 +16,6 @@ import java.util.List;
 public class ReportUtils {
     private static final String TAG = ReportUtils.class.getCanonicalName();
 
-
     public static void createReport(List<ReportHia2Indicator> hia2Indicators, Date month, String reportType) {
         try {
             String providerId = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();

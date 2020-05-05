@@ -2,6 +2,7 @@ package org.smartregister.chw.core.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.junit.Assert;
@@ -29,8 +30,8 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        stockUsageItemModelList = Arrays.asList(new StockUsageItemModel("zinc 10", "packets", "10"),
-                new StockUsageItemModel("Paracetamol", "packets", "20"));
+        stockUsageItemModelList = Arrays.asList(new StockUsageItemModel("zinc 10", "packets", "10", "chwone"),
+                new StockUsageItemModel("Paracetamol", "packets", "20", "chwone"));
         adapter = new CoreStockUsageItemAdapter(stockUsageItemModelList, context);
     }
 
@@ -46,12 +47,14 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
         TextView stockName = Mockito.mock(TextView.class);
         TextView stockUnitOfMeasure = Mockito.mock(TextView.class);
         TextView stockCount = Mockito.mock(TextView.class);
+        ImageView goToItemDetails = Mockito.mock(ImageView.class);
         View view = Mockito.mock(View.class);
 
-        ReflectionHelpers.setField(viewHolder, "stockName", stockName);
-        ReflectionHelpers.setField(viewHolder, "stockUnitOfMeasure", stockUnitOfMeasure);
-        ReflectionHelpers.setField(viewHolder, "stockCount", stockCount);
+        ReflectionHelpers.setField(viewHolder, "stockItemName", stockName);
+        ReflectionHelpers.setField(viewHolder, "stockItemUnitOfMeasure", stockUnitOfMeasure);
+        ReflectionHelpers.setField(viewHolder, "stockItemCount", stockCount);
         ReflectionHelpers.setField(viewHolder, "view", view);
+        ReflectionHelpers.setField(viewHolder, "goToItemDetails", goToItemDetails);
 
         StockUsageItemModel stockUsageItemModel = stockUsageItemModelList.get(0) ;
         adapter.onBindViewHolder(viewHolder, 0);

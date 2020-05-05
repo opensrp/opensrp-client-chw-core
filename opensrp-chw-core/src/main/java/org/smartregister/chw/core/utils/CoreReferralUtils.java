@@ -1,6 +1,9 @@
 package org.smartregister.chw.core.utils;
 
 import android.app.Activity;
+import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.utils.FormUtils;
@@ -13,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ReferralTaskDao;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -137,18 +141,18 @@ public class CoreReferralUtils {
         createReferralTask(baseEvent.getBaseEntityId(), allSharedPreferences, assignReferralFocus(referralTable), getReferralProblems(jsonString));
     }
 
-    private static String setEntityId(String jsonString, String entityId) {
-        String referralForm = "";
+    public static String setEntityId(String jsonString, String entityId) {
+        String jsonForm = "";
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             jsonObject.put(CoreConstants.ENTITY_ID, entityId);
 
-            referralForm = jsonObject.toString();
+            jsonForm = jsonObject.toString();
         } catch (JSONException e) {
-            Timber.e(e, "CoreChildProfileInteractor --> setEntityId");
+            Timber.e(e, "Interactor --> setEntityId");
         }
 
-        return referralForm;
+        return jsonForm;
     }
 
     private static void createReferralTask(String baseEntityId, AllSharedPreferences allSharedPreferences, String focus, String referralProblems) {
@@ -319,4 +323,46 @@ public class CoreReferralUtils {
         return startedFromReferrals;
     }
 
+    @NotNull
+    public static String getFamilyMemberFtsSearchQuery(@Nullable String filters) {
+        if (TextUtils.isEmpty(filters)) {
+            return "SELECT object_id, last_interacted_with\n" +
+                    "FROM (SELECT object_id, last_interacted_with FROM ec_family_member_search WHERE date_removed IS NULL)\n" +
+                    "ORDER BY last_interacted_with DESC";
+        } else {
+            String query = "SELECT object_id\n" +
+                    "FROM (SELECT object_id, last_interacted_with\n" +
+                    "      FROM ec_family_member_search\n" +
+                    "      WHERE date_removed IS NULL\n" +
+                    "        AND phrase MATCH '%s*'\n" +
+                    "     )\n" +
+                    "ORDER BY last_interacted_with DESC";
+            query = query.replace("%s", filters);
+            return query;
+        }
+    }
+
+    /**
+     * This method is used by CHW to complete a referral task by marking it as done.
+     */
+    public static void completeClosedReferralTasks() {
+        List<Task> tasksToBeCompleted = ReferralTaskDao.getToBeCompletedReferralTasks();
+        if (tasksToBeCompleted != null) {
+            Timber.d("Tasks to be completed size: %s ", tasksToBeCompleted.size());
+            for (Task task : tasksToBeCompleted) {
+                completeTask(task, true);
+            }
+        }
+    }
+
+    public static void completeTask(Task currentTask, boolean endTask) {
+        DateTime now = new DateTime();
+        if (endTask) {
+            currentTask.setStatus(Task.TaskStatus.COMPLETED);
+        }
+        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.COMPLETE);
+        currentTask.setLastModified(now);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+    }
 }

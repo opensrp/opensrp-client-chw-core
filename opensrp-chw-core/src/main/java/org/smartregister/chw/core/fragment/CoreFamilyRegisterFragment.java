@@ -121,7 +121,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
 
     private void dueFilter(String mainConditionString) {
         this.joinTables = null;
-        super.filter(searchText(), "", mainConditionString, false);
+        super.filter(getSearchText(), "", mainConditionString, false);
     }
 
     private void switchViews(View dueOnlyLayout, boolean isPress) {
@@ -134,7 +134,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         }
     }
 
-    private String searchText() {
+    private String getSearchText() {
         return (getSearchView() == null) ? "" : getSearchView().getText().toString();
     }
 
@@ -231,7 +231,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     }
 
     private void normalFilter(View dueOnlyLayout) {
-        filter(searchText(), "", presenter().getMainCondition(), false);
+        filter(getSearchText(), "", presenter().getMainCondition(), false);
         dueOnlyLayout.setTag(null);
         switchViews(dueOnlyLayout, false);
     }

@@ -13,6 +13,8 @@ import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.FormUtils;
 
+import java.util.UUID;
+
 public class CoreFamilyPlanningProfilePresenterTest {
 
     @Mock
@@ -23,8 +25,7 @@ public class CoreFamilyPlanningProfilePresenterTest {
     @Mock
     private CoreFamilyPlanningMemberProfileContract.Interactor interactor;
 
-    @Mock
-    private FpMemberObject fpMemberObject;
+    private FpMemberObject fpMemberObject = new FpMemberObject();
 
     @Mock
     private FormUtils formUtils;
@@ -38,6 +39,8 @@ public class CoreFamilyPlanningProfilePresenterTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        fpMemberObject.setGender("Male");
+        fpMemberObject.setBaseEntityId(UUID.randomUUID().toString());
         profilePresenter = Mockito.spy(new CoreFamilyPlanningProfilePresenter(view, interactor, fpMemberObject));
     }
 

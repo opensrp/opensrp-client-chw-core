@@ -2,6 +2,7 @@ package org.smartregister.chw.core.repository;
 
 import net.sqlcipher.Cursor;
 
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.cloudant.models.Event;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.BaseRepository;
@@ -10,7 +11,9 @@ import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -39,6 +42,25 @@ public class ChwTaskRepository extends TaskRepository {
             Timber.e(e);
         }
         return tasks;
+    }
+
+    public Set<Task> getReferralTasksForClientByStatus(String planId, String forEntity, String businessStatus ) {
+        Cursor cursor = null;
+        Set<Task> taskSet = new HashSet<>();
+        try {
+            cursor = getReadableDatabase().rawQuery(String.format("SELECT * FROM %s WHERE %s=? COLLATE NOCASE AND %s =? AND %s = ? COLLATE NOCASE AND code = 'Referral' ",
+                    TASK_TABLE, CoreConstants.DB_CONSTANTS.PLAN_ID, CoreConstants.DB_CONSTANTS.BUSINESS_STATUS, CoreConstants.DB_CONSTANTS.FOR), new String[]{planId, businessStatus, forEntity});
+            while (cursor.moveToNext()) {
+                Task task = readCursor(cursor);
+                taskSet.add(task);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return taskSet;
     }
 
 }

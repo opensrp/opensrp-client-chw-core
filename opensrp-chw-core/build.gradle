@@ -96,7 +96,7 @@ tasks.withType(Test) {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    api('org.smartregister:opensrp-client-native-form:1.7.27-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:1.7.32-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -106,7 +106,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
 
-    api('org.smartregister:opensrp-client-core:1.10.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.10.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -182,14 +182,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-chw-family-planning:1.0.21-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-chw-family-planning:1.0.22-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    api('org.smartregister:opensrp-client-chw-referral:1.2.0-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-referral:1.2.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
