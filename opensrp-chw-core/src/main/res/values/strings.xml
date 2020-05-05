@@ -625,7 +625,7 @@
     <string name="back_to_updates">Back to Updates</string>
     <string name="successful_referral_notification_title">Name: %1$s, %2$s</string>
     <string name="followup_referral_notification_title">%1$s has attended the facility on %2$s</string>
-    <string name="referral_notification_danger_sign">Danger sign: %1$s</string>
+    <string name="referral_notification_danger_sign">Danger signs: %1$s</string>
     <string name="referral_notification_action_taken">Action taken: %1$s</string>
     <string name="referral_notification_village">Village: %1$s</string>
     <string name="referral_notification_selected_method">Selected method: %1$s</string>
@@ -653,5 +653,9 @@
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
     <string name="referral_notification_type_sick_child_follow_up">Sick Child Follow-up</string>
+    <string name="referral_notification_type_pnc_danger_signs">PNC Danger Signs Outcome</string>
+    <string name="referral_notification_type_anc_danger_signs">ANC Danger Signs Outcome</string>
+    <string name="referral_notification_type_malaria_follow_up">Malaria Follow-up</string>
+
     <string name="perform_click_action">perform click action</string>
 </resources>

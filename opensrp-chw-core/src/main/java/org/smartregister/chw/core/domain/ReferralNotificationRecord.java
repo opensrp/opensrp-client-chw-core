@@ -10,6 +10,7 @@ public class ReferralNotificationRecord {
     private String notificationDate;
     private String actionTaken;
     private String dangerSigns;
+    private String diagnosis;
     private String selectedMethod;
 
     public ReferralNotificationRecord(String clientBaseEntityId) {
@@ -86,5 +87,13 @@ public class ReferralNotificationRecord {
 
     public void setClientBaseEntityId(String clientBaseEntityId) {
         this.clientBaseEntityId = clientBaseEntityId;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
     }
 }
