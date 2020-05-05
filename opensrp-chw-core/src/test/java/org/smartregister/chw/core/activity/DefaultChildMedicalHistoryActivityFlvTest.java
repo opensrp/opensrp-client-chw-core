@@ -11,18 +11,26 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.shadows.AncLibraryShadowUtil;
+import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.CustomFontTextViewShadowHelper;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
@@ -38,7 +46,9 @@ import java.util.Map;
 /**
  * @author rkodev
  */
-public class DefaultChildMedicalHistoryActivityFlvTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, CustomFontTextViewShadowHelper.class, AncLibraryShadowUtil.class})
+public class DefaultChildMedicalHistoryActivityFlvTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
