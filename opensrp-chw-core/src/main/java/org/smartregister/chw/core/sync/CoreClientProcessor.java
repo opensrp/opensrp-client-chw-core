@@ -8,6 +8,8 @@ import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.model.CommunityResponderModel;
+import org.smartregister.chw.core.repository.CommunityResponderRepository;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
@@ -247,6 +249,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.STOCK_USAGE_REPORT:
                 clientProcessStockEvent(event);
+                break;
+            case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
+                clientProcessCommunityResponderEvent(event);
                 break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
@@ -687,5 +692,45 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e);
         }
         return null;
+    }
+
+    private CommunityResponderModel getCommunityResponderFromObs(List<Obs> responderObs) {
+        CommunityResponderModel communityResponderModel = new CommunityResponderModel();
+        for (Obs obs : responderObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    communityResponderModel.setResponderName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    communityResponderModel.setResponderPhoneNumber(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_GPS)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    communityResponderModel.setResponderLocation(value);
+                    continue;
+                } else
+                    return null;
+            }
+        }
+        return communityResponderModel;
+    }
+
+    private void clientProcessCommunityResponderEvent(Event event) {
+        List<Obs> responderObs = event.getObs();
+        CommunityResponderModel communityResponderModel = getCommunityResponderFromObs(responderObs);
+        if (communityResponderModel != null) {
+            CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+            String formSubmissionId = event.getBaseEntityId();
+            communityResponderModel.setId(formSubmissionId);
+            repo.addOrUpdate(communityResponderModel);
+        }
     }
 }

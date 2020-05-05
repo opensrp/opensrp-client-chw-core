@@ -1,8 +1,13 @@
 package org.smartregister.chw.core.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -11,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.JsonFormUtils;
+import org.smartregister.chw.core.R;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
@@ -26,6 +32,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
 import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
 
 public class FormUtils {
@@ -51,6 +58,27 @@ public class FormUtils {
         metadata.setLocationHierarchy(locationHierarchy);
         metadata.setLocationFields(locationFields);
         return metadata;
+    }
+
+    public static Intent getStartFormActivity(JSONObject jsonForm, String title, Context context) {
+        Intent intent = new Intent(context, org.smartregister.family.util.Utils.metadata().familyMemberFormActivity);
+        intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        form.setHomeAsUpIndicator(R.mipmap.ic_cross_white);
+        form.setSaveLabel(context.getResources().getString(R.string.submit));
+
+        if (isMultiPartForm(jsonForm)) {
+            form.setWizard(true);
+            form.setNavigationBackground(R.color.family_navigation);
+            form.setName(title);
+            form.setNextLabel(context.getResources().getString(R.string.next));
+            form.setPreviousLabel(context.getResources().getString(R.string.back));
+        }
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        return intent;
+
     }
 
     public static void updateWraForBA(FamilyEventClient familyEventClient) {

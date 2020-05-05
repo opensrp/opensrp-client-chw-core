@@ -137,6 +137,7 @@ public class CoreConstants {
         public static final String SICK_CHILD = "Sick Child";
         public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
+        public static final String COMMUNITY_RESPONDER_REGISTRATION = "Community Responder Registration";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
@@ -192,6 +193,7 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
+        public static final String COMMUNITY_RESPONDER_REGISTRATION_FORM = "community_responder_registration";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -615,6 +617,7 @@ public class CoreConstants {
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String COMMUNITY_RESPONDERS = "community_responders";
     }
 
     public static final class INTENT_KEY {
@@ -716,6 +719,10 @@ public class CoreConstants {
         public static final String STOCK_MONTH = "stock_month";
         public static final String STOCK_USAGE = "stock_usage";
         public static final String STOCK_PROVIDER = "stock_provider";
+        public static final String RESPONDER_ID = "id";
+        public static final String RESPONDER_NAME = "responder_name";
+        public static final String RESPONDER_PHONE_NUMBER = "responder_phone_number";
+        public static final String RESPONDER_GPS = "responder_gps";
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
@@ -900,8 +907,6 @@ public class CoreConstants {
         public static final String IN_APP_TABLE_NAME = "monthly_tallies";
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
-
-
 
 
 }

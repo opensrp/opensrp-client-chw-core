@@ -653,4 +653,8 @@
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
     <string name="perform_click_action">perform click action</string>
+
+    <string name="community_responders">Community responders</string>
+    <string name="add_community_responder">Responders</string>
+    <string name="add_responder">Add</string>
 </resources>
