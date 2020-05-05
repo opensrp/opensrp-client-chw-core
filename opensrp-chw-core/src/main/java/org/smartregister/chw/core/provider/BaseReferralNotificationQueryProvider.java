@@ -33,6 +33,27 @@ public class BaseReferralNotificationQueryProvider {
                         "FROM ec_sick_child_followup\n" +
                         "inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE ANC DANGER SIGNS OUTCOME FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)\n" +
+                        "FROM ec_anc_danger_signs_outcome\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE PNC DANGER SIGNS OUTCOME FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)\n" +
+                        "FROM ec_pnc_danger_signs_outcome\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n",
+
+                "/* COUNT NOTIFICATIONS THAT ARE MALARIA FOLLOW-UPS */\n" +
+                        "SELECT COUNT(*)\n" +
+                        "FROM ec_malaria_followup_hf\n" +
+                        "inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n"
         };
     }
@@ -60,6 +81,67 @@ public class BaseReferralNotificationQueryProvider {
                 "WHERE ec_family_member.is_closed = '0'\n" +
                 "  AND ec_family_member.date_removed is null\n" +
                 "  AND ec_family_member.base_entity_id IN (%s)\n" +
-                "ORDER BY  ec_sick_child_followup.visit_date DESC;\n";
+                "ORDER BY  ec_sick_child_followup.visit_date DESC\n" +
+                "UNION ALL" +
+                "/*ANC DANGER SIGNS OUTCOME*/\n" +
+                "SELECT ec_family_member.first_name    AS first_name,\n" +
+                "       ec_family_member.middle_name   AS middle_name,\n" +
+                "       ec_family_member.last_name     AS last_name,\n" +
+                "       ec_family_member.dob           AS dob,\n" +
+                "       ec_family_member.id            AS _id,\n" +
+                "       ec_family_member.relational_id AS relationalid,\n" +
+                "       ec_anc_danger_signs_outcome.visit_date AS notification_date,\n" +
+                "       'PNC Danger Signs Outcome'          AS notification_type\n" +
+                "FROM ec_anc_danger_signs_outcome\n" +
+                "         inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.base_entity_id\n" +
+                "WHERE ec_family_member.is_closed = '0'\n" +
+                "  AND ec_family_member.date_removed is null\n" +
+                "  AND ec_family_member.base_entity_id IN (%s)\n" +
+                "ORDER BY  ec_anc_danger_signs_outcome.visit_date DESC\n" +
+                "/*PNC DANGER SIGNS OUTCOME*/\n" +
+                "SELECT ec_family_member.first_name    AS first_name,\n" +
+                "       ec_family_member.middle_name   AS middle_name,\n" +
+                "       ec_family_member.last_name     AS last_name,\n" +
+                "       ec_family_member.dob           AS dob,\n" +
+                "       ec_family_member.id            AS _id,\n" +
+                "       ec_family_member.relational_id AS relationalid,\n" +
+                "       ec_pnc_danger_signs_outcome.visit_date AS notification_date,\n" +
+                "       'PNC Danger Signs Outcome'          AS notification_type\n" +
+                "FROM ec_pnc_danger_signs_outcome\n" +
+                "         inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.base_entity_id\n" +
+                "WHERE ec_family_member.is_closed = '0'\n" +
+                "  AND ec_family_member.date_removed is null\n" +
+                "  AND ec_family_member.base_entity_id IN (%s)\n" +
+                "  AND ec_family_member.base_entity_id NOT IN (\n" +
+                "    SELECT ec_anc_danger_signs_outcome.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_anc_danger_signs_outcome\n" +
+                ")\n" +
+                "ORDER BY  ec_pnc_danger_signs_outcome.visit_date DESC\n" +
+                "UNION ALL" +
+                "/*MALARIA FOLLOW-UP*/\n" +
+                "SELECT ec_family_member.first_name    AS first_name,\n" +
+                "       ec_family_member.middle_name   AS middle_name,\n" +
+                "       ec_family_member.last_name     AS last_name,\n" +
+                "       ec_family_member.dob           AS dob,\n" +
+                "       ec_family_member.id            AS _id,\n" +
+                "       ec_family_member.relational_id AS relationalid,\n" +
+                "       ec_malaria_followup_hf.visit_date AS notification_date,\n" +
+                "       'PNC Danger Signs Outcome'          AS notification_type\n" +
+                "FROM ec_malaria_followup_hf\n" +
+                "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                "WHERE ec_family_member.is_closed = '0'\n" +
+                "  AND ec_family_member.date_removed is null\n" +
+                "  AND ec_family_member.base_entity_id IN (%s)\n" +
+                "  AND ec_family_member.base_entity_id NOT IN (\n" +
+                "    SELECT ec_anc_danger_signs_outcome.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_anc_danger_signs_outcome\n" +
+                "    UNION ALL\n" +
+                "    SELECT ec_pnc_danger_signs_outcome.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_pnc_danger_signs_outcome\n" +
+                "    UNION ALL\n" +
+                "    SELECT ec_sick_child_followup.base_entity_id AS base_entity_id\n" +
+                "    FROM ec_sick_child_followup\n" +
+                ")\n" +
+                "ORDER BY  ec_malaria_followup_hf.visit_date DESC;\n";
     }
 }
