@@ -30,5 +30,6 @@ public interface ChwDBConstants {
         String BUSINESS_STATUS = "business_status";
         String START = "start";
         String FOCUS = "focus";
+        String REASON_REFERENCE = "reason_reference";
     }
 }

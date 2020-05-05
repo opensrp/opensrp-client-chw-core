@@ -642,10 +642,15 @@
     <string name="all_chw">All-CHWs</string>
     <string name="stock_used_text">%s Stock Used</string>
 
+    <!--In app Reporting-->
+    <string name="service_activity_title">Service Activity</string>
+    <string name="service_activity_reporting">Service activity reporting</string>
+    <string name="review_chw_services">Review CHW services</string>
     <!--Referral notification types -->
     <string name="referral_notification_type_successful">Successful</string>
     <string name="referral_notification_type_pnc">PNC</string>
     <string name="referral_notification_type_anc">ANC</string>
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
+    <string name="perform_click_action">perform click action</string>
 </resources>
