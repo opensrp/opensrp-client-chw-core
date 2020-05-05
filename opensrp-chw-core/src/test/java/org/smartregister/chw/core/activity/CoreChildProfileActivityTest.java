@@ -483,7 +483,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         ReflectionHelpers.setField(activity, "progressBar", progressBar);
 
         activity.hideProgressBar();
-        progressBar.setVisibility(View.GONE);
+        Mockito.verify(progressBar).setVisibility(View.GONE);
     }
 
     @Test
@@ -512,10 +512,10 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         ReflectionHelpers.setField(activity, "progressBar", progressBar);
 
         activity.setProgressBarState(true);
-        progressBar.setVisibility(View.VISIBLE);
+        Mockito.verify(progressBar).setVisibility(View.VISIBLE);
 
         activity.setProgressBarState(false);
-        progressBar.setVisibility(View.GONE);
+        Mockito.verify(progressBar).setVisibility(View.GONE);
     }
 
     @Test

@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
@@ -22,10 +21,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
-import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.shadows.AncLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.ContextShadow;
@@ -141,12 +138,12 @@ public class DefaultChildMedicalHistoryActivityFlvTest {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         ReflectionHelpers.setField(childMedicalHistoryActivityFlv, "sdf", sdf);
 
-        Map<String,List<Visit>> visitMap = new HashMap<>();
-        visitMap.put(CoreConstants.EventType.EXCLUSIVE_BREASTFEEDING, getSampleVisits("date","yes"));
-        visitMap.put(CoreConstants.EventType.VITAMIN_A, getSampleVisits("VitaminA 1","done"));
-        visitMap.put(CoreConstants.EventType.DEWORMING, getSampleVisits("Deworming 1","done"));
-        visitMap.put(CoreConstants.EventType.MINIMUM_DIETARY_DIVERSITY, getSampleVisits("chk_no_animal_products","chk_no_animal_products"));
-        visitMap.put(CoreConstants.EventType.MUAC, getSampleVisits("chk_red","chk_red"));
+        Map<String, List<Visit>> visitMap = new HashMap<>();
+        visitMap.put(CoreConstants.EventType.EXCLUSIVE_BREASTFEEDING, getSampleVisits("date", "yes"));
+        visitMap.put(CoreConstants.EventType.VITAMIN_A, getSampleVisits("VitaminA 1", "done"));
+        visitMap.put(CoreConstants.EventType.DEWORMING, getSampleVisits("Deworming 1", "done"));
+        visitMap.put(CoreConstants.EventType.MINIMUM_DIETARY_DIVERSITY, getSampleVisits("chk_no_animal_products", "chk_no_animal_products"));
+        visitMap.put(CoreConstants.EventType.MUAC, getSampleVisits("chk_red", "chk_red"));
         ReflectionHelpers.setField(childMedicalHistoryActivityFlv, "visitMap", visitMap);
 
         ReflectionHelpers.callInstanceMethod(childMedicalHistoryActivityFlv, "evaluateGrowthAndNutrition");
