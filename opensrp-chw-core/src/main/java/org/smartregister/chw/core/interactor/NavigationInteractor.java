@@ -12,6 +12,11 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
+
 public class NavigationInteractor implements NavigationContract.Interactor {
 
     private static NavigationInteractor instance;
@@ -219,9 +224,10 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "where m.date_removed is null and t.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "' ";
                 return NavigationDao.getQueryCount(sqlReferral);
 
-            case  CoreConstants.TABLE_NAME.CLOSE_REFERRAL:
+            case  CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:
                 String referralNotificationQuery =
-                        "";
+                        String.format("SELECT SUM(c) FROM (\n %s UNION ALL\n %s UNION ALL\n %s UNION ALL\n %s)",
+                                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, MALARIA_HF_FOLLOW_UP_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             default:
