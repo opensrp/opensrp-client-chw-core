@@ -593,6 +593,7 @@ public class CoreConstants {
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String REFERRAL = "ec_referral";
     }
 
     public static final class INTENT_KEY {

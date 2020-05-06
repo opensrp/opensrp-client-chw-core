@@ -2,13 +2,10 @@ package org.smartregister.chw.core.sync.intent;
 
 import android.content.Intent;
 
-import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.repository.ChwTaskRepository;
-import org.smartregister.domain.Task;
-import org.smartregister.repository.TaskRepository;
-
-import java.util.Date;
-import java.util.List;
+import org.smartregister.chw.core.utils.ChwDBConstants;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.Utils;
+import org.smartregister.commonregistry.CommonRepository;
 
 /**
  * Created by cozej4 on 2020-02-08.
@@ -18,23 +15,23 @@ import java.util.List;
 public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService {
 
     private static final String TAG = CloseExpiredReferralsIntentService.class.getSimpleName();
-    private final TaskRepository taskRepository;
+    private final CommonRepository commonRepository;
 
 
     public CloseExpiredReferralsIntentService() {
         super(TAG);
-        taskRepository = CoreChwApplication.getInstance().getTaskRepository();
+        commonRepository = Utils.context().commonrepository("task");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        List<Task> readyTasks = ((ChwTaskRepository) taskRepository).getReadyTasks();
-        for(Task task:readyTasks){
-            Date refereddate;
-            switch (task.getFocus()){
-                case "Gender Based Violence Referral":
-            }
-        }
+        commonRepository.customQuery(
+                String.format(
+                        "SELECT * FROM %s LEFT JOIN %s ON %s.%s = %s.%s WHERE %s = ?  ORDER BY %s DESC",
+                        CoreConstants.TABLE_NAME.TASK, CoreConstants.TABLE_NAME.REFERRAL, CoreConstants.TABLE_NAME.TASK, ChwDBConstants.TaskTable.REASON_REFERENCE, CoreConstants.TABLE_NAME.REFERRAL, CommonRepository.ID_COLUMN,
+                        ChwDBConstants.TaskTable.BUSINESS_STATUS, ChwDBConstants.TaskTable.START),
+                new String[]{CoreConstants.BUSINESS_STATUS.REFERRED});
+
 
     }
 }
