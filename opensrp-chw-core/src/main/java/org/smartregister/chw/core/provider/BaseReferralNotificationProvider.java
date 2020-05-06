@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.holders.FooterViewHolder;
 import org.smartregister.chw.core.holders.ReferralNotificationViewHolder;
@@ -27,7 +28,6 @@ import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 import org.smartregister.view.viewholder.OnClickFormLauncher;
 
-import java.sql.Timestamp;
 import java.text.MessageFormat;
 
 public class BaseReferralNotificationProvider implements RecyclerViewProvider<ReferralNotificationViewHolder> {
@@ -63,7 +63,7 @@ public class BaseReferralNotificationProvider implements RecyclerViewProvider<Re
 
         String notificationEventDate = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_DATE, false);
         if (StringUtils.isNotBlank(notificationEventDate)) {
-            DateTime duration = new DateTime(Timestamp.valueOf(notificationEventDate));
+            DateTime duration = new DateTime(DateTimeFormat.forPattern("dd-MM-yyyy").parseDateTime(notificationEventDate));
             viewHolder.setNotificationDate(org.smartregister.chw.core.utils.Utils.formatReferralDuration(duration, context));
         }
         attachPatientOnclickListener(viewHolder.itemView, client);
