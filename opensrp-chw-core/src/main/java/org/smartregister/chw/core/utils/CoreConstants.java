@@ -871,6 +871,9 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
+        public static final String SUSPECTED_HIV= "Suspected HIV";
+        public static final String SUSPECTED_TB= "Suspected TB";
+        public static final String SUSPECTED_GBV= "Suspected GBV";
     }
 
     public static final class REGISTER_TYPE {
