@@ -80,14 +80,9 @@ public class IndicatorCategoryView extends LinearLayout {
                 nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.indicator_table_contents_text_size));
                 nameTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                nameTextView.setMaxWidth(700);
-                nameTextView.setPadding(
-                        getResources().getDimensionPixelSize(R.dimen.table_row_side_margin),
-
-                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin),
-                        getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
-                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
-
+                TableRow.LayoutParams nameTextViewLp = new TableRow.LayoutParams(0);
+                nameTextViewLp.weight = 1;
+                nameTextView.setLayoutParams(nameTextViewLp);
                 try {
                     int resourceId = this.getResources().getIdentifier(curTally.getIndicator().getDescription(), "string", getContext().getPackageName());
                     nameTextView.setText(getResources().getString(resourceId));
@@ -101,13 +96,10 @@ public class IndicatorCategoryView extends LinearLayout {
                 valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.indicator_table_contents_text_size));
                 valueTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-                valueTextView.setPadding(
-                        getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
-                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin),
-                        getResources().getDimensionPixelSize(R.dimen.table_row_side_margin),
-                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
                 valueTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 valueTextView.setText(curTally.getValue());
+                TableRow.LayoutParams valueTextViewLp = new TableRow.LayoutParams(1);
+                valueTextView.setLayoutParams(valueTextViewLp);
                 curRow.addView(valueTextView);
                 indicatorTable.addView(curRow);
             }

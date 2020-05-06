@@ -131,6 +131,12 @@ public interface CoreChildProfileContract {
         void processJson(@NotNull Context context, String eventType, @Nullable String tableName, String jsonString);
 
         void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask);
+
+        void startFormForEdit(String title, CommonPersonObjectClient client);
+
+        CommonPersonObjectClient getChildClient();
+
+        void startSickChildForm(CommonPersonObjectClient client);
     }
 
     interface Interactor {
