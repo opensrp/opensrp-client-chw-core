@@ -16,7 +16,6 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.referral.util.DBConstants;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Task;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
@@ -97,7 +96,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     checkIfExpired(expiredCalendar, task);
                 } else {
                     if (appointmentDate != null && !appointmentDate.isEmpty()) {
-                        expiredCalendar.setTimeInMillis( new BigDecimal(appointmentDate).longValue());
+                        expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
                     } else {
                         expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
                     }
@@ -245,7 +244,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
     }
 
     private Task updateCurrentTask(String taskId, String baseEntityId) {
-        Timber.e("Coze ---> "+taskId);
+        Timber.e("Coze ---> " + taskId);
         Task currentTask = taskRepository.getTaskByIdentifier(taskId);
         DateTime now = new DateTime();
         currentTask.setExecutionEndDate(now);
