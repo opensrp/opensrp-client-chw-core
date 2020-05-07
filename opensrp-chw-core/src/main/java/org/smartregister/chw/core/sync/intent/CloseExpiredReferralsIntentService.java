@@ -2,6 +2,7 @@ package org.smartregister.chw.core.sync.intent;
 
 import android.content.Intent;
 
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -17,6 +18,7 @@ import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Task;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.JsonFormUtils;
@@ -117,6 +119,7 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
                     taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.BUSINESS_STATUS)
 
             );
+            expireTask(taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN), taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR));
         }
     }
 
@@ -128,6 +131,7 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
                     taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN),
                     taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.STATUS)
             );
+            referralNotYetDoneTask(taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN), taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR));
         }
     }
 
@@ -222,4 +226,26 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
         return baseEvent;
     }
 
+    private void expireTask(String taskId, String baseEntityId) {
+        Task updatedTask = updateCurrentTask(taskId, baseEntityId);
+        updatedTask.setStatus(Task.TaskStatus.FAILED);
+        updatedTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.EXPIRED);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(updatedTask);
+    }
+
+    private void referralNotYetDoneTask(String taskId, String baseEntityId) {
+        Task updatedTask = updateCurrentTask(taskId, baseEntityId);
+        updatedTask.setStatus(Task.TaskStatus.CANCELLED);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(updatedTask);
+    }
+
+    private Task updateCurrentTask(String taskId, String baseEntityId) {
+        Task currentTask = taskRepository.getTaskByIdentifier(taskId);
+        DateTime now = new DateTime();
+        currentTask.setExecutionEndDate(now);
+        currentTask.setLastModified(now);
+        currentTask.setForEntity(baseEntityId);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        return currentTask;
+    }
 }
