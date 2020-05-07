@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import org.smartregister.chw.core.domain.NotificationItem;
 
-public interface NotificationDetailsContract {
+public interface ChwNotificationDetailsContract {
 
     interface View {
         void setNotificationDetails(NotificationItem notificationItem);

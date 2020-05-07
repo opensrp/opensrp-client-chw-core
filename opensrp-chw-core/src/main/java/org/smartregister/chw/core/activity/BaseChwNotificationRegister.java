@@ -10,7 +10,7 @@ import org.smartregister.chw.core.listener.CoreBottomNavigationListener;
 import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.view.activity.BaseRegisterActivity;
 
-public abstract class BaseNotificationRegister extends BaseRegisterActivity {
+public abstract class BaseChwNotificationRegister extends BaseRegisterActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

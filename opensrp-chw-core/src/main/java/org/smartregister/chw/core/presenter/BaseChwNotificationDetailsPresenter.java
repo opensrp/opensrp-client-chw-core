@@ -9,14 +9,14 @@ import org.smartregister.chw.core.interactor.BaseChwNotificationDetailsInteracto
 
 import java.lang.ref.WeakReference;
 
-public class BaseNotificationDetailsPresenter implements ChwNotificationDetailsContract.Presenter {
+public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetailsContract.Presenter {
 
     private WeakReference<ChwNotificationDetailsContract.View> view;
     private ChwNotificationDetailsContract.Interactor interactor;
     private String clientBaseEntityId;
     private Pair<String, String> notificationDates;
 
-    public BaseNotificationDetailsPresenter(ChwNotificationDetailsContract.View view) {
+    public BaseChwNotificationDetailsPresenter(ChwNotificationDetailsContract.View view) {
         this.view = new WeakReference<>(view);
         interactor = new BaseChwNotificationDetailsInteractor(this);
     }
@@ -53,7 +53,7 @@ public class BaseNotificationDetailsPresenter implements ChwNotificationDetailsC
     public void dismissNotification(String baseEntityId, String notificationType) {
         if (!ChwNotificationDao.isMarkedAsDone(notificationType)) {
             getView().disableMarkAsDoneAction(true);
-            interactor.createReferralDismissalEvent(notificationType);
+            interactor.createReferralDismissalEvent(notificationType); // TODO -> Dismiss notification instead of referral
         }
     }
 

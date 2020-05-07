@@ -30,13 +30,13 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 
 import java.text.MessageFormat;
 
-public class BaseNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
+public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
 
     private Context context;
     private View.OnClickListener onClickListener;
     private View.OnClickListener paginationClickListener;
 
-    public BaseNotificationProvider(Context context, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
+    public BaseChwNotificationProvider(Context context, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
         this.context = context;
         this.onClickListener = onClickListener;
         this.paginationClickListener = paginationClickListener;
@@ -109,7 +109,7 @@ public class BaseNotificationProvider implements RecyclerViewProvider<ChwNotific
 
     @Override
     public ChwNotificationViewHolder createViewHolder(ViewGroup parent) {
-        View view = inflater().inflate(R.layout.notification_list_row, parent, false);
+        View view = inflater().inflate(R.layout.chw_notification_list_row, parent, false);
         return new ChwNotificationViewHolder(view);
     }
 

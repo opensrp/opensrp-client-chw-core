@@ -40,6 +40,7 @@ public class CoreConstants {
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
+        String BASE_ENTITY_ID = "base_entity_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
     }
@@ -615,6 +616,7 @@ public class CoreConstants {
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String NOTIFICATION_UPDATE = "notification_update";
     }
 
     public static final class INTENT_KEY {
@@ -900,8 +902,6 @@ public class CoreConstants {
         public static final String IN_APP_TABLE_NAME = "monthly_tallies";
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
-
-
 
 
 }

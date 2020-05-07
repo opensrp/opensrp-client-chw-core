@@ -10,22 +10,22 @@ import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.contract.NotificationDetailsContract;
+import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.domain.NotificationItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseNotificationDetailsActivityTest extends BaseUnitTest {
+public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
 
-    private NotificationDetailsContract.View view;
+    private ChwNotificationDetailsContract.View view;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private TextView markAsDoneTextView =  new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
 
     @Before
     public void setUp() {
-        view = Robolectric.buildActivity(TestableNotificationDetailsActivity.class).get();
+        view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
         ReflectionHelpers.setField(view, "markAsDoneTextView", markAsDoneTextView);
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
@@ -34,7 +34,7 @@ public class BaseNotificationDetailsActivityTest extends BaseUnitTest {
     @Test
     public void testInitPresenter() {
         view.initPresenter();
-        Assert.assertNotNull(((BaseNotificationDetailsActivity) view).getPresenter());
+        Assert.assertNotNull(((BaseChwNotificationDetailsActivity) view).getPresenter());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BaseNotificationDetailsActivityTest extends BaseUnitTest {
         Assert.assertFalse(markAsDoneTextView.isEnabled());
     }
 
-    public static class TestableNotificationDetailsActivity extends BaseNotificationDetailsActivity {
+    public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {
 
     }
 }

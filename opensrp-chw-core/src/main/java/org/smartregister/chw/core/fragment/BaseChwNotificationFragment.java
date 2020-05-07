@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseChwNotificationFragmentContract;
-import org.smartregister.chw.core.provider.BaseNotificationProvider;
-import org.smartregister.chw.core.provider.BaseNotificationQueryProvider;
+import org.smartregister.chw.core.provider.BaseChwNotificationProvider;
+import org.smartregister.chw.core.provider.BaseChwNotificationQueryProvider;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
@@ -24,17 +24,17 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class BaseNotificationFragment extends BaseChwRegisterFragment implements BaseChwNotificationFragmentContract.View {
+public abstract class BaseChwNotificationFragment extends BaseChwRegisterFragment implements BaseChwNotificationFragmentContract.View {
 
-    private BaseNotificationQueryProvider queryProvider;
+    private BaseChwNotificationQueryProvider queryProvider;
 
-    public BaseNotificationFragment(){
-        queryProvider = new BaseNotificationQueryProvider();
+    public BaseChwNotificationFragment(){
+        queryProvider = new BaseChwNotificationQueryProvider();
     }
 
     @Override
     public void initializeAdapter() {
-        BaseNotificationProvider registerProvider = new BaseNotificationProvider(getActivity(), registerActionHandler, paginationViewHandler);
+        BaseChwNotificationProvider registerProvider = new BaseChwNotificationProvider(getActivity(), registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, registerProvider, context().commonrepository(tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);

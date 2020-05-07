@@ -2,13 +2,13 @@ package org.smartregister.chw.core.domain;
 
 import java.util.List;
 
-public class ReferralNotificationItem {
+public class NotificationItem {
 
     private String clientBaseEntityId;
     private String title;
     private List<String> details;
 
-    public ReferralNotificationItem(String title, List<String> details) {
+    public NotificationItem(String title, List<String> details) {
         this.title = title;
         this.details = details;
     }
@@ -25,7 +25,7 @@ public class ReferralNotificationItem {
         return clientBaseEntityId;
     }
 
-    public ReferralNotificationItem setClientBaseEntityId(String clientBaseEntityId) {
+    public NotificationItem setClientBaseEntityId(String clientBaseEntityId) {
         this.clientBaseEntityId = clientBaseEntityId;
         return this;
     }

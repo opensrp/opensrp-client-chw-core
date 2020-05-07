@@ -13,7 +13,7 @@ import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.List;
 
-public class UpdatesRegisterActivityChw extends BaseChwNotificationRegister {
+public class UpdatesRegisterActivity extends BaseChwNotificationRegister {
 
     @Override
     protected void onDestroy() {

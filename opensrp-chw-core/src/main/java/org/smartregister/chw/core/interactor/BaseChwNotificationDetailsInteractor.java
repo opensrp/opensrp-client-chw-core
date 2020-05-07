@@ -30,13 +30,13 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class BaseNotificationDetailsInteractor implements ChwNotificationDetailsContract.Interactor {
+public class BaseChwNotificationDetailsInteractor implements ChwNotificationDetailsContract.Interactor {
 
     private ChwNotificationDetailsContract.Presenter presenter;
     private Context context;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    public BaseNotificationDetailsInteractor(ChwNotificationDetailsContract.Presenter presenter) {
+    public BaseChwNotificationDetailsInteractor(ChwNotificationDetailsContract.Presenter presenter) {
         this.presenter = presenter;
         context = (Activity) presenter.getView();
     }

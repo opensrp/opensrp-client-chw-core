@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class BaseNotificationModel {
+public abstract class BaseChwNotificationModel {
 
     protected String[] mainColumns(String tableName, String entityTable) {
         Set<String> columns =

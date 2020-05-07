@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.chw.core.R;
 
-public class NotificationViewHolder extends RecyclerView.ViewHolder {
+public class ChwNotificationViewHolder extends RecyclerView.ViewHolder {
 
     private TextView personNameAndAge;
     private TextView notificationTypeTextView;
     private TextView notificationEventDateTextView;
 
-    public NotificationViewHolder(@NonNull View itemView) {
+    public ChwNotificationViewHolder(@NonNull View itemView) {
         super(itemView);
         personNameAndAge = itemView.findViewById(R.id.persons_name_and_age);
         notificationTypeTextView = itemView.findViewById(R.id.notification_type);

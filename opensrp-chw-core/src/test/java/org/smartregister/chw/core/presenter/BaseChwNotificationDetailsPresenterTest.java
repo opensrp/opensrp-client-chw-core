@@ -23,13 +23,13 @@ import java.util.List;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
-public class BaseNotificationDetailsPresenterTest extends BaseUnitTest {
+public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
 
     @Mock
     private ChwNotificationDetailsContract.Interactor interactor;
 
     private BaseChwNotificationDetailsActivity view;
-    private BaseNotificationDetailsPresenter notificationDetailsPresenter;
+    private BaseChwNotificationDetailsPresenter notificationDetailsPresenter;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
     private String baseEntityId = "some-base-entity-id";
@@ -40,7 +40,7 @@ public class BaseNotificationDetailsPresenterTest extends BaseUnitTest {
         view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
-        notificationDetailsPresenter = new BaseNotificationDetailsPresenter(view);
+        notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(view);
         notificationDetailsPresenter.setInteractor(interactor);
         notificationDetailsPresenter.setClientBaseEntityId(baseEntityId);
         notificationDetailsPresenter.setNotificationDates(Pair.create("2020-04-28", "2020-05-01"));

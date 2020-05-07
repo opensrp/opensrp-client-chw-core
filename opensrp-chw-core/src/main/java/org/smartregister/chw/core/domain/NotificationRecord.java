@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.domain;
 
-public class ReferralNotificationRecord {
+public class NotificationRecord {
 
     private String clientBaseEntityId;
     private String clientName;
@@ -13,7 +13,7 @@ public class ReferralNotificationRecord {
     private String visitDate;
     private String method;
 
-    public ReferralNotificationRecord(String clientBaseEntityId) {
+    public NotificationRecord(String clientBaseEntityId) {
         this.clientBaseEntityId = clientBaseEntityId;
     }
 
