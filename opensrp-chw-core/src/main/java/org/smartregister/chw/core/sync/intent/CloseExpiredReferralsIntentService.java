@@ -2,7 +2,9 @@ package org.smartregister.chw.core.sync.intent;
 
 import android.content.Intent;
 
+import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -114,6 +116,59 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
     public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, CommonPersonObject taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
             //Implement expired referrals events
+        }
+    }
+
+    private void saveExpiredReferralEvent(String baseEntityId, String userLocationId, String referralTaskId, String taskStatus, String businessStatus) {
+        try {
+
+            Event baseEvent = generateEvent(baseEntityId, userLocationId, referralTaskId, taskStatus);
+            baseEvent.setEventType(CoreConstants.EventType.EXPIRED_REFERRAL);
+            baseEvent.setEntityType((CoreConstants.TABLE_NAME.CLOSE_REFERRAL));
+
+            baseEvent.addObs((new Obs())
+                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS)
+                    .withValue(businessStatus)
+                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS)
+                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.TEXT).withParentCode("")
+                    .withHumanReadableValues(new ArrayList<>()));
+
+            CoreJsonFormUtils.tagSyncMetadata(sharedPreferences, baseEvent);
+
+            baseEvent.setLocationId(userLocationId); //setting the location uuid of the referral initiator so that to allow the event to sync back to the chw app since it sync data by location.
+            syncEvents(baseEvent, referralTaskId);
+        } catch (Exception e) {
+            Timber.e(e, "CloseExpiredReferralsIntentService --> saveExpiredReferralEvent");
+        }
+    }
+
+    private void saveNotYetDoneReferralEvent(String baseEntityId, String userLocationId, String referralTaskId, String taskStatus) {
+        try {
+            Event baseEvent = generateEvent(baseEntityId, userLocationId, referralTaskId, taskStatus);
+            baseEvent.setEventType((CoreConstants.EventType.NOT_YET_DONE_REFERRAL));
+            baseEvent.setEntityType((CoreConstants.TABLE_NAME.NOT_YET_DONE_REFERRAL));
+
+            CoreJsonFormUtils.tagSyncMetadata(sharedPreferences, baseEvent);
+            baseEvent.setLocationId(userLocationId);  //setting the location uuid of the referral initiator so that to allow the event to sync back to the chw app since it sync data by location.
+
+            syncEvents(baseEvent, referralTaskId);
+        } catch (Exception e) {
+            Timber.e(e, "CloseExpiredReferralsIntentService --> saveExpiredReferralEvent");
+        }
+    }
+
+    private void syncEvents(Event baseEvent, String referralTaskId) {
+        try {
+            JSONObject eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
+            syncHelper.addEvent(referralTaskId, eventJson);
+            long lastSyncTimeStamp = sharedPreferences.fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            List<String> formSubmissionIds = new ArrayList<>();
+            formSubmissionIds.add(baseEvent.getFormSubmissionId());
+            CoreChwApplication.getInstance().getClientProcessorForJava().processClient(syncHelper.getEvents(formSubmissionIds));
+            sharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
+        } catch (Exception e) {
+            Timber.e(e, "CloseExpiredReferralsIntentService --> syncEvents");
         }
     }
 
