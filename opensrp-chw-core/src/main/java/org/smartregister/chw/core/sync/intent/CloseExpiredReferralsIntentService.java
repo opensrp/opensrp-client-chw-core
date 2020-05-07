@@ -3,8 +3,6 @@ package org.smartregister.chw.core.sync.intent;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.google.gson.Gson;
-
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -63,13 +61,10 @@ public class CloseExpiredReferralsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         List<Map<String, String>> referredTasks = taskRepository.getReferredTaskEvents();
 
-        Timber.i("Number of tasks found ---> %s", referredTasks.size());
-
         for (Map<String, String> task : referredTasks) {
             String appointmentDate = task.get(DBConstants.Key.REFERRAL_APPOINTMENT_DATE);
             String startDate = task.get(TaskTable.START);
 
-            Timber.i("Object ---> %s", new Gson().toJson(task));
             String focus = task.get(ChwDBConstants.TaskTable.FOCUS);
             if (focus != null && startDate != null) {
                 Calendar expiredCalendar = Calendar.getInstance();
@@ -111,9 +106,6 @@ public class CloseExpiredReferralsIntentService extends IntentService {
 
     public void checkIfExpired(Calendar expiredCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(expiredCalendar.getTime())) {
-            Timber.i("Expired Referral found with focus ---> %s", taskEvent.get(TaskTable.FOCUS));
-            Timber.i("Expired Referral found with task id ---> %s", taskEvent.get(ID));
-            Timber.i("Expired Referral found with task  ---> %s", new Gson().toJson(taskEvent));
             saveExpiredReferralEvent(
                     taskEvent.get(ChwDBConstants.TaskTable.FOR),
                     taskEvent.get(ChwDBConstants.TaskTable.LOCATION),
@@ -128,7 +120,6 @@ public class CloseExpiredReferralsIntentService extends IntentService {
 
     public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
-            Timber.i("Not yet done referral found with focus ---> %s", taskEvent.get(TaskTable.FOCUS));
             saveNotYetDoneReferralEvent(
                     taskEvent.get(ChwDBConstants.TaskTable.FOR),
                     taskEvent.get(ChwDBConstants.TaskTable.LOCATION),
@@ -244,7 +235,6 @@ public class CloseExpiredReferralsIntentService extends IntentService {
     }
 
     private Task updateCurrentTask(String taskId, String baseEntityId) {
-        Timber.e("Coze ---> " + taskId);
         Task currentTask = taskRepository.getTaskByIdentifier(taskId);
         DateTime now = new DateTime();
         currentTask.setExecutionEndDate(now);
