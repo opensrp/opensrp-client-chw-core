@@ -125,6 +125,8 @@ public class CoreConstants {
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
+        public static final String EXPIRED_REFERRAL = "Expired Referral";
+        public static final String NOT_YET_DONE_REFERRAL = "Not Yet Done Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
         public static final String PNC_REGISTRATION = "PNC Registration";
         public static final String PNC_HOME_VISIT_NOT_DONE = "PNC Home Visit Not Done";
@@ -607,6 +609,7 @@ public class CoreConstants {
         public static final String PNC_REFERRAL = "ec_pnc_referral";
         public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
+        public static final String NOT_YET_DONE_REFERRAL = "ec_not_yet_done_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
         public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
