@@ -13,9 +13,9 @@ import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.activity.BaseReferralNotificationDetailsActivity;
-import org.smartregister.chw.core.contract.BaseReferralNotificationDetailsContract;
-import org.smartregister.chw.core.domain.ReferralNotificationItem;
+import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
+import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
+import org.smartregister.chw.core.domain.NotificationItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,13 @@ import java.util.List;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
-public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
+public class BaseNotificationDetailsPresenterTest extends BaseUnitTest {
 
     @Mock
-    private BaseReferralNotificationDetailsContract.Interactor interactor;
+    private ChwNotificationDetailsContract.Interactor interactor;
 
-    private BaseReferralNotificationDetailsActivity view;
-    private BaseReferralNotificationDetailsPresenter notificationDetailsPresenter;
+    private BaseChwNotificationDetailsActivity view;
+    private BaseNotificationDetailsPresenter notificationDetailsPresenter;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
     private String baseEntityId = "some-base-entity-id";
@@ -37,10 +37,10 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        view = Robolectric.buildActivity(TestableReferralNotificationDetailsActivity.class).get();
+        view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
-        notificationDetailsPresenter = new BaseReferralNotificationDetailsPresenter(view);
+        notificationDetailsPresenter = new BaseNotificationDetailsPresenter(view);
         notificationDetailsPresenter.setInteractor(interactor);
         notificationDetailsPresenter.setClientBaseEntityId(baseEntityId);
         notificationDetailsPresenter.setNotificationDates(Pair.create("2020-04-28", "2020-05-01"));
@@ -50,16 +50,16 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
     public void testGetReferralDetails() {
         String referralTaskId = "referralTaskId";
         String notificationType = "Referral Successful";
-        notificationDetailsPresenter.getReferralDetails(referralTaskId, notificationType);
-        verify(interactor, atLeastOnce()).fetchReferralDetails(referralTaskId, notificationType);
+        notificationDetailsPresenter.getNotificationDetails(referralTaskId, notificationType);
+        verify(interactor, atLeastOnce()).fetchNotificationDetails(referralTaskId, notificationType);
     }
 
     @Test
     public void testOnReferralDetailsFetched() {
         List<String> details = new ArrayList<>();
         details.add("Referral Successful");
-        ReferralNotificationItem referralDetails = new ReferralNotificationItem("some-title", details);
-        notificationDetailsPresenter.onReferralDetailsFetched(referralDetails);
+        NotificationItem referralDetails = new NotificationItem("some-title", details);
+        notificationDetailsPresenter.onNotificationDetailsFetched(referralDetails);
         Assert.assertNotNull(referralNotificationTitle.getText());
         Assert.assertEquals(1, referralNotificationDetails.getChildCount());
     }
@@ -80,7 +80,7 @@ public class BaseReferralNotificationDetailsPresenterTest extends BaseUnitTest {
        Assert.assertNotNull(notificationDetailsPresenter.getNotificationDates());
     }
 
-    public static class TestableReferralNotificationDetailsActivity extends BaseReferralNotificationDetailsActivity {
+    public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {
 
     }
 }

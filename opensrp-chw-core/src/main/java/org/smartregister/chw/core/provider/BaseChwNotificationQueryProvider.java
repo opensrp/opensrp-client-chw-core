@@ -14,7 +14,7 @@ import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OU
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_MAIN_SELECT;
 
-public class BaseReferralNotificationQueryProvider {
+public class BaseNotificationQueryProvider {
     /**
      * Return query to be used to select object_ids from the search table so that these objects_ids
      * are later used to retrieve the actual rows from the normal(non-FTS) table
@@ -49,7 +49,7 @@ public class BaseReferralNotificationQueryProvider {
      * the comma-separated  base-entity-ids for the clients will be inserted into the query and later
      * executed
      *
-     * @return query string used for displaying referral notifications
+     * @return query string used for displaying notifications
      */
     @NonNull
     public String mainSelectWhereIDsIn() {

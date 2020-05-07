@@ -11,9 +11,9 @@ import androidx.loader.content.Loader;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.BaseReferralNotificationFragmentContract;
-import org.smartregister.chw.core.provider.BaseReferralNotificationProvider;
-import org.smartregister.chw.core.provider.BaseReferralNotificationQueryProvider;
+import org.smartregister.chw.core.contract.BaseChwNotificationFragmentContract;
+import org.smartregister.chw.core.provider.BaseNotificationProvider;
+import org.smartregister.chw.core.provider.BaseNotificationQueryProvider;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
@@ -24,17 +24,17 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class BaseReferralNotificationFragment extends BaseChwRegisterFragment implements BaseReferralNotificationFragmentContract.View {
+public abstract class BaseNotificationFragment extends BaseChwRegisterFragment implements BaseChwNotificationFragmentContract.View {
 
-    private BaseReferralNotificationQueryProvider queryProvider;
+    private BaseNotificationQueryProvider queryProvider;
 
-    public BaseReferralNotificationFragment(){
-        queryProvider = new BaseReferralNotificationQueryProvider();
+    public BaseNotificationFragment(){
+        queryProvider = new BaseNotificationQueryProvider();
     }
 
     @Override
     public void initializeAdapter() {
-        BaseReferralNotificationProvider registerProvider = new BaseReferralNotificationProvider(getActivity(), registerActionHandler, paginationViewHandler);
+        BaseNotificationProvider registerProvider = new BaseNotificationProvider(getActivity(), registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, registerProvider, context().commonrepository(tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);

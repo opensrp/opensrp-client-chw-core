@@ -1,11 +1,11 @@
 package org.smartregister.chw.core.dao;
 
-import org.smartregister.chw.core.domain.ReferralNotificationRecord;
+import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.dao.AbstractDao;
 
 import java.util.List;
 
-public class ReferralNotificationDao extends AbstractDao {
+public class ChwNotificationDao extends AbstractDao {
 
     /**
      * This method is used to get details of referral notification with the provided task id
@@ -14,7 +14,7 @@ public class ReferralNotificationDao extends AbstractDao {
      * @return a notification record with details for the referral
      */
     @Deprecated
-    public static ReferralNotificationRecord getSuccessfulReferral(String referralId) {
+    public static NotificationRecord getSuccessfulReferral(String referralId) {
         String sql = String.format(
                 "/* Get details for successful referral */\n" +
                         "SELECT ec_family_member.first_name || ' ' || CASE ec_family_member.last_name\n" +
@@ -41,23 +41,25 @@ public class ReferralNotificationDao extends AbstractDao {
 
     }
 
-    public static ReferralNotificationRecord getSickChildFollowUpRecord(String baseEntityId) {
+    public static NotificationRecord getSickChildFollowUpRecord(String baseEntityId) {
         String sql = String.format(
                 "/* Get details for a sick child follow-up */\n" +
                         "SELECT ec_family_member.first_name || ' ' || CASE ec_family_member.last_name\n" +
                         "                                                 WHEN NULL THEN ec_family_member.middle_name\n" +
                         "                                                 ELSE ec_family_member.last_name END full_name,\n" +
-                        "       ec_family_member.dob          AS      dob,\n" +
+                        "cg.first_name || ' ' || CASE cg.last_name \n" +
+                        "                                                                         WHEN NULL THEN cg.middle_name \n" +
+                        "                                                                         ELSE ec_family_member.last_name \n" +
+                        "END cg_full_name, " +
                         "       ec_family.village_town        AS      village,\n" +
-                        "       ec_sick_child_followup.dateCreated AS notification_date,\n" +
-                        "       ec_sick_child_followup.other_symptoms AS danger_signs,\n" +
                         "       ec_sick_child_followup.diagnosis AS diagnosis,\n" +
-                        "       ec_sick_child_followup.diarrhea_treatment AS selected_method,\n" +
-                        "       ec_sick_child_followup.results AS action_taken,\n" +
+                        "       ec_sick_child_followup.results AS results,\n" +
+                        "       ec_sick_child_followup.visit_date AS visit_date\n" +
                         "\n" +
                         "FROM ec_sick_child_followup\n" +
                         "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "         inner join (select fm.base_entity_id, fm.first_name, fm.middle_name, fm.last_name from ec_family_member fm) cg on ec_family.primary_caregiver = cg.base_entity_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
@@ -66,18 +68,15 @@ public class ReferralNotificationDao extends AbstractDao {
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
-    private static DataMap<ReferralNotificationRecord> mapColumnValuesToModel() {
+    private static DataMap<NotificationRecord> mapColumnValuesToModel() {
         return row -> {
-            ReferralNotificationRecord record = new ReferralNotificationRecord(getCursorValue(row, "base_entity_id"));
+            NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
             record.setClientName(getCursorValue(row, "full_name"));
-            record.setClientDateOfBirth(getCursorValue(row, "dob"));
+            record.setCareGiverName(getCursorValue(row, "cg_full_name"));
             record.setVillage(getCursorValue(row, "village"));
-            record.setNotificationDate(getCursorValue(row, "notification_date"));
-            record.setPhone(getCursorValue(row, "phone_number"));
-            record.setDangerSigns(getCursorValue(row, "danger_signs"));
+            record.setVisitDate(getCursorValue(row, "visit_date"));
             record.setDiagnosis(getCursorValue(row, "diagnosis"));
-            record.setSelectedMethod(getCursorValue(row, "selected_method"));
-            record.setActionTaken(getCursorValue(row, "action_taken"));
+            record.setResults(getCursorValue(row, "results"));
             return record;
         };
     }
