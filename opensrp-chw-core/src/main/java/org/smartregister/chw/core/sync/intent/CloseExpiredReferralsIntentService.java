@@ -109,13 +109,25 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
 
     public void checkIfExpired(Calendar expiredCalendar, CommonPersonObject taskEvent) {
         if (Calendar.getInstance().getTime().after(expiredCalendar.getTime())) {
-            //Implement expired referrals events
+            saveExpiredReferralEvent(
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR),
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.LOCATION),
+                    taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN),
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.STATUS),
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.BUSINESS_STATUS)
+
+            );
         }
     }
 
     public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, CommonPersonObject taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
-            //Implement expired referrals events
+            saveNotYetDoneReferralEvent(
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR),
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.LOCATION),
+                    taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN),
+                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.STATUS)
+            );
         }
     }
 
