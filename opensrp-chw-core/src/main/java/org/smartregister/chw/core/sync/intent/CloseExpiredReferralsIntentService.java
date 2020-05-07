@@ -1,11 +1,14 @@
 package org.smartregister.chw.core.sync.intent;
 
+import android.app.IntentService;
 import android.content.Intent;
+
+import com.google.gson.Gson;
 
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -13,25 +16,26 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.referral.util.DBConstants;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
-import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Task;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.JsonFormUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.ChwDBConstants.TaskTable;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.ID;
 import static org.smartregister.chw.core.utils.CoreConstants.TASKS_FOCUS;
 
 /**
@@ -39,19 +43,18 @@ import static org.smartregister.chw.core.utils.CoreConstants.TASKS_FOCUS;
  *
  * @author cozej4 https://github.com/cozej4
  */
-public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService {
+public class CloseExpiredReferralsIntentService extends IntentService {
 
     private static final String TAG = CloseExpiredReferralsIntentService.class.getSimpleName();
-    private final CommonRepository commonRepository;
-    private final TaskRepository taskRepository;
+    private final ChwTaskRepository taskRepository;
     private AllSharedPreferences sharedPreferences;
     private ECSyncHelper syncHelper;
 
 
     public CloseExpiredReferralsIntentService() {
         super(TAG);
-        commonRepository = Utils.context().commonrepository("task");
-        taskRepository = CoreLibrary.getInstance().context().getTaskRepository();
+        taskRepository = (ChwTaskRepository) CoreChwApplication.getInstance()
+                .getTaskRepository();
         sharedPreferences = Utils.getAllSharedPreferences();
         syncHelper = FamilyLibrary.getInstance().getEcSyncHelper();
 
@@ -59,17 +62,16 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        List<CommonPersonObject> tasks = commonRepository.customQuery(
-                String.format(
-                        "SELECT * FROM %s LEFT JOIN %s ON %s.%s = %s.%s WHERE %s = ?  ORDER BY %s DESC",
-                        CoreConstants.TABLE_NAME.TASK, CoreConstants.TABLE_NAME.REFERRAL, CoreConstants.TABLE_NAME.TASK, ChwDBConstants.TaskTable.FOR, CoreConstants.TABLE_NAME.REFERRAL, CommonRepository.ID_COLUMN,
-                        ChwDBConstants.TaskTable.BUSINESS_STATUS, TaskTable.START),
-                new String[]{CoreConstants.BUSINESS_STATUS.REFERRED}, CoreConstants.TABLE_NAME.TASK);
+        List<Map<String, String>> referredTasks = taskRepository.getReferredTaskEvents();
 
-        for (CommonPersonObject task : tasks) {
-            String appointmentDate = task.getColumnmaps().get(DBConstants.Key.REFERRAL_APPOINTMENT_DATE);
-            String startDate = task.getColumnmaps().get(TaskTable.START);
-            String focus = task.getDetails().get(ChwDBConstants.TaskTable.FOCUS);
+        Timber.i("Number of tasks found ---> %s", referredTasks.size());
+
+        for (Map<String, String> task : referredTasks) {
+            String appointmentDate = task.get(DBConstants.Key.REFERRAL_APPOINTMENT_DATE);
+            String startDate = task.get(TaskTable.START);
+
+            Timber.i("Object ---> %s", new Gson().toJson(task));
+            String focus = task.get(ChwDBConstants.TaskTable.FOCUS);
             if (focus != null && startDate != null) {
                 Calendar expiredCalendar = Calendar.getInstance();
                 if (focus.equals(TASKS_FOCUS.ANC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.PNC_DANGER_SIGNS)) {
@@ -84,19 +86,18 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
                     expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
                     expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
-                    if (Objects.requireNonNull(task.getColumnmaps().get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name())) {
+                    checkIfExpired(expiredCalendar, task);
+                    if (Objects.requireNonNull(task.get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name())) {
                         checkIfNotYetDone(referralNotYetDoneCalendar, task);
-                    } else {
-                        checkIfExpired(expiredCalendar, task);
                     }
                 } else if (focus.equals(TASKS_FOCUS.SUSPECTED_TB)) {
-                    expiredCalendar.setTimeInMillis(Long.parseLong(appointmentDate));
+                    expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
                     expiredCalendar.add(Calendar.DAY_OF_MONTH, 3);
 
                     checkIfExpired(expiredCalendar, task);
                 } else {
                     if (appointmentDate != null && !appointmentDate.isEmpty()) {
-                        expiredCalendar.setTimeInMillis(Long.parseLong(appointmentDate));
+                        expiredCalendar.setTimeInMillis( new BigDecimal(appointmentDate).longValue());
                     } else {
                         expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
                     }
@@ -109,29 +110,33 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
         }
     }
 
-    public void checkIfExpired(Calendar expiredCalendar, CommonPersonObject taskEvent) {
+    public void checkIfExpired(Calendar expiredCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(expiredCalendar.getTime())) {
+            Timber.i("Expired Referral found with focus ---> %s", taskEvent.get(TaskTable.FOCUS));
+            Timber.i("Expired Referral found with task id ---> %s", taskEvent.get(ID));
+            Timber.i("Expired Referral found with task  ---> %s", new Gson().toJson(taskEvent));
             saveExpiredReferralEvent(
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR),
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.LOCATION),
-                    taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN),
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.STATUS),
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.BUSINESS_STATUS)
+                    taskEvent.get(ChwDBConstants.TaskTable.FOR),
+                    taskEvent.get(ChwDBConstants.TaskTable.LOCATION),
+                    taskEvent.get(ID),
+                    taskEvent.get(ChwDBConstants.TaskTable.STATUS),
+                    taskEvent.get(ChwDBConstants.TaskTable.BUSINESS_STATUS)
 
             );
-            expireTask(taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN), taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR));
+            expireTask(taskEvent.get(ID), taskEvent.get(ChwDBConstants.TaskTable.FOR));
         }
     }
 
-    public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, CommonPersonObject taskEvent) {
+    public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
+            Timber.i("Not yet done referral found with focus ---> %s", taskEvent.get(TaskTable.FOCUS));
             saveNotYetDoneReferralEvent(
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR),
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.LOCATION),
-                    taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN),
-                    taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.STATUS)
+                    taskEvent.get(ChwDBConstants.TaskTable.FOR),
+                    taskEvent.get(ChwDBConstants.TaskTable.LOCATION),
+                    taskEvent.get(ID),
+                    taskEvent.get(ChwDBConstants.TaskTable.STATUS)
             );
-            referralNotYetDoneTask(taskEvent.getColumnmaps().get(CommonRepository.ID_COLUMN), taskEvent.getColumnmaps().get(ChwDBConstants.TaskTable.FOR));
+            referralNotYetDoneTask(taskEvent.get(ID), taskEvent.get(ChwDBConstants.TaskTable.FOR));
         }
     }
 
@@ -240,6 +245,7 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
     }
 
     private Task updateCurrentTask(String taskId, String baseEntityId) {
+        Timber.e("Coze ---> "+taskId);
         Task currentTask = taskRepository.getTaskByIdentifier(taskId);
         DateTime now = new DateTime();
         currentTask.setExecutionEndDate(now);

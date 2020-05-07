@@ -5,7 +5,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import org.smartregister.AllConstants;
-import org.smartregister.chw.core.sync.intent.SyncClientEventsPerTaskIntentService;
+import org.smartregister.chw.core.sync.intent.CloseExpiredReferralsIntentService;
 import org.smartregister.job.BaseJob;
 
 /**
@@ -15,18 +15,12 @@ import org.smartregister.job.BaseJob;
  */
 public class CloseExpiredReferralsServiceJob extends BaseJob {
 
-    public static final String TAG = "SyncTaskWithClientEventsServiceJob";
-
-    private Class<? extends SyncClientEventsPerTaskIntentService> serviceClass;
-
-    public CloseExpiredReferralsServiceJob(Class<? extends SyncClientEventsPerTaskIntentService> serviceClass) {
-        this.serviceClass = serviceClass;
-    }
+    public static final String TAG = "CloseExpiredReferralsServiceJob";
 
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params) {
-        Intent intent = new Intent(getApplicationContext(), serviceClass);
+        Intent intent = new Intent(getApplicationContext(), CloseExpiredReferralsIntentService.class);
         getApplicationContext().startService(intent);
         return params != null && params.getExtras().getBoolean(AllConstants.INTENT_KEY.TO_RESCHEDULE, false) ? Result.RESCHEDULE : Result.SUCCESS;
     }
