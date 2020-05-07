@@ -5,8 +5,11 @@ import android.content.Intent;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.referral.util.DBConstants;
+import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Task;
@@ -14,10 +17,15 @@ import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.helper.ECSyncHelper;
+import org.smartregister.util.JsonFormUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.ChwDBConstants.TaskTable;
 import static org.smartregister.chw.core.utils.CoreConstants.TASKS_FOCUS;
@@ -107,6 +115,44 @@ public class CloseExpiredReferralsIntentService extends ChwCoreSyncIntentService
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
             //Implement expired referrals events
         }
+    }
+
+    private Event generateEvent(String baseEntityId, String userLocationId, String referralTaskId, String taskStatus) {
+        Event baseEvent = null;
+        try {
+            AllSharedPreferences sharedPreferences = org.smartregister.family.util.Utils.getAllSharedPreferences();
+            baseEvent = (Event) new Event()
+                    .withBaseEntityId(baseEntityId)
+                    .withEventDate(new Date())
+                    .withFormSubmissionId(JsonFormUtils.generateRandomUUIDString())
+                    .withProviderId(sharedPreferences.fetchRegisteredANM())
+                    .withLocationId(userLocationId)
+                    .withTeamId(sharedPreferences.fetchDefaultTeamId(sharedPreferences.fetchRegisteredANM()))
+                    .withTeam(sharedPreferences.fetchDefaultTeam(sharedPreferences.fetchRegisteredANM()))
+                    .withDateCreated(new Date());
+
+            baseEvent.addObs((new Obs())
+                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK)
+                    .withValue(referralTaskId)
+                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK)
+                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.TEXT)
+                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
+
+            baseEvent.addObs((new Obs())
+                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK_PREVIOUS_STATUS)
+                    .withValue(taskStatus)
+                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK_PREVIOUS_STATUS)
+                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.TEXT)
+                    .withParentCode("")
+                    .withHumanReadableValues(new ArrayList<>()));
+
+            CoreJsonFormUtils.tagSyncMetadata(sharedPreferences, baseEvent);
+            //setting the location uuid of the referral initiator so that to allow the event to sync back to the chw app since it sync data by location.
+            baseEvent.setLocationId(userLocationId);
+        } catch (Exception e) {
+            Timber.e(e, "CloseExpiredReferralsIntentService --> saveExpiredReferralEvent");
+        }
+        return baseEvent;
     }
 
 }
