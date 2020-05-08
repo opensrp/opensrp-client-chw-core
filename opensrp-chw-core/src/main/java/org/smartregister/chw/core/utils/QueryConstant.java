@@ -325,7 +325,7 @@ public interface QueryConstant {
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.base_entity_id\n" +
                     "WHERE ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    //"  AND ec_anc_danger_signs_outcome.base_entity_id IN (%s)\n" +
+                    "  AND ec_anc_danger_signs_outcome.base_entity_id IN (%s)\n" +
                     "  AND ec_anc_danger_signs_outcome.base_entity_id NOT IN (\n" +
                     "    SELECT ec_malaria_followup_hf.base_entity_id AS base_entity_id\n" +
                     "    FROM ec_malaria_followup_hf\n" +
@@ -346,7 +346,7 @@ public interface QueryConstant {
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
                     "WHERE ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    //"  AND ec_sick_child_followup.base_entity_id IN (%s)\n" +
+                    "  AND ec_sick_child_followup.base_entity_id IN (%s)\n" +
                     "  AND ec_family_member.base_entity_id NOT IN (\n" +
                     "    SELECT ec_malaria_followup_hf.base_entity_id AS base_entity_id\n" +
                     "    FROM ec_malaria_followup_hf\n" +
@@ -367,7 +367,7 @@ public interface QueryConstant {
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.base_entity_id\n" +
                     "WHERE ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    //"  AND ec_pnc_danger_signs_outcome.base_entity_id IN (%s)\n" +
+                    "  AND ec_pnc_danger_signs_outcome.base_entity_id IN (%s)\n" +
                     "  AND ec_pnc_danger_signs_outcome.base_entity_id NOT IN (\n" +
                     "    SELECT ec_anc_danger_signs_outcome.base_entity_id AS base_entity_id\n" +
                     "    FROM ec_anc_danger_signs_outcome\n" +
@@ -391,7 +391,7 @@ public interface QueryConstant {
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
                     "WHERE ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    //"  AND ec_malaria_followup_hf.base_entity_id IN (%s)\n" +
+                    "  AND ec_malaria_followup_hf.base_entity_id IN (%s)\n" +
                     "  AND ec_malaria_followup_hf.base_entity_id NOT IN (\n" +
                     "    SELECT ec_anc_danger_signs_outcome.base_entity_id AS base_entity_id\n" +
                     "    FROM ec_anc_danger_signs_outcome\n" +
