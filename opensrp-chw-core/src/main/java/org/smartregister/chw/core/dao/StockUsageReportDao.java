@@ -32,7 +32,7 @@ public class StockUsageReportDao extends AbstractDao {
                 " on vd.visit_id  = vdd.visit_id\n" +
                 "  INNER JOIN visits v on vd.visit_id = v.visit_id\n" +
                 "  WHERE  vd.visit_key LIKE '%no_condoms%'\n" +
-                "  AND vdd.visit_key LIKE '%fp_method_accepted'\n" +
+                "  AND (vdd.visit_key LIKE '%fp_method_accepted' or vdd.visit_key like 'fp_method')\n" +
                 "  AND vdd.details LIKE '%condom' \n" +
                 "  group by vdd.details, strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))), strftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime')))\n" +
                 " UNION ALL\n" +
@@ -57,8 +57,8 @@ public class StockUsageReportDao extends AbstractDao {
                 " UNION ALL\n" +
                 " SELECT substr(mc.date_chw_malaria_test, 7, 4) as \"Year\",\n" +
                 "        substr(mc.date_chw_malaria_test, 4, 2) as \"Month\",\n" +
-                "\t'RDTs' as StockName,\n" +
-                "\tcount(1) as Usage\n" +
+                "\t\t'RDTs' as StockName,\n" +
+                "\t\tcount(1) as Usage\n" +
                 "\tfrom ec_malaria_confirmation mc\n" +
                 "where mc.malaria_results in('Negative','Positive')\n" +
                 "and mc.date_chw_malaria_test is not NULL\n" +
