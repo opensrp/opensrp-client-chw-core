@@ -44,17 +44,12 @@ public class ChwNotificationDao extends AbstractDao {
     public static NotificationRecord getSickChildFollowUpRecord(String baseEntityId) {
         String sql = String.format(
                 "/* Get details for a sick child follow-up */\n" +
-                        "SELECT ec_family_member.first_name || ' ' || CASE ec_family_member.last_name\n" +
-                        "                                                 WHEN NULL THEN ec_family_member.middle_name\n" +
-                        "                                                 ELSE ec_family_member.last_name END full_name,\n" +
-                        "cg.first_name || ' ' || CASE cg.last_name \n" +
-                        "                                                                         WHEN NULL THEN cg.middle_name \n" +
-                        "                                                                         ELSE ec_family_member.last_name \n" +
-                        "END cg_full_name, " +
+                        "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
+                        "cg.first_name || ' ' || ifnull(cg.last_name, cg.middle_name) as cg_full_name,\n" +
                         "       ec_family.village_town        AS      village,\n" +
-                        "       ec_sick_child_followup.diagnosis AS diagnosis,\n" +
-                        "       ec_sick_child_followup.results AS results,\n" +
-                        "       ec_sick_child_followup.visit_date AS visit_date\n" +
+                        "       ec_sick_child_followup.diagnosis,\n" +
+                        "       ec_sick_child_followup.results,\n" +
+                        "       ec_sick_child_followup.visit_date\n" +
                         "\n" +
                         "FROM ec_sick_child_followup\n" +
                         "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
@@ -63,8 +58,58 @@ public class ChwNotificationDao extends AbstractDao {
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
+                        "  AND ec_sick_child_followup.is_closed = '0'" +
                         "  AND ec_sick_child_followup.base_entity_id = '%s'\n", baseEntityId);
 
+        return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
+    }
+
+    public static NotificationRecord getAncPncDangerSignsOutcomeRecord(String baseEntityId, String table) {
+        String sql = String.format(
+                "/* Get details for ANC or PNC Danger Signs Outcome */\n" +
+                        "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
+                        "cg.first_name || ' ' || ifnull(cg.last_name, cg.middle_name) as cg_full_name,\n" +
+                        "ec_family.village_town        AS      village,\n" +
+                        table + ".danger_signs_present,\n" +
+                        table + ".action_taken,\n" +
+                        table + ".visit_date\n" +
+                        "FROM " + table + "\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".base_entity_id\n" +
+                        "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "         inner join (select fm.base_entity_id, fm.first_name, fm.middle_name, fm.last_name from ec_family_member fm) cg on ec_family.primary_caregiver = cg.base_entity_id\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND " + table + ".is_closed = '0'" +
+                        "  AND " + table + ".base_entity_id = '%s'\n", baseEntityId);
+
+        return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
+    }
+
+
+    public static NotificationRecord getMalariaFollowUpRecord(String baseEntityId) {
+        String sql = String.format(
+                "/* Get details for a sick child follow-up */\n" +
+                        "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
+                        "       ec_family.village_town        AS      village,\n" +
+                        "       ec_malaria_followup_hf.outcomes AS action_taken,\n" +
+                        "       ec_malaria_followup_hf.test_results AS results,\n" +
+                        "       ec_malaria_followup_hf.visit_date\n" +
+                        "\n" +
+                        "FROM ec_malaria_followup_hf\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                        "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND ec_malaria_followup_hf.is_closed = '0'" +
+                        "  AND ec_malaria_followup_hf.base_entity_id = '%s'\n", baseEntityId);
+
+        return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
+    }
+
+    public static NotificationRecord getFamilyPlanningRecord(String baseEntityId) {
+        String sql = ""; // TODO -> Get FP details where entry point = HF
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
@@ -75,8 +120,24 @@ public class ChwNotificationDao extends AbstractDao {
             record.setCareGiverName(getCursorValue(row, "cg_full_name"));
             record.setVillage(getCursorValue(row, "village"));
             record.setVisitDate(getCursorValue(row, "visit_date"));
-            record.setDiagnosis(getCursorValue(row, "diagnosis"));
-            record.setResults(getCursorValue(row, "results"));
+
+            String diagnosis = getCursorValue(row, "diagnosis");
+            String results = getCursorValue(row, "results");
+            String dangerSignsPresent = getCursorValue(row, "danger_signs_present");
+            String actionTaken = getCursorValue(row, "action_taken");
+
+            if (diagnosis != null) {
+                record.setDiagnosis(diagnosis);
+            }
+            if (results != null) {
+                record.setResults(results);
+            }
+            if (dangerSignsPresent != null) {
+                record.setDangerSigns(dangerSignsPresent);
+            }
+            if (actionTaken != null) {
+                record.setActionTaken(actionTaken);
+            }
             return record;
         };
     }
