@@ -317,8 +317,9 @@ public interface QueryConstant {
                     "       ec_family_member.last_name     AS last_name,\n" +
                     "       ec_family_member.dob           AS dob,\n" +
                     "       ec_family_member.id            AS _id,\n" +
-                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
+                    "       ec_family_member.base_entity_id,\n" +
                     "       ec_family_member.relational_id AS relationalid,\n" +
+                    "       ec_anc_danger_signs_outcome.id AS n_id,\n" +
                     "       ec_anc_danger_signs_outcome.visit_date AS notification_date,\n" +
                     "       'ANC Danger Signs'          AS notification_type\n" +
                     "FROM ec_anc_danger_signs_outcome\n" +
@@ -338,8 +339,9 @@ public interface QueryConstant {
                     "       ec_family_member.last_name     AS last_name,\n" +
                     "       ec_family_member.dob           AS dob,\n" +
                     "       ec_family_member.id            AS _id,\n" +
-                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
+                    "       ec_family_member.base_entity_id,\n" +
                     "       ec_family_member.relational_id AS relationalid,\n" +
+                    "       ec_sick_child_followup.id AS n_id,\n" +
                     "       ec_sick_child_followup.visit_date AS notification_date,\n" +
                     "       'Sick Child'          AS notification_type\n" +
                     "FROM ec_sick_child_followup\n" +
@@ -359,8 +361,9 @@ public interface QueryConstant {
                     "       ec_family_member.last_name     AS last_name,\n" +
                     "       ec_family_member.dob           AS dob,\n" +
                     "       ec_family_member.id            AS _id,\n" +
-                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
+                    "       ec_family_member.base_entity_id,\n" +
                     "       ec_family_member.relational_id AS relationalid,\n" +
+                    "       ec_pnc_danger_signs_outcome.id AS n_id,\n" +
                     "       ec_pnc_danger_signs_outcome.visit_date AS notification_date,\n" +
                     "       'PNC Danger Signs'          AS notification_type\n" +
                     "FROM ec_pnc_danger_signs_outcome\n" +
@@ -383,8 +386,9 @@ public interface QueryConstant {
                     "       ec_family_member.last_name     AS last_name,\n" +
                     "       ec_family_member.dob           AS dob,\n" +
                     "       ec_family_member.id            AS _id,\n" +
-                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
+                    "       ec_family_member.base_entity_id,\n" +
                     "       ec_family_member.relational_id AS relationalid,\n" +
+                    "       ec_malaria_followup_hf.id AS n_id,\n" +
                     "       ec_malaria_followup_hf.visit_date AS notification_date,\n" +
                     "       'Malaria Follow-up'          AS notification_type\n" +
                     "FROM ec_malaria_followup_hf\n" +

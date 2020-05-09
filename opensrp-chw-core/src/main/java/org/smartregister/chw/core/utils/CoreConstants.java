@@ -37,6 +37,7 @@ public class CoreConstants {
         String ENTRY_POINT = "entry_point";
         String STATUS = "status";
         String LAST_MODIFIED = "last_modified";
+        String NOTIFICATION_ID = "n_id";
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
@@ -133,6 +134,11 @@ public class CoreConstants {
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
         public static final String REFERRAL_DISMISSAL = "Referral Dismissal";
+        public static final String ANC_NOTIFICATION_DISMISSAL = "ANC Notification Dismissal";
+        public static final String PNC_NOTIFICATION_DISMISSAL = "PNC Notification Dismissal";
+        public static final String MALARIA_NOTIFICATION_DISMISSAL = "Malaria Notification Dismissal";
+        public static final String SICK_CHILD_NOTIFICATION_DISMISSAL = "Sick Child Notification Dismissal";
+        public static final String FAMILY_PLANNING_NOTIFICATION_DISMISSAL = "Family Planning Notification Dismissal";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
