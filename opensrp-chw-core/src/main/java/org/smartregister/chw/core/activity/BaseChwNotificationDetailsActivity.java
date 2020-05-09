@@ -27,7 +27,7 @@ import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.List;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFICATION_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFICATION_TYPE;
 
 public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageActivity
@@ -39,7 +39,7 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
     protected TextView viewProfileTextView;
 
     private ChwNotificationDetailsContract.Presenter presenter;
-    private String baseEntityId;
+    private String notificationId;
     private String notificationType;
 
     @Override
@@ -49,7 +49,7 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
         inflateToolbar();
         setupViews();
         initPresenter();
-        disableMarkAsDoneAction(ChwNotificationDao.isMarkedAsDone(baseEntityId));
+        disableMarkAsDoneAction(ChwNotificationDao.isMarkedAsDone(this, notificationId, notificationType));
     }
 
     private void inflateToolbar() {
@@ -93,9 +93,10 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
     public void initPresenter() {
         presenter = new BaseChwNotificationDetailsPresenter(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
-            baseEntityId = getIntent().getExtras().getString(BASE_ENTITY_ID);
+            notificationId = getIntent().getExtras().getString(NOTIFICATION_ID);
+
             notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
-            presenter.getNotificationDetails(baseEntityId, notificationType);
+            presenter.getNotificationDetails(notificationId, notificationType);
         }
     }
 
@@ -134,7 +135,7 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
         if (view.getId() == R.id.view_profile) {
             getPresenter().showMemberProfile();
         } else if (view.getId() == R.id.mark_as_done) {
-            getPresenter().dismissNotification(baseEntityId, notificationType);
+            getPresenter().dismissNotification(notificationId, notificationType);
         } else {
             Utils.showShortToast(this, getString(R.string.perform_click_action));
         }

@@ -1,6 +1,9 @@
 package org.smartregister.chw.core.dao;
 
+import android.content.Context;
+
 import org.smartregister.chw.core.domain.NotificationRecord;
+import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.dao.AbstractDao;
 
 import java.util.List;
@@ -41,7 +44,7 @@ public class ChwNotificationDao extends AbstractDao {
 
     }
 
-    public static NotificationRecord getSickChildFollowUpRecord(String baseEntityId) {
+    public static NotificationRecord getSickChildFollowUpRecord(String notificationId) {
         String sql = String.format(
                 "/* Get details for a sick child follow-up */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
@@ -58,13 +61,12 @@ public class ChwNotificationDao extends AbstractDao {
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
-                        "  AND ec_sick_child_followup.is_closed = '0'" +
-                        "  AND ec_sick_child_followup.base_entity_id = '%s'\n", baseEntityId);
+                        "  AND ec_sick_child_followup.id = '%s'\n", notificationId);
 
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
-    public static NotificationRecord getAncPncDangerSignsOutcomeRecord(String baseEntityId, String table) {
+    public static NotificationRecord getAncPncDangerSignsOutcomeRecord(String notificationId, String table) {
         String sql = String.format(
                 "/* Get details for ANC or PNC Danger Signs Outcome */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
@@ -80,14 +82,13 @@ public class ChwNotificationDao extends AbstractDao {
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
-                        "  AND " + table + ".is_closed = '0'" +
-                        "  AND " + table + ".base_entity_id = '%s'\n", baseEntityId);
+                        "  AND " + table + ".id = '%s'\n", notificationId);
 
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
 
-    public static NotificationRecord getMalariaFollowUpRecord(String baseEntityId) {
+    public static NotificationRecord getMalariaFollowUpRecord(String notificationId) {
         String sql = String.format(
                 "/* Get details for a sick child follow-up */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
@@ -102,8 +103,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
-                        "  AND ec_malaria_followup_hf.is_closed = '0'" +
-                        "  AND ec_malaria_followup_hf.base_entity_id = '%s'\n", baseEntityId);
+                        "  AND ec_malaria_followup_hf.id = '%s'\n", notificationId);
 
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
@@ -143,17 +143,18 @@ public class ChwNotificationDao extends AbstractDao {
     }
 
     /**
-     * This method is used to check whether a referral has been marked as done or not
+     * This method is used to check whether a Notification has been marked as done or not
      *
-     * @param referralTaskId the unique identifier for the referral task
-     * @return true if the referral with the provided task id is already marked as done false otherwise
+     * @param context      the Android context for String value retrieval
+     * @param notificationId the unique identifier for the notification record
+     * @return true if the Notification is closed and false if otherwise
      */
-    public static boolean isMarkedAsDone(String referralTaskId) {
-        String sql = String.format("select count(*) count from ec_referral_dismissal where referral_task = '%s'", referralTaskId);
-
+    public static boolean isMarkedAsDone(Context context, String notificationId, String notificationType) {
+        String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
+        String sql = String.format("select count(*) count from " + table + " where id = '%s' and is_closed = 1", notificationId);
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
-
         List<Integer> res = readData(sql, dataMap);
+
         if (res == null || res.size() != 1)
             return false;
 

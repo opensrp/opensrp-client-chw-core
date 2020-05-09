@@ -18,7 +18,7 @@ public interface ChwNotificationDetailsContract {
 
         String getClientBaseEntityId();
 
-        void getNotificationDetails(String baseEntityId, String notificationType);
+        void getNotificationDetails(String notificationId, String notificationType);
 
         View getView();
 
@@ -26,7 +26,7 @@ public interface ChwNotificationDetailsContract {
 
         void showMemberProfile();
 
-        void dismissNotification(String baseEntityId, String notificationType);
+        void dismissNotification(String notificationId, String notificationType);
 
         void setClientBaseEntityId(String clientBaseEntityId);
 
@@ -50,5 +50,7 @@ public interface ChwNotificationDetailsContract {
          * @param referralTaskId referral task id
          */
         void createReferralDismissalEvent(String referralTaskId);
+
+        void createNotificationDismissalEvent(String baseEntityId, String notificationType);
     }
 }

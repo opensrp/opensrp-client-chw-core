@@ -3,8 +3,6 @@ package org.smartregister.chw.core.domain;
 import java.util.List;
 
 public class NotificationItem {
-
-    private String clientBaseEntityId;
     private String title;
     private List<String> details;
 
@@ -19,14 +17,5 @@ public class NotificationItem {
 
     public List<String> getDetails() {
         return details;
-    }
-
-    public String getClientBaseEntityId() {
-        return clientBaseEntityId;
-    }
-
-    public NotificationItem setClientBaseEntityId(String clientBaseEntityId) {
-        this.clientBaseEntityId = clientBaseEntityId;
-        return this;
     }
 }
