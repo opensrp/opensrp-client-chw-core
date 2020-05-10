@@ -145,7 +145,7 @@ public class ChwNotificationDao extends AbstractDao {
     /**
      * This method is used to check whether a Notification has been marked as done or not
      *
-     * @param context      the Android context for String value retrieval
+     * @param context        the Android context for String value retrieval
      * @param notificationId the unique identifier for the notification record
      * @return true if the Notification is closed and false if otherwise
      */
@@ -159,5 +159,16 @@ public class ChwNotificationDao extends AbstractDao {
             return false;
 
         return res.get(0) > 0;
+    }
+
+    public static String getSyncLocationId(String baseEntityId) {
+        String sql = String.format("SELECT sync_location_id FROM ec_family_member WHERE base_entity_id = '%s'", baseEntityId);
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "sync_location_id");
+        List<String> res = readData(sql, dataMap);
+
+        if (res == null || res.size() != 1)
+            return null;
+
+        return res.get(0);
     }
 }
