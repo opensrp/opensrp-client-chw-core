@@ -27,7 +27,7 @@ public interface AncMemberProfileContract {
 
         void startAncDangerSignsOutcomeForm(MemberObject memberObject);
 
-        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
+        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
 
     }
 
@@ -36,7 +36,7 @@ public interface AncMemberProfileContract {
 
         void getClientTasks(String planId, String baseEntityId, AncMemberProfileContract.InteractorCallBack callback);
 
-        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
+        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
     }
 
     interface InteractorCallBack extends BaseAncMemberProfileContract.InteractorCallBack {

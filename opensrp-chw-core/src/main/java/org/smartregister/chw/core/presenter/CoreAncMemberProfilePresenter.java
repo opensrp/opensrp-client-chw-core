@@ -132,8 +132,8 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
     }
 
     @Override
-    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
-        interactor.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID, locationId);
+    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        interactor.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID);
     }
 
     private FormUtils getFormUtils() {

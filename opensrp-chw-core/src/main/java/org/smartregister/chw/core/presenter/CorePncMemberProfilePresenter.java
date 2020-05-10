@@ -42,8 +42,8 @@ public class CorePncMemberProfilePresenter extends BaseAncMemberProfilePresenter
     }
 
     @Override
-    public void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
-        interactor.createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID, locationId);
+    public void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        interactor.createPncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID);
     }
 
     private FormUtils getFormUtils() {

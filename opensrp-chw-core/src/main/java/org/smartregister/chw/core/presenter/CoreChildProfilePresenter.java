@@ -230,8 +230,8 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     }
 
     @Override
-    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString, String locationId) throws Exception {
-        interactor.createSickChildFollowUpEvent(allSharedPreferences, jsonString, locationId);
+    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
+        interactor.createSickChildFollowUpEvent(allSharedPreferences, jsonString);
     }
 
     @Override

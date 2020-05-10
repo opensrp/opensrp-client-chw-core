@@ -16,6 +16,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
@@ -88,12 +89,13 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
     }
 
     @Override
-    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
+    public void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
         Event baseEvent = JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, entityID), CoreConstants.TABLE_NAME.ANC_DANGER_SIGNS_OUTCOME);
         JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
-        if (locationId != null) {
+        String syncLocationId = ChwNotificationDao.getSyncLocationId(baseEvent.getBaseEntityId());
+        if (syncLocationId != null) {
             // Allows setting the ID for sync purposes
-            baseEvent.setLocationId(locationId);
+            baseEvent.setLocationId(syncLocationId);
         }
         NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseEvent)));
     }

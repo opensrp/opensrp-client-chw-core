@@ -37,8 +37,8 @@ public class CoreMalariaMemberProfilePresenter extends BaseMalariaProfilePresent
     }
 
     @Override
-    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
-        interactor.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, entityID, locationId);
+    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
+        interactor.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, entityID);
     }
 
     private FormUtils getFormUtils() {

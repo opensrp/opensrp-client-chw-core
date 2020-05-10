@@ -6,6 +6,7 @@ import org.smartregister.chw.anc.util.JsonFormUtils;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.contract.CoreMalariaProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
@@ -44,12 +45,13 @@ public class CoreMalariaProfileInteractor extends BaseMalariaProfileInteractor i
     }
 
     @Override
-    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception {
+    public void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception {
         Event baseEvent = JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, entityID), CoreConstants.TABLE_NAME.MALARIA_FOLLOW_UP_HF);
         JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
-        if (locationId != null) {
+        String syncLocationId = ChwNotificationDao.getSyncLocationId(baseEvent.getBaseEntityId());
+        if (syncLocationId != null) {
             // Allows setting the ID for sync purposes
-            baseEvent.setLocationId(locationId);
+            baseEvent.setLocationId(syncLocationId);
         }
         NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseEvent)));
     }

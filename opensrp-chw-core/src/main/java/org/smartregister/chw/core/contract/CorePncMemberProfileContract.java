@@ -13,10 +13,10 @@ public interface CorePncMemberProfileContract {
     interface Presenter extends BaseAncMemberProfileContract.Presenter {
         void startPncDangerSignsOutcomeForm();
 
-        void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
+        void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
     }
 
     interface Interactor extends BaseAncMemberProfileContract.Interactor {
-        void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID, String locationId) throws Exception;
+        void createPncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
     }
 }
