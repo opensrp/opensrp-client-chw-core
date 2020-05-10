@@ -5,20 +5,23 @@ import android.content.Context;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.util.JsonFormUtils;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.domain.NotificationRecord;
+import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
-import org.smartregister.util.JsonFormUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +33,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.smartregister.util.Utils.getAllSharedPreferences;
+
 public class BaseChwNotificationDetailsInteractor implements ChwNotificationDetailsContract.Interactor {
 
     private ChwNotificationDetailsContract.Presenter presenter;
@@ -39,23 +44,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     public BaseChwNotificationDetailsInteractor(ChwNotificationDetailsContract.Presenter presenter) {
         this.presenter = presenter;
         context = (Activity) presenter.getView();
-    }
-
-    @Override
-    public void fetchNotificationDetails(String baseEntityId, String notificationType) {
-        NotificationItem notificationItem = null;
-
-        if (notificationType.equals(context.getString(R.string.notification_type_sick_child_follow_up))) {
-            notificationItem = getSickChildFollowUpDetails(baseEntityId);
-        } else if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs)) ||
-                notificationType.equals(context.getString(R.string.notification_type_anc_danger_signs))) {
-            notificationItem = getAncPncOutcomeDetails(baseEntityId, notificationType);
-        } else if (notificationType.contains(context.getString(R.string.notification_type_malaria_follow_up))) {
-            notificationItem = getMalariaFollowUpDetails(baseEntityId);
-        } else if (notificationType.contains(context.getString(R.string.notification_type_family_planning))) {
-            notificationItem = getDetailsForFamilyPlanning(baseEntityId);
-        }
-        presenter.onNotificationDetailsFetched(notificationItem);
     }
 
     @Override
@@ -114,6 +102,20 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         }
     }
 
+    @Override
+    public void createNotificationDismissalEvent(String notificationId, String notificationType) {
+        Event baseEvent = ChwNotificationUtil.createNotificationDismissalBaseEvent(presenter.getClientBaseEntityId(), ChwNotificationUtil.getNotificationEventType(context, notificationType));
+        org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(Utils.getAllSharedPreferences(), baseEvent);
+        try {
+            NCUtils.addEvent(Utils.getAllSharedPreferences(), baseEvent);
+        } catch (Exception ex) {
+            Timber.e(ex);
+        }
+        long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+        Date lastSyncDate = new Date(lastSyncTimeStamp);
+        getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+    }
+
     /**
      * This method is used to obtain the date when the referral will be dismissed from the updates
      * register
@@ -133,9 +135,26 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         return dateFormat.format(calendar.getTime());
     }
 
+    @Override
+    public void fetchNotificationDetails(String notificationId, String notificationType) {
+        NotificationItem notificationItem = null;
+
+        if (notificationType.equals(context.getString(R.string.notification_type_sick_child_follow_up))) {
+            notificationItem = getSickChildFollowUpDetails(notificationId);
+        } else if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs)) ||
+                notificationType.equals(context.getString(R.string.notification_type_anc_danger_signs))) {
+            notificationItem = getAncPncOutcomeDetails(notificationId, notificationType);
+        } else if (notificationType.contains(context.getString(R.string.notification_type_malaria_follow_up))) {
+            notificationItem = getMalariaFollowUpDetails(notificationId);
+        } else if (notificationType.contains(context.getString(R.string.notification_type_family_planning))) {
+            notificationItem = getDetailsForFamilyPlanning(notificationId);
+        }
+        presenter.onNotificationDetailsFetched(notificationItem);
+    }
+
     @NotNull
-    private NotificationItem getSickChildFollowUpDetails(String baseEntityId) {
-        NotificationRecord notificationRecord = ChwNotificationDao.getSickChildFollowUpRecord(baseEntityId);
+    private NotificationItem getSickChildFollowUpDetails(String notificationId) {
+        NotificationRecord notificationRecord = ChwNotificationDao.getSickChildFollowUpRecord(notificationId);
         String title = context.getString(R.string.followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.notification_care_giver, notificationRecord.getCareGiverName()));
@@ -146,20 +165,13 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     }
 
     @NotNull
-    private NotificationItem getAncPncOutcomeDetails(String baseEntityId, String type) {
+    private NotificationItem getAncPncOutcomeDetails(String notificationId, String notificationType) {
         NotificationRecord notificationRecord;
-        String table = null;
-        if (type.equals(context.getString(R.string.notification_type_pnc_danger_signs))) {
-            table = "ec_pnc_danger_signs_outcome";
-        } else if (type.equals(context.getString(R.string.notification_type_anc_danger_signs))) {
-            table = "ec_anc_danger_signs_outcome";
-        }
-
-        notificationRecord = ChwNotificationDao.getAncPncDangerSignsOutcomeRecord(baseEntityId, table);
+        notificationRecord = ChwNotificationDao.getAncPncDangerSignsOutcomeRecord(notificationId, ChwNotificationUtil.getNotificationDetailsTable(context, notificationType));
 
         String title = context.getString(R.string.followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
-        if (type.equals(context.getString(R.string.notification_type_pnc_danger_signs))) {
+        if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs))) {
             details.add(context.getString(R.string.notification_care_giver, notificationRecord.getCareGiverName()));
         }
         details.add(context.getString(R.string.notification_danger_sign, notificationRecord.getDangerSigns()));
@@ -170,8 +182,8 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
 
     @NotNull
-    private NotificationItem getMalariaFollowUpDetails(String baseEntityId) {
-        NotificationRecord notificationRecord = ChwNotificationDao.getMalariaFollowUpRecord(baseEntityId);
+    private NotificationItem getMalariaFollowUpDetails(String notificationId) {
+        NotificationRecord notificationRecord = ChwNotificationDao.getMalariaFollowUpRecord(notificationId);
         String title = context.getString(R.string.followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.notification_diagnosis, notificationRecord.getResults()));
@@ -181,8 +193,8 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     }
 
     @NotNull
-    private NotificationItem getDetailsForFamilyPlanning(String baseEntityId) {
-        NotificationRecord notificationRecord = ChwNotificationDao.getFamilyPlanningRecord(baseEntityId);
+    private NotificationItem getDetailsForFamilyPlanning(String notificationId) {
+        NotificationRecord notificationRecord = ChwNotificationDao.getFamilyPlanningRecord(notificationId);
         String title = context.getString(R.string.followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.notification_selected_method, notificationRecord.getMethod()));

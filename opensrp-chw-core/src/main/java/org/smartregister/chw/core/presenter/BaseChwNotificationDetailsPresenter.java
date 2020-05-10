@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.presenter;
 
+import android.app.Activity;
 import android.util.Pair;
 
 import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
@@ -27,8 +28,8 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
     }
 
     @Override
-    public void getNotificationDetails(String baseEntityId, String notificationType) {
-        interactor.fetchNotificationDetails(baseEntityId, notificationType);
+    public void getNotificationDetails(String notificationId, String notificationType) {
+        interactor.fetchNotificationDetails(notificationId, notificationType);
     }
 
     @Override
@@ -50,10 +51,10 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
     }
 
     @Override
-    public void dismissNotification(String baseEntityId, String notificationType) {
-        if (!ChwNotificationDao.isMarkedAsDone(notificationType)) {
+    public void dismissNotification(String notificationId, String notificationType) {
+        if (!ChwNotificationDao.isMarkedAsDone((Activity) getView(), notificationId, notificationType)) {
             getView().disableMarkAsDoneAction(true);
-            interactor.createReferralDismissalEvent(notificationType); // TODO -> Dismiss notification instead of referral
+            interactor.createNotificationDismissalEvent(notificationId, notificationType);
         }
     }
 

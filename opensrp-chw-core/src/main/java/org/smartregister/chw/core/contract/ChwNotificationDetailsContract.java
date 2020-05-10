@@ -39,10 +39,10 @@ public interface ChwNotificationDetailsContract {
         /**
          * Fetch the notification details
          *
-         * @param baseEntityId     unique client baseEntityId
+         * @param notificationId   unique notification id
          * @param notificationType type of notification
          */
-        void fetchNotificationDetails(String baseEntityId, String notificationType);
+        void fetchNotificationDetails(String notificationId, String notificationType);
 
         /**
          * Crete a referral dismissal entry for the provided task id
@@ -51,6 +51,11 @@ public interface ChwNotificationDetailsContract {
          */
         void createReferralDismissalEvent(String referralTaskId);
 
-        void createNotificationDismissalEvent(String baseEntityId, String notificationType);
+        /**
+         * Crete a Notification dismissal entry for the provided notification id
+         *
+         * @param notificationId Notification id
+         */
+        void createNotificationDismissalEvent(String notificationId, String notificationType);
     }
 }

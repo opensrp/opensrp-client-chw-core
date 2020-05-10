@@ -108,7 +108,7 @@ public class ChwNotificationDao extends AbstractDao {
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
-    public static NotificationRecord getFamilyPlanningRecord(String baseEntityId) {
+    public static NotificationRecord getFamilyPlanningRecord(String notificationId) {
         String sql = ""; // TODO -> Get FP details where entry point = HF
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
