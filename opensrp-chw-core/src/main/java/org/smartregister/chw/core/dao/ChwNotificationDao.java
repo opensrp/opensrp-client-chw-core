@@ -148,13 +148,13 @@ public class ChwNotificationDao extends AbstractDao {
                 record.setDiagnosis(diagnosis);
             }
             if (results != null) {
-                record.setResults(results);
+                record.setResults(ChwNotificationUtil.getStringFromJSONArrayString(results));
             }
             if (dangerSignsPresent != null) {
-                record.setDangerSigns(dangerSignsPresent);
+                record.setDangerSigns(ChwNotificationUtil.getStringFromJSONArrayString(dangerSignsPresent));
             }
             if (actionTaken != null) {
-                record.setActionTaken(actionTaken);
+                record.setActionTaken(ChwNotificationUtil.getStringFromJSONArrayString(actionTaken));
             }
             if (method != null) {
                 record.setMethod(method);

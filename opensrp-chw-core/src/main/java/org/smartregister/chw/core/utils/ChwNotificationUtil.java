@@ -2,6 +2,8 @@ package org.smartregister.chw.core.utils;
 
 import android.content.Context;
 
+import org.json.JSONArray;
+import org.json.JSONTokener;
 import org.smartregister.chw.core.R;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.util.JsonFormUtils;
@@ -54,5 +56,17 @@ public class ChwNotificationUtil {
             Timber.e(ex);
         }
         return baseEvent;
+    }
+
+    public static String getStringFromJSONArrayString(String jsonArrayString) {
+        try {
+            Object json = new JSONTokener(jsonArrayString).nextValue();
+            if (json instanceof JSONArray) {
+                return new JSONArray(jsonArrayString).join(",").replaceAll("\"", "").trim();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return jsonArrayString;
     }
 }
