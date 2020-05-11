@@ -29,16 +29,16 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     private ChwNotificationDetailsContract.Interactor interactor;
 
     private BaseChwNotificationDetailsPresenter notificationDetailsPresenter;
-    private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
-    private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
+    private TextView notificationTitle = new TextView(RuntimeEnvironment.systemContext);
+    private LinearLayout notificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
     private String baseEntityId = "some-base-entity-id";
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         BaseChwNotificationDetailsActivity view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
-        ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
-        ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
+        ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
+        ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
         notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(view);
         notificationDetailsPresenter.setInteractor(interactor);
         notificationDetailsPresenter.setClientBaseEntityId(baseEntityId);
@@ -47,20 +47,20 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
 
     @Test
     public void testGetReferralDetails() {
-        String referralTaskId = "referralTaskId";
-        String notificationType = "Referral Successful";
-        notificationDetailsPresenter.getNotificationDetails(referralTaskId, notificationType);
-        verify(interactor, atLeastOnce()).fetchNotificationDetails(referralTaskId, notificationType);
+        String notificationId = "notificationId-123-456";
+        String notificationType = "PNC Danger Signs";
+        notificationDetailsPresenter.getNotificationDetails(notificationId, notificationType);
+        verify(interactor, atLeastOnce()).fetchNotificationDetails(notificationId, notificationType);
     }
 
     @Test
     public void testOnReferralDetailsFetched() {
         List<String> details = new ArrayList<>();
-        details.add("Referral Successful");
-        NotificationItem referralDetails = new NotificationItem("some-title", details);
-        notificationDetailsPresenter.onNotificationDetailsFetched(referralDetails);
-        Assert.assertNotNull(referralNotificationTitle.getText());
-        Assert.assertEquals(1, referralNotificationDetails.getChildCount());
+        details.add("Facility Visit Today");
+        NotificationItem notificationItem = new NotificationItem("some-title", details);
+        notificationDetailsPresenter.onNotificationDetailsFetched(notificationItem);
+        Assert.assertNotNull(notificationTitle.getText());
+        Assert.assertEquals(1, notificationDetails.getChildCount());
     }
 
     @Test
