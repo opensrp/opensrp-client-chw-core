@@ -56,7 +56,7 @@ public class BaseChwNotificationQueryProvider {
      */
     @NonNull
     public String mainSelectWhereIDsIn() {
-        return String.format("%s UNION ALL %s UNION ALL %s UNION ALL %s",
+        return String.format("%s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s",
                 SICK_CHILD_FOLLOW_UP_MAIN_SELECT, ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT,
                 PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT, FAMILY_PLANNING_UPDATE_MAIN_SELECT, MALARIA_FOLLOW_UP_MAIN_SELECT);
     }

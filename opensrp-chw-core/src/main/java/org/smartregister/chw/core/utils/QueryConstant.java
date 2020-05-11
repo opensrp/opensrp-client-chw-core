@@ -411,7 +411,6 @@ public interface QueryConstant {
                     "       ec_family_member.relational_id AS relationalid,\n" +
                     "       ec_family_planning_update.id AS n_id,\n" +
                     "       ec_family_planning_update.fp_reg_date AS notification_date,\n" +
-                    "       ec_family_planning_update.fp_method_accepted AS method,\n" +
                     "       'Family Planning'          AS notification_type\n" +
                     "FROM ec_family_planning_update\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.base_entity_id\n" +
