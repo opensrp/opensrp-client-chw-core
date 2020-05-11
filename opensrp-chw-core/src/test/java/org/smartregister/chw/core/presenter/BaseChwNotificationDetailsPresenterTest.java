@@ -28,7 +28,6 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     @Mock
     private ChwNotificationDetailsContract.Interactor interactor;
 
-    private BaseChwNotificationDetailsActivity view;
     private BaseChwNotificationDetailsPresenter notificationDetailsPresenter;
     private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
@@ -37,7 +36,7 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
+        BaseChwNotificationDetailsActivity view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
         ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
         notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(view);

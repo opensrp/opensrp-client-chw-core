@@ -34,9 +34,8 @@ public class CoreMalariaMemberProfilePresenterTest {
         AllSharedPreferences allSharedPreferences = Mockito.mock(AllSharedPreferences.class);
         String jsonString = "{'Encounter':'Follow-up'}";
         String baseEntityId = "id-123-456";
-        String locationId = "123-location-abc";
-        memberProfilePresenter.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId, locationId);
-        Mockito.verify(interactor).createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId, locationId);
+        memberProfilePresenter.createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId);
+        Mockito.verify(interactor).createHfMalariaFollowupEvent(allSharedPreferences, jsonString, baseEntityId);
     }
 
     @Test
