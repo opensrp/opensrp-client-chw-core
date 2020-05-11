@@ -32,7 +32,7 @@ public class StockUsageReportDao extends AbstractDao {
                 " on vd.visit_id  = vdd.visit_id\n" +
                 "  INNER JOIN visits v on vd.visit_id = v.visit_id\n" +
                 "  WHERE  vd.visit_key LIKE '%no_condoms%'\n" +
-                "  AND vdd.visit_key LIKE '%fp_method_accepted'\n" +
+                "  AND (vdd.visit_key LIKE '%fp_method_accepted' or vdd.visit_key like 'fp_method')\n" +
                 "  AND vdd.details LIKE '%condom' \n" +
                 "  group by vdd.details, strftime('%Y',(datetime(v.visit_date/1000, 'unixepoch', 'localtime'))), strftime('%m',(datetime(v.visit_date/1000, 'unixepoch', 'localtime')))\n" +
                 " UNION ALL\n" +
