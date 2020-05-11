@@ -16,17 +16,14 @@ import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -105,34 +102,18 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     @Override
     public void createNotificationDismissalEvent(String notificationId, String notificationType) {
         Event baseEvent = ChwNotificationUtil.createNotificationDismissalBaseEvent(presenter.getClientBaseEntityId(), ChwNotificationUtil.getNotificationEventType(context, notificationType));
-        org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(Utils.getAllSharedPreferences(), baseEvent);
+        JsonFormUtils.tagEvent(getAllSharedPreferences(), baseEvent);
         try {
-            NCUtils.addEvent(Utils.getAllSharedPreferences(), baseEvent);
+            NCUtils.addEvent(getAllSharedPreferences(), baseEvent);
+            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            ChwNotificationDao.markNotificationAsDone(context, notificationId, notificationType);
+            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+
         } catch (Exception ex) {
             Timber.e(ex);
         }
-        long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-        Date lastSyncDate = new Date(lastSyncTimeStamp);
-        getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
-    }
 
-    /**
-     * This method is used to obtain the date when the referral will be dismissed from the updates
-     * register
-     *
-     * @param eventCreationDate date the referral was created
-     * @return new date returned after adding 3 to the provided date
-     */
-    private String getDismissalDate(String eventCreationDate) {
-
-        Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(dateFormat.parse(eventCreationDate));
-        } catch (ParseException e) {
-            Timber.e(e);
-        }
-        calendar.add(Calendar.DAY_OF_MONTH, 3);
-        return dateFormat.format(calendar.getTime());
     }
 
     @Override

@@ -6,7 +6,10 @@ import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.dao.AbstractDao;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChwNotificationDao extends AbstractDao {
 
@@ -169,7 +172,7 @@ public class ChwNotificationDao extends AbstractDao {
      */
     public static boolean isMarkedAsDone(Context context, String notificationId, String notificationType) {
         String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
-        String sql = String.format("select count(*) count from " + table + " where id = '%s' and is_closed = 1", notificationId);
+        String sql = String.format("select count(*) count from %s where id = '%s' and is_closed = 1", table, notificationId);
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
         List<Integer> res = readData(sql, dataMap);
 
@@ -188,5 +191,12 @@ public class ChwNotificationDao extends AbstractDao {
             return null;
 
         return res.get(0);
+    }
+
+    public static void markNotificationAsDone(Context context, String notificationId, String notificationType) {
+        String dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
+        String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", table, dateMarkedAsDone, notificationId);
+        updateDB(sql);
     }
 }
