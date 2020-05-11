@@ -877,6 +877,7 @@ public class CoreConstants {
         public static final String SUSPECTED_HIV= "Suspected HIV";
         public static final String SUSPECTED_TB= "Suspected TB";
         public static final String SUSPECTED_GBV= "Suspected GBV";
+        public static final String SUSPECTED_CHILD_GBV= "Suspected Child GBV";
     }
 
     public static final class REGISTER_TYPE {
