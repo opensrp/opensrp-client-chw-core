@@ -20,7 +20,8 @@ import org.smartregister.chw.core.fragment.SentMonthlyFragment;
 @Config(application = TestCoreChwApplication.class)
 public class SectionsPagerAdapterTest {
     @Mock
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
+
     private android.content.Context context = RuntimeEnvironment.application;
 
     private SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, context);
