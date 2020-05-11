@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
 import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
@@ -38,11 +39,21 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
 
     @Override
     public Intent getStockReportIntent(Activity activity) {
-        return  new Intent(activity, CoreStockInventoryReportActivity.class);
+        return new Intent(activity, CoreStockInventoryReportActivity.class);
     }
 
     @Override
     public Intent getServiceReportIntent(Activity activity) {
         return new Intent(activity, HIA2ReportsActivity.class);
+    }
+
+    @Override
+    public boolean hasCommunityResponders() {
+        return false;
+    }
+
+    @Override
+    public Intent getCommunityRespondersIntent(Activity activity) {
+        return new Intent(activity, CoreCommunityRespondersRegisterActivity.class);
     }
 }

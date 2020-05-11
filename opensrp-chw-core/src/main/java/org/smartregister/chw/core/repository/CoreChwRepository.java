@@ -92,6 +92,7 @@ public class CoreChwRepository extends Repository {
 
         ManifestRepository.createTable(database);
         ClientFormRepository.createTable(database);
+        CommunityResponderRepository.createTable(database);
 
         onUpgrade(database, 1, databaseVersion);
 
