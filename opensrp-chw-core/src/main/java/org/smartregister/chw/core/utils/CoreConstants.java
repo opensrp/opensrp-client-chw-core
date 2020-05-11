@@ -431,6 +431,7 @@ public class CoreConstants {
             private static final String OBSERVATION_AND_ILLNESS = "anc_hv_observations";
             private static final String REMARKS_AND_COMMENTS = "anc_hv_remarks_and_comments";
             private static final String EARLY_CHILDHOOD_DEVELOPMENT = "early_childhood_development";
+            private static final String PREGNANCY_RISK = "anc_hv_pregnancy_risk_form";
 
             public static String getDangerSigns() {
                 return Utils.getLocalForm(DANGER_SIGNS, locale, assetManager);
@@ -486,6 +487,10 @@ public class CoreConstants {
 
             public static String getEarlyChildhoodDevelopment() {
                 return Utils.getLocalForm(EARLY_CHILDHOOD_DEVELOPMENT, locale, assetManager);
+            }
+
+            public static String getPregnancyRisk() {
+                return Utils.getLocalForm(PREGNANCY_RISK, locale, assetManager);
             }
         }
 
