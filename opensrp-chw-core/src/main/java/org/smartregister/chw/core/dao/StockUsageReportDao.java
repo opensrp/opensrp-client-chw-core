@@ -57,8 +57,8 @@ public class StockUsageReportDao extends AbstractDao {
                 " UNION ALL\n" +
                 " SELECT substr(mc.date_chw_malaria_test, 7, 4) as \"Year\",\n" +
                 "        substr(mc.date_chw_malaria_test, 4, 2) as \"Month\",\n" +
-                "\t\t'RDTs' as StockName,\n" +
-                "\t\tcount(1) as Usage\n" +
+                "\t'RDTs' as StockName,\n" +
+                "\tcount(1) as Usage\n" +
                 "\tfrom ec_malaria_confirmation mc\n" +
                 "where mc.malaria_results in('Negative','Positive')\n" +
                 "and mc.date_chw_malaria_test is not NULL\n" +
