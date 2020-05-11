@@ -80,8 +80,8 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
                     expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
-                    checkIfExpired(expiredCalendar, task);
-                    if (Objects.requireNonNull(task.get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name())) {
+                    boolean isExpired = checkIfExpired(expiredCalendar, task);
+                    if (Objects.requireNonNull(task.get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name()) && !isExpired) {
                         checkIfNotYetDone(referralNotYetDoneCalendar, task);
                     }
                 } else if (focus.equals(TASKS_FOCUS.SUSPECTED_TB)) {
@@ -93,7 +93,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     if (appointmentDate != null && !appointmentDate.isEmpty()) {
                         expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
                     } else {
-                        expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
+                        expiredCalendar.setTimeInMillis(new BigDecimal(startDate).longValue());
                     }
                     expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
@@ -104,7 +104,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
         }
     }
 
-    public void checkIfExpired(Calendar expiredCalendar, Map<String, String> taskEvent) {
+    public boolean checkIfExpired(Calendar expiredCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(expiredCalendar.getTime())) {
             saveExpiredReferralEvent(
                     taskEvent.get(ChwDBConstants.TaskTable.FOR),
@@ -112,13 +112,14 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     taskEvent.get(ID),
                     taskEvent.get(ChwDBConstants.TaskTable.STATUS),
                     taskEvent.get(ChwDBConstants.TaskTable.BUSINESS_STATUS)
-
             );
             expireTask(taskEvent.get(ID), taskEvent.get(ChwDBConstants.TaskTable.FOR));
+            return true;
         }
+        return false;
     }
 
-    public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
+    public boolean checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
             saveNotYetDoneReferralEvent(
                     taskEvent.get(ChwDBConstants.TaskTable.FOR),
@@ -127,7 +128,9 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     taskEvent.get(ChwDBConstants.TaskTable.STATUS)
             );
             referralNotYetDoneTask(taskEvent.get(ID), taskEvent.get(ChwDBConstants.TaskTable.FOR));
+            return true;
         }
+        return false;
     }
 
     private void saveExpiredReferralEvent(String baseEntityId, String userLocationId, String referralTaskId, String taskStatus, String businessStatus) {
@@ -241,6 +244,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
         currentTask.setLastModified(now);
         currentTask.setForEntity(baseEntityId);
         currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        currentTask.setLastModified(now);
         return currentTask;
     }
 }
