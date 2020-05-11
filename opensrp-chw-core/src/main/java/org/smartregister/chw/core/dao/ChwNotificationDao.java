@@ -109,7 +109,21 @@ public class ChwNotificationDao extends AbstractDao {
     }
 
     public static NotificationRecord getFamilyPlanningRecord(String notificationId) {
-        String sql = ""; // TODO -> Get FP details where entry point = HF
+        String sql = String.format(
+                "/* Get details for family planning registration or method change */\n" +
+                        "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
+                        "       ec_family.village_town        AS      village,\n" +
+                        "       ec_family_planning_update.fp_method_accepted AS method,\n" +
+                        "       ec_family_planning_update.fp_reg_date AS visit_date\n" +
+                        "\n" +
+                        "FROM ec_family_planning_update\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.base_entity_id\n" +
+                        "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND ec_family_planning_update.id = '%s'\n", notificationId);
+
         return AbstractDao.readSingleValue(sql, mapColumnValuesToModel());
     }
 
@@ -125,6 +139,7 @@ public class ChwNotificationDao extends AbstractDao {
             String results = getCursorValue(row, "results");
             String dangerSignsPresent = getCursorValue(row, "danger_signs_present");
             String actionTaken = getCursorValue(row, "action_taken");
+            String method = getCursorValue(row, "method");
 
             if (diagnosis != null) {
                 record.setDiagnosis(diagnosis);
@@ -137,6 +152,9 @@ public class ChwNotificationDao extends AbstractDao {
             }
             if (actionTaken != null) {
                 record.setActionTaken(actionTaken);
+            }
+            if (method != null) {
+                record.setMethod(method);
             }
             return record;
         };

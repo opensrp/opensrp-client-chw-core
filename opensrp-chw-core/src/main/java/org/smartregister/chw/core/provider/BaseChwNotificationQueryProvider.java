@@ -7,6 +7,8 @@ import org.smartregister.chw.core.utils.CoreReferralUtils;
 
 import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT;
+import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_FOLLOW_UP_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
@@ -40,6 +42,7 @@ public class BaseChwNotificationQueryProvider {
                 SICK_CHILD_FOLLOW_UP_COUNT_QUERY,
                 ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
+                FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY
         };
     }
@@ -54,6 +57,7 @@ public class BaseChwNotificationQueryProvider {
     @NonNull
     public String mainSelectWhereIDsIn() {
         return String.format("%s UNION ALL %s UNION ALL %s UNION ALL %s",
-                SICK_CHILD_FOLLOW_UP_MAIN_SELECT, ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT, PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT, MALARIA_FOLLOW_UP_MAIN_SELECT);
+                SICK_CHILD_FOLLOW_UP_MAIN_SELECT, ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT,
+                PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT, FAMILY_PLANNING_UPDATE_MAIN_SELECT, MALARIA_FOLLOW_UP_MAIN_SELECT);
     }
 }
