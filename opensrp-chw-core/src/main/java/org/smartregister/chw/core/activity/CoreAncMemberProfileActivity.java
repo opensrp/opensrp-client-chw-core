@@ -249,6 +249,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     }
 
+    @Override
+    public void openFamilyLocation() {
+        // TODO implement
+    }
+
 
     @Override
     public abstract void setClientTasks(Set<Task> taskList);
