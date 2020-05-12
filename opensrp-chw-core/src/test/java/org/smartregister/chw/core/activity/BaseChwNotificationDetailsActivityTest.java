@@ -19,16 +19,16 @@ import java.util.List;
 public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
 
     private ChwNotificationDetailsContract.View view;
-    private TextView referralNotificationTitle = new TextView(RuntimeEnvironment.systemContext);
+    private TextView notificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private TextView markAsDoneTextView =  new TextView(RuntimeEnvironment.systemContext);
-    private LinearLayout referralNotificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
+    private LinearLayout notificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
 
     @Before
     public void setUp() {
         view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
-        ReflectionHelpers.setField(view, "referralNotificationTitle", referralNotificationTitle);
+        ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
         ReflectionHelpers.setField(view, "markAsDoneTextView", markAsDoneTextView);
-        ReflectionHelpers.setField(view, "referralNotificationDetails", referralNotificationDetails);
+        ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
     }
 
     @Test
@@ -44,8 +44,8 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
         details.add("Referral Successful");
         NotificationItem notificationItem = new NotificationItem("Mathew Lucas visited the facility on 03 Mar 2020.", details);
         view.setNotificationDetails(notificationItem);
-        Assert.assertNotNull(referralNotificationTitle.getText());
-        Assert.assertEquals(2, referralNotificationDetails.getChildCount());
+        Assert.assertNotNull(notificationTitle.getText());
+        Assert.assertEquals(2, notificationDetails.getChildCount());
     }
 
     @Test
