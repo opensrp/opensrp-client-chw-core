@@ -27,6 +27,7 @@ public class CoreMalariaMemberProfilePresenterTest {
         MockitoAnnotations.initMocks(this);
         memberProfilePresenter = Mockito.mock(CoreMalariaMemberProfilePresenter.class, Mockito.CALLS_REAL_METHODS);
         ReflectionHelpers.setField(memberProfilePresenter, "view", new WeakReference<>(view));
+        ReflectionHelpers.setField(memberProfilePresenter, "interactor", interactor);
     }
 
     @Test
