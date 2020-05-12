@@ -30,4 +30,13 @@ public class ChwNotificationUtilTest {
         expectedString = "Value uno";
         Assert.assertEquals(expectedString, ChwNotificationUtil.getStringFromJSONArrayString(jsonArrayString));
     }
+
+
+    @Test
+    public void canGetCorrectNotificationDismissalEventType() {
+        Context context = RuntimeEnvironment.application;
+        Assert.assertEquals(CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_sick_child_follow_up)));
+        Assert.assertEquals(CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_anc_danger_signs)));
+        Assert.assertEquals(CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_malaria_follow_up)));
+    }
 }

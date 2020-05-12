@@ -31,7 +31,7 @@ public class ChwNotificationUtil {
         return null;
     }
 
-    public static String getNotificationEventType(Context context, String notificationType) {
+    public static String getNotificationDismissalEventType(Context context, String notificationType) {
         Map<String, String> notificationEventMap = new HashMap<>();
         notificationEventMap.put(context.getString(R.string.notification_type_sick_child_follow_up), CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL);
         notificationEventMap.put(context.getString(R.string.notification_type_pnc_danger_signs), CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL);
