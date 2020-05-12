@@ -653,6 +653,6 @@
     <string name="referral_notification_type_anc">ANC</string>
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
-    <string name="referral_notification_type_not_yet_done_referrals">Not Yet Done</string>
+    <string name="referral_notification_type_not_yet_done_referrals">Referral not completed yet</string>
     <string name="perform_click_action">perform click action</string>
 </resources>

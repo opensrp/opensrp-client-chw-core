@@ -65,7 +65,7 @@ public interface QueryConstant {
             "       ec_family_member.relational_id AS relationalid,\n" +
             "       task._id                       AS referral_task_id,\n" +
             "       event.dateCreated              AS notification_date,\n" +
-            "       'Not Yet Done '             AS notification_type\n" +
+            "       'Referral not completed yet'             AS notification_type\n" +
             "\n" +
             "FROM task\n" +
             "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
