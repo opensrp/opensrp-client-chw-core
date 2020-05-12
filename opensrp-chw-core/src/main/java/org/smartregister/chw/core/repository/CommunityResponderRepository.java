@@ -13,6 +13,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.repository.BaseRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -55,11 +56,23 @@ public class CommunityResponderRepository extends BaseRepository {
     }
 
     public CommunityResponderCustomAdapter readAllRespondersAdapter(Context context, CoreCommunityRespondersRegisterActivity activity) {
+        try {
+            ArrayList<CommunityResponderModel> communityResponderModels = new ArrayList<>(readAllResponders());
+
+            return new CommunityResponderCustomAdapter(communityResponderModels, context, activity);
+        } catch (Exception e) {
+            Timber.e(e.getMessage());
+        }
+        return null;
+    }
+
+
+    private List<CommunityResponderModel> readAllResponders() {
         String[] columns = {CoreConstants.JsonAssets.RESPONDER_ID, CoreConstants.JsonAssets.RESPONDER_NAME, CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER, CoreConstants.JsonAssets.RESPONDER_GPS};
         Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, null, null);
-        try {
-            ArrayList<CommunityResponderModel> communityResponderModels = new ArrayList<>();
+        ArrayList<CommunityResponderModel> communityResponderModels = new ArrayList<>();
 
+        try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     communityResponderModels.add(new CommunityResponderModel(
@@ -70,7 +83,6 @@ public class CommunityResponderRepository extends BaseRepository {
                 } while (cursor.moveToNext());
             }
 
-            return new CommunityResponderCustomAdapter(communityResponderModels, context, activity);
         } catch (Exception e) {
             Timber.e(e.getMessage());
         } finally {
@@ -78,7 +90,9 @@ public class CommunityResponderRepository extends BaseRepository {
                 cursor.close();
             }
         }
-        return null;
+
+        return communityResponderModels;
+
     }
 
 }
