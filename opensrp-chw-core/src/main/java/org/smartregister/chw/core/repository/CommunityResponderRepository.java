@@ -6,6 +6,7 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.json.JSONException;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -67,7 +68,7 @@ public class CommunityResponderRepository extends BaseRepository {
     }
 
 
-    private List<CommunityResponderModel> readAllResponders() {
+    public List<CommunityResponderModel> readAllResponders() {
         String[] columns = {CoreConstants.JsonAssets.RESPONDER_ID, CoreConstants.JsonAssets.RESPONDER_NAME, CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER, CoreConstants.JsonAssets.RESPONDER_GPS};
         Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, null, null);
         ArrayList<CommunityResponderModel> communityResponderModels = new ArrayList<>();
