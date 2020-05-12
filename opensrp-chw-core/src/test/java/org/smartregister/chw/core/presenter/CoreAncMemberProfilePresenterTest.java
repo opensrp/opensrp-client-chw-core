@@ -61,7 +61,6 @@ public class CoreAncMemberProfilePresenterTest {
     @Test
     public void createAncDangerSignsOutcomeEvent() throws Exception {
         String jsonString = "{encounter_type:'Sample form'}";
-        String locationId = "loc-123-456";
         ancMemberProfilePresenter.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId);
         Mockito.verify(interactor, Mockito.atLeastOnce()).createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, baseEntityId);
     }

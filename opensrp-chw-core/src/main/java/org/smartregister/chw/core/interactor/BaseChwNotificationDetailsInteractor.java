@@ -22,11 +22,9 @@ import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -36,7 +34,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     private ChwNotificationDetailsContract.Presenter presenter;
     private Context context;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public BaseChwNotificationDetailsInteractor(ChwNotificationDetailsContract.Presenter presenter) {
         this.presenter = presenter;
