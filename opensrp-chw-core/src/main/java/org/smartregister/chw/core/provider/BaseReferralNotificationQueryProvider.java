@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.smartregister.chw.core.utils.CoreReferralUtils;
+import org.smartregister.chw.core.utils.QueryConstant;
 
 public class BaseReferralNotificationQueryProvider {
     /**
@@ -27,7 +28,7 @@ public class BaseReferralNotificationQueryProvider {
      */
     @NonNull
     public String[] countExecuteQueries() {
-        return new String[]{};
+        return new String[]{QueryConstant.NOT_YET_DONE_REFERRAL_QUERY_COUNT};
     }
 
     /**
@@ -39,6 +40,6 @@ public class BaseReferralNotificationQueryProvider {
      */
     @NonNull
     public String mainSelectWhereIDsIn() {
-      return "";
+      return QueryConstant.NOT_YET_DONE_REFERRAL_QUERY;
     }
 }

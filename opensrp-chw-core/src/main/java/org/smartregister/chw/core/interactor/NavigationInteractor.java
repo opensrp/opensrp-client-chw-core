@@ -221,18 +221,17 @@ public class NavigationInteractor implements NavigationContract.Interactor {
 
             case  CoreConstants.TABLE_NAME.CLOSE_REFERRAL:
                 String referralNotificationQuery =
-                        "/* COUNT NOTIFICATION FROM REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
-                            "SELECT COUNT(*) AS c\n" +
-                            "FROM task\n" +
-                            "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
-                            "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
-                            "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
-                            "\n" +
-                            "WHERE ec_family_member.is_closed = '0'\n" +
-                            "  AND ec_family_member.date_removed is null\n" +
-                            "  AND task.business_status = 'Complete'\n" +
-                            "  AND (task.status = 'READY' OR task.status = 'IN_PROGRESS')\n" +
-                            "  AND task.code = 'Referral'";
+                        "/* COUNT NOTIFICATION FROM NOT YET DONE REFERRALS FROM THE FACILITY */\n" +
+                        "SELECT COUNT(*) AS c\n" +
+                        "FROM task\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+                        "         inner join ec_not_yet_done_referral on ec_not_yet_done_referral.referral_task = task._id\n" +
+                        "         inner join event on ec_not_yet_done_referral.id = event.formSubmissionId\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND task.status = 'CANCELLED'\n" +
+                        "  AND task.code = 'Referral'\n";
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             default:

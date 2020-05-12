@@ -57,6 +57,8 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
             referralNotificationItem = getDetailsForMalariaReferral();
         } else if (referralType.contains(context.getString(R.string.referral_notification_type_fp))) {
             referralNotificationItem = getDetailsForFamilyPlanningReferral();
+        } else if (referralType.contains(context.getString(R.string.referral_notification_type_not_yet_done_referrals))) {
+            referralNotificationItem = getDetailsForNotYetDoneReferral(referralTaskId);
         }
         presenter.onReferralDetailsFetched(referralNotificationItem);
     }
@@ -120,27 +122,10 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
     @NotNull
     private ReferralNotificationItem getDetailsForSuccessfulReferral(String referralTaskId) {
         ReferralNotificationRecord record = ReferralNotificationDao.getSuccessfulReferral(referralTaskId);
-        presenter.setClientBaseEntityId(record.getClientBaseEntityId());
-
-        Pair<String, String> notificationDatesPair = null;
-        String notificationDate = record.getNotificationDate();
-        try {
-            notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
-            notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
-        } catch (ParseException e) {
-            Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
-        }
-        presenter.setNotificationDates(notificationDatesPair);
-
+        List<String> details = setNotificationRecordDetails(record);
+        details.add(context.getString(R.string.referral_notification_record_closed));
         String title = context.getString(R.string.successful_referral_notification_title,
                 record.getClientName(), getClientAge(record.getClientDateOfBirth()));
-        List<String> details = new ArrayList<>();
-        details.add(context.getString(R.string.referral_notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
-        details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
-        if (record.getVillage() != null) {
-            details.add(context.getString(R.string.referral_notification_village, record.getVillage()));
-        }
-        details.add(context.getString(R.string.referral_notification_record_closed));
         return new ReferralNotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
     }
 
@@ -181,6 +166,38 @@ public class BaseReferralNotificationDetailsInteractor implements BaseReferralNo
         details.add(context.getString(R.string.referral_notification_action_taken, "Nothing"));
         details.add(context.getString(R.string.referral_notification_village, "Beketa Market"));
         return new ReferralNotificationItem(title, details);
+    }
+
+    @NotNull
+    private ReferralNotificationItem getDetailsForNotYetDoneReferral(String referralTaskId) {
+        ReferralNotificationRecord record = ReferralNotificationDao.getNotYetDoneReferral(referralTaskId);
+        List<String> details = setNotificationRecordDetails(record);
+        details.add(context.getString(R.string.referral_notification_record_not_yet_done));
+        String title = context.getString(R.string.successful_referral_notification_title,
+                record.getClientName(), getClientAge(record.getClientDateOfBirth()));
+        return new ReferralNotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
+    }
+
+    private List<String> setNotificationRecordDetails(ReferralNotificationRecord record){
+        presenter.setClientBaseEntityId(record.getClientBaseEntityId());
+
+        Pair<String, String> notificationDatesPair = null;
+        String notificationDate = record.getNotificationDate();
+        try {
+            notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
+            notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
+        } catch (ParseException e) {
+            Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
+        }
+        presenter.setNotificationDates(notificationDatesPair);
+
+        List<String> details = new ArrayList<>();
+        details.add(context.getString(R.string.referral_notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
+        details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
+        if (record.getVillage() != null) {
+            details.add(context.getString(R.string.referral_notification_village, record.getVillage()));
+        }
+        return details;
     }
 
     @NotNull

@@ -633,6 +633,7 @@
     <string name="referral_notification_record_closed">Record closed</string>
     <string name="referral_notification_phone">Household/Caregiver Phone: %1$s</string>
     <string name="no_phone_provided">No phone provided</string>
+    <string name="referral_notification_record_not_yet_done">Referral not yet done</string>
 
 
     <!--stock usage reporting-->
@@ -652,5 +653,6 @@
     <string name="referral_notification_type_anc">ANC</string>
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
+    <string name="referral_notification_type_not_yet_done_referrals">Not Yet Done</string>
     <string name="perform_click_action">perform click action</string>
 </resources>
