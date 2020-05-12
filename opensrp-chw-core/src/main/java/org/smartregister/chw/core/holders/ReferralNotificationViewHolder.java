@@ -29,7 +29,7 @@ public class ReferralNotificationViewHolder extends RecyclerView.ViewHolder {
         String formattedReferralType = referralTypeTextView.getContext()
                 .getString(R.string.facility_visit, referralType);
 
-        this.referralTypeTextView.setText(referralType.contains("Successful") || referralType.contains("not completed")   ? referralType : formattedReferralType);
+        this.referralTypeTextView.setText(referralType.contains("Successful") || referralType.toLowerCase().contains("not completed") ? referralType : formattedReferralType);
     }
 
     public void setNotificationDate(String notificationDate) {
