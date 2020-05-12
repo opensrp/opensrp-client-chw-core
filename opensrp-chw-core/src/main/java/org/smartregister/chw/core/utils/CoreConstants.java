@@ -42,6 +42,7 @@ public class CoreConstants {
         String REFERRAL_TASK_ID = "referral_task_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
+        String DETAILS = "details";
     }
 
     public interface SERVICE_GROUPS {
@@ -615,6 +616,7 @@ public class CoreConstants {
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String INDEPENDENT_CLIENT = "ec_independent_client";
     }
 
     public static final class INTENT_KEY {
@@ -878,7 +880,8 @@ public class CoreConstants {
         public static final String PNC = "PNC";
         public static final String MALARIA = "Malaria";
         public static final String FAMILY_PLANNING = "Family Planning";
-        public static final String OTHER = "OTHER";
+        public static final String OTHER = "Other";
+        public static final String INDEPENDENT = "Independent";
     }
 
     public static final class KeyIndicatorsUtil {

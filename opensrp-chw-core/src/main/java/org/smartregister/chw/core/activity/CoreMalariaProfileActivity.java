@@ -122,7 +122,7 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
                     JSONObject form = new JSONObject(jsonString);
                     String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
                     if (encounterType.equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                        presenter().updateFamilyMember(jsonString);
+                        presenter().updateFamilyMember(jsonString, false);
                     } else if (encounterType.equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
                         CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
                         showToast(this.getString(R.string.referral_submitted));

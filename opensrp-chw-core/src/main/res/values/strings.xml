@@ -653,4 +653,10 @@
     <string name="referral_notification_type_malaria">Malaria</string>
     <string name="referral_notification_type_fp">Family Planning</string>
     <string name="perform_click_action">perform click action</string>
+
+    <!--All Client Member Profile -->
+    <string name="edit_all_client_member_form_title">Edit Client Details</string>
+    <string name="location_info">Location info</string>
+    <string name="hiv_registration">HIV registration</string>
+    <string name="tb_registration">TB registration</string>
 </resources>
