@@ -68,11 +68,11 @@ public class CloseExpiredReferralsIntentService extends IntentService {
             String focus = task.get(ChwDBConstants.TaskTable.FOCUS);
             if (focus != null && startDate != null) {
                 Calendar expiredCalendar = Calendar.getInstance();
-                if (focus.equals(TASKS_FOCUS.ANC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.PNC_DANGER_SIGNS)) {
+                if (focus.equals(TASKS_FOCUS.ANC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.PNC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.SUSPECTED_MALARIA)) {
                     expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
                     expiredCalendar.add(Calendar.HOUR_OF_DAY, 24);
                     checkIfExpired(expiredCalendar, task);
-                } else if (focus.equals(TASKS_FOCUS.SICK_CHILD) || focus.equals(TASKS_FOCUS.SUSPECTED_MALARIA) || focus.equals(TASKS_FOCUS.FP_SIDE_EFFECTS)) {
+                } else if (focus.equals(TASKS_FOCUS.SICK_CHILD) || focus.equals(TASKS_FOCUS.FP_SIDE_EFFECTS)) {
                     Calendar referralNotYetDoneCalendar = Calendar.getInstance();
                     referralNotYetDoneCalendar.setTimeInMillis(Long.parseLong(startDate));
                     referralNotYetDoneCalendar.add(Calendar.DAY_OF_MONTH, 3);
