@@ -659,4 +659,6 @@
     <string name="location_info">Location info</string>
     <string name="hiv_registration">HIV registration</string>
     <string name="tb_registration">TB registration</string>
+    <string name="remove_client">Remove Client</string>
+    <string name="call_all_clients_member">Call client or caregiver</string>
 </resources>

@@ -204,6 +204,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-anc'
         exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'id.zelory', module: 'compressor'
     }
 
     api 'com.google.guava:guava:20.0'

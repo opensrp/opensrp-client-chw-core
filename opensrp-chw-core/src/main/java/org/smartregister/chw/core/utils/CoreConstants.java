@@ -43,6 +43,7 @@ public class CoreConstants {
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
+        String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
     }
 
     public interface SERVICE_GROUPS {
