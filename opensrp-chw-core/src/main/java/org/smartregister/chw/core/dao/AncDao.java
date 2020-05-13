@@ -33,7 +33,7 @@ public class AncDao extends AlertDao {
     }
 
     public static MemberObject getMember(String baseEntityID) {
-        String sql = "select m.base_entity_id , m.unique_id , m.relational_id , m.dob , m.first_name , m.middle_name , m.last_name , m.gender , " +
+        String sql = "select f.gps, m.base_entity_id , m.unique_id , m.relational_id , m.dob , m.first_name , m.middle_name , m.last_name , m.gender , " +
                 "m.phone_number , m.other_phone_number , f.first_name family_name , f.primary_caregiver , f.family_head , " +
                 "fh.first_name family_head_first_name , fh.middle_name family_head_middle_name, fh.last_name family_head_last_name, " +
                 "fh.phone_number family_head_phone_number , ar.confirmed_visits , f.village_town , ar.last_interacted_with , " +
@@ -73,6 +73,7 @@ public class AncDao extends AlertDao {
             memberObject.setDateCreated(getCursorValue(cursor, "date_created"));
             memberObject.setAddress(getCursorValue(cursor, "village_town"));
             memberObject.setHasAncCard(getCursorValue(cursor, "has_anc_card", ""));
+            memberObject.setGps(getCursorValue(cursor, "gps", ""));
 
             return memberObject;
         };
