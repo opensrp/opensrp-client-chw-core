@@ -1,18 +1,13 @@
 package org.smartregister.chw.core.presenter;
 
-
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.presenter.BaseFamilyProfileMemberPresenter;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
-import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.view.LocationPickerView;
 

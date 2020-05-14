@@ -39,8 +39,9 @@ public class ApplicationUtils {
                         DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
                         DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, ChildDBConstants.KEY.ENTRY_POINT, DBConstants.KEY.DOB, DBConstants.KEY.DATE_REMOVED
                 };
+            default:
+                return null;
         }
-        return null;
     }
 
     private static String[] getFtsSortFields(String tableName) {
