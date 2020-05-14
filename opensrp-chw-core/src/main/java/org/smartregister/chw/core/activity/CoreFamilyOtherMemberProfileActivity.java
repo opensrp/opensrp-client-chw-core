@@ -61,6 +61,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     protected OnClickFloatingMenu onClickFloatingMenu;
     private TextView textViewFamilyHas;
     private RelativeLayout layoutFamilyHasRow;
+    protected boolean isIndependent;
 
     @Override
     protected void onCreation() {
@@ -151,7 +152,11 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
             startMalariaFollowUpVisit();
             return true;
         } else if (i == R.id.action_registration) {
-            startFormForEdit(R.string.edit_member_form_title);
+            if (isIndependent) {
+                startFormForEdit(R.string.edit_all_client_member_form_title);
+            }else {
+                startFormForEdit(R.string.edit_member_form_title);
+            }
             return true;
         } else if (i == R.id.action_remove_member) {
             removeIndividualProfile();
@@ -174,6 +179,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     protected abstract void startMalariaRegister();
 
     protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void setIndependentClient(boolean isIndependent);
 
     public void startFormForEdit(Integer title_resource) {
 
@@ -227,7 +234,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
                     String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
                     JSONObject form = new JSONObject(jsonString);
                     if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                        presenter().updateFamilyMember(jsonString);
+                        presenter().updateFamilyMember(jsonString, isIndependent);
                     }
                 } catch (Exception e) {
                     Timber.e(e);
