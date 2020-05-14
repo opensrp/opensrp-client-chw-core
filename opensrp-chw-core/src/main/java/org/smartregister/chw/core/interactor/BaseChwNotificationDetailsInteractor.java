@@ -149,9 +149,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
         String title = context.getString(R.string.followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
-        if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs))) {
-            details.add(context.getString(R.string.notification_care_giver, notificationRecord.getCareGiverName()));
-        }
         details.add(context.getString(R.string.notification_danger_sign, notificationRecord.getDangerSigns()));
         details.add(context.getString(R.string.notification_action_taken, notificationRecord.getActionTaken()));
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
