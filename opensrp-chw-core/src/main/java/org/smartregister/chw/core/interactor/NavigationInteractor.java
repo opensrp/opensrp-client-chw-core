@@ -80,7 +80,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(sqlChild);
 
             case CoreConstants.TABLE_NAME.FAMILY:
-                String sqlFamily = "select count(*) from ec_family where date_removed is null";
+                String sqlFamily = "select count(*) from ec_family where date_removed is null AND (entity_type = 'ec_family' OR entity_type IS NULL)";
                 return NavigationDao.getQueryCount(sqlFamily);
 
             case CoreConstants.TABLE_NAME.ANC_MEMBER:
@@ -122,59 +122,107 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(sqlFP);
 
             case CoreConstants.TABLE_NAME.FAMILY_MEMBER:
-                String allClients = "SELECT SUM(c)\n" +
+                String allClients = "/**COUNT REGISTERED CHILD CLIENTS*/\n" +
+                        "SELECT SUM(c)\n" +
                         "FROM (\n" +
                         "         SELECT COUNT(*) AS c\n" +
                         "         FROM ec_child\n" +
-                        "                  inner join ec_family_member\n" +
-                        "                             on ec_family_member.base_entity_id = ec_child.base_entity_id\n" +
+                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_child.base_entity_id\n" +
                         "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         WHERE ec_family_member.is_closed = '0'\n" +
                         "           AND ec_family_member.date_removed is null\n" +
-                        "           AND cast(strftime('%Y-%m-%d %H:%M:%S', 'now') -\n" +
-                        "                    strftime('%Y-%m-%d %H:%M:%S', ec_child.dob) as int) > 0\n" +
+                        "           AND cast(strftime('%Y-%m-%d %H:%M:%S', 'now') - strftime('%Y-%m-%d %H:%M:%S', ec_child.dob) as int) > 0\n" +
                         "         UNION ALL\n" +
-                        "         SELECT COUNT(*)\n" +
+                        "/**COUNT REGISTERED ANC CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
                         "         FROM ec_anc_register\n" +
-                        "                  inner join ec_family_member\n" +
-                        "                             on ec_family_member.base_entity_id = ec_anc_register.base_entity_id\n" +
+                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_register.base_entity_id\n" +
                         "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         where ec_family_member.date_removed is null\n" +
                         "           and ec_anc_register.is_closed is 0\n" +
-                        "\n" +
-                        "       UNION ALL\n" +
-                        "       SELECT COUNT(*)\n" +
-                        "       FROM ec_family_member\n" +
-                        "           where ec_family_member.date_removed is null\n" +
-                        "           AND ec_family_member.relational_id is null\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "                SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "                   FROM ec_anc_register\n" +
-                        "                UNION ALL\n" +
-                        "               SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "                   FROM ec_pregnancy_outcome\n" +
-                        "               UNION ALL\n" +
-                        "               SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "                   FROM ec_child\n" +
-                        "               UNION ALL\n" +
-                        "               SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
-                        "                   FROM ec_malaria_confirmation\n" +
-                        "           )\n" +
-                        "         UNION ALL\n"+
-                        "         SELECT COUNT(*)\n" +
+                        "         UNION ALL\n" +
+                        "/**COUNT REGISTERED PNC CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
                         "         FROM ec_pregnancy_outcome\n" +
-                        "                  inner join ec_family_member\n" +
-                        "                             on ec_family_member.base_entity_id = ec_pregnancy_outcome.base_entity_id\n" +
+                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_pregnancy_outcome.base_entity_id\n" +
                         "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         where ec_family_member.date_removed is null\n" +
                         "           and ec_pregnancy_outcome.is_closed is 0\n" +
                         "           AND ec_pregnancy_outcome.base_entity_id NOT IN\n" +
                         "               (SELECT base_entity_id FROM ec_anc_register WHERE ec_anc_register.is_closed IS 0)\n" +
                         "         UNION ALL\n" +
-                        "         SELECT COUNT(*)\n" +
+                        "/*COUNT OTHER FAMILY MEMBERS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
                         "         FROM ec_family_member\n" +
-                        "                  inner join ec_family\n" +
-                        "                             on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "         where ec_family_member.date_removed is null\n" +
+                        "           AND (ec_family.entity_type = 'ec_family' OR ec_family.entity_type is null)\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_anc_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_pregnancy_outcome\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_malaria_confirmation\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_family_planning\n" +
+                        "         )\n" +
+                        "         UNION ALL\n" +
+                        "/*COUNT INDEPENDENT MEMBERS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
+                        "         FROM ec_family_member\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "         where ec_family_member.date_removed is null\n" +
+                        "           AND ec_family.entity_type = 'ec_independent_client'\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_anc_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_pregnancy_outcome\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_malaria_confirmation\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_family_planning\n" +
+                        "         )\n" +
+                        "         UNION ALL\n" +
+                        "/**COUNT REGISTERED MALARIA CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
+                        "         FROM ec_family_member\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "                  inner join ec_malaria_confirmation\n" +
+                        "                             on ec_family_member.base_entity_id = ec_malaria_confirmation.base_entity_id\n" +
+                        "         where ec_family_member.date_removed is null\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_anc_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_pregnancy_outcome\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_family_planning\n" +
+                        "         )\n" +
+                        "         UNION ALL\n" +
+                        "/**COUNT FAMILY_PLANNING CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
+                        "         FROM ec_family_member\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "                  inner join ec_family_planning on ec_family_member.base_entity_id = ec_family_planning.base_entity_id\n" +
                         "         where ec_family_member.date_removed is null\n" +
                         "           AND ec_family_member.base_entity_id NOT IN (\n" +
                         "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
@@ -188,26 +236,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "             UNION ALL\n" +
                         "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_malaria_confirmation\n" +
-                        "         )\n" +
-                        "         UNION ALL\n" +
-                        "         SELECT COUNT(*)\n" +
-                        "         FROM ec_family_member\n" +
-                        "                  inner join ec_family\n" +
-                        "                             on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "                  inner join ec_malaria_confirmation\n" +
-                        "                             on ec_family_member.base_entity_id = ec_malaria_confirmation.base_entity_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_pregnancy_outcome\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_child\n" +
-                        "         )\n" +
-                        "     )\n";
+                        "         ));";
                 return NavigationDao.getQueryCount(allClients);
 
             case Constants.Tables.REFERRAL:

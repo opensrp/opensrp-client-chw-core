@@ -35,6 +35,7 @@ import java.util.Map;
 public class CoreStockInventoryReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
     protected RecyclerView recyclerView;
+    protected CustomFontTextView toolBarTextView;
     public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
     public static List<String> getItems() {
@@ -102,7 +103,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         });
 
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
