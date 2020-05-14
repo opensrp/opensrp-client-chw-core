@@ -4,6 +4,7 @@ package org.smartregister.chw.core.presenter;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreFamilyRegisterFragmentContract;
 import org.smartregister.chw.core.utils.ChildDBConstants;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.family.presenter.BaseFamilyRegisterFragmentPresenter;
 import org.smartregister.family.util.DBConstants;
 
@@ -31,4 +32,9 @@ public class FamilyRegisterFragmentPresenter extends BaseFamilyRegisterFragmentP
         return getMainCondition() + " AND " + ChildDBConstants.childDueFilter();
     }
 
+    @Override
+    public String getMainCondition() {
+     return  String.format(" %s is NULL AND (%s is NULL OR %s = '%s')", DBConstants.KEY.DATE_REMOVED,
+             DBConstants.KEY.ENTITY_TYPE, DBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.FAMILY);
+    }
 }

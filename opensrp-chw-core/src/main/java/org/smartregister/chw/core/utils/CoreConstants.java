@@ -44,6 +44,8 @@ public class CoreConstants {
         String BASE_ENTITY_ID = "base_entity_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
+        String DETAILS = "details";
+        String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
     }
 
     public interface SERVICE_GROUPS {
@@ -630,6 +632,7 @@ public class CoreConstants {
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
+        public static final String INDEPENDENT_CLIENT = "ec_independent_client";
     }
 
     public static final class INTENT_KEY {
@@ -893,7 +896,8 @@ public class CoreConstants {
         public static final String PNC = "PNC";
         public static final String MALARIA = "Malaria";
         public static final String FAMILY_PLANNING = "Family Planning";
-        public static final String OTHER = "OTHER";
+        public static final String OTHER = "Other";
+        public static final String INDEPENDENT = "Independent";
     }
 
     public static final class KeyIndicatorsUtil {
