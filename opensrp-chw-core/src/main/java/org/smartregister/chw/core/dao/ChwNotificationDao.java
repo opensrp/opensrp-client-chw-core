@@ -73,7 +73,6 @@ public class ChwNotificationDao extends AbstractDao {
         String sql = String.format(
                 "/* Get details for ANC or PNC Danger Signs Outcome */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
-                        "cg.first_name || ' ' || ifnull(cg.last_name, cg.middle_name) as cg_full_name,\n" +
                         "ec_family.village_town        AS      village,\n" +
                         table + ".danger_signs_present,\n" +
                         table + ".action_taken,\n" +
@@ -81,7 +80,6 @@ public class ChwNotificationDao extends AbstractDao {
                         "FROM " + table + "\n" +
                         "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".base_entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         inner join (select fm.base_entity_id, fm.first_name, fm.middle_name, fm.last_name from ec_family_member fm) cg on ec_family.primary_caregiver = cg.base_entity_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
                         "  AND ec_family_member.date_removed is null\n" +
@@ -134,16 +132,19 @@ public class ChwNotificationDao extends AbstractDao {
         return row -> {
             NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
             record.setClientName(getCursorValue(row, "full_name"));
-            record.setCareGiverName(getCursorValue(row, "cg_full_name"));
             record.setVillage(getCursorValue(row, "village"));
             record.setVisitDate(getCursorValue(row, "visit_date"));
 
+            String careGiverName = getCursorValue(row, "cg_full_name");
             String diagnosis = getCursorValue(row, "diagnosis");
             String results = getCursorValue(row, "results");
             String dangerSignsPresent = getCursorValue(row, "danger_signs_present");
             String actionTaken = getCursorValue(row, "action_taken");
             String method = getCursorValue(row, "method");
 
+            if (careGiverName != null) {
+                record.setCareGiverName(careGiverName);
+            }
             if (diagnosis != null) {
                 record.setDiagnosis(diagnosis);
             }

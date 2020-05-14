@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.holders.FooterViewHolder;
 import org.smartregister.chw.core.holders.ChwNotificationViewHolder;
+import org.smartregister.chw.core.holders.FooterViewHolder;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewProvider;
@@ -28,6 +28,7 @@ import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 import org.smartregister.view.viewholder.OnClickFormLauncher;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 
 public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
@@ -63,7 +64,12 @@ public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNoti
 
         String notificationEventDate = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_DATE, false);
         if (StringUtils.isNotBlank(notificationEventDate)) {
-            DateTime duration = new DateTime(DateTimeFormat.forPattern("dd-MM-yyyy").parseDateTime(notificationEventDate));
+            DateTime duration;
+            if (notificationType.equals(context.getString(R.string.notification_type_family_planning))) {
+                duration = new DateTime(DateTimeFormat.forPattern("dd-MM-yyyy").parseDateTime(notificationEventDate)); // FP Reg Date is in it's own different format
+            } else {
+                duration = new DateTime(Timestamp.valueOf(notificationEventDate));
+            }
             viewHolder.setNotificationDate(org.smartregister.chw.core.utils.Utils.formatReferralDuration(duration, context));
         }
         attachPatientOnclickListener(viewHolder.itemView, client);
