@@ -9,6 +9,7 @@ import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.interactor.CoreFamilyInteractor;
 import org.smartregister.chw.core.interactor.CoreFamilyProfileInteractor;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyOtherMemberContract;
 import org.smartregister.family.contract.FamilyProfileContract;
@@ -138,7 +139,7 @@ public abstract class CoreFamilyOtherMemberActivityPresenter extends BaseFamilyO
     }
 
     @Override
-    public void updateFamilyMember(String jsonString) {
+    public void updateFamilyMember(String jsonString, boolean isIndependent) {
 
         try {
             getView().showProgressDialog(org.smartregister.family.R.string.saving_dialog_title);
@@ -146,6 +147,9 @@ public abstract class CoreFamilyOtherMemberActivityPresenter extends BaseFamilyO
             FamilyEventClient familyEventClient = profileModel.processUpdateMemberRegistration(jsonString, familyBaseEntityId);
             if (familyEventClient == null) {
                 return;
+            }
+            if (isIndependent) {
+                familyEventClient.getEvent().setEntityType(CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT);
             }
             profileInteractor.saveRegistration(familyEventClient, jsonString, true, this);
         } catch (Exception e) {
