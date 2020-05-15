@@ -619,20 +619,20 @@
 
     <string name="facility_visit">%1$s facility visit</string>
 
-    <!--Referral notification details -->
+    <!-- Notification details -->
     <string name="mark_as_done">Mark as done</string>
     <string name="view_profile">View Profile</string>
     <string name="back_to_updates">Back to Updates</string>
     <string name="successful_referral_notification_title">Name: %1$s, %2$s</string>
-    <string name="followup_referral_notification_title">%1$s has attended the facility on %2$s</string>
-    <string name="referral_notification_danger_sign">Danger sign: %1$s</string>
-    <string name="referral_notification_action_taken">Action taken: %1$s</string>
-    <string name="referral_notification_village">Village: %1$s</string>
-    <string name="referral_notification_selected_method">Selected method: %1$s</string>
-    <string name="referral_notification_closure_date">Closure date: %1$s</string>
-    <string name="referral_notification_record_closed">Record closed</string>
-    <string name="referral_notification_phone">Household/Caregiver Phone: %1$s</string>
-    <string name="no_phone_provided">No phone provided</string>
+    <string name="followup_notification_title">%1$s has attended the facility on %2$s</string>
+    <string name="notification_care_giver">CG: %1$s</string>
+    <string name="notification_diagnosis">Diagnosis: %1$s</string>
+    <string name="notification_danger_sign">Danger signs: %1$s</string>
+    <string name="notification_action_taken">Action taken: %1$s</string>
+    <string name="notification_village">Village: %1$s</string>
+    <string name="notification_selected_method">Selected method: %1$s</string>
+    <string name="notification_record_closed">Record closed</string>
+    <string name="notification_phone">Household/Caregiver Phone: %1$s</string>
 
 
     <!--stock usage reporting-->
@@ -648,12 +648,13 @@
     <string name="review_chw_services">Review CHW services</string>
     <string name="provider_service_text">%s services</string>
     <string name="service_review"> Service Review</string>
+
     <!--Referral notification types -->
-    <string name="referral_notification_type_successful">Successful</string>
-    <string name="referral_notification_type_pnc">PNC</string>
-    <string name="referral_notification_type_anc">ANC</string>
-    <string name="referral_notification_type_malaria">Malaria</string>
-    <string name="referral_notification_type_fp">Family Planning</string>
+    <string name="notification_type_sick_child_follow_up">Sick Child</string>
+    <string name="notification_type_pnc_danger_signs">PNC Danger Signs</string>
+    <string name="notification_type_anc_danger_signs">ANC Danger Signs</string>
+    <string name="notification_type_malaria_follow_up">Malaria Follow-up</string>
+    <string name="notification_type_family_planning">Family Planning</string>
     <string name="perform_click_action">perform click action</string>
 
     <!--All Client Member Profile -->

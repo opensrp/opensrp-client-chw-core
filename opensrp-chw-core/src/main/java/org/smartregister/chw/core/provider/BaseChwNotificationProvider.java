@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.holders.ChwNotificationViewHolder;
 import org.smartregister.chw.core.holders.FooterViewHolder;
-import org.smartregister.chw.core.holders.ReferralNotificationViewHolder;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewProvider;
@@ -30,25 +30,25 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
-public class BaseReferralNotificationProvider implements RecyclerViewProvider<ReferralNotificationViewHolder> {
+public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
 
     private Context context;
     private View.OnClickListener onClickListener;
     private View.OnClickListener paginationClickListener;
 
-    public BaseReferralNotificationProvider(Context context, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
+    public BaseChwNotificationProvider(Context context, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
         this.context = context;
         this.onClickListener = onClickListener;
         this.paginationClickListener = paginationClickListener;
     }
 
     @Override
-    public void getView(Cursor cursor, SmartRegisterClient client, ReferralNotificationViewHolder viewHolder) {
+    public void getView(Cursor cursor, SmartRegisterClient client, ChwNotificationViewHolder viewHolder) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
         populatePatientColumn(pc, viewHolder);
     }
 
-    private void populatePatientColumn(CommonPersonObjectClient client, ReferralNotificationViewHolder viewHolder) {
+    private void populatePatientColumn(CommonPersonObjectClient client, ChwNotificationViewHolder viewHolder) {
 
         String firstName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
@@ -59,7 +59,7 @@ public class BaseReferralNotificationProvider implements RecyclerViewProvider<Re
         viewHolder.setNameAndAge(StringUtils.capitalize(fullName) + ", " + StringUtils.capitalize(OpdUtils.getClientAge(dobString, translatedYearInitial)));
 
         String notificationType = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_TYPE, true);
-        viewHolder.setReferralTypeTextView(notificationType);
+        viewHolder.setNotificationTypeTextView(notificationType);
 
         String notificationEventDate = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_DATE, false);
         if (StringUtils.isNotBlank(notificationEventDate)) {
@@ -108,9 +108,9 @@ public class BaseReferralNotificationProvider implements RecyclerViewProvider<Re
     }
 
     @Override
-    public ReferralNotificationViewHolder createViewHolder(ViewGroup parent) {
-        View view = inflater().inflate(R.layout.referral_notification_list_row, parent, false);
-        return new ReferralNotificationViewHolder(view);
+    public ChwNotificationViewHolder createViewHolder(ViewGroup parent) {
+        View view = inflater().inflate(R.layout.chw_notification_list_row, parent, false);
+        return new ChwNotificationViewHolder(view);
     }
 
     @Override

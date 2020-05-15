@@ -12,6 +12,12 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
+
 public class NavigationInteractor implements NavigationContract.Interactor {
 
     private static NavigationInteractor instance;
@@ -248,20 +254,11 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "where m.date_removed is null and t.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "' ";
                 return NavigationDao.getQueryCount(sqlReferral);
 
-            case  CoreConstants.TABLE_NAME.CLOSE_REFERRAL:
+            case CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:
                 String referralNotificationQuery =
-                        "/* COUNT NOTIFICATION FROM REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
-                            "SELECT COUNT(*) AS c\n" +
-                            "FROM task\n" +
-                            "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
-                            "         inner join ec_close_referral on ec_close_referral.referral_task = task._id\n" +
-                            "         inner join event on ec_close_referral.id = event.formSubmissionId\n" +
-                            "\n" +
-                            "WHERE ec_family_member.is_closed = '0'\n" +
-                            "  AND ec_family_member.date_removed is null\n" +
-                            "  AND task.business_status = 'Complete'\n" +
-                            "  AND (task.status = 'READY' OR task.status = 'IN_PROGRESS')\n" +
-                            "  AND task.code = 'Referral'";
+                        String.format("SELECT SUM(c) FROM (\n %s UNION ALL\n %s UNION ALL\n %s UNION ALL\n %s UNION ALL\n %s)",
+                                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
+                                PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY, MALARIA_HF_FOLLOW_UP_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             default:

@@ -17,38 +17,39 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.BaseReferralNotificationDetailsContract;
-import org.smartregister.chw.core.dao.ReferralNotificationDao;
-import org.smartregister.chw.core.domain.ReferralNotificationItem;
-import org.smartregister.chw.core.presenter.BaseReferralNotificationDetailsPresenter;
+import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.domain.NotificationItem;
+import org.smartregister.chw.core.presenter.BaseChwNotificationDetailsPresenter;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.MultiLanguageActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.List;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFICATION_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.NOTIFICATION_TYPE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.REFERRAL_TASK_ID;
 
-public abstract class BaseReferralNotificationDetailsActivity extends MultiLanguageActivity
-        implements BaseReferralNotificationDetailsContract.View, View.OnClickListener {
+public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageActivity
+        implements ChwNotificationDetailsContract.View, View.OnClickListener {
 
-    protected TextView referralNotificationTitle;
-    protected LinearLayout referralNotificationDetails;
+    protected TextView notificationTitle;
+    protected LinearLayout notificationDetails;
     protected TextView markAsDoneTextView;
     protected TextView viewProfileTextView;
 
-    private BaseReferralNotificationDetailsContract.Presenter presenter;
-    private String referralTaskId;
+    private ChwNotificationDetailsContract.Presenter presenter;
+    private String notificationId;
+    private String notificationType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_referral_notification_details);
+        setContentView(R.layout.activity_chw_notification_details);
         inflateToolbar();
         setupViews();
         initPresenter();
-        disableMarkAsDoneAction(ReferralNotificationDao.isMarkedAsDone(referralTaskId));
+        disableMarkAsDoneAction(ChwNotificationDao.isMarkedAsDone(this, notificationId, notificationType));
     }
 
     private void inflateToolbar() {
@@ -74,8 +75,8 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     }
 
     protected void setupViews() {
-        referralNotificationTitle = findViewById(R.id.referral_notification_title);
-        referralNotificationDetails = findViewById(R.id.referral_notification_content);
+        notificationTitle = findViewById(R.id.notification_title);
+        notificationDetails = findViewById(R.id.notification_content);
         markAsDoneTextView = findViewById(R.id.mark_as_done);
         markAsDoneTextView.setOnClickListener(this);
         viewProfileTextView = findViewById(R.id.view_profile);
@@ -83,18 +84,19 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     }
 
     @Override
-    public void setReferralNotificationDetails(ReferralNotificationItem notificationItem) {
-        referralNotificationTitle.setText(notificationItem.getTitle());
+    public void setNotificationDetails(NotificationItem notificationItem) {
+        notificationTitle.setText(notificationItem.getTitle());
         addNotificationInnerContent(notificationItem.getDetails());
     }
 
     @Override
     public void initPresenter() {
-        presenter = new BaseReferralNotificationDetailsPresenter(this);
+        presenter = new BaseChwNotificationDetailsPresenter(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
-            referralTaskId = getIntent().getExtras().getString(REFERRAL_TASK_ID);
-            String notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
-            presenter.getReferralDetails(referralTaskId, notificationType);
+            notificationId = getIntent().getExtras().getString(NOTIFICATION_ID);
+
+            notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
+            presenter.getNotificationDetails(notificationId, notificationType);
         }
     }
 
@@ -110,7 +112,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
     }
 
     private void addNotificationInnerContent(List<String> details) {
-        referralNotificationDetails.removeAllViews();
+        notificationDetails.removeAllViews();
         for (String entry : details) {
             TextView textView = new TextView(this);
             textView.setTextSize(18f);
@@ -119,12 +121,12 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
             textView.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             textView.setSingleLine(false);
             textView.setTextColor(ContextCompat.getColor(this, R.color.text_black));
-            referralNotificationDetails.addView(textView,
+            notificationDetails.addView(textView,
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
     }
 
-    public BaseReferralNotificationDetailsContract.Presenter getPresenter() {
+    public ChwNotificationDetailsContract.Presenter getPresenter() {
         return presenter;
     }
 
@@ -133,7 +135,7 @@ public abstract class BaseReferralNotificationDetailsActivity extends MultiLangu
         if (view.getId() == R.id.view_profile) {
             getPresenter().showMemberProfile();
         } else if (view.getId() == R.id.mark_as_done) {
-            getPresenter().dismissReferralNotification(referralTaskId);
+            getPresenter().dismissNotification(notificationId, notificationType);
         } else {
             Utils.showShortToast(this, getString(R.string.perform_click_action));
         }

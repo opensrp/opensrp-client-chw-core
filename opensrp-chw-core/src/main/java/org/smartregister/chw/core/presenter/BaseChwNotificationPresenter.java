@@ -4,7 +4,7 @@ import org.smartregister.view.contract.BaseRegisterContract;
 
 import java.util.List;
 
-public class BaseReferralNotificationPresenter implements BaseRegisterContract.Presenter {
+public class BaseChwNotificationPresenter implements BaseRegisterContract.Presenter {
     @Override
     public void registerViewConfigurations(List<String> list) {
         //// TODO: 15/08/19  
