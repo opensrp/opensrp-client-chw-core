@@ -7,6 +7,8 @@ import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.interactor.BaseChwNotificationDetailsInteractor;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.util.Utils;
 
 import java.lang.ref.WeakReference;
 
@@ -14,7 +16,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     private WeakReference<ChwNotificationDetailsContract.View> view;
     private ChwNotificationDetailsContract.Interactor interactor;
-    private String clientBaseEntityId;
     private Pair<String, String> notificationDates;
 
     public BaseChwNotificationDetailsPresenter(ChwNotificationDetailsContract.View view) {
@@ -24,7 +25,7 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     @Override
     public String getClientBaseEntityId() {
-        return clientBaseEntityId;
+        return Utils.getValue(getView().getCommonPersonObjectClient().getColumnmaps(), CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID, false);
     }
 
     @Override
@@ -46,11 +47,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
     }
 
     @Override
-    public void showMemberProfile() {
-        //TODO implement functionality for navigating to member profile
-    }
-
-    @Override
     public void dismissNotification(String notificationId, String notificationType) {
         if (!ChwNotificationDao.isMarkedAsDone((Activity) getView(), notificationId, notificationType)) {
             getView().disableMarkAsDoneAction(true);
@@ -60,11 +56,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     public void setInteractor(ChwNotificationDetailsContract.Interactor interactor) {
         this.interactor = interactor;
-    }
-
-    @Override
-    public void setClientBaseEntityId(String clientBaseEntityId) {
-        this.clientBaseEntityId = clientBaseEntityId;
     }
 
     @Override
