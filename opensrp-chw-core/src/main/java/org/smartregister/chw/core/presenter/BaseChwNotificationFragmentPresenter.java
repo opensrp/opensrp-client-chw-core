@@ -3,6 +3,7 @@ package org.smartregister.chw.core.presenter;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseChwNotificationFragmentContract;
 import org.smartregister.chw.core.model.BaseChwNotificationModel;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 import java.lang.ref.WeakReference;
 
@@ -52,5 +53,5 @@ public abstract class BaseChwNotificationFragmentPresenter implements
     }
 
     @Override
-    abstract public void displayDetailsActivity(String referralTaskId, String notificationType);
+    abstract public void displayDetailsActivity(CommonPersonObjectClient client, String notificationId, String notificationType);
 }
