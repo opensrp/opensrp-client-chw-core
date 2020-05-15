@@ -6,10 +6,13 @@ import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.dao.AbstractDao;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class ChwNotificationDao extends AbstractDao {
 
@@ -133,7 +136,7 @@ public class ChwNotificationDao extends AbstractDao {
             NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
             record.setClientName(getCursorValue(row, "full_name"));
             record.setVillage(getCursorValue(row, "village"));
-            record.setVisitDate(getCursorValue(row, "visit_date"));
+            record.setVisitDate(formatVisitDate(getCursorValue(row, "visit_date")));
 
             String careGiverName = getCursorValue(row, "cg_full_name");
             String diagnosis = getCursorValue(row, "diagnosis");
@@ -199,5 +202,17 @@ public class ChwNotificationDao extends AbstractDao {
         String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
         String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", table, dateMarkedAsDone, notificationId);
         updateDB(sql);
+    }
+
+    private static String formatVisitDate(String visitDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());//12-08-2018 14:05:10
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        try {
+            Date date = sdf.parse(visitDate);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            Timber.e(e);
+        }
+        return "";
     }
 }
