@@ -230,6 +230,11 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     }
 
     @Override
+    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
+        interactor.createSickChildFollowUpEvent(allSharedPreferences, jsonString);
+    }
+
+    @Override
     public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID) {
         interactor.fetchProfileTask(context, baseEntityID, this);
     }
