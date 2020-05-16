@@ -42,6 +42,7 @@
     <string name="menu_anc_clients">ANC Clients</string>
     <string name="menu_child_clients">Child Clients</string>
     <string name="menu_hiv_clients">HIV Clients</string>
+    <string name="menu_tb_clients">TB Clients</string>
     <string name="menu_anc">ANC</string>
     <string name="menu_pnc">PNC</string>
     <string name="menu_child">Child</string>
@@ -664,4 +665,9 @@
     <string name="tb_registration">TB registration</string>
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>
+
+
+<!--    HIV Register-->
+    <string name="hiv_register">HIV Register</string>
+
 </resources>

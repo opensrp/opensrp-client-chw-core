@@ -668,7 +668,8 @@ public class CoreConstants {
         public static final String ANC_CLIENTS = "ANC Clients";
         public static final String CHILD_CLIENTS = "Child Clients";
         public static final String CHILD = "Child";
-        public static final String HIV_CLIENTS = "Hiv Clients";
+        public static final String HIV_CLIENTS = "HIV Clients";
+        public static final String TB_CLIENTS = "TB Clients";
         public static final String ANC = "ANC";
         public static final String LD = "L&D";
         public static final String PNC = "PNC";
@@ -873,6 +874,7 @@ public class CoreConstants {
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
+        public static final String HIV_REGISTER_ACTIVITY = "HIV_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {

@@ -437,4 +437,5 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Revenir à tous les clients</string>
+    <string name="menu_tb_clients">" Clients de la Tuberculose"</string>
 </resources>
