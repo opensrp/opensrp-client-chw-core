@@ -875,6 +875,7 @@ public class CoreConstants {
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
         public static final String HIV_REGISTER_ACTIVITY = "HIV_REGISTER_ACTIVITY";
+        public static final String TB_REGISTER_ACTIVITY = "TB_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
