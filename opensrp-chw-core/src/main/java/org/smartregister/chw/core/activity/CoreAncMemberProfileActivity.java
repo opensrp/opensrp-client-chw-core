@@ -239,7 +239,8 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     @Override
     public void openFamilyLocation() {
-        // TODO implement
+        Intent intent = new Intent(this, CoreAncMemberMapActivity.class);
+        this.startActivity(intent);
     }
 
 
