@@ -15,12 +15,14 @@ import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
+import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.interactor.CoreAncMemberProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -37,8 +39,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
-
-import timber.log.Timber;
 
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
@@ -85,18 +85,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
                 break;
             case Constants.REQUEST_CODE_HOME_VISIT:
                 this.displayView();
-                break;
-            case JsonFormUtils.REQUEST_CODE_GET_JSON:
-                try {
-                    String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
-                    JSONObject form = new JSONObject(jsonString);
-                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
-                    if (encounterType.equals(CoreConstants.EventType.ANC_DANGER_SIGNS_OUTCOME)) {
-                        ancMemberProfilePresenter().createAncDangerSignsOutcomeEvent(Utils.getAllSharedPreferences(), jsonString, baseEntityID);
-                    }
-                } catch (Exception ex) {
-                    Timber.e(ex);
-                }
                 break;
             default:
                 break;
@@ -257,5 +245,10 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     @Override
     public abstract void setClientTasks(Set<Task> taskList);
+
+    @Override
+    public MemberObject getMemberObject(String baseEntityID) {
+        return AncDao.getMember(baseEntityID);
+    }
 
 }

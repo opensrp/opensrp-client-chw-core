@@ -40,6 +40,7 @@ public class FamilyCallDialogFragment extends DialogFragment implements FamilyCa
     private TextView tvCareGiverTitle;
     private TextView tvCareGiverName;
     private TextView tvCareGiverPhone;
+    private TextView dialogTitle;
 
     public static FamilyCallDialogFragment launchDialog(Activity activity, String familyBaseEntityId) {
         FamilyCallDialogFragment dialogFragment = FamilyCallDialogFragment.newInstance(familyBaseEntityId);
@@ -121,6 +122,7 @@ public class FamilyCallDialogFragment extends DialogFragment implements FamilyCa
         tvCareGiverTitle = rootView.findViewById(R.id.call_caregiver_title);
         tvCareGiverName = rootView.findViewById(R.id.call_caregiver_name);
         tvCareGiverPhone = rootView.findViewById(R.id.call_caregiver_phone);
+        dialogTitle = rootView.findViewById(R.id.call_title);
 
         rootView.findViewById(R.id.close).setOnClickListener(listener);
         tvFamilyHeadPhone.setOnClickListener(listener);
@@ -137,9 +139,12 @@ public class FamilyCallDialogFragment extends DialogFragment implements FamilyCa
             tvFamilyHeadPhone.setTag(model.getPhoneNumber());
 
             tvFamilyHeadTitle.setText(model.getRole());
+            if (model.isIndependent()) {
+                tvFamilyHeadTitle.setVisibility(View.GONE);
+                dialogTitle.setText(R.string.call_all_clients_member);
+            }
         } else {
             llFamilyHead.setVisibility(View.GONE);
-
             tvFamilyHeadName.setText("");
             tvFamilyHeadPhone.setText("");
             tvFamilyHeadPhone.setTag(null);
@@ -149,19 +154,29 @@ public class FamilyCallDialogFragment extends DialogFragment implements FamilyCa
 
     @Override
     public void refreshCareGiverView(FamilyCallDialogContract.Model model) {
-        if (model != null && StringUtils.isNotBlank(model.getPhoneNumber())) {
+        if (model != null && (StringUtils.isNotBlank(model.getPhoneNumber())
+                || (model.isIndependent() && StringUtils.isBlank(model.getOtherContact().second)))) {
             llCareGiver.setVisibility(View.VISIBLE);
-            tvCareGiverName.setText(model.getName());
 
-            tvCareGiverPhone.setText(String.format(getString(R.string.call_prompt), model.getPhoneNumber()));
-            tvCareGiverPhone.setTag(model.getPhoneNumber());
-
-            tvCareGiverTitle.setText(model.getRole());
+            if (model.isIndependent()) {
+                String otherPhoneNumber = model.getOtherContact().second;
+                String caregiver = model.getOtherContact().first;
+                if (StringUtils.isBlank(caregiver) || StringUtils.isBlank(otherPhoneNumber)) {
+                    llCareGiver.setVisibility(View.GONE);
+                }
+                tvCareGiverPhone.setText(String.format(getString(R.string.call_prompt), otherPhoneNumber));
+                tvCareGiverPhone.setTag(otherPhoneNumber);
+                tvCareGiverName.setText(caregiver);
+                tvCareGiverTitle.setText(R.string.care_giver);
+            } else {
+                tvCareGiverPhone.setText(String.format(getString(R.string.call_prompt), model.getPhoneNumber()));
+                tvCareGiverPhone.setTag(model.getPhoneNumber());
+                tvCareGiverName.setText(model.getName());
+                tvCareGiverTitle.setText(model.getRole());
+            }
 
         } else {
-
             llCareGiver.setVisibility(View.GONE);
-
             tvCareGiverName.setText("");
             tvCareGiverPhone.setText("");
             tvCareGiverPhone.setTag(null);

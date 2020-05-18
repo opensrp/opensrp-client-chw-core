@@ -8,16 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.chw.core.R;
 
-public class ReferralNotificationViewHolder extends RecyclerView.ViewHolder {
+public class ChwNotificationViewHolder extends RecyclerView.ViewHolder {
 
     private TextView personNameAndAge;
-    private TextView referralTypeTextView;
+    private TextView notificationTypeTextView;
     private TextView notificationEventDateTextView;
 
-    public ReferralNotificationViewHolder(@NonNull View itemView) {
+    public ChwNotificationViewHolder(@NonNull View itemView) {
         super(itemView);
         personNameAndAge = itemView.findViewById(R.id.persons_name_and_age);
-        referralTypeTextView = itemView.findViewById(R.id.referral_type);
+        notificationTypeTextView = itemView.findViewById(R.id.notification_type);
         notificationEventDateTextView = itemView.findViewById(R.id.notification_date);
     }
 
@@ -25,11 +25,10 @@ public class ReferralNotificationViewHolder extends RecyclerView.ViewHolder {
         this.personNameAndAge.setText(fullNameAndAge);
     }
 
-    public void setReferralTypeTextView(String referralType) {
-        String formattedReferralType = referralTypeTextView.getContext()
-                .getString(R.string.facility_visit, referralType);
-
-        this.referralTypeTextView.setText(referralType.contains("Successful") || referralType.toLowerCase().contains("not completed") ? referralType : formattedReferralType);
+    public void setNotificationTypeTextView(String notificationType) {
+        String formattedReferralType = notificationTypeTextView.getContext()
+                .getString(R.string.facility_visit, notificationType);
+        this.notificationTypeTextView.setText(formattedReferralType);
     }
 
     public void setNotificationDate(String notificationDate) {

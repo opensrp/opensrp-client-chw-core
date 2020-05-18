@@ -37,11 +37,15 @@ public class CoreConstants {
         String ENTRY_POINT = "entry_point";
         String STATUS = "status";
         String LAST_MODIFIED = "last_modified";
+        String NOTIFICATION_ID = "n_id";
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
+        String BASE_ENTITY_ID = "base_entity_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
+        String DETAILS = "details";
+        String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
     }
 
     public interface SERVICE_GROUPS {
@@ -134,6 +138,11 @@ public class CoreConstants {
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
         public static final String REFERRAL_DISMISSAL = "Referral Dismissal";
+        public static final String ANC_NOTIFICATION_DISMISSAL = "ANC Notification Dismissal";
+        public static final String PNC_NOTIFICATION_DISMISSAL = "PNC Notification Dismissal";
+        public static final String MALARIA_NOTIFICATION_DISMISSAL = "Malaria Notification Dismissal";
+        public static final String SICK_CHILD_NOTIFICATION_DISMISSAL = "Sick Child Notification Dismissal";
+        public static final String FAMILY_PLANNING_NOTIFICATION_DISMISSAL = "Family Planning Notification Dismissal";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
@@ -142,6 +151,7 @@ public class CoreConstants {
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
+        public static final String FAMILY_PLANNING_UPDATE = "Family Planning Update";
     }
 
     public static final class EncounterType {
@@ -624,6 +634,9 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
         public static final String REFERRAL = "ec_referral";
+        public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
+        public static final String NOTIFICATION_UPDATE = "notification_update";
+        public static final String INDEPENDENT_CLIENT = "ec_independent_client";
     }
 
     public static final class INTENT_KEY {
@@ -891,7 +904,8 @@ public class CoreConstants {
         public static final String PNC = "PNC";
         public static final String MALARIA = "Malaria";
         public static final String FAMILY_PLANNING = "Family Planning";
-        public static final String OTHER = "OTHER";
+        public static final String OTHER = "Other";
+        public static final String INDEPENDENT = "Independent";
     }
 
     public static final class KeyIndicatorsUtil {
@@ -913,8 +927,6 @@ public class CoreConstants {
         public static final String IN_APP_TABLE_NAME = "monthly_tallies";
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
-
-
 
 
 }

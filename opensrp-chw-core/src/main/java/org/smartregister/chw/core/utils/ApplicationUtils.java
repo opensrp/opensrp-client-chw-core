@@ -23,30 +23,33 @@ public class ApplicationUtils {
     }
 
     private static String[] getFtsSearchFields(String tableName) {
-        if (tableName.equals(CoreConstants.TABLE_NAME.FAMILY)) {
-            return new String[]{
-                    DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.VILLAGE_TOWN, DBConstants.KEY.FIRST_NAME,
-                    DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID
-            };
-        } else if (tableName.equals(CoreConstants.TABLE_NAME.FAMILY_MEMBER)) {
-            return new String[]{
-                    DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
-                    DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, DBConstants.KEY.RELATIONAL_ID
-            };
-        } else if (tableName.equals(CoreConstants.TABLE_NAME.CHILD)) {
-            return new String[]{
-                    DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
-                    DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, ChildDBConstants.KEY.ENTRY_POINT, DBConstants.KEY.DOB, DBConstants.KEY.DATE_REMOVED
-            };
+        switch (tableName) {
+            case CoreConstants.TABLE_NAME.FAMILY:
+                return new String[]{
+                        DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.VILLAGE_TOWN, DBConstants.KEY.FIRST_NAME,
+                        DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID
+                };
+            case CoreConstants.TABLE_NAME.FAMILY_MEMBER:
+                return new String[]{
+                        DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
+                        DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, DBConstants.KEY.RELATIONAL_ID
+                };
+            case CoreConstants.TABLE_NAME.CHILD:
+                return new String[]{
+                        DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
+                        DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, ChildDBConstants.KEY.ENTRY_POINT, DBConstants.KEY.DOB, DBConstants.KEY.DATE_REMOVED
+                };
+            default:
+                return null;
         }
-        return null;
     }
 
     private static String[] getFtsSortFields(String tableName) {
         switch (tableName) {
             case CoreConstants.TABLE_NAME.FAMILY:
                 return new String[]{DBConstants.KEY.LAST_INTERACTED_WITH, DBConstants.KEY.DATE_REMOVED,
-                        DBConstants.KEY.FAMILY_HEAD, DBConstants.KEY.PRIMARY_CAREGIVER};
+                        DBConstants.KEY.FAMILY_HEAD, DBConstants.KEY.PRIMARY_CAREGIVER, DBConstants.KEY.ENTITY_TYPE,
+                        CoreConstants.DB_CONSTANTS.DETAILS};
             case CoreConstants.TABLE_NAME.FAMILY_MEMBER:
                 return new String[]{DBConstants.KEY.DOB, DBConstants.KEY.DOD,
                         DBConstants.KEY.LAST_INTERACTED_WITH, DBConstants.KEY.DATE_REMOVED, DBConstants.KEY.RELATIONAL_ID};
