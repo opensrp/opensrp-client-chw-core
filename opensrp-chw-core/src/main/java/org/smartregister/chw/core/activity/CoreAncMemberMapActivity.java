@@ -4,7 +4,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,7 +60,6 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         kujakuMapView.onCreate(savedInstanceState);
         kujakuMapView.showCurrentLocationBtn(true);
         kujakuMapView.setDisableMyLocationOnMapMove(true);
-
         userLocation = extractUserLocation(savedInstanceState);
 
         kujakuMapView.getMapAsync(mapBoxMap -> {
@@ -110,12 +108,11 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         kujakuMapView.setOnFeatureClickListener(new OnFeatureClickListener() {
             @Override
             public void onFeatureClick(List<Feature> features) {
-                // We only pick the first one
                 Feature feature = features.get(0);
                 if (feature != null)
                     featureClicked(feature);
             }
-        }, "community-transporters");
+        }, "community-transporters", "health-facilities");
     }
 
     private void featureClicked(@NonNull Feature feature) {
@@ -143,8 +140,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         }
 
         if (userLocation != null) {
-            MarkerOptions markerOptions = markerOptions = new MarkerOptions()
-                    .position(userLocation);
+            MarkerOptions markerOptions = new MarkerOptions().position(userLocation);
             mapboxMap.addMarker(markerOptions);
         }
 
@@ -175,7 +171,6 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     @Nullable
     private BoundingBox showCommunityTransporters(@NonNull MapboxMap mapboxMap, @Nullable FeatureCollection featureCollection) {
         if (featureCollection != null && featureCollection.features() != null && featureCollection.features().size() > 0 && communityTransportersSource != null) {
-            //CameraPosition cameraPosition = new CameraPosition.Builder(). featureCollection.bbox();
             BoundingBox boundingBox = featureCollection.bbox();
 
             if (boundingBox == null) {
@@ -184,7 +179,6 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
             }
 
             mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.from(boundingBox.north(), boundingBox.east(), boundingBox.south(), boundingBox.west()), BOUNDING_BOX_PADDING));
-
             communityTransportersSource.setGeoJson(featureCollection);
             return boundingBox;
         }
@@ -206,7 +200,6 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
                 Feature feature = getFeature(communityResponderModel);
                 feature.addNumberProperty(RECYCLER_VIEW_POSITION_PROPERTY, counter);
                 featureList.add(feature);
-
                 counter++;
             } catch (JSONException e) {
                 Timber.e(e);

@@ -41,7 +41,7 @@
                 android:paddingEnd="0dp"
                 android:paddingRight="0dp"
                 android:text="@string/return_to_profile"
-                android:textColor="@color/customAppThemeBlue"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
