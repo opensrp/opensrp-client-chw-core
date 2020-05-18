@@ -7,8 +7,6 @@ import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.interactor.BaseChwNotificationDetailsInteractor;
-import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.util.Utils;
 
 import java.lang.ref.WeakReference;
 
