@@ -1,8 +1,10 @@
 package org.smartregister.chw.core.activity;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -78,20 +80,27 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
             });
         });
 
-        Toolbar toolbar = findViewById(org.smartregister.chw.core.R.id.back_anc_profile_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(org.smartregister.chw.core.R.id.map_view_toolbar_title);
+        inflateToolbar();
+
+    }
+
+    private void inflateToolbar() {
+        Toolbar toolbar = findViewById(R.id.back_anc_toolbar);
+        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            final Drawable upArrow = getResources().getDrawable(org.smartregister.chw.core.R.drawable.ic_arrow_back_white_24dp);
-            upArrow.setVisible(true, true);
+            final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
             actionBar.setHomeAsUpIndicator(upArrow);
             actionBar.setElevation(0);
         }
+
         toolbar.setNavigationOnClickListener(v -> finish());
         toolBarTextView.setOnClickListener(v -> finish());
-        appBarLayout = findViewById(org.smartregister.chw.core.R.id.map_app_bar);
+        appBarLayout = findViewById(R.id.map_app_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
         }

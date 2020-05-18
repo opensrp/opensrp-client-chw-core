@@ -496,8 +496,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         Intent getStockReportIntent(Activity activity);
 
-        Intent getCommunityRespondersIntent(Activity activity);
-
         Intent getServiceReportIntent(Activity activity);
 
     }

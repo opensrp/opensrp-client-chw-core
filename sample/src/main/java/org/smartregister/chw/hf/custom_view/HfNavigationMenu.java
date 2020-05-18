@@ -52,8 +52,4 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
         return false;
     }
 
-    @Override
-    public Intent getCommunityRespondersIntent(Activity activity) {
-        return new Intent(activity, CoreCommunityRespondersRegisterActivity.class);
-    }
 }
