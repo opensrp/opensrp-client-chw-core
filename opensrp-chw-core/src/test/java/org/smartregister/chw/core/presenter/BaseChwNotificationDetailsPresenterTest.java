@@ -16,9 +16,12 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
 import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.domain.NotificationItem;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
@@ -39,9 +42,11 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
         BaseChwNotificationDetailsActivity view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
         ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
         ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
+        Map<String, String> detailsMap = new HashMap<>();
+        CommonPersonObjectClient client = new CommonPersonObjectClient(baseEntityId, detailsMap, "Patient 0");
+        view.setCommonPersonsObjectClient(client);
         notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(view);
         notificationDetailsPresenter.setInteractor(interactor);
-        notificationDetailsPresenter.setClientBaseEntityId(baseEntityId);
         notificationDetailsPresenter.setNotificationDates(Pair.create("2020-04-28", "2020-05-01"));
     }
 
@@ -69,17 +74,20 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetBaseEntityId (){
-        Assert.assertNotNull(notificationDetailsPresenter.getClientBaseEntityId());
+    public void testGetBaseEntityId() {
         Assert.assertEquals(baseEntityId, notificationDetailsPresenter.getClientBaseEntityId());
     }
 
     @Test
     public void testGetNotificationDates() {
-       Assert.assertNotNull(notificationDetailsPresenter.getNotificationDates());
+        Assert.assertNotNull(notificationDetailsPresenter.getNotificationDates());
     }
 
     public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {
 
+        @Override
+        public void goToMemberProfile() {
+            // Implementation not required at the moment
+        }
     }
 }

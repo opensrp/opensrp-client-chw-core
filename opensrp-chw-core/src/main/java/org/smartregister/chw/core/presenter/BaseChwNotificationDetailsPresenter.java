@@ -25,7 +25,7 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     @Override
     public String getClientBaseEntityId() {
-        return Utils.getValue(getView().getCommonPersonObjectClient().getColumnmaps(), CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID, false);
+        return getView().getCommonPersonObjectClient().getCaseId();
     }
 
     @Override
