@@ -137,9 +137,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     }
 
     private int getMonthsDifference(LocalDate date1, LocalDate date2) {
-        return Months.monthsBetween(
-                date1.withDayOfMonth(1),
-                date2.withDayOfMonth(1)).getMonths();
+        return Months.monthsBetween( date1.withDayOfMonth(1), date2.withDayOfMonth(1)).getMonths();
     }
 
     private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
@@ -155,7 +153,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
         }
         return ancCreatedDate;
-
     }
 
     private void getLayoutVisibility() {
@@ -170,7 +167,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         textViewUndo.setVisibility(View.GONE);
 
         Rules rules = CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-
         Visit lastNotDoneVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE);
         if (lastNotDoneVisit != null) {
             Visit lastNotDoneVisitUndo = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE_UNDO);
@@ -234,7 +230,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         } else {
             getButtonStatus();
         }
-
     }
 
     @Override
@@ -244,10 +239,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         intent.putExtra(CoreConstants.KUJAKU.LAND_MARK, memberObject.getLandmark());
         intent.putExtra(CoreConstants.KUJAKU.NAME, memberObject.getFullName());
         intent.putExtra(CoreConstants.KUJAKU.FAMILY_NAME, memberObject.getFamilyName());
-
+        intent.putExtra(CoreConstants.KUJAKU.ANC_WOMAN_PHONE, memberObject.getPhoneNumber());
+        intent.putExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD, memberObject.getFamilyHeadName());
+        intent.putExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD_PHONE, memberObject.getFamilyHeadPhoneNumber());
         this.startActivity(intent);
     }
-
 
     @Override
     public abstract void setClientTasks(Set<Task> taskList);

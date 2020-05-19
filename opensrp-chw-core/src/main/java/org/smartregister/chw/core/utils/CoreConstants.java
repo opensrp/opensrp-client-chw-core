@@ -848,6 +848,9 @@ public class CoreConstants {
         public static final String LAT_LNG = "latLng";
         public static final String LAND_MARK = "landMark";
         public static final String NAME = "name";
+        public static final String ANC_WOMAN_PHONE = "ancWomanPhone";
+        public static final String ANC_WOMAN_FAMILY_HEAD = "ancWomanFamilyHead";
+        public static final String ANC_WOMAN_FAMILY_HEAD_PHONE = "ancWomanFamilyHeadPhone";
         public static final String FAMILY_NAME = "familyName";
     }
 

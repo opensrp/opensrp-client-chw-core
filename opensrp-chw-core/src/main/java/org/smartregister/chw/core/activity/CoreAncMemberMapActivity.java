@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +28,11 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.turf.TurfMeasurement;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
+import org.smartregister.chw.anc.fragment.BaseAncWomanCallDialogFragment;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -49,18 +53,25 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     protected AppBarLayout appBarLayout;
     private KujakuMapView kujakuMapView;
     private GeoJsonSource communityTransportersSource;
-    private LatLng userLocation;
+    private String ancWomanName;
+    private String ancWomanPhoneNumber;
+    private String ancWomanFamilyHeadName;
+    private String ancWomanFamilyHeadPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anc_member_map);
+        ancWomanName = getIntent().getStringExtra(CoreConstants.KUJAKU.NAME);
+        ancWomanPhoneNumber = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_PHONE);
+        ancWomanFamilyHeadName = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD);
+        ancWomanFamilyHeadPhoneNumber = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD_PHONE);
+
 
         kujakuMapView = findViewById(R.id.kujakuMapView);
         kujakuMapView.onCreate(savedInstanceState);
         kujakuMapView.showCurrentLocationBtn(true);
         kujakuMapView.setDisableMyLocationOnMapMove(true);
-        userLocation = extractUserLocation();
 
         kujakuMapView.getMapAsync(mapBoxMap -> {
             Style.Builder builder = new Style.Builder().fromUri("asset://ba_anc_style.json");
@@ -102,12 +113,19 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
         }
-        TextView ancWomanName = findViewById(R.id.text_view_name);
-        TextView familyName = findViewById(R.id.text_view_family);
-        TextView landMark = findViewById(R.id.text_view_landmark);
-        ancWomanName.setText(getIntent().getStringExtra(CoreConstants.KUJAKU.NAME));
-        familyName.setText(getString(R.string.house_hold_family_name, getIntent().getStringExtra(CoreConstants.KUJAKU.FAMILY_NAME)));
-        landMark.setText(getString(R.string.house_hold_discription, getIntent().getStringExtra(CoreConstants.KUJAKU.LAND_MARK)));
+
+        TextView ancWomanNameView = findViewById(R.id.text_view_name);
+        TextView familyNameView = findViewById(R.id.text_view_family);
+        TextView landMarkView = findViewById(R.id.text_view_landmark);
+        ancWomanNameView.setText(ancWomanName);
+        familyNameView.setText(getString(R.string.house_hold_family_name, getIntent().getStringExtra(CoreConstants.KUJAKU.FAMILY_NAME)));
+        landMarkView.setText(getString(R.string.house_hold_discription, getIntent().getStringExtra(CoreConstants.KUJAKU.LAND_MARK)));
+        final View imageButton = findViewById(R.id.call_woman);
+        imageButton.setOnClickListener(view -> {
+            if (StringUtils.isNotBlank(ancWomanPhoneNumber) || StringUtils.isNotBlank(ancWomanFamilyHeadPhoneNumber))
+                BaseAncWomanCallDialogFragment.launchDialog(this, ancWomanName,
+                        ancWomanPhoneNumber, ancWomanFamilyHeadName, ancWomanFamilyHeadPhoneNumber, "ANC");
+        });
     }
 
     private void addCommunityTransporterClickListener(@NonNull KujakuMapView kujakuMapView) {
@@ -121,8 +139,22 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     private void featureClicked(@NonNull Feature feature) {
         String responderName = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_NAME);
         String respondersPhoneNumber = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER);
-        Toast.makeText(CoreAncMemberMapActivity.this, String.format("Clicked on RESPONDER\nName: %s\nPhone No: %s", responderName, respondersPhoneNumber), Toast.LENGTH_LONG)
-                .show();
+        if (StringUtils.isNotBlank(responderName) && StringUtils.isNotBlank(respondersPhoneNumber)) {
+            BaseAncRespondersCallDialogFragment.launchDialog(this, responderName, respondersPhoneNumber);
+            return;
+        }
+
+        String facilityName = feature.getStringProperty("Facility Name");
+        String facilityType = feature.getStringProperty("Facility Type");
+        String status = feature.getStringProperty("Operating Status");
+        if (StringUtils.isNotBlank(facilityName) && StringUtils.isNotBlank(status)) {
+            Toast.makeText(this, String.format(getString(R.string.map_facility) + "\n" +
+                    getString(R.string.facility_name) + ": %s\n" + getString(R.string.facility_status) + ": %s", String.format(facilityName, facilityType), status), Toast.LENGTH_LONG)
+                    .show();
+        } else {
+            Toast.makeText(this, getString(R.string.invalid_feature), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Nullable
@@ -134,10 +166,10 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     }
 
     private void zoomToPatientLocation(@NonNull MapboxMap mapboxMap, @Nullable BoundingBox boundingBox) {
+        LatLng userLocation = extractUserLocation();
         if (userLocation != null && boundingBox == null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(userLocation).zoom(16).build();
-
             mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 

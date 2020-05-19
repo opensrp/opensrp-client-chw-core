@@ -665,6 +665,10 @@
     <string name="return_to_profile">Return to profile</string>
     <string name="house_hold_family_name">Family: %1$s</string>
     <string name="house_hold_discription">Household located near: %1$s</string>
+    <string name="map_facility">Facility</string>
+    <string name="facility_name">Name</string>
+    <string name="facility_status">Status</string>
+    <string name="invalid_feature">Invalid feature</string>
 
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Edit Client Details</string>
