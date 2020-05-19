@@ -202,6 +202,7 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
+        private static final String HIV_REGISTRATION = "hiv_registration";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -367,6 +368,10 @@ public class CoreConstants {
 
         public static String getMalariaFollowUpHfForm() {
             return Utils.getLocalForm(MALARIA_FOLLOW_UP_HF_FORM, locale, assetManager);
+        }
+
+        public static String getHivRegistration() {
+            return HIV_REGISTRATION;
         }
 
         public static class CHILD_HOME_VISIT {

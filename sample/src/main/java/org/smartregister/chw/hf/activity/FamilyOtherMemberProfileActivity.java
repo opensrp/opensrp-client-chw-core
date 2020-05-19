@@ -58,6 +58,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     @Override
+    protected void startHivRegister() {
+        //TODO implement start hiv register for HF
+    }
+
+    @Override
     protected void startFpChangeMethod() {
         //TODO implement start fp change register for HF
     }
