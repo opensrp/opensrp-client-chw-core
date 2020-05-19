@@ -48,13 +48,6 @@ public interface ChwNotificationDetailsContract {
         void fetchNotificationDetails(String notificationId, String notificationType);
 
         /**
-         * Crete a referral dismissal entry for the provided task id
-         *
-         * @param referralTaskId referral task id
-         */
-        void createReferralDismissalEvent(String referralTaskId);
-
-        /**
          * Crete a Notification dismissal entry for the provided notification id
          *
          * @param notificationId Notification id
