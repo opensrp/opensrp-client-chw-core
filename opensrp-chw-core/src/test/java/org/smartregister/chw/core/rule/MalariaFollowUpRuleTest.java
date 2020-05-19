@@ -8,20 +8,20 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 public class MalariaFollowUpRuleTest {
     private String RULE_KEY;
     private Date testDate = new DateTime().minusDays(10).toDate();
     private Date latestFollowUpDate = new DateTime().minusDays(7).toDate();
-    private  MalariaFollowUpRule malariaFollowUpRule = new MalariaFollowUpRule(testDate, latestFollowUpDate);
+    private MalariaFollowUpRule malariaFollowUpRule = new MalariaFollowUpRule(testDate, latestFollowUpDate);
     private String buttonStatus;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         RULE_KEY = "malariaFollowUpRule";
         buttonStatus = "buttonStatus";
     }
+
     @Test
     public void testGetDatesDiff() {
         Assert.assertEquals(10, malariaFollowUpRule.getDatesDiff());
@@ -40,7 +40,7 @@ public class MalariaFollowUpRuleTest {
 
     @Test
     public void testGetRuleKey() {
-       Assert.assertEquals(RULE_KEY, malariaFollowUpRule.getRuleKey());
+        Assert.assertEquals(RULE_KEY, malariaFollowUpRule.getRuleKey());
     }
 
 }
