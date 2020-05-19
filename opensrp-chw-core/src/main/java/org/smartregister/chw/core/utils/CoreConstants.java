@@ -841,8 +841,14 @@ public class CoreConstants {
     }
 
     public static final class PEER_TO_PEER {
-
         public static final String LOCATION_ID = "location-id";
+    }
+
+    public static final class KUJAKU {
+        public static final String LAT_LNG = "latLng";
+        public static final String LAND_MARK = "landMark";
+        public static final String NAME = "name";
+        public static final String FAMILY_NAME = "familyName";
     }
 
     public static final class ACTIVITY_PAYLOAD {

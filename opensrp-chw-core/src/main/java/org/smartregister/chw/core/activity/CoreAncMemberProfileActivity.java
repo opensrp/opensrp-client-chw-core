@@ -240,6 +240,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override
     public void openFamilyLocation() {
         Intent intent = new Intent(this, CoreAncMemberMapActivity.class);
+        intent.putExtra(CoreConstants.KUJAKU.LAT_LNG, memberObject.getGps());
+        intent.putExtra(CoreConstants.KUJAKU.LAND_MARK, memberObject.getLandmark());
+        intent.putExtra(CoreConstants.KUJAKU.NAME, memberObject.getFullName());
+        intent.putExtra(CoreConstants.KUJAKU.FAMILY_NAME, memberObject.getFamilyName());
+
         this.startActivity(intent);
     }
 

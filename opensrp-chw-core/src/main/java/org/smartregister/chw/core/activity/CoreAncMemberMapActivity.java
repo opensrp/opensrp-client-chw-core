@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,6 @@ import org.smartregister.view.customcontrols.CustomFontTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.ona.kujaku.listeners.OnFeatureClickListener;
 import io.ona.kujaku.utils.CoordinateUtils;
 import io.ona.kujaku.views.KujakuMapView;
 import timber.log.Timber;
@@ -60,7 +60,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         kujakuMapView.onCreate(savedInstanceState);
         kujakuMapView.showCurrentLocationBtn(true);
         kujakuMapView.setDisableMyLocationOnMapMove(true);
-        userLocation = extractUserLocation(savedInstanceState);
+        userLocation = extractUserLocation();
 
         kujakuMapView.getMapAsync(mapBoxMap -> {
             Style.Builder builder = new Style.Builder().fromUri("asset://ba_anc_style.json");
@@ -102,16 +102,19 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
         }
+        TextView ancWomanName = findViewById(R.id.text_view_name);
+        TextView familyName = findViewById(R.id.text_view_family);
+        TextView landMark = findViewById(R.id.text_view_landmark);
+        ancWomanName.setText(getIntent().getStringExtra(CoreConstants.KUJAKU.NAME));
+        familyName.setText(getString(R.string.house_hold_family_name, getIntent().getStringExtra(CoreConstants.KUJAKU.FAMILY_NAME)));
+        landMark.setText(getString(R.string.house_hold_discription, getIntent().getStringExtra(CoreConstants.KUJAKU.LAND_MARK)));
     }
 
     private void addCommunityTransporterClickListener(@NonNull KujakuMapView kujakuMapView) {
-        kujakuMapView.setOnFeatureClickListener(new OnFeatureClickListener() {
-            @Override
-            public void onFeatureClick(List<Feature> features) {
-                Feature feature = features.get(0);
-                if (feature != null)
-                    featureClicked(feature);
-            }
+        kujakuMapView.setOnFeatureClickListener(features -> {
+            Feature feature = features.get(0);
+            if (feature != null)
+                featureClicked(feature);
         }, "community-transporters", "health-facilities");
     }
 
@@ -123,18 +126,17 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     }
 
     @Nullable
-    private LatLng extractUserLocation(Bundle savedInstanceState) {
-        double latitude = Double.parseDouble("-1.9885");
-        double longitude = Double.parseDouble("33.7799");
+    private LatLng extractUserLocation() {
+        String[] latLong = getIntent().getStringExtra(CoreConstants.KUJAKU.LAT_LNG).split(" ");
+        double latitude = Double.parseDouble(latLong[0]);
+        double longitude = Double.parseDouble(latLong[1]);
         return new LatLng(latitude, longitude);
     }
 
     private void zoomToPatientLocation(@NonNull MapboxMap mapboxMap, @Nullable BoundingBox boundingBox) {
         if (userLocation != null && boundingBox == null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(userLocation)
-                    .zoom(16)
-                    .build();
+                    .target(userLocation).zoom(16).build();
 
             mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
@@ -174,8 +176,8 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
             BoundingBox boundingBox = featureCollection.bbox();
 
             if (boundingBox == null) {
-                double[] bbox = TurfMeasurement.bbox(featureCollection);
-                boundingBox = BoundingBox.fromLngLats(bbox[0], bbox[1], bbox[2], bbox[3]);
+                double[] bBox = TurfMeasurement.bbox(featureCollection);
+                boundingBox = BoundingBox.fromLngLats(bBox[0], bBox[1], bBox[2], bBox[3]);
             }
 
             mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.from(boundingBox.north(), boundingBox.east(), boundingBox.south(), boundingBox.west()), BOUNDING_BOX_PADDING));

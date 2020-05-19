@@ -663,6 +663,8 @@
     <string name="add_community_responder">Responders</string>
     <string name="add_responder">Add</string>
     <string name="return_to_profile">Return to profile</string>
+    <string name="house_hold_family_name">Family: %1$s</string>
+    <string name="house_hold_discription">Household located near: %1$s</string>
 
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Edit Client Details</string>
