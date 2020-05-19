@@ -19,26 +19,26 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         aggregateFieldsMap.put("total_U5_visit", new String[]{"less1m_visit", "1m1yr_visit", "1yr5yr_visit"});
         aggregateFieldsMap.put("total_referral", new String[]{"F_referral_hf", "less1m_referral_hf", "1m1yr_referral_hf", "1yr5yr_referral_hf"});
         aggregateFieldsMap.put("total_birth_home", new String[]{"birth_home", "birth_home_healer", "birth_way_hf"});
-        aggregateFieldsMap.put("10y14y_total_clients", new String[]{"10y14y_new_clients", "10y14y_return_clients"});
-        aggregateFieldsMap.put("15y19y_total_clients", new String[]{"15y19y_new_clients", "15y19y_return_clients"});
-        aggregateFieldsMap.put("20y24y_total_clients", new String[]{"20y24y_new_clients", "20y24y_return_clients"});
-        aggregateFieldsMap.put("25_total_clients", new String[]{"25_new_clients", "25_return_clients"});
-        aggregateFieldsMap.put("total_total_clients", new String[]{"total_new_clients", "total_return_clients"});
+        aggregateFieldsMap.put("10y14y_total_clients", new String[]{"10y14y_new_clients", "10y14y_return_clients", "10y14y_new_men_clients", "10y14y_return_men_clients"});
+        aggregateFieldsMap.put("15y19y_total_clients", new String[]{"15y19y_new_clients", "15y19y_return_clients", "15y19y_new_men_clients", "15y19y_return_men_clients"});
+        aggregateFieldsMap.put("20y24y_total_clients", new String[]{"20y24y_new_clients", "20y24y_return_clients", "20y24y_new_men_clients", "20y24y_return_men_clients"});
+        aggregateFieldsMap.put("25_total_clients", new String[]{"25_new_clients", "25_return_clients", "25_new_men_clients", "25_return_men_clients"});
+        aggregateFieldsMap.put("total_total_clients", new String[]{"total_new_clients", "total_return_clients", "total_new_men_clients", "total_return_men_clients"});
         aggregateFieldsMap.put("10y14y_total_pills", new String[]{"10y14y_pop", "10y14y_coc", "10y14y_emc"});
         aggregateFieldsMap.put("15y19y_total_pills", new String[]{"15y19y_pop", "15y19y_coc", "15y19y_emc"});
         aggregateFieldsMap.put("20y24y_total_pills", new String[]{"20y24y_pop", "20y24y_coc", "20y24y_emc"});
         aggregateFieldsMap.put("25_total_pills", new String[]{"25_pop", "25_coc", "25_emc"});
         aggregateFieldsMap.put("total_total_pills", new String[]{"total_pop", "total_coc", "total_emc"});
-        aggregateFieldsMap.put("10y14y_total_condoms", new String[]{"10y14y_F_mcondom", "10y14y_F_fcondom"});
-        aggregateFieldsMap.put("15y19y_total_condoms", new String[]{"15y19y_F_mcondom", "15y19y_F_fcondom"});
-        aggregateFieldsMap.put("20y24y_total_condoms", new String[]{"20y24y_F_mcondom", "20y24y_F_fcondom"});
-        aggregateFieldsMap.put("25_total_condoms", new String[]{"25_F_mcondom", "25_F_fcondom"});
-        aggregateFieldsMap.put("total_total_condoms", new String[]{"total_F_mcondom", "total_F_fcondom"});
+        aggregateFieldsMap.put("10y14y_total_condoms", new String[]{"10y14y_F_mcondom", "10y14y_F_fcondom", "10y14y_men_F_mcondom", "10y14y_men_F_fcondom"});
+        aggregateFieldsMap.put("15y19y_total_condoms", new String[]{"15y19y_F_mcondom", "15y19y_F_fcondom", "15y19y_men_F_mcondom", "15y19y_men_F_fcondom"});
+        aggregateFieldsMap.put("20y24y_total_condoms", new String[]{"20y24y_F_mcondom", "20y24y_F_fcondom", "20y24y_men_F_mcondom", "20y24y_men_F_fcondom"});
+        aggregateFieldsMap.put("25_total_condoms", new String[]{"25_F_mcondom", "25_F_fcondom", "25_men_F_mcondom", "25_men_F_fcondom"});
+        aggregateFieldsMap.put("total_total_condoms", new String[]{"total_F_mcondom", "total_F_fcondom", "total_men_F_mcondom", "total_men_F_fcondom"});
         aggregateFieldsMap.put("total_beads", new String[]{"10y14y_beads", "15y19y_beads", "20y24y_beads", "25_beads"});
         aggregateFieldsMap.put("total_cousel_ANC", new String[]{"10y14y_cousel_ANC", "15y19y_cousel_ANC", "20y24y_cousel_ANC", "25_cousel_ANC"});
         aggregateFieldsMap.put("total_cousel_delivery", new String[]{"10y14y_cousel_delivery", "15y19y_cousel_delivery", "20y24y_cousel_delivery", "25_cousel_delivery"});
         aggregateFieldsMap.put("total_cousel_PNC", new String[]{"10y14y_cousel_PNC", "15y19y_cousel_PNC", "20y24y_cousel_PNC", "25_cousel_PNC"});
-        aggregateFieldsMap.put("total_fp_referral", new String[]{"10y14y_referral", "15y19y_referral", "20y24y_referral", "25_referral"});
+        aggregateFieldsMap.put("total_fp_referral", new String[]{"10y14y_referral", "15y19y_referral", "20y24y_referral", "25_referral", "10y14y_men_referral", "15y19y_men_referral", "20y24y_men_referral", "25_men_referral"});
     }
 
     private static final Map<String, String> indicatorKeyMap;
@@ -69,6 +69,16 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         indicatorKeyMap.put("25_return_clients", "25_total_clients");
         indicatorKeyMap.put("total_new_clients", "total_total_clients");
         indicatorKeyMap.put("total_return_clients", "total_total_clients");
+        indicatorKeyMap.put("10y14y_new_men_clients", "10y14y_total_clients");
+        indicatorKeyMap.put("10y14y_return_men_clients", "10y14y_total_clients");
+        indicatorKeyMap.put("15y19y_new_men_clients", "15y19y_total_clients");
+        indicatorKeyMap.put("15y19y_return_men_clients", "15y19y_total_clients");
+        indicatorKeyMap.put("20y24y_new_men_clients", "20y24y_total_clients");
+        indicatorKeyMap.put("20y24y_return_men_clients", "20y24y_total_clients");
+        indicatorKeyMap.put("25_new_men_clients", "25_total_clients");
+        indicatorKeyMap.put("25_return_men_clients", "25_total_clients");
+        indicatorKeyMap.put("total_new_men_clients", "total_total_clients");
+        indicatorKeyMap.put("total_return_men_clients", "total_total_clients");
         indicatorKeyMap.put("10y14y_pop", "10y14y_total_pills");
         indicatorKeyMap.put("10y14y_coc", "10y14y_total_pills");
         indicatorKeyMap.put("10y14y_emc", "10y14y_total_pills");
@@ -94,6 +104,16 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         indicatorKeyMap.put("25_F_fcondom", "25_total_condoms");
         indicatorKeyMap.put("total_F_mcondom", "total_total_condoms");
         indicatorKeyMap.put("total_F_fcondom", "total_total_condoms");
+        indicatorKeyMap.put("10y14y_men_F_mcondom", "10y14y_total_condoms");
+        indicatorKeyMap.put("10y14y_men_F_fcondom", "10y14y_total_condoms");
+        indicatorKeyMap.put("15y19y_men_F_mcondom", "15y19y_total_condoms");
+        indicatorKeyMap.put("15y19y_men_F_fcondom", "15y19y_total_condoms");
+        indicatorKeyMap.put("20y24y_men_F_mcondom", "20y24y_total_condoms");
+        indicatorKeyMap.put("20y24y_men_F_fcondom", "20y24y_total_condoms");
+        indicatorKeyMap.put("25_men_F_mcondom", "25_total_condoms");
+        indicatorKeyMap.put("25_men_F_fcondom", "25_total_condoms");
+        indicatorKeyMap.put("total_men_F_mcondom", "total_total_condoms");
+        indicatorKeyMap.put("total_men_F_fcondom", "total_total_condoms");
         indicatorKeyMap.put("10y14y_beads", "total_beads");
         indicatorKeyMap.put("15y19y_beads", "total_beads");
         indicatorKeyMap.put("20y24y_beads", "total_beads");
@@ -114,6 +134,11 @@ public class HIA2ReportFormTextWatcher implements TextWatcher {
         indicatorKeyMap.put("15y19y_referral", "total_fp_referral");
         indicatorKeyMap.put("20y24y_referral", "total_fp_referral");
         indicatorKeyMap.put("25_referral", "total_fp_referral");
+        indicatorKeyMap.put("10y14y_men_referral", "total_fp_referral");
+        indicatorKeyMap.put("15y19y_men_referral", "total_fp_referral");
+        indicatorKeyMap.put("20y24y_men_referral", "total_fp_referral");
+        indicatorKeyMap.put("25_men_referral", "total_fp_referral");
+
     }
 
     private final JsonFormFragment formFragment;
