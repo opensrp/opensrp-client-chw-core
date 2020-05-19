@@ -5,10 +5,8 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.BaseRobolectricTest;
-import org.smartregister.chw.core.contract.NavigationContract;
 
 public class NavigationInteractorTest extends BaseRobolectricTest {
 
