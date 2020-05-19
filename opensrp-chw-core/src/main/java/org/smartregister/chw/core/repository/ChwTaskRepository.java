@@ -2,6 +2,7 @@ package org.smartregister.chw.core.repository;
 
 import net.sqlcipher.Cursor;
 
+import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.cloudant.models.Event;
 import org.smartregister.domain.Task;
@@ -11,8 +12,10 @@ import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -61,6 +64,28 @@ public class ChwTaskRepository extends TaskRepository {
                 cursor.close();
         }
         return taskSet;
+    }
+
+    public List<Map<String, String>> getReferredTaskEvents() {
+        List<Map<String, String>> tasksEvents = new ArrayList<>();
+        try (Cursor cursor = getReadableDatabase().rawQuery(
+                String.format(
+                        "SELECT * FROM %s LEFT JOIN %s ON %s.%s = %s.%s WHERE %s = ?  ORDER BY %s DESC",
+                        CoreConstants.TABLE_NAME.TASK, CoreConstants.TABLE_NAME.REFERRAL, CoreConstants.TABLE_NAME.TASK, ChwDBConstants.TaskTable.REASON_REFERENCE, CoreConstants.TABLE_NAME.REFERRAL, org.smartregister.family.util.DBConstants.KEY.BASE_ENTITY_ID,
+                        ChwDBConstants.TaskTable.BUSINESS_STATUS, ChwDBConstants.TaskTable.START),
+                new String[]{CoreConstants.BUSINESS_STATUS.REFERRED})) {
+            while (cursor.moveToNext()) {
+                HashMap<String, String> columns = new HashMap<String, String>();
+                int columnCount = cursor.getColumnCount();
+                for (int i = 0; i < columnCount; i++) {
+                    columns.put(cursor.getColumnName(i), cursor.getString(i));
+                }
+                tasksEvents.add(columns);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return tasksEvents;
     }
 
 }

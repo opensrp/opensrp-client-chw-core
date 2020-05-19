@@ -2,6 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Pair;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -19,12 +20,18 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.family.FamilyLibrary;
+import org.smartregister.family.util.Utils;
+import org.smartregister.opd.utils.OpdUtils;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -34,66 +41,11 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     private ChwNotificationDetailsContract.Presenter presenter;
     private Context context;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public BaseChwNotificationDetailsInteractor(ChwNotificationDetailsContract.Presenter presenter) {
         this.presenter = presenter;
         context = (Activity) presenter.getView();
-    }
-
-    @Override
-    public void createReferralDismissalEvent(String referralTaskId) {
-        try {
-            AllSharedPreferences sharedPreferences = CoreChwApplication.getInstance().getContext().allSharedPreferences();
-            ECSyncHelper syncHelper = FamilyLibrary.getInstance().getEcSyncHelper();
-            String userLocationId = sharedPreferences.fetchUserLocalityId(sharedPreferences.fetchRegisteredANM());
-            Event baseEvent = (Event) new Event()
-                    .withBaseEntityId(presenter.getClientBaseEntityId())
-                    .withEventDate(new Date())
-                    .withEventType(CoreConstants.EventType.REFERRAL_DISMISSAL)
-                    .withFormSubmissionId(JsonFormUtils.generateRandomUUIDString())
-                    .withEntityType(CoreConstants.TABLE_NAME.REFERRAL_DISMISSAL)
-                    .withProviderId(sharedPreferences.fetchRegisteredANM())
-                    .withLocationId(userLocationId)
-                    .withTeamId(sharedPreferences.fetchDefaultTeamId(sharedPreferences.fetchRegisteredANM()))
-                    .withTeam(sharedPreferences.fetchDefaultTeam(sharedPreferences.fetchRegisteredANM()))
-                    .withDateCreated(new Date());
-
-            baseEvent.addObs((new Obs())
-                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK)
-                    .withValue(referralTaskId)
-                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.REFERRAL_TASK)
-                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.TEXT)
-                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
-
-            baseEvent.addObs((new Obs())
-                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DATE_CREATED)
-                    .withValue(presenter.getNotificationDates().first)
-                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DATE_CREATED)
-                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.DATE)
-                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
-
-            baseEvent.addObs((new Obs())
-                    .withFormSubmissionField(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DISMISSAL_DATE)
-                    .withValue(presenter.getNotificationDates().second)
-                    .withFieldCode(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_DISMISSAL_DATE)
-                    .withFieldType(CoreConstants.FORMSUBMISSION_FIELD).withFieldDataType(CoreConstants.DATE)
-                    .withParentCode("").withHumanReadableValues(new ArrayList<>()));
-
-            CoreJsonFormUtils.tagSyncMetadata(sharedPreferences, baseEvent);
-
-            baseEvent.setLocationId(userLocationId);
-
-            JSONObject eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
-            syncHelper.addEvent(referralTaskId, eventJson);
-            long lastSyncTimeStamp = sharedPreferences.fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            List<String> formSubmissionIds = new ArrayList<>();
-            formSubmissionIds.add(baseEvent.getFormSubmissionId());
-            CoreChwApplication.getInstance().getClientProcessorForJava().processClient(syncHelper.getEvents(formSubmissionIds));
-            sharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
-        } catch (Exception e) {
-            Timber.e(e, "BaseReferralNotificationDetailsInteractor --> createReferralDismissalEvent");
-        }
     }
 
     @Override
@@ -116,17 +68,18 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     @Override
     public void fetchNotificationDetails(String notificationId, String notificationType) {
         NotificationItem notificationItem = null;
-
-        if (notificationType.equals(context.getString(R.string.notification_type_sick_child_follow_up))) {
+        if (notificationType.equals(context.getString(R.string.notification_type_sick_child_follow_up)))
             notificationItem = getSickChildFollowUpDetails(notificationId);
-        } else if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs)) ||
-                notificationType.equals(context.getString(R.string.notification_type_anc_danger_signs))) {
+        else if (notificationType.equals(context.getString(R.string.notification_type_pnc_danger_signs)) ||
+                notificationType.equals(context.getString(R.string.notification_type_anc_danger_signs)))
             notificationItem = getAncPncOutcomeDetails(notificationId, notificationType);
-        } else if (notificationType.contains(context.getString(R.string.notification_type_malaria_follow_up))) {
+        else if (notificationType.contains(context.getString(R.string.notification_type_malaria_follow_up)))
             notificationItem = getMalariaFollowUpDetails(notificationId);
-        } else if (notificationType.contains(context.getString(R.string.notification_type_family_planning))) {
+        else if (notificationType.contains(context.getString(R.string.notification_type_family_planning)))
             notificationItem = getDetailsForFamilyPlanning(notificationId);
-        }
+        else if (notificationType.contains(context.getString(R.string.notification_type_not_yet_done_referrals)))
+            notificationItem = getDetailsForNotYetDoneReferral(notificationId);
+
         presenter.onNotificationDetailsFetched(notificationItem);
     }
 
@@ -175,5 +128,59 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         details.add(context.getString(R.string.notification_selected_method, notificationRecord.getMethod()));
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
         return new NotificationItem(title, details);
+    }
+
+    @NotNull
+    private NotificationItem getDetailsForNotYetDoneReferral(String referralTaskId) {
+        NotificationRecord record = ChwNotificationDao.getNotYetDoneReferral(referralTaskId);
+        List<String> details = setNotificationRecordDetails(record);
+        details.add(context.getString(R.string.notification_record_not_yet_done));
+        String title = context.getString(R.string.successful_referral_notification_title,
+                record.getClientName(), getClientAge(record.getClientDateOfBirth()));
+        return new NotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
+    }
+
+    private List<String> setNotificationRecordDetails(NotificationRecord record) {
+        presenter.setClientBaseEntityId(record.getClientBaseEntityId());
+
+        Pair<String, String> notificationDatesPair = null;
+        String notificationDate = record.getNotificationDate();
+        try {
+            notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
+            notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
+        } catch (ParseException e) {
+            Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
+        }
+        presenter.setNotificationDates(notificationDatesPair);
+
+        List<String> details = new ArrayList<>();
+        details.add(context.getString(R.string.notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
+        details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
+        if (record.getVillage() != null) {
+            details.add(context.getString(R.string.notification_village, record.getVillage()));
+        }
+        return details;
+    }
+    /**
+     * This method is used to obtain the date when the referral will be dismissed from the updates
+     * register
+     *
+     * @param eventCreationDate date the referral was created
+     * @return new date returned after adding 3 to the provided date
+     */
+    private String getDismissalDate(String eventCreationDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(eventCreationDate));
+        } catch (ParseException e) {
+            Timber.e(e);
+        }
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        return dateFormat.format(calendar.getTime());
+    }
+    private String getClientAge(String dobString) {
+        String translatedYearInitial = context.getResources().getString(R.string.abbrv_years);
+        return OpdUtils.getClientAge(Utils.getDuration(dobString), translatedYearInitial);
     }
 }
