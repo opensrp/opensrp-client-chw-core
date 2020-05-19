@@ -41,6 +41,43 @@ public interface QueryConstant {
                     "  AND ec_family_member.base_entity_id IN (%s)\n" +
                     "ORDER BY event.dateCreated DESC";
 
+    String NOT_YET_DONE_REFERRAL_COUNT_QUERY =
+            "/* COUNT NOTIFICATION FROM NOT YET DONE REFERRALS FROM THE FACILITY */\n" +
+            "SELECT COUNT(*) AS c\n" +
+            "FROM task\n" +
+            "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+            "         inner join ec_not_yet_done_referral on ec_not_yet_done_referral.referral_task = task._id\n" +
+            "         inner join event on ec_not_yet_done_referral.id = event.formSubmissionId\n" +
+            "\n" +
+            "WHERE ec_family_member.is_closed = '0'\n" +
+            "  AND ec_family_member.date_removed is null\n" +
+            "  AND task.status = 'CANCELLED'\n" +
+            "  AND task.code = 'Referral'\n";
+
+    String NOT_YET_DONE_REFERRAL_MAIN_SELECT =
+            "/* NOTIFICATION FROM NOT YET DONE REFERRALS FROM THE FACILITY */\n" +
+            "SELECT ec_family_member.first_name    AS first_name,\n" +
+            "       ec_family_member.middle_name   AS middle_name,\n" +
+            "       ec_family_member.last_name     AS last_name,\n" +
+            "       ec_family_member.dob           AS dob,\n" +
+            "       ec_family_member.id            AS _id,\n" +
+            "       ec_family_member.relational_id AS relationalid,\n" +
+            "       task._id                       AS referral_task_id,\n" +
+            "       event.dateCreated              AS notification_date,\n" +
+            "       'Referral not completed yet'             AS notification_type\n" +
+            "\n" +
+            "FROM task\n" +
+            "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+            "         inner join ec_not_yet_done_referral on ec_not_yet_done_referral.referral_task = task._id\n" +
+            "         inner join event on ec_not_yet_done_referral.id = event.formSubmissionId\n" +
+            "\n" +
+            "WHERE ec_family_member.is_closed = '0'\n" +
+            "  AND ec_family_member.date_removed is null\n" +
+            "  AND task.status = 'CANCELLED'\n" +
+            "  AND task.code = 'Referral'\n" +
+            "  AND ec_family_member.base_entity_id IN (%s)\n" +
+            "ORDER BY event.dateCreated DESC";
+
     String ALL_CLIENTS_SELECT_QUERY = "/* ANC REGISTER */\n" +
             "SELECT ec_family_member.first_name          AS first_name,\n" +
             "       ec_family_member.middle_name         AS middle_name,\n" +
