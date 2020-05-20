@@ -52,7 +52,6 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.navigation_item, parent, false);
-
         return new MyViewHolder(itemView);
     }
 

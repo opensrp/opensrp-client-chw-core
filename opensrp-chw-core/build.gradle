@@ -34,7 +34,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion androidBuildToolsVersion
 
-    defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
+    //defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -155,7 +155,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:0.1.57-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:0.1.58-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -164,7 +164,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-pnc:0.0.31-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pnc:0.0.32-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -174,7 +174,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-malaria:1.2.15-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-malaria:1.2.15-T-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -182,7 +182,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-chw-family-planning:1.0.22-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-chw-family-planning:1.0.23-T-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -271,7 +271,7 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
 
-apply from: '../maven.gradle'
+//apply from: '../maven.gradle'
 
 task javadoc(type: Javadoc) {
     failOnError false

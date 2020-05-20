@@ -6,6 +6,10 @@ import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jeasy.rules.api.Rules;
 import org.joda.time.LocalDate;
@@ -42,6 +46,8 @@ import java.util.Set;
 
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
     protected boolean hasDueServices = false;
     DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
     private LocalDate ancCreatedDate;
@@ -205,6 +211,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override
     public void setupViews() {
         super.setupViews();
+        initializeNotificationReferralRecyclerView();
 
         Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
         if (lastVisit != null) {
@@ -235,6 +242,13 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             getButtonStatus();
         }
 
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

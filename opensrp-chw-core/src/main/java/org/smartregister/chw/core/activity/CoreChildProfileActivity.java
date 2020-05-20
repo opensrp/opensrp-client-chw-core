@@ -23,6 +23,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -83,6 +85,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     protected View recordVisitPanel;
     protected MemberObject memberObject;
     protected ImageView imageViewCrossChild;
+    protected RelativeLayout notificationAndReferralLayout;
+    protected RecyclerView notificationAndReferralRecyclerView;
     private boolean appBarTitleIsShown = true;
     private int appBarLayoutScrollRange = -1;
     private TextView textViewTitle;
@@ -244,7 +248,16 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutSickVisit = findViewById(R.id.sick_visit_row);
         textViewSickChild = findViewById(R.id.textview_sick_visit_has);
         textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
+        initializeNotificationReferralRecyclerView();
         fetchProfileTasks();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralLayout.setVisibility(View.VISIBLE);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

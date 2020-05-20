@@ -57,6 +57,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private static PlanDefinitionRepository planDefinitionRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
+    private static StockUsageReportRepository stockUsageReportRepository;
     public JsonSpecHelper jsonSpecHelper;
     protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
@@ -67,13 +68,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
-
-
     private RulesEngineHelper rulesEngineHelper;
-    private static StockUsageReportRepository stockUsageReportRepository;
-    private static boolean hasEndedClosedReferralTasks;
-    private static boolean hasClosedExpiredReferrals;
-
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return getInstance().jsonSpecHelper;
@@ -121,22 +116,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
             clientProcessor = CoreClientProcessor.getInstance(context);
         }
         return clientProcessor;
-    }
-
-    public static boolean hasEndedClosedReferralTasks() {
-        return hasEndedClosedReferralTasks;
-    }
-
-    public static void setHasEndedClosedReferralTasks(boolean hasEndedClosedReferralTasks) {
-        CoreChwApplication.hasEndedClosedReferralTasks = hasEndedClosedReferralTasks;
-    }
-
-    public static boolean hasClosedExpiredReferrals() {
-        return hasClosedExpiredReferrals;
-    }
-
-    public static void setHasClosedExpiredReferrals(boolean hasClosedExpiredReferrals) {
-        CoreChwApplication.hasClosedExpiredReferrals = hasClosedExpiredReferrals;
     }
 
     public TaskRepository getTaskRepository() {

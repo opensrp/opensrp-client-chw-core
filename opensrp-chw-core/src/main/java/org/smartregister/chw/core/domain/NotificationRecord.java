@@ -15,6 +15,7 @@ public class NotificationRecord {
     private String visitDate;
     private String method;
     private String careGiverName;
+    private String notificationType;
 
     public NotificationRecord(String clientBaseEntityId) {
         this.clientBaseEntityId = clientBaseEntityId;
@@ -122,5 +123,13 @@ public class NotificationRecord {
 
     public void setNotificationDate(String notificationDate) {
         this.notificationDate = notificationDate;
+    }
+
+    public String getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(String notificationType) {
+        this.notificationType = notificationType;
     }
 }

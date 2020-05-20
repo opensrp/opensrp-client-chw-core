@@ -668,4 +668,8 @@
     <string name="tb_registration">TB registration</string>
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>
+
+    <!-- Notification row -->
+    <string name="notification_for">Notification for %1$s</string>
+    <string name="full_notification_info">View full notification info</string>
 </resources>

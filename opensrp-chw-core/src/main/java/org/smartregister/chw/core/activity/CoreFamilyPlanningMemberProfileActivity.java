@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
@@ -55,7 +59,10 @@ import timber.log.Timber;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
-
+    
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
+    
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
 
@@ -65,6 +72,19 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
         client.setColumnmaps(commonPersonObject.getColumnmaps());
         return client;
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

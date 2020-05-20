@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
@@ -38,6 +41,8 @@ import timber.log.Timber;
 public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActivity implements
         FamilyOtherMemberProfileExtendedContract.View, CoreMalariaProfileContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
     private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
 
     public interface OnMemberTypeLoadedListener {
@@ -66,6 +71,19 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void onCreation() {
         super.onCreation();
+    }
+
+    @Override
+    protected void setupViews() {
+        super.setupViews();
+        initializeNotificationReferralRecyclerView();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

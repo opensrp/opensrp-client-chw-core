@@ -3,11 +3,16 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -44,7 +49,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected CorePncMemberProfileInteractor pncMemberProfileInteractor = getPncMemberProfileInteractor();
     protected HashMap<String, String> menuItemEditNames = new HashMap<>();
     protected HashMap<String, String> menuItemRemoveNames = new HashMap<>();
-
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -84,6 +90,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+    }
+
+    @Override
     public void startFormActivity(JSONObject formJson) {
         startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, formJson,
                 org.smartregister.family.util.Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
@@ -100,6 +112,13 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public void registerPresenter() {
         presenter = new CorePncMemberProfilePresenter(this, new CorePncMemberProfileInteractor(), memberObject);
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
