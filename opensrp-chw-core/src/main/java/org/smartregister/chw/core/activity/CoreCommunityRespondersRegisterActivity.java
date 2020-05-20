@@ -45,7 +45,7 @@ import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
 
-    private ListView lv_country;
+    private ListView communityRespondersList;
     public static final int TOOLBAR_ID = R.id.location_switching_toolbar;
 
     @Override
@@ -53,15 +53,14 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.community_responders);
 
-        lv_country = findViewById(R.id.lv_country);
+        communityRespondersList = findViewById(R.id.lv_responder);
         Toolbar toolbar = findViewById(TOOLBAR_ID);
         setSupportActionBar(toolbar);
-        findViewById(R.id.toggle_action_menu).setOnClickListener(v -> onClickReport(v));
+        findViewById(R.id.toggle_action_menu).setOnClickListener(v -> onClickDrawer(v));
 
     }
 
-
-    public void onClickReport(View view) {
+    public void onClickDrawer(View view) {
         if (view.getId() == R.id.toggle_action_menu) {
             NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
         }
@@ -72,10 +71,10 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         CommunityResponderRepository communityResponderRepository = CoreChwApplication.getInstance().communityResponderRepository();
         CommunityResponderCustomAdapter adapter = communityResponderRepository.readAllRespondersAdapter(getApplicationContext(), this);
 
-        lv_country.setAdapter(adapter);
-        registerForContextMenu(lv_country);
-        lv_country.setAdapter(adapter);
-        registerForContextMenu(lv_country);
+        communityRespondersList.setAdapter(adapter);
+        registerForContextMenu(communityRespondersList);
+        communityRespondersList.setAdapter(adapter);
+        registerForContextMenu(communityRespondersList);
 
         super.onResume();
     }
@@ -151,15 +150,15 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.lv_country) {
+        if (v.getId() == R.id.lv_responder) {
             AdapterView.AdapterContextMenuInfo info =
                     (AdapterView.AdapterContextMenuInfo) menuInfo;
-            String country = ((TextView) info.targetView).getText().toString();
-            menu.setHeaderTitle(country);
+            String responder = ((TextView) info.targetView).getText().toString();
+            menu.setHeaderTitle(responder);
 
             String[] actions = getResources().getStringArray(R.array.responder_dialog_menu);
-            for (int i = 0; i < actions.length; i++) {
-                menu.add(Menu.NONE, i, i, actions[i]);
+            for (int i = 0; i < 2; i++) {
+                menu.add("add");
             }
         }
     }
