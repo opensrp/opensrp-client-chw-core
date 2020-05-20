@@ -14,6 +14,7 @@ import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CorePncMemberProfileContract;
+import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
@@ -231,6 +232,11 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
                 setMalariaFollowUpMenuItems(malariaFollowUpRule.getButtonStatus(), menu);
             }
         }
+    }
+
+    @Override
+    public MemberObject getMemberObject(String baseEntityID) {
+        return PNCDao.getMember(baseEntityID);
     }
 
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
