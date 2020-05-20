@@ -633,6 +633,9 @@
     <string name="notification_selected_method">Selected method: %1$s</string>
     <string name="notification_record_closed">Record closed</string>
     <string name="notification_phone">Household/Caregiver Phone: %1$s</string>
+    <string name="notification_record_not_yet_done">Referral not yet done</string>
+    <string name="no_phone_provided">No phone provided</string>
+    <string name="referral_notification_closure_date">Closure date: %1$s</string>
 
 
     <!--stock usage reporting-->
@@ -655,6 +658,7 @@
     <string name="notification_type_anc_danger_signs">ANC Danger Signs</string>
     <string name="notification_type_malaria_follow_up">Malaria Follow-up</string>
     <string name="notification_type_family_planning">Family Planning</string>
+    <string name="notification_type_not_yet_done_referrals">Referral not completed yet</string>
     <string name="perform_click_action">perform click action</string>
 
 
