@@ -102,15 +102,15 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
                     fieldsArray5.put(jsonObject);
                 } else if (i <= 29) {
                     fieldsArray6.put(jsonObject);
-                } else if (i <= 44) {
+                } else if (i <= 54) {
                     fieldsArray7.put(jsonObject);
-                } else if (i <= 64) {
+                } else if (i <= 74) {
                     fieldsArray8.put(jsonObject);
-                } else if (i <= 79) {
-                    fieldsArray9.put(jsonObject);
-                } else if (i <= 84) {
-                    fieldsArray10.put(jsonObject);
                 } else if (i <= 99) {
+                    fieldsArray9.put(jsonObject);
+                } else if (i <= 104) {
+                    fieldsArray10.put(jsonObject);
+                } else if (i <= 119) {
                     fieldsArray11.put(jsonObject);
                 } else {
                     fieldsArray12.put(jsonObject);
