@@ -67,6 +67,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_fp_initiation_pnc) {
             startFpRegister();
             return true;
+        } else if (itemId == R.id.action_hiv_registration_pnc) {
+            startHivRegister();
+            return true;
+        } else if (itemId == R.id.action_tb_registration_pnc) {
+            startTbRegister();
+            return true;
         } else if (itemId == R.id.action_fp_change) {
             startFpChangeMethod();
             return true;
@@ -244,6 +250,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void startMalariaRegister();
 
     protected abstract void startFpRegister();
+
+    protected abstract void startHivRegister();
+
+    protected abstract void startTbRegister();
 
     protected abstract void startFpChangeMethod();
 
