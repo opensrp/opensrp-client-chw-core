@@ -55,6 +55,7 @@ public class NavigationPresenter implements NavigationContract.Presenter {
         tableMap.put(CoreConstants.DrawerMenu.FAMILY_PLANNING, FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE);
         tableMap.put(CoreConstants.DrawerMenu.ALL_CLIENTS, CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         tableMap.put(CoreConstants.DrawerMenu.UPDATES, CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE);
+        tableMap.put(CoreConstants.DrawerMenu.HIV_CLIENTS, org.smartregister.chw.hiv.util.Constants.Tables.HIV);
     }
 
     public HashMap<String, String> getTableMap() {

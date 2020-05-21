@@ -261,6 +261,14 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY, MALARIA_HF_FOLLOW_UP_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
+            case org.smartregister.chw.hiv.util.Constants.Tables.HIV:
+                String sqlHiv = "select count(*) " +
+                        "from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV + " p " +
+                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                        "where m.date_removed is null and p.is_closed = '0' ";
+                return NavigationDao.getQueryCount(sqlHiv);
+
             default:
                 return NavigationDao.getTableCount(tableName);
         }
