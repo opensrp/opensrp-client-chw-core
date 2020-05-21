@@ -60,7 +60,6 @@ import java.util.Set;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
-
 public class CoreChildProfileActivity extends BaseProfileActivity implements CoreChildProfileContract.View, CoreChildRegisterContract.InteractorCallBack {
     public static IntentFilter sIntentFilter;
     private static boolean isStartedFromReferrals;
@@ -142,6 +141,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     public static void setsIntentFilter(IntentFilter sIntentFilter) {
         CoreChildProfileActivity.sIntentFilter = sIntentFilter;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
     }
 
     @Override
@@ -248,16 +253,13 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutSickVisit = findViewById(R.id.sick_visit_row);
         textViewSickChild = findViewById(R.id.textview_sick_visit_has);
         textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
-        initializeNotificationReferralRecyclerView();
         fetchProfileTasks();
     }
 
     protected void initializeNotificationReferralRecyclerView() {
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
         notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralLayout.setVisibility(View.VISIBLE);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import android.content.Context;
+import android.util.Pair;
 
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
@@ -8,6 +9,7 @@ import org.smartregister.dao.AbstractDao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -217,7 +219,8 @@ public class ChwNotificationDao extends AbstractDao {
     }
 
     /**
-     *This method is used to get details of referral notification with the provided task id
+     * This method is used to get details of referral notification with the provided task id
+     *
      * @param referralId unique identifier for the task
      * @return a notification record with details for the referral
      */
@@ -258,5 +261,51 @@ public class ChwNotificationDao extends AbstractDao {
             record.setPhone(getCursorValue(row, "phone_number"));
             return record;
         };
+    }
+
+    /**
+     * This method is used to retrieve all the notifications belonging to the client with the
+     * specified id
+     *
+     * @param baseEntityId unique identifier for the client
+     * @return a list of pair of the notification id and type
+     */
+    public static List<Pair<String, String>> getClientNotifications(String baseEntityId) {
+        String query =
+                "SELECT id as notification_id, 'Sick Child' as notification_type\n" +
+                        "FROM ec_sick_child_followup\n" +
+                        "WHERE base_entity_id = '%s'\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'PNC danger signs' as notification_type\n" +
+                        "FROM ec_pnc_danger_signs_outcome\n" +
+                        "WHERE base_entity_id = '%s'\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'ANC danger sgns' as notification_type\n" +
+                        "FROM ec_anc_danger_signs_outcome\n" +
+                        "WHERE base_entity_id = ''\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Malaria Follow-up' as notification_type\n" +
+                        "FROM ec_malaria_followup_hf\n" +
+                        "WHERE base_entity_id = '%s'\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Family planning' as notification_type\n" +
+                        "FROM ec_family_planning_update\n" +
+                        "WHERE base_entity_id = '%s'\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Referral not yet done' as notification_type\n" +
+                        "FROM ec_not_yet_done_referral\n" +
+                        "WHERE entity_id = '%s';";
+
+        List<Pair<String, String>> values = AbstractDao.readData(query.replace("%s", baseEntityId),
+                getNotificationPair());
+        if (values == null || values.size() == 0)
+            return new ArrayList<>();
+        return values;
+    }
+
+    private static DataMap<Pair<String, String>> getNotificationPair() {
+        return cursor -> Pair.create(
+                getCursorValue(cursor, "notification_id"),
+                getCursorValue(cursor, "notification_type"));
     }
 }

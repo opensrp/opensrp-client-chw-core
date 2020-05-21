@@ -115,10 +115,9 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     }
 
     protected void initializeNotificationReferralRecyclerView() {
-        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

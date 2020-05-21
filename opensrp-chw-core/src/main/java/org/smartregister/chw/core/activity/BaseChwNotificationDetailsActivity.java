@@ -37,7 +37,6 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
     protected LinearLayout notificationDetails;
     protected TextView markAsDoneTextView;
     protected TextView viewProfileTextView;
-
     private ChwNotificationDetailsContract.Presenter presenter;
     private String notificationId;
     private String notificationType;
@@ -94,7 +93,6 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
         presenter = new BaseChwNotificationDetailsPresenter(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             notificationId = getIntent().getExtras().getString(NOTIFICATION_ID);
-
             notificationType = getIntent().getExtras().getString(NOTIFICATION_TYPE);
             presenter.getNotificationDetails(notificationId, notificationType);
         }

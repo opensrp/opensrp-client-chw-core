@@ -2,6 +2,7 @@ package org.smartregister.chw.core.utils;
 
 public interface QueryConstant {
 
+    @Deprecated
     String SUCCESSFUL_REFERRAL_QUERY_COUNT =
             "/* COUNT NOTIFICATION REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
                     "SELECT COUNT(*) AS c\n" +
@@ -16,6 +17,7 @@ public interface QueryConstant {
                     "  AND task.status = 'COMPLETED'\n" +
                     "  AND task.code = 'Referral'\n";
 
+    @Deprecated
     String SUCCESSFUL_REFERRAL_QUERY =
             "/* NOTIFICATION FROM REFERRALS MARKED AS DONE AT THE FACILITY */\n" +
                     "SELECT ec_family_member.first_name    AS first_name,\n" +

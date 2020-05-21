@@ -2,6 +2,7 @@ package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,12 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     protected boolean hasDueServices = false;
     DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
     private LocalDate ancCreatedDate;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -211,8 +218,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override
     public void setupViews() {
         super.setupViews();
-        initializeNotificationReferralRecyclerView();
-
         Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
         if (lastVisit != null) {
             boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
@@ -245,10 +250,9 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     }
 
     protected void initializeNotificationReferralRecyclerView() {
-        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        notificationAndReferralRecyclerView.setLayoutManager(layoutManager);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
