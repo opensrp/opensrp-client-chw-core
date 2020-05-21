@@ -17,6 +17,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
@@ -64,6 +65,12 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
     public MemberObject getMemberClient(String memberID) {
         // read all the member details from the database
         return AncDao.getMember(memberID);
+    }
+
+    @Override
+    protected MemberObject getEmergencyTransportDetails(MemberObject memberObject) {
+        memberObject.setPregnancyRiskLevel(VisitDao.getMemberPregnancyRiskLevel(memberObject.getBaseEntityId()));
+        return memberObject;
     }
 
     protected Date getLastVisitDate(MemberObject memberObject) {
