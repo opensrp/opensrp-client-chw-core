@@ -19,6 +19,7 @@
         android:id="@+id/action_hiv_registration"
         android:enabled="true"
         android:title="@string/hiv_registration"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item
