@@ -63,6 +63,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     @Override
+    protected void startTbRegister() {
+        //TODO implement start tb register for HF
+    }
+
+    @Override
     protected void startFpChangeMethod() {
         //TODO implement start fp change register for HF
     }
@@ -70,6 +75,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     @Override
     protected void startMalariaFollowUpVisit() {
         //TODO implement start malaria  follow-up visit for HF
+    }
+
+    @Override
+    protected void setIndependentClient(boolean isIndependent) {
+        //TODO implement set independent client for HF
     }
 
     @Override
