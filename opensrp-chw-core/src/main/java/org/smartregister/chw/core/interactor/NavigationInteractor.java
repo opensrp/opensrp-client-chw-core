@@ -269,6 +269,14 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "where m.date_removed is null and p.is_closed = '0' ";
                 return NavigationDao.getQueryCount(sqlHiv);
 
+            case org.smartregister.chw.tb.util.Constants.Tables.TB:
+                String sqlTb = "select count(*) " +
+                        "from " + org.smartregister.chw.tb.util.Constants.Tables.TB + " p " +
+                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                        "where m.date_removed is null and p.is_closed = '0' ";
+                return NavigationDao.getQueryCount(sqlTb);
+
             default:
                 return NavigationDao.getTableCount(tableName);
         }

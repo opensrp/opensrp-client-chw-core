@@ -670,4 +670,7 @@
 <!--    HIV Register-->
     <string name="hiv_register">HIV Register</string>
 
+<!--    TB Register-->
+    <string name="tb_register">TB Register</string>
+
 </resources>
