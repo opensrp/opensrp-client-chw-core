@@ -20,7 +20,7 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
 
     private ChwNotificationDetailsContract.View view;
     private TextView notificationTitle = new TextView(RuntimeEnvironment.systemContext);
-    private TextView markAsDoneTextView =  new TextView(RuntimeEnvironment.systemContext);
+    private TextView markAsDoneTextView = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout notificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
 
     @Before
@@ -49,12 +49,16 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testDisableMarkAsDoneAction(){
+    public void testDisableMarkAsDoneAction() {
         view.disableMarkAsDoneAction(true);
         Assert.assertFalse(markAsDoneTextView.isEnabled());
     }
 
     public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {
 
+        @Override
+        public void goToMemberProfile() {
+            // Implementation not required at the moment
+        }
     }
 }

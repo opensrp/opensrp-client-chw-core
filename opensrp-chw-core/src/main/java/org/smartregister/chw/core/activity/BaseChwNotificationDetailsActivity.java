@@ -21,6 +21,8 @@ import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.presenter.BaseChwNotificationDetailsPresenter;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.MultiLanguageActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
@@ -37,9 +39,10 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
     protected LinearLayout notificationDetails;
     protected TextView markAsDoneTextView;
     protected TextView viewProfileTextView;
-    private ChwNotificationDetailsContract.Presenter presenter;
-    private String notificationId;
-    private String notificationType;
+    protected ChwNotificationDetailsContract.Presenter presenter;
+    protected String notificationId;
+    protected String notificationType;
+    protected CommonPersonObjectClient commonPersonObjectClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
         setContentView(R.layout.activity_chw_notification_details);
         inflateToolbar();
         setupViews();
+        setCommonPersonsObjectClient((CommonPersonObjectClient) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.CLIENT));
         initPresenter();
         disableMarkAsDoneAction(ChwNotificationDao.isMarkedAsDone(this, notificationId, notificationType));
     }
@@ -129,9 +133,19 @@ public abstract class BaseChwNotificationDetailsActivity extends MultiLanguageAc
     }
 
     @Override
+    public void setCommonPersonsObjectClient(CommonPersonObjectClient client) {
+        commonPersonObjectClient = client;
+    }
+
+    @Override
+    public CommonPersonObjectClient getCommonPersonObjectClient() {
+        return commonPersonObjectClient;
+    }
+
+    @Override
     public void onClick(View view) {
         if (view.getId() == R.id.view_profile) {
-            getPresenter().showMemberProfile();
+            goToMemberProfile();
         } else if (view.getId() == R.id.mark_as_done) {
             getPresenter().dismissNotification(notificationId, notificationType);
         } else {
