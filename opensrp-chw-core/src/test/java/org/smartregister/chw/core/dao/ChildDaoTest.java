@@ -69,4 +69,20 @@ public class ChildDaoTest extends ChildDao {
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertFalse(status);
     }
+
+
+    @Test
+    public void testIsMotherAlive() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"is_closed"});
+        matrixCursor.addRow(new Object[]{"0"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        Boolean isAlive = ChildDao.isMotherAlive("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertFalse(isAlive);
+    }
 }
