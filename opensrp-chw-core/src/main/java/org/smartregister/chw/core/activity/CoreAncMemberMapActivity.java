@@ -96,7 +96,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     private void inflateToolbar() {
         Toolbar toolbar = findViewById(R.id.back_anc_toolbar);
         CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.anc_map_toolbar_title);
-        toolBarTextView.setText(String.format(getString(R.string.return_to_profile), ancWomanName));
+        toolBarTextView.setText(String.format(getString(R.string.return_to_profile), ancWomanName.substring(0, ancWomanName.indexOf(" "))));
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -163,7 +163,10 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
 
     @Nullable
     private LatLng extractUserLocation() {
-        String[] latLong = getIntent().getStringExtra(CoreConstants.KUJAKU.LAT_LNG).split(" ");
+        String location = getIntent().getStringExtra(CoreConstants.KUJAKU.LAT_LNG);
+        if (StringUtils.isBlank(location))
+            location = "-2.728955 33.6178233";
+        String[] latLong = location.split(" ");
         double latitude = Double.parseDouble(latLong[0]);
         double longitude = Double.parseDouble(latLong[1]);
         return new LatLng(latitude, longitude);
