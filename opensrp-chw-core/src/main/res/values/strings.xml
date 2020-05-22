@@ -380,6 +380,10 @@
     <string name="ga_label">GA</string>
     <string name="cancel">Cancel</string>
     <string name="referral_day">Referral %s</string>
+    <string name="care_giver_prefix">CG: %s</string>
+    <string name="child_prefix">Child: %s</string>
+    <string name="children_prefix">Children: %s</string>
+    <string name="return_to">Return to %s</string>
 
     <string name="phone_not_provided">Phone not provided</string>
     <string name="anc_danger_sign_prefix">ANC Danger Signs; Symptoms: %s</string>

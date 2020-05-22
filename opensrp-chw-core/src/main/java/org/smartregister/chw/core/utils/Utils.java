@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
+import org.smartregister.chw.core.activity.BaseReferralTaskViewActivity;
 import org.smartregister.chw.core.activity.CoreAllClientsRegisterActivity;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -735,5 +736,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_notification_details);
         else if (activity instanceof CoreFamilyProfileActivity)
             intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_family_name);
+        else if (activity instanceof BaseReferralTaskViewActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_task_details);
     }
 }

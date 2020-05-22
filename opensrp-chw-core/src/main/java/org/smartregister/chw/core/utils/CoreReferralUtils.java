@@ -314,15 +314,6 @@ public class CoreReferralUtils {
         return Utils.context().commonrepository(tableName);
     }
 
-    public static boolean checkIfStartedFromReferrals(Activity startActivity) {
-        boolean startedFromReferrals = false;
-        String referrerActivity = startActivity.getLocalClassName();
-        if ("activity.ReferralTaskViewActivity".equals(referrerActivity)) {
-            startedFromReferrals = true;
-        }
-        return startedFromReferrals;
-    }
-
     @NotNull
     public static String getFamilyMemberFtsSearchQuery(@Nullable String filters) {
         if (TextUtils.isEmpty(filters)) {
