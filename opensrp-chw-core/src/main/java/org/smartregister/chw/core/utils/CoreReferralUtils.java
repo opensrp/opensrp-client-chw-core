@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.utils;
 
-import android.app.Activity;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;

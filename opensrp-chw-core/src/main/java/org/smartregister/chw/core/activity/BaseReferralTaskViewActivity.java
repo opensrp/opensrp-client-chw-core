@@ -31,6 +31,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
 
     protected String name;
@@ -249,7 +251,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
         }
-
+        updateToolbarTitle(this, R.id.toolbar_title, "");
     }
 
     public String getStartingActivity() {

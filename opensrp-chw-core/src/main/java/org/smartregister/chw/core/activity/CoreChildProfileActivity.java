@@ -45,7 +45,6 @@ import org.smartregister.chw.core.presenter.CoreChildProfilePresenter;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.domain.FamilyEventClient;
