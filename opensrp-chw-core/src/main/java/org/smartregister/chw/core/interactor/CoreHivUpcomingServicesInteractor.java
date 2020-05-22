@@ -9,7 +9,7 @@ import org.smartregister.chw.anc.interactor.BaseAncUpcomingServicesInteractor;
 import org.smartregister.chw.anc.model.BaseUpcomingService;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.rule.HivAlertRule;
+import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
@@ -25,6 +25,10 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
     protected MemberObject memberObject;
     protected Context context;
 
+    public static Rules getHivRules() {
+        return CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.HIV_FOLLOW_UP_VISIT);
+    }
+
     @Override
     public List<BaseUpcomingService> getMemberServices(Context context, MemberObject memberObject) {
         this.memberObject = memberObject;
@@ -36,7 +40,6 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
 
     private void evaluateFp(List<BaseUpcomingService> serviceList) {
         String hiv_date = null;
-        Rules rule = null;
         Date serviceDueDate = null;
         Date serviceOverDueDate = null;
         String serviceName = null;
@@ -45,7 +48,6 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
         if (hivList.size() > 0) {
             for (HivAlertObject hiv : hivList) {
                 hiv_date = hiv.getHivStartDate();
-                rule = getHivRules();
             }
         }
         Date lastVisitDate = null;
@@ -56,7 +58,7 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
             lastVisitDate = lastVisit.getDate();
         }
 
-        HivAlertRule alertRule = HomeVisitUtil.getHivVisitStatus(rule, lastVisitDate, tbDate);
+        HivFollowupRule alertRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, tbDate);
         serviceDueDate = alertRule.getDueDate();
         serviceOverDueDate = alertRule.getOverDueDate();
         serviceName = context.getString(R.string.hiv_follow_up_visit);
@@ -69,10 +71,6 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
             serviceList.add(upcomingService);
         }
 
-    }
-
-    public static Rules getHivRules() {
-        return CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.HIV_FOLLOW_UP_VISIT);
     }
 
 }

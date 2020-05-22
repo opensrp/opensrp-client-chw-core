@@ -9,19 +9,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class HivAlertRule implements ICommonRule {
+public class HivFollowupRule implements ICommonRule {
+    public static final String RULE_KEY = "hivFollowupRule";
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private String visitID;
     private DateTime hivDate;
     private DateTime dueDate;
     private DateTime overDueDate;
     private DateTime lastVisitDate;
-    private int tbDifference;
+    private int daysDifference;
 
-    public HivAlertRule(Date hivDate, Date lastVisitDate) {
+    public HivFollowupRule(Date hivDate, Date lastVisitDate) {
         this.hivDate = hivDate != null ? new DateTime(sdf.format(hivDate)) : null;
         this.lastVisitDate = lastVisitDate == null ? null : new DateTime(lastVisitDate);
-        tbDifference = Days.daysBetween(new DateTime(hivDate), new DateTime()).getDays();
     }
 
     public String getVisitID() {
@@ -32,26 +32,18 @@ public class HivAlertRule implements ICommonRule {
         this.visitID = visitID;
     }
 
-    public boolean updateDueDate(int dueDay, int overdueDate) {
+    public int getDaysDifference() {
+        return daysDifference;
+    }
+
+    public boolean updateDueDate(int scheduledPeriodInDays, int overdueDays) {
         if (lastVisitDate != null) {
-            int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
-            int year = new DateTime(lastVisitDate).getYear();
-            if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
-                this.dueDate = new DateTime().plusMonths(1).withDayOfMonth(dueDay);
-                this.overDueDate = new DateTime().plusMonths(1).withDayOfMonth(overdueDate);
-            } else {
-                if ((year == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)) {
-                    this.dueDate = new DateTime().withDayOfMonth(dueDay);
-                    this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
-                } else {
-                    this.dueDate = lastVisitDate.withDayOfMonth(dueDay).plusMonths(1);
-                    this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate).plusMonths(1);
-                }
-            }
+            this.dueDate = lastVisitDate.plusDays(scheduledPeriodInDays);
         } else {
-            this.dueDate = hivDate.plusMonths(1).withDayOfMonth(dueDay);
-            this.overDueDate = hivDate.plusMonths(1).withDayOfMonth(overdueDate);
+            this.dueDate = hivDate.plusDays(scheduledPeriodInDays);
         }
+        this.overDueDate = dueDate.plus(overdueDays);
+        daysDifference = Days.daysBetween(new DateTime(), new DateTime(dueDate)).getDays();
         return true;
     }
 
@@ -72,7 +64,7 @@ public class HivAlertRule implements ICommonRule {
 
     @Override
     public String getRuleKey() {
-        return "hivAlertRule";
+        return "hivFollowupRule";
     }
 
     @Override

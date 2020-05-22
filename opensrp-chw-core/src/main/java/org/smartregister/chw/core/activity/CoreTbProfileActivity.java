@@ -319,7 +319,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
                 updateFollowUpVisitButton(tbFollowupRule.getButtonStatus());
             }
 
-            if (tbFollowupRule.getDaysDifference() > 7)
+            if (tbFollowupRule != null && tbFollowupRule.getDaysDifference() > 7)
                 hideFollowUpVisitButton();
 
             updateFollowUpVisitStatusRow(lastVisit);

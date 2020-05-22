@@ -25,7 +25,7 @@ import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreHivProfileInteractor;
 import org.smartregister.chw.core.interactor.CoreHivUpcomingServicesInteractor;
 import org.smartregister.chw.core.presenter.CoreHivProfilePresenter;
-import org.smartregister.chw.core.rule.HivAlertRule;
+import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
@@ -296,7 +296,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
         private HivMemberObject hivMemberObject;
-        private HivAlertRule hivAlertRule;
+        private HivFollowupRule hivFollowupRule;
         private Visit lastVisit;
 
         public UpdateFollowUpVisitButtonTask(HivMemberObject hivMemberObject) {
@@ -310,17 +310,20 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
             Rules rule = CoreHivUpcomingServicesInteractor.getHivRules();
 
-            hivAlertRule = HomeVisitUtil.getHivVisitStatus(rule, lastVisitDate, hivMemberObject.getHivRegistrationDate());
+            hivFollowupRule = HomeVisitUtil.getHivVisitStatus(rule, lastVisitDate, hivMemberObject.getHivRegistrationDate());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            if (hivAlertRule != null && (hivAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
-                    hivAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
+            if (hivFollowupRule != null && (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
+                    hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {
-                updateFollowUpVisitButton(hivAlertRule.getButtonStatus());
+                updateFollowUpVisitButton(hivFollowupRule.getButtonStatus());
             }
+            if (hivFollowupRule != null && hivFollowupRule.getDaysDifference() > 7)
+                hideFollowUpVisitButton();
+
             updateFollowUpVisitStatusRow(lastVisit);
         }
     }
