@@ -144,6 +144,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
         return getMonthsDifference(lastVisitDate, todayDate) < 1;
+
     }
 
     private LocalDate getDateCreated() {
