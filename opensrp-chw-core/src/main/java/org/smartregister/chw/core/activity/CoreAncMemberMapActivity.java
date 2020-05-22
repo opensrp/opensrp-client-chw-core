@@ -95,7 +95,8 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
 
     private void inflateToolbar() {
         Toolbar toolbar = findViewById(R.id.back_anc_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.anc_map_toolbar_title);
+        toolBarTextView.setText(String.format(getString(R.string.return_to_profile), ancWomanName));
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -140,17 +141,20 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         String responderName = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_NAME);
         String respondersPhoneNumber = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER);
         if (StringUtils.isNotBlank(responderName) && StringUtils.isNotBlank(respondersPhoneNumber)) {
-            BaseAncRespondersCallDialogFragment.launchDialog(this, responderName, respondersPhoneNumber);
+            BaseAncRespondersCallDialogFragment.launchDialog(this, responderName, respondersPhoneNumber, true,
+                    null, null, false, false, null);
             return;
         }
 
         String facilityName = feature.getStringProperty("Facility Name");
         String facilityType = feature.getStringProperty("Facility Type");
         String status = feature.getStringProperty("Operating Status");
+        String basicServiceProvided = feature.getStringProperty("Basic Service Provided ANC_BEmONC_PPC_QI_MIP_ENC_FP_HIV_RMNCH_integration");
+        String cEmONC = feature.getStringProperty("CEmONC");
+        String ownership = feature.getStringProperty("Ownership");
         if (StringUtils.isNotBlank(facilityName) && StringUtils.isNotBlank(status)) {
-            Toast.makeText(this, String.format(getString(R.string.map_facility) + "\n" +
-                    getString(R.string.facility_name) + ": %s\n" + getString(R.string.facility_status) + ": %s", String.format(facilityName, facilityType), status), Toast.LENGTH_LONG)
-                    .show();
+            BaseAncRespondersCallDialogFragment.launchDialog(this, null, null, false,
+                    facilityName, facilityType, basicServiceProvided.equalsIgnoreCase("yes"), cEmONC.equalsIgnoreCase("yes"), ownership);
         } else {
             Toast.makeText(this, getString(R.string.invalid_feature), Toast.LENGTH_SHORT).show();
         }
