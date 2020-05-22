@@ -9,7 +9,8 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
-import org.jeasy.rules.api.Rules;
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
@@ -23,7 +24,6 @@ import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreHivProfileInteractor;
-import org.smartregister.chw.core.interactor.CoreHivUpcomingServicesInteractor;
 import org.smartregister.chw.core.presenter.CoreHivProfilePresenter;
 import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -100,9 +100,8 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
         } else if (itemId == R.id.action_remove_member) {
             removeMember();
             return true;
-        } else if (itemId == R.id.action_fp_change) {
-            startFamilyPlanningRegistrationActivity();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -235,8 +234,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
     protected abstract void removeMember();
 
-    protected abstract void startFamilyPlanningRegistrationActivity();
-
     public void startFormForEdit(Integer titleResource, String formName) {
 
         JSONObject form = null;
@@ -308,14 +305,14 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
             lastVisit = HivDao.getLatestVisit(hivMemberObject.getBaseEntityId(), HIV_FOLLOW_UP_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
-            Rules rule = CoreHivUpcomingServicesInteractor.getHivRules();
-
-            hivFollowupRule = HomeVisitUtil.getHivVisitStatus(rule, lastVisitDate, hivMemberObject.getHivRegistrationDate());
+            Timber.e("Coze:: hivregistration date = "+new Gson().toJson(hivMemberObject.getHivRegistrationDate()));
+            hivFollowupRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, hivMemberObject.getHivRegistrationDate());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
+            Timber.e("Coze:: hivFollowup Rule = "+new Gson().toJson(hivFollowupRule));
             if (hivFollowupRule != null && (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
                     hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {

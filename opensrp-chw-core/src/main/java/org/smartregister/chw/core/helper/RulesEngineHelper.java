@@ -155,7 +155,7 @@ public class RulesEngineHelper {
     public HivFollowupRule getHivRule(HivFollowupRule hivFollowupRule, String rulesFile) {
 
         Facts facts = new Facts();
-        facts.put(TbFollowupRule.RULE_KEY, hivFollowupRule);
+        facts.put(HivFollowupRule.RULE_KEY, hivFollowupRule);
 
         Rules rules = getRulesFromAsset(RULE_FOLDER_PATH + rulesFile);
         if (rules == null) {
