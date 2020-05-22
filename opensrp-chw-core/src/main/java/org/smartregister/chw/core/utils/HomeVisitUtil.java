@@ -12,7 +12,7 @@ import org.smartregister.chw.core.rule.AncVisitAlertRule;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.rule.HivAlertRule;
 import org.smartregister.chw.core.rule.PncVisitAlertRule;
-import org.smartregister.chw.core.rule.TbAlertRule;
+import org.smartregister.chw.core.rule.TbFollowupRule;
 
 import java.util.Date;
 
@@ -52,10 +52,10 @@ public class HomeVisitUtil {
         return fpAlertRule;
     }
 
-    public static TbAlertRule getTbVisitStatus(Rules rules, Date lastVisitDate, Date tbDate) {
-        TbAlertRule tbAlertRule = new TbAlertRule(tbDate, lastVisitDate);
-        CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(tbAlertRule, rules);
-        return tbAlertRule;
+    public static TbFollowupRule getTbVisitStatus( Date lastVisitDate, Date tbDate) {
+        TbFollowupRule tbFollowupRule = new TbFollowupRule(tbDate, lastVisitDate);
+        CoreChwApplication.getInstance().getRulesEngineHelper().getTbRule(tbFollowupRule, CoreConstants.RULE_FILE.TB_FOLLOW_UP_VISIT);
+        return tbFollowupRule;
     }
 
     public static HivAlertRule getHivVisitStatus(Rules rules, Date lastVisitDate, Date tbDate) {

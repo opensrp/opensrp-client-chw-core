@@ -9,7 +9,7 @@ import org.smartregister.chw.anc.interactor.BaseAncUpcomingServicesInteractor;
 import org.smartregister.chw.anc.model.BaseUpcomingService;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.rule.TbAlertRule;
+import org.smartregister.chw.core.rule.TbFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
@@ -30,13 +30,12 @@ public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         this.memberObject = memberObject;
         this.context = context;
         List<BaseUpcomingService> serviceList = new ArrayList<>();
-        evaluateFp(serviceList);
+        evaluateTb(serviceList);
         return serviceList;
     }
 
-    private void evaluateFp(List<BaseUpcomingService> serviceList) {
+    private void evaluateTb(List<BaseUpcomingService> serviceList) {
         String tb_date = null;
-        Rules rule = null;
         Date serviceDueDate = null;
         Date serviceOverDueDate = null;
         String serviceName = null;
@@ -45,7 +44,6 @@ public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         if (tbList.size() > 0) {
             for (TbAlertObject tb : tbList) {
                 tb_date = tb.getTbStartDate();
-                rule = getTbRules();
             }
         }
         Date lastVisitDate = null;
@@ -56,7 +54,7 @@ public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
             lastVisitDate = lastVisit.getDate();
         }
 
-        TbAlertRule alertRule = HomeVisitUtil.getTbVisitStatus(rule, lastVisitDate, tbDate);
+        TbFollowupRule alertRule = HomeVisitUtil.getTbVisitStatus(lastVisitDate, tbDate);
         serviceDueDate = alertRule.getDueDate();
         serviceOverDueDate = alertRule.getOverDueDate();
         serviceName = context.getString(R.string.tb_follow_up_visit);

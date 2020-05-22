@@ -9,49 +9,42 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TbAlertRule implements ICommonRule {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+import timber.log.Timber;
+
+public class TbFollowupRule implements ICommonRule {
+    public static final String RULE_KEY = "tbFollowupRule";
     private String visitID;
     private DateTime tbDate;
     private DateTime dueDate;
     private DateTime overDueDate;
     private DateTime lastVisitDate;
-    private int tbDifference;
+    private int daysDifference;
 
-    public TbAlertRule(Date tbDate, Date lastVisitDate) {
-        this.tbDate = tbDate != null ? new DateTime(sdf.format(tbDate)) : null;
+    public TbFollowupRule(Date tbDate, Date lastVisitDate) {
+        this.tbDate = tbDate != null ? new DateTime(tbDate.getTime()) : null;
         this.lastVisitDate = lastVisitDate == null ? null : new DateTime(lastVisitDate);
-        tbDifference = Days.daysBetween(new DateTime(tbDate), new DateTime()).getDays();
     }
 
     public String getVisitID() {
         return visitID;
     }
 
+    public int getDaysDifference() {
+        return daysDifference;
+    }
+
     public void setVisitID(String visitID) {
         this.visitID = visitID;
     }
 
-    public boolean updateDueDate(int dueDay, int overdueDate) {
+    public boolean updateDueDate(int scheduledPeriodInDays, int overdueDays) {
         if (lastVisitDate != null) {
-            int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
-            int year = new DateTime(lastVisitDate).getYear();
-            if ((monthOfYear == DateTime.now().getMonthOfYear()) && (year == DateTime.now().getYear())) {
-                this.dueDate = new DateTime().plusMonths(1).withDayOfMonth(dueDay);
-                this.overDueDate = new DateTime().plusMonths(1).withDayOfMonth(overdueDate);
-            } else {
-                if ((year == DateTime.now().getYear()) && ((DateTime.now().getMonthOfYear()) - (monthOfYear) == 1)) {
-                    this.dueDate = new DateTime().withDayOfMonth(dueDay);
-                    this.overDueDate = new DateTime().withDayOfMonth(overdueDate);
-                } else {
-                    this.dueDate = lastVisitDate.withDayOfMonth(dueDay).plusMonths(1);
-                    this.overDueDate = lastVisitDate.withDayOfMonth(overdueDate).plusMonths(1);
-                }
-            }
+            this.dueDate = lastVisitDate.plusDays(scheduledPeriodInDays);
         } else {
-            this.dueDate = tbDate.plusMonths(1).withDayOfMonth(dueDay);
-            this.overDueDate = tbDate.plusMonths(1).withDayOfMonth(overdueDate);
+            this.dueDate = tbDate.plusDays(scheduledPeriodInDays);
         }
+        this.overDueDate = dueDate.plus(overdueDays);
+        daysDifference = Days.daysBetween(new DateTime(),new DateTime(dueDate)).getDays();
         return true;
     }
 
@@ -72,7 +65,7 @@ public class TbAlertRule implements ICommonRule {
 
     @Override
     public String getRuleKey() {
-        return "fpAlertRule";
+        return "tbFollowupRule";
     }
 
     @Override

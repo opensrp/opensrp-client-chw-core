@@ -10,13 +10,11 @@ import org.smartregister.chw.anc.model.BaseUpcomingService;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.rule.HivAlertRule;
-import org.smartregister.chw.core.rule.TbAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.hiv.dao.HivDao;
 import org.smartregister.chw.hiv.domain.HivAlertObject;
-import org.smartregister.chw.tb.dao.TbDao;
 import org.smartregister.chw.tb.util.Constants;
 
 import java.util.ArrayList;

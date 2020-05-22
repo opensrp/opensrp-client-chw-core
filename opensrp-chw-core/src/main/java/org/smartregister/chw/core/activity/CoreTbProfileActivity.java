@@ -9,7 +9,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
-import org.jeasy.rules.api.Rules;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
@@ -23,9 +22,8 @@ import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreTbProfileInteractor;
-import org.smartregister.chw.core.interactor.CoreTbUpcomingServicesInteractor;
 import org.smartregister.chw.core.presenter.CoreTbProfilePresenter;
-import org.smartregister.chw.core.rule.TbAlertRule;
+import org.smartregister.chw.core.rule.TbFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
@@ -34,6 +32,7 @@ import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.tb.activity.BaseTbProfileActivity;
 import org.smartregister.chw.tb.dao.TbDao;
 import org.smartregister.chw.tb.domain.TbMemberObject;
+import org.smartregister.chw.tb.util.TbUtil;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -77,6 +76,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
     @Override
     public void setupViews() {
         super.setupViews();
+        Timber.e("Coze:: Setting up views");
         new UpdateFollowUpVisitButtonTask(getTbMemberObject()).execute();
     }
 
@@ -149,7 +149,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     protected Observable<MemberType> getMemberType() {
         return Observable.create(e -> {
-            MemberObject memberObject = PNCDao.getMember(getTbMemberObject().getBaseEntityId());
+            MemberObject memberObject = TbUtil.toMember(TbDao.getMember(getTbMemberObject().getBaseEntityId()));
             String type = null;
 
             if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
@@ -296,7 +296,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
         private TbMemberObject tbMemberObject;
-        private TbAlertRule tbAlertRule;
+        private TbFollowupRule tbFollowupRule;
         private Visit lastVisit;
 
         public UpdateFollowUpVisitButtonTask(TbMemberObject tbMemberObject) {
@@ -307,20 +307,21 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
         protected Void doInBackground(Void... voids) {
             lastVisit = TbDao.getLatestVisit(tbMemberObject.getBaseEntityId(), TB_FOLLOW_UP_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
-
-            Rules rule = CoreTbUpcomingServicesInteractor.getTbRules();
-
-            tbAlertRule = HomeVisitUtil.getTbVisitStatus(rule, lastVisitDate, tbMemberObject.getTbRegistrationDate());
+            tbFollowupRule = HomeVisitUtil.getTbVisitStatus(lastVisitDate, tbMemberObject.getTbRegistrationDate());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            if (tbAlertRule != null && (tbAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
-                    tbAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
+            if (tbFollowupRule != null && (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
+                    tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {
-                updateFollowUpVisitButton(tbAlertRule.getButtonStatus());
+                updateFollowUpVisitButton(tbFollowupRule.getButtonStatus());
             }
+
+            if (tbFollowupRule.getDaysDifference() > 7)
+                hideFollowUpVisitButton();
+
             updateFollowUpVisitStatusRow(lastVisit);
         }
     }
