@@ -114,9 +114,9 @@ public class VisitDao extends AbstractDao {
         DataMap<String> dataMap = c -> getCursorValue(c, "details");
         List<String> values = AbstractDao.readData(sql, dataMap);
         if (values == null || values.size() == 0)
-            return null;
+            return "Low";
 
-        return values.get(0);
+        return values.get(0) == null ? "Low" : values.get(0); // Return a default value of Low
     }
 
     public static boolean memberHasVisits(String baseEntityID) {
