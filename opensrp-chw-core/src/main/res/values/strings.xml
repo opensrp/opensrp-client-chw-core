@@ -512,6 +512,16 @@
     <string name="total_new_clients_label">Total number of new clients </string>
     <string name="total_return_clients_label">Number of return women clients </string>
     <string name="total_total_clients_label">Total number of return clients </string>
+    <string name="reporting_10y14y_new_men_clients_label">Total number of new men clients (10 -14years)</string>
+    <string name="reporting_10y14y_return_men_clients_label">Number of return men clients  (10 -14years)</string>
+    <string name="reporting_15y19y_new_men_clients_label">Total number of new men clients  (15 -19years)</string>
+    <string name="reporting_15y19y_return_men_clients_label">Number of return men clients (15 -19years) </string>
+    <string name="reporting_20y24y_new_men_clients_label">Total number of new men clients (20 -24years)</string>
+    <string name="reporting_20y24y_return_men_clients_label">Number of return men clients (20 -24years)</string>
+    <string name="reporting_25_new_men_clients_label">Total number of new men clients (25+ years)</string>
+    <string name="reporting_25_return_men_clients_label">Number of return men clients (25+ years) </string>
+    <string name="total_new_men_clients_label">Total number of new men clients </string>
+    <string name="total_return_men_clients_label">Number of return men clients </string>
     <string name="reporting_10y14y_pop_label">Number of women using POP (10 -14years)</string>
     <string name="reporting_10y14y_coc_label">Number of women using COC (10 -14years) </string>
     <string name="reporting_10y14y_emc_label">Number of women who used emergency contraceptive pills (Postinor 2) (10 -14years)</string>
@@ -547,6 +557,16 @@
     <string name="total_F_mcondom_label">Number of women who took male condoms</string>
     <string name="total_F_fcondom_label">Number of women who took female condoms</string>
     <string name="total_total_condoms_label">Total number of clients using condoms</string>
+    <string name="reporting_10y14y_men_F_mcondom_label">Number of men  who took male condoms (10 -14years)</string>
+    <string name="reporting_10y14y_men_F_fcondom_label">Number of men  who took female condoms (10 -14years)</string>
+    <string name="reporting_15y19y_men_F_mcondom_label">Number of men who took male condoms (15 -19years)</string>
+    <string name="reporting_15y19y_men_F_fcondom_label">Number of men who took female condoms (15 -19years)</string>
+    <string name="reporting_20y24y_men_F_mcondom_label">Number of men who took male condoms (20 -24years)</string>
+    <string name="reporting_20y24y_men_F_fcondom_label">Number of men who took female condoms (20 -24years)</string>
+    <string name="reporting_25_men_F_mcondom_label">Number of men who took male condoms (25+ years) </string>
+    <string name="reporting_25_men_F_fcondom_label">Number of men who took female condoms (25+ years) </string>
+    <string name="total_men_F_mcondom_label">Number of men who took male condoms</string>
+    <string name="total_men_F_fcondom_label">Number of men who took female condoms</string>
     <string name="reporting_10y14y_beads_label">Number of women given cycle beads (10 -14 years)</string>
     <string name="reporting_15y19y_beads_label">Number of women given cycle beads (15 -19 years)</string>
     <string name="reporting_20y24y_beads_label">Number of women given cycle beads (20 -24 years)</string>
@@ -571,7 +591,11 @@
     <string name="reporting_15y19y_referral_label">Number of women given referrals (15 -19 years) </string>
     <string name="reporting_20y24y_referral_label">Number of women given referrals (20 -24 years) </string>
     <string name="reporting_25_referral_label">Number of women given referrals (25 + years) </string>
-    <string name="total_fp_referral_label">Total number of women given referrals</string>
+    <string name="total_fp_referral_label">Total number of Clients given referrals</string>
+    <string name="reporting_10y14y_men_referral_label">Number of men given referrals (10 -14 years) </string>
+    <string name="reporting_15y19y_men_referral_label">Number of men given referrals (15 -19 years) </string>
+    <string name="reporting_20y24y_men_referral_label">Number of men given referrals (20 -24 years) </string>
+    <string name="reporting_25_men_referral_label">Number of men given referrals (25 + years) </string>
     <string name="all_changes_saved">All changes saved.</string>
     <string name="side_nav_hia2">Monthly Reports</string>
     <string name="hia2_daily_tallies">Daily Tallies</string>
@@ -589,7 +613,6 @@
     <string name="daily_tally_">Daily Tally > %1$s</string>
     <string name="started">Started</string>
     <string name="send_report_warning">Send the %1$s report?\nDate: %2$s\nUser: %3$s</string>
-
 
     <!--ba stockUsageModel inv reporting-->
     <string name="stock_usage_report">Stock usage report</string>
