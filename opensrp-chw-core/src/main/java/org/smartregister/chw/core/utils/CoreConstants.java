@@ -643,6 +643,8 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
+        public static final String HIV_MEMBER = "ec_hiv_register";
+        public static final String TB_MEMBER = "ec_tb_register";
     }
 
     public static final class INTENT_KEY {
@@ -703,6 +705,7 @@ public class CoreConstants {
         public static final String FP_INJECTION_DUE = "fp-injection-due-rule.yml";
         public static final String FP_FEMALE_STERILIZATION = "fp-female-sterilization-rule.yml";
         public static final String FP_IUCD = "fp-iucd-rule.yml";
+        public static final String TB_FOLLOW_UP_VISIT = "tb-followup-rules.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {

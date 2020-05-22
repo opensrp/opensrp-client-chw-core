@@ -11,6 +11,7 @@ import org.smartregister.chw.core.contract.RegisterAlert;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
 import org.smartregister.chw.core.rule.FpAlertRule;
 import org.smartregister.chw.core.rule.PncVisitAlertRule;
+import org.smartregister.chw.core.rule.TbAlertRule;
 
 import java.util.Date;
 
@@ -48,5 +49,11 @@ public class HomeVisitUtil {
         FpAlertRule fpAlertRule = new FpAlertRule(fpDate, lastVisitDate, pillCycles, fpMethod);
         CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(fpAlertRule, rules);
         return fpAlertRule;
+    }
+
+    public static TbAlertRule getTbVisitStatus(Rules rules, Date lastVisitDate, Date tbDate) {
+        TbAlertRule tbAlertRule = new TbAlertRule(tbDate, lastVisitDate);
+        CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(tbAlertRule, rules);
+        return tbAlertRule;
     }
 }
