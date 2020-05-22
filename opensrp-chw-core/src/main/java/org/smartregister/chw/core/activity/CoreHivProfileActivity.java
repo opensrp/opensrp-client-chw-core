@@ -304,15 +304,12 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
         protected Void doInBackground(Void... voids) {
             lastVisit = HivDao.getLatestVisit(hivMemberObject.getBaseEntityId(), HIV_FOLLOW_UP_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
-
-            Timber.e("Coze:: hivregistration date = "+new Gson().toJson(hivMemberObject.getHivRegistrationDate()));
             hivFollowupRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, hivMemberObject.getHivRegistrationDate());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            Timber.e("Coze:: hivFollowup Rule = "+new Gson().toJson(hivFollowupRule));
             if (hivFollowupRule != null && (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
                     hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {
