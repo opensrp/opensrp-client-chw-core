@@ -141,8 +141,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     }
 
     private List<String> setNotificationRecordDetails(NotificationRecord record) {
-        presenter.setClientBaseEntityId(record.getClientBaseEntityId());
-
         Pair<String, String> notificationDatesPair = null;
         String notificationDate = record.getNotificationDate();
         try {

@@ -45,6 +45,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
     protected RecyclerView notificationAndReferralRecyclerView;
@@ -218,6 +220,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override
     public void setupViews() {
         super.setupViews();
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
         Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
         if (lastVisit != null) {
             boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);

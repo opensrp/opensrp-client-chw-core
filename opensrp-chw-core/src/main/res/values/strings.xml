@@ -461,6 +461,7 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Return to All Clients</string>
+    <string name="return_to_notification_details">Return to Notification Details</string>
 
     <string name="indicator">Indicator</string>
     <string name="value">Value</string>

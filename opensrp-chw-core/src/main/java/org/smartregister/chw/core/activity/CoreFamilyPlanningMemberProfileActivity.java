@@ -56,6 +56,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
@@ -78,6 +79,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeNotificationReferralRecyclerView();
+        updateToolbarTitle(this, R.id.toolbar_title, fpMemberObject.getFamilyName());
     }
 
     protected void initializeNotificationReferralRecyclerView() {

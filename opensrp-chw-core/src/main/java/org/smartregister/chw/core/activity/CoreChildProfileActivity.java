@@ -60,9 +60,11 @@ import java.util.Set;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public class CoreChildProfileActivity extends BaseProfileActivity implements CoreChildProfileContract.View, CoreChildRegisterContract.InteractorCallBack {
     public static IntentFilter sIntentFilter;
-    private static boolean isStartedFromReferrals;
 
     static {
         sIntentFilter = new IntentFilter();
@@ -72,7 +74,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     public String childBaseEntityId;
-    public boolean isComesFromFamily = false;
     public String lastVisitDay;
     public OnClickFloatingMenu onClickFloatingMenu;
     public Handler handler = new Handler();
@@ -118,7 +119,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     };
     private View viewFamilyRow;
     private View viewDividerSickRow;
-    private View textViewSickChildArrow;
     private TextView textViewNotVisitMonth;
     private TextView textViewUndo;
     private TextView textViewNameDue;
@@ -127,10 +127,9 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private ImageView imageViewCross;
     private ProgressBar progressBar;
 
-    public static void startMe(Activity activity, boolean isComesFromFamily, MemberObject memberObject, Class<?> cls) {
-        isStartedFromReferrals = CoreReferralUtils.checkIfStartedFromReferrals(activity);
+    public static void startMe(Activity activity, MemberObject memberObject, Class<?> cls) {
         Intent intent = new Intent(activity, cls);
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, isComesFromFamily);
+        passToolbarTitle(activity, intent);
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject);
         activity.startActivity(intent);
     }
@@ -160,7 +159,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         if (extras != null) {
             memberObject = (MemberObject) getIntent().getSerializableExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT);
             childBaseEntityId = memberObject.getBaseEntityId();
-            isComesFromFamily = getIntent().getBooleanExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, false);
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -196,7 +194,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     @Override
     protected void initializePresenter() {
         childBaseEntityId = getIntent().getStringExtra(Constants.INTENT_KEY.BASE_ENTITY_ID);
-        isComesFromFamily = getIntent().getBooleanExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, false);
         String familyName = getIntent().getStringExtra(Constants.INTENT_KEY.FAMILY_NAME);
         if (familyName == null) {
             familyName = "";
@@ -252,7 +249,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         viewDividerSickRow = findViewById(R.id.view_sick_visit_row);
         layoutSickVisit = findViewById(R.id.sick_visit_row);
         textViewSickChild = findViewById(R.id.textview_sick_visit_has);
-        textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
         fetchProfileTasks();
     }
 
@@ -286,11 +282,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     public void setUpToolbar() {
-        if (isComesFromFamily) {
-            textViewTitle.setText(getString(R.string.return_to_family_members));
-        } else {
-            textViewTitle.setText(isStartedFromReferrals ? getString(R.string.return_to_task_details) : getString(R.string.return_to_all_children));
-        }
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
     }
 
     /**

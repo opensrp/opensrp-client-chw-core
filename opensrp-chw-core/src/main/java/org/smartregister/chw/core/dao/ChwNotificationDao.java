@@ -274,27 +274,27 @@ public class ChwNotificationDao extends AbstractDao {
         String query =
                 "SELECT id as notification_id, 'Sick Child' as notification_type\n" +
                         "FROM ec_sick_child_followup\n" +
-                        "WHERE base_entity_id = '%s'\n" +
+                        "WHERE base_entity_id = '%s' COLLATE NOCASE\n" +
                         "UNION ALL\n" +
-                        "SELECT id as notification_id, 'PNC danger signs' as notification_type\n" +
+                        "SELECT id as notification_id, 'PNC Danger Signs' as notification_type\n" +
                         "FROM ec_pnc_danger_signs_outcome\n" +
-                        "WHERE base_entity_id = '%s'\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
                         "UNION ALL\n" +
-                        "SELECT id as notification_id, 'ANC danger sgns' as notification_type\n" +
+                        "SELECT id as notification_id, 'ANC Danger Signs' as notification_type\n" +
                         "FROM ec_anc_danger_signs_outcome\n" +
-                        "WHERE base_entity_id = ''\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
                         "UNION ALL\n" +
                         "SELECT id as notification_id, 'Malaria Follow-up' as notification_type\n" +
                         "FROM ec_malaria_followup_hf\n" +
-                        "WHERE base_entity_id = '%s'\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
                         "UNION ALL\n" +
-                        "SELECT id as notification_id, 'Family planning' as notification_type\n" +
+                        "SELECT id as notification_id, 'Family Planning' as notification_type\n" +
                         "FROM ec_family_planning_update\n" +
-                        "WHERE base_entity_id = '%s'\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
                         "UNION ALL\n" +
-                        "SELECT id as notification_id, 'Referral not yet done' as notification_type\n" +
+                        "SELECT id as notification_id, 'Referral not completed yet' as notification_type\n" +
                         "FROM ec_not_yet_done_referral\n" +
-                        "WHERE entity_id = '%s';";
+                        "WHERE entity_id = '%s'  COLLATE NOCASE;";
 
         List<Pair<String, String>> values = AbstractDao.readData(query.replace("%s", baseEntityId),
                 getNotificationPair());

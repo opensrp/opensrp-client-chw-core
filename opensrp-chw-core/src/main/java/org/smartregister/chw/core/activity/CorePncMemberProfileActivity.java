@@ -42,6 +42,8 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileActivity implements CorePncMemberProfileContract.View {
 
     protected ImageView imageViewCross;
@@ -185,6 +187,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         super.setupViews();
         imageViewCross = findViewById(R.id.tick_image);
         imageViewCross.setOnClickListener(this);
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
     }
 
     @Override

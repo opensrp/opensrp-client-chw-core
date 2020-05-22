@@ -23,7 +23,7 @@ import org.smartregister.family.util.Utils;
 
 import java.lang.ref.WeakReference;
 
-import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.TITLE_VIEW_TEXT;
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
 
 public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask<Void, Void, Void> {
     private final CommonPersonObjectClient commonPersonObjectClient;
@@ -54,7 +54,7 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
         return null;
     }
 
-    public void goToChildProfileActivity(CommonPersonObjectClient patient, Bundle bundle) {
+    private void goToChildProfileActivity(CommonPersonObjectClient patient, Bundle bundle) {
         String dobString = Utils.getDuration(Utils.getValue(patient.getColumnmaps(), DBConstants.KEY.DOB, false));
         Integer yearOfBirth = CoreChildUtils.dobStringToYear(dobString);
         Intent intent;
@@ -66,7 +66,7 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, false);
+        passToolbarTitle(activity.get(), intent);
         intent.putExtra(Constants.INTENT_KEY.BASE_ENTITY_ID, patient.getCaseId());
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, new MemberObject(patient));
         activity.get().startActivity(intent);
@@ -87,9 +87,9 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
         if (bundle != null) {
             intent.putExtras(bundle);
         }
+        passToolbarTitle(activity.get(), intent);
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, patient.entityId());
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, patient);
-        intent.putExtra(TITLE_VIEW_TEXT, String.format(activity.get().getString(org.smartregister.chw.core.R.string.return_to_family_name), ""));
         return intent;
     }
 
@@ -98,6 +98,7 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
         if (bundle != null) {
             intent.putExtras(bundle);
         }
+        passToolbarTitle(activity.get(), intent);
         intent.putExtra(org.smartregister.chw.malaria.util.Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID, client.getCaseId());
         activity.get().startActivity(intent);
     }

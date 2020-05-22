@@ -43,6 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
+import org.smartregister.chw.core.activity.CoreAllClientsRegisterActivity;
+import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 import org.smartregister.chw.core.custom_views.CoreAncFloatingMenu;
@@ -709,5 +712,28 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         return defaultValue;
+    }
+
+    public static void updateToolbarTitle(Activity activity, int toolbarTextViewId, String familyName) {
+        int titleResource = -1;
+        if (activity.getIntent().getExtras() != null)
+            titleResource = activity.getIntent().getExtras().getInt(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, -1);
+        if (titleResource != -1) {
+            TextView toolbarTitleTextView = activity.findViewById(toolbarTextViewId);
+            if (titleResource == R.string.return_to_family_name) {
+                toolbarTitleTextView.setText(activity.getString(R.string.return_to_family_name, familyName));
+            } else {
+                toolbarTitleTextView.setText(titleResource);
+            }
+        }
+    }
+
+    public static void passToolbarTitle(Activity activity, Intent intent) {
+        if (activity instanceof CoreAllClientsRegisterActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_all_client);
+        else if (activity instanceof BaseChwNotificationDetailsActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_notification_details);
+        else if (activity instanceof CoreFamilyProfileActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_family_name);
     }
 }

@@ -84,7 +84,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         Activity activity = Mockito.mock(Activity.class);
         MemberObject memberObject = Mockito.mock(MemberObject.class);
 
-        CoreChildProfileActivity.startMe(activity, false, memberObject, activity.getClass());
+        CoreChildProfileActivity.startMe(activity, memberObject, activity.getClass());
         Mockito.verify(activity).startActivity(Mockito.any());
     }
 
