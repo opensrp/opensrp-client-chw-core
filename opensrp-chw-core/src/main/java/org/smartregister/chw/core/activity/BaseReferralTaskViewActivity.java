@@ -16,6 +16,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -118,7 +119,10 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
     }
 
     protected void extraDetails() {
-        setMemberObject((MemberObject) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.MEMBER_OBJECT));
+        if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(task.getFocus()) ||
+                CoreConstants.TASKS_FOCUS.PNC_DANGER_SIGNS.equals(task.getFocus())) {
+            setMemberObject(AncDao.getMember(baseEntityId));
+        }
         setFamilyHeadName((String) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.FAMILY_HEAD_NAME));
         setFamilyHeadPhoneNumber((String) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.FAMILY_HEAD_PHONE_NUMBER));
     }
