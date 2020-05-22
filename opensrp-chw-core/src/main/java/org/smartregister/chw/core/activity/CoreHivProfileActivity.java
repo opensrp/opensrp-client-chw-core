@@ -16,24 +16,24 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.CoreTbProfileContract;
+import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.domain.MemberType;
-import org.smartregister.chw.core.interactor.CoreTbProfileInteractor;
-import org.smartregister.chw.core.interactor.CoreTbUpcomingServicesInteractor;
-import org.smartregister.chw.core.presenter.CoreTbProfilePresenter;
-import org.smartregister.chw.core.rule.TbAlertRule;
+import org.smartregister.chw.core.interactor.CoreHivProfileInteractor;
+import org.smartregister.chw.core.interactor.CoreHivUpcomingServicesInteractor;
+import org.smartregister.chw.core.presenter.CoreHivProfilePresenter;
+import org.smartregister.chw.core.rule.HivAlertRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
-import org.smartregister.chw.tb.activity.BaseTbProfileActivity;
-import org.smartregister.chw.tb.dao.TbDao;
-import org.smartregister.chw.tb.domain.TbMemberObject;
+import org.smartregister.chw.hiv.activity.BaseHivProfileActivity;
+import org.smartregister.chw.hiv.dao.HivDao;
+import org.smartregister.chw.hiv.domain.HivMemberObject;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -53,10 +53,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.utils.CoreConstants.RULE_FILE.TB_FOLLOW_UP_VISIT;
+import static org.smartregister.chw.core.utils.CoreConstants.RULE_FILE.HIV_FOLLOW_UP_VISIT;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
-public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreTbProfileContract.View {
+public abstract class CoreHivProfileActivity extends BaseHivProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreHivProfileContract.View {
 
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
@@ -77,13 +77,13 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
     @Override
     public void setupViews() {
         super.setupViews();
-        new UpdateFollowUpVisitButtonTask(getTbMemberObject()).execute();
+        new UpdateFollowUpVisitButtonTask(getHivMemberObject()).execute();
     }
 
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        setTbProfilePresenter(new CoreTbProfilePresenter(this, new CoreTbProfileInteractor(this), getTbMemberObject()));
+        setHivProfilePresenter(new CoreHivProfilePresenter(this, new CoreHivProfileInteractor(this), getHivMemberObject()));
         fetchProfileData();
     }
 
@@ -101,7 +101,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
             removeMember();
             return true;
         } else if (itemId == R.id.action_fp_change) {
-            startTbRegistrationActivity();
+            startFamilyPlanningRegistrationActivity();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -131,8 +131,8 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
                         JSONObject form = new JSONObject(jsonString);
                         if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
                             FamilyEventClient familyEventClient =
-                                    new BaseFamilyProfileModel(getTbMemberObject().getFamilyName()).processUpdateMemberRegistration(jsonString, getTbMemberObject().getBaseEntityId());
-                            new FamilyProfileInteractor().saveRegistration(familyEventClient, jsonString, true, (FamilyProfileContract.InteractorCallBack) getTbProfilePresenter());
+                                    new BaseFamilyProfileModel(getHivMemberObject().getFamilyName()).processUpdateMemberRegistration(jsonString, getHivMemberObject().getBaseEntityId());
+                            new FamilyProfileInteractor().saveRegistration(familyEventClient, jsonString, true, (FamilyProfileContract.InteractorCallBack) getHivProfilePresenter());
                         }
                     } catch (Exception e) {
                         Timber.e(e);
@@ -149,7 +149,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     protected Observable<MemberType> getMemberType() {
         return Observable.create(e -> {
-            MemberObject memberObject = PNCDao.getMember(getTbMemberObject().getBaseEntityId());
+            MemberObject memberObject = PNCDao.getMember(getHivMemberObject().getBaseEntityId());
             String type = null;
 
             if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
@@ -196,7 +196,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
-            Visit lastVisit = FpDao.getLatestVisit(getTbMemberObject().getBaseEntityId(), FP_FOLLOW_UP_VISIT);
+            Visit lastVisit = FpDao.getLatestVisit(getHivMemberObject().getBaseEntityId(), FP_FOLLOW_UP_VISIT);
             visitObservableEmitter.onNext(lastVisit);
             visitObservableEmitter.onComplete();
         });
@@ -213,7 +213,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
                     @Override
                     public void onNext(Visit visit) {
                         updateLastVisitRow(visit.getDate());
-                        onMemberDetailsReloaded(getTbMemberObject());
+                        onMemberDetailsReloaded(getHivMemberObject());
                     }
 
                     @Override
@@ -229,42 +229,42 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
                 });
     }
 
-    public void onMemberDetailsReloaded(TbMemberObject tbMemberObject) {
-        super.onMemberDetailsReloaded(tbMemberObject);
+    public void onMemberDetailsReloaded(HivMemberObject hivMemberObject) {
+        super.onMemberDetailsReloaded(hivMemberObject);
     }
 
     protected abstract void removeMember();
 
-    protected abstract void startTbRegistrationActivity();
+    protected abstract void startFamilyPlanningRegistrationActivity();
 
     public void startFormForEdit(Integer titleResource, String formName) {
 
         JSONObject form = null;
-        CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(getTbMemberObject().getBaseEntityId());
+        CommonPersonObjectClient client = org.smartregister.chw.core.utils.Utils.clientForEdit(getHivMemberObject().getBaseEntityId());
 
         if (formName.equals(CoreConstants.JSON_FORM.getFamilyMemberRegister())) {
             form = CoreJsonFormUtils.getAutoPopulatedJsonEditMemberFormString(
                     (titleResource != null) ? getResources().getString(titleResource) : null,
                     CoreConstants.JSON_FORM.getFamilyMemberRegister(),
                     this, client,
-                    Utils.metadata().familyMemberRegister.updateEventType, getTbMemberObject().getLastName(), false);
+                    Utils.metadata().familyMemberRegister.updateEventType, getHivMemberObject().getLastName(), false);
         } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
-                    getTbMemberObject().getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(titleResource));
+                    getHivMemberObject().getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(titleResource));
         }
 
         try {
             assert form != null;
-            startFormActivity(form, getTbMemberObject());
+            startFormActivity(form, getHivMemberObject());
         } catch (Exception e) {
             Timber.e(e);
         }
     }
 
     @Override
-    public void startFormActivity(JSONObject formJson, TbMemberObject tbMemberObject) {
+    public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, formJson.toString());
-        intent.putExtra(FamilyPlanningConstants.FamilyPlanningMemberObject.MEMBER_OBJECT, tbMemberObject);
+        intent.putExtra(FamilyPlanningConstants.FamilyPlanningMemberObject.MEMBER_OBJECT, hivMemberObject);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
@@ -295,31 +295,31 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
     }
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
-        private TbMemberObject tbMemberObject;
-        private TbAlertRule tbAlertRule;
+        private HivMemberObject hivMemberObject;
+        private HivAlertRule hivAlertRule;
         private Visit lastVisit;
 
-        public UpdateFollowUpVisitButtonTask(TbMemberObject tbMemberObject) {
-            this.tbMemberObject = tbMemberObject;
+        public UpdateFollowUpVisitButtonTask(HivMemberObject hivMemberObject) {
+            this.hivMemberObject = hivMemberObject;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            lastVisit = TbDao.getLatestVisit(tbMemberObject.getBaseEntityId(), TB_FOLLOW_UP_VISIT);
+            lastVisit = HivDao.getLatestVisit(hivMemberObject.getBaseEntityId(), HIV_FOLLOW_UP_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
 
-            Rules rule = CoreTbUpcomingServicesInteractor.getTbRules();
+            Rules rule = CoreHivUpcomingServicesInteractor.getHivRules();
 
-            tbAlertRule = HomeVisitUtil.getTbVisitStatus(rule, lastVisitDate, tbMemberObject.getTbRegistrationDate());
+            hivAlertRule = HomeVisitUtil.getHivVisitStatus(rule, lastVisitDate, hivMemberObject.getHivRegistrationDate());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            if (tbAlertRule != null && (tbAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
-                    tbAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
+            if (hivAlertRule != null && (hivAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE) ||
+                    hivAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE))
             ) {
-                updateFollowUpVisitButton(tbAlertRule.getButtonStatus());
+                updateFollowUpVisitButton(hivAlertRule.getButtonStatus());
             }
             updateFollowUpVisitStatusRow(lastVisit);
         }

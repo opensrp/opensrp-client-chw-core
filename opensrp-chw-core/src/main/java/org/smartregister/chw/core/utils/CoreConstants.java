@@ -706,6 +706,7 @@ public class CoreConstants {
         public static final String FP_FEMALE_STERILIZATION = "fp-female-sterilization-rule.yml";
         public static final String FP_IUCD = "fp-iucd-rule.yml";
         public static final String TB_FOLLOW_UP_VISIT = "tb-followup-rules.yml";
+        public static final String HIV_FOLLOW_UP_VISIT = "hiv-followup-rules.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {

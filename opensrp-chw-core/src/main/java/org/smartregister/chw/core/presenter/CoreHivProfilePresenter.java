@@ -3,11 +3,12 @@ package org.smartregister.chw.core.presenter;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.smartregister.chw.core.contract.CoreTbProfileContract;
+import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
+import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.tb.contract.BaseTbProfileContract;
-import org.smartregister.chw.tb.domain.TbMemberObject;
-import org.smartregister.chw.tb.presenter.BaseTbProfilePresenter;
+import org.smartregister.chw.hiv.contract.BaseHivProfileContract;
+import org.smartregister.chw.hiv.domain.HivMemberObject;
+import org.smartregister.chw.hiv.presenter.BaseHivProfilePresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -19,28 +20,28 @@ import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
-public class CoreTbProfilePresenter extends BaseTbProfilePresenter implements CoreTbProfileContract.Presenter, FamilyProfileContract.InteractorCallBack {
-    private BaseTbProfileContract.Interactor interactor;
-    private WeakReference<BaseTbProfileContract.View> view;
+public class CoreHivProfilePresenter extends BaseHivProfilePresenter implements CoreHivProfileContract.Presenter, FamilyProfileContract.InteractorCallBack {
+    private BaseHivProfileContract.Interactor interactor;
+    private WeakReference<BaseHivProfileContract.View> view;
     private FormUtils formUtils;
-    private TbMemberObject tbMemberObject;
+    private HivMemberObject hivMemberObject;
 
-    public CoreTbProfilePresenter(BaseTbProfileContract.View view, BaseTbProfileContract.Interactor interactor, TbMemberObject tbMemberObject) {
-        super(view, interactor, tbMemberObject);
+    public CoreHivProfilePresenter(BaseHivProfileContract.View view, BaseHivProfileContract.Interactor interactor, HivMemberObject hivMemberObject) {
+        super(view, interactor, hivMemberObject);
         this.interactor = interactor;
         this.view = new WeakReference<>(view);
-        this.tbMemberObject = tbMemberObject;
+        this.hivMemberObject = hivMemberObject;
     }
 
     @Override
     public void createReferralEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
-        ((CoreTbProfileContract.Interactor) interactor).createReferralEvent(allSharedPreferences, jsonString, tbMemberObject.getBaseEntityId());
+        ((CoreHivProfileContract.Interactor) interactor).createReferralEvent(allSharedPreferences, jsonString, hivMemberObject.getBaseEntityId());
     }
 
     @Override
-    public void startTbReferral() {
+    public void startHivReferral() {
         try {
-            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getTbReferralForm()), tbMemberObject);
+            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getHivReferralForm()), hivMemberObject);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -48,9 +49,9 @@ public class CoreTbProfilePresenter extends BaseTbProfilePresenter implements Co
 
     @Override
     @Nullable
-    public CoreTbProfileContract.View getView() {
+    public CoreHivProfileContract.View getView() {
         if (view != null) {
-            return (CoreTbProfileContract.View) view.get();
+            return (CoreHivProfileContract.View) view.get();
         } else {
             return null;
         }

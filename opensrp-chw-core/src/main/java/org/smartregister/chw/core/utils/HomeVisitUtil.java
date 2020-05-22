@@ -10,6 +10,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.RegisterAlert;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
 import org.smartregister.chw.core.rule.FpAlertRule;
+import org.smartregister.chw.core.rule.HivAlertRule;
 import org.smartregister.chw.core.rule.PncVisitAlertRule;
 import org.smartregister.chw.core.rule.TbAlertRule;
 
@@ -55,5 +56,11 @@ public class HomeVisitUtil {
         TbAlertRule tbAlertRule = new TbAlertRule(tbDate, lastVisitDate);
         CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(tbAlertRule, rules);
         return tbAlertRule;
+    }
+
+    public static HivAlertRule getHivVisitStatus(Rules rules, Date lastVisitDate, Date tbDate) {
+        HivAlertRule hivAlertRule = new HivAlertRule(tbDate, lastVisitDate);
+        CoreChwApplication.getInstance().getRulesEngineHelper().getButtonAlertStatus(hivAlertRule, rules);
+        return hivAlertRule;
     }
 }
