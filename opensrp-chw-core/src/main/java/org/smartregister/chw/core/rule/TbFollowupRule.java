@@ -5,11 +5,7 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.utils.CoreConstants;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
-import timber.log.Timber;
 
 public class TbFollowupRule implements ICommonRule {
     public static final String RULE_KEY = "tbFollowupRule";

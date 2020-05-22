@@ -3,7 +3,6 @@ package org.smartregister.chw.core.presenter;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.smartregister.chw.core.contract.CoreFamilyPlanningMemberProfileContract;
 import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hiv.contract.BaseHivProfileContract;

@@ -9,8 +9,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
