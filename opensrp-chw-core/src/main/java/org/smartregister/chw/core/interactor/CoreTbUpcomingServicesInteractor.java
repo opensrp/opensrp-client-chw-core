@@ -11,12 +11,12 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.rule.TbFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.tb.dao.TbDao;
 import org.smartregister.chw.tb.domain.TbAlertObject;
 import org.smartregister.chw.tb.util.Constants;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +24,10 @@ import java.util.List;
 public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInteractor {
     protected MemberObject memberObject;
     protected Context context;
+
+    public static Rules getTbRules() {
+        return CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.TB_FOLLOW_UP_VISIT);
+    }
 
     @Override
     public List<BaseUpcomingService> getMemberServices(Context context, MemberObject memberObject) {
@@ -48,7 +52,7 @@ public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
         }
         Date lastVisitDate = null;
         Visit lastVisit;
-        Date tbDate = FpUtil.parseFpStartDate(tb_date);
+        Date tbDate = new Date(new BigDecimal(tb_date).longValue());
         lastVisit = TbDao.getLatestVisit(memberObject.getBaseEntityId(), Constants.EventType.FOLLOW_UP_VISIT);
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
@@ -67,10 +71,6 @@ public class CoreTbUpcomingServicesInteractor extends BaseAncUpcomingServicesInt
             serviceList.add(upcomingService);
         }
 
-    }
-
-    public static Rules getTbRules() {
-        return CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.TB_FOLLOW_UP_VISIT);
     }
 
 }

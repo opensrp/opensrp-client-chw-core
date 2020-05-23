@@ -17,6 +17,7 @@ import org.smartregister.chw.hiv.dao.HivDao;
 import org.smartregister.chw.hiv.domain.HivAlertObject;
 import org.smartregister.chw.tb.util.Constants;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,13 +53,13 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
         }
         Date lastVisitDate = null;
         Visit lastVisit;
-        Date tbDate = FpUtil.parseFpStartDate(hiv_date);
+        Date hivDate = new Date(new BigDecimal(hiv_date).longValue());
         lastVisit = HivDao.getLatestVisit(memberObject.getBaseEntityId(), Constants.EventType.FOLLOW_UP_VISIT);
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
         }
 
-        HivFollowupRule alertRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, tbDate);
+        HivFollowupRule alertRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, hivDate);
         serviceDueDate = alertRule.getDueDate();
         serviceOverDueDate = alertRule.getOverDueDate();
         serviceName = context.getString(R.string.hiv_follow_up_visit);
