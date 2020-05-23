@@ -203,7 +203,9 @@ public class CoreConstants {
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
         private static final String HIV_REGISTRATION = "hiv_registration";
+        private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
         private static final String TB_REGISTRATION = "tb_registration";
+        private static final String TB_FOLLOWUP_VISIT= "tb_followup_visit";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -377,6 +379,14 @@ public class CoreConstants {
 
         public static String getTbRegistration() {
             return TB_REGISTRATION;
+        }
+
+        public static String getHivFollowupVisit() {
+            return HIV_FOLLOWUP_VISIT;
+        }
+
+        public static String getTbFollowupVisit() {
+            return TB_FOLLOWUP_VISIT;
         }
 
         public static class CHILD_HOME_VISIT {
