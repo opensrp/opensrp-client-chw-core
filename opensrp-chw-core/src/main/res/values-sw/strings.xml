@@ -421,4 +421,12 @@
     <!---All Clients Register -->
     <string name="return_to_all_client">Rudi kwenye Wateja wote</string>
     <string name="menu_tb_clients">Wateja wenye Kifua Kikuu</string>
+
+    <!--    HIV Register-->
+    <string name="hiv_register">Orodha ya wateja wenye Ukimwi</string>
+    <string name="routine_hiv_visit"> · Tembeleo la mteja mwenye VVU</string>
+
+    <!--    TB Register-->
+    <string name="tb_register">Orodha ya wateja wenye Kifua Kikuu</string>
+    <string name="routine_tb_visit"> · · Tembeleo la mteja mwenye Kifua Kikuu</string>
 </resources>

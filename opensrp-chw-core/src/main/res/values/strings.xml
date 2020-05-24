@@ -669,8 +669,10 @@
 
 <!--    HIV Register-->
     <string name="hiv_register">HIV Register</string>
+    <string name="routine_hiv_visit"> · Routine HIV Visit</string>
 
 <!--    TB Register-->
     <string name="tb_register">TB Register</string>
+    <string name="routine_tb_visit"> · Routine TB Visit</string>
 
 </resources>
