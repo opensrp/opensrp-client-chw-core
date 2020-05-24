@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
@@ -305,7 +307,8 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
         @Override
         protected Void doInBackground(Void... voids) {
-            lastVisit = TbDao.getLatestVisit(tbMemberObject.getBaseEntityId(), TB_FOLLOW_UP_VISIT);
+            lastVisit = TbDao.getLatestVisit(tbMemberObject.getBaseEntityId(), org.smartregister.chw.tb.util.Constants.EventType.FOLLOW_UP_VISIT);
+            Timber.e("Coze :: last visit = "+new Gson().toJson(lastVisit));
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
             tbFollowupRule = HomeVisitUtil.getTbVisitStatus(lastVisitDate, tbMemberObject.getTbRegistrationDate());
             return null;

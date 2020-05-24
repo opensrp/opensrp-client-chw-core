@@ -300,7 +300,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
         @Override
         protected Void doInBackground(Void... voids) {
-            lastVisit = HivDao.getLatestVisit(hivMemberObject.getBaseEntityId(), HIV_FOLLOW_UP_VISIT);
+            lastVisit = HivDao.getLatestVisit(hivMemberObject.getBaseEntityId(), org.smartregister.chw.hiv.util.Constants.EventType.FOLLOW_UP_VISIT);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
             hivFollowupRule = HomeVisitUtil.getHivVisitStatus(lastVisitDate, hivMemberObject.getHivRegistrationDate());
             return null;
