@@ -5,6 +5,7 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.utils.CoreConstants;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class TbFollowupRule implements ICommonRule {
@@ -26,6 +27,10 @@ public class TbFollowupRule implements ICommonRule {
         return visitID;
     }
 
+    public int getDaysDifference() {
+        return daysDifference;
+    }
+
     public void setVisitID(String visitID) {
         this.visitID = visitID;
     }
@@ -36,9 +41,16 @@ public class TbFollowupRule implements ICommonRule {
         } else {
             this.dueDate = tbDate.plusDays(scheduledPeriodInDays);
         }
-        this.overDueDate = dueDate.plus(daysFromDueToOverdue);
-        this.expiryDate = overDueDate.plus(daysFromOverdueTillExpiry);
-        daysDifference = Days.daysBetween(new DateTime(),new DateTime(dueDate)).getDays();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dueDate.toDate());
+        calendar.add(Calendar.DATE, daysFromDueToOverdue);
+        this.overDueDate = new DateTime(calendar.getTime());
+
+        calendar.setTime(overDueDate.toDate());
+        calendar.add(Calendar.DATE, daysFromOverdueTillExpiry);
+        this.expiryDate = new DateTime(calendar.getTime());
+
+        daysDifference = Days.daysBetween(new DateTime(), new DateTime(dueDate)).getDays();
         return true;
     }
 
@@ -48,6 +60,10 @@ public class TbFollowupRule implements ICommonRule {
 
     public Date getOverDueDate() {
         return overDueDate != null ? overDueDate.toDate() : null;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate != null ? expiryDate.toDate() : null;
     }
 
     public Date getCompletionDate() {

@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -43,8 +44,15 @@ public class HivFollowupRule implements ICommonRule {
         } else {
             this.dueDate = hivDate.plusDays(scheduledPeriodInDays);
         }
-        this.overDueDate = dueDate.plus(daysFromDueToOverdue);
-        this.expiryDate = overDueDate.plus(daysFromOverdueTillExpiry);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dueDate.toDate());
+        calendar.add(Calendar.DATE, daysFromDueToOverdue);
+        this.overDueDate = new DateTime(calendar.getTime());
+
+        calendar.setTime(overDueDate.toDate());
+        calendar.add(Calendar.DATE, daysFromOverdueTillExpiry);
+        this.expiryDate = new DateTime(calendar.getTime());
+
         daysDifference = Days.daysBetween(new DateTime(), new DateTime(dueDate)).getDays();
         return true;
     }
