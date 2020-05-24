@@ -10,8 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.widget.PopupMenu;
 
+import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -26,12 +27,6 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
     private int lastPosition = -1;
     private CoreCommunityRespondersRegisterActivity activity;
 
-    private static class ViewHolder {
-        TextView txtName;
-        TextView txtPhoneNumber;
-        ImageView editDelete;
-    }
-
     public CommunityResponderCustomAdapter(ArrayList<CommunityResponderModel> data, Context context, CoreCommunityRespondersRegisterActivity activity) {
         super(context, R.layout.row_item, data);
         this.mContext = context;
@@ -43,19 +38,37 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         int position = (Integer) v.getTag();
         Object object = getItem(position);
         CommunityResponderModel communityResponderModel = (CommunityResponderModel) object;
+        showPopupMenu(v, communityResponderModel);
+    }
 
-        if (v.getId() == R.id.edit_delete) {
+    private void showPopupMenu(View view, CommunityResponderModel communityResponderModel) {
+        PopupMenu popupMenu = new PopupMenu(activity, view);
+        popupMenu.getMenuInflater().inflate(R.menu.community_responder_contex_menu, popupMenu.getMenu());
+        popupMenu.show();
 
-            // start the object
-            try {
-                activity.startJsonActivity(communityResponderModel);
-            } catch (Exception e) {
-                Timber.e(e);
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            int menuItemItemId = menuItem.getItemId();
+            if (menuItemItemId == R.id.call_responder) {
+                BaseAncRespondersCallDialogFragment.launchDialog(activity, communityResponderModel.getResponderName(), communityResponderModel.getResponderPhoneNumber(), true,
+                        null, null, false, false, null);
+
+            } else if (menuItemItemId == R.id.edit_responder) {
+                try {
+                    activity.startJsonActivity(communityResponderModel);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
+            } else if (menuItemItemId == R.id.remove_responder) {
+                try {
+                    activity.startJsonActivity(communityResponderModel);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
             }
 
-            Snackbar.make(v, "Base ID " + communityResponderModel.getId(), Snackbar.LENGTH_LONG)
-                    .setAction("No action", null).show();
-        }
+            return false;
+        });
+
     }
 
     @Override
@@ -89,6 +102,12 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         viewHolder.editDelete.setOnClickListener(this);
         viewHolder.editDelete.setTag(position);
         return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView txtName;
+        TextView txtPhoneNumber;
+        ImageView editDelete;
     }
 
 

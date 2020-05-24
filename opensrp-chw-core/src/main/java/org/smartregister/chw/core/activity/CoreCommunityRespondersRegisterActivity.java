@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,8 +46,8 @@ import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
 
-    private ListView communityRespondersList;
     public static final int TOOLBAR_ID = R.id.location_switching_toolbar;
+    private ListView communityRespondersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,22 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         communityRespondersList = findViewById(R.id.lv_responder);
         Toolbar toolbar = findViewById(TOOLBAR_ID);
         setSupportActionBar(toolbar);
+
+        ImageView imageView = findViewById(R.id.edit_delete);
+
+        registerForContextMenu(communityRespondersList);
         findViewById(R.id.toggle_action_menu).setOnClickListener(v -> onClickDrawer(v));
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Context Menu");
+        menu.add(0, v.getId(), 0, "Upload");
+        menu.add(0, v.getId(), 0, "Search");
+        menu.add(0, v.getId(), 0, "Share");
+        menu.add(0, v.getId(), 0, "Bookmark");
     }
 
     public void onClickDrawer(View view) {
@@ -148,18 +163,18 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.lv_responder) {
-            AdapterView.AdapterContextMenuInfo info =
-                    (AdapterView.AdapterContextMenuInfo) menuInfo;
-            String responder = ((TextView) info.targetView).getText().toString();
-            menu.setHeaderTitle(responder);
-
-            String[] actions = getResources().getStringArray(R.array.responder_dialog_menu);
-            for (int i = 0; i < 2; i++) {
-                menu.add("add");
-            }
-        }
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        if (v.getId() == R.id.lv_responder) {
+//            AdapterView.AdapterContextMenuInfo info =
+//                    (AdapterView.AdapterContextMenuInfo) menuInfo;
+//            String responder = ((TextView) info.targetView).getText().toString();
+//            menu.setHeaderTitle(responder);
+//
+//            String[] actions = getResources().getStringArray(R.array.responder_dialog_menu);
+//            for (int i = 0; i < 2; i++) {
+//                menu.add("add");
+//            }
+//        }
+//    }
 }
