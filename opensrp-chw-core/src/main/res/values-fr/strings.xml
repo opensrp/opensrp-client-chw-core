@@ -438,4 +438,12 @@
     <!---All Clients Register -->
     <string name="return_to_all_client">Revenir à tous les clients</string>
     <string name="menu_tb_clients">" Clients de la Tuberculose"</string>
+
+    <!--    HIV Register-->
+    <string name="hiv_register">Registre du VIH</string>
+    <string name="routine_hiv_visit"> · Visite de routine du VIH</string>
+
+    <!--    TB Register-->
+    <string name="tb_register">Registre TB</string>
+    <string name="routine_tb_visit"> · Visite de routine en tuberculose</string>
 </resources>
