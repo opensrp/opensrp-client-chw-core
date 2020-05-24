@@ -308,7 +308,6 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
         @Override
         protected Void doInBackground(Void... voids) {
             lastVisit = TbDao.getLatestVisit(tbMemberObject.getBaseEntityId(), org.smartregister.chw.tb.util.Constants.EventType.FOLLOW_UP_VISIT);
-            Timber.e("Coze :: last visit = "+new Gson().toJson(lastVisit));
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
             tbFollowupRule = HomeVisitUtil.getTbVisitStatus(lastVisitDate, tbMemberObject.getTbRegistrationDate());
             return null;
