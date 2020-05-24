@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.JsonFormUtils;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
@@ -24,16 +25,20 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Utils;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
 import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
 import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FormUtils {
     public static FamilyMetadata getFamilyMetadata(BaseProfileActivity baseProfileActivity, String defaultLocation, ArrayList<String> locationHierarchy, ArrayList<Pair<String, String>> locationFields) {
@@ -160,6 +165,17 @@ public class FormUtils {
                 currJsonObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
                 currJsonObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
             }
+        }
+    }
+
+    public static void processEvent() {
+        try {
+            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
+            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

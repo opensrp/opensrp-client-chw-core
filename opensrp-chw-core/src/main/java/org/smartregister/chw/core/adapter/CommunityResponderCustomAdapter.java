@@ -60,12 +60,11 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
                 }
             } else if (menuItemItemId == R.id.remove_responder) {
                 try {
-                    activity.startJsonActivity(communityResponderModel);
+                    activity.confirmPurgeResponder(communityResponderModel.getId());
                 } catch (Exception e) {
                     Timber.e(e);
                 }
             }
-
             return false;
         });
 
@@ -77,16 +76,13 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         ViewHolder viewHolder;
         final View result;
         if (convertView == null) {
-
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtName = convertView.findViewById(R.id.responder_name);
             viewHolder.txtPhoneNumber = convertView.findViewById(R.id.responder_phone);
             viewHolder.editDelete = convertView.findViewById(R.id.edit_delete);
-
             result = convertView;
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -96,7 +92,6 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
         lastPosition = position;
-
         viewHolder.txtName.setText(communityResponderModel.getResponderName());
         viewHolder.txtPhoneNumber.setText(communityResponderModel.getResponderPhoneNumber());
         viewHolder.editDelete.setOnClickListener(this);
@@ -109,6 +104,5 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         TextView txtPhoneNumber;
         ImageView editDelete;
     }
-
 
 }

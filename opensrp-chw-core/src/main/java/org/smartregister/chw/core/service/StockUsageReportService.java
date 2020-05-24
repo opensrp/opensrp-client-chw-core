@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.util.JsonFormUtils;
-import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.StockUsageReportDao;
 import org.smartregister.chw.core.domain.StockUsage;
@@ -23,9 +22,7 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.repository.BaseRepository;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,10 +62,7 @@ public class StockUsageReportService extends IntentService {
                     addEvent(form, jsonArray, usage, allSharedPreferences, formSubmissionId);
                 }
 
-                long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-                Date lastSyncDate = new Date(lastSyncTimeStamp);
-                NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
-                getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+                FormUtils.processEvent();
 
             } catch (JSONException e) {
                 e.printStackTrace();

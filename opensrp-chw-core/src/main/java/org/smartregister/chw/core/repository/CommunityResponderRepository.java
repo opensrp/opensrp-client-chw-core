@@ -6,7 +6,6 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.json.JSONException;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -93,7 +92,14 @@ public class CommunityResponderRepository extends BaseRepository {
         }
 
         return communityResponderModels;
+    }
 
+    public void purgeCommunityResponder(String baseEntityID) {
+        try {
+            getWritableDatabase().execSQL("DELETE FROM community_responders WHERE id ='" + baseEntityID + "'");
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
 }

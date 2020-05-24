@@ -250,6 +250,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.STOCK_USAGE_REPORT:
                 clientProcessStockEvent(event);
                 break;
+            case CoreConstants.EventType.REMOVE_COMMUNITY_RESPONDER:
+                CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+                repo.purgeCommunityResponder(event.getBaseEntityId());
+                break;
             case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
                 clientProcessCommunityResponderEvent(event);
                 break;

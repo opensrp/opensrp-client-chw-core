@@ -153,6 +153,7 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
         public static final String FAMILY_PLANNING_UPDATE = "Family Planning Update";
+        public static final String REMOVE_COMMUNITY_RESPONDER= "Remove Community Responder";
     }
 
     public static final class EncounterType {
