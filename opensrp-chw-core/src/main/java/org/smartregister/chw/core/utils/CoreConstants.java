@@ -62,6 +62,8 @@ public class CoreConstants {
         String WASH_CHECK = "WASH_CHECK";
         String MALARIA_VISIT = "MALARIA_VISIT";
         String FP_VISIT = "FP_VISIT";
+        String TB_VISIT = "TB_VISIT";
+        String HIV_VISIT = "HIV_VISIT";
         String ROUTINE_HOUSEHOLD_VISIT = "ROUTINE_HOUSEHOLD_VISIT";
     }
 
