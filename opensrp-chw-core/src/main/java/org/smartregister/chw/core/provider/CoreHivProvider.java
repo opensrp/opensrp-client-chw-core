@@ -124,7 +124,7 @@ public class CoreHivProvider extends BaseHivRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            if (hivFollowupRule != null) {
+            if (hivFollowupRule != null && !hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)) {
                 updateDueColumn(context, viewHolder, hivFollowupRule);
             }
         }

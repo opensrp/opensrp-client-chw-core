@@ -124,7 +124,7 @@ public class CoreTbProvider extends BaseTbRegisterProvider {
 
         @Override
         protected void onPostExecute(Void param) {
-            if (tbFollowupRule != null) {
+            if (tbFollowupRule != null && !tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.EXPIRED)) {
                 updateDueColumn(context, viewHolder, tbFollowupRule);
             }
         }
