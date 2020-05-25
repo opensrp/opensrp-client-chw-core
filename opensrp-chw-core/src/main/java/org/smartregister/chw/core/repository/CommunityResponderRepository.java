@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import net.sqlcipher.DatabaseUtils;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
@@ -90,7 +91,6 @@ public class CommunityResponderRepository extends BaseRepository {
                 cursor.close();
             }
         }
-
         return communityResponderModels;
     }
 
@@ -100,6 +100,12 @@ public class CommunityResponderRepository extends BaseRepository {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+    public long getRespondersCount() {
+        SQLiteDatabase db = getWritableDatabase();
+        long count = DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        db.close();
+        return count;
     }
 
 }

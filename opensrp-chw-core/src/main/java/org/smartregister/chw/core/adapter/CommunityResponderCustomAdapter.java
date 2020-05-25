@@ -54,7 +54,7 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
 
             } else if (menuItemItemId == R.id.edit_responder) {
                 try {
-                    activity.startJsonActivity(communityResponderModel);
+                    activity.startJsonActivity(communityResponderModel, communityResponderModel.getId());
                 } catch (Exception e) {
                     Timber.e(e);
                 }
@@ -104,5 +104,4 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         TextView txtPhoneNumber;
         ImageView editDelete;
     }
-
 }

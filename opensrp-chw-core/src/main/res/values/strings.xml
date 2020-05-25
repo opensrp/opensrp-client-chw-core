@@ -708,4 +708,5 @@
     <string name="remove_responder">Remove</string>
     <string name="remove_responder_dialog_title">Remove Responder</string>
     <string name="remove_responder_dialog_message">Responder will be closed and disappear from app.</string>
+    <string name="add_responder_max_message">You have reached the maximum number of responders allowed</string>
 </resources>

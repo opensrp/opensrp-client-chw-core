@@ -698,26 +698,35 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return null;
     }
 
-    private CommunityResponderModel getCommunityResponderFromObs(List<Obs> responderObs) {
+    private CommunityResponderModel getCommunityResponderFromObs(Event event) {
+        List<Obs> responderObs = event.getObs();
         CommunityResponderModel communityResponderModel = new CommunityResponderModel();
         for (Obs obs : responderObs) {
             if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_NAME)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
+                if (StringUtils.isNotBlank(value)) {
                     communityResponderModel.setResponderName(value);
                     continue;
                 } else
                     return null;
             } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
+                if (StringUtils.isNotBlank(value)) {
                     communityResponderModel.setResponderPhoneNumber(value);
                     continue;
                 } else
                     return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_ID)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setId(value);
+                } else {
+                    communityResponderModel.setId(event.getBaseEntityId());
+                    continue;
+                }
             } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_GPS)) {
                 String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
+                if (StringUtils.isNotBlank(value)) {
                     communityResponderModel.setResponderLocation(value);
                     continue;
                 } else
@@ -728,12 +737,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     }
 
     private void clientProcessCommunityResponderEvent(Event event) {
-        List<Obs> responderObs = event.getObs();
-        CommunityResponderModel communityResponderModel = getCommunityResponderFromObs(responderObs);
+        CommunityResponderModel communityResponderModel = getCommunityResponderFromObs(event);
         if (communityResponderModel != null) {
             CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
-            String formSubmissionId = event.getBaseEntityId();
-            communityResponderModel.setId(formSubmissionId);
+            if (StringUtils.isBlank(communityResponderModel.getId()))
+                communityResponderModel.setId(event.getBaseEntityId());
             repo.addOrUpdate(communityResponderModel);
         }
     }

@@ -8,13 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +70,6 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_responder, menu);
@@ -82,8 +79,13 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_responder) {
-            JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
-            startActivityForResult(FormUtils.getStartFormActivity(form, this.getString(R.string.add_community_responder), this), org.smartregister.family.util.JsonFormUtils.REQUEST_CODE_GET_JSON);
+            CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+            if (repo.getRespondersCount() > 7) {
+                Toast.makeText(this, getString(R.string.add_responder_max_message), Toast.LENGTH_LONG).show();
+            } else {
+                JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+                startActivityForResult(FormUtils.getStartFormActivity(form, this.getString(R.string.add_community_responder), this), org.smartregister.family.util.JsonFormUtils.REQUEST_CODE_GET_JSON);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -98,13 +100,10 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
             String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
             AllSharedPreferences allSharedPreferences = getAllSharedPreferences();
             Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, jsonString, CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
-
-            String baseEntityID = UUID.randomUUID().toString();
-            baseEvent.setBaseEntityId(baseEntityID);
-
+            baseEvent.setBaseEntityId(UUID.randomUUID().toString());
             CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);
             JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
-            getSyncHelper().addEvent(baseEntityID, eventJson);
+            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson);
 
             long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
@@ -115,26 +114,17 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void startJsonActivity(CommunityResponderModel communityResponderModel) throws Exception {
-        // Intent intent = new Intent(getContext(), Utils.metadata().familyMemberFormActivity);
-
+    public void startJsonActivity(CommunityResponderModel communityResponderModel, String baseEntityID) throws Exception {
         JSONObject jsonObject = org.smartregister.util.FormUtils.getInstance(CoreChwApplication.getInstance().getApplicationContext()).getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
-        jsonObject.put("baseEntityId", communityResponderModel.getId());
+        jsonObject.put("entity_id", baseEntityID);
         Map<String, String> valueMap = new HashMap<>();
+        valueMap.put("id", baseEntityID);
         valueMap.put("responder_phone_number", communityResponderModel.getResponderPhoneNumber());
         valueMap.put("responder_name", communityResponderModel.getResponderName());
         valueMap.put("responder_gps", communityResponderModel.getResponderLocation());
-
         CoreJsonFormUtils.populateJsonForm(jsonObject, valueMap);
-
         Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
         intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonObject.toString());
-
-        Form form = new Form();
-        form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
-        form.setWizard(false);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
-
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
@@ -143,7 +133,6 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
         builder.setTitle(getString(R.string.remove_responder_dialog_title));
         builder.setMessage(getString(R.string.remove_responder_dialog_message));
         builder.setCancelable(true);
-
         builder.setPositiveButton(this.getString(R.string.remove_responder), (dialog, id) -> {
             try {
                 addEvent(baseEntityID);
@@ -157,10 +146,8 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
             }
         });
         builder.setNegativeButton(this.getString(R.string.cancel), ((dialog, id) -> dialog.cancel()));
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
     }
 
     private void addEvent(String baseEntityID) {
