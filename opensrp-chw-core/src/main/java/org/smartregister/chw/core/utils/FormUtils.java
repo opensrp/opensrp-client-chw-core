@@ -66,7 +66,7 @@ public class FormUtils {
     }
 
     public static Intent getStartFormActivity(JSONObject jsonForm, String title, Context context) {
-        Intent intent = new Intent(context, org.smartregister.family.util.Utils.metadata().familyMemberFormActivity);
+        Intent intent = new Intent(context, Utils.metadata().familyMemberFormActivity);
         intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
         Form form = new Form();
         form.setActionBarBackground(R.color.family_actionbar);

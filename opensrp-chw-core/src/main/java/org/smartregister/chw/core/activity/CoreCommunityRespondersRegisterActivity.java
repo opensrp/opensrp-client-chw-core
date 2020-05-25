@@ -84,7 +84,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.add_responder_max_message), Toast.LENGTH_LONG).show();
             } else {
                 JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
-                startActivityForResult(FormUtils.getStartFormActivity(form, this.getString(R.string.add_community_responder), this), org.smartregister.family.util.JsonFormUtils.REQUEST_CODE_GET_JSON);
+                startActivityForResult(FormUtils.getStartFormActivity(form, this.getString(R.string.add_community_responder), this), JsonFormUtils.REQUEST_CODE_GET_JSON);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -101,7 +101,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
             AllSharedPreferences allSharedPreferences = getAllSharedPreferences();
             Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, jsonString, CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
             baseEvent.setBaseEntityId(UUID.randomUUID().toString());
-            CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);
+            CoreJsonFormUtils.tagSyncMetadata(Utils.context().allSharedPreferences(), baseEvent);
             JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
             getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson);
 
@@ -152,7 +152,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
 
     private void addEvent(String baseEntityID) {
         JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
-        AllSharedPreferences allSharedPreferences = org.smartregister.family.util.Utils.context().allSharedPreferences();
+        AllSharedPreferences allSharedPreferences = Utils.context().allSharedPreferences();
         Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
         baseEvent.setFormSubmissionId(UUID.randomUUID().toString());
         baseEvent.setBaseEntityId(baseEntityID);

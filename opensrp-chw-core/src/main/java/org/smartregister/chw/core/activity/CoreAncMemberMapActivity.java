@@ -62,10 +62,10 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anc_member_map);
-        ancWomanName = getIntent().getStringExtra(CoreConstants.KUJAKU.NAME);
-        ancWomanPhoneNumber = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_PHONE);
-        ancWomanFamilyHeadName = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD);
-        ancWomanFamilyHeadPhoneNumber = getIntent().getStringExtra(CoreConstants.KUJAKU.ANC_WOMAN_FAMILY_HEAD_PHONE);
+        ancWomanName = getIntent().getStringExtra(CoreConstants.KujakuConstants.NAME);
+        ancWomanPhoneNumber = getIntent().getStringExtra(CoreConstants.KujakuConstants.ANC_WOMAN_PHONE);
+        ancWomanFamilyHeadName = getIntent().getStringExtra(CoreConstants.KujakuConstants.ANC_WOMAN_FAMILY_HEAD);
+        ancWomanFamilyHeadPhoneNumber = getIntent().getStringExtra(CoreConstants.KujakuConstants.ANC_WOMAN_FAMILY_HEAD_PHONE);
 
 
         kujakuMapView = findViewById(R.id.kujakuMapView);
@@ -119,8 +119,8 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         TextView familyNameView = findViewById(R.id.text_view_family);
         TextView landMarkView = findViewById(R.id.text_view_landmark);
         ancWomanNameView.setText(ancWomanName);
-        familyNameView.setText(getString(R.string.house_hold_family_name, getIntent().getStringExtra(CoreConstants.KUJAKU.FAMILY_NAME)));
-        landMarkView.setText(getString(R.string.house_hold_discription, getIntent().getStringExtra(CoreConstants.KUJAKU.LAND_MARK)));
+        familyNameView.setText(getString(R.string.house_hold_family_name, getIntent().getStringExtra(CoreConstants.KujakuConstants.FAMILY_NAME)));
+        landMarkView.setText(getString(R.string.house_hold_discription, getIntent().getStringExtra(CoreConstants.KujakuConstants.LAND_MARK)));
         final View imageButton = findViewById(R.id.call_woman);
         imageButton.setOnClickListener(view -> {
             if (StringUtils.isNotBlank(ancWomanPhoneNumber) || StringUtils.isNotBlank(ancWomanFamilyHeadPhoneNumber))
@@ -163,7 +163,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
 
     @Nullable
     private LatLng extractUserLocation() {
-        String location = getIntent().getStringExtra(CoreConstants.KUJAKU.LAT_LNG);
+        String location = getIntent().getStringExtra(CoreConstants.KujakuConstants.LAT_LNG);
         if (StringUtils.isBlank(location))
             location = "-2.020055 33.8761233";
         String[] latLong = location.split(" ");
@@ -185,27 +185,25 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
             mapboxMap.addMarker(markerOptions);
         }
 
-        if (boundingBox != null) {
-            if (!CoordinateUtils.isLocationInBounds(userLocation, boundingBox.north(), boundingBox.south(), boundingBox.east(), boundingBox.west())) {
-                double north = boundingBox.north();
-                double south = boundingBox.south();
-                double east = boundingBox.east();
-                double west = boundingBox.west();
+        if (boundingBox != null && !CoordinateUtils.isLocationInBounds(userLocation, boundingBox.north(), boundingBox.south(), boundingBox.east(), boundingBox.west())) {
+            double north = boundingBox.north();
+            double south = boundingBox.south();
+            double east = boundingBox.east();
+            double west = boundingBox.west();
 
-                if (userLocation.getLatitude() > north) {
-                    north = userLocation.getLatitude();
-                } else if (userLocation.getLatitude() < south) {
-                    south = userLocation.getLatitude();
-                }
-
-                if (userLocation.getLongitude() > east) {
-                    east = userLocation.getLongitude();
-                } else if (userLocation.getLongitude() < west) {
-                    west = userLocation.getLongitude();
-                }
-
-                mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.from(north, east, south, west), BOUNDING_BOX_PADDING));
+            if (userLocation.getLatitude() > north) {
+                north = userLocation.getLatitude();
+            } else if (userLocation.getLatitude() < south) {
+                south = userLocation.getLatitude();
             }
+
+            if (userLocation.getLongitude() > east) {
+                east = userLocation.getLongitude();
+            } else if (userLocation.getLongitude() < west) {
+                west = userLocation.getLongitude();
+            }
+
+            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.from(north, east, south, west), BOUNDING_BOX_PADDING));
         }
     }
 
@@ -249,7 +247,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         return featureList;
     }
 
-    private com.mapbox.geojson.Feature getFeature(CommunityResponderModel communityResponderModel) throws JSONException {
+    private Feature getFeature(CommunityResponderModel communityResponderModel) throws JSONException {
         String[] latLong = communityResponderModel.getResponderLocation().split(" ");
         double latitude = Double.parseDouble(latLong[0]);
         double longitude = Double.parseDouble(latLong[1]);

@@ -23,7 +23,7 @@ import timber.log.Timber;
 
 public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityResponderModel> implements View.OnClickListener {
 
-    Context mContext;
+    private Context mContext;
     private int lastPosition = -1;
     private CoreCommunityRespondersRegisterActivity activity;
 
@@ -73,20 +73,21 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CommunityResponderModel communityResponderModel = getItem(position);
+        View view = convertView;
         ViewHolder viewHolder;
         final View result;
-        if (convertView == null) {
+        if (view == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.txtName = convertView.findViewById(R.id.responder_name);
-            viewHolder.txtPhoneNumber = convertView.findViewById(R.id.responder_phone);
-            viewHolder.editDelete = convertView.findViewById(R.id.edit_delete);
-            result = convertView;
-            convertView.setTag(viewHolder);
+            view = inflater.inflate(R.layout.row_item, parent, false);
+            viewHolder.txtName = view.findViewById(R.id.responder_name);
+            viewHolder.txtPhoneNumber = view.findViewById(R.id.responder_phone);
+            viewHolder.editDelete = view.findViewById(R.id.edit_delete);
+            result = view;
+            view.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
+            viewHolder = (ViewHolder) view.getTag();
+            result = view;
         }
 
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
@@ -96,12 +97,12 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         viewHolder.txtPhoneNumber.setText(communityResponderModel.getResponderPhoneNumber());
         viewHolder.editDelete.setOnClickListener(this);
         viewHolder.editDelete.setTag(position);
-        return convertView;
+        return view;
     }
 
     private static class ViewHolder {
-        TextView txtName;
-        TextView txtPhoneNumber;
-        ImageView editDelete;
+        private TextView txtName;
+        private TextView txtPhoneNumber;
+        private ImageView editDelete;
     }
 }

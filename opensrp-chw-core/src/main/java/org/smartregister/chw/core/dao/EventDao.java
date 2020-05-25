@@ -8,8 +8,6 @@ import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.sync.helper.ECSyncHelper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import timber.log.Timber;
@@ -73,7 +71,7 @@ public class EventDao extends AbstractDao {
 
         String sql = "select json from event where baseEntityId = '" + baseEntityID + "' COLLATE NOCASE and eventType in (" + types.toString() + ") COLLATE NOCASE order by updatedAt desc limit 1";
 
-        DataMap<String> dataMap = cursor-> getCursorValue(cursor, "json");
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "json");
 
         return AbstractDao.readSingleValue(sql, dataMap);
     }

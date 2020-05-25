@@ -847,7 +847,7 @@ public class CoreConstants {
         public static final String LOCATION_ID = "location-id";
     }
 
-    public static final class KUJAKU {
+    public static final class KujakuConstants {
         public static final String LAT_LNG = "latLng";
         public static final String LAND_MARK = "landMark";
         public static final String NAME = "name";
