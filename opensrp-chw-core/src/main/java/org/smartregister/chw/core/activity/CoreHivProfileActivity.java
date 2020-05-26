@@ -303,6 +303,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
                 hideFollowUpVisitButton();
 
             updateFollowUpVisitStatusRow(lastVisit);
+            updateLastVisitRow(lastVisit.getDate());
         }
     }
 }
