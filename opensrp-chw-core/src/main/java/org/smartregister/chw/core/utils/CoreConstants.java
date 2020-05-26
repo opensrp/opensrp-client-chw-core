@@ -929,7 +929,7 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
-    public static class AncHealthFacilityVisit{
+    public static class AncHealthFacilityVisitUtil{
         public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
     }
 
