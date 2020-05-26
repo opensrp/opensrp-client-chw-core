@@ -99,7 +99,7 @@ public class AncDao extends AlertDao {
         return (res == null || res.size() < 1) ? 0 : res.get(0);
     }
     public static boolean showTT(String baseEntityID){
-        String sql = "SELECT Count(*) as count\n" +
+        String sql = "SELECT count(*) as count\n" +
                 "FROM visit_details vd\n" +
                 "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
                 "WHERE vd.visit_key = 'imm_medicine_given'\n" +
@@ -109,7 +109,7 @@ public class AncDao extends AlertDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        return res == null || res.size() < 2;
+        return res == null || res.get(0) < 2;
     }
 
     public static List<String> getTestDone(String baseEntityID) {
