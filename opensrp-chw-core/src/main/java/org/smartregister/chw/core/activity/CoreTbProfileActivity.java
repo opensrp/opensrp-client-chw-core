@@ -285,7 +285,9 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
                 hideFollowUpVisitButton();
 
             updateFollowUpVisitStatusRow(lastVisit);
-            updateLastVisitRow(lastVisit.getDate());
+
+            Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
+            updateLastVisitRow(lastVisitDate);
         }
     }
 }
