@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -27,8 +26,6 @@ import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
-import org.smartregister.chw.fp.dao.FpDao;
-import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.hiv.activity.BaseHivProfileActivity;
 import org.smartregister.chw.hiv.dao.HivDao;
 import org.smartregister.chw.hiv.domain.HivMemberObject;
@@ -50,9 +47,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.CoreConstants.RULE_FILE.HIV_FOLLOW_UP_VISIT;
-import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreHivProfileActivity extends BaseHivProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreHivProfileContract.View {
 
@@ -113,14 +107,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
-                if (resultCode == Activity.RESULT_OK) {
-                    Intent intent = new Intent(this, CoreFpRegisterActivity.class);
-                    intent.putExtras(getIntent().getExtras());
-                    startActivity(intent);
-                    finish();
-                }
-                break;
             case JsonFormUtils.REQUEST_CODE_GET_JSON:
                 if (resultCode == RESULT_OK) {
                     try {
@@ -193,7 +179,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
-            Visit lastVisit = FpDao.getLatestVisit(getHivMemberObject().getBaseEntityId(), FP_FOLLOW_UP_VISIT);
+            Visit lastVisit = HivDao.getLatestVisit(getHivMemberObject().getBaseEntityId(), org.smartregister.chw.hiv.util.Constants.EventType.FOLLOW_UP_VISIT);
             visitObservableEmitter.onNext(lastVisit);
             visitObservableEmitter.onComplete();
         });
@@ -245,7 +231,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
                     Utils.metadata().familyMemberRegister.updateEventType, getHivMemberObject().getLastName(), false);
         } else if (formName.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             form = CoreJsonFormUtils.getAutoJsonEditAncFormString(
-                    getHivMemberObject().getBaseEntityId(), this, formName, FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION, getResources().getString(titleResource));
+                    getHivMemberObject().getBaseEntityId(), this, formName, org.smartregister.chw.hiv.util.Constants.EventType.REGISTRATION, getResources().getString(titleResource));
         }
 
         try {
@@ -259,7 +245,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     @Override
     public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, formJson.toString());
-        intent.putExtra(FamilyPlanningConstants.FamilyPlanningMemberObject.MEMBER_OBJECT, hivMemberObject);
+        intent.putExtra(org.smartregister.chw.hiv.util.Constants.HivMemberObject.MEMBER_OBJECT, hivMemberObject);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 

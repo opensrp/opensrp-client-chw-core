@@ -221,6 +221,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.nerdstone', module: 'neat-form-core'
     }
 
     api 'com.google.guava:guava:20.0'
