@@ -16,7 +16,6 @@ import org.smartregister.chw.hiv.custom_views.BaseHivFloatingMenu;
 import org.smartregister.chw.hiv.domain.HivMemberObject;
 import org.smartregister.chw.hiv.fragment.BaseHivClientCallDialogFragment;
 import org.smartregister.chw.hiv.util.HivUtil;
-import org.smartregister.chw.tb.fragment.BaseTbCallDialogFragment;
 
 import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
 
