@@ -39,6 +39,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
 public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActivity implements
@@ -156,6 +157,10 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
             default:
                 break;
         }
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
     }
 
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();

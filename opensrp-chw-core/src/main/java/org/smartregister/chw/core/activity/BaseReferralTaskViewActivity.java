@@ -33,6 +33,11 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+import static org.smartregister.chw.malaria.util.DBConstants.KEY.FIRST_NAME;
+import static org.smartregister.chw.malaria.util.DBConstants.KEY.LAST_NAME;
+import static org.smartregister.chw.malaria.util.DBConstants.KEY.MIDDLE_NAME;
+import static org.smartregister.chw.malaria.util.DBConstants.KEY.PHONE_NUMBER;
+import static org.smartregister.family.util.DBConstants.KEY.OTHER_PHONE_NUMBER;
 
 public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
 
@@ -55,37 +60,15 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
     protected LinearLayout childNameLayout;
     protected AppBarLayout appBarLayout;
     protected String startingActivity;
-    private CommonPersonObjectClient personObjectClient;
-    private String clientAge;
+    protected static CommonPersonObjectClient personObjectClient;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
 
-    protected void extractPersonObjectClient() {
-        setPersonObjectClient((CommonPersonObjectClient) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON));
-        if (getPersonObjectClient() != null) {
-            name = Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.FIRST_NAME, true) + " " + Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true) + " " + Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
-            setBaseEntityId(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.BASE_ENTITY_ID, false));
-        }
-
-        if (getPersonObjectClient() == null) {
-            Timber.e("ReferralTaskViewActivity --> The person object is null");
-            finish();
-        }
-    }
-
     public CommonPersonObjectClient getPersonObjectClient() {
         return personObjectClient;
-    }
-
-    public void setPersonObjectClient(CommonPersonObjectClient personObjectClient) {
-        this.personObjectClient = personObjectClient;
-    }
-
-    public void setBaseEntityId(String baseEntityId) {
-        this.baseEntityId = baseEntityId;
     }
 
     protected void extraClientTask() {
@@ -112,17 +95,18 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
     protected void addGaDisplay() {
         if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(getTask().getFocus())) {
             womanGaLayout.setVisibility(View.VISIBLE);
-
             String gaWeeks = getMemberObject().getGestationAge() + " " + getString(R.string.weeks);
             womanGa.setText(gaWeeks);
         }
     }
 
     protected void extraDetails() {
-        if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(task.getFocus()) ||
-                CoreConstants.TASKS_FOCUS.PNC_DANGER_SIGNS.equals(task.getFocus())) {
-            setMemberObject(AncDao.getMember(baseEntityId));
+        if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equalsIgnoreCase(task.getFocus()) ||
+                CoreConstants.TASKS_FOCUS.PNC_DANGER_SIGNS.equalsIgnoreCase(task.getFocus())) {
+            setMemberObject(AncDao.getMember(getPersonObjectClient().getCaseId()));
         }
+        setClientName();
+        baseEntityId = getPersonObjectClient().getCaseId();
         setFamilyHeadName((String) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.FAMILY_HEAD_NAME));
         setFamilyHeadPhoneNumber((String) getIntent().getSerializableExtra(CoreConstants.INTENT_KEY.FAMILY_HEAD_PHONE_NUMBER));
     }
@@ -146,14 +130,9 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
     protected void getReferralDetails() {
         if (getPersonObjectClient() != null && getTask() != null) {
             updateProblemDisplay();
-            clientAge = (Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
+            String clientAge = (Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
             clientName.setText(getString(R.string.client_name_age_suffix, name, clientAge));
             referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(getTask().getExecutionStartDate().toDate()));
-
-            String parentFirstName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_FIRST_NAME, true);
-            String parentLastName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_LAST_NAME, true);
-            String parentMiddleName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MIDDLE_NAME, true);
-            String parentName = getString(R.string.care_giver_prefix, org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName));
 
             //For PNC get children belonging to the woman
             String childrenForPncWoman = getChildrenForPncWoman(getPersonObjectClient().entityId());
@@ -163,20 +142,31 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
                 childNameLayout.setVisibility(View.VISIBLE);
             }
 
-            //Hide Care giver for ANC referral
+            //Hide Care giver for clients other than CHILD
             careGiverLayout.setVisibility(View.GONE);
             if (getTask().getFocus().equalsIgnoreCase(CoreConstants.TASKS_FOCUS.SICK_CHILD)) {
-                // CG only shows for CHILD clients
                 careGiverLayout.setVisibility(View.VISIBLE);
+                String parentFirstName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_FIRST_NAME, true);
+                String parentLastName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_LAST_NAME, true);
+                String parentMiddleName = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MIDDLE_NAME, true);
+                String parentName = getString(R.string.care_giver_prefix, org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName));
+                careGiverName.setText(parentName);
             }
 
-            careGiverName.setText(parentName);
-            careGiverPhone.setText(getFamilyMemberContacts().isEmpty() || getFamilyMemberContacts() == null ? getString(R.string.phone_not_provided) : getFamilyMemberContacts());
+            String familyMemberContacts = getFamilyMemberContacts();
+            careGiverPhone.setText(familyMemberContacts.isEmpty() ? getString(R.string.phone_not_provided) : familyMemberContacts);
 
             chwDetailsNames.setText(getTask().getRequester());
 
             addGaDisplay();
         }
+    }
+
+    private void setClientName() {
+        String firstName = Utils.getValue(getPersonObjectClient().getColumnmaps(), FIRST_NAME, true);
+        String lastName = Utils.getValue(getPersonObjectClient().getColumnmaps(), LAST_NAME, true);
+        String middleName = Utils.getValue(getPersonObjectClient().getColumnmaps(), MIDDLE_NAME, true);
+        name = Utils.getName(firstName, middleName + " " + lastName);
     }
 
     private String getChildrenForPncWoman(String baseEntityId) {
@@ -205,24 +195,25 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
     }
 
     private String getFamilyMemberContacts() {
-        String phoneNumber = "";
+
         String familyPhoneNumber = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER, true);
         String familyPhoneNumberOther = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER_OTHER, true);
-        if (StringUtils.isNoneEmpty(familyPhoneNumber)) {
-            phoneNumber = familyPhoneNumber;
-        } else if (StringUtils.isEmpty(familyPhoneNumber) && StringUtils.isNoneEmpty(familyPhoneNumberOther)) {
-            phoneNumber = familyPhoneNumberOther;
-        } else if (StringUtils.isNoneEmpty(familyPhoneNumber) && StringUtils.isNoneEmpty(familyPhoneNumberOther)) {
-            phoneNumber = familyPhoneNumber + ", " + familyPhoneNumberOther;
-        } else if (StringUtils.isNoneEmpty(getFamilyHeadPhoneNumber())) {
-            phoneNumber = getFamilyHeadPhoneNumber();
-        }
+        String clientPhoneNumber = Utils.getValue(getPersonObjectClient().getColumnmaps(), PHONE_NUMBER, true);
+        String clientOtherPhoneNumber = Utils.getValue(getPersonObjectClient().getColumnmaps(), OTHER_PHONE_NUMBER, true);
 
-        return phoneNumber;
-    }
-
-    public String getFamilyHeadName() {
-        return familyHeadName;
+        if (StringUtils.isNoneEmpty(clientPhoneNumber) && StringUtils.isNoneEmpty(clientOtherPhoneNumber))
+            return clientPhoneNumber + ", " + clientOtherPhoneNumber;
+        else if (StringUtils.isNoneEmpty(clientPhoneNumber)) return clientPhoneNumber;
+        else if (StringUtils.isEmpty(clientPhoneNumber) && StringUtils.isNoneEmpty(clientOtherPhoneNumber))
+            return clientOtherPhoneNumber;
+        else if (StringUtils.isNoneEmpty(familyPhoneNumber) && StringUtils.isNoneEmpty(familyPhoneNumberOther))
+            return familyPhoneNumber + ", " + familyPhoneNumberOther;
+        else if (StringUtils.isNoneEmpty(familyPhoneNumber)) return familyPhoneNumber;
+        else if (StringUtils.isEmpty(familyPhoneNumber) && StringUtils.isNoneEmpty(familyPhoneNumberOther))
+            return familyPhoneNumberOther;
+        else if (StringUtils.isNoneEmpty(getFamilyHeadPhoneNumber()))
+            return getFamilyHeadPhoneNumber();
+        return "";
     }
 
     protected void inflateToolbar() {

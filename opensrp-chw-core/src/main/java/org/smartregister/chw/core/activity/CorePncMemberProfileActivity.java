@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
 public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileActivity implements CorePncMemberProfileContract.View {
@@ -95,6 +97,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeNotificationReferralRecyclerView();
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
     }
 
     @Override

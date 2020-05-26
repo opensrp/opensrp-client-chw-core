@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.core.utils.VisitSummary;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.JsonFormUtils;
@@ -45,6 +47,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
@@ -120,6 +123,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         return (CoreAncMemberProfilePresenter) presenter;
     }
 
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
+    }
+
     @Override
     protected void registerPresenter() {
         presenter = new CoreAncMemberProfilePresenter(this, new CoreAncMemberProfileInteractor(this), memberObject);
@@ -135,6 +143,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     @Override
     public abstract void openFamilyDueServices();
+
 
     @Override
     public void setFamilyStatus(AlertStatus status) {
