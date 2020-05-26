@@ -436,7 +436,6 @@ public class CoreConstants {
             private static final String REMARKS_AND_COMMENTS = "anc_hv_remarks_and_comments";
             private static final String EARLY_CHILDHOOD_DEVELOPMENT = "early_childhood_development";
             private static final String PREGNANCY_RISK = "anc_hv_pregnancy_risk_form";
-            private static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
 
             public static String getDangerSigns() {
                 return Utils.getLocalForm(DANGER_SIGNS, locale, assetManager);
@@ -498,9 +497,6 @@ public class CoreConstants {
                 return Utils.getLocalForm(PREGNANCY_RISK, locale, assetManager);
             }
 
-            public static String getTetanusToxoid() {
-                return Utils.getLocalForm(TETANUS_TOXOID, locale, assetManager);
-            }
         }
 
         public static class PNC_HOME_VISIT {
@@ -933,5 +929,6 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
+    public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
 
 }
