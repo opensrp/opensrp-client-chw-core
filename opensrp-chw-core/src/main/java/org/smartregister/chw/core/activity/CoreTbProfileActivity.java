@@ -66,7 +66,6 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
     @Override
     public void setupViews() {
         super.setupViews();
-        Timber.e("Coze:: Setting up views");
         new UpdateFollowUpVisitButtonTask(getTbMemberObject()).execute();
     }
 
