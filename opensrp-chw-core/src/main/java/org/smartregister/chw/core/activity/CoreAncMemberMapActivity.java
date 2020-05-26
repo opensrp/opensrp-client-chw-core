@@ -165,7 +165,7 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     private LatLng extractUserLocation() {
         String location = getIntent().getStringExtra(CoreConstants.KujakuConstants.LAT_LNG);
         if (StringUtils.isBlank(location))
-            location = "-2.020055 33.8761233";
+            location = "-1.958955 33.7909233";
         String[] latLong = location.split(" ");
         double latitude = Double.parseDouble(latLong[0]);
         double longitude = Double.parseDouble(latLong[1]);
