@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.smartregister.chw.anc.domain.MemberObject;
-import org.smartregister.chw.core.domain.Child;
 import org.smartregister.repository.Repository;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class AncDaoTest extends AncDao {
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"date_created"});
         matrixCursor.addRow(new Object[]{"2019-09-24T03:00:00.000+03:00"});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
-        String dateCreated =  AncDao.getAncDateCreated("123456");
+        String dateCreated = AncDao.getAncDateCreated("123456");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertEquals(dateCreated, "2019-09-24T03:00:00.000+03:00");
     }
