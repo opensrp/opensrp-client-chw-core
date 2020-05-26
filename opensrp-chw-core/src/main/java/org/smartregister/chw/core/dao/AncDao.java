@@ -98,7 +98,7 @@ public class AncDao extends AlertDao {
         List<Integer> res = readData(sql, dataMap);
         return (res == null || res.size() < 1) ? 0 : res.get(0);
     }
-    private static boolean showTT(String baseEntityID){
+    public static boolean showTT(String baseEntityID){
         String sql = "SELECT Count(*) as count\n" +
                 "FROM visit_details vd\n" +
                 "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
