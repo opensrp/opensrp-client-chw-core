@@ -1,17 +1,24 @@
 package org.smartregister.chw.core.utils;
 
 import android.content.Context;
+import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONTokener;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.listener.OnRetrieveNotifications;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.util.JsonFormUtils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class ChwNotificationUtil {
@@ -65,8 +72,43 @@ public class ChwNotificationUtil {
                 return new JSONArray(jsonArrayString).join(",").replaceAll("\"", "").trim();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Timber.e(ex);
         }
         return jsonArrayString;
+    }
+
+    /**
+     * This method is used to retrieve notifications for a particular client
+     *
+     * @param hasReferrals            this action should only be performed for flavours with referrals
+     * @param baseEntityId            the clients unique identifier
+     * @param onRetrieveNotifications callback method invoked after retrieving the notifications
+     */
+    public static void retrieveNotifications(boolean hasReferrals, String baseEntityId,
+                                             OnRetrieveNotifications onRetrieveNotifications) {
+        if (hasReferrals)
+            Single.fromCallable(() ->
+                    ChwNotificationDao.getClientNotifications(baseEntityId))
+                    .subscribe(new SingleObserver<List<Pair<String, String>>>() {
+                        private Disposable disposable;
+
+                        @Override
+                        public void onSubscribe(Disposable disposable) {
+                            this.disposable = disposable;
+                        }
+
+                        @Override
+                        public void onSuccess(List<Pair<String, String>> notifications) {
+                            if (notifications.size() > 0) {
+                                onRetrieveNotifications.onReceivedNotifications(notifications);
+                                disposable.dispose();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            Timber.e(throwable, "Error retrieving notifications for %s", baseEntityId);
+                        }
+                    });
     }
 }
