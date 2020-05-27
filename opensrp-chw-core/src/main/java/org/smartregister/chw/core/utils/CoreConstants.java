@@ -14,6 +14,9 @@ public class CoreConstants {
     public static final String REFERRAL_PLAN_ID = "5270285b-5a3b-4647-b772-c0b3c52e2b71";
     public static final String DB_DATE_FORMAT = "yyyy-MM-dd";
     public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
+    public static final String FORMSUBMISSION_FIELD = "formsubmissionField";
+    public static final String TEXT = "text";
+    public static final String DATE = "date";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
 
@@ -34,9 +37,15 @@ public class CoreConstants {
         String ENTRY_POINT = "entry_point";
         String STATUS = "status";
         String LAST_MODIFIED = "last_modified";
+        String NOTIFICATION_ID = "n_id";
         String NOTIFICATION_TYPE = "notification_type";
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
+        String BASE_ENTITY_ID = "base_entity_id";
+        String PLAN_ID = "plan_id";
+        String BUSINESS_STATUS = "business_status";
+        String DETAILS = "details";
+        String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
     }
 
     public interface SERVICE_GROUPS {
@@ -120,12 +129,20 @@ public class CoreConstants {
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
+        public static final String EXPIRED_REFERRAL = "Expired Referral";
+        public static final String NOT_YET_DONE_REFERRAL = "Not Yet Done Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
         public static final String PNC_REGISTRATION = "PNC Registration";
         public static final String PNC_HOME_VISIT_NOT_DONE = "PNC Home Visit Not Done";
         public static final String PNC_HOME_VISIT_NOT_DONE_UNDO = "PNC Home Visit Not Done Undo";
         public static final String WASH_CHECK = "WASH check";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
+        public static final String REFERRAL_DISMISSAL = "Referral Dismissal";
+        public static final String ANC_NOTIFICATION_DISMISSAL = "ANC Notification Dismissal";
+        public static final String PNC_NOTIFICATION_DISMISSAL = "PNC Notification Dismissal";
+        public static final String MALARIA_NOTIFICATION_DISMISSAL = "Malaria Notification Dismissal";
+        public static final String SICK_CHILD_NOTIFICATION_DISMISSAL = "Sick Child Notification Dismissal";
+        public static final String FAMILY_PLANNING_NOTIFICATION_DISMISSAL = "Family Planning Notification Dismissal";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
@@ -134,6 +151,7 @@ public class CoreConstants {
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
+        public static final String FAMILY_PLANNING_UPDATE = "Family Planning Update";
     }
 
     public static final class EncounterType {
@@ -170,7 +188,10 @@ public class CoreConstants {
         private static final String CHILD_UNIFIED_REFERRAL_FORM = "referrals/child_referral_form";
         private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
         private static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
-        private static final String GENERAL_REFERRAL_FORM = "referrals/referral_form";
+        private static final String HIV_REFERRAL_FORM = "referrals/hiv_referral_form";
+        private static final String TB_REFERRAL_FORM = "referrals/tb_referral_form";
+        private static final String GBV_REFERRAL_FORM = "referrals/gbv_referral_form";
+        private static final String CHILD_GBV_REFERRAL_FORM = "referrals/child_gbv_referral_form";
         private static final String REFERRAL_FOLLOWUP_FORM = "referrals/referral_followup_neat_form";
         private static final String ROUTINE_HOUSEHOLD_VISIT = "routine_household_visit";
         private static final String FEMALE_FAMILY_PLANNING_REFERRAL_FORM = "female_fp_referral_form";
@@ -318,8 +339,20 @@ public class CoreConstants {
             return Utils.getLocalForm(ROUTINE_HOUSEHOLD_VISIT, locale, assetManager);
         }
 
-        public static String getGeneralReferralForm() {
-            return Utils.getLocalForm(GENERAL_REFERRAL_FORM, locale, assetManager);
+        public static String getHivReferralForm() {
+            return HIV_REFERRAL_FORM;
+        }
+
+        public static String getTbReferralForm() {
+            return TB_REFERRAL_FORM;
+        }
+
+        public static String getGbvReferralForm() {
+            return GBV_REFERRAL_FORM;
+        }
+
+        public static String getChildGbvReferralForm() {
+            return CHILD_GBV_REFERRAL_FORM;
         }
 
         public static String getReferralFollowupForm() {
@@ -402,6 +435,7 @@ public class CoreConstants {
             private static final String OBSERVATION_AND_ILLNESS = "anc_hv_observations";
             private static final String REMARKS_AND_COMMENTS = "anc_hv_remarks_and_comments";
             private static final String EARLY_CHILDHOOD_DEVELOPMENT = "early_childhood_development";
+            private static final String PREGNANCY_RISK = "anc_hv_pregnancy_risk_form";
 
             public static String getDangerSigns() {
                 return Utils.getLocalForm(DANGER_SIGNS, locale, assetManager);
@@ -457,6 +491,10 @@ public class CoreConstants {
 
             public static String getEarlyChildhoodDevelopment() {
                 return Utils.getLocalForm(EARLY_CHILDHOOD_DEVELOPMENT, locale, assetManager);
+            }
+
+            public static String getPregnancyRisk() {
+                return Utils.getLocalForm(PREGNANCY_RISK, locale, assetManager);
             }
         }
 
@@ -586,13 +624,19 @@ public class CoreConstants {
         public static final String PNC_REFERRAL = "ec_pnc_referral";
         public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
+        public static final String NOT_YET_DONE_REFERRAL = "ec_not_yet_done_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
         public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
+        public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String REFERRAL = "ec_referral";
+        public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
+        public static final String NOTIFICATION_UPDATE = "notification_update";
+        public static final String INDEPENDENT_CLIENT = "ec_independent_client";
     }
 
     public static final class INTENT_KEY {
@@ -770,8 +814,8 @@ public class CoreConstants {
             public static final String REFERRAL_TASK = "referral_task";
             public static final String REFERRAL_TASK_PREVIOUS_STATUS = "referral_task_previous_status";
             public static final String REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS = "referral_task_previous_business_status";
-
-
+            public static final String NOTIFICATION_DATE_CREATED = "notification_date_created";
+            public static final String NOTIFICATION_DISMISSAL_DATE = "notification_dismissal_date";
         }
     }
 
@@ -848,6 +892,10 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
+        public static final String SUSPECTED_HIV= "Suspected HIV";
+        public static final String SUSPECTED_TB= "Suspected TB";
+        public static final String SUSPECTED_GBV= "Suspected GBV";
+        public static final String SUSPECTED_CHILD_GBV= "Suspected Child GBV";
     }
 
     public static final class REGISTER_TYPE {
@@ -856,7 +904,8 @@ public class CoreConstants {
         public static final String PNC = "PNC";
         public static final String MALARIA = "Malaria";
         public static final String FAMILY_PLANNING = "Family Planning";
-        public static final String OTHER = "OTHER";
+        public static final String OTHER = "Other";
+        public static final String INDEPENDENT = "Independent";
     }
 
     public static final class KeyIndicatorsUtil {
@@ -869,6 +918,15 @@ public class CoreConstants {
     public static class HfStockUsageUtil {
         public static final String STOCK_NAME = "stockName";
         public static final String PROVIDER_NAME = "providerName";
+        public static final String STOCK_USAGE_TABLE_NAME = "stock_usage_report";
+        public static final String PROVIDER_TYPE = "stock_usage_providers";
 
     }
+
+    public static class HfInAppUtil {
+        public static final String IN_APP_TABLE_NAME = "monthly_tallies";
+        public static final String PROVIDER_TYPE = "in_app_providers";
+    }
+
+
 }

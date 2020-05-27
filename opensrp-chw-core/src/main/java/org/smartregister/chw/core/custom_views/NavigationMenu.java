@@ -244,7 +244,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, HIA2ReportsActivity.class);
+                Intent intent = menuFlavor.getServiceReportIntent(activity);
                 activity.startActivity(intent);
             });
         }
@@ -255,7 +255,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
             rlIconStockReport.setVisibility(View.VISIBLE);
             rlIconStockReport.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, CoreStockInventoryReportActivity.class);
+                Intent intent = menuFlavor.getStockReportIntent(activity);
                 activity.startActivity(intent);
             });
         }

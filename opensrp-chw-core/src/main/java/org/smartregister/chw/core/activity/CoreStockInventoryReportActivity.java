@@ -34,7 +34,8 @@ import java.util.Map;
 
 public class CoreStockInventoryReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
-    private RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
+    protected CustomFontTextView toolBarTextView;
     public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
 
     public static List<String> getItems() {
@@ -63,7 +64,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         return stockUsageItemModelsList;
     }
 
-    private void reloadRecycler(MonthStockUsageModel selected) {
+    protected void reloadRecycler(MonthStockUsageModel selected) {
         String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 
@@ -102,7 +103,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         });
 
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -115,7 +116,6 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         }
         toolbar.setNavigationOnClickListener(v -> finish());
         toolBarTextView.setText(getString(R.string.stock_usage_report));
-
         toolBarTextView.setOnClickListener(v -> finish());
         appBarLayout = findViewById(R.id.app_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

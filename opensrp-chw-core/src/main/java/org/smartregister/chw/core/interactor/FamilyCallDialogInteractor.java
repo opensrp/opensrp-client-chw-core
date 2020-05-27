@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 import org.smartregister.chw.core.model.FamilyCallDialogModel;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -48,9 +50,9 @@ public class FamilyCallDialogInteractor implements FamilyCallDialogContract.Inte
                 final FamilyCallDialogModel headModel = prepareModel(context, familyHeadID, primaryCaregiverID, true);
                 appExecutors.mainThread().execute(() -> presenter.updateHeadOfFamily((headModel == null || headModel.getPhoneNumber() == null) ? null : headModel));
             }
-
-            if (familyHeadID != null && !familyHeadID.equals(primaryCaregiverID) && primaryCaregiverID != null) {
-                final FamilyCallDialogModel careGiverModel = prepareModel(context, familyHeadID, primaryCaregiverID, false);
+            boolean independentClient = isIndependentClient(client);
+            if (independentClient || familyHeadID != null && !familyHeadID.equals(primaryCaregiverID) && primaryCaregiverID != null) {
+                final FamilyCallDialogModel careGiverModel = prepareModel(context, familyHeadID, primaryCaregiverID, independentClient);
                 appExecutors.mainThread().execute(() -> presenter.updateCareGiver((careGiverModel == null || careGiverModel.getPhoneNumber() == null) ? null : careGiverModel));
 
             }
@@ -65,11 +67,8 @@ public class FamilyCallDialogInteractor implements FamilyCallDialogContract.Inte
         return Utils.context().commonrepository(tableName);
     }
 
-    private FamilyCallDialogModel prepareModel(
-            Context context,
-            String familyHeadID, String primaryCaregiverID,
-            Boolean isHead
-    ) {
+    private FamilyCallDialogModel prepareModel(Context context, String familyHeadID,
+                                               String primaryCaregiverID, Boolean isHead) {
 
         if (primaryCaregiverID.equalsIgnoreCase(familyHeadID) && !isHead) {
             return null;
@@ -87,6 +86,16 @@ public class FamilyCallDialogInteractor implements FamilyCallDialogContract.Inte
             String firstName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, false);
             String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, false);
             String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, false);
+            String otherPhoneNumber = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.OTHER_PHONE_NUMBER, false);
+            String primaryCareGiverName = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.PRIMARY_CAREGIVER_NAME, false);
+
+            boolean independentClient = isIndependentClient(client);
+            model.setIndependent(independentClient);
+
+            if(independentClient){
+                model.setOtherContact(Pair.create(primaryCareGiverName, otherPhoneNumber));
+            }
+
             model.setPhoneNumber(phoneNumber);
             model.setName(String.format("%s %s", String.format("%s %s", firstName, middleName).trim(), lastName));
 
@@ -97,6 +106,11 @@ public class FamilyCallDialogInteractor implements FamilyCallDialogContract.Inte
         }
 
         return model;
+    }
+
+    private boolean isIndependentClient(CommonPersonObjectClient client){
+        String entityType = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.ENTITY_TYPE, false);
+        return CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT.equalsIgnoreCase(entityType);
     }
 
 }

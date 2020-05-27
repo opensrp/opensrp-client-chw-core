@@ -207,6 +207,29 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         }
     }
 
+    @Override
+    public MemberObject getMemberObject(String baseEntityID) {
+        return PNCDao.getMember(baseEntityID);
+    }
+
+    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
+
+    protected abstract CorePncMemberProfileInteractor getPncMemberProfileInteractor();
+
+    protected abstract void removePncMember();
+
+    protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
+
+    protected abstract void startMalariaRegister();
+
+    protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
+
+    protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void getRemoveBabyMenuItem(MenuItem item);
+
     private class UpdateMalariaFollowUpStatusTask extends AsyncTask<Void, Void, Void> {
         private final Menu menu;
         private final String baseEntityId;
@@ -232,23 +255,5 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             }
         }
     }
-
-    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
-
-    protected abstract CorePncMemberProfileInteractor getPncMemberProfileInteractor();
-
-    protected abstract void removePncMember();
-
-    protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
-
-    protected abstract void startMalariaRegister();
-
-    protected abstract void startFpRegister();
-
-    protected abstract void startFpChangeMethod();
-
-    protected abstract void startMalariaFollowUpVisit();
-
-    protected abstract void getRemoveBabyMenuItem(MenuItem item);
 
 }

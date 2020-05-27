@@ -1,19 +1,19 @@
 package org.smartregister.chw.core.presenter;
 
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.BaseReferralNotificationFragmentContract;
-import org.smartregister.chw.core.model.BaseReferralNotificationModel;
+import org.smartregister.chw.core.contract.BaseChwNotificationFragmentContract;
+import org.smartregister.chw.core.model.BaseChwNotificationModel;
 
 import java.lang.ref.WeakReference;
 
-public abstract class BaseReferralNotificationFragmentPresenter implements
-        BaseReferralNotificationFragmentContract.Presenter {
+public abstract class BaseChwNotificationFragmentPresenter implements
+        BaseChwNotificationFragmentContract.Presenter {
 
-    private WeakReference<BaseReferralNotificationFragmentContract.View> viewReference;
-    protected BaseReferralNotificationModel model;
+    private WeakReference<BaseChwNotificationFragmentContract.View> viewReference;
+    protected BaseChwNotificationModel model;
 
-    public BaseReferralNotificationFragmentPresenter(BaseReferralNotificationFragmentContract.View view,
-                                                     BaseReferralNotificationModel model) {
+    public BaseChwNotificationFragmentPresenter(BaseChwNotificationFragmentContract.View view,
+                                                BaseChwNotificationModel model) {
         this.viewReference = new WeakReference<>(view);
         this.model = model;
     }
@@ -33,7 +33,7 @@ public abstract class BaseReferralNotificationFragmentPresenter implements
         getView().filterandSortInInitializeQueries();
     }
 
-    protected BaseReferralNotificationFragmentContract.View getView() {
+    protected BaseChwNotificationFragmentContract.View getView() {
         if (viewReference != null) {
             return viewReference.get();
         } else {

@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ReferralTaskDao;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -341,4 +342,27 @@ public class CoreReferralUtils {
         }
     }
 
+    /**
+     * This method is used by CHW to complete a referral task by marking it as done.
+     */
+    public static void completeClosedReferralTasks() {
+        List<Task> tasksToBeCompleted = ReferralTaskDao.getToBeCompletedReferralTasks();
+        if (tasksToBeCompleted != null) {
+            Timber.d("Tasks to be completed size: %s ", tasksToBeCompleted.size());
+            for (Task task : tasksToBeCompleted) {
+                completeTask(task, true);
+            }
+        }
+    }
+
+    public static void completeTask(Task currentTask, boolean endTask) {
+        DateTime now = new DateTime();
+        if (endTask) {
+            currentTask.setStatus(Task.TaskStatus.COMPLETED);
+        }
+        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.COMPLETE);
+        currentTask.setLastModified(now);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+    }
 }

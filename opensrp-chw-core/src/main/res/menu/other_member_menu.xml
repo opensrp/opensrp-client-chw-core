@@ -9,6 +9,27 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_location_info"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/location_info"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_hiv_registration"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/hiv_registration"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_tb_registration"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/tb_registration"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_anc_registration"
         android:enabled="true"
         android:title="@string/anc_registration"
@@ -65,6 +86,4 @@
         android:visible="false"
         android:title="@string/pregnancy_confirmation"
         app:showAsAction="never" />
-
-
 </menu>

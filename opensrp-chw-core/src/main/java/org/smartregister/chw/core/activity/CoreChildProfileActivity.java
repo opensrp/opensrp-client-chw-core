@@ -260,19 +260,14 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-        if (appBarLayoutScrollRange == -1) {
-            appBarLayoutScrollRange = appBarLayout.getTotalScrollRange();
-        }
+        appBarLayoutScrollRange = (appBarLayoutScrollRange == -1) ? appBarLayout.getTotalScrollRange() : appBarLayoutScrollRange;
         if (appBarLayoutScrollRange + verticalOffset == 0) {
-
             textViewTitle.setText(patientName);
             appBarTitleIsShown = true;
         } else if (appBarTitleIsShown) {
             setUpToolbar();
             appBarTitleIsShown = false;
         }
-
     }
 
     public void setUpToolbar() {
@@ -281,7 +276,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         } else {
             textViewTitle.setText(isStartedFromReferrals ? getString(R.string.return_to_task_details) : getString(R.string.return_to_all_children));
         }
-
     }
 
     /**
@@ -399,8 +393,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     @Override
     public void setVisitNotDoneThisMonth(boolean withinEditPeriod) {
         openVisitMonthView();
-        textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
-        textViewUndo.setText(getString(R.string.undo));
+        textViewNotVisitMonth.setText(R.string.not_visiting_this_month);
+        textViewUndo.setText(R.string.undo);
         textViewUndo.setVisibility(withinEditPeriod ? View.VISIBLE : View.GONE);
         imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
@@ -416,7 +410,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             textViewLastVisit.setText(getString(R.string.last_visit_40_days_ago, days));
             viewLastVisitRow.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -443,7 +436,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutMostDueOverdue.setVisibility(View.VISIBLE);
         viewMostDueRow.setVisibility(View.VISIBLE);
         textViewNameDue.setText(CoreChildUtils.fromHtml(getString(R.string.vaccine_service_upcoming, serviceName, dueDate)));
-
     }
 
     @Override
@@ -515,7 +507,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutNotRecordView.setVisibility(View.VISIBLE);
         layoutRecordButtonDone.setVisibility(View.GONE);
         layoutRecordView.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -610,16 +601,10 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             onBackPressed();
             return true;
         } else if (i == R.id.action_registration) {
-            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
-            if (profilePresenter != null) {
-                profilePresenter.startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), profilePresenter.getChildClient());
-            }
+            presenter().startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), presenter().getChildClient());
             return true;
         } else if (i == R.id.action_sick_child_form) {
-            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
-            if (profilePresenter != null) {
-                profilePresenter.startSickChildForm(profilePresenter.getChildClient());
-            }
+            presenter().startSickChildForm(presenter().getChildClient());
             return true;
         }
         return super.onOptionsItemSelected(item);
