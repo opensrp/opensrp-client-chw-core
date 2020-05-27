@@ -34,7 +34,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion androidBuildToolsVersion
 
-    //defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
+    defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -271,7 +271,7 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
 
-//apply from: '../maven.gradle'
+apply from: '../maven.gradle'
 
 task javadoc(type: Javadoc) {
     failOnError false
