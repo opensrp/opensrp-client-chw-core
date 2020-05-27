@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AncDao extends AlertDao {
@@ -96,5 +97,35 @@ public class AncDao extends AlertDao {
 
         List<Integer> res = readData(sql, dataMap);
         return (res == null || res.size() < 1) ? 0 : res.get(0);
+    }
+    public static boolean showTT(String baseEntityID){
+        String sql = "SELECT count(*) as count\n" +
+                "FROM visit_details vd\n" +
+                "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
+                "WHERE vd.visit_key = 'imm_medicine_given'\n" +
+                "AND vd.human_readable_details = 'Tetanus toxoid (TT)'\n" +
+                "AND v.base_entity_id = '" + baseEntityID + "'";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        return res == null || res.get(0) < 2;
+    }
+
+    public static List<String> getTestDone(String baseEntityID) {
+        String sql = "SELECT vd.human_readable_details\n" +
+                "FROM visit_details vd\n" +
+                "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
+                "WHERE vd.visit_key = 'tests_done'\n" +
+                "AND ((vd.human_readable_details != 'Haemoglobin level') AND (vd.human_readable_details != 'None') AND (vd.human_readable_details != 'Other test'))\n" +
+                "AND v.base_entity_id = '" + baseEntityID + "'";
+
+        DataMap<String> dataMap = c -> getCursorValue(c, "human_readable_details");
+
+        List<String> humanReadableDetails = readData(sql, dataMap);
+        if (humanReadableDetails != null)
+            return humanReadableDetails;
+
+        return new ArrayList<>();
     }
 }
