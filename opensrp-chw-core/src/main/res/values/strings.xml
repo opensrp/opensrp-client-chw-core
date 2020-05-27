@@ -674,5 +674,6 @@
 <!--    TB Register-->
     <string name="tb_register">TB Register</string>
     <string name="routine_tb_visit"> · Routine TB Visit</string>
+    <string name="tb_close_case">Close TB case</string>
 
 </resources>

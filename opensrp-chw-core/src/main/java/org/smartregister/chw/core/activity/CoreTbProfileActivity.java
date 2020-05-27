@@ -86,18 +86,15 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
             startFormForEdit(R.string.registration_info,
                     CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
             return true;
-        } else if (itemId == R.id.action_remove_member) {
-            removeMember();
-            return true;
-        } else if (itemId == R.id.action_fp_change) {
-            startTbRegistrationActivity();
+        } else if (itemId == R.id.action_close_tb_case) {
+            startTbCaseClosure();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.family_planning_member_profile_menu, menu);
+        getMenuInflater().inflate(R.menu.tb_profile_menu, menu);
         return true;
     }
 
@@ -197,7 +194,7 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     protected abstract void removeMember();
 
-    protected abstract void startTbRegistrationActivity();
+    protected abstract void startTbCaseClosure();
 
     public void startFormForEdit(Integer titleResource, String formName) {
 

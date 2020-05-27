@@ -89,9 +89,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
             startFormForEdit(R.string.registration_info,
                     CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
             return true;
-        } else if (itemId == R.id.action_remove_member) {
-            removeMember();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -99,7 +96,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.family_planning_member_profile_menu, menu);
+        getMenuInflater().inflate(R.menu.hiv_profile_menu, menu);
         return true;
     }
 

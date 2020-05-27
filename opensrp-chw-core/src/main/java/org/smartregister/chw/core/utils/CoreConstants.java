@@ -208,6 +208,7 @@ public class CoreConstants {
         private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
         private static final String TB_REGISTRATION = "tb_registration";
         private static final String TB_FOLLOWUP_VISIT= "tb_followup_visit";
+        private static final String TB_CASE_CLOSURE = "tb_case_closure";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -389,6 +390,10 @@ public class CoreConstants {
 
         public static String getTbFollowupVisit() {
             return TB_FOLLOWUP_VISIT;
+        }
+
+        public static String getTbCaseClosure() {
+            return TB_CASE_CLOSURE;
         }
 
         public static class CHILD_HOME_VISIT {
