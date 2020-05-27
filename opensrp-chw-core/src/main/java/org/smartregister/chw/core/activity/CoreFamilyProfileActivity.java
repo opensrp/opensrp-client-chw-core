@@ -51,6 +51,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.TITLE_VIEW_TEXT;
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
+import static org.smartregister.family.util.DBConstants.KEY.LAST_NAME;
 
 public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivity implements FamilyProfileExtendedContract.View {
     protected String familyBaseEntityId;
@@ -332,6 +334,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, patient);
         intent.putExtra(Constants.INTENT_KEY.FAMILY_HEAD, getFamilyHead());
         intent.putExtra(Constants.INTENT_KEY.PRIMARY_CAREGIVER, getPrimaryCaregiver());
+        passToolbarTitle(this, intent);
         startActivity(intent);
     }
 
@@ -347,9 +350,11 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, true);
+        MemberObject memberObject = new MemberObject(patient);
+        memberObject.setFamilyName(Utils.getValue(patient.getColumnmaps(), LAST_NAME, false));
+        passToolbarTitle(this, intent);
         intent.putExtra(Constants.INTENT_KEY.BASE_ENTITY_ID, patient.getCaseId());
-        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, new MemberObject(patient));
+        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject );
         startActivity(intent);
     }
 
@@ -372,6 +377,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, patient.entityId());
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, patient);
         intent.putExtra(TITLE_VIEW_TEXT, String.format(getString(org.smartregister.chw.core.R.string.return_to_family_name), ""));
+        passToolbarTitle(this, intent);
         return intent;
     }
 

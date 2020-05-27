@@ -3,11 +3,15 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
@@ -35,9 +39,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActivity implements
         FamilyOtherMemberProfileExtendedContract.View, CoreMalariaProfileContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
     private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
 
     public interface OnMemberTypeLoadedListener {
@@ -64,8 +73,21 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     }
 
     @Override
-    protected void onCreation() {
-        super.onCreation();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
+    }
+
+    @Override
+    protected void setupViews() {
+        super.setupViews();
+        initializeNotificationReferralRecyclerView();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -135,6 +157,10 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
             default:
                 break;
         }
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
     }
 
     protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();

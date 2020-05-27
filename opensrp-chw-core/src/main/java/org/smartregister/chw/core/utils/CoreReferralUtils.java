@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.utils;
 
-import android.app.Activity;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
@@ -312,15 +311,6 @@ public class CoreReferralUtils {
 
     public static CommonRepository getCommonRepository(String tableName) {
         return Utils.context().commonrepository(tableName);
-    }
-
-    public static boolean checkIfStartedFromReferrals(Activity startActivity) {
-        boolean startedFromReferrals = false;
-        String referrerActivity = startActivity.getLocalClassName();
-        if ("activity.ReferralTaskViewActivity".equals(referrerActivity)) {
-            startedFromReferrals = true;
-        }
-        return startedFromReferrals;
     }
 
     @NotNull

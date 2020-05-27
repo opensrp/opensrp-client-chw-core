@@ -5,9 +5,11 @@ import android.content.Context;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.listener.OnRetrieveNotifications;
 
 @RunWith(RobolectricTestRunner.class)
 public class ChwNotificationUtilTest {
@@ -38,5 +40,12 @@ public class ChwNotificationUtilTest {
         Assert.assertEquals(CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_sick_child_follow_up)));
         Assert.assertEquals(CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_anc_danger_signs)));
         Assert.assertEquals(CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL, ChwNotificationUtil.getNotificationDismissalEventType(context, context.getString(R.string.notification_type_malaria_follow_up)));
+    }
+
+    @Test
+    public void shouldRetrieveNotificationsForClient() {
+        OnRetrieveNotifications onRetrieveNotifications = Mockito.mock(OnRetrieveNotifications.class);
+        ChwNotificationUtil.retrieveNotifications(true, "some-base-entity-id", onRetrieveNotifications);
+        Mockito.verify(onRetrieveNotifications, Mockito.never()).onReceivedNotifications(Mockito.anyList());
     }
 }
