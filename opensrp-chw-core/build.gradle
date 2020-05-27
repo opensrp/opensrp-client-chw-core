@@ -96,7 +96,7 @@ tasks.withType(Test) {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    api('org.smartregister:opensrp-client-native-form:1.9.0-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:1.9.1-ALPHA-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -122,7 +122,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-family:1.2.33-ALPHA2-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-family:1.2.33-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
