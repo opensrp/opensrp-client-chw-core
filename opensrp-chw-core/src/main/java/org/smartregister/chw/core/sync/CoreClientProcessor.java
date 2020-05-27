@@ -7,12 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
 import org.smartregister.chw.core.repository.CommunityResponderRepository;
+import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
+import org.smartregister.chw.core.utils.ReportUtils;
 import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
@@ -48,7 +51,6 @@ import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
-
 
 public class CoreClientProcessor extends ClientProcessorForJava {
 
@@ -237,7 +239,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
 
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-
                 List<Obs> observations = event.getObs();
                 for (Obs obs : observations) {
                     if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
@@ -256,6 +257,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
                 clientProcessCommunityResponderEvent(event);
+            case CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT:
+                clientProcessInAppReportingEvent(event);
+                break;
+            case CoreConstants.EventType.HF_IN_APP_REPORT_EVENT:
+                clientProcessHfInAppReportingEvent(event);
                 break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
@@ -298,51 +304,36 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    private StockUsage getStockUsageFromObs(List<Obs> stockObs) {
-        StockUsage usage = new StockUsage();
-        for (Obs obs : stockObs) {
-            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_NAME)) {
-                String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
-                    usage.setStockName(value);
-                    continue;
-                } else
-                    return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_YEAR)) {
-                String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
-                    usage.setYear(value);
-                    continue;
-                } else
-                    return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_MONTH)) {
-                String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
-                    usage.setMonth(value);
-                    continue;
-                } else
-                    return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE)) {
-                String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null) {
-                    usage.setStockUsage(value);
-                    continue;
-                } else
-                    return null;
-            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_PROVIDER)) {
-                String value = StockUsageReportUtils.getObsValue(obs);
-                if (value != null)
-                    usage.setProviderId(value);
-                else
-                    return null;
-            }
+    public boolean saveReportDateSent() {
+        return true;
+    }
+
+    public boolean processHfReportEvents() {
+        return false;
+    }
+
+    private void clientProcessInAppReportingEvent(Event event) {
+        List<Obs> reportObs = event.getObs();
+        MonthlyTally report = ReportUtils.getMonthlyTallyFromObs(reportObs);
+        if (report != null) {
+            MonthlyTalliesRepository monthlyTalliesRepository = CoreChwApplication.getInstance().monthlyTalliesRepository();
+            String formSubmissionId = event.getFormSubmissionId();
+            report.setSubmissionId(formSubmissionId);
+            report.setProviderId(event.getProviderId());
+            if (!saveReportDateSent() && event.getEventType().equals(CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT))
+                report.setDateSent(null);
+            monthlyTalliesRepository.save(report);
         }
-        return usage;
+    }
+
+    private void clientProcessHfInAppReportingEvent(Event event) {
+        if (processHfReportEvents())
+            clientProcessInAppReportingEvent(event);
     }
 
     private void clientProcessStockEvent(Event event) {
         List<Obs> stockObs = event.getObs();
-        StockUsage usage = getStockUsageFromObs(stockObs);
+        StockUsage usage = ReportUtils.getStockUsageFromObs(stockObs);
         if (usage != null) {
             StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
             String formSubmissionId = event.getFormSubmissionId();

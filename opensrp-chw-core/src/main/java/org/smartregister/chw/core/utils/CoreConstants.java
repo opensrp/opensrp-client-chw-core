@@ -147,13 +147,15 @@ public class CoreConstants {
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
         public static final String STOCK_USAGE_REPORT = "Stock Usage Report";
+        public static final String CHW_IN_APP_REPORT_EVENT = "CHW Monthly tallies Report";
+        public static final String HF_IN_APP_REPORT_EVENT = "HF Monthly tallies Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
         public static final String COMMUNITY_RESPONDER_REGISTRATION = "Community Responder Registration";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
         public static final String FAMILY_PLANNING_UPDATE = "Family Planning Update";
-        public static final String REMOVE_COMMUNITY_RESPONDER= "Remove Community Responder";
+        public static final String REMOVE_COMMUNITY_RESPONDER = "Remove Community Responder";
     }
 
     public static final class EncounterType {
@@ -165,7 +167,6 @@ public class CoreConstants {
      */
     public static class JSON_FORM {
         public static final String BIRTH_CERTIFICATION = "birth_certification";
-
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
@@ -173,11 +174,11 @@ public class CoreConstants {
         public static final String CHILD_SICK_FORM = "child_sick_form";
         public static final String FAMILY_DETAILS_REGISTER = "family_details_register";
         public static final String FAMILY_DETAILS_REMOVE_MEMBER = "family_details_remove_member";
-
         public static final String FAMILY_DETAILS_REMOVE_CHILD = "family_details_remove_child";
         public static final String FAMILY_DETAILS_REMOVE_FAMILY = "family_details_remove_family";
         public static final String HOME_VISIT_COUNSELLING = "routine_home_visit";
         public static final String COMMUNITY_RESPONDER_REGISTRATION_FORM = "community_responder_registration";
+        public static final String IN_APP_REPORT_FORM = "in_app_monthly_tallies_report";
         private static final String ANC_REGISTRATION = "anc_member_registration";
         private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
         private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
@@ -628,7 +629,8 @@ public class CoreConstants {
         public static final String NOT_YET_DONE_REFERRAL = "ec_not_yet_done_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
-        public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
+        public static final String STOCK_USAGE_REPORT = "stock_usage_report";
+        public static final String MONTHLY_TALLIES_REPORT = "monthly_tallies";
         public static final String SICK_CHILD_FOLLOW_UP = "ec_sick_child_followup";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ec_anc_danger_signs_outcome";
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
@@ -744,6 +746,12 @@ public class CoreConstants {
         public static final String RESPONDER_NAME = "responder_name";
         public static final String RESPONDER_PHONE_NUMBER = "responder_phone_number";
         public static final String RESPONDER_GPS = "responder_gps";
+        public static final String IN_APP_REPORT_INDICATOR_CODE = "indicator_code";
+        public static final String IN_APP_REPORT_MONTH = "month";
+        public static final String IN_APP_REPORT_EDITED = "edited";
+        public static final String IN_APP_REPORT_DATE_SENT = "date_sent";
+        public static final String IN_APP_REPORT_CREATED_AT = "created_at";
+        public static final String IN_APP_REPORT_VALUE = "value";
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
