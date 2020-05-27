@@ -380,6 +380,10 @@
     <string name="ga_label">GA</string>
     <string name="cancel">Cancel</string>
     <string name="referral_day">Referral %s</string>
+    <string name="care_giver_prefix">CG: %s</string>
+    <string name="child_prefix">Child: %s</string>
+    <string name="children_prefix">Children: %s</string>
+    <string name="return_to">Return to %s</string>
 
     <string name="phone_not_provided">Phone not provided</string>
     <string name="anc_danger_sign_prefix">ANC Danger Signs; Symptoms: %s</string>
@@ -461,6 +465,7 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Return to All Clients</string>
+    <string name="return_to_notification_details">Return to Notification Details</string>
 
     <string name="indicator">Indicator</string>
     <string name="value">Value</string>
@@ -691,4 +696,8 @@
     <string name="tb_registration">TB registration</string>
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>
+
+    <!-- Notification row -->
+    <string name="notification_for">Notification for %1$s</string>
+    <string name="full_notification_info">View full notification info</string>
 </resources>
