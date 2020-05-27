@@ -34,7 +34,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion androidBuildToolsVersion
 
-    defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
+    //defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -96,7 +96,7 @@ tasks.withType(Test) {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
-    api('org.smartregister:opensrp-client-native-form:1.9.1-ALPHA-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:1.9.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -271,7 +271,7 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
 
-apply from: '../maven.gradle'
+//apply from: '../maven.gradle'
 
 task javadoc(type: Javadoc) {
     failOnError false
