@@ -63,7 +63,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_sick_child_followup.visit_date\n" +
                         "\n" +
                         "FROM ec_sick_child_followup\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         inner join (select fm.base_entity_id, fm.first_name, fm.middle_name, fm.last_name from ec_family_member fm) cg on ec_family.primary_caregiver = cg.base_entity_id\n" +
                         "\n" +
@@ -83,7 +83,7 @@ public class ChwNotificationDao extends AbstractDao {
                         table + ".action_taken,\n" +
                         table + ".visit_date\n" +
                         "FROM " + table + "\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
@@ -104,7 +104,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_malaria_followup_hf.visit_date\n" +
                         "\n" +
                         "FROM ec_malaria_followup_hf\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
@@ -123,7 +123,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_family_planning_update.fp_reg_date AS visit_date\n" +
                         "\n" +
                         "FROM ec_family_planning_update\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
