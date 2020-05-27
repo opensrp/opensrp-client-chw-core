@@ -40,6 +40,7 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.helper.ImageRenderHelper;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import timber.log.Timber;
 
 /**
  * @author rkodev
@@ -51,6 +52,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
 
     private CoreChildProfileActivity activity;
     private ActivityController<CoreChildProfileActivity> controller;
+    private  MemberObject memberObject;
 
     @Before
     public void setUp() {
@@ -67,24 +69,15 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
 
         controller = Robolectric.buildActivity(CoreChildProfileActivity.class).create().start();
         activity = controller.get();
-    }
-
-    @After
-    public void tearDown() {
-        try {
-            activity.finish();
-            controller.pause().stop().destroy(); //destroy controller if we can
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        memberObject = Mockito.mock(MemberObject.class);
+        memberObject.setBaseEntityId("some-base-entity-id");
+        memberObject.setFamilyName("Some Family Name");
     }
 
     @Test
     public void testStartMe() {
         Activity activity = Mockito.mock(Activity.class);
-        MemberObject memberObject = Mockito.mock(MemberObject.class);
-
-        CoreChildProfileActivity.startMe(activity, false, memberObject, activity.getClass());
+        CoreChildProfileActivity.startMe(activity, memberObject, activity.getClass());
         Mockito.verify(activity).startActivity(Mockito.any());
     }
 
@@ -135,6 +128,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetUpViews() {
         activity = Mockito.spy(activity);
+        activity.memberObject = memberObject;
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -145,7 +139,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
                 "textViewUndo", "imageViewCrossChild", "imageViewCross", "layoutRecordView", "layoutNotRecordView", "layoutLastVisitRow",
                 "textViewMedicalHistory", "layoutMostDueOverdue", "textViewNameDue", "layoutFamilyHasRow", "textViewFamilyHas",
                 "layoutRecordButtonDone", "viewLastVisitRow", "viewMostDueRow", "viewFamilyRow", "progressBar", "viewDividerSickRow",
-                "layoutSickVisit", "textViewSickChild", "textViewSickChildArrow"
+                "layoutSickVisit", "textViewSickChild"
         };
         for (String view : views) {
             Assert.assertNotNull(ReflectionHelpers.getField(activity, view));
@@ -170,6 +164,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testOnOffsetChanged() {
         activity = Mockito.spy(activity);
+        activity.memberObject = memberObject;
         TextView textViewTitle = Mockito.mock(TextView.class);
         ReflectionHelpers.setField(activity, "textViewTitle", textViewTitle);
 
@@ -614,5 +609,15 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
 
         activity.onActivityResult(JsonFormUtils.REQUEST_CODE_GET_JSON, resultCode, data);
         Mockito.verify(presenter).processJson(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+            controller.pause().stop().destroy(); //destroy controller if we can
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 }

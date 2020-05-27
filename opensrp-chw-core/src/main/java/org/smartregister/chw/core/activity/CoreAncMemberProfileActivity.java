@@ -2,10 +2,16 @@ package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jeasy.rules.api.Rules;
 import org.joda.time.LocalDate;
@@ -29,6 +35,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.core.utils.VisitSummary;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.JsonFormUtils;
@@ -40,11 +47,22 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileActivity implements AncMemberProfileContract.View {
 
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
     protected boolean hasDueServices = false;
     DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
     private LocalDate ancCreatedDate;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,6 +123,11 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         return (CoreAncMemberProfilePresenter) presenter;
     }
 
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
+    }
+
     @Override
     protected void registerPresenter() {
         presenter = new CoreAncMemberProfilePresenter(this, new CoreAncMemberProfileInteractor(this), memberObject);
@@ -120,6 +143,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
 
     @Override
     public abstract void openFamilyDueServices();
+
 
     @Override
     public void setFamilyStatus(AlertStatus status) {
@@ -206,7 +230,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     @Override
     public void setupViews() {
         super.setupViews();
-
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
         Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
         if (lastVisit != null) {
             boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
@@ -236,6 +260,12 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
             getButtonStatus();
         }
 
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

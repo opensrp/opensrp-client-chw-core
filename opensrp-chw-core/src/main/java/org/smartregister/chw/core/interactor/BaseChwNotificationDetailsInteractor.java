@@ -5,25 +5,17 @@ import android.content.Context;
 import android.util.Pair;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import org.smartregister.chw.anc.util.JsonFormUtils;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
-import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.clientandeventmodel.Event;
-import org.smartregister.clientandeventmodel.Obs;
-import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.util.Utils;
 import org.smartregister.opd.utils.OpdUtils;
-import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.sync.helper.ECSyncHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -141,8 +133,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     }
 
     private List<String> setNotificationRecordDetails(NotificationRecord record) {
-        presenter.setClientBaseEntityId(record.getClientBaseEntityId());
-
         Pair<String, String> notificationDatesPair = null;
         String notificationDate = record.getNotificationDate();
         try {

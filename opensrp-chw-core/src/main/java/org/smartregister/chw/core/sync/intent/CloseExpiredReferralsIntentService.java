@@ -68,37 +68,46 @@ public class CloseExpiredReferralsIntentService extends IntentService {
             String focus = task.get(ChwDBConstants.TaskTable.FOCUS);
             if (focus != null && startDate != null) {
                 Calendar expiredCalendar = Calendar.getInstance();
-                if (focus.equals(TASKS_FOCUS.ANC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.PNC_DANGER_SIGNS) || focus.equals(TASKS_FOCUS.SUSPECTED_MALARIA)) {
-                    expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
-                    expiredCalendar.add(Calendar.HOUR_OF_DAY, 24);
-                    checkIfExpired(expiredCalendar, task);
-                } else if (focus.equals(TASKS_FOCUS.SICK_CHILD) || focus.equals(TASKS_FOCUS.FP_SIDE_EFFECTS)) {
-                    Calendar referralNotYetDoneCalendar = Calendar.getInstance();
-                    referralNotYetDoneCalendar.setTimeInMillis(Long.parseLong(startDate));
-                    referralNotYetDoneCalendar.add(Calendar.DAY_OF_MONTH, 3);
+                switch (focus) {
+                    case TASKS_FOCUS.ANC_DANGER_SIGNS:
+                    case TASKS_FOCUS.PNC_DANGER_SIGNS:
+                    case TASKS_FOCUS.SUSPECTED_MALARIA:
+                        expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
+                        expiredCalendar.add(Calendar.HOUR_OF_DAY, 24);
+                        checkIfExpired(expiredCalendar, task);
+                        break;
+                    case TASKS_FOCUS.SICK_CHILD:
+                    case TASKS_FOCUS.FP_SIDE_EFFECTS:
+                        Calendar referralNotYetDoneCalendar = Calendar.getInstance();
+                        referralNotYetDoneCalendar.setTimeInMillis(Long.parseLong(startDate));
+                        referralNotYetDoneCalendar.add(Calendar.DAY_OF_MONTH, 3);
 
-                    expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
-                    expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
+                        expiredCalendar.setTimeInMillis(Long.parseLong(startDate));
+                        expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
-                    boolean isExpired = checkIfExpired(expiredCalendar, task);
-                    if (Objects.requireNonNull(task.get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name()) && !isExpired) {
-                        checkIfNotYetDone(referralNotYetDoneCalendar, task);
-                    }
-                } else if (focus.equals(TASKS_FOCUS.SUSPECTED_TB)) {
-                    expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
-                    expiredCalendar.add(Calendar.DAY_OF_MONTH, 3);
+                        boolean isExpired = checkIfExpired(expiredCalendar, task);
+                        if (Objects.requireNonNull(task.get(TaskTable.STATUS)).equals(Task.TaskStatus.READY.name()) && !isExpired) {
+                            checkIfNotYetDone(referralNotYetDoneCalendar, task);
+                        }
+                        break;
+                    case TASKS_FOCUS.SUSPECTED_TB:
+                        if (appointmentDate != null && !appointmentDate.isEmpty()) {
+                            expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
+                            expiredCalendar.add(Calendar.DAY_OF_MONTH, 3);
+                        }
+                        checkIfExpired(expiredCalendar, task);
+                        break;
+                    default:
+                        if (appointmentDate != null && !appointmentDate.isEmpty()) {
+                            expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
+                        } else {
+                            expiredCalendar.setTimeInMillis(new BigDecimal(startDate).longValue());
+                        }
+                        expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
 
-                    checkIfExpired(expiredCalendar, task);
-                } else {
-                    if (appointmentDate != null && !appointmentDate.isEmpty()) {
-                        expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
-                    } else {
-                        expiredCalendar.setTimeInMillis(new BigDecimal(startDate).longValue());
-                    }
-                    expiredCalendar.add(Calendar.DAY_OF_MONTH, 7);
+                        checkIfExpired(expiredCalendar, task);
 
-                    checkIfExpired(expiredCalendar, task);
-
+                        break;
                 }
             }
         }
@@ -119,7 +128,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
         return false;
     }
 
-    public boolean checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
+    public void checkIfNotYetDone(Calendar referralNotYetDoneCalendar, Map<String, String> taskEvent) {
         if (Calendar.getInstance().getTime().after(referralNotYetDoneCalendar.getTime())) {
             saveNotYetDoneReferralEvent(
                     taskEvent.get(ChwDBConstants.TaskTable.FOR),
@@ -128,9 +137,7 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                     taskEvent.get(ChwDBConstants.TaskTable.STATUS)
             );
             referralNotYetDoneTask(taskEvent.get(ID), taskEvent.get(ChwDBConstants.TaskTable.FOR));
-            return true;
         }
-        return false;
     }
 
     private void saveExpiredReferralEvent(String baseEntityId, String userLocationId, String referralTaskId, String taskStatus, String businessStatus) {
