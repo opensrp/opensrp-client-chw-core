@@ -131,6 +131,8 @@ public class CoreConstants {
         public static final String ANC_HOME_VISIT_NOT_DONE_UNDO = "ANC Home Visit Not Done Undo";
         public static final String UPDATE_ANC_REGISTRATION = "Update ANC Registration";
         public static final String CLOSE_REFERRAL = "Close Referral";
+        public static final String EXPIRED_REFERRAL = "Expired Referral";
+        public static final String NOT_YET_DONE_REFERRAL = "Not Yet Done Referral";
         public static final String PREGNANCY_OUTCOME = "Pregnancy Outcome";
         public static final String PNC_REGISTRATION = "PNC Registration";
         public static final String PNC_HOME_VISIT_NOT_DONE = "PNC Home Visit Not Done";
@@ -521,6 +523,7 @@ public class CoreConstants {
             public static String getPregnancyRisk() {
                 return Utils.getLocalForm(PREGNANCY_RISK, locale, assetManager);
             }
+
         }
 
         public static class PNC_HOME_VISIT {
@@ -649,6 +652,7 @@ public class CoreConstants {
         public static final String PNC_REFERRAL = "ec_pnc_referral";
         public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
+        public static final String NOT_YET_DONE_REFERRAL = "ec_not_yet_done_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
         public static final String STOCK_USAGE_REPORT = "ec_stock_usage_report";
@@ -657,6 +661,7 @@ public class CoreConstants {
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String REFERRAL = "ec_referral";
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
@@ -675,7 +680,6 @@ public class CoreConstants {
         public static final String GROWTH_QUESTION = "growth_ques";
         public static final String GROWTH_IMMUNIZATION_TYPE = "growth_type";
         public static final String CHILD_COMMON_PERSON = "child_common_peron";
-        public static final String IS_COMES_FROM_FAMILY = "is_comes_from";
         public static final String USERS_TASKS = "tasks";
         public static final String CLASS = "class";
         public static final String VIEW_REGISTER_CLASS = "view_register_class";
@@ -684,6 +688,7 @@ public class CoreConstants {
         public static final String MEMBER_OBJECT = "member_object";
         public static final String FAMILY_HEAD_NAME = "family_head_name";
         public static final String FAMILY_HEAD_PHONE_NUMBER = "family_head_phone_number";
+        public static final String TOOLBAR_TITLE = "toolbar_title";
     }
 
     public static final class IMMUNIZATION_CONSTANT {
@@ -922,6 +927,10 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "Family planning side effects";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
+        public static final String SUSPECTED_HIV= "Suspected HIV";
+        public static final String SUSPECTED_TB= "Suspected TB";
+        public static final String SUSPECTED_GBV= "Suspected GBV";
+        public static final String SUSPECTED_CHILD_GBV= "Suspected Child GBV";
     }
 
     public static final class REGISTER_TYPE {
@@ -954,5 +963,8 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
+    public static class AncHealthFacilityVisitUtil{
+        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
+    }
 
 }

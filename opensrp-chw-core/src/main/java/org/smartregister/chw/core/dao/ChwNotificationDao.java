@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import android.content.Context;
+import android.util.Pair;
 
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
@@ -8,6 +9,7 @@ import org.smartregister.dao.AbstractDao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,7 +63,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_sick_child_followup.visit_date\n" +
                         "\n" +
                         "FROM ec_sick_child_followup\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         inner join (select fm.base_entity_id, fm.first_name, fm.middle_name, fm.last_name from ec_family_member fm) cg on ec_family.primary_caregiver = cg.base_entity_id\n" +
                         "\n" +
@@ -81,7 +83,7 @@ public class ChwNotificationDao extends AbstractDao {
                         table + ".action_taken,\n" +
                         table + ".visit_date\n" +
                         "FROM " + table + "\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
@@ -102,7 +104,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_malaria_followup_hf.visit_date\n" +
                         "\n" +
                         "FROM ec_malaria_followup_hf\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
@@ -121,7 +123,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "       ec_family_planning_update.fp_reg_date AS visit_date\n" +
                         "\n" +
                         "FROM ec_family_planning_update\n" +
-                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.base_entity_id\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "\n" +
                         "WHERE ec_family_member.is_closed = '0'\n" +
@@ -214,5 +216,96 @@ public class ChwNotificationDao extends AbstractDao {
             Timber.e(e);
         }
         return "";
+    }
+
+    /**
+     * This method is used to get details of referral notification with the provided task id
+     *
+     * @param referralId unique identifier for the task
+     * @return a notification record with details for the referral
+     */
+    public static NotificationRecord getNotYetDoneReferral(String referralId) {
+        String sql = String.format(
+                "/* Get details for not yet done referral */\n" +
+                        "SELECT ec_family_member.first_name || ' ' || CASE ec_family_member.last_name\n" +
+                        "                                                 WHEN NULL THEN ec_family_member.middle_name\n" +
+                        "                                                 ELSE ec_family_member.last_name END full_name,\n" +
+                        "       ec_family_member.dob          AS                                              dob,\n" +
+                        "       ec_family.village_town        AS                                              village,\n" +
+                        "       event.dateCreated             AS                                              notification_date,\n" +
+                        "       ec_family_member.phone_number AS                                              phone_number,\n" +
+                        "       ec_family_member.base_entity_id AS                                            base_entity_id\n" +
+                        "\n" +
+                        "FROM task\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = task.for\n" +
+                        "         inner join ec_not_yet_done_referral on ec_not_yet_done_referral.referral_task = task._id\n" +
+                        "         inner join event on ec_not_yet_done_referral.id = event.formSubmissionId\n" +
+                        "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND task.code = 'Referral'\n" +
+                        "  AND task._id = '%s' COLLATE NOCASE\n", referralId);
+
+        return AbstractDao.readSingleValue(sql, mapReferralNotificationColumns());
+
+    }
+
+    private static DataMap<NotificationRecord> mapReferralNotificationColumns() {
+        return row -> {
+            NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
+            record.setClientName(getCursorValue(row, "full_name"));
+            record.setClientDateOfBirth(getCursorValue(row, "dob"));
+            record.setVillage(getCursorValue(row, "village"));
+            record.setNotificationDate(getCursorValue(row, "notification_date"));
+            record.setPhone(getCursorValue(row, "phone_number"));
+            return record;
+        };
+    }
+
+    /**
+     * This method is used to retrieve all the notifications belonging to the client with the
+     * specified id
+     *
+     * @param baseEntityId unique identifier for the client
+     * @return a list of pair of the notification id and type
+     */
+    public static List<Pair<String, String>> getClientNotifications(String baseEntityId) {
+        String query =
+                "SELECT id as notification_id, 'Sick Child' as notification_type\n" +
+                        "FROM ec_sick_child_followup\n" +
+                        "WHERE base_entity_id = '%s' COLLATE NOCASE\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'PNC Danger Signs' as notification_type\n" +
+                        "FROM ec_pnc_danger_signs_outcome\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'ANC Danger Signs' as notification_type\n" +
+                        "FROM ec_anc_danger_signs_outcome\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Malaria Follow-up' as notification_type\n" +
+                        "FROM ec_malaria_followup_hf\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Family Planning' as notification_type\n" +
+                        "FROM ec_family_planning_update\n" +
+                        "WHERE base_entity_id = '%s'  COLLATE NOCASE\n" +
+                        "UNION ALL\n" +
+                        "SELECT id as notification_id, 'Referral not completed yet' as notification_type\n" +
+                        "FROM ec_not_yet_done_referral\n" +
+                        "WHERE entity_id = '%s'  COLLATE NOCASE;";
+
+        List<Pair<String, String>> values = AbstractDao.readData(query.replace("%s", baseEntityId),
+                getNotificationPair());
+        if (values == null || values.size() == 0)
+            return new ArrayList<>();
+        return values;
+    }
+
+    private static DataMap<Pair<String, String>> getNotificationPair() {
+        return cursor -> Pair.create(
+                getCursorValue(cursor, "notification_id"),
+                getCursorValue(cursor, "notification_type"));
     }
 }

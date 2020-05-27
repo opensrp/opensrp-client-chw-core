@@ -33,6 +33,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     protected void onCreation() {
         super.onCreation();
         baJsonFormUtils = new BAJsonFormUtils(HealthFacilityApplication.getInstance());
+        setIndependentClient(false);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
 
     @Override
     protected void setIndependentClient(boolean isIndependent) {
-        //TODO implement set independent client for HF
+        this.isIndependent = isIndependent;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.smartregister.chw.core.contract;
 import android.util.Pair;
 
 import org.smartregister.chw.core.domain.NotificationItem;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 public interface ChwNotificationDetailsContract {
 
@@ -12,6 +13,12 @@ public interface ChwNotificationDetailsContract {
         void initPresenter();
 
         void disableMarkAsDoneAction(boolean disable);
+
+        void goToMemberProfile();
+
+        void setCommonPersonsObjectClient(CommonPersonObjectClient client);
+
+        CommonPersonObjectClient getCommonPersonObjectClient();
     }
 
     interface Presenter {
@@ -24,11 +31,7 @@ public interface ChwNotificationDetailsContract {
 
         void onNotificationDetailsFetched(NotificationItem notificationItem);
 
-        void showMemberProfile();
-
         void dismissNotification(String notificationId, String notificationType);
-
-        void setClientBaseEntityId(String clientBaseEntityId);
 
         void setNotificationDates(Pair<String, String> dates);
 
@@ -43,13 +46,6 @@ public interface ChwNotificationDetailsContract {
          * @param notificationType type of notification
          */
         void fetchNotificationDetails(String notificationId, String notificationType);
-
-        /**
-         * Crete a referral dismissal entry for the provided task id
-         *
-         * @param referralTaskId referral task id
-         */
-        void createReferralDismissalEvent(String referralTaskId);
 
         /**
          * Crete a Notification dismissal entry for the provided notification id

@@ -5,6 +5,7 @@ import java.util.List;
 public class NotificationItem {
     private String title;
     private List<String> details;
+    private String clientBaseEntityId;
 
     public NotificationItem(String title, List<String> details) {
         this.title = title;
@@ -17,5 +18,14 @@ public class NotificationItem {
 
     public List<String> getDetails() {
         return details;
+    }
+
+    public NotificationItem setClientBaseEntityId(String clientBaseEntityId) {
+        this.clientBaseEntityId = clientBaseEntityId;
+        return this;
+    }
+
+    public String getClientBaseEntityId() {
+        return clientBaseEntityId;
     }
 }

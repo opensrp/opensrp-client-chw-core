@@ -32,5 +32,6 @@ public interface ChwDBConstants {
         String START = "start";
         String FOCUS = "focus";
         String REASON_REFERENCE = "reason_reference";
+        String LOCATION = "location";
     }
 }
