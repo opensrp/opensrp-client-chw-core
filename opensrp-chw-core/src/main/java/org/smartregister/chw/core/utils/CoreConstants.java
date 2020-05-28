@@ -498,6 +498,7 @@ public class CoreConstants {
             public static String getPregnancyRisk() {
                 return Utils.getLocalForm(PREGNANCY_RISK, locale, assetManager);
             }
+
         }
 
         public static class PNC_HOME_VISIT {
@@ -654,7 +655,6 @@ public class CoreConstants {
         public static final String GROWTH_QUESTION = "growth_ques";
         public static final String GROWTH_IMMUNIZATION_TYPE = "growth_type";
         public static final String CHILD_COMMON_PERSON = "child_common_peron";
-        public static final String IS_COMES_FROM_FAMILY = "is_comes_from";
         public static final String USERS_TASKS = "tasks";
         public static final String CLASS = "class";
         public static final String VIEW_REGISTER_CLASS = "view_register_class";
@@ -663,6 +663,7 @@ public class CoreConstants {
         public static final String MEMBER_OBJECT = "member_object";
         public static final String FAMILY_HEAD_NAME = "family_head_name";
         public static final String FAMILY_HEAD_PHONE_NUMBER = "family_head_phone_number";
+        public static final String TOOLBAR_TITLE = "toolbar_title";
     }
 
     public static final class IMMUNIZATION_CONSTANT {
@@ -951,5 +952,8 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
+    public static class AncHealthFacilityVisitUtil{
+        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
+    }
 
 }

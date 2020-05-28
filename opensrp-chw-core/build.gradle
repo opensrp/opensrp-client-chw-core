@@ -100,7 +100,7 @@ dependencies {
     implementation ('io.ona.kujaku:library:0.8.4') {
         exclude group: 'com.android.volley', module: 'volley'
     }
-    api('org.smartregister:opensrp-client-native-form:1.8.5-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:1.9.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -126,7 +126,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-family:1.2.32-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-family:1.2.33-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -134,7 +134,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-immunization:1.4.37-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-immunization:1.4.44-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -168,7 +168,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-pnc:0.0.31-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pnc:0.0.32-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -178,7 +178,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-malaria:1.2.15-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-malaria:1.2.16-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -186,7 +186,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-chw-family-planning:1.0.22-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-chw-family-planning:1.0.23-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

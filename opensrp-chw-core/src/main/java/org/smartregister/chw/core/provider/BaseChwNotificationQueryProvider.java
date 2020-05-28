@@ -11,8 +11,8 @@ import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPD
 import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_FOLLOW_UP_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
