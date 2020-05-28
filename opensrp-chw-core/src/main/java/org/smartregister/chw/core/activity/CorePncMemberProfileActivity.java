@@ -3,7 +3,6 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,12 +92,6 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initializeNotificationReferralRecyclerView();
-    }
-
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         return getCommonPersonObjectClient(baseEntityId);
     }
@@ -120,6 +113,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public void registerPresenter() {
         presenter = new CorePncMemberProfilePresenter(this, new CorePncMemberProfileInteractor(), memberObject);
+    }
+
+    @Override
+    protected void onCreation() {
+        super.onCreation();
+        initializeNotificationReferralRecyclerView();
     }
 
     protected void initializeNotificationReferralRecyclerView() {

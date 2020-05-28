@@ -142,12 +142,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initializeNotificationReferralRecyclerView();
-    }
-
-    @Override
     protected void onCreation() {
         setContentView(R.layout.activity_child_profile);
         Toolbar toolbar = findViewById(R.id.collapsing_toolbar);
@@ -175,6 +169,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         }
         imageRenderHelper = new ImageRenderHelper(this);
         registerReceiver(mDateTimeChangedReceiver, getsIntentFilter());
+        initializeNotificationReferralRecyclerView();
     }
 
     @Override
