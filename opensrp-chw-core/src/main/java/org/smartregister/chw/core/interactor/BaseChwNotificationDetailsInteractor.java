@@ -69,7 +69,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
             notificationItem = getMalariaFollowUpDetails(notificationId);
         else if (notificationType.contains(context.getString(R.string.notification_type_family_planning)))
             notificationItem = getDetailsForFamilyPlanning(notificationId);
-        else if (notificationType.contains(context.getString(R.string.notification_type_not_yet_done_referrals)))
+        else if (notificationType.equalsIgnoreCase(context.getString(R.string.notification_type_not_yet_done_referrals)))
             notificationItem = getDetailsForNotYetDoneReferral(notificationId);
 
         presenter.onNotificationDetailsFetched(notificationItem);
