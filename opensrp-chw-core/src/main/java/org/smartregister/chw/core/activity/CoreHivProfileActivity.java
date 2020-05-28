@@ -9,17 +9,12 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
-import org.smartregister.chw.core.dao.AncDao;
-import org.smartregister.chw.core.dao.ChildDao;
-import org.smartregister.chw.core.dao.PNCDao;
-import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreHivProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreHivProfilePresenter;
 import org.smartregister.chw.core.rule.HivFollowupRule;
@@ -127,53 +122,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
         }
     }
 
-    protected Observable<MemberType> getMemberType() {
-        return Observable.create(e -> {
-            MemberObject memberObject = PNCDao.getMember(getHivMemberObject().getBaseEntityId());
-            String type = null;
-
-            if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.ANC_MEMBER;
-            } else if (PNCDao.isPNCMember(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.PNC_MEMBER;
-            } else if (ChildDao.isChild(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.CHILD;
-            }
-
-            MemberType memberType = new MemberType(memberObject, type);
-            e.onNext(memberType);
-            e.onComplete();
-        });
-    }
-
-    protected void executeOnLoaded(OnMemberTypeLoadedListener listener) {
-        final Disposable[] disposable = new Disposable[1];
-        getMemberType().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MemberType>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable[0] = d;
-                    }
-
-                    @Override
-                    public void onNext(MemberType memberType) {
-                        listener.onMemberTypeLoaded(memberType);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        disposable[0].dispose();
-                        disposable[0] = null;
-                    }
-                });
-    }
-
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
             Visit lastVisit = HivDao.getLatestVisit(getHivMemberObject().getBaseEntityId(), org.smartregister.chw.hiv.util.Constants.EventType.FOLLOW_UP_VISIT);
@@ -266,10 +214,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     @Override
     public Context getContext() {
         return this;
-    }
-
-    public interface OnMemberTypeLoadedListener {
-        void onMemberTypeLoaded(MemberType memberType);
     }
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {

@@ -106,53 +106,6 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
         }
     }
 
-    protected Observable<MemberType> getMemberType() {
-        return Observable.create(e -> {
-            MemberObject memberObject = TbUtil.toMember(TbDao.getMember(getTbMemberObject().getBaseEntityId()));
-            String type = null;
-
-            if (AncDao.isANCMember(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.ANC_MEMBER;
-            } else if (PNCDao.isPNCMember(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.PNC_MEMBER;
-            } else if (ChildDao.isChild(memberObject.getBaseEntityId())) {
-                type = CoreConstants.TABLE_NAME.CHILD;
-            }
-
-            MemberType memberType = new MemberType(memberObject, type);
-            e.onNext(memberType);
-            e.onComplete();
-        });
-    }
-
-    protected void executeOnLoaded(OnMemberTypeLoadedListener listener) {
-        final Disposable[] disposable = new Disposable[1];
-        getMemberType().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MemberType>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable[0] = d;
-                    }
-
-                    @Override
-                    public void onNext(MemberType memberType) {
-                        listener.onMemberTypeLoaded(memberType);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        disposable[0].dispose();
-                        disposable[0] = null;
-                    }
-                });
-    }
-
     private void refreshViewOnHomeVisitResult() {
         Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
             Visit lastVisit = TbDao.getLatestVisit(getTbMemberObject().getBaseEntityId(), org.smartregister.chw.tb.util.Constants.EventType.FOLLOW_UP_VISIT);
@@ -247,10 +200,6 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
     @Override
     public Context getContext() {
         return this;
-    }
-
-    public interface OnMemberTypeLoadedListener {
-        void onMemberTypeLoaded(MemberType memberType);
     }
 
     private class UpdateFollowUpVisitButtonTask extends AsyncTask<Void, Void, Void> {
