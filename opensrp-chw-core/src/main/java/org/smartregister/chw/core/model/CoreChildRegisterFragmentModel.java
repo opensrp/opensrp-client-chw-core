@@ -40,7 +40,7 @@ public class CoreChildRegisterFragmentModel implements CoreChildRegisterFragment
     @Override
     public String countSelect(String tableName, String mainCondition) {
         SmartRegisterQueryBuilder countQueryBuilder = new SmartRegisterQueryBuilder();
-        countQueryBuilder.SelectInitiateMainTableCounts(tableName);
+        countQueryBuilder.selectInitiateMainTableCounts(tableName);
         return countQueryBuilder.mainCondition(mainCondition);
     }
 
