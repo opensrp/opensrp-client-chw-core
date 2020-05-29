@@ -179,6 +179,12 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "             UNION ALL\n" +
                         "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_family_planning\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_tb_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_tb_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_hiv_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_hiv_register\n" +
                         "         )\n" +
                         "         UNION ALL\n" +
                         "/*COUNT INDEPENDENT MEMBERS*/\n" +
@@ -220,6 +226,57 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "             UNION ALL\n" +
                         "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_family_planning\n" +
+                        "         )\n" +
+                        "         UNION ALL\n" +
+                        "/**COUNT REGISTERED TB CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
+                        "         FROM ec_family_member\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "                  inner join ec_tb_register\n" +
+                        "                             on ec_family_member.base_entity_id = ec_tb_register.base_entity_id\n" +
+                        "         where ec_family_member.date_removed is null\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_anc_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_pregnancy_outcome\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_malaria_confirmation\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_family_planning\n" +
+                        "         )\n" +
+                        "         UNION ALL\n" +
+                        "/**COUNT REGISTERED HIV CLIENTS*/\n" +
+                        "         SELECT COUNT(*) AS c\n" +
+                        "         FROM ec_family_member\n" +
+                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "                  inner join ec_hiv_register\n" +
+                        "                             on ec_family_member.base_entity_id = ec_hiv_register.base_entity_id\n" +
+                        "         where ec_family_member.date_removed is null\n" +
+                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
+                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_anc_register\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_pregnancy_outcome\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_child\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_malaria_confirmation\n" +
+                        "             UNION ALL\n" +
+                        "             SELECT ec_tb_register.base_entity_id AS base_entity_id\n" +
+                        "             FROM ec_tb_register\n" +
                         "             UNION ALL\n" +
                         "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_family_planning\n" +
