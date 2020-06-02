@@ -55,7 +55,6 @@ public class AncMemberProfileActivity extends CoreAncMemberProfileActivity {
         Intent intent = new Intent(activity, AncMemberProfileActivity.class);
         intent.putExtra(Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, baseEntityID);
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, commonPersonObjectClient);
-        isStartedFromReferrals = CoreReferralUtils.checkIfStartedFromReferrals(activity);
         activity.startActivity(intent);
     }
 
