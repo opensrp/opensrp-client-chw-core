@@ -63,6 +63,7 @@ public interface QueryConstant {
             "       ec_family_member.last_name     AS last_name,\n" +
             "       ec_family_member.dob           AS dob,\n" +
             "       ec_family_member.id            AS _id,\n" +
+                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
             "       ec_family_member.relational_id AS relationalid,\n" +
             "       task._id                       AS referral_task_id,\n" +
             "       event.dateCreated              AS notification_date,\n" +
@@ -505,6 +506,5 @@ public interface QueryConstant {
                     "    UNION ALL\n" +
                     "    SELECT ec_family_planning_update.entity_id AS base_entity_id\n" +
                     "    FROM ec_family_planning_update\n" +
-                    ")\n" +
-                    "ORDER BY notification_date DESC;";
+                    ")\n";
 }

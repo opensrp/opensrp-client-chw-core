@@ -33,7 +33,7 @@ public class ReferralsTaskViewClickListener implements View.OnClickListener {
     private void goToClientProfile() {
         switch (getTaskFocus()) {
             case CoreConstants.TASKS_FOCUS.SICK_CHILD:
-                ChildProfileActivity.startMe(getReferralTaskViewActivity(), false,
+                ChildProfileActivity.startMe(getReferralTaskViewActivity(),
                         new MemberObject(getCommonPersonObjectClient()), ChildProfileActivity.class);
                 break;
             case CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS:

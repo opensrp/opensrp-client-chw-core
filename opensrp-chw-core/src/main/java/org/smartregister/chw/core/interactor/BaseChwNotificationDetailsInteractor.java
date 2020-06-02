@@ -69,7 +69,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
             notificationItem = getMalariaFollowUpDetails(notificationId);
         else if (notificationType.contains(context.getString(R.string.notification_type_family_planning)))
             notificationItem = getDetailsForFamilyPlanning(notificationId);
-        else if (notificationType.contains(context.getString(R.string.notification_type_not_yet_done_referrals)))
+        else if (notificationType.equalsIgnoreCase(context.getString(R.string.notification_type_not_yet_done_referrals)))
             notificationItem = getDetailsForNotYetDoneReferral(notificationId);
 
         presenter.onNotificationDetailsFetched(notificationItem);
@@ -151,6 +151,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         }
         return details;
     }
+
     /**
      * This method is used to obtain the date when the referral will be dismissed from the updates
      * register
@@ -169,6 +170,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         return dateFormat.format(calendar.getTime());
     }
+
     private String getClientAge(String dobString) {
         String translatedYearInitial = context.getResources().getString(R.string.abbrv_years);
         return OpdUtils.getClientAge(Utils.getDuration(dobString), translatedYearInitial);
