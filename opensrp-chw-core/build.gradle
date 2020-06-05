@@ -34,7 +34,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion androidBuildToolsVersion
 
-   // defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
+    defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
