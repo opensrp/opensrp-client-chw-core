@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
@@ -58,25 +57,25 @@ import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
-    
+
     protected RecyclerView notificationAndReferralRecyclerView;
     protected RelativeLayout notificationAndReferralLayout;
-    
+
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         return org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient(baseEntityId);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initializeNotificationReferralRecyclerView();
+    protected void onCreation() {
+        super.onCreation();
         updateToolbarTitle(this, R.id.toolbar_title, fpMemberObject.getFamilyName());
+        initializeNotificationReferralRecyclerView();
     }
 
     protected void initializeNotificationReferralRecyclerView() {
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
         notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager( new LinearLayoutManager(this));
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
