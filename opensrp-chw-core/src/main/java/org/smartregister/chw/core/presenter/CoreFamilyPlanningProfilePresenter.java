@@ -56,7 +56,7 @@ public class CoreFamilyPlanningProfilePresenter extends BaseFpProfilePresenter i
         }
     }
 
-    private FormUtils getFormUtils() {
+    protected FormUtils getFormUtils() {
 
         if (formUtils == null) {
             try {
