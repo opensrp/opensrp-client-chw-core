@@ -41,7 +41,7 @@
     <string name="menu_all_families">Ménages</string>
     <string name="menu_anc_clients">Clients CPN</string>
     <string name="menu_child_clients">Enfants Clients</string>
-    <string name="menu_hiv_clients">Clients VIH</string>
+    <string name="menu_hiv">VIH</string>
     <string name="menu_anc">Clients CPN</string>
     <string name="menu_pnc">Clients CPoN</string>
     <string name="menu_child">CH</string>
@@ -437,7 +437,7 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Revenir à tous les clients</string>
-    <string name="menu_tb_clients">" Clients de la Tuberculose"</string>
+    <string name="menu_tb">Tuberculose</string>
 
     <!--    HIV Register-->
     <string name="hiv_register">Registre du VIH</string>

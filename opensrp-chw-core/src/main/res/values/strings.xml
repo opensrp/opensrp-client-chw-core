@@ -41,8 +41,8 @@
     <string name="menu_all_families">All Families</string>
     <string name="menu_anc_clients">ANC Clients</string>
     <string name="menu_child_clients">Child Clients</string>
-    <string name="menu_hiv_clients">HIV Clients</string>
-    <string name="menu_tb_clients">TB Clients</string>
+    <string name="menu_hiv">HIV</string>
+    <string name="menu_tb">TB</string>
     <string name="menu_anc">ANC</string>
     <string name="menu_pnc">PNC</string>
     <string name="menu_child">Child</string>

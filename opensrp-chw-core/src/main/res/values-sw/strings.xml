@@ -41,7 +41,7 @@
     <string name="menu_all_families">Kaya Zote</string>
     <string name="menu_anc_clients">Wateja wa wajawazito</string>
     <string name="menu_child_clients">Watoto</string>
-    <string name="menu_hiv_clients">Wateja wenye VVU</string>
+    <string name="menu_hiv">VVU/Ukimwi</string>
     <string name="menu_anc">Wajawazito</string>
     <string name="menu_pnc">Wateja wa huduma ya mtoto na mama baada ya kujifungua PNC</string>
     <string name="menu_child">REJESTA YA WATOTO</string>
@@ -420,10 +420,10 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Rudi kwenye Wateja wote</string>
-    <string name="menu_tb_clients">Wateja wenye Kifua Kikuu</string>
+    <string name="menu_tb">Kifua Kikuu</string>
 
     <!--    HIV Register-->
-    <string name="hiv_register">Orodha ya wateja wenye Ukimwi</string>
+    <string name="hiv_register">Orodha ya wateja wenye VVU</string>
     <string name="routine_hiv_visit"> · Tembeleo la mteja mwenye VVU</string>
 
     <!--    TB Register-->
