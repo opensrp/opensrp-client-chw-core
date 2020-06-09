@@ -3,23 +3,22 @@ package org.smartregister.chw.core.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreTbProfileContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
-import org.smartregister.chw.core.dao.AncDao;
-import org.smartregister.chw.core.dao.ChildDao;
-import org.smartregister.chw.core.dao.PNCDao;
-import org.smartregister.chw.core.domain.MemberType;
 import org.smartregister.chw.core.interactor.CoreTbProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreTbProfilePresenter;
 import org.smartregister.chw.core.rule.TbFollowupRule;
@@ -29,7 +28,6 @@ import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.tb.activity.BaseTbProfileActivity;
 import org.smartregister.chw.tb.dao.TbDao;
 import org.smartregister.chw.tb.domain.TbMemberObject;
-import org.smartregister.chw.tb.util.TbUtil;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -45,7 +43,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreTbProfileContract.View {
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
 
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
@@ -58,9 +60,17 @@ public abstract class CoreTbProfileActivity extends BaseTbProfileActivity implem
 
     }
 
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
     @Override
-    protected void onCreation() {
-        super.onCreation();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+        updateToolbarTitle(this, R.id.toolbar_title, getTbMemberObject().getFamilyName());
     }
 
     @Override
