@@ -47,16 +47,18 @@ public class CoreTbProvider extends BaseTbRegisterProvider {
     }
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, TbFollowupRule tbFollowupRule) {
-        viewHolder.getDueButton().setVisibility(View.VISIBLE);
-        if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
-            setVisitButtonNextDueStatus(context, FpUtil.sdf.format(tbFollowupRule.getDueDate()), viewHolder.getDueButton());
-        }
-        if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
-            setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(tbFollowupRule.getDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
-        } else if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
-            setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(tbFollowupRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
-        } else if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
-            setVisitDone(context, viewHolder.getDueButton());
+        if(tbFollowupRule.getDueDate()!=null) {
+            viewHolder.getDueButton().setVisibility(View.VISIBLE);
+            if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
+                setVisitButtonNextDueStatus(context, FpUtil.sdf.format(tbFollowupRule.getDueDate()), viewHolder.getDueButton());
+            }
+            if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
+                setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(tbFollowupRule.getDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
+            } else if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
+                setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(tbFollowupRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
+            } else if (tbFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
+                setVisitDone(context, viewHolder.getDueButton());
+            }
         }
     }
 

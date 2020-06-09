@@ -47,16 +47,18 @@ public class CoreHivProvider extends BaseHivRegisterProvider {
     }
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, HivFollowupRule hivFollowupRule) {
-        viewHolder.getDueButton().setVisibility(View.VISIBLE);
-        if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
-            setVisitButtonNextDueStatus(context, FpUtil.sdf.format(hivFollowupRule.getDueDate()), viewHolder.getDueButton());
-        }
-        if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
-            setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(hivFollowupRule.getDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
-        } else if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
-            setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(hivFollowupRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
-        } else if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
-            setVisitDone(context, viewHolder.getDueButton());
+        if(hivFollowupRule.getDueDate()!=null) {
+            viewHolder.getDueButton().setVisibility(View.VISIBLE);
+            if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
+                setVisitButtonNextDueStatus(context, FpUtil.sdf.format(hivFollowupRule.getDueDate()), viewHolder.getDueButton());
+            }
+            if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
+                setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(hivFollowupRule.getDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
+            } else if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
+                setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(hivFollowupRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
+            } else if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
+                setVisitDone(context, viewHolder.getDueButton());
+            }
         }
     }
 
