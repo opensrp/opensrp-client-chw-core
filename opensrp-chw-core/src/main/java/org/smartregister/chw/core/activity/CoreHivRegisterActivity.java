@@ -3,50 +3,21 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.smartregister.chw.R;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.job.HomeVisitServiceJob;
 import org.smartregister.chw.core.job.VaccineRecurringServiceJob;
-import org.smartregister.chw.fragment.HivFollowupRegisterFragment;
-import org.smartregister.chw.fragment.HivRegisterFragment;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hiv.activity.BaseHivRegisterActivity;
 import org.smartregister.chw.hiv.activity.BaseHivRegistrationFormsActivity;
-import org.smartregister.chw.hiv.fragment.BaseHivRegisterFragment;
-import org.smartregister.chw.util.Constants;
-import org.smartregister.chw.util.JsonFormUtils;
-import org.smartregister.helper.BottomNavigationHelper;
+import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncTaskServiceJob;
-import org.smartregister.listener.BottomNavigationListener;
 
 public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
     private String baseEntityID;
-
-    public static void startHIVFormActivity(Activity activity, String baseEntityID, String formName, String payloadType) {
-        Intent intent = new Intent(activity, HivRegisterActivity.class);
-        intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.BASE_ENTITY_ID, baseEntityID);
-        intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.ACTION, payloadType);
-        intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.HIV_REGISTRATION_FORM_NAME, formName);
-        activity.startActivity(intent);
-    }
-
-    @NotNull
-    @Override
-    protected androidx.fragment.app.Fragment[] getOtherFragments() {
-        androidx.fragment.app.Fragment fg = new HivFollowupRegisterFragment();
-        return new androidx.fragment.app.Fragment[]{fg};
-    }
-
-    @NotNull
-    @Override
-    protected BaseHivRegisterFragment getRegisterFragment() {
-        return new HivRegisterFragment();
-    }
 
     @Override
     public java.util.List<String> getViewIdentifiers() {
@@ -58,27 +29,6 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
         baseEntityID = getIntent().getStringExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.BASE_ENTITY_ID);
         super.onCreate(savedInstanceState);
         NavigationMenu.getInstance(this, null, null);
-    }
-
-    @Override
-    protected void registerBottomNavigation() {
-        bottomNavigationHelper = new BottomNavigationHelper();
-        bottomNavigationView = findViewById(org.smartregister.R.id.bottom_navigation);
-
-        if (bottomNavigationView != null) {
-            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-            bottomNavigationView.getMenu().removeItem(org.smartregister.R.id.action_clients);
-            bottomNavigationView.getMenu().removeItem(org.smartregister.chw.hiv.R.id.action_register);
-            bottomNavigationView.getMenu().removeItem(org.smartregister.R.id.action_search);
-            bottomNavigationView.getMenu().removeItem(org.smartregister.R.id.action_library);
-
-            bottomNavigationView.inflateMenu(getMenuResource());
-            bottomNavigationHelper.disableShiftMode(bottomNavigationView);
-
-            BottomNavigationListener hivBottomNavigationListener = getBottomNavigation(this);
-            bottomNavigationView.setOnNavigationItemSelectedListener(hivBottomNavigationListener);
-
-        }
     }
 
 
@@ -100,7 +50,7 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
         PullUniqueIdsServiceJob.scheduleJobImmediately(PullUniqueIdsServiceJob.TAG);
         HomeVisitServiceJob.scheduleJobImmediately(HomeVisitServiceJob.TAG);
         SyncTaskServiceJob.scheduleJobImmediately(SyncTaskServiceJob.TAG);
-        Intent intent = new Intent(this, HivRegisterActivity.class);
+        Intent intent = new Intent(this, CoreHivRegisterActivity.class);
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
         this.finish();
@@ -111,7 +61,7 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
         super.onResumption();
         NavigationMenu menu = NavigationMenu.getInstance(this, null, null);
         if (menu != null) {
-            menu.getNavigationAdapter().setSelectedView(Constants.DrawerMenu.HIV_CLIENTS);
+            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.HIV_CLIENTS);
         }
     }
 

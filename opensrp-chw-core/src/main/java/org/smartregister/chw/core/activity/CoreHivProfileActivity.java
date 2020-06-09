@@ -3,10 +3,14 @@ package org.smartregister.chw.core.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.Visit;
@@ -43,7 +47,17 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CoreHivProfileActivity extends BaseHivProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreHivProfileContract.View {
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager( new LinearLayoutManager(this));
+    }
 
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
@@ -57,8 +71,10 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     }
 
     @Override
-    protected void onCreation() {
-        super.onCreation();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
+        updateToolbarTitle(this, R.id.toolbar_title, getHivMemberObject().getFamilyName());
     }
 
     @Override
