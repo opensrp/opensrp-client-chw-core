@@ -207,6 +207,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
             case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
             case FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION:
+            case org.smartregister.chw.tb.util.Constants.EventType.FOLLOW_UP_VISIT:
+            case org.smartregister.chw.hiv.util.Constants.EventType.FOLLOW_UP_VISIT:
                 if (eventClient.getEvent() == null) {
                     return;
                 }
