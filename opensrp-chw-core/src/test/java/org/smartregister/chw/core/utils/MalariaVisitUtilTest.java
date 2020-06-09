@@ -12,15 +12,11 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestCoreChwApplication;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestCoreChwApplication.class)
 public class MalariaVisitUtilTest {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-    private MalariaVisitUtil malariaVisitUtil = new MalariaVisitUtil();
     private Date malariaTestDate = new DateTime().minusDays(14).toDate();
     private Date followUpDate = new DateTime().minusDays(7).toDate();
     private MalariaFollowUpRule malariaFollowUpRule;
