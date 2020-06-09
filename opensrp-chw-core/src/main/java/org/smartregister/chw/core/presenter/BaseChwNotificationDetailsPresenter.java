@@ -14,7 +14,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     private WeakReference<ChwNotificationDetailsContract.View> view;
     private ChwNotificationDetailsContract.Interactor interactor;
-    private String clientBaseEntityId;
     private Pair<String, String> notificationDates;
 
     public BaseChwNotificationDetailsPresenter(ChwNotificationDetailsContract.View view) {
@@ -24,7 +23,7 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     @Override
     public String getClientBaseEntityId() {
-        return clientBaseEntityId;
+        return getView().getCommonPersonObjectClient().getCaseId();
     }
 
     @Override
@@ -46,11 +45,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
     }
 
     @Override
-    public void showMemberProfile() {
-        //TODO implement functionality for navigating to member profile
-    }
-
-    @Override
     public void dismissNotification(String notificationId, String notificationType) {
         if (!ChwNotificationDao.isMarkedAsDone((Activity) getView(), notificationId, notificationType)) {
             getView().disableMarkAsDoneAction(true);
@@ -60,11 +54,6 @@ public class BaseChwNotificationDetailsPresenter implements ChwNotificationDetai
 
     public void setInteractor(ChwNotificationDetailsContract.Interactor interactor) {
         this.interactor = interactor;
-    }
-
-    @Override
-    public void setClientBaseEntityId(String clientBaseEntityId) {
-        this.clientBaseEntityId = clientBaseEntityId;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.smartregister.chw.core.contract;
 import android.util.Pair;
 
 import org.smartregister.chw.core.domain.NotificationItem;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 public interface ChwNotificationDetailsContract {
 
@@ -12,6 +13,12 @@ public interface ChwNotificationDetailsContract {
         void initPresenter();
 
         void disableMarkAsDoneAction(boolean disable);
+
+        void goToMemberProfile();
+
+        void setCommonPersonsObjectClient(CommonPersonObjectClient client);
+
+        CommonPersonObjectClient getCommonPersonObjectClient();
     }
 
     interface Presenter {
@@ -24,11 +31,7 @@ public interface ChwNotificationDetailsContract {
 
         void onNotificationDetailsFetched(NotificationItem notificationItem);
 
-        void showMemberProfile();
-
         void dismissNotification(String notificationId, String notificationType);
-
-        void setClientBaseEntityId(String clientBaseEntityId);
 
         void setNotificationDates(Pair<String, String> dates);
 
