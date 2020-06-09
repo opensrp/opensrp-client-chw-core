@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.smartregister.chw.core.activity.CoreFamilyOtherMemberProfileActivity;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
+import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.fragment.BaseFamilyOtherMemberProfileFragment;
 import org.smartregister.view.contract.BaseProfileContract;
@@ -53,12 +54,12 @@ public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMem
 
     @Override
     protected BaseProfileContract.Presenter getFamilyOtherMemberActivityPresenter(String familyBaseEntityId, String baseEntityId, String familyHead, String primaryCaregiver, String villageTown, String familyName) {
-        return Mockito.mock(BaseProfileContract.Presenter.class);
+        return Mockito.mock(CoreFamilyOtherMemberActivityPresenter.class);
     }
 
     @Override
     protected CoreFamilyMemberFloatingMenu getFamilyMemberFloatingMenu() {
-        return null;
+        return Mockito.mock(CoreFamilyMemberFloatingMenu.class);
     }
 
     @Override

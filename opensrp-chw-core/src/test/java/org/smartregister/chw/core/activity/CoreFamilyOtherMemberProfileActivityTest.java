@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.activity;
 
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
@@ -21,6 +23,8 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.implementation.CoreFamilyOtherMemberProfileActivityImpl;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
 
@@ -29,6 +33,9 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
 
     private CoreFamilyOtherMemberProfileActivityImpl activity;
     private ActivityController<CoreFamilyOtherMemberProfileActivityImpl> controller;
+
+    @Mock
+    private CommonPersonObjectClient commonPersonObjectClient;
 
     @Before
     public void setUp() {
@@ -43,7 +50,10 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
         context.configuration().getDrishtiApplication().setPassword(password);
         context.session().setPassword(password);
 
-        controller = Robolectric.buildActivity(CoreFamilyOtherMemberProfileActivityImpl.class).create().start();
+        Intent intent = new Intent();
+        intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, commonPersonObjectClient);
+
+        controller = Robolectric.buildActivity(CoreFamilyOtherMemberProfileActivityImpl.class, intent).create().start();
         activity = controller.get();
     }
 
@@ -86,7 +96,7 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
 
         MenuItem item = Mockito.mock(MenuItem.class);
 
-        Mockito.doReturn(R.id.home).when(item).getItemId();
+        Mockito.doReturn(android.R.id.home).when(item).getItemId();
         activity.onOptionsItemSelected(item);
         Mockito.verify(activity).onBackPressed();
 
