@@ -5,13 +5,31 @@
     <item
         android:id="@+id/action_registration"
         android:enabled="true"
+        android:orderInCategory="100"
         android:title="@string/registration_info"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_close_tb_case"
         android:enabled="true"
+        android:orderInCategory="200"
         android:title="@string/tb_close_case"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_tb_referral_outcome"
+        android:enabled="true"
+        android:orderInCategory="300"
+        android:title="@string/tb_referral_outcome"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_issue_tb_ltf_referral"
+        android:enabled="true"
+        android:orderInCategory="400"
+        android:title="@string/tb_ltf_referral"
+        android:visible="false"
         app:showAsAction="never" />
 
 </menu>
