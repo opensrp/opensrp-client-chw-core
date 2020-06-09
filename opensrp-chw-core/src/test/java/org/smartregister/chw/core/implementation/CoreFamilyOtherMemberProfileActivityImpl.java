@@ -14,42 +14,42 @@ import org.smartregister.view.contract.BaseProfileContract;
 public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMemberProfileActivity {
     @Override
     public void startAncRegister() {
-
+        // do nothing
     }
 
     @Override
     public void startFpRegister() {
-
+        // do nothing
     }
 
     @Override
     public void startFpChangeMethod() {
-
+        // do nothing
     }
 
     @Override
     public void startMalariaRegister() {
-
+        // do nothing
     }
 
     @Override
     public void startMalariaFollowUpVisit() {
-
+        // do nothing
     }
 
     @Override
     public void setIndependentClient(boolean isIndependent) {
-
+        // do nothing
     }
 
     @Override
     public void removeIndividualProfile() {
-
+        // do nothing
     }
 
     @Override
     public void startEditMemberJsonForm(Integer title_resource, CommonPersonObjectClient client) {
-
+        // do nothing
     }
 
     @Override
