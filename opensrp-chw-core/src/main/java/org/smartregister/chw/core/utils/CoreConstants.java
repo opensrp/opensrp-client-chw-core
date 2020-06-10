@@ -208,6 +208,10 @@ public class CoreConstants {
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
         private static final String HIV_REGISTRATION = "hiv_registration";
         private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
+        private static final String HIV_OUTCOME = "hiv_outcome";
+        private static final String HIV_ISSUE_COMMUNITY_FOLLOWUP_REFERRAL = "hiv_issue_community_followup_referral";
+        private static final String TB_OUTCOME = "tb_outcome";
+        private static final String TB_ISSUE_COMMUNITY_FOLLOWUP_REFERRAL = "tb_issue_community_followup_referral";
         private static final String TB_REGISTRATION = "tb_registration";
         private static final String TB_FOLLOWUP_VISIT= "tb_followup_visit";
         private static final String TB_CASE_CLOSURE = "tb_case_closure";
@@ -388,6 +392,22 @@ public class CoreConstants {
 
         public static String getHivFollowupVisit() {
             return HIV_FOLLOWUP_VISIT;
+        }
+
+        public static String getHivOutcome() {
+            return HIV_OUTCOME;
+        }
+
+        public static String getHivIssueCommunityFollowupReferral() {
+            return HIV_ISSUE_COMMUNITY_FOLLOWUP_REFERRAL;
+        }
+
+        public static String getTbOutcome() {
+            return TB_OUTCOME;
+        }
+
+        public static String getTbIssueCommunityFollowupReferral() {
+            return TB_ISSUE_COMMUNITY_FOLLOWUP_REFERRAL;
         }
 
         public static String getTbFollowupVisit() {

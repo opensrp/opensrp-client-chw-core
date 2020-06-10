@@ -705,13 +705,13 @@
     <!--    HIV Register-->
     <string name="hiv_register">HIV Register</string>
     <string name="routine_hiv_visit"> · Routine HIV Visit</string>
-    <string name="hiv_referral_outcome">HIV referral outcome</string>
-    <string name="hiv_ltf_referral">HIV LTF referral</string>
+    <string name="hiv_problem_outcome">HIV Problem Outcome</string>
+    <string name="hiv_community_followup_referral">Issue HIV community followup referral</string>
 
     <!--    TB Register-->
     <string name="tb_register">TB Register</string>
     <string name="routine_tb_visit"> · Routine TB Visit</string>
     <string name="tb_close_case">Close TB case</string>
-    <string name="tb_referral_outcome">TB referral outcome</string>
-    <string name="tb_ltf_referral">TB LTF referral</string>
+    <string name="tb_problem_outcome">TB Problem Outcome</string>
+    <string name="tb_community_followup_referral">Issue TB community followup referral</string>
 </resources>

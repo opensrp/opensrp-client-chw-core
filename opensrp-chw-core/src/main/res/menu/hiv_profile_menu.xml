@@ -9,17 +9,17 @@
         android:title="@string/registration_info"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_hiv_referral_outcome"
+        android:id="@+id/action_hiv_outcome"
         android:enabled="true"
         android:orderInCategory="200"
-        android:title="@string/hiv_referral_outcome"
+        android:title="@string/hiv_problem_outcome"
         android:visible="false"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_issue_hiv_ltf_referral"
+        android:id="@+id/action_issue_hiv_community_followup_referral"
         android:enabled="true"
         android:orderInCategory="300"
-        android:title="@string/hiv_ltf_referral"
+        android:title="@string/hiv_community_followup_referral"
         android:visible="false"
         app:showAsAction="never" />
 
