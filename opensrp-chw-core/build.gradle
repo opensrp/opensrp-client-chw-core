@@ -189,12 +189,14 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    api('org.smartregister:opensrp-client-chw-referral:1.3.0-Test-SNAPSHOT@aar') {
+
+    api('org.smartregister:opensrp-client-chw-referral:1.3.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.nerdstone', module: 'neat-form-core'
     }
 
     api('org.smartregister:opensrp-client-opd:0.0.13-SNAPSHOT@aar') {

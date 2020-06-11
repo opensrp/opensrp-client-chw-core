@@ -50,7 +50,7 @@ public class CoreTbRegisterActivity extends BaseTbRegisterActivity {
         PullUniqueIdsServiceJob.scheduleJobImmediately(PullUniqueIdsServiceJob.TAG);
         HomeVisitServiceJob.scheduleJobImmediately(HomeVisitServiceJob.TAG);
         SyncTaskServiceJob.scheduleJobImmediately(SyncTaskServiceJob.TAG);
-        Intent intent = new Intent(this, CoreTbRegisterActivity.class);
+        Intent intent = new Intent(this, getClass());
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
         this.finish();
