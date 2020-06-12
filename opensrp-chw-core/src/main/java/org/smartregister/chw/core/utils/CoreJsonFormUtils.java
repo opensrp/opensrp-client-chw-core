@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -972,12 +971,9 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static String getSyncLocationUUIDFromDropdown(JSONObject dropdownField) throws JSONException {
         if (dropdownField.has(JsonFormConstants.TYPE) && dropdownField.getString(JsonFormConstants.TYPE)
                 .equalsIgnoreCase(JsonFormConstants.SPINNER) && dropdownField.has(JsonFormConstants.VALUE)) {
-            if (dropdownField.has(LOCATION_UUIDS)) {
-                JSONObject locationsUUIDs = dropdownField.getJSONObject(LOCATION_UUIDS);
-                String fieldValue = dropdownField.getString(JsonFormConstants.VALUE);
-                if (locationsUUIDs.has(fieldValue)) {
-                    return locationsUUIDs.getString(fieldValue);
-                }
+            String fieldValue = dropdownField.getString(JsonFormConstants.VALUE);
+            if (dropdownField.has(LOCATION_UUIDS) && dropdownField.getJSONObject(LOCATION_UUIDS).has(fieldValue)) {
+                return dropdownField.getJSONObject(LOCATION_UUIDS).getString(fieldValue);
             }
         }
         return null;
