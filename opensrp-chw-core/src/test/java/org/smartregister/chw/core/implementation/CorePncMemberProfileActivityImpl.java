@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CorePncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
-import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
 
 public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivity {
@@ -28,7 +27,7 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
 
     @Override
     public void removePncMember() {
-
+        // do nothing
     }
 
     @Override
@@ -38,26 +37,26 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
 
     @Override
     public void startMalariaRegister() {
-
+        // do nothing
     }
 
     @Override
     public void startFpRegister() {
-
+        // do nothing
     }
 
     @Override
     public void startFpChangeMethod() {
-
+        // do nothing
     }
 
     @Override
     public void startMalariaFollowUpVisit() {
-
+        // do nothing
     }
 
     @Override
     public void getRemoveBabyMenuItem(MenuItem item) {
-
+        // do nothing
     }
 }
