@@ -62,8 +62,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             onBackPressed();
             return true;
         } else if (itemId == R.id.action_pnc_member_registration) {
-            JSONObject form = CoreJsonFormUtils.getAncPncForm(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister(), memberObject, this);
-            startActivityForResult(CoreJsonFormUtils.getAncPncStartFormIntent(form, this), JsonFormUtils.REQUEST_CODE_GET_JSON);
+            startActivityForResult(getPNCIntent(), JsonFormUtils.REQUEST_CODE_GET_JSON);
             return true;
         } else if (itemId == R.id.action_pnc_registration) {
             getEditMenuItem(item);
@@ -90,6 +89,11 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected Intent getPNCIntent(){
+        JSONObject form = CoreJsonFormUtils.getAncPncForm(R.string.edit_member_form_title, CoreConstants.JSON_FORM.getFamilyMemberRegister(), memberObject, this);
+        return CoreJsonFormUtils.getAncPncStartFormIntent(form, this);
     }
 
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
