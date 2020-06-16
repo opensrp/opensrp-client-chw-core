@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 
@@ -20,10 +21,13 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.domain.FamilyMember;
 import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.Constants;
@@ -124,6 +128,18 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         JSONArray fieldsArray = jsonStepObject.getJSONArray(JsonFormConstants.FIELDS);
         JSONObject keyValueObject = fieldsArray.getJSONObject(0); // We only have one field
         Assert.assertEquals(value, keyValueObject.optString(JsonFormConstants.VALUE));
+    }
+
+    @Test
+    public void processFamilyUpdateRelationsReturnsCorrectPair() throws Exception {
+        Context context = RuntimeEnvironment.systemContext;
+        FamilyMember testMember = new FamilyMember();
+        CoreChwApplication application = (CoreChwApplication) RuntimeEnvironment.application;
+        String location = "Kenya";
+
+        CoreLibrary.init(org.smartregister.Context.getInstance());
+        Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, context, testMember, location);
+        Assert.assertNotNull(resultPair);
     }
 
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
