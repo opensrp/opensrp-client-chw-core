@@ -42,7 +42,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     @Override
     public void createNotificationDismissalEvent(String notificationId, String notificationType) {
-        Event baseEvent = ChwNotificationUtil.createNotificationDismissalBaseEvent(presenter.getClientBaseEntityId(), ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType));
+        Event baseEvent = ChwNotificationUtil.createNotificationDismissalEvent(context, presenter.getClientBaseEntityId(), notificationId,notificationType);
         JsonFormUtils.tagEvent(getAllSharedPreferences(), baseEvent);
         try {
             NCUtils.addEvent(getAllSharedPreferences(), baseEvent);
