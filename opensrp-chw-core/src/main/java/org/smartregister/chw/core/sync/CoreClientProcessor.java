@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
+import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.StockUsageReportUtils;
@@ -278,6 +280,13 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CoreReferralUtils.completeClosedReferralTasks();
                 }
                 break;
+            case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_NOTIFICATION_DISMISSAL:
+                processNotificationDismissalEvent(eventClient.getEvent());
+                break;
             default:
                 if (eventClient.getClient() != null) {
                     if (eventType.equals(CoreConstants.EventType.UPDATE_FAMILY_RELATIONS) && event.getEntityType().equalsIgnoreCase(CoreConstants.TABLE_NAME.FAMILY_MEMBER)) {
@@ -339,6 +348,14 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             String formSubmissionId = event.getFormSubmissionId();
             usage.setId(formSubmissionId);
             repo.addOrUpdateStockUsage(usage);
+        }
+    }
+
+    private void processNotificationDismissalEvent(Event event) {
+        List<Obs> notificationObs = event.getObs();
+        String notificationId = (String) notificationObs.get(0).getValue();
+        if (StringUtils.isNotBlank(notificationId)) {
+            ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType());
         }
     }
 

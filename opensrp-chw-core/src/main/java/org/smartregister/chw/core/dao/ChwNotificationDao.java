@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import android.content.Context;
 import android.util.Pair;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.dao.AbstractDao;
@@ -199,10 +200,9 @@ public class ChwNotificationDao extends AbstractDao {
         return res.get(0);
     }
 
-    public static void markNotificationAsDone(Context context, String notificationId, String notificationType) {
+    public static void markNotificationAsDone(Context context, String notificationId, String notificationTable) {
         String dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
-        String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", table, dateMarkedAsDone, notificationId);
+        String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", notificationTable, dateMarkedAsDone, notificationId);
         updateDB(sql);
     }
 

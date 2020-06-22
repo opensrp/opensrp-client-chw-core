@@ -48,7 +48,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
             NCUtils.addEvent(getAllSharedPreferences(), baseEvent);
             long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
-            ChwNotificationDao.markNotificationAsDone(context, notificationId, notificationType);
+            ChwNotificationDao.markNotificationAsDone(context, notificationId,  ChwNotificationUtil.getNotificationDetailsTable(context, notificationType));
             getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
 
         } catch (Exception ex) {
