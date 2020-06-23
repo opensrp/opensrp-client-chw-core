@@ -110,11 +110,6 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testStartFormActivity(){
-        activity = Mockito.spy(activity);
-    }
-
-    @Test
     public void presenterIsInitialisedCorrectly() {
         activity.registerPresenter();
         Assert.assertNotNull(activity.getPncMemberProfilePresenter());
