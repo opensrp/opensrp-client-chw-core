@@ -3,7 +3,6 @@ package org.smartregister.chw.core.dao;
 import android.content.Context;
 import android.util.Pair;
 
-import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.dao.AbstractDao;

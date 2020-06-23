@@ -4,15 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
-import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.StockUsageReportUtils;
