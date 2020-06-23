@@ -17,8 +17,11 @@ import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.adapter.CoreStockUsageItemAdapter;
 import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.model.MonthStockUsageModel;
 import org.smartregister.chw.core.model.StockUsageItemModel;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +30,28 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     private CoreStockInventoryReportActivity activity;
-    private ActivityController<CoreStockInventoryReportActivity> controller;
     private List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
     @Mock
     private Menu menu;
 
+    private String stockName;
+    private String unitsOfMeasure;
+    private String month;
+    private String year;
+
     @Before
     public void setUp() {
+        ActivityController<CoreStockInventoryReportActivity> controller;
+
         MockitoAnnotations.initMocks(this);
         Context context = Context.getInstance();
         CoreLibrary.init(context);
+
+        //setUp
+        stockName = "COC";
+        unitsOfMeasure = "Packets";
+        month = "12";
+        year = "2019";
 
         //Auto login by default
         String password = "pwd";
@@ -54,28 +69,27 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         Assert.assertEquals(14, size);
     }
 
+    private void getProvider() {
+        activity = Mockito.spy(activity);
+        Mockito.doReturn("provider").when(activity).getProviderName();
+        Mockito.doReturn("usage").when(activity).getStockUsageForMonth(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+    }
+
     @Test
     public void testGetStockUsageItemReportList() {
-        String stockName = "COC";
-        String unitsOfMeasure = "Packets";
-        String month = "12";
-        String year = "2019";
+
         StockUsage stockUsage = new StockUsage();
         stockUsage.setProviderId("chwone");
         List<StockUsage> providerName = new ArrayList<>();
         providerName.add(stockUsage);
 
-        activity = Mockito.spy(activity);
-        Mockito.doReturn("provider").when(activity).getProviderName();
-        Mockito.doReturn("usage").when(activity).getStockUsageForMonth(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-
+        getProvider();
         stockUsageItemModelsList.add(new StockUsageItemModel(stockName, unitsOfMeasure, "20", providerName.get(0).getProviderId()));
         activity.getStockUsageItemReportList(month, year);
         Assert.assertEquals(1, stockUsageItemModelsList.size());
     }
 
-    /*
-   @Test
+    @Test
     public void testReloadRecycler() {
         MonthStockUsageModel selected = activity.getMonthStockUsageReportList().get(0);
         Assert.assertNotNull(selected);
@@ -83,14 +97,15 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 
-
+        getProvider();
         List<StockUsageItemModel> stockUsageItemReportList = activity.getStockUsageItemReportList(stockMonth, stockYear);
-        CoreStockUsageItemAdapter coreStockUsageItemAdapter = new CoreStockUsageItemAdapter(stockUsageItemReportList, context);
+        CoreStockUsageItemAdapter coreStockUsageItemAdapter = new CoreStockUsageItemAdapter(stockUsageItemReportList, activity);
+        activity.recyclerView.setAdapter(coreStockUsageItemAdapter);
 
         activity.reloadRecycler(selected);
-        //Assert.assertNotNull(activity.reloadRecycler(selected));
+        Assert.assertNotNull(activity.recyclerView);
     }
-*/
+
     @Test
     public void testOnCreation() {
         // check if created views are found
@@ -98,14 +113,10 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "toolBarTextView"));
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "appBarLayout"));
 
-        // MonthStockUsageModel selected = activity.getMonthStockUsageReportList().get(0);
-        //activity.reloadRecycler(selected);
-
     }
 
     @Test
     public void testOnCreateOptionsMenu() {
         Assert.assertFalse(activity.onCreateOptionsMenu(menu));
     }
-
 }
