@@ -44,7 +44,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         );
     }
 
-    List<MonthStockUsageModel> getMonthStockUsageReportList() {
+   protected List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
