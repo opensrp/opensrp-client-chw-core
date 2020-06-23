@@ -51,7 +51,7 @@ public class ChwNotificationUtil {
         return notificationEventMap.get(notificationType);
     }
 
-    public static Event createNotificationDismissalEvent(Context context, String baseEntityId, String notificationId, String notificationType) {
+    public static Event createNotificationDismissalEvent(Context context, String baseEntityId, String notificationId, String notificationType, String dateMarkedAsDone) {
         Event dismissalEvent = null;
         try {
             dismissalEvent = (Event) new Event()
@@ -68,6 +68,8 @@ public class ChwNotificationUtil {
         if (dismissalEvent != null) {
             dismissalEvent.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID, "",
                     CoreJsonFormUtils.toList(notificationId), new ArrayList<>(), null, CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID));
+            dismissalEvent.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE, "",
+                    CoreJsonFormUtils.toList(dateMarkedAsDone), new ArrayList<>(), null, CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE));
         }
         return dismissalEvent;
     }

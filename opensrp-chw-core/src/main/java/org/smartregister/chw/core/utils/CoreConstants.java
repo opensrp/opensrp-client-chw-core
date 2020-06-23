@@ -823,6 +823,7 @@ public class CoreConstants {
             public static final String REFERRAL_TASK_PREVIOUS_STATUS = "referral_task_previous_status";
             public static final String REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS = "referral_task_previous_business_status";
             public static final String NOTIFICATION_ID = "notification_id";
+            public static final String DATE_NOTIFICATION_MARKED_AS_DONE = "date_marked_as_done";
         }
     }
 

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -46,6 +48,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -353,9 +356,20 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processNotificationDismissalEvent(Event event) {
         List<Obs> notificationObs = event.getObs();
-        String notificationId = (String) notificationObs.get(0).getValue();
-        if (StringUtils.isNotBlank(notificationId)) {
-            ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType());
+        String notificationId = null;
+        String dateMarkedAsDone = null;
+        if (notificationObs.size() > 0) {
+            for (Obs obs : notificationObs) {
+                if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID.equals(obs.getFormSubmissionField())) {
+                    notificationId = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE.equals(obs.getFormSubmissionField())) {
+                    dateMarkedAsDone = (String) obs.getValue();
+                }
+            }
+            if (StringUtils.isBlank(dateMarkedAsDone)) {
+                dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDateCreated().toDate());
+            }
+            ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType(), dateMarkedAsDone);
         }
     }
 
