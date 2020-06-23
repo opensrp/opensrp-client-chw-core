@@ -40,7 +40,7 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
     private WeakReference<FamilyProfileExtendedContract.View> viewReference;
     private CoreChildRegisterInteractor childRegisterInteractor;
-    private CoreChildProfileModel childProfileModel;
+    protected CoreChildProfileModel childProfileModel;
 
 
     public CoreFamilyProfilePresenter(FamilyProfileExtendedContract.View view, FamilyProfileContract.Model model, String familyBaseEntityId, String familyHead, String primaryCaregiver, String familyName) {
