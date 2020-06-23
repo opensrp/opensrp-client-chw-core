@@ -44,7 +44,9 @@ public class EventDaoTest extends EventDao{
         matrixCursor.addRow(new Object[]{eventJson});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
         List<Event> events = EventDao.getEvents("some-base-entity-id", "some-event-type", 100);
-        Assert.assertNull(events);
+        Assert.assertNotNull(events);
+        Assert.assertEquals(events.size(), 1);
+        Assert.assertEquals("ec610c3c-7e37-4559-9fee-6c99d870b197", events.get(0).getBaseEntityId());
     }
 
     @Test
@@ -53,6 +55,6 @@ public class EventDaoTest extends EventDao{
         matrixCursor.addRow(new Object[]{eventJson});
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
         Event event = EventDao.getLatestEvent("some-base-entity-id", Arrays.asList("some-event-type", "another-event-type"));
-        Assert.assertNull(event);
+        Assert.assertNotNull(event);
     }
 }
