@@ -42,13 +42,14 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     @Override
     public void createNotificationDismissalEvent(String notificationId, String notificationType) {
-        Event baseEvent = ChwNotificationUtil.createNotificationDismissalBaseEvent(presenter.getClientBaseEntityId(), ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType));
+        String dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Event baseEvent = ChwNotificationUtil.createNotificationDismissalEvent(context, presenter.getClientBaseEntityId(), notificationId,notificationType, dateMarkedAsDone);
         JsonFormUtils.tagEvent(getAllSharedPreferences(), baseEvent);
         try {
             NCUtils.addEvent(getAllSharedPreferences(), baseEvent);
             long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
-            ChwNotificationDao.markNotificationAsDone(context, notificationId, notificationType);
+            ChwNotificationDao.markNotificationAsDone(context, notificationId,  ChwNotificationUtil.getNotificationDetailsTable(context, notificationType), dateMarkedAsDone);
             getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
 
         } catch (Exception ex) {
