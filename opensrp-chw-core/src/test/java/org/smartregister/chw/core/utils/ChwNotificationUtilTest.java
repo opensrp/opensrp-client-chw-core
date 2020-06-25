@@ -10,6 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnRetrieveNotifications;
+import org.smartregister.clientandeventmodel.Event;
 
 @RunWith(RobolectricTestRunner.class)
 public class ChwNotificationUtilTest {
@@ -47,5 +48,16 @@ public class ChwNotificationUtilTest {
         OnRetrieveNotifications onRetrieveNotifications = Mockito.mock(OnRetrieveNotifications.class);
         ChwNotificationUtil.retrieveNotifications(true, "some-base-entity-id", onRetrieveNotifications);
         Mockito.verify(onRetrieveNotifications, Mockito.never()).onReceivedNotifications(Mockito.anyList());
+    }
+
+    @Test
+    public void canCreateNotificationDismissalEvent() {
+        String baseEntityId = "test-entity-0001";
+        String notificationID = "123789";
+        String notificationType = "ANC Danger Signs";
+        String dateMarkedAsDone = "2020-06-23";
+
+        Event dismissalEvent = ChwNotificationUtil.createNotificationDismissalEvent(RuntimeEnvironment.application, baseEntityId, notificationID, notificationType, dateMarkedAsDone);
+        Assert.assertEquals(dismissalEvent.getObs().size(), 2);
     }
 }

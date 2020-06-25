@@ -9,8 +9,10 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.listener.OnRetrieveNotifications;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.util.JsonFormUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,20 +51,27 @@ public class ChwNotificationUtil {
         return notificationEventMap.get(notificationType);
     }
 
-    public static Event createNotificationDismissalBaseEvent(String baseEntityId, String notificationEventType) {
-        Event baseEvent = null;
+    public static Event createNotificationDismissalEvent(Context context, String baseEntityId, String notificationId, String notificationType, String dateMarkedAsDone) {
+        Event dismissalEvent = null;
         try {
-            baseEvent = (Event) new Event()
+            dismissalEvent = (Event) new Event()
                     .withBaseEntityId(baseEntityId)
                     .withEventDate(new Date())
-                    .withEventType(notificationEventType)
+                    .withEventType( ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType))
                     .withFormSubmissionId(JsonFormUtils.generateRandomUUIDString())
-                    .withEntityType(null)
+                    .withEntityType(getNotificationDetailsTable(context, notificationType))
                     .withDateCreated(new Date());
         } catch (Exception ex) {
             Timber.e(ex);
         }
-        return baseEvent;
+
+        if (dismissalEvent != null) {
+            dismissalEvent.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID, "",
+                    CoreJsonFormUtils.toList(notificationId), new ArrayList<>(), null, CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID));
+            dismissalEvent.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE, "",
+                    CoreJsonFormUtils.toList(dateMarkedAsDone), new ArrayList<>(), null, CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE));
+        }
+        return dismissalEvent;
     }
 
     public static String getStringFromJSONArrayString(String jsonArrayString) {
