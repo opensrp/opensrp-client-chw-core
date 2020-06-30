@@ -9,13 +9,13 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 
 import java.util.Date;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class)
 public class MalariaVisitUtilTest {
     private Date malariaTestDate = new DateTime().minusDays(14).toDate();
     private Date followUpDate = new DateTime().minusDays(7).toDate();
