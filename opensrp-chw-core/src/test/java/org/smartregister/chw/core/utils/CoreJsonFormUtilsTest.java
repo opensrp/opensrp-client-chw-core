@@ -160,13 +160,13 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
         FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
                 BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
-        metadata.updateFamilyRegister("formName",
+        metadata.updateFamilyRegister("family_register",
                 "tableName",
                 "registerEventType",
                 "updateEventType",
                 "config",
                 "familyHeadRelationKey", "familyCareGiverRelationKey");
-        metadata.updateFamilyMemberRegister("formName",
+        metadata.updateFamilyMemberRegister("family_member_register",
                 "tableName",
                 "registerEventType",
                 "updateEventType",
@@ -174,7 +174,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
                 "familyRelationKey");
         UtilsShadowUtil.setMetadata(metadata);
 
-        Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, application, testMember, "Kenya");
+        Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, RuntimeEnvironment.application, testMember, "Kenya");
 
         // Client validation
         Assert.assertEquals(1, resultPair.first.size());
