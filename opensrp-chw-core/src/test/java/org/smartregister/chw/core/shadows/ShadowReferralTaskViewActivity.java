@@ -17,11 +17,11 @@ public class ShadowReferralTaskViewActivity extends BaseReferralTaskViewActivity
 
     @Override
     protected void onCreation() {
-
+        //Overridden not needed
     }
 
     @Override
     protected void onResumption() {
-
+        //Overridden not needed
     }
 }

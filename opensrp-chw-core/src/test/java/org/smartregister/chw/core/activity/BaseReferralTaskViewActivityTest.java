@@ -15,7 +15,7 @@ import org.smartregister.domain.Task;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseShadowReferralTaskViewActivityTest extends BaseUnitTest {
+public class BaseReferralTaskViewActivityTest extends BaseUnitTest {
 
     private BaseReferralTaskViewActivity referralTaskViewActivity;
 
