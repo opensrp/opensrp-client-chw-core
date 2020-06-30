@@ -9,7 +9,7 @@ import org.smartregister.sync.helper.ECSyncHelper;
 @Implements(ECSyncHelper.class)
 public class EcSyncHelperShadowHelper {
 
-    static Client testClient;
+    private static Client testClient;
 
     @Implementation
     public JSONObject getClient(String baseEntityId) {
