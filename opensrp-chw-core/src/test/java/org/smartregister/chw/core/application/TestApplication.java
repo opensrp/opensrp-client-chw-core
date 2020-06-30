@@ -10,7 +10,6 @@ import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.repository.Repository;
 
-
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
