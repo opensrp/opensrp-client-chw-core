@@ -31,12 +31,16 @@ import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationProperty;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +57,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        String jsonString = "{\"count\": \"2\",\"metadata\": {},\"step1\": {\"title\": \"Family Registration Info\",\"next\": \"step2\",\"fields\": [] },\"step2\": {\"title\": \"Family Registration Page two\",\"fields\": [] }}";
+        String jsonString = "{\"count\": \"2\",\"metadata\": {},\"step1\": {\"title\": \"Family Registration Info\",\"next\": \"step2\",\"fields\": [{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"},\"values\":[\"Tabata Dampo - Unified\"],\"keys\":[\"Tabata Dampo - Unified\"],\"openmrs_choice_ids\":{\"Tabata Dampo - Unified\":\"Tabata Dampo - Unified\"},\"location_uuids\":{\"Tabata Dampo - Unified\":\"fb7ed5db-138d-4e6f-94d8-bc443b58dadb\"},\"value\":\"Tabata Dampo - Unified\"}] },\"step2\": {\"title\": \"Family Registration Page two\",\"fields\": [] }}";
         try {
             jsonForm = new JSONObject(jsonString);
 
@@ -194,5 +198,45 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
                 ":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedatethatthemembermovedaway\"},\"is_visible\":false,\"is-rule-check\":false},{\"key\":\"date_died\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"1543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\"" +
                 ":\"text\",\"type\":\"date_picker\",\"label\":\"Dateofdeath\",\"hint\":\"Dateofdeath\",\"expanded\":false,\"min_date\":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedateofdeath\"},\"step\":\"step1\",\"is-rule-check\":false,\"is_visible\":false},{\"key\":\"age_at_death\",\"openmrs_entity_parent\"" +
                 ":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"label\":\"Ageatdeath\",\"hint\":\"Ageatdeath\",\"type\":\"edit_text\",\"read_only\":\"true\",\"is_visible\":false}]},\"invisible_required_fields\":\"[date_died,date_moved]\",\"details\":{\"appVersionName\":\"1.7.23-SNAPSHOT\",\"formVersion\":\"\"}}";
+    }
+
+    @Test
+    public void addLocationsToDropdownField() throws JSONException {
+        List<Location> locations = new ArrayList<>();
+        Location location1 = new Location();
+        location1.setId("uuid1");
+        location1.setProperties(new LocationProperty());
+        location1.getProperties().setName("Madona");
+        location1.getProperties().setUid("uuid1");
+
+        Location location2 = new Location();
+        location2.setId("uuid2");
+        location2.setProperties(new LocationProperty());
+        location2.getProperties().setName("Ebrahim Haji");
+        location2.getProperties().setUid("uuid2");
+
+        locations.add(location1);
+        locations.add(location2);
+
+        JSONObject dropdownField = new JSONObject("{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"}}");
+        CoreJsonFormUtils.addLocationsToDropdownField(locations, dropdownField);
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.VALUES));
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.KEYS));
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.OPENMRS_CHOICE_IDS));
+    }
+
+    @Test
+    public void getSyncLocationUUIDFromDropdown() throws JSONException {
+        JSONObject dropdownField = new JSONObject("{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"},\"values\":[\"Tabata Dampo - Unified\"],\"keys\":[\"Tabata Dampo - Unified\"],\"openmrs_choice_ids\":{\"Tabata Dampo - Unified\":\"Tabata Dampo - Unified\"},\"location_uuids\":{\"Tabata Dampo - Unified\":\"fb7ed5db-138d-4e6f-94d8-bc443b58dadb\"},\"value\":\"Tabata Dampo - Unified\"}");
+        String locationUUID = CoreJsonFormUtils.getSyncLocationUUIDFromDropdown(dropdownField);
+        Assert.assertNotNull(locationUUID);
+        Assert.assertEquals(locationUUID, "fb7ed5db-138d-4e6f-94d8-bc443b58dadb");
+        Assert.assertNull(CoreJsonFormUtils.getSyncLocationUUIDFromDropdown(new JSONObject()));
+    }
+
+    @Test
+    public void getJsonField() {
+        JSONObject locationId = CoreJsonFormUtils.getJsonField(jsonForm, JsonFormUtils.STEP1, "sync_location_id");
+        Assert.assertNotNull(locationId);
     }
 }

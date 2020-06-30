@@ -100,6 +100,8 @@ public abstract class BaseChwNotificationFragment extends BaseChwRegisterFragmen
         try {
             if (isValidFilterForFts(commonRepository())) {
                 String sql = queryProvider.getObjectIdsQuery(filters);
+                sql = sqb.addlimitandOffset(sql, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset());
+
                 List<String> ids = commonRepository().findSearchIds(sql);
                 query = queryProvider.mainSelectWhereIDsIn();
 

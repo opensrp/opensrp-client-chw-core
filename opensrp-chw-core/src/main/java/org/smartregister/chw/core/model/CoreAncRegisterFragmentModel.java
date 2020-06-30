@@ -60,7 +60,7 @@ public class CoreAncRegisterFragmentModel extends BaseAncRegisterFragmentModel {
 
         columnList.addAll(getFlavor().mainColumns(tableName));
 
-        return columnList.toArray(new String[columnList.size()]);
+        return columnList.toArray(new String[0]);
     }
 
 

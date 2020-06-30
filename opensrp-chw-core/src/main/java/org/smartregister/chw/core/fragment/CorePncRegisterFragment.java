@@ -88,7 +88,8 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
     }
 
     public String getDueCondition() {
-        return "ec_pregnancy_outcome.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.PNC_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
+        return "ec_pregnancy_outcome.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and expiry_date " +
+                "and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.PNC_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
     }
 
     private void switchViews(View dueOnlyLayout, boolean isPress) {
@@ -100,7 +101,7 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
         }
     }
 
-    private String getCondition() {
+    protected String getCondition() {
         return " " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.DATE_REMOVED + " is null " +
                 "AND " + CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME + "." + DBConstants.KEY.IS_CLOSED + " is 0 ";
     }
