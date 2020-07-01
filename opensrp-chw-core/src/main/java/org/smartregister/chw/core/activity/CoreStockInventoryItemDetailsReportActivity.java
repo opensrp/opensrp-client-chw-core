@@ -31,7 +31,7 @@ import java.util.Map;
 public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
 
-    private String evaluateStockName(String stockName) {
+    protected  String evaluateStockName(String stockName) {
         String stock_name;
         switch (stockName) {
             case ("Male Condoms"):
@@ -53,7 +53,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
         return stock_name;
     }
 
-    private List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName, String providerName) {
+    protected List<StockUsageItemDetailsModel> stockUsageItemDetailsModelList(String stockName, String providerName) {
         StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
         String stockMonth;
         String stockYear;
