@@ -33,6 +33,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     protected void onCreation() {
         super.onCreation();
         baJsonFormUtils = new BAJsonFormUtils(HealthFacilityApplication.getInstance());
+        setIndependentClient(false);
     }
 
     @Override
@@ -58,6 +59,16 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     @Override
+    protected void startHivRegister() {
+        //TODO implement start hiv register for HF
+    }
+
+    @Override
+    protected void startTbRegister() {
+        //TODO implement start tb register for HF
+    }
+
+    @Override
     protected void startFpChangeMethod() {
         //TODO implement start fp change register for HF
     }
@@ -65,6 +76,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     @Override
     protected void startMalariaFollowUpVisit() {
         //TODO implement start malaria  follow-up visit for HF
+    }
+
+    @Override
+    protected void setIndependentClient(boolean isIndependent) {
+        this.isIndependent = isIndependent;
     }
 
     @Override

@@ -23,6 +23,7 @@ public interface ChwDBConstants {
     String TASK_CODE = "code";
     String TASK_STATUS_READY = "READY";
     String TASK_STATUS_REFERRAL = "Referral";
+    String DETAILS = "details";
 
     interface TaskTable {
         String FOR = "for";
@@ -31,5 +32,6 @@ public interface ChwDBConstants {
         String START = "start";
         String FOCUS = "focus";
         String REASON_REFERENCE = "reason_reference";
+        String LOCATION = "location";
     }
 }

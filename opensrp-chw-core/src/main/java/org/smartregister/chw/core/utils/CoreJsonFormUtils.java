@@ -3,7 +3,6 @@ package org.smartregister.chw.core.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -30,8 +29,9 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
+import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.Photo;
-import org.smartregister.domain.ProfileImage;
 import org.smartregister.domain.tag.FormTag;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.util.Constants;
@@ -40,24 +40,18 @@ import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.repository.ImageRepository;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.AssetHandler;
 import org.smartregister.util.FormUtils;
 import org.smartregister.util.ImageUtils;
 import org.smartregister.view.LocationPickerView;
-import org.smartregister.view.activity.DrishtiApplication;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,7 +59,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import timber.log.Timber;
 
@@ -80,6 +73,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static final String CURRENT_OPENSRP_ID = "current_opensrp_id";
     public static final String READ_ONLY = "read_only";
     private static HashMap<String, String> actionMap = null;
+    private static final String LOCATION_UUIDS = "location_uuids";
 
     public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass) {
         Intent intent = new Intent(context, activityClass);
@@ -379,72 +373,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         //TODO Save edit log ?
 
         ecUpdater.addClient(baseClient.getBaseEntityId(), mergedJson);
-    }
-
-    public static void saveImage(String providerId, String entityId, String imageLocation) {
-        if (StringUtils.isBlank(imageLocation)) {
-            return;
-        }
-
-        File file = new File(imageLocation);
-
-        if (!file.exists()) {
-            return;
-        }
-
-        Bitmap compressedImageFile = null;
-        try {
-            compressedImageFile = FamilyLibrary.getInstance().getCompressor().compressToBitmap(file);
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-        saveStaticImageToDisk(compressedImageFile, providerId, entityId);
-
-    }
-
-    private static void saveStaticImageToDisk(Bitmap image, String providerId, String entityId) {
-        if (image == null || StringUtils.isBlank(providerId) || StringUtils.isBlank(entityId)) {
-            return;
-        }
-        OutputStream os = null;
-        try {
-
-            if (entityId != null && !entityId.isEmpty()) {
-                final String absoluteFileName = DrishtiApplication.getAppDir() + File.separator + entityId + ".JPEG";
-
-                File outputFile = new File(absoluteFileName);
-                os = new FileOutputStream(outputFile);
-                Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
-                if (compressFormat != null) {
-                    image.compress(compressFormat, 100, os);
-                } else {
-                    throw new IllegalArgumentException("Failed to updateFamilyRelations static image, could not retrieve image compression format from name "
-                            + absoluteFileName);
-                }
-                // insert into the db
-                ProfileImage profileImage = new ProfileImage();
-                profileImage.setImageid(UUID.randomUUID().toString());
-                profileImage.setAnmId(providerId);
-                profileImage.setEntityID(entityId);
-                profileImage.setFilepath(absoluteFileName);
-                profileImage.setFilecategory("profilepic");
-                profileImage.setSyncStatus(ImageRepository.TYPE_Unsynced);
-                ImageRepository imageRepo = Utils.context().imageRepository();
-                imageRepo.add(profileImage);
-            }
-
-        } catch (FileNotFoundException e) {
-            Timber.e("Failed to updateFamilyRelations static image to disk");
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    Timber.e("Failed to close static images output stream after attempting to write image");
-                }
-            }
-        }
-
     }
 
     public static JSONObject getAutoPopulatedJsonEditFormString(String formName, Context context, CommonPersonObjectClient client, String eventType) {
@@ -1011,5 +939,48 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
             step++;
         }
+    }
+
+    public static void addLocationsToDropdownField(List<Location> locations, JSONObject dropdownField) throws JSONException {
+        if (dropdownField != null) {
+            Collections.sort(locations, (firstLocation, secondLocation) ->
+                    firstLocation.getProperties().getName().compareTo(secondLocation.getProperties().getName()));
+
+            if (dropdownField.has(JsonFormConstants.TYPE) && dropdownField.getString(JsonFormConstants.TYPE)
+                    .equalsIgnoreCase(JsonFormConstants.SPINNER)) {
+
+                JSONArray values = new JSONArray();
+                JSONObject openMrsChoiceIds = new JSONObject();
+                JSONObject locationUUIDs = new JSONObject();
+
+                for (Location location : locations) {
+                    LocationProperty locationProperties = location.getProperties();
+                    values.put(locationProperties.getName());
+                    openMrsChoiceIds.put(locationProperties.getName(), locationProperties.getName());
+                    locationUUIDs.put(locationProperties.getName(), location.getId());
+                }
+
+                dropdownField.put(JsonFormConstants.VALUES, values);
+                dropdownField.put(JsonFormConstants.KEYS, values);
+                dropdownField.put(JsonFormConstants.OPENMRS_CHOICE_IDS, openMrsChoiceIds);
+                dropdownField.put(LOCATION_UUIDS, locationUUIDs);
+            }
+        }
+    }
+
+    public static String getSyncLocationUUIDFromDropdown(JSONObject dropdownField) throws JSONException {
+        if (dropdownField.has(JsonFormConstants.TYPE) && dropdownField.getString(JsonFormConstants.TYPE)
+                .equalsIgnoreCase(JsonFormConstants.SPINNER) && dropdownField.has(JsonFormConstants.VALUE)) {
+            String fieldValue = dropdownField.getString(JsonFormConstants.VALUE);
+            if (dropdownField.has(LOCATION_UUIDS) && dropdownField.getJSONObject(LOCATION_UUIDS).has(fieldValue)) {
+                return dropdownField.getJSONObject(LOCATION_UUIDS).getString(fieldValue);
+            }
+        }
+        return null;
+    }
+
+    public static JSONObject getJsonField(JSONObject form, String step, String key) {
+        JSONArray field = fields(form, step);
+        return getFieldJSONObject(field, key);
     }
 }

@@ -33,7 +33,9 @@ import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.dao.FpDao;
+import org.smartregister.chw.hiv.dao.HivDao;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
+import org.smartregister.chw.tb.dao.TbDao;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.FetchStatus;
@@ -51,6 +53,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.TITLE_VIEW_TEXT;
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
+import static org.smartregister.family.util.DBConstants.KEY.LAST_NAME;
 
 public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivity implements FamilyProfileExtendedContract.View {
     protected String familyBaseEntityId;
@@ -314,7 +318,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (view.getTag() instanceof CommonPersonObjectClient) {
             CommonPersonObjectClient commonPersonObjectClient = (CommonPersonObjectClient) view.getTag();
             String entityType = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.ENTITY_TYPE, false);
-            if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
+            if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType) || CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT.equals(entityType)) {
                 org.smartregister.util.Utils.startAsyncTask(new GoToMemberProfileBaseOnRegisterTask(commonPersonObjectClient, fragmentArguments, this), null);
 
             } else {
@@ -332,6 +336,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, patient);
         intent.putExtra(Constants.INTENT_KEY.FAMILY_HEAD, getFamilyHead());
         intent.putExtra(Constants.INTENT_KEY.PRIMARY_CAREGIVER, getPrimaryCaregiver());
+        passToolbarTitle(this, intent);
         startActivity(intent);
     }
 
@@ -347,9 +352,11 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, true);
+        MemberObject memberObject = new MemberObject(patient);
+        memberObject.setFamilyName(Utils.getValue(patient.getColumnmaps(), LAST_NAME, false));
+        passToolbarTitle(this, intent);
         intent.putExtra(Constants.INTENT_KEY.BASE_ENTITY_ID, patient.getCaseId());
-        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, new MemberObject(patient));
+        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject );
         startActivity(intent);
     }
 
@@ -372,6 +379,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, patient.entityId());
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, patient);
         intent.putExtra(TITLE_VIEW_TEXT, String.format(getString(org.smartregister.chw.core.R.string.return_to_family_name), ""));
+        passToolbarTitle(this, intent);
         return intent;
     }
 
@@ -394,6 +402,10 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
                 gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
             } else if (FpDao.isRegisteredForFp(commonPersonObjectClient.entityId())) {
                 goToFpProfile(commonPersonObjectClient.entityId(), activity);
+            }else if (HivDao.isRegisteredForHiv(commonPersonObjectClient.entityId())) {
+                goToHivProfile(commonPersonObjectClient.entityId(), activity);
+            }else if (TbDao.isRegisteredForTb(commonPersonObjectClient.entityId())) {
+                goToTbProfile(commonPersonObjectClient.entityId(), activity);
             } else {
                 goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
             }
@@ -412,6 +424,10 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected abstract Class<? extends BasePncMemberProfileActivity> getPncMemberProfileActivityClass();
 
     protected abstract void goToFpProfile(String baseEntityId, Activity activity);
+
+    protected abstract void goToHivProfile(String baseEntityId, Activity activity);
+
+    protected abstract void goToTbProfile(String baseEntityId, Activity activity);
 
     protected abstract boolean isAncMember(String baseEntityId);
 

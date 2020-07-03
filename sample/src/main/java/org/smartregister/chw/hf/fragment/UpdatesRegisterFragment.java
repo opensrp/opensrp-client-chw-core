@@ -2,13 +2,13 @@ package org.smartregister.chw.hf.fragment;
 
 import android.view.View;
 
-import org.smartregister.chw.core.fragment.BaseReferralNotificationFragment;
+import org.smartregister.chw.core.fragment.BaseChwNotificationFragment;
 import org.smartregister.chw.hf.presenter.UpdatesFragmentPresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 import java.util.HashMap;
 
-public class UpdatesRegisterFragment extends BaseReferralNotificationFragment {
+public class UpdatesRegisterFragment extends BaseChwNotificationFragment {
 
     @Override
     protected void startRegistration() {

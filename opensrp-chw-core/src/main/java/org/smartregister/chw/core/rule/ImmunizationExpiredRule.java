@@ -45,4 +45,9 @@ public class ImmunizationExpiredRule implements ICommonRule {
         return isExpired + "";
     }
 
+
+    public void setVaccineName(String vaccineName) {
+        this.vaccineName = vaccineName;
+    }
+
 }

@@ -11,8 +11,8 @@ import org.smartregister.util.FormUtils;
 import timber.log.Timber;
 
 public class CoreMalariaMemberProfilePresenter extends BaseMalariaProfilePresenter implements CoreMalariaProfileContract.Presenter {
-    private CoreMalariaProfileContract.Interactor interactor;
     private FormUtils formUtils;
+    private CoreMalariaProfileContract.Interactor interactor;
 
     public CoreMalariaMemberProfilePresenter(CoreMalariaProfileContract.View view, CoreMalariaProfileContract.Interactor interactor, MemberObject memberObject) {
         super(view, interactor, memberObject);

@@ -7,7 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -37,6 +42,9 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
+
 public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileActivity implements CorePncMemberProfileContract.View {
 
     protected ImageView imageViewCross;
@@ -44,7 +52,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected CorePncMemberProfileInteractor pncMemberProfileInteractor = getPncMemberProfileInteractor();
     protected HashMap<String, String> menuItemEditNames = new HashMap<>();
     protected HashMap<String, String> menuItemRemoveNames = new HashMap<>();
-
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -67,6 +76,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_fp_initiation_pnc) {
             startFpRegister();
             return true;
+        } else if (itemId == R.id.action_hiv_registration) {
+            startHivRegister();
+            return true;
+        } else if (itemId == R.id.action_tb_registration) {
+            startTbRegister();
+            return true;
         } else if (itemId == R.id.action_fp_change) {
             startFpChangeMethod();
             return true;
@@ -81,6 +96,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
+        return getCommonPersonObjectClient(baseEntityId);
     }
 
     @Override
@@ -100,6 +119,18 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     @Override
     public void registerPresenter() {
         presenter = new CorePncMemberProfilePresenter(this, new CorePncMemberProfileInteractor(), memberObject);
+    }
+
+    @Override
+    protected void onCreation() {
+        super.onCreation();
+        initializeNotificationReferralRecyclerView();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -167,6 +198,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         super.setupViews();
         imageViewCross = findViewById(R.id.tick_image);
         imageViewCross.setOnClickListener(this);
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
     }
 
     @Override
@@ -207,6 +239,33 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         }
     }
 
+    @Override
+    public MemberObject getMemberObject(String baseEntityID) {
+        return PNCDao.getMember(baseEntityID);
+    }
+
+    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
+
+    protected abstract CorePncMemberProfileInteractor getPncMemberProfileInteractor();
+
+    protected abstract void removePncMember();
+
+    protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
+
+    protected abstract void startMalariaRegister();
+
+    protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
+
+    protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHivRegister();
+
+    protected abstract void startTbRegister();
+
+    protected abstract void getRemoveBabyMenuItem(MenuItem item);
+
     private class UpdateMalariaFollowUpStatusTask extends AsyncTask<Void, Void, Void> {
         private final Menu menu;
         private final String baseEntityId;
@@ -232,23 +291,5 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             }
         }
     }
-
-    protected abstract Class<? extends CoreFamilyProfileActivity> getFamilyProfileActivityClass();
-
-    protected abstract CorePncMemberProfileInteractor getPncMemberProfileInteractor();
-
-    protected abstract void removePncMember();
-
-    protected abstract Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass();
-
-    protected abstract void startMalariaRegister();
-
-    protected abstract void startFpRegister();
-
-    protected abstract void startFpChangeMethod();
-
-    protected abstract void startMalariaFollowUpVisit();
-
-    protected abstract void getRemoveBabyMenuItem(MenuItem item);
 
 }

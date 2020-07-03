@@ -3,7 +3,6 @@ package org.smartregister.chw.core.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 public class CoreConstantsTest {
     @Test
     public void getUnifiedReferralForms() {
@@ -19,7 +18,6 @@ public class CoreConstantsTest {
         Assert.assertEquals(CoreConstants.JSON_FORM.getPncReferralForm(), "pnc_referral_form");
     }
 
-
     @Test
     public void getRegisterType() {
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.ANC, "ANC");
@@ -27,7 +25,7 @@ public class CoreConstantsTest {
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.CHILD, "Child");
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.FAMILY_PLANNING, "Family Planning");
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.MALARIA, "Malaria");
-        Assert.assertEquals(CoreConstants.REGISTER_TYPE.OTHER, "OTHER");
+        Assert.assertEquals(CoreConstants.REGISTER_TYPE.OTHER, "Other");
     }
 
 }
