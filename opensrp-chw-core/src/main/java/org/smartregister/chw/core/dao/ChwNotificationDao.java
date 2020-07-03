@@ -259,8 +259,8 @@ public class ChwNotificationDao extends AbstractDao {
     public static String getFamilyHeadSyncLocationId(String familyBaseEntityId) {
         String sql = String.format(
                 " SELECT sync_location_id FROM ec_family f " +
-                " INNER JOIN ec_family_member fm ON f.family_head = fm.base_entity_id " +
-                " WHERE f.base_entity_id = '%s'", familyBaseEntityId);
+                        " INNER JOIN ec_family_member fm ON f.family_head = fm.base_entity_id " +
+                        " WHERE f.base_entity_id = '%s'", familyBaseEntityId);
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "sync_location_id");
         List<String> res = readData(sql, dataMap);
 

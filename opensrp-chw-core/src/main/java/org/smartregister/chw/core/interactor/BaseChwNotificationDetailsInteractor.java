@@ -14,6 +14,7 @@ import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.hiv.util.Constants;
+import org.smartregister.chw.hiv.util.Constants;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.family.util.Utils;
 import org.smartregister.opd.utils.OpdUtils;
@@ -138,6 +139,29 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         return new NotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
     }
 
+    private List<String> getNotificationRecordDetails(NotificationRecord record) {
+        List<String> details = new ArrayList<>();
+        if (record != null) {
+            Pair<String, String> notificationDatesPair = null;
+            String notificationDate = record.getNotificationDate();
+            try {
+                notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
+                notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
+            } catch (ParseException e) {
+                Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
+            }
+            presenter.setNotificationDates(notificationDatesPair);
+
+
+            details.add(context.getString(R.string.notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
+            details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
+            if (record.getVillage() != null) {
+                details.add(context.getString(R.string.notification_village, record.getVillage()));
+            }
+        }
+        return details;
+    }
+
     @NotNull
     private NotificationItem getHivTbProblemOutcomeDetails(String notificationId, String notificationType) {
         NotificationRecord notificationRecord;
@@ -160,30 +184,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
         return new NotificationItem(title, details);
-    }
-
-
-    private List<String> getNotificationRecordDetails(NotificationRecord record) {
-        List<String> details = new ArrayList<>();
-        if (record != null) {
-            Pair<String, String> notificationDatesPair = null;
-            String notificationDate = record.getNotificationDate();
-            try {
-                notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
-                notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
-            } catch (ParseException e) {
-                Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
-            }
-            presenter.setNotificationDates(notificationDatesPair);
-
-
-            details.add(context.getString(R.string.notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
-            details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
-            if (record.getVillage() != null) {
-                details.add(context.getString(R.string.notification_village, record.getVillage()));
-            }
-        }
-        return details;
     }
 
     /**

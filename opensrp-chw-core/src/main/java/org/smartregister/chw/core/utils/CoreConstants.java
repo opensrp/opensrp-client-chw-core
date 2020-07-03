@@ -227,6 +227,7 @@ public class CoreConstants {
         private static final String ALL_CLIENT_UPDATE_REGISTRATION_INFO_FORM = "all_clients_update_registration_info_form";
 
 
+
         public static AssetManager assetManager;
         public static Locale locale;
 
