@@ -17,11 +17,10 @@ import org.smartregister.chw.core.R;
 public class SendMonthlyDraftDialogFragmentTest extends BaseUnitTest {
 
     private SendMonthlyDraftDialogFragment sendMonthlyDraftDialogFragment;
-    private View.OnClickListener onSendClickedListener;
 
     @Before
     public void setUp() {
-        onSendClickedListener = Mockito.spy(View.OnClickListener.class);
+        View.OnClickListener onSendClickedListener = Mockito.spy(View.OnClickListener.class);
         sendMonthlyDraftDialogFragment = SendMonthlyDraftDialogFragment.newInstance("Feb", "2019-06-07", onSendClickedListener);
         AppCompatActivity activity = Robolectric
                 .buildActivity(AppCompatActivity.class).create().start()
