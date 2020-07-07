@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 
@@ -27,6 +28,8 @@ import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.EcSyncHelperShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
+import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
+import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
@@ -37,6 +40,7 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
@@ -49,7 +53,7 @@ import java.util.Objects;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
-        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class})
+        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -90,6 +94,29 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(baseEntityId, eventTriple.getMiddle());
         Assert.assertEquals(1, eventTriple.getRight().size());
     }
+
+    @Test
+    public void getAutoPopulatedJsonEditFormReturnsCorrectString() {
+        Context context = RuntimeEnvironment.application;
+        String id = "testCaseId";
+        String encounterType = "test_encounter";
+
+        HashMap<String, String> detailsMap = new HashMap<>();
+        HashMap<String, String> columnMaps = new HashMap<>();
+        columnMaps.put(DBConstants.KEY.DOB, "01-12-2020");
+        columnMaps.put(Constants.JSON_FORM_KEY.DOB_UNKNOWN, "false");
+        columnMaps.put("fam_name", "Sonkos");
+        columnMaps.put(DBConstants.KEY.LANDMARK, "police station");
+        columnMaps.put(ChwDBConstants.NEAREST_HEALTH_FACILITY, "makutano health center");
+        columnMaps.put(DBConstants.KEY.GPS, "-0.00001, 0.25400");
+
+        CommonPersonObjectClient testClient = new CommonPersonObjectClient(id, detailsMap, "tester");
+        testClient.setColumnmaps(columnMaps);
+
+        LocationHelper.init(new ArrayList<String>(), "HEALTH FACILITY");
+        JSONObject jsonObject = CoreJsonFormUtils.getAutoPopulatedJsonEditFormString("family_register", context, testClient, encounterType);
+    }
+
 
     @Test
     public void processPopulatableFieldsUpdatesJSONOptionsWithCorrectValues() throws JSONException {
