@@ -20,26 +20,36 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.domain.FamilyMember;
 import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.EcSyncHelperShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
+import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.LocationProperty;
+import org.smartregister.family.activity.FamilyWizardFormActivity;
+import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.util.JsonFormUtils;
+import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, UtilsShadowUtil.class})
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
+        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -128,6 +138,55 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         JSONArray fieldsArray = jsonStepObject.getJSONArray(JsonFormConstants.FIELDS);
         JSONObject keyValueObject = fieldsArray.getJSONObject(0); // We only have one field
         Assert.assertEquals(value, keyValueObject.optString(JsonFormConstants.VALUE));
+    }
+
+    @Test
+    public void processFamilyUpdateRelationsReturnsCorrectPair() throws Exception {
+        CoreChwApplication application = (CoreChwApplication) RuntimeEnvironment.application;
+        CoreLibrary.init(org.smartregister.Context.getInstance());
+        String memberId = "test-member-id-123";
+        String familyId = "test-family-id-123";
+
+        FamilyMember testMember = new FamilyMember();
+        testMember.setFamilyID(familyId);
+        testMember.setMemberID(memberId);
+        testMember.setPrimaryCareGiver(true);
+        testMember.setFamilyHead(true);
+
+        Client testClient = new Client(memberId, "Mr", "Miyagi", "Sakamoto", new Date(), null,
+                false, false, "male");
+        testClient.setRelationships(new HashMap<>());
+        EcSyncHelperShadowHelper.setTestClient(testClient);
+
+        FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
+                BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
+        metadata.updateFamilyRegister("family_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyHeadRelationKey", "familyCareGiverRelationKey");
+        metadata.updateFamilyMemberRegister("family_member_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyRelationKey");
+        UtilsShadowUtil.setMetadata(metadata);
+
+        Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, RuntimeEnvironment.application, testMember, "Kenya");
+
+        // Client validation
+        Assert.assertEquals(1, resultPair.first.size());
+        Assert.assertEquals(memberId, Objects.requireNonNull(resultPair.first.get(0).getRelationships().get(CoreConstants.RELATIONSHIP.PRIMARY_CAREGIVER)).get(0));
+
+        // Events validation
+        Assert.assertEquals(2, resultPair.second.size());
+        Assert.assertEquals(CoreConstants.EventType.UPDATE_FAMILY_RELATIONS, resultPair.second.get(0).getEventType());
+        Assert.assertEquals(familyId, resultPair.second.get(0).getBaseEntityId());
+        Assert.assertEquals(CoreConstants.EventType.UPDATE_FAMILY_MEMBER_RELATIONS, resultPair.second.get(1).getEventType());
+        Assert.assertEquals(memberId, resultPair.second.get(1).getBaseEntityId());
+        Assert.assertEquals(3, resultPair.second.get(1).getObs().size());
     }
 
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
