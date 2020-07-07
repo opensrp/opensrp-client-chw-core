@@ -67,6 +67,10 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
         return false;
     }
 
+    public static void setPersonObjectClient(CommonPersonObjectClient personObjectClient) {
+        BaseReferralTaskViewActivity.personObjectClient = personObjectClient;
+    }
+
     public CommonPersonObjectClient getPersonObjectClient() {
         return personObjectClient;
     }
