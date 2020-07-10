@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.application;
 
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
@@ -57,5 +58,10 @@ public class TestApplication extends CoreChwApplication {
     public Repository getRepository() {
         repository = mock(Repository.class);
         return repository;
+    }
+
+    @Override
+    public void onTerminate() {
+        Robolectric.flushBackgroundThreadScheduler();
     }
 }
