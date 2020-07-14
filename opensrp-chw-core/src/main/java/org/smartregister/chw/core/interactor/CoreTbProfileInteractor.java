@@ -84,17 +84,17 @@ public class CoreTbProfileInteractor extends BaseTbProfileInteractor implements 
 
         if (memberType != null) {
             switch (memberType) {
-                case CoreConstants.TABLE_NAME.TB_MEMBER:
-                    visits = TbDao.getTbVisitsMedicalHistory(memberObject.getBaseEntityId());
-                    break;
                 case CoreConstants.TABLE_NAME.HIV_MEMBER:
                     visits = HivDao.getHivVisitsMedicalHistory(memberObject.getBaseEntityId());
                     break;
-                case CoreConstants.TABLE_NAME.PNC_MEMBER:
-                    visits = VisitDao.getPNCVisitsMedicalHistory(memberObject.getBaseEntityId());
+                case CoreConstants.TABLE_NAME.TB_MEMBER:
+                    visits = TbDao.getTbVisitsMedicalHistory(memberObject.getBaseEntityId());
                     break;
                 case CoreConstants.TABLE_NAME.ANC_MEMBER:
                     visits = getAncVisitsMedicalHistory(memberObject.getBaseEntityId());
+                    break;
+                case CoreConstants.TABLE_NAME.PNC_MEMBER:
+                    visits = VisitDao.getPNCVisitsMedicalHistory(memberObject.getBaseEntityId());
                     break;
                 default:
                     break;
@@ -105,17 +105,6 @@ public class CoreTbProfileInteractor extends BaseTbProfileInteractor implements 
             }
         }
         return lastVisitDate;
-    }
-
-    private List<Visit> getAncVisitsMedicalHistory(String baseEntityId) {
-        List<Visit> visits = VisitUtils.getVisits(baseEntityId);
-        List<Visit> allVisits = new ArrayList<>(visits);
-
-        for (Visit visit : visits) {
-            List<Visit> childVisits = VisitUtils.getChildVisits(visit.getVisitId());
-            allVisits.addAll(childVisits);
-        }
-        return allVisits;
     }
 
     protected Alert getAlerts(Context context, String baseEntityID) {
@@ -136,6 +125,17 @@ public class CoreTbProfileInteractor extends BaseTbProfileInteractor implements 
             Timber.e(e);
         }
         return null;
+    }
+
+    private List<Visit> getAncVisitsMedicalHistory(String baseEntityId) {
+        List<Visit> visits = VisitUtils.getVisits(baseEntityId);
+        List<Visit> allVisits = new ArrayList<>(visits);
+
+        for (Visit visit : visits) {
+            List<Visit> childVisits = VisitUtils.getChildVisits(visit.getVisitId());
+            allVisits.addAll(childVisits);
+        }
+        return allVisits;
     }
 
     private MemberObject toMember(TbMemberObject memberObject) {

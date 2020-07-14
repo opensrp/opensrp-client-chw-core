@@ -64,16 +64,16 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
         View navbarContainer = view.findViewById(R.id.register_nav_bar_container);
         navbarContainer.setFocusable(false);
 
+        CustomFontTextView titleView = view.findViewById(R.id.txt_title_label);
+        if (titleView != null) {
+            titleView.setPadding(0, titleView.getTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
+        }
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View searchBarLayout = view.findViewById(R.id.search_bar_layout);
         searchBarLayout.setLayoutParams(params);
         searchBarLayout.setBackgroundResource(R.color.chw_primary);
         searchBarLayout.setPadding(searchBarLayout.getPaddingLeft(), searchBarLayout.getPaddingTop(), searchBarLayout.getPaddingRight(), (int) Utils.convertDpToPixel(10, getActivity()));
-
-        CustomFontTextView titleView = view.findViewById(R.id.txt_title_label);
-        if (titleView != null) {
-            titleView.setPadding(0, titleView.getTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
-        }
 
         View topLeftLayout = view.findViewById(R.id.top_left_layout);
         topLeftLayout.setVisibility(View.GONE);
@@ -116,16 +116,6 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
     @Override
     public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
         //TODO
-        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
-    }
-
-    @Override
-    protected void onViewClicked(View view) {
-        super.onViewClicked(view);
-
-        if (view.getId() == R.id.due_only_layout) {
-            toggleFilterSelection(view);
-        }
     }
 
     protected void toggleFilterSelection(View dueOnlyLayout) {
@@ -137,6 +127,15 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
                 dueFilterActive = false;
                 normalFilter(dueOnlyLayout);
             }
+        }
+    }
+
+    @Override
+    protected void onViewClicked(View view) {
+        super.onViewClicked(view);
+
+        if (view.getId() == R.id.due_only_layout) {
+            toggleFilterSelection(view);
         }
     }
 
@@ -154,16 +153,6 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
         }
     }
 
-
-    @Override
-    protected void onResumption() {
-        if (dueFilterActive && dueOnlyLayout != null) {
-            dueFilter(dueOnlyLayout);
-        } else {
-            super.onResumption();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -176,12 +165,56 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
     }
 
     @Override
+    protected void onResumption() {
+        if (dueFilterActive && dueOnlyLayout != null) {
+            dueFilter(dueOnlyLayout);
+        } else {
+            super.onResumption();
+        }
+    }
+
+    @Override
     protected void refreshSyncProgressSpinner() {
         if (syncProgressBar != null) {
             syncProgressBar.setVisibility(View.GONE);
         }
         if (syncButton != null) {
             syncButton.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void countExecute() {
+        Cursor c = null;
+        try {
+
+            String query = "select count(*) from " + presenter().getMainTable() + " inner join " + CoreConstants.TABLE_NAME.FAMILY_MEMBER +
+                    " on " + presenter().getMainTable() + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " +
+                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
+                    " where " + presenter().getMainCondition();
+
+            if (StringUtils.isNotBlank(filters)) {
+                query = query + " and ( " + filters + " ) ";
+            }
+
+            if (dueFilterActive) {
+                query = query + " and ( " + presenter().getDueFilterCondition() + " ) ";
+            }
+
+            c = commonRepository().rawCustomQueryForAdapter(query);
+            c.moveToFirst();
+            clientAdapter.setTotalcount(c.getInt(0));
+            Timber.v("total count here %s", clientAdapter.getTotalcount());
+
+            clientAdapter.setCurrentlimit(20);
+            clientAdapter.setCurrentoffset(0);
+
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
         }
     }
 
@@ -221,42 +254,6 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
         return query;
     }
 
-
-    @Override
-    public void countExecute() {
-        Cursor c = null;
-        try {
-
-            String query = "select count(*) from " + presenter().getMainTable() + " inner join " + CoreConstants.TABLE_NAME.FAMILY_MEMBER +
-                    " on " + presenter().getMainTable() + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " +
-                    CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID +
-                    " where " + presenter().getMainCondition();
-
-            if (StringUtils.isNotBlank(filters)) {
-                query = query + " and ( " + filters + " ) ";
-            }
-
-            if (dueFilterActive) {
-                query = query + " and ( " + presenter().getDueFilterCondition() + " ) ";
-            }
-
-            c = commonRepository().rawCustomQueryForAdapter(query);
-            c.moveToFirst();
-            clientAdapter.setTotalcount(c.getInt(0));
-            Timber.v("total count here %s", clientAdapter.getTotalcount());
-
-            clientAdapter.setCurrentlimit(20);
-            clientAdapter.setCurrentoffset(0);
-
-        } catch (Exception e) {
-            Timber.e(e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
         if (id == LOADER_ID) {
@@ -276,16 +273,16 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
         return super.onCreateLoader(id, args);
     }
 
-    protected void dueFilter(View dueOnlyLayout) {
-        filterDue(searchText(), "", presenter().getDueFilterCondition());
-        dueOnlyLayout.setTag(DUE_FILTER_TAG);
-        switchViews(dueOnlyLayout, true);
-    }
-
     protected void normalFilter(View dueOnlyLayout) {
         filterDue(searchText(), "", presenter().getMainCondition());
         dueOnlyLayout.setTag(null);
         switchViews(dueOnlyLayout, false);
+    }
+
+    protected void dueFilter(View dueOnlyLayout) {
+        filterDue(searchText(), "", presenter().getDueFilterCondition());
+        dueOnlyLayout.setTag(DUE_FILTER_TAG);
+        switchViews(dueOnlyLayout, true);
     }
 
     protected void filterDue(String filterString, String joinTableString, String mainConditionString) {

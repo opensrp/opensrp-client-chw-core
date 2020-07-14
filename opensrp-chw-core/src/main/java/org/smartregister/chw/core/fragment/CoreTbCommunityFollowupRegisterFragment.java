@@ -116,8 +116,12 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
     @Override
     public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
         //TODO
-        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
     }
+
+    protected String searchText() {
+        return (getSearchView() == null) ? "" : getSearchView().getText().toString();
+    }
+
 
     @Override
     protected void onViewClicked(View view) {
@@ -140,10 +144,6 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
         }
     }
 
-    protected String searchText() {
-        return (getSearchView() == null) ? "" : getSearchView().getText().toString();
-    }
-
     private void switchViews(View dueOnlyLayout, boolean isPress) {
         TextView dueOnlyTextView = dueOnlyLayout.findViewById(R.id.due_only_text_view);
         if (isPress) {
@@ -151,6 +151,16 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
         } else {
             dueOnlyTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_due_filter_off, 0);
 
+        }
+    }
+
+    @Override
+    protected void refreshSyncProgressSpinner() {
+        if (syncProgressBar != null) {
+            syncProgressBar.setVisibility(View.GONE);
+        }
+        if (syncButton != null) {
+            syncButton.setVisibility(View.GONE);
         }
     }
 
@@ -176,13 +186,22 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
     }
 
     @Override
-    protected void refreshSyncProgressSpinner() {
-        if (syncProgressBar != null) {
-            syncProgressBar.setVisibility(View.GONE);
+    public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
+        if (id == LOADER_ID) {
+            return new CursorLoader(getActivity()) {
+                @Override
+                public Cursor loadInBackground() {
+                    // Count query
+                    final String COUNT = "count_execute";
+                    if (args != null && args.getBoolean(COUNT)) {
+                        countExecute();
+                    }
+                    String query = defaultFilterAndSortQuery();
+                    return commonRepository().rawCustomQueryForAdapter(query);
+                }
+            };
         }
-        if (syncButton != null) {
-            syncButton.setVisibility(View.GONE);
-        }
+        return super.onCreateLoader(id, args);
     }
 
     private String defaultFilterAndSortQuery() {
@@ -257,23 +276,11 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
-        if (id == LOADER_ID) {
-            return new CursorLoader(getActivity()) {
-                @Override
-                public Cursor loadInBackground() {
-                    // Count query
-                    final String COUNT = "count_execute";
-                    if (args != null && args.getBoolean(COUNT)) {
-                        countExecute();
-                    }
-                    String query = defaultFilterAndSortQuery();
-                    return commonRepository().rawCustomQueryForAdapter(query);
-                }
-            };
-        }
-        return super.onCreateLoader(id, args);
+    protected void filterDue(String filterString, String joinTableString, String mainConditionString) {
+        filters = filterString;
+        joinTable = joinTableString;
+        mainCondition = mainConditionString;
+        filterandSortExecute(countBundle());
     }
 
     protected void dueFilter(View dueOnlyLayout) {
@@ -288,12 +295,7 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
         switchViews(dueOnlyLayout, false);
     }
 
-    protected void filterDue(String filterString, String joinTableString, String mainConditionString) {
-        filters = filterString;
-        joinTable = joinTableString;
-        mainCondition = mainConditionString;
-        filterandSortExecute(countBundle());
-    }
+
 
 }
 
