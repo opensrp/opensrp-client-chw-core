@@ -34,8 +34,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import timber.log.Timber;
+
 public class DailyTalliesFragment extends Fragment {
-    private static final String TAG = DailyTalliesFragment.class.getCanonicalName();
     private ExpandableListView expandableListView;
     private HashMap<String, ArrayList<DailyTally>> dailyTallies;
     private ProgressDialog progressDialog;
@@ -99,37 +100,29 @@ public class DailyTalliesFragment extends Fragment {
 
         ExpandedListAdapter<String, String, Date> expandableListAdapter = new ExpandedListAdapter(getActivity(), map, R.layout.daily_tally_header, R.layout.daily_tally_item);
         expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Object tag = v.getTag(R.id.item_data);
-                if (tag instanceof Date) {
-                    Date date = (Date) tag;
-                    String dayString = new SimpleDateFormat("dd MMMM yyyy", locale).format(date);
-                    if (dailyTallies.containsKey(dayString)) {
-                        ArrayList<DailyTally> indicators = new ArrayList(dailyTallies.get(dayString));
-                        String title = String.format(getString(R.string.daily_tally_), dayString);
-                        Intent intent = new Intent(getActivity(), ReportSummaryActivity.class);
-                        intent.putExtra(ReportSummaryActivity.EXTRA_TALLIES, indicators);
-                        intent.putExtra(ReportSummaryActivity.EXTRA_TITLE, title);
-                        startActivity(intent);
-                    }
+        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            Object tag = v.getTag(R.id.item_data);
+            if (tag instanceof Date) {
+                Date date = (Date) tag;
+                String dayString = new SimpleDateFormat("dd MMMM yyyy", locale).format(date);
+                if (dailyTallies.containsKey(dayString)) {
+                    ArrayList<DailyTally> indicators = new ArrayList(dailyTallies.get(dayString));
+                    String title = String.format(getString(R.string.daily_tally_), dayString);
+                    Intent intent = new Intent(getActivity(), ReportSummaryActivity.class);
+                    intent.putExtra(ReportSummaryActivity.EXTRA_TALLIES, indicators);
+                    intent.putExtra(ReportSummaryActivity.EXTRA_TITLE, title);
+                    startActivity(intent);
                 }
-
-                return true;
             }
+
+            return true;
         });
         expandableListAdapter.notifyDataSetChanged();
     }
 
     private LinkedHashMap<String, List<ExpandedListAdapter.ItemData<String, Date>>> formatListData() {
         Map<String, List<ExpandedListAdapter.ItemData<String, Date>>> map = new HashMap<>();
-        Map<Long, String> sortMap = new TreeMap<>(new Comparator<Comparable>() {
-            @SuppressWarnings("unchecked")
-            public int compare(Comparable a, Comparable b) {
-                return b.compareTo(a);
-            }
-        });
+        Map<Long, String> sortMap = new TreeMap<>((Comparator<Comparable>) (a, b) -> b.compareTo(a));
 
         Locale locale = Utils.getLocale(getContext());
 
@@ -141,13 +134,11 @@ public class DailyTalliesFragment extends Fragment {
                     Date day = curDay.get(0).getDay();
                     String monthString = monthFormat.format(day);
                     if (!map.containsKey(monthString)) {
-                        map.put(monthString,
-                                new ArrayList<ExpandedListAdapter.ItemData<String, Date>>());
+                        map.put(monthString, new ArrayList<>());
                     }
 
                     map.get(monthString).add(
-                            new ExpandedListAdapter.ItemData<>(DAY_FORMAT.format(day),
-                                    day)
+                            new ExpandedListAdapter.ItemData<>(DAY_FORMAT.format(day), day)
                     );
                     sortMap.put(day.getTime(), monthString);
                 }
@@ -185,7 +176,7 @@ public class DailyTalliesFragment extends Fragment {
 
             progressDialog.show();
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -195,7 +186,7 @@ public class DailyTalliesFragment extends Fragment {
                 progressDialog.dismiss();
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
