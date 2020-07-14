@@ -32,7 +32,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
    
 
     @Test
-    public void InitializeAdapter() {
+    public void testInitializeAdapter() {
         Mockito.doNothing().when(coreTbRegisterFragment).initializeAdapter(visibleColumns);
         coreTbRegisterFragment.initializeAdapter(visibleColumns);
 
@@ -42,7 +42,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void SetupViews() {
+    public void testSetupViews() {
         Mockito.doNothing().when(coreTbRegisterFragment).setupViews(view);
         coreTbRegisterFragment.setupViews(view);
 
@@ -52,7 +52,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
     
     @Test
-    public void OnViewClicked() {
+    public void testOnViewClicked() {
         Mockito.doNothing().when(coreTbRegisterFragment).onViewClicked(view);
         coreTbRegisterFragment.onViewClicked(view);
 
@@ -62,7 +62,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void DueFilters() {
+    public void testDueFilters() {
         Mockito.doNothing().when(coreTbRegisterFragment).dueFilter(view);
         coreTbRegisterFragment.dueFilter(view);
 
@@ -72,7 +72,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void ToggleFilterSelection() {
+    public void testToggleFilterSelection() {
         Mockito.doNothing().when(coreTbRegisterFragment).toggleFilterSelection(view);
         coreTbRegisterFragment.toggleFilterSelection(view);
 
@@ -82,7 +82,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
     
     @Test
-    public void FilterDue() {
+    public void testFilterDue() {
         String filterString = "filterString";
         String joinTableString = "joinTableString";
         String mainConditionString = "mainConditionString";
@@ -99,7 +99,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
     }
     
     @Test
-    public void NormalFilter() {
+    public void testNormalFilter() {
         Mockito.doNothing().when(coreTbRegisterFragment).normalFilter(view);
         coreTbRegisterFragment.normalFilter(view);
 
