@@ -65,13 +65,6 @@ public class HivFollowupRule implements ICommonRule {
         return expiryDate != null ? expiryDate.toDate() : null;
     }
 
-    public Date getCompletionDate() {
-        if (lastVisitDate != null && ((lastVisitDate.isAfter(dueDate) || lastVisitDate.isEqual(dueDate))))
-            return lastVisitDate.toDate();
-
-        return null;
-    }
-
     @Override
     public String getRuleKey() {
         return "hivFollowupRule";
