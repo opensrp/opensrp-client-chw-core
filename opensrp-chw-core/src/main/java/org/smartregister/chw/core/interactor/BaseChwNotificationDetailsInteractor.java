@@ -14,7 +14,6 @@ import org.smartregister.chw.core.domain.NotificationItem;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.hiv.util.Constants;
-import org.smartregister.chw.hiv.util.Constants;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.family.util.Utils;
 import org.smartregister.opd.utils.OpdUtils;
