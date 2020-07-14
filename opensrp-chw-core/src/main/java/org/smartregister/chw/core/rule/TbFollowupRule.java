@@ -5,7 +5,6 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.utils.CoreConstants;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class TbFollowupRule implements ICommonRule {
@@ -35,20 +34,16 @@ public class TbFollowupRule implements ICommonRule {
         return daysDifference;
     }
 
-    public boolean updateDueDate(int scheduledPeriodInDays, int daysFromDueToOverdue, int daysFromOverdueTillExpiry) {
+    public boolean isValid(int dueDay, int overdueDate, int expiry) {
         if (lastVisitDate != null) {
-            this.dueDate = lastVisitDate.plusDays(scheduledPeriodInDays);
+            this.dueDate = lastVisitDate.plusDays(dueDay);
+            this.overDueDate = lastVisitDate.plusDays(overdueDate);
+            this.expiryDate = lastVisitDate.plusDays(expiry);
         } else {
-            this.dueDate = tbDate.plusDays(scheduledPeriodInDays);
+            this.dueDate = tbDate.plusDays(dueDay);
+            this.overDueDate = tbDate.plusDays(overdueDate);
+            this.expiryDate = tbDate.plusDays(expiry);
         }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dueDate.toDate());
-        calendar.add(Calendar.DATE, daysFromDueToOverdue);
-        this.overDueDate = new DateTime(calendar.getTime());
-
-        calendar.setTime(overDueDate.toDate());
-        calendar.add(Calendar.DATE, daysFromOverdueTillExpiry);
-        this.expiryDate = new DateTime(calendar.getTime());
 
         daysDifference = Days.daysBetween(new DateTime(), new DateTime(dueDate)).getDays();
         return true;
@@ -83,21 +78,15 @@ public class TbFollowupRule implements ICommonRule {
         DateTime currentDate = new DateTime(new LocalDate().toDate());
         DateTime lastVisit = lastVisitDate;
 
-        if (lastVisitDate != null) {
-            if ((lastVisit.isEqual(dueDate) || lastVisit.isAfter(dueDate)) && lastVisit.isBefore(expiryDate))
-                return CoreConstants.VISIT_STATE.VISIT_DONE;
-            if (lastVisit.isBefore(dueDate)) {
-                if ((currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)) && currentDate.isBefore(expiryDate))
-                    return CoreConstants.VISIT_STATE.OVERDUE;
-                if ((currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)) && currentDate.isBefore(overDueDate))
-                    return CoreConstants.VISIT_STATE.DUE;
-            }
-        } else {
-            if ((currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)) && currentDate.isBefore(expiryDate))
+        if (currentDate.isBefore(expiryDate)) {
+            if ((currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                 return CoreConstants.VISIT_STATE.OVERDUE;
-
             if ((currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)) && currentDate.isBefore(overDueDate))
                 return CoreConstants.VISIT_STATE.DUE;
+            if (lastVisit != null && currentDate.isEqual(lastVisit))
+                return CoreConstants.VISIT_STATE.VISIT_DONE;
+            return CoreConstants.VISIT_STATE.NOT_DUE_YET;
+
         }
         return CoreConstants.VISIT_STATE.EXPIRED;
     }
