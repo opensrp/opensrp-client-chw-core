@@ -138,7 +138,7 @@ public class CoreTbProfileInteractor extends BaseTbProfileInteractor implements 
         return allVisits;
     }
 
-    private MemberObject toMember(TbMemberObject memberObject) {
+    public MemberObject toMember(TbMemberObject memberObject) {
         MemberObject res = new MemberObject();
         res.setBaseEntityId(memberObject.getBaseEntityId());
         res.setFirstName(memberObject.getFirstName());

@@ -138,7 +138,7 @@ public class CoreHivProfileInteractor extends BaseHivProfileInteractor implement
         return null;
     }
 
-    private MemberObject toMember(HivMemberObject memberObject) {
+    public MemberObject toMember(HivMemberObject memberObject) {
         MemberObject res = new MemberObject();
         res.setBaseEntityId(memberObject.getBaseEntityId());
         res.setFirstName(memberObject.getFirstName());

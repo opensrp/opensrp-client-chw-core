@@ -34,11 +34,11 @@ public class CoreHivUpcomingServicesInteractor extends BaseAncUpcomingServicesIn
         this.memberObject = memberObject;
         this.context = context;
         List<BaseUpcomingService> serviceList = new ArrayList<>();
-        evaluateFp(serviceList);
+        evaluateHiv(serviceList);
         return serviceList;
     }
 
-    private void evaluateFp(List<BaseUpcomingService> serviceList) {
+    private void evaluateHiv(List<BaseUpcomingService> serviceList) {
         String hiv_date = null;
         Date serviceDueDate = null;
         Date serviceOverDueDate = null;
