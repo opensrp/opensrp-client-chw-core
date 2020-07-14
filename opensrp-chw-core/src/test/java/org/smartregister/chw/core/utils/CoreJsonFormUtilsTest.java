@@ -40,7 +40,6 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
@@ -96,25 +95,42 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void getAutoPopulatedJsonEditFormReturnsCorrectString() {
+    public void getAutoPopulatedJsonEditFormReturnsCorrectString() throws JSONException {
         Context context = RuntimeEnvironment.application;
         String id = "testCaseId";
         String encounterType = "test_encounter";
+        String landMark = "police station";
+        String nearestHealthFacility = "makutano health center";
 
         HashMap<String, String> detailsMap = new HashMap<>();
         HashMap<String, String> columnMaps = new HashMap<>();
         columnMaps.put(DBConstants.KEY.DOB, "01-12-2020");
         columnMaps.put(Constants.JSON_FORM_KEY.DOB_UNKNOWN, "false");
-        columnMaps.put("fam_name", "Sonkos");
-        columnMaps.put(DBConstants.KEY.LANDMARK, "police station");
-        columnMaps.put(ChwDBConstants.NEAREST_HEALTH_FACILITY, "makutano health center");
+        columnMaps.put(DBConstants.KEY.FIRST_NAME, "Sonkore");
+        columnMaps.put(DBConstants.KEY.LANDMARK, landMark);
+        columnMaps.put(ChwDBConstants.NEAREST_HEALTH_FACILITY, nearestHealthFacility);
         columnMaps.put(DBConstants.KEY.GPS, "-0.00001, 0.25400");
 
         CommonPersonObjectClient testClient = new CommonPersonObjectClient(id, detailsMap, "tester");
         testClient.setColumnmaps(columnMaps);
 
-        LocationHelper.init(new ArrayList<String>(), "HEALTH FACILITY");
         JSONObject jsonObject = CoreJsonFormUtils.getAutoPopulatedJsonEditFormString("family_register", context, testClient, encounterType);
+        assert jsonObject != null;
+        JSONObject step1Object = jsonObject.getJSONObject("step1");
+        String actualLandMark = null;
+        String actualHealthFacility = null;
+        JSONArray fields = step1Object.getJSONArray(JsonFormConstants.FIELDS);
+        for (int i = 0; i < fields.length(); i++) {
+            String key = fields.getJSONObject(i).getString(JsonFormConstants.KEY);
+            if (key.equals(DBConstants.KEY.LANDMARK)) {
+                actualLandMark = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+            if (key.equals(ChwDBConstants.NEAREST_HEALTH_FACILITY)) {
+                actualHealthFacility = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+        }
+        Assert.assertEquals(landMark,actualLandMark);
+        Assert.assertEquals(nearestHealthFacility, actualHealthFacility);
     }
 
 

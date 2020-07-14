@@ -5,7 +5,7 @@ import org.robolectric.annotation.Implements;
 import org.smartregister.view.LocationPickerView;
 
 @Implements(LocationPickerView.class)
-public class LocationPickerViewShadowHelper {
+public class LocationPickerViewShadowHelper extends CustomFontTextViewShadowHelper {
 
     @Implementation
     public void init() {
