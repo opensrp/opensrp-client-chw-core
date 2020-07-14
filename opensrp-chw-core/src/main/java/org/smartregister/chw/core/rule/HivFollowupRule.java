@@ -12,7 +12,6 @@ import java.util.Locale;
 
 public class HivFollowupRule implements ICommonRule {
     public static final String RULE_KEY = "hivFollowupRule";
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private String visitID;
     private DateTime hivDate;
     private DateTime dueDate;
@@ -22,6 +21,7 @@ public class HivFollowupRule implements ICommonRule {
     private int daysDifference;
 
     public HivFollowupRule(Date hivDate, Date lastVisitDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         this.hivDate = hivDate != null ? new DateTime(sdf.format(hivDate)) : null;
         this.lastVisitDate = lastVisitDate == null ? null : new DateTime(lastVisitDate);
     }
@@ -84,31 +84,24 @@ public class HivFollowupRule implements ICommonRule {
     @Override
     public String getButtonStatus() {
         DateTime currentDate = new DateTime(new LocalDate().toDate());
+        DateTime lastVisit = lastVisitDate;
 
         if (lastVisitDate != null) {
-            if ((lastVisitDate.isAfter(dueDate) || lastVisitDate.isEqual(dueDate)) && lastVisitDate.isBefore(expiryDate))
+            if ((lastVisit.isAfter(dueDate) || lastVisit.isEqual(dueDate)) && lastVisit.isBefore(expiryDate))
                 return CoreConstants.VISIT_STATE.VISIT_DONE;
-            if (lastVisitDate.isBefore(dueDate)) {
-                if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
-                    return CoreConstants.VISIT_STATE.DUE;
-
+            if (lastVisit.isBefore(dueDate)) {
                 if (currentDate.isBefore(expiryDate) && (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                     return CoreConstants.VISIT_STATE.OVERDUE;
-                if (currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)) {
-                    return CoreConstants.VISIT_STATE.NOT_DUE_YET;
-                }
+                if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
+                    return CoreConstants.VISIT_STATE.DUE;
             }
         } else {
-            if (currentDate.isBefore(dueDate) && currentDate.isBefore(expiryDate)) {
-                return CoreConstants.VISIT_STATE.NOT_DUE_YET;
-            }
-            if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
-                return CoreConstants.VISIT_STATE.DUE;
-
             if (currentDate.isBefore(expiryDate) && (currentDate.isAfter(overDueDate) || currentDate.isEqual(overDueDate)))
                 return CoreConstants.VISIT_STATE.OVERDUE;
-        }
 
+            if (currentDate.isBefore(overDueDate) && (currentDate.isAfter(dueDate) || currentDate.isEqual(dueDate)))
+                return CoreConstants.VISIT_STATE.DUE;
+        }
         return CoreConstants.VISIT_STATE.EXPIRED;
     }
 }
