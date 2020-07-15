@@ -2,7 +2,10 @@ package org.smartregister.chw.core.presenter;
 
 import androidx.annotation.Nullable;
 
+import com.vijay.jsonwizard.utils.FormUtils;
+
 import org.apache.commons.lang3.tuple.Triple;
+import org.smartregister.chw.core.activity.CoreHivProfileActivity;
 import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hiv.contract.BaseHivProfileContract;
@@ -11,9 +14,7 @@ import org.smartregister.chw.hiv.presenter.BaseHivProfilePresenter;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
-import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.util.FormUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -22,7 +23,6 @@ import timber.log.Timber;
 public class CoreHivProfilePresenter extends BaseHivProfilePresenter implements CoreHivProfileContract.Presenter, FamilyProfileContract.InteractorCallBack {
     private BaseHivProfileContract.Interactor interactor;
     private WeakReference<BaseHivProfileContract.View> view;
-    private FormUtils formUtils;
     private HivMemberObject hivMemberObject;
 
     public CoreHivProfilePresenter(BaseHivProfileContract.View view, BaseHivProfileContract.Interactor interactor, HivMemberObject hivMemberObject) {
@@ -40,7 +40,7 @@ public class CoreHivProfilePresenter extends BaseHivProfilePresenter implements 
     @Override
     public void startHivReferral() {
         try {
-            getView().startFormActivity(getFormUtils().getFormJson(CoreConstants.JSON_FORM.getHivReferralForm()), hivMemberObject);
+            getView().startFormActivity((new FormUtils()).getFormJsonFromRepositoryOrAssets(((CoreHivProfileActivity) getView()), CoreConstants.JSON_FORM.getHivReferralForm()), hivMemberObject);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -54,18 +54,6 @@ public class CoreHivProfilePresenter extends BaseHivProfilePresenter implements 
         } else {
             return null;
         }
-    }
-
-    private FormUtils getFormUtils() {
-
-        if (formUtils == null) {
-            try {
-                formUtils = FormUtils.getInstance(Utils.context().applicationContext());
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-        }
-        return formUtils;
     }
 
     @Override
