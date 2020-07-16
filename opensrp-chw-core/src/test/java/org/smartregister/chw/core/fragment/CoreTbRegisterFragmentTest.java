@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.implementation.CoreHivRegisterFragmentIml;
 import org.smartregister.chw.core.implementation.CoreTbRegisterFragmentIml;
 
 import java.util.Set;
