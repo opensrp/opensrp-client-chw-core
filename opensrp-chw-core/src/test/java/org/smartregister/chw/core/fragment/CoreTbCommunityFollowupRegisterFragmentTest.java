@@ -2,6 +2,10 @@ package org.smartregister.chw.core.fragment;
 
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +13,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.implementation.CoreTbCommunityFollowupRegisterFragmentIml;
 
 import java.util.Set;
 
 public class CoreTbCommunityFollowupRegisterFragmentTest extends BaseUnitTest {
 
     @Mock
-    private CoreTbCommunityFollowupRegisterFragment coreTbCommunityFollowupRegisterFragment;
+    private CoreTbCommunityFollowupRegisterFragmentIml coreTbCommunityFollowupRegisterFragment;
 
     @Mock
     private View view;
@@ -26,48 +32,33 @@ public class CoreTbCommunityFollowupRegisterFragmentTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
+
+        MockitoAnnotations.initMocks(this);
+        AppCompatActivity activity = Robolectric
+                .buildActivity(AppCompatActivity.class).create().start()
+                .resume().get();
+
+        coreTbCommunityFollowupRegisterFragment = new CoreTbCommunityFollowupRegisterFragmentIml();
+
+        FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+        Fragment prev = activity.getSupportFragmentManager()
+                .findFragmentByTag("CoreTbCommunityFollowupRegisterFragment");
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.add(coreTbCommunityFollowupRegisterFragment, "CoreTbCommunityFollowupRegisterFragment");
+        fragmentTransaction.commitAllowingStateLoss();
+
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSetupViews() {
-        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).setupViews(view);
-        coreTbCommunityFollowupRegisterFragment.setupViews(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).setupViews(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-
-    @Test
     public void testInitializeAdapter() {
-        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).initializeAdapter(visibleColumns);
         coreTbCommunityFollowupRegisterFragment.initializeAdapter(visibleColumns);
 
         ArgumentCaptor<Set> captor = ArgumentCaptor.forClass(Set.class);
         Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).initializeAdapter(captor.capture());
         Assert.assertEquals(captor.getValue(), visibleColumns);
-    }
-
-    
-    @Test
-    public void testOnViewClicked() {
-        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).onViewClicked(view);
-        coreTbCommunityFollowupRegisterFragment.onViewClicked(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-
-    @Test
-    public void testDueFilters() {
-        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).dueFilter(view);
-        coreTbCommunityFollowupRegisterFragment.dueFilter(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).dueFilter(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
     }
 
     @Test
@@ -79,7 +70,17 @@ public class CoreTbCommunityFollowupRegisterFragmentTest extends BaseUnitTest {
         Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
-    
+
+    @Test
+    public void testOnViewClicked() {
+        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).onViewClicked(view);
+        coreTbCommunityFollowupRegisterFragment.onViewClicked(view);
+
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+    }
+
     @Test
     public void testFilterDue() {
         String filterString = "filterString";
@@ -96,7 +97,7 @@ public class CoreTbCommunityFollowupRegisterFragmentTest extends BaseUnitTest {
         Assert.assertEquals(captor1.getValue(), joinTableString);
         Assert.assertEquals(captor2.getValue(), mainConditionString);
     }
-    
+
     @Test
     public void testNormalFilter() {
         Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).normalFilter(view);
@@ -104,6 +105,16 @@ public class CoreTbCommunityFollowupRegisterFragmentTest extends BaseUnitTest {
 
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).normalFilter(captor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+    }
+
+    @Test
+    public void testDueFilters() {
+        Mockito.doNothing().when(coreTbCommunityFollowupRegisterFragment).dueFilter(view);
+        coreTbCommunityFollowupRegisterFragment.dueFilter(view);
+
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        Mockito.verify(coreTbCommunityFollowupRegisterFragment, Mockito.times(1)).dueFilter(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
 

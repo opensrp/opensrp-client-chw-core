@@ -2,6 +2,10 @@ package org.smartregister.chw.core.fragment;
 
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +13,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.implementation.CoreHivRegisterFragmentIml;
+import org.smartregister.chw.core.implementation.CoreTbRegisterFragmentIml;
 
 import java.util.Set;
 
 public class CoreTbRegisterFragmentTest extends BaseUnitTest {
 
     @Mock
-    private CoreTbRegisterFragment coreTbRegisterFragment;
+    private CoreTbRegisterFragmentIml coreTbRegisterFragment;
 
     @Mock
     private View view;
@@ -26,49 +33,33 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
+
+        MockitoAnnotations.initMocks(this);
+        AppCompatActivity activity = Robolectric
+                .buildActivity(AppCompatActivity.class).create().start()
+                .resume().get();
+
+        coreTbRegisterFragment = new CoreTbRegisterFragmentIml();
+
+        FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+        Fragment prev = activity.getSupportFragmentManager()
+                .findFragmentByTag("CoreHivRegisterFragment");
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.add(coreTbRegisterFragment, "CoreHivRegisterFragment");
+        fragmentTransaction.commitAllowingStateLoss();
+
         MockitoAnnotations.initMocks(this);
     }
 
-   
-
     @Test
     public void testInitializeAdapter() {
-        Mockito.doNothing().when(coreTbRegisterFragment).initializeAdapter(visibleColumns);
         coreTbRegisterFragment.initializeAdapter(visibleColumns);
 
         ArgumentCaptor<Set> captor = ArgumentCaptor.forClass(Set.class);
         Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).initializeAdapter(captor.capture());
         Assert.assertEquals(captor.getValue(), visibleColumns);
-    }
-
-    @Test
-    public void testSetupViews() {
-        Mockito.doNothing().when(coreTbRegisterFragment).setupViews(view);
-        coreTbRegisterFragment.setupViews(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).setupViews(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-    
-    @Test
-    public void testOnViewClicked() {
-        Mockito.doNothing().when(coreTbRegisterFragment).onViewClicked(view);
-        coreTbRegisterFragment.onViewClicked(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-
-    @Test
-    public void testDueFilters() {
-        Mockito.doNothing().when(coreTbRegisterFragment).dueFilter(view);
-        coreTbRegisterFragment.dueFilter(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).dueFilter(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
     }
 
     @Test
@@ -80,7 +71,17 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
         Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
-    
+
+    @Test
+    public void testOnViewClicked() {
+        Mockito.doNothing().when(coreTbRegisterFragment).onViewClicked(view);
+        coreTbRegisterFragment.onViewClicked(view);
+
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+    }
+
     @Test
     public void testFilterDue() {
         String filterString = "filterString";
@@ -97,7 +98,7 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
         Assert.assertEquals(captor1.getValue(), joinTableString);
         Assert.assertEquals(captor2.getValue(), mainConditionString);
     }
-    
+
     @Test
     public void testNormalFilter() {
         Mockito.doNothing().when(coreTbRegisterFragment).normalFilter(view);
@@ -105,6 +106,16 @@ public class CoreTbRegisterFragmentTest extends BaseUnitTest {
 
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).normalFilter(captor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+    }
+
+    @Test
+    public void testDueFilters() {
+        Mockito.doNothing().when(coreTbRegisterFragment).dueFilter(view);
+        coreTbRegisterFragment.dueFilter(view);
+
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        Mockito.verify(coreTbRegisterFragment, Mockito.times(1)).dueFilter(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
 

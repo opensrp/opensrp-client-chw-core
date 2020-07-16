@@ -51,6 +51,7 @@ public abstract class CoreHivCommunityFollowupRegisterFragment extends BaseHivCo
 
     @Override
     public void setupViews(View view) {
+        initializePresenter();
         super.setupViews(view);
         this.view = view;
 
@@ -59,8 +60,11 @@ public abstract class CoreHivCommunityFollowupRegisterFragment extends BaseHivCo
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
 
-        NavigationMenu.getInstance(getActivity(), null, toolbar);
-
+        try {
+            NavigationMenu.getInstance(getActivity(), null, toolbar);
+        }catch (NullPointerException e){
+            Timber.e(e);
+        }
         View navbarContainer = view.findViewById(R.id.register_nav_bar_container);
         navbarContainer.setFocusable(false);
 

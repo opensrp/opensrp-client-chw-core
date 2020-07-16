@@ -2,6 +2,10 @@ package org.smartregister.chw.core.fragment;
 
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +13,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.implementation.CoreHivRegisterFragmentIml;
 
 import java.util.Set;
 
 public class CoreHivRegisterFragmentTest extends BaseUnitTest {
 
     @Mock
-    private CoreHivRegisterFragment coreHivRegisterFragment;
+    private CoreHivRegisterFragmentIml coreHivRegisterFragment;
 
     @Mock
     private View view;
@@ -26,22 +32,28 @@ public class CoreHivRegisterFragmentTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
+
+        MockitoAnnotations.initMocks(this);
+        AppCompatActivity activity = Robolectric
+                .buildActivity(AppCompatActivity.class).create().start()
+                .resume().get();
+
+        coreHivRegisterFragment = new CoreHivRegisterFragmentIml();
+
+        FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+        Fragment prev = activity.getSupportFragmentManager()
+                .findFragmentByTag("CoreHivRegisterFragment");
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.add(coreHivRegisterFragment, "CoreHivRegisterFragment");
+        fragmentTransaction.commitAllowingStateLoss();
+
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSetupViews() {
-        Mockito.doNothing().when(coreHivRegisterFragment).setupViews(view);
-        coreHivRegisterFragment.setupViews(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreHivRegisterFragment, Mockito.times(1)).setupViews(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-
-    @Test
     public void testInitializeAdapter() {
-        Mockito.doNothing().when(coreHivRegisterFragment).initializeAdapter(visibleColumns);
         coreHivRegisterFragment.initializeAdapter(visibleColumns);
 
         ArgumentCaptor<Set> captor = ArgumentCaptor.forClass(Set.class);
@@ -68,7 +80,7 @@ public class CoreHivRegisterFragmentTest extends BaseUnitTest {
         Mockito.verify(coreHivRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
-    
+
     @Test
     public void testFilterDue() {
         String filterString = "filterString";
@@ -95,6 +107,7 @@ public class CoreHivRegisterFragmentTest extends BaseUnitTest {
         Mockito.verify(coreHivRegisterFragment, Mockito.times(1)).normalFilter(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
+
     @Test
     public void testDueFilters() {
         Mockito.doNothing().when(coreHivRegisterFragment).dueFilter(view);
