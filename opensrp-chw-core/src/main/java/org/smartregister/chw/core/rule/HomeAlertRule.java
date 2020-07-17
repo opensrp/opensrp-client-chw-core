@@ -11,6 +11,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 //All date formats ISO 8601 yyyy-mm-dd
@@ -31,6 +32,7 @@ public class HomeAlertRule implements ICommonRule {
     private LocalDate visitNotDoneDate;
     private Integer yearOfBirth;
     private Context context;
+
 
     public HomeAlertRule(Context context, String yearOfBirthString, long lastVisitDateLong, long visitNotDoneValue, long dateCreatedLong) {
         yearOfBirth = CoreChildUtils.dobStringToYear(yearOfBirthString);
@@ -71,7 +73,8 @@ public class HomeAlertRule implements ICommonRule {
     }
 
     public boolean isOverdueWithinMonth(Integer value) {
-        int diff = getMonthsDifference((lastVisitDate != null ? lastVisitDate : dateCreated), todayDate);
+        LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getOverDueDate()));
+        int diff = getMonthsDifference(overdue, todayDate);
         if (diff >= value) {
             noOfMonthDue = diff + StringUtils.upperCase(context.getString(R.string.abbrv_months));
             return true;
@@ -149,9 +152,9 @@ public class HomeAlertRule implements ICommonRule {
         }
     }
 
-    public Date getNotDoneDate(){
+    public Date getNotDoneDate() {
         if (getCompletionDate() == null && visitNotDoneDate != null) {
-            return visitNotDoneDate.toDate();
+            return visitNotDoneDate.toDate().getTime() >= getDueDate().getTime() ? visitNotDoneDate.toDate() : null;
         }
         return null;
     }
@@ -172,11 +175,22 @@ public class HomeAlertRule implements ICommonRule {
     }
 
     public Date getOverDueDate() {
-        Date anchor = (lastVisitDate != null ? lastVisitDate.toDate() : getDateCreated().toDate());
-        Date overDue = getLastDayOfMonth(anchor);
-        if (overDue.getTime() < getDueDate().getTime()) {
-            return getDueDate();
+        Date anchor = null;
+        if (lastVisitDate == null) {
+            if (visitNotDoneDate != null) {
+                anchor = visitNotDoneDate.toDate();
+            } else {
+                anchor = getLastDayOfMonth(dateCreated.toDate());
+            }
+        } else {
+            if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
+                if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
+                    anchor = getLastDayOfMonth(todayDate.toDate());
+                }
+            } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
+                anchor = visitNotDoneDate.toDate();
+            }
         }
-        return overDue;
+        return anchor;
     }
 }

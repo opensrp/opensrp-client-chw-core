@@ -132,6 +132,9 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
         form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
         form.setWizard(false);
         form.setSaveLabel("Save");
+        if (jsonObject.has(CoreConstants.REGISTER_TYPE.INDEPENDENT)) {
+            form.setName(getString(R.string.remove_client));
+        }
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
 
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
@@ -240,7 +243,8 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
             if (payload != null) {
                 String message = payload.get("message");
                 memberName = payload.get("name");
-                closeFamily(String.format(getString(R.string.family), memberName), message);
+                closeFamily(String.format(
+                        getString(R.string.family), memberName), message);
             }
         }
     }

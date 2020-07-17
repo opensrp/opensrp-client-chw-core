@@ -7,14 +7,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreReferralUtils;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
+import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.fp.util.FpUtil;
+import org.smartregister.chw.malaria.util.Constants;
+import org.smartregister.chw.malaria.util.MalariaUtil;
 import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.domain.db.Client;
 import org.smartregister.domain.db.Event;
 import org.smartregister.domain.db.EventClient;
+import org.smartregister.domain.db.Obs;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -35,6 +45,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -54,6 +65,49 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             instance = new CoreClientProcessor(context);
         }
         return instance;
+    }
+
+    public static void addVaccine(VaccineRepository vaccineRepository, Vaccine vaccine) {
+        try {
+            if (vaccineRepository == null || vaccine == null) {
+                return;
+            }
+
+            // Add the vaccine
+            vaccineRepository.add(vaccine);
+
+            String name = vaccine.getName();
+            if (StringUtils.isBlank(name)) {
+                return;
+            }
+
+            // Update vaccines in the same group where either can be given
+            // For example measles 1 / mr 1
+            name = VaccineRepository.removeHyphen(name);
+            String ftsVaccineName = null;
+
+            if (VaccineRepo.Vaccine.measles1.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.mr1.display();
+            } else if (VaccineRepo.Vaccine.mr1.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.measles1.display();
+            } else if (VaccineRepo.Vaccine.measles2.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.mr2.display();
+            } else if (VaccineRepo.Vaccine.mr2.display().equalsIgnoreCase(name)) {
+                ftsVaccineName = VaccineRepo.Vaccine.measles2.display();
+            }
+
+            if (ftsVaccineName != null) {
+                ftsVaccineName = VaccineRepository.addHyphen(ftsVaccineName.toLowerCase());
+                Vaccine ftsVaccine = new Vaccine();
+                ftsVaccine.setBaseEntityId(vaccine.getBaseEntityId());
+                ftsVaccine.setName(ftsVaccineName);
+                vaccineRepository.updateFtsSearch(ftsVaccine);
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
     }
 
     @Override
@@ -123,6 +177,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
             case CoreConstants.EventType.WASH_CHECK:
+            case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -143,6 +198,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.UMBILICAL_CORD_CARE:
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
+            case CoreConstants.EventType.SICK_CHILD:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -151,6 +207,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE_UNDO:
             case CoreConstants.EventType.PNC_HOME_VISIT:
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
+            case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION:
                 if (eventClient.getEvent() == null) {
                     return;
                 }
@@ -169,6 +227,29 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
                 processRemoveMember(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
                 break;
+            case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
+                clientProcessByObs(eventClient, clientClassification, event, "reason_stop_fp_chw", "decided_to_change_method");
+                break;
+            case Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT:
+                clientProcessByObs(eventClient, clientClassification, event, "fever_still", "Yes");
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+
+                List<Obs> observations = event.getObs();
+                for (Obs obs : observations) {
+                    if (obs.getFormSubmissionField().equals("reason_stop_fp_chw") && !obs.getHumanReadableValues().get(0).equals("decided_to_change_method")) {
+                        processVisitEvent(eventClient);
+                        FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
+                        break;
+                    }
+                }
+                break;
+            case CoreConstants.EventType.STOCK_USAGE_REPORT:
+                clientProcessStockEvent(event);
+                break;
             case CoreConstants.EventType.REMOVE_CHILD:
                 if (eventClient.getClient() == null) {
                     return;
@@ -186,9 +267,25 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.ANC_REFERRAL:
             case CoreConstants.EventType.PNC_REFERRAL:
             case CoreConstants.EventType.CLOSE_REFERRAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_REFERRAL:
+            case CoreConstants.EventType.MALARIA_REFERRAL:
                 if (eventClient.getClient() != null) {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                    org.smartregister.util.Utils.startAsyncTask(new MalariaUtil.CloseMalariaMemberFromRegister(event.getBaseEntityId()), null);
                 }
+                break;
+            case CoreConstants.EventType.REFERRAL_DISMISSAL:
+                if (eventClient.getClient() != null) {
+                    processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                    CoreReferralUtils.completeClosedReferralTasks();
+                }
+                break;
+            case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_NOTIFICATION_DISMISSAL:
+                processNotificationDismissalEvent(eventClient.getEvent());
                 break;
             default:
                 if (eventClient.getClient() != null) {
@@ -198,6 +295,100 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
                 break;
+        }
+    }
+
+    private StockUsage getStockUsageFromObs(List<Obs> stockObs) {
+        StockUsage usage = new StockUsage();
+        for (Obs obs : stockObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_YEAR)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setYear(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_MONTH)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setMonth(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_USAGE)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null) {
+                    usage.setStockUsage(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.STOCK_PROVIDER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (value != null)
+                    usage.setProviderId(value);
+                else
+                    return null;
+            }
+        }
+        return usage;
+    }
+
+    private void clientProcessStockEvent(Event event) {
+        List<Obs> stockObs = event.getObs();
+        StockUsage usage = getStockUsageFromObs(stockObs);
+        if (usage != null) {
+            StockUsageReportRepository repo = CoreChwApplication.getInstance().getStockUsageRepository();
+            String formSubmissionId = event.getFormSubmissionId();
+            usage.setId(formSubmissionId);
+            repo.addOrUpdateStockUsage(usage);
+        }
+    }
+
+    private void processNotificationDismissalEvent(Event event) {
+        List<Obs> notificationObs = event.getObs();
+        String notificationId = null;
+        String dateMarkedAsDone = null;
+        if (notificationObs.size() > 0) {
+            for (Obs obs : notificationObs) {
+                if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID.equals(obs.getFormSubmissionField())) {
+                    notificationId = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE.equals(obs.getFormSubmissionField())) {
+                    dateMarkedAsDone = (String) obs.getValue();
+                }
+            }
+            if (StringUtils.isBlank(dateMarkedAsDone)) {
+                dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDateCreated().toDate());
+            }
+            ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType(), dateMarkedAsDone);
+        }
+    }
+
+    private void clientProcessByObs(EventClient eventClient, ClientClassification clientClassification, Event event, String formSubmissionField, String humanReadableValues) {
+        if (eventClient.getClient() == null) {
+            return;
+        }
+        try {
+            processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+            List<Obs> observations = event.getObs();
+            for (Obs obs : observations) {
+                if (obs.getFormSubmissionField().equals(formSubmissionField) && !obs.getHumanReadableValues().get(0).equals(humanReadableValues)) {
+                    if (event.getEventType().equals(FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD)) {
+                        FpUtil.processChangeFpMethod(eventClient.getClient().getBaseEntityId());
+                    } else if (event.getEventType().equals(Constants.EVENT_TYPE.MALARIA_FOLLOW_UP_VISIT)) {
+                        org.smartregister.util.Utils.startAsyncTask(new MalariaUtil.CloseMalariaMemberFromRegister(event.getBaseEntityId()), null);
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Timber.d(e);
         }
     }
 
@@ -502,49 +693,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             }
         }
         return date;
-    }
-
-    public static void addVaccine(VaccineRepository vaccineRepository, Vaccine vaccine) {
-        try {
-            if (vaccineRepository == null || vaccine == null) {
-                return;
-            }
-
-            // Add the vaccine
-            vaccineRepository.add(vaccine);
-
-            String name = vaccine.getName();
-            if (StringUtils.isBlank(name)) {
-                return;
-            }
-
-            // Update vaccines in the same group where either can be given
-            // For example measles 1 / mr 1
-            name = VaccineRepository.removeHyphen(name);
-            String ftsVaccineName = null;
-
-            if (VaccineRepo.Vaccine.measles1.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.mr1.display();
-            } else if (VaccineRepo.Vaccine.mr1.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.measles1.display();
-            } else if (VaccineRepo.Vaccine.measles2.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.mr2.display();
-            } else if (VaccineRepo.Vaccine.mr2.display().equalsIgnoreCase(name)) {
-                ftsVaccineName = VaccineRepo.Vaccine.measles2.display();
-            }
-
-            if (ftsVaccineName != null) {
-                ftsVaccineName = VaccineRepository.addHyphen(ftsVaccineName.toLowerCase());
-                Vaccine ftsVaccine = new Vaccine();
-                ftsVaccine.setBaseEntityId(vaccine.getBaseEntityId());
-                ftsVaccine.setName(ftsVaccineName);
-                vaccineRepository.updateFtsSearch(ftsVaccine);
-            }
-
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.presenter;
 
-
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -8,10 +8,13 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.presenter.BaseFamilyProfileMemberPresenter;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.view.LocationPickerView;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
+
+import timber.log.Timber;
 
 public class CoreFamilyRemoveMemberPresenter extends BaseFamilyProfileMemberPresenter implements FamilyRemoveMemberContract.Presenter {
 
@@ -35,16 +38,19 @@ public class CoreFamilyRemoveMemberPresenter extends BaseFamilyProfileMemberPres
     public void removeMember(CommonPersonObjectClient client) {
 
         String memberID = client.getColumnmaps().get(DBConstants.KEY.BASE_ENTITY_ID);
+        String registerType = client.getColumnmaps().get(OpdDbConstants.KEY.REGISTER_TYPE);
+
+        if (CoreConstants.REGISTER_TYPE.INDEPENDENT.equalsIgnoreCase(registerType)) {
+            startRemoveMemberForm(client);
+            return;
+        }
+
         if (memberID != null && (memberID.equalsIgnoreCase(familyHead) || memberID.equalsIgnoreCase(primaryCaregiver))) {
 
             interactor.processFamilyMember(familyBaseEntityId, client, this);
 
         } else {
-
-            JSONObject form = model.prepareJsonForm(client, model.getForm(client));
-            if (form != null) {
-                viewReference.get().startJsonActivity(form);
-            }
+            startRemoveMemberForm(client);
         }
     }
 
@@ -53,8 +59,13 @@ public class CoreFamilyRemoveMemberPresenter extends BaseFamilyProfileMemberPres
         String memberID = client.getColumnmaps().get(DBConstants.KEY.BASE_ENTITY_ID);
         String currentFamilyHead = familyDetails.get(CoreConstants.RELATIONSHIP.FAMILY_HEAD);
         String currentCareGiver = familyDetails.get(CoreConstants.RELATIONSHIP.PRIMARY_CAREGIVER);
+        String registerType = client.getColumnmaps().get(OpdDbConstants.KEY.REGISTER_TYPE);
 
         if (memberID != null) {
+            if (CoreConstants.REGISTER_TYPE.INDEPENDENT.equalsIgnoreCase(registerType)) {
+                startRemoveMemberForm(client);
+                return;
+            }
             if (memberID.equalsIgnoreCase(currentFamilyHead)) {
 
                 if (viewReference.get() != null) {
@@ -68,12 +79,25 @@ public class CoreFamilyRemoveMemberPresenter extends BaseFamilyProfileMemberPres
                 }
 
             } else {
-
-                JSONObject form = model.prepareJsonForm(client, model.getForm(client));
-                if (form != null) {
-                    viewReference.get().startJsonActivity(form);
-                }
+                startRemoveMemberForm(client);
             }
+        }
+    }
+
+    private void startRemoveMemberForm(CommonPersonObjectClient client) {
+        JSONObject form = model.prepareJsonForm(client, model.getForm(client));
+        String registerType = client.getColumnmaps().get(OpdDbConstants.KEY.REGISTER_TYPE);
+
+        if (CoreConstants.REGISTER_TYPE.INDEPENDENT.equalsIgnoreCase(registerType)) {
+            try {
+                form.put(CoreConstants.REGISTER_TYPE.INDEPENDENT, true);
+            } catch (JSONException e) {
+                Timber.e(e, "Error adding entry to form");
+            }
+        }
+
+        if (form != null) {
+            viewReference.get().startJsonActivity(form);
         }
     }
 

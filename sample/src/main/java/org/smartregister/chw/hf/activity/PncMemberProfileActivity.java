@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -18,7 +19,6 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CorePncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
-import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hf.R;
@@ -27,6 +27,7 @@ import org.smartregister.chw.hf.contract.PncMemberProfileContract;
 import org.smartregister.chw.hf.interactor.PncMemberProfileInteractor;
 import org.smartregister.chw.hf.model.FamilyProfileModel;
 import org.smartregister.chw.hf.presenter.PncMemberProfilePresenter;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
@@ -65,6 +66,16 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
         MalariaRegisterActivity.startMalariaRegistrationActivity(this, memberObject.getBaseEntityId());
     }
 
+    @Override
+    protected void startFpRegister() {
+        //TODO implement start FP register for HF
+    }
+
+    @Override
+    protected void startFpChangeMethod() {
+        //TODO implement start FP change method for HF
+    }
+
     public void setReferralTasks(Set<Task> taskList) {
         if (referralRecyclerView != null && taskList.size() > 0) {
             RecyclerView.Adapter mAdapter = new ReferralCardViewAdapter(taskList, this, memberObject, getFamilyHeadName(),
@@ -84,7 +95,7 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     }
 
     @Override
-    protected void registerPresenter() {
+    public void registerPresenter() {
         presenter = new PncMemberProfilePresenter(this, new PncMemberProfileInteractor(), memberObject);
     }
 
@@ -197,6 +208,16 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     @Override
     protected Class<? extends CorePncRegisterActivity> getPncRegisterActivityClass() {
         return PncRegisterActivity.class;
+    }
+
+    @Override
+    protected void startMalariaFollowUpVisit() {
+//        TODO implement functionality to malaria home visit
+    }
+
+    @Override
+    protected void getRemoveBabyMenuItem(MenuItem item) {
+
     }
 
     public PncMemberProfileContract.Presenter pncMemberProfilePresenter() {

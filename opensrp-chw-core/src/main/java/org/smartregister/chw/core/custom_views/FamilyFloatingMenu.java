@@ -2,7 +2,6 @@ package org.smartregister.chw.core.custom_views;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
@@ -10,6 +9,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
@@ -27,6 +28,16 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
 
     public FamilyFloatingMenu(Context context) {
         super(context);
+        initUi();
+    }
+
+    public FamilyFloatingMenu(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initUi();
+    }
+
+    public FamilyFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         initUi();
     }
 
@@ -88,16 +99,6 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
 
             isFabMenuOpen = true;
         }
-    }
-
-    public FamilyFloatingMenu(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initUi();
-    }
-
-    public FamilyFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initUi();
     }
 
     /**

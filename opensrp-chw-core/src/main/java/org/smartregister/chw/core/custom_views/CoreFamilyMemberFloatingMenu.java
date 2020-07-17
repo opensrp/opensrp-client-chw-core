@@ -1,13 +1,14 @@
 package org.smartregister.chw.core.custom_views;
 
 import android.content.Context;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
@@ -24,6 +25,16 @@ public abstract class CoreFamilyMemberFloatingMenu extends LinearLayout implemen
 
     public CoreFamilyMemberFloatingMenu(Context context) {
         super(context);
+        initUi();
+    }
+
+    public CoreFamilyMemberFloatingMenu(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initUi();
+    }
+
+    public CoreFamilyMemberFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         initUi();
     }
 
@@ -48,16 +59,6 @@ public abstract class CoreFamilyMemberFloatingMenu extends LinearLayout implemen
         referLayout.setClickable(false);
 
         menuBar.setVisibility(GONE);
-    }
-
-    public CoreFamilyMemberFloatingMenu(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initUi();
-    }
-
-    public CoreFamilyMemberFloatingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initUi();
     }
 
     public View getCallLayout() {

@@ -83,9 +83,9 @@ public abstract class CoreChildUtils {
     }
 
     public static String getChildListByFamilyId(String tableName, String familyId) {
-        SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.SelectInitiateMainTable(tableName, new String[]{DBConstants.KEY.BASE_ENTITY_ID});
-        return queryBUilder.mainCondition(MessageFormat.format("{0}.{1} = ''{2}''", tableName, DBConstants.KEY.RELATIONAL_ID, familyId));
+        SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
+        queryBuilder.selectInitiateMainTable(tableName, new String[]{DBConstants.KEY.BASE_ENTITY_ID});
+        return queryBuilder.mainCondition(MessageFormat.format("{0}.{1} = ''{2}''", tableName, DBConstants.KEY.RELATIONAL_ID, familyId));
     }
 
     public static ChildHomeVisit getLastHomeVisit(String tableName, String childId) {
@@ -121,12 +121,12 @@ public abstract class CoreChildUtils {
     }
 
     public static String mainSelectRegisterWithoutGroupby(String tableName, String familyTableName, String familyMemberTableName, String mainCondition) {
-        SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.SelectInitiateMainTable(tableName, mainColumns(tableName, familyTableName, familyMemberTableName));
-        queryBUilder.customJoin("LEFT JOIN " + familyTableName + " ON  " + tableName + "." + DBConstants.KEY.RELATIONAL_ID + " = " + familyTableName + ".id COLLATE NOCASE ");
-        queryBUilder.customJoin("LEFT JOIN " + familyMemberTableName + " ON  " + familyMemberTableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + familyTableName + ".primary_caregiver COLLATE NOCASE ");
+        SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
+        queryBuilder.selectInitiateMainTable(tableName, mainColumns(tableName, familyTableName, familyMemberTableName));
+        queryBuilder.customJoin("LEFT JOIN " + familyTableName + " ON  " + tableName + "." + DBConstants.KEY.RELATIONAL_ID + " = " + familyTableName + ".id COLLATE NOCASE ");
+        queryBuilder.customJoin("LEFT JOIN " + familyMemberTableName + " ON  " + familyMemberTableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + familyTableName + ".primary_caregiver COLLATE NOCASE ");
 
-        return queryBUilder.mainCondition(mainCondition);
+        return queryBuilder.mainCondition(mainCondition);
     }
 
     public static String[] mainColumns(String tableName, String familyTable, String familyMemberTable) {
@@ -220,7 +220,7 @@ public abstract class CoreChildUtils {
                 || display.toLowerCase().contains("rubella")) {
             vaccineDisplay = WordUtils.capitalize(vaccineDisplay.toLowerCase());
         }
-        vaccineDisplay = vaccineDisplay.replace("_"," ");
+        vaccineDisplay = vaccineDisplay.replace("_", " ");
         return vaccineDisplay;
     }
 
@@ -369,11 +369,11 @@ public abstract class CoreChildUtils {
             if (obs.getFormSubmissionField().equalsIgnoreCase(formSubmissionId)) {
                 List<Object> values = obs.getValues();
                 String value = "";
-                if(values.size()>0){
+                if (values.size() > 0) {
                     for (Object object : values) {
                         value = (String) object;
                     }
-                }else{
+                } else {
                     List<Object> hu = obs.getHumanReadableValues();
                     for (Object object : hu) {
                         value = (String) object;
@@ -387,7 +387,8 @@ public abstract class CoreChildUtils {
         return serviceTask;
 
     }
-    public static String getValueFromJsonFormSubmission(String details,String formSubmissionId){
+
+    public static String getValueFromJsonFormSubmission(String details, String formSubmissionId) {
         Event event = CoreChildUtils.gsonConverter.fromJson(details, new TypeToken<Event>() {
         }.getType());
         List<org.smartregister.clientandeventmodel.Obs> observations = event.getObs();
@@ -396,11 +397,11 @@ public abstract class CoreChildUtils {
         for (org.smartregister.clientandeventmodel.Obs obs : observations) {
             if (obs.getFormSubmissionField().equalsIgnoreCase(formSubmissionId)) {
                 List<Object> values = obs.getValues();
-                if(values.size()>0){
+                if (values.size() > 0) {
                     for (Object object : values) {
                         value = (String) object;
                     }
-                }else{
+                } else {
                     List<Object> hu = obs.getHumanReadableValues();
                     for (Object object : hu) {
                         value = (String) object;

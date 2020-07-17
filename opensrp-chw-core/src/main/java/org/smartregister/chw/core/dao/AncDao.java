@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.domain.MemberObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AncDao extends AlertDao {
@@ -33,11 +34,10 @@ public class AncDao extends AlertDao {
     }
 
     public static MemberObject getMember(String baseEntityID) {
-        String sql = "select m.base_entity_id , m.unique_id , m.relational_id , m.dob , m.first_name , m.middle_name , m.last_name , m.gender , " +
+        String sql = "select f.landmark, f.gps, m.base_entity_id , m.unique_id , m.relational_id , m.dob , m.first_name , m.middle_name , m.last_name , m.gender , " +
                 "m.phone_number , m.other_phone_number , f.first_name family_name , f.primary_caregiver , f.family_head , " +
                 "fh.first_name family_head_first_name , fh.middle_name family_head_middle_name, fh.last_name family_head_last_name, " +
-                "fh.phone_number family_head_phone_number , ar.confirmed_visits , f.village_town , ar.last_interacted_with , " +
-                "ar.last_contact_visit , ar.visit_not_done , ar.last_menstrual_period  , al.date_created  , ar.* " +
+                "fh.phone_number family_head_phone_number , ar.confirmed_visits , f.village_town, al.date_created, ar.* " +
                 "from ec_family_member m " +
                 "inner join ec_family f on m.relational_id = f.base_entity_id " +
                 "inner join ec_anc_register ar on ar.base_entity_id = m.base_entity_id " +
@@ -48,6 +48,7 @@ public class AncDao extends AlertDao {
         DataMap<MemberObject> dataMap = cursor -> {
             MemberObject memberObject = new MemberObject();
             memberObject.setLastMenstrualPeriod(getCursorValue(cursor, "last_menstrual_period"));
+            memberObject.setGravida(getCursorValue(cursor, "gravida"));
             memberObject.setChwMemberId(getCursorValue(cursor, "unique_id", ""));
             memberObject.setBaseEntityId(getCursorValue(cursor, "base_entity_id", ""));
             memberObject.setFamilyBaseEntityId(getCursorValue(cursor, "relational_id", ""));
@@ -73,6 +74,8 @@ public class AncDao extends AlertDao {
             memberObject.setDateCreated(getCursorValue(cursor, "date_created"));
             memberObject.setAddress(getCursorValue(cursor, "village_town"));
             memberObject.setHasAncCard(getCursorValue(cursor, "has_anc_card", ""));
+            memberObject.setGps(getCursorValue(cursor, "gps"));
+            memberObject.setLandmark(getCursorValue(cursor, "landmark"));
 
             return memberObject;
         };
@@ -93,6 +96,36 @@ public class AncDao extends AlertDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        return res.get(0);
+        return (res == null || res.size() < 1) ? 0 : res.get(0);
+    }
+    public static boolean showTT(String baseEntityID){
+        String sql = "SELECT count(*) as count\n" +
+                "FROM visit_details vd\n" +
+                "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
+                "WHERE vd.visit_key = 'imm_medicine_given'\n" +
+                "AND vd.human_readable_details = 'Tetanus toxoid (TT)'\n" +
+                "AND v.base_entity_id = '" + baseEntityID + "'";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        return res == null || res.get(0) < 2;
+    }
+
+    public static List<String> getTestDone(String baseEntityID) {
+        String sql = "SELECT vd.human_readable_details\n" +
+                "FROM visit_details vd\n" +
+                "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
+                "WHERE vd.visit_key = 'tests_done'\n" +
+                "AND ((vd.human_readable_details != 'Haemoglobin level') AND (vd.human_readable_details != 'None') AND (vd.human_readable_details != 'Other test'))\n" +
+                "AND v.base_entity_id = '" + baseEntityID + "'";
+
+        DataMap<String> dataMap = c -> getCursorValue(c, "human_readable_details");
+
+        List<String> humanReadableDetails = readData(sql, dataMap);
+        if (humanReadableDetails != null)
+            return humanReadableDetails;
+
+        return new ArrayList<>();
     }
 }

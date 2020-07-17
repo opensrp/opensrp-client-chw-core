@@ -51,7 +51,7 @@ public class ChwServiceSchedule {
                 // Check if service is already given
                 for (ServiceRecord serviceRecord : issuedServices) {
                     if (curAlert != null && curAlert.scheduleName().equalsIgnoreCase(serviceRecord.getName())
-                            || curAlert != null && curAlert.visitCode().equalsIgnoreCase(serviceRecord.getName().toLowerCase().replace("_",""))) {
+                            || curAlert != null && curAlert.visitCode().equalsIgnoreCase(serviceRecord.getName().toLowerCase().replace("_", ""))) {
                         exists = true;
                         break;
                     }

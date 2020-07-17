@@ -2,11 +2,12 @@ package org.smartregister.chw.core.provider;
 
 import android.content.Context;
 import android.database.Cursor;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.smartregister.chw.core.R;
@@ -46,6 +47,12 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
         this.onClickListener = onClickListener;
         this.paginationClickListener = paginationClickListener;
         this.context = context;
+    }
+
+    protected static void fillValue(TextView v, String value) {
+        if (v != null) {
+            v.setText(value);
+        }
     }
 
     @Override
@@ -147,16 +154,15 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
         //fillValue(viewHolder.ancId, String.format(context.getString(R.string.unique_id_text), uniqueId));
     }
 
-    protected static void fillValue(TextView v, String value) {
-        if (v != null) {
-            v.setText(value);
-        }
-
-    }
-
     public void setAddressAndGender(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
         String address = Utils.getValue(pc.getColumnmaps(), ChildDBConstants.KEY.FAMILY_HOME_ADDRESS, true);
-        String gender = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.GENDER, true);
+        String gender_key = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.GENDER, true);
+        String gender = "";
+        if (gender_key.equalsIgnoreCase("Male")) {
+            gender = context.getString(R.string.male);
+        } else if (gender_key.equalsIgnoreCase("Female")) {
+            gender = context.getString(R.string.female);
+        }
         fillValue(viewHolder.textViewAddressGender, address + " \u00B7 " + gender);
     }
 

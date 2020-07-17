@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.view.contract.BaseRegisterContract;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public interface CoreChildRegisterContract {
 
         void onUniqueIdFetched(Triple<String, String, String> triple, String entityId, String familyId);
 
-        void onRegistrationSaved(boolean isEdit);
+        void onRegistrationSaved(boolean editMode, boolean isSaved, FamilyEventClient familyEventClient);
 
     }
 }

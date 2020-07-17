@@ -16,10 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -27,11 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.internal.Preconditions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -42,11 +44,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
+import org.smartregister.chw.core.activity.BaseReferralTaskViewActivity;
+import org.smartregister.chw.core.activity.CoreAllClientsRegisterActivity;
+import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 import org.smartregister.chw.core.custom_views.CoreAncFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
+import org.smartregister.chw.core.custom_views.CoreFamilyPlanningFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreMalariaFloatingMenu;
+import org.smartregister.chw.core.domain.Hia2Indicator;
+import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.fragment.CopyToClipboardDialog;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
@@ -304,13 +313,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
         switch (n % 10) {
             case 1:
-                return "st";
+                return context().getStringResource(R.string.st);
             case 2:
-                return "nd";
+                return context().getStringResource(R.string.nd);
             case 3:
-                return "rd";
+                return context().getStringResource(R.string.th);
             default:
-                return "th";
+                return context().getStringResource(R.string.th);
         }
     }
 
@@ -389,6 +398,10 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return form_name;
     }
 
+    @Deprecated
+    /**
+     * To be removed in a future build
+     */
     public static String getLocalForm(String form_name, Locale locale, AssetManager assetManager) {
         return getFileName(form_name, locale, assetManager);
     }
@@ -479,34 +492,40 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     private static void setCallLayoutListener(boolean has_phone, LinearLayout menu) {
         CoreFamilyMemberFloatingMenu memberFloatingMenu;
         CoreAncFloatingMenu ancFloatingMenu;
+        CoreFamilyPlanningFloatingMenu fpFloatingMenu;
         if (has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
             memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
             memberFloatingMenu.getCallLayout().setOnClickListener(memberFloatingMenu);
+        } else if (!has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
+            memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
+            memberFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (has_phone && menu instanceof CoreAncFloatingMenu) {
             ancFloatingMenu = (CoreAncFloatingMenu) menu;
             ancFloatingMenu.getCallLayout().setOnClickListener(ancFloatingMenu);
         } else if (!has_phone && menu instanceof CoreAncFloatingMenu) {
             ancFloatingMenu = (CoreAncFloatingMenu) menu;
             ancFloatingMenu.getCallLayout().setOnClickListener(null);
-        } else if (!has_phone && menu instanceof CoreFamilyMemberFloatingMenu) {
-            memberFloatingMenu = (CoreFamilyMemberFloatingMenu) menu;
-            memberFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (!has_phone && menu instanceof CoreMalariaFloatingMenu) {
             CoreMalariaFloatingMenu malariaFloatingMenu = (CoreMalariaFloatingMenu) menu;
             malariaFloatingMenu.getCallLayout().setOnClickListener(null);
+        } else if (has_phone && menu instanceof CoreFamilyPlanningFloatingMenu) {
+            fpFloatingMenu = (CoreFamilyPlanningFloatingMenu) menu;
+            fpFloatingMenu.getCallLayout().setOnClickListener(fpFloatingMenu);
+        } else if (!has_phone && menu instanceof CoreFamilyPlanningFloatingMenu) {
+            fpFloatingMenu = (CoreFamilyPlanningFloatingMenu) menu;
+            fpFloatingMenu.getCallLayout().setOnClickListener(null);
         }
     }
 
 
-    public static boolean isWomanOfReproductiveAge(CommonPersonObjectClient commonPersonObject, int fromAge, int toAge) {
+    public static boolean isMemberOfReproductiveAge(CommonPersonObjectClient commonPersonObject, int fromAge, int toAge) {
         if (commonPersonObject == null) {
             return false;
         }
 
-        // check age and gender
+        // check for age
         String dobString = org.smartregister.util.Utils.getValue(commonPersonObject.getColumnmaps(), "dob", false);
-        String gender = org.smartregister.util.Utils.getValue(commonPersonObject.getColumnmaps(), "gender", false);
-        if (!TextUtils.isEmpty(dobString) && gender.trim().equalsIgnoreCase("Female")) {
+        if (!TextUtils.isEmpty(dobString)) {
             Period period = new Period(new DateTime(dobString), new DateTime());
             int age = period.getYears();
             return age >= fromAge && age <= toAge;
@@ -658,8 +677,78 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return null;
     }
 
+    public static MemberObject referralToAncMember(org.smartregister.chw.referral.domain.MemberObject memberObject) {
+        try {
+            JSONObject referralJson = new JSONObject(org.smartregister.family.util.JsonFormUtils.gson.toJson(memberObject));
+            return convert(referralJson.toString(), MemberObject.class);
+        } catch (JSONException var3) {
+            Timber.e(var3);
+            return null;
+        }
+    }
+
     public static String getFamilyDueFilter() {
         return "and ec_family.base_entity_id in ( select ec_family_member.relational_id from schedule_service inner join ec_family_member on ec_family_member.base_entity_id = schedule_service.base_entity_id " +
                 " where strftime('%Y-%m-%d') BETWEEN schedule_service.due_date and schedule_service.expiry_date and ifnull(schedule_service.not_done_date,'') = '' and ifnull(schedule_service.completion_date,'') = ''  ) ";
+    }
+
+    public static Locale getLocale(Context context) {
+        if (context == null) {
+            return Locale.getDefault();
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
+    public static String retrieveValue(List<MonthlyTally> monthlyTallies, Hia2Indicator hia2Indicator) {
+        String defaultValue = "0";
+        if (hia2Indicator == null || monthlyTallies == null) {
+            return defaultValue;
+        }
+
+        for (MonthlyTally monthlyTally : monthlyTallies) {
+            if (monthlyTally.getIndicator() != null && monthlyTally.getIndicator().getIndicatorCode()
+                    .equalsIgnoreCase(hia2Indicator.getIndicatorCode())) {
+                return monthlyTally.getValue();
+            }
+        }
+
+        return defaultValue;
+    }
+
+    public static void updateToolbarTitle(Activity activity, int toolbarTextViewId, String familyName) {
+        int titleResource = -1;
+        if (activity.getIntent().getExtras() != null)
+            titleResource = activity.getIntent().getExtras().getInt(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, -1);
+        if (titleResource != -1) {
+            TextView toolbarTitleTextView = activity.findViewById(toolbarTextViewId);
+            if (titleResource == R.string.return_to_family_name) {
+                toolbarTitleTextView.setText(activity.getString(R.string.return_to_family_name, familyName));
+            } else {
+                toolbarTitleTextView.setText(titleResource);
+            }
+        }
+    }
+
+    public static void passToolbarTitle(Activity activity, Intent intent) {
+        if (activity instanceof CoreAllClientsRegisterActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_all_client);
+        else if (activity instanceof BaseChwNotificationDetailsActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_notification_details);
+        else if (activity instanceof CoreFamilyProfileActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_family_name);
+        else if (activity instanceof BaseReferralTaskViewActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_task_details);
+    }
+
+    @NotNull
+    public static CommonPersonObjectClient getCommonPersonObjectClient(@NonNull String baseEntityId) {
+        CommonRepository commonRepository = org.smartregister.family.util.Utils.context().commonrepository(org.smartregister.family.util.Utils.metadata().familyMemberRegister.tableName);
+
+        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
+        final CommonPersonObjectClient client =
+                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
+        client.setColumnmaps(commonPersonObject.getColumnmaps());
+        return client;
     }
 }

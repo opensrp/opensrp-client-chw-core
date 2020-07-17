@@ -97,7 +97,8 @@ public class FamilyMember {
     }
 
     public String getFullNames() {
-        return String.format("%s %s %s", isNull(getFirstName()), isNull(getMiddleName()), isNull(getLastName()));
+        String names = String.format("%s %s", isNull(getFirstName()), isNull(getMiddleName())).trim();
+        return String.format("%s %s", names, isNull(getLastName())).trim();
     }
 
     private String isNull(String string) {
@@ -120,15 +121,15 @@ public class FamilyMember {
         return middleName;
     }
 
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 }

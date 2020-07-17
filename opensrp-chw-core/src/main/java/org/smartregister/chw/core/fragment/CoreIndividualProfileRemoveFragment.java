@@ -99,19 +99,13 @@ public abstract class CoreIndividualProfileRemoveFragment extends BaseFamilyProf
     public void displayChangeFamilyHeadDialog(final CommonPersonObjectClient client, final String familyHeadID) {
         if (getActivity() != null && getActivity().getFragmentManager() != null) {
             CoreFamilyProfileChangeDialog dialog = getChangeFamilyHeadDialog();
-            dialog.setOnSaveAndClose(new Runnable() {
-                @Override
-                public void run() {
-                    setFamilyHead(familyHeadID);
-                    getPresenter().removeMember(client);
-                }
+            dialog.setOnSaveAndClose(() -> {
+                setFamilyHead(familyHeadID);
+                getPresenter().removeMember(client);
             });
-            dialog.setOnRemoveActivity(new Runnable() {
-                @Override
-                public void run() {
-                    if (getActivity() != null) {
-                        getActivity().finish();
-                    }
+            dialog.setOnRemoveActivity(() -> {
+                if (getActivity() != null) {
+                    getActivity().finish();
                 }
             });
             dialog.show(getActivity().getFragmentManager(), "FamilyProfileChangeDialogHF");
@@ -164,6 +158,9 @@ public abstract class CoreIndividualProfileRemoveFragment extends BaseFamilyProf
         form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
         form.setWizard(false);
         form.setSaveLabel("Save");
+        if (jsonObject.has(CoreConstants.REGISTER_TYPE.INDEPENDENT)) {
+            form.setName(getString(R.string.remove_client));
+        }
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
 
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);

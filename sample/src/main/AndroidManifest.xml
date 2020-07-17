@@ -122,6 +122,10 @@
         <activity
             android:name=".activity.MalariaProfileActivity"
             android:theme="@style/HFTheme.NoActionBar" />
+        <activity
+            android:name="org.smartregister.chw.hf.activity.UpdatesRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/HFTheme.NoActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -139,6 +143,10 @@
         <activity
             android:name=".activity.AboveFiveChildProfileActivity"
             android:label="@string/child_details"
+            android:theme="@style/HFTheme.NoActionBar" />
+
+        <activity
+            android:name="org.smartregister.chw.core.activity.HIA2ReportsActivity"
             android:theme="@style/HFTheme.NoActionBar" />
 
 

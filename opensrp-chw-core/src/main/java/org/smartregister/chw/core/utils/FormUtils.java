@@ -2,19 +2,31 @@ package org.smartregister.chw.core.utils;
 
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.smartregister.chw.anc.util.JsonFormUtils;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.domain.FamilyMetadata;
+import org.smartregister.family.util.Utils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import timber.log.Timber;
+
+import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
 
 public class FormUtils {
     public static FamilyMetadata getFamilyMetadata(BaseProfileActivity baseProfileActivity, String defaultLocation, ArrayList<String> locationHierarchy, ArrayList<Pair<String, String>> locationFields) {
@@ -58,4 +70,68 @@ public class FormUtils {
         }
     }
 
+    public static JSONObject populateStockEventForm(JSONObject form, JSONArray fields) {
+        try {
+            if (form != null) {
+                JSONObject stepOne = form.getJSONObject(JsonFormUtils.STEP1);
+                JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
+
+                JSONObject preLoadObject;
+                JSONObject jsonObject;
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    preLoadObject = getFieldJSONObject(fields, jsonObject.optString(JsonFormUtils.KEY));
+                    if (preLoadObject != null)
+                        jsonObject.put(JsonFormUtils.VALUE, preLoadObject.opt(JsonFormUtils.VALUE));
+                }
+
+                return form;
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return null;
+    }
+
+    public static org.smartregister.util.FormUtils getFormUtils() {
+        try {
+            return org.smartregister.util.FormUtils.getInstance(Utils.context().applicationContext());
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
+    }
+
+    public static void updateFormField(JSONArray formFieldArrays, String formFieldKey, String updateValue) {
+        if (updateValue != null) {
+            JSONObject formObject = getFieldJSONObject(formFieldArrays, formFieldKey);
+            if (formObject != null) {
+                try {
+                    formObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
+                    formObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
+                } catch (JSONException e) {
+                    Timber.e(e);
+                }
+            }
+        }
+    }
+
+    public static void updateFormField(@NonNull JSONArray jsonArray, @NonNull Map<String, String> values) throws JSONException {
+        if (jsonArray == null || values == null)
+            throw new IllegalArgumentException();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject currJsonObject = JsonFormUtils.getJSONObject(jsonArray, i);
+            String keyVal = JsonFormUtils.getString(currJsonObject, JsonFormUtils.KEY);
+
+            if (keyVal != null && values.containsKey(keyVal)) {
+                String updateValue = values.get(keyVal);
+
+                currJsonObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
+                currJsonObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
+            }
+        }
+    }
 }

@@ -203,7 +203,7 @@ public class VaccineScheduleUtil {
                 for (Alert alert : alerts) {
                     if (
                             today.isAfter(new LocalDate(alert.startDate()).plusDays(-1)) &&
-                            alert.scheduleName().toLowerCase().replace(" ", "").replace("_", "").equals(code)
+                                    alert.scheduleName().toLowerCase().replace(" ", "").replace("_", "").equals(code)
                     ) {
                         String vaccine_key = alert.visitCode().toLowerCase().replace(" ", "").replace("_", "");
                         VaccineWrapper vaccineWrapper = new VaccineWrapper();

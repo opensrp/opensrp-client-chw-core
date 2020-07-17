@@ -7,6 +7,7 @@ public class ChildVisit {
     private String lastVisitDays;
 
     private String noOfMonthDue;
+    private Long lastNotVisitDate;
 
 
     public String getNoOfMonthDue() {
@@ -51,5 +52,11 @@ public class ChildVisit {
         this.lastVisitMonthName = lastVisitMonthName;
     }
 
+    public Long getLastNotVisitDate() {
+        return lastNotVisitDate;
+    }
 
+    public void setLastNotVisitDate(Long lastNotVisitDate) {
+        this.lastNotVisitDate = lastNotVisitDate;
+    }
 }

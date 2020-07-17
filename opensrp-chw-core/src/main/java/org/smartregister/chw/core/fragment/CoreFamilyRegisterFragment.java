@@ -2,12 +2,13 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreFamilyRegisterFragmentContract;
@@ -35,8 +36,8 @@ import timber.log.Timber;
 public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragment {
     private static final String DUE_FILTER_TAG = "PRESSED";
     protected View dueOnlyLayout;
-    private View view;
     protected boolean dueFilterActive = false;
+    private View view;
 
     @Override
     protected void initializePresenter() {
@@ -105,7 +106,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     public void onResume() {
         super.onResume();
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -120,7 +121,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
 
     private void dueFilter(String mainConditionString) {
         this.joinTables = null;
-        super.filter(searchText(), "", mainConditionString, false);
+        super.filter(getSearchText(), "", mainConditionString, false);
     }
 
     private void switchViews(View dueOnlyLayout, boolean isPress) {
@@ -133,7 +134,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         }
     }
 
-    private String searchText() {
+    private String getSearchText() {
         return (getSearchView() == null) ? "" : getSearchView().getText().toString();
     }
 
@@ -147,7 +148,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         super.setupViews(view);
         this.view = view;
 
-        Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -230,7 +231,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     }
 
     private void normalFilter(View dueOnlyLayout) {
-        filter(searchText(), "", presenter().getMainCondition(), false);
+        filter(getSearchText(), "", presenter().getMainCondition(), false);
         dueOnlyLayout.setTag(null);
         switchViews(dueOnlyLayout, false);
     }

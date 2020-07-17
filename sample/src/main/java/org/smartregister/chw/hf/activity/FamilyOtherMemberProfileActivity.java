@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import org.smartregister.chw.core.activity.CoreFamilyOtherMemberProfileActivity;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
-import org.smartregister.chw.core.dao.MalariaDao;
 import org.smartregister.chw.core.fragment.FamilyCallDialogFragment;
 import org.smartregister.chw.core.utils.BAJsonFormUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -17,14 +16,14 @@ import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.custom_view.FamilyMemberFloatingMenu;
 import org.smartregister.chw.hf.fragment.FamilyOtherMemberProfileFragment;
 import org.smartregister.chw.hf.presenter.FamilyOtherMemberActivityPresenter;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.fragment.BaseFamilyOtherMemberProfileFragment;
 import org.smartregister.family.model.BaseFamilyOtherMemberProfileActivityModel;
+import org.smartregister.family.util.DBConstants;
 import org.smartregister.view.contract.BaseProfileContract;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.Utils.isWomanOfReproductiveAge;
 
 public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfileActivity {
     private FamilyMemberFloatingMenu familyFloatingMenu;
@@ -34,6 +33,7 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     protected void onCreation() {
         super.onCreation();
         baJsonFormUtils = new BAJsonFormUtils(HealthFacilityApplication.getInstance());
+        setIndependentClient(false);
     }
 
     @Override
@@ -49,8 +49,28 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
     }
 
     @Override
+    protected void startFpRegister() {
+        //TODO implement start anc register for HF
+    }
+
+    @Override
     protected void startMalariaRegister() {
-        //TODO implement start anc malaria for HF
+        //TODO implement start malaria register for HF
+    }
+
+    @Override
+    protected void startFpChangeMethod() {
+        //TODO implement start fp change register for HF
+    }
+
+    @Override
+    protected void startMalariaFollowUpVisit() {
+        //TODO implement start malaria  follow-up visit for HF
+    }
+
+    @Override
+    protected void setIndependentClient(boolean isIndependent) {
+        this.isIndependent = isIndependent;
     }
 
     @Override
@@ -144,9 +164,9 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
             menu.findItem(R.id.action_malaria_diagnosis).setVisible(true);
         }
 
-        if (isWomanOfReproductiveAge(commonPersonObject, 10, 49)) {
+        if ("Female".equalsIgnoreCase(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.GENDER, false)) && Utils.isMemberOfReproductiveAge(commonPersonObject, 10, 49)) {
             menu.findItem(R.id.action_pregnancy_confirmation).setVisible(true);
-            menu.findItem(R.id.action_family_planning_initiation).setVisible(true);
+            menu.findItem(R.id.action_fp_initiation).setVisible(true);
         }
     }
 }

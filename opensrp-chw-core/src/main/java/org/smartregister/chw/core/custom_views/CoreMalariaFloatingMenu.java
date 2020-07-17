@@ -2,12 +2,13 @@ package org.smartregister.chw.core.custom_views;
 
 import android.app.Activity;
 import android.content.Context;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
@@ -64,6 +65,7 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
         referLayout.setOnClickListener(this);
         referLayout.setClickable(false);
 
+
         menuBar.setVisibility(GONE);
 
     }
@@ -91,10 +93,13 @@ public abstract class CoreMalariaFloatingMenu extends BaseMalariaFloatingMenu {
         } else {
             activityMain.setBackgroundResource(R.color.grey_tranparent_50);
 
-            fab.setImageResource(R.drawable.ic_input_add);
+            fab.setImageResource(R.drawable.ic_edit_white);
 
             callLayout.startAnimation(fabOpen);
             callLayout.setClickable(true);
+
+            referLayout.startAnimation(fabOpen);
+            referLayout.setClickable(true);
             isFabMenuOpen = true;
         }
     }

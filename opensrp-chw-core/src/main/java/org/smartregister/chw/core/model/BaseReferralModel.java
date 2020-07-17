@@ -6,11 +6,10 @@ import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 
 public class BaseReferralModel implements BaseReferralRegisterFragmentContract.Model {
 
-
     @Override
     public String countSelect(String taskTable, String mainCondition) {
         SmartRegisterQueryBuilder countQueryBuilder = new SmartRegisterQueryBuilder();
-        countQueryBuilder.SelectInitiateMainTableCounts(taskTable);
+        countQueryBuilder.selectInitiateMainTableCounts(taskTable);
         return countQueryBuilder.mainCondition(mainCondition);
     }
 

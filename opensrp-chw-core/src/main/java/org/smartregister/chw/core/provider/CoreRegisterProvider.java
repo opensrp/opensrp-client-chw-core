@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -47,6 +48,17 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         this.onClickListener = onClickListener;
     }
 
+    public static int convertDpToPixel(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static int getAncWomenCount(String familyBaseID) {
+        return AncDao.getAncWomenCount(familyBaseID);
+    }
+
+    public static int getPncWomenCount(String familyBaseID) {
+        return PNCDao.getPncWomenCount(familyBaseID);
+    }
 
     @Override
     public void getView(Cursor cursor, SmartRegisterClient client, RegisterViewHolder viewHolder) {
@@ -80,18 +92,22 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
     private void updatePncAncIcons(RegisterViewHolder viewHolder, int womanCount, String register) {
         for (int i = 1; i <= womanCount; i++) {
-            int res = CoreConstants.TABLE_NAME.ANC_MEMBER.equals(register) ? R.mipmap.ic_anc_pink : org.smartregister.family.R.mipmap.row_pnc;
+            int res = CoreConstants.TABLE_NAME.ANC_MEMBER.equals(register) ? R.mipmap.ic_anc_pink : R.mipmap.row_pnc;
             addImageView(viewHolder, res);
         }
-    }
-
-    public static int convertDpToPixel(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     protected void updateMalariaIcons(RegisterViewHolder viewHolder, int malariaCount) {
         for (int i = 1; i <= malariaCount; i++) {
             addImageView(viewHolder, R.drawable.ic_row_malaria);
+        }
+    }
+
+    protected void updateFpIcons(RegisterViewHolder viewHolder, int fpCount) {
+        if (fpCount != 0) {
+            for (int i = 1; i <= fpCount; i++) {
+                addImageView(viewHolder, R.mipmap.sidemenu_fp);
+            }
         }
     }
 
@@ -104,7 +120,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
             for (Map<String, String> map : list) {
                 if ("PNC".equals(map.get(CoreConstants.DB_CONSTANTS.ENTRY_POINT))) {
                     String dob = map.get(DBConstants.KEY.DOB);
-                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29) {
+                    if (dob != null && org.smartregister.chw.core.utils.CoreJsonFormUtils.getDayFromDate(dob) < 29 && ChildDao.isMotherAlive(map.get(ChildDBConstants.KEY.MOTHER_ENTITY_ID))) {
                         return;
                     }
                 }
@@ -158,7 +174,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
     protected List<Map<String, String>> getChildren(String familyEntityId) {
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.SelectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.GENDER, ChildDBConstants.KEY.LAST_HOME_VISIT, ChildDBConstants.KEY.VISIT_NOT_DONE, ChildDBConstants.KEY.DATE_CREATED, DBConstants.KEY.DOB, CoreConstants.DB_CONSTANTS.ENTRY_POINT});
+        queryBUilder.selectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.GENDER, ChildDBConstants.KEY.LAST_HOME_VISIT, ChildDBConstants.KEY.VISIT_NOT_DONE, ChildDBConstants.KEY.DATE_CREATED, DBConstants.KEY.DOB, CoreConstants.DB_CONSTANTS.ENTRY_POINT, ChildDBConstants.KEY.MOTHER_ENTITY_ID});
         queryBUilder.mainCondition(String.format(" %s is null AND %s = '%s' AND %s ",
                 DBConstants.KEY.DATE_REMOVED,
                 DBConstants.KEY.RELATIONAL_ID,
@@ -193,14 +209,6 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         }
 
         return res;
-    }
-
-    public static int getAncWomenCount(String familyBaseID) {
-        return AncDao.getAncWomenCount(familyBaseID);
-    }
-
-    public static int getPncWomenCount(String familyBaseID) {
-        return PNCDao.getPncWomenCount(familyBaseID);
     }
 
     public abstract List<ChildVisit> retrieveChildVisitList(Rules rules, List<Map<String, String>> list);

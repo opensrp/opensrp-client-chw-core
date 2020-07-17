@@ -10,6 +10,7 @@ import org.smartregister.chw.anc.repository.VisitRepository;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.repository.RecurringServiceRecordRepository;
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
@@ -20,9 +21,13 @@ import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.reporting.repository.DailyIndicatorCountRepository;
 import org.smartregister.reporting.repository.IndicatorQueryRepository;
 import org.smartregister.reporting.repository.IndicatorRepository;
+import org.smartregister.repository.ClientFormRepository;
 import org.smartregister.repository.DrishtiRepository;
 import org.smartregister.repository.EventClientRepository;
+import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
+import org.smartregister.repository.LocationTagRepository;
+import org.smartregister.repository.ManifestRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
@@ -67,6 +72,8 @@ public class CoreChwRepository extends Repository {
         IndicatorRepository.createTable(database);
         IndicatorQueryRepository.createTable(database);
         DailyIndicatorCountRepository.createTable(database);
+        MonthlyTalliesRepository.createTable(database);
+
 
         VisitRepository.createTable(database);
         VisitDetailsRepository.createTable(database);
@@ -75,12 +82,26 @@ public class CoreChwRepository extends Repository {
         PlanDefinitionSearchRepository.createTable(database);
         TaskRepository.createTable(database);
         //LocationRepository.createTable(database);    //TODO verify why this causes a break in code
+        LocationTagRepository.createTable(database);
 
         ScheduleRepository.createTable(database);
         RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
         IMDatabaseUtils.populateRecurringServices(context, database, recurringServiceTypeRepository);
 
+        WeightForHeightRepository.createTable(database);
+
+        ManifestRepository.createTable(database);
+        ClientFormRepository.createTable(database);
+
         onUpgrade(database, 1, databaseVersion);
+
+        // initialize from yml file
+
+        // Check if indicator data initialised
+
+        //hia2
+        EventClientRepository.createTable(database, Hia2ReportRepository.Table.hia2_report, Hia2ReportRepository.report_column.values());
+
     }
 
     @Override

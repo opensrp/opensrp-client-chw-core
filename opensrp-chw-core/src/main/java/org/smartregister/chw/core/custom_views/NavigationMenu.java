@@ -4,15 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +13,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
@@ -43,13 +45,16 @@ import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -67,10 +72,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private ProgressBar syncProgressBar;
     private NavigationContract.Presenter mPresenter;
     private View parentView;
-
-    private NavigationMenu() {
-
-    }
+    private Timer timer;
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
                                            NavigationModel.Flavor modelFlavor, Map<String, Class> registeredActivities, boolean showDeviceToDeviceSync) {
@@ -81,21 +83,28 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         NavigationMenu.showDeviceToDeviceSync = showDeviceToDeviceSync;
     }
 
+    @Nullable
     public static NavigationMenu getInstance(Activity activity, View parentView, Toolbar myToolbar) {
-        SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
-        activityWeakReference = new WeakReference<>(activity);
-        int orientation = activity.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (instance == null) {
-                instance = new NavigationMenu();
-            }
+        try {
+            SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
+            activityWeakReference = new WeakReference<>(activity);
+            int orientation = activity.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if (instance == null) {
+                    instance = new NavigationMenu();
+                }
 
-            SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
-            instance.init(activity, parentView, myToolbar);
-            return instance;
-        } else {
-            return null;
+                SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
+                instance.init(activity, parentView, myToolbar);
+                return instance;
+            } else {
+                return null;
+            }
+        } catch (OutOfMemoryError e) {
+            Timber.e(e);
         }
+
+        return null;
     }
 
     private void init(Activity activity, View myParentView, Toolbar myToolbar) {
@@ -106,6 +115,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             parentView = myParentView;
             mPresenter = new NavigationPresenter(application, this, modelFlavor);
             prepareViews(activity);
+            mPresenter.updateTableMap(menuFlavor.getTableMapValues());
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -115,8 +125,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (parentView != null) {
             rootView = parentView;
         } else {
-            // get current view
-            // ViewGroup current = parentActivity.getWindow().getDecorView().findViewById(android.R.id.content);
             ViewGroup current = (ViewGroup) ((ViewGroup) (activity.findViewById(android.R.id.content))).getChildAt(0);
             if (!(current instanceof DrawerLayout)) {
 
@@ -148,15 +156,14 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 rootView = current;
             }
         }
-        //
     }
 
     @Override
     public void prepareViews(Activity activity) {
 
         drawer = activity.findViewById(R.id.drawer_layout);
+        drawer.addDrawerListener(this);
         recyclerView = rootView.findViewById(R.id.rvOptions);
-        // NavigationView navigationView = rootView.findViewById(R.id.nav_view);
         tvLogout = rootView.findViewById(R.id.tvLogout);
         recyclerView = rootView.findViewById(R.id.rvOptions);
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
@@ -174,14 +181,18 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             syncProgressBar.setIndeterminateDrawable(circle);
         }
 
-        // register all objects
+        // register top section menu items
         registerDrawer(activity);
         registerNavigation(activity);
-        registerLogout(activity);
-        registerSync(activity);
-        registerLanguageSwitcher(activity);
 
+        /// register bottom section menu items after the separator
+        registerLanguageSwitcher(activity);
+        registerServiceActivity(activity);
+        registerStockReport(activity);
         registerDeviceToDeviceSync(activity);
+        registerSync(activity);
+        registerLogout(activity);
+
         // update all actions
         mPresenter.refreshLastSync();
         mPresenter.refreshNavigationCount(activity);
@@ -226,11 +237,34 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    private void registerServiceActivity(Activity activity) {
+        if (menuFlavor.hasServiceReport()) {
+            View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
+            rlIconServiceReport.setVisibility(View.VISIBLE);
+            rlIconServiceReport.setOnClickListener(view -> {
+                Intent intent = menuFlavor.getServiceReportIntent(activity);
+                activity.startActivity(intent);
+            });
+        }
+    }
+
+    private void registerStockReport(Activity activity) {
+        if (menuFlavor.hasStockReport()) {
+            View rlIconStockReport = rootView.findViewById(org.smartregister.chw.core.R.id.rlIconStockReport);
+            rlIconStockReport.setVisibility(View.VISIBLE);
+            rlIconStockReport.setOnClickListener(view -> {
+                Intent intent = menuFlavor.getStockReportIntent(activity);
+                activity.startActivity(intent);
+            });
+        }
+    }
+
     private void registerDrawer(Activity parentActivity) {
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
@@ -280,32 +314,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         View rlIconLang = rootView.findViewById(R.id.rlIconLang);
         final TextView tvLang = rootView.findViewById(R.id.tvLang);
 
-        final String[] languages = menuFlavor.getSupportedLanguages();
+        final List<Pair<String, Locale>> locales = menuFlavor.getSupportedLanguages();
+
+        String[] languages = new String[locales.size()];
         Locale current = context.getResources().getConfiguration().locale;
-        tvLang.setText(StringUtils.capitalize(current.getDisplayLanguage()));
+        int x = 0;
+        while (x < locales.size()) {
+            languages[x] = locales.get(x).getKey();
+            if (current.getLanguage().equals(locales.get(x).getValue().getLanguage())) {
+                tvLang.setText(locales.get(x).getKey());
+            }
+            x++;
+        }
 
         rlIconLang.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(context.getString(R.string.choose_language));
             builder.setItems(languages, (dialog, which) -> {
-                String lang = languages[which];
-                Locale LOCALE;
-                switch (lang) {
-                    case "English":
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                    case "Français":
-                        LOCALE = Locale.FRENCH;
-                        break;
-                    case "Kiswahili":
-                        LOCALE = new Locale("sw");
-                        break;
-                    default:
-                        LOCALE = Locale.ENGLISH;
-                        break;
-                }
-                tvLang.setText(languages[which]);
-                LangUtils.saveLanguage(context.getApplicationContext(), LOCALE.getLanguage());
+                Pair<String, Locale> lang = locales.get(which);
+                tvLang.setText(lang.getLeft());
+                LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
 
                 // destroy current instance
                 drawer.closeDrawers();
@@ -330,6 +358,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void refreshSyncProgressSpinner() {
+        if (syncProgressBar == null || ivSync == null)
+            return;
+
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
             ivSync.setVisibility(View.INVISIBLE);
@@ -385,13 +416,70 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         // update the time
         mPresenter.refreshLastSync();
         // refreshLastSync(new Date());
-
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
     }
 
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        Timber.v("Drawer is sliding");
+    }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) {
+        Timber.v("Drawer is opened");
+        recomputeCounts();
+    }
+
+    @Override
+    public void onDrawerClosed(@NonNull View drawerView) {
+        Timber.v("Drawer is closed");
+        if (timer != null)
+            timer = null;
+    }
+
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        Timber.v("Drawer state is changed");
+    }
+
+    private void recomputeCounts() {
+        try {
+            if (timer == null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Activity activity = activityWeakReference.get();
+                        if (mPresenter != null && activity != null) {
+                            mPresenter.refreshNavigationCount(activity);
+                        }
+                    }
+                }, 0, 5000);
+            }
+        } catch (Exception e) {
+            Timber.v(e);
+        }
+    }
+
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
     public interface Flavour {
-        String[] getSupportedLanguages();
+        List<Pair<String, Locale>> getSupportedLanguages();
+
+        HashMap<String, String> getTableMapValues();
+
+        boolean hasServiceReport();
+
+        boolean hasStockReport();
+
+        Intent getStockReportIntent(Activity activity);
+
+        Intent getServiceReportIntent(Activity activity);
+
     }
 }

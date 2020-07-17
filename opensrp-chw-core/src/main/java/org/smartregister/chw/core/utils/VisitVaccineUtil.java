@@ -422,8 +422,7 @@ public class VisitVaccineUtil {
             return context.getString(R.string.at_birth);
         }
 
-        return name.replace("Weeks", context.getString(org.smartregister.chw.core.R.string.abbrv_weeks))
-                .replace("Months", context.getString(org.smartregister.chw.core.R.string.abbrv_months))
-                .replace(" ", "");
+        return name.replace("Weeks", context.getString(R.string.date_weeks)).toLowerCase()
+                .replace("Months", context.getString(R.string.date_months)).toLowerCase();
     }
 }

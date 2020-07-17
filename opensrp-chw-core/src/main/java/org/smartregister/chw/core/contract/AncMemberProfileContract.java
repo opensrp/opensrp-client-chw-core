@@ -2,6 +2,7 @@ package org.smartregister.chw.core.contract;
 
 import org.json.JSONObject;
 import org.smartregister.chw.anc.contract.BaseAncMemberProfileContract;
+import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.AllSharedPreferences;
 
@@ -23,12 +24,19 @@ public interface AncMemberProfileContract {
         void createReferralEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
         void startAncReferralForm();
+
+        void startAncDangerSignsOutcomeForm(MemberObject memberObject);
+
+        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
+
     }
 
     interface Interactor extends BaseAncMemberProfileContract.Interactor {
         void createReferralEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
 
         void getClientTasks(String planId, String baseEntityId, AncMemberProfileContract.InteractorCallBack callback);
+
+        void createAncDangerSignsOutcomeEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
     }
 
     interface InteractorCallBack extends BaseAncMemberProfileContract.InteractorCallBack {

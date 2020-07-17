@@ -10,7 +10,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.smartregister.chw.core.domain.ContactInfo;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.Repository;
 
 import timber.log.Timber;
 
@@ -37,9 +36,6 @@ public class ContactInfoRepository extends BaseRepository {
 
     private String[] projectionArgs = new String[]{KEY, VALUE, BASE_ENTITY_ID, CREATED_AT};
 
-    public ContactInfoRepository(Repository repository) {
-        super(repository);
-    }
 
     protected static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_SQL);

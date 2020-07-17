@@ -2,18 +2,28 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
 
+import androidx.annotation.VisibleForTesting;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.AncLibrary;
+import org.smartregister.chw.anc.domain.Visit;
+import org.smartregister.chw.anc.util.NCUtils;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.ChwServiceSchedule;
 import org.smartregister.chw.core.utils.CoreChildService;
@@ -40,6 +50,7 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
@@ -47,9 +58,11 @@ import org.smartregister.util.FormUtils;
 import org.smartregister.util.ImageUtils;
 import org.smartregister.view.LocationPickerView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,7 +71,7 @@ import timber.log.Timber;
 
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
-    private AppExecutors appExecutors;
+    protected AppExecutors appExecutors;
     private CommonPersonObjectClient pClient;
     private Map<String, Date> vaccineList = new LinkedHashMap<>();
     private String childBaseEntityId;
@@ -98,7 +111,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
             if (alert != null) {
                 CoreChildService childService = new CoreChildService();
-                childService.setServiceName(alert.scheduleName());
+                childService.setServiceName(getTranslatedService(context, alert.scheduleName()));
                 childService.setServiceDate(alert.startDate());
                 childService.setServiceStatus(getImmunizationStateFromAlert(alert.status()).name());
                 e.onNext(childService);
@@ -106,6 +119,24 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 e.onNext(null);
             }
         });
+    }
+
+    private String getTranslatedService(Context context, String _name) {
+        String name = _name.toLowerCase();
+
+        String num = name.replaceAll("\\D+", "");
+        if (name.contains("breastfeeding")) {
+            return context.getString(R.string.exclusive_breastfeeding_months, num);
+        } else if (name.contains("deworming")) {
+            return context.getString(R.string.deworming_number_dose, num);
+        } else if (name.contains("vitamin")) {
+            return context.getString(R.string.vitamin_a, num);
+        } else if (name.contains("mnp")) {
+            return context.getString(R.string.mnp_number_pack, num);
+        } else {
+            String val = name.replace(" ", "_");
+            return Utils.getStringResourceByName(val, context);
+        }
     }
 
     private ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {
@@ -237,7 +268,8 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
     @Override
     public void getClientTasks(String planId, String baseEntityId, CoreChildProfileContract.InteractorCallBack callback) {
-        Set<Task> taskList = CoreChwApplication.getInstance().getTaskRepository().getTasksByEntityAndStatus(planId, baseEntityId, Task.TaskStatus.READY);
+        TaskRepository taskRepository = CoreChwApplication.getInstance().getTaskRepository();
+        Set<Task> taskList = ((ChwTaskRepository) taskRepository).getReferralTasksForClientByStatus(planId, baseEntityId, CoreConstants.BUSINESS_STATUS.REFERRED);
         callback.setClientTasks(taskList);
     }
 
@@ -312,14 +344,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public JSONObject getAutoPopulatedJsonEditFormString(String formName, String title, Context context, CommonPersonObjectClient client) {
         try {
             JSONObject form = FormUtils.getInstance(context).getFormJson(formName);
-            LocationPickerView lpv = new LocationPickerView(context);
-            lpv.init();
+
             if (form != null) {
                 form.put(JsonFormUtils.ENTITY_ID, client.getCaseId());
                 form.put(JsonFormUtils.ENCOUNTER_TYPE, CoreConstants.EventType.UPDATE_CHILD_REGISTRATION);
 
                 JSONObject metadata = form.getJSONObject(JsonFormUtils.METADATA);
-                String lastLocationId = LocationHelper.getInstance().getOpenMrsLocationId(lpv.getSelectedItem());
+                String lastLocationId = getCurrentLocationID(context);
 
                 metadata.put(JsonFormUtils.ENCOUNTER_LOCATION, lastLocationId);
 
@@ -348,6 +379,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     }
 
     @Override
+    public String getCurrentLocationID(Context context) {
+        LocationPickerView lpv = new LocationPickerView(context);
+        lpv.init();
+        return LocationHelper.getInstance().getOpenMrsLocationId(lpv.getSelectedItem());
+    }
+
+    @Override
     public void processBackGroundEvent(CoreChildProfileContract.InteractorCallBack callback) {
         //todo
     }
@@ -358,6 +396,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     }
 
     @Override
+    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
+        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, getChildBaseEntityId()), CoreConstants.TABLE_NAME.SICK_CHILD_FOLLOW_UP);
+        org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
+        String syncLocationId = ChwNotificationDao.getSyncLocationId(baseEvent.getBaseEntityId());
+        if (syncLocationId != null) {
+            // Allows setting the ID for sync purposes
+            baseEvent.setLocationId(syncLocationId);
+        }
+        NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
+    }
+
+    @Override
     public String getChildBaseEntityId() {
         return childBaseEntityId;
     }
@@ -365,6 +415,46 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     @Override
     public void setChildBaseEntityId(String childBaseEntityId) {
         this.childBaseEntityId = childBaseEntityId;
+    }
+
+    @Override
+    public void processJson(@NotNull Context context, String eventType, String tableName, String jsonString, CoreChildProfileContract.Presenter presenter) {
+        // save the event in event table
+        try {
+            final Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(org.smartregister.family.util.Utils.getAllSharedPreferences(), jsonString, tableName);
+            NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
+            presenter.onJsonProcessed(eventType, CoreConstants.EventType.SICK_CHILD, getSickChildVisit(context, baseEvent.getBaseEntityId()));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    private ProfileTask getSickChildVisit(@NotNull Context context, @NotNull String baseEntityID) {
+        Visit visit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, CoreConstants.EventType.SICK_CHILD);
+        ProfileTask task = null;
+        if (visit != null) {
+            task = new ProfileTask();
+            task.setResourceID(R.drawable.rowicon_sickchild);
+            task.setTitle(context.getString(R.string.sick_visit_on, new SimpleDateFormat("dd MMM", Locale.ENGLISH).format(visit.getDate())));
+            task.setTaskDate(visit.getDate());
+        }
+
+        return task;
+    }
+
+    @Override
+    public void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, CoreChildProfileContract.@Nullable Presenter presenter) {
+        Runnable runnable = () -> {
+
+            String taskType = CoreConstants.EventType.SICK_CHILD;
+            ProfileTask task = getSickChildVisit(context, baseEntityID);
+
+            if (presenter != null) {
+                appExecutors.mainThread().execute(() -> presenter.onProfileTaskFetched(taskType, task));
+            }
+        };
+
+        appExecutors.diskIO().execute(runnable);
     }
 
     public void processPopulatableFields(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray) throws JSONException {

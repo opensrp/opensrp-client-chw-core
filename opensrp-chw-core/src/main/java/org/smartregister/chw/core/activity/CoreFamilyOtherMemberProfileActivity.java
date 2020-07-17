@@ -5,11 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
@@ -60,6 +61,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     protected OnClickFloatingMenu onClickFloatingMenu;
     private TextView textViewFamilyHas;
     private RelativeLayout layoutFamilyHasRow;
+    protected boolean isIndependent;
 
     @Override
     protected void onCreation() {
@@ -137,11 +139,24 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_anc_registration) {
             startAncRegister();
             return true;
+        } else if (i == R.id.action_fp_initiation) {
+            startFpRegister();
+            return true;
+        } else if (i == R.id.action_fp_change) {
+            startFpChangeMethod();
+            return true;
         } else if (i == R.id.action_malaria_registration) {
             startMalariaRegister();
             return true;
+        } else if (i == R.id.action_malaria_followup_visit) {
+            startMalariaFollowUpVisit();
+            return true;
         } else if (i == R.id.action_registration) {
-            startFormForEdit(R.string.edit_member_form_title);
+            if (isIndependent) {
+                startFormForEdit(R.string.edit_all_client_member_form_title);
+            }else {
+                startFormForEdit(R.string.edit_member_form_title);
+            }
             return true;
         } else if (i == R.id.action_remove_member) {
             removeIndividualProfile();
@@ -157,7 +172,15 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
 
     protected abstract void startAncRegister();
 
+    protected abstract void startFpRegister();
+
+    protected abstract void startFpChangeMethod();
+
     protected abstract void startMalariaRegister();
+
+    protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void setIndependentClient(boolean isIndependent);
 
     public void startFormForEdit(Integer title_resource) {
 
@@ -211,7 +234,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
                     String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
                     JSONObject form = new JSONObject(jsonString);
                     if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                        presenter().updateFamilyMember(jsonString);
+                        presenter().updateFamilyMember(jsonString, isIndependent);
                     }
                 } catch (Exception e) {
                     Timber.e(e);

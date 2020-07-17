@@ -41,8 +41,14 @@ public class NavigationListener implements View.OnClickListener {
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.PNC_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.FAMILY_PLANNING:
-                    Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.FAMILY_PLANNING, Toast.LENGTH_SHORT).show();
+                    Class fPlanning = getActivity(CoreConstants.REGISTERED_ACTIVITIES.FP_REGISTER_ACTIVITY);
+                    if (fPlanning == null) {
+                        Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.FAMILY_PLANNING, Toast.LENGTH_SHORT).show();
+                    } else {
+                        startRegisterActivity(fPlanning);
+                    }
                     break;
+
                 case CoreConstants.DrawerMenu.MALARIA:
                     Class malaria = getActivity(CoreConstants.REGISTERED_ACTIVITIES.MALARIA_REGISTER_ACTIVITY);
                     if (malaria == null) {
@@ -56,6 +62,9 @@ public class NavigationListener implements View.OnClickListener {
                     break;
                 case CoreConstants.DrawerMenu.ALL_CLIENTS:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.ALL_CLIENTS_REGISTERED_ACTIVITY));
+                    break;
+                case CoreConstants.DrawerMenu.UPDATES:
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.UPDATES_REGISTER_ACTIVITY));
                     break;
                 default:
                     Utils.showShortToast(activity.getApplicationContext(), "Unspecified navigation action");

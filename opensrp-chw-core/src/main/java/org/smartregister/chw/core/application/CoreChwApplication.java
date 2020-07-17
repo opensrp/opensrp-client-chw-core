@@ -9,9 +9,14 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
+import org.smartregister.chw.core.repository.DailyTalliesRepository;
+import org.smartregister.chw.core.repository.HIA2IndicatorsRepository;
 import org.smartregister.chw.core.repository.MalariaRegisterRepository;
+import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
 import org.smartregister.chw.core.repository.ScheduleRepository;
+import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.chw.core.utils.ApplicationUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -25,6 +30,7 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
+import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.TaskNotesRepository;
@@ -43,22 +49,25 @@ import timber.log.Timber;
 
 public abstract class CoreChwApplication extends DrishtiApplication implements CoreApplication {
 
+    protected static TaskRepository taskRepository;
     private static ClientProcessorForJava clientProcessor;
-
     private static CommonFtsObject commonFtsObject = null;
     private static AncRegisterRepository ancRegisterRepository;
-    protected static TaskRepository taskRepository;
     private static PncRegisterRepository pncRegisterRepository;
     private static PlanDefinitionRepository planDefinitionRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
+    private static StockUsageReportRepository stockUsageReportRepository;
     public JsonSpecHelper jsonSpecHelper;
+    protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
     private ECSyncHelper ecSyncHelper;
     private String password;
-    protected ClientProcessorForJava clientProcessorForJava;
     private UniqueIdRepository uniqueIdRepository;
-
+    private HIA2IndicatorsRepository hIA2IndicatorsRepository;
+    private DailyTalliesRepository dailyTalliesRepository;
+    private MonthlyTalliesRepository monthlyTalliesRepository;
+    private Hia2ReportRepository hia2ReportRepository;
     private RulesEngineHelper rulesEngineHelper;
 
     public static JsonSpecHelper getJsonSpecHelper() {
@@ -75,21 +84,21 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public static AncRegisterRepository ancRegisterRepository() {
         if (ancRegisterRepository == null) {
-            ancRegisterRepository = new AncRegisterRepository(getInstance().getRepository());
+            ancRegisterRepository = new AncRegisterRepository();
         }
         return ancRegisterRepository;
     }
 
     public static PncRegisterRepository pncRegisterRepository() {
         if (pncRegisterRepository == null) {
-            pncRegisterRepository = new PncRegisterRepository(getInstance().getRepository());
+            pncRegisterRepository = new PncRegisterRepository();
         }
         return pncRegisterRepository;
     }
 
     public static MalariaRegisterRepository malariaRegisterRepository() {
         if (malariaRegisterRepository == null) {
-            malariaRegisterRepository = new MalariaRegisterRepository(getInstance().getRepository());
+            malariaRegisterRepository = new MalariaRegisterRepository();
         }
 
         return malariaRegisterRepository;
@@ -102,25 +111,39 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         return mInstance == null ? Locale.getDefault() : mInstance.getResources().getConfiguration().locale;
     }
 
+    public static ClientProcessorForJava getClientProcessor(android.content.Context context) {
+        if (clientProcessor == null) {
+            clientProcessor = CoreClientProcessor.getInstance(context);
+        }
+        return clientProcessor;
+    }
+
     public TaskRepository getTaskRepository() {
         if (taskRepository == null) {
-            taskRepository = new TaskRepository(getRepository(), new TaskNotesRepository(getRepository()));
+            taskRepository = new ChwTaskRepository(new TaskNotesRepository());
         }
         return taskRepository;
     }
 
     public PlanDefinitionRepository getPlanDefinitionRepository() {
         if (planDefinitionRepository == null) {
-            planDefinitionRepository = new PlanDefinitionRepository(getRepository());
+            planDefinitionRepository = new PlanDefinitionRepository();
         }
         return planDefinitionRepository;
     }
 
     public ScheduleRepository getScheduleRepository() {
         if (scheduleRepository == null) {
-            scheduleRepository = new ScheduleRepository(getRepository());
+            scheduleRepository = new ScheduleRepository();
         }
         return scheduleRepository;
+    }
+
+    public StockUsageReportRepository getStockUsageRepository() {
+        if (stockUsageReportRepository == null) {
+            stockUsageReportRepository = new StockUsageReportRepository();
+        }
+        return stockUsageReportRepository;
     }
 
     @Override
@@ -153,20 +176,13 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         return CoreChwApplication.getClientProcessor(CoreChwApplication.getInstance().getApplicationContext());
     }
 
-    public static ClientProcessorForJava getClientProcessor(android.content.Context context) {
-        if (clientProcessor == null) {
-            clientProcessor = CoreClientProcessor.getInstance(context);
-        }
-        return clientProcessor;
-    }
-
     public VaccineRepository vaccineRepository() {
         return ImmunizationLibrary.getInstance().vaccineRepository();
     }
 
     public LocationRepository getLocationRepository() {
         if (locationRepository == null) {
-            locationRepository = new LocationRepository(getRepository());
+            locationRepository = new LocationRepository();
         }
         return locationRepository;
     }
@@ -204,7 +220,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     public UniqueIdRepository getUniqueIdRepository() {
         if (this.uniqueIdRepository == null) {
-            this.uniqueIdRepository = new UniqueIdRepository(this.getRepository());
+            this.uniqueIdRepository = new UniqueIdRepository();
         }
 
         return this.uniqueIdRepository;
@@ -250,5 +266,35 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         list.add(Pair.create(JsonFormConstants.STEP1, "nearest_facility"));
         return list;
+    }
+
+
+    public DailyTalliesRepository dailyTalliesRepository() {
+        if (dailyTalliesRepository == null) {
+            dailyTalliesRepository = new DailyTalliesRepository();
+        }
+        return dailyTalliesRepository;
+    }
+
+    public HIA2IndicatorsRepository hIA2IndicatorsRepository() {
+        if (hIA2IndicatorsRepository == null) {
+            hIA2IndicatorsRepository = new HIA2IndicatorsRepository();
+        }
+        return hIA2IndicatorsRepository;
+    }
+
+    public MonthlyTalliesRepository monthlyTalliesRepository() {
+        if (monthlyTalliesRepository == null) {
+            monthlyTalliesRepository = new MonthlyTalliesRepository();
+        }
+
+        return monthlyTalliesRepository;
+    }
+
+    public Hia2ReportRepository hia2ReportRepository() {
+        if (hia2ReportRepository == null) {
+            hia2ReportRepository = new Hia2ReportRepository();
+        }
+        return hia2ReportRepository;
     }
 }

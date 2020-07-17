@@ -11,7 +11,7 @@ public interface ScheduleService {
      * @param baseEntityID
      * @return
      */
-    List<ScheduleTask> generateTasks(String baseEntityID, String eventName , Date eventDate);
+    List<ScheduleTask> generateTasks(String baseEntityID, String eventName, Date eventDate);
 
     /**
      * add logic to delete the schedule from the database

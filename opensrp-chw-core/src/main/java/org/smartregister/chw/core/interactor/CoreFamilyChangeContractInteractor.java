@@ -2,8 +2,9 @@ package org.smartregister.chw.core.interactor;
 
 import android.content.Context;
 import android.database.Cursor;
-import androidx.annotation.VisibleForTesting;
 import android.util.Pair;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -45,6 +46,23 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
     @VisibleForTesting
     CoreFamilyChangeContractInteractor(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
+    }
+
+    public static int getDiffYears(Date first, Date last) {
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return diff;
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance(Locale.US);
+        cal.setTime(date);
+        return cal;
     }
 
     @Override
@@ -135,7 +153,6 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
 
     private Triple<List<FamilyMember>, String, String> processFamily(String familyID) {
         Triple<List<FamilyMember>, String, String> res;
-
 
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyRegister.tableName);
 
@@ -239,23 +256,6 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
         return res;
     }
 
-    public static int getDiffYears(Date first, Date last) {
-        Calendar a = getCalendar(first);
-        Calendar b = getCalendar(last);
-        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
-            diff--;
-        }
-        return diff;
-    }
-
-    public static Calendar getCalendar(Date date) {
-        Calendar cal = Calendar.getInstance(Locale.US);
-        cal.setTime(date);
-        return cal;
-    }
-
     public void setFlavor(Flavor flavor) {
         this.flavor = flavor;
     }
@@ -266,6 +266,7 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
 
     public interface Flavor {
         String getFamilyMembersSql(String familyID);
+
         int getMinimumCareGiverAge();
     }
 }

@@ -1,6 +1,8 @@
 package org.smartregister.chw.core.utils;
 
-import android.app.Activity;
+import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.utils.FormUtils;
@@ -13,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ReferralTaskDao;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -35,10 +38,10 @@ public class CoreReferralUtils {
     }
 
     private static String mainSelectRegisterWithoutGroupby(String tableName, String familyTableName, String mainCondition) {
-        SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.SelectInitiateMainTable(tableName, mainColumns(tableName, familyTableName));
-        queryBUilder.customJoin("LEFT JOIN " + familyTableName + " ON  " + tableName + "." + DBConstants.KEY.RELATIONAL_ID + " = " + familyTableName + ".id COLLATE NOCASE ");
-        return queryBUilder.mainCondition(mainCondition);
+        SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
+        queryBuilder.selectInitiateMainTable(tableName, mainColumns(tableName, familyTableName));
+        queryBuilder.customJoin("LEFT JOIN " + familyTableName + " ON  " + tableName + "." + DBConstants.KEY.RELATIONAL_ID + " = " + familyTableName + ".id COLLATE NOCASE ");
+        return queryBuilder.mainCondition(mainCondition);
     }
 
     public static String[] mainColumns(String tableName, String familyTable) {
@@ -65,7 +68,7 @@ public class CoreReferralUtils {
 
     private static String createCareGiverSelect(String tableName, String mainCondition) {
         SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
-        smartRegisterQueryBuilder.SelectInitiateMainTable(tableName, mainCareGiverColumns(tableName));
+        smartRegisterQueryBuilder.selectInitiateMainTable(tableName, mainCareGiverColumns(tableName));
         return smartRegisterQueryBuilder.mainCondition(mainCondition);
     }
 
@@ -91,7 +94,7 @@ public class CoreReferralUtils {
 
     private static String createAncDetailsSelect(String tableName, String selectCondition) {
         SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
-        smartRegisterQueryBuilder.SelectInitiateMainTable(tableName, mainAncDetailsColumns(tableName));
+        smartRegisterQueryBuilder.selectInitiateMainTable(tableName, mainAncDetailsColumns(tableName));
         smartRegisterQueryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.ANC_MEMBER_LOG + " ON  " + tableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.ANC_MEMBER_LOG + ".id COLLATE NOCASE ");
         smartRegisterQueryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.FAMILY + " ON  " + tableName + "." + DBConstants.KEY.RELATIONAL_ID + " = " + CoreConstants.TABLE_NAME.FAMILY + "." + DBConstants.KEY.BASE_ENTITY_ID);
         return smartRegisterQueryBuilder.mainCondition(selectCondition);
@@ -99,7 +102,7 @@ public class CoreReferralUtils {
 
     private static String createAncDetailsSelect(String[] tableNames, int ancDetailsColumnsTableIndex, String selectCondition) {
         SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
-        smartRegisterQueryBuilder.SelectInitiateMainTable(tableNames, mainAncDetailsColumns(tableNames[ancDetailsColumnsTableIndex]));
+        smartRegisterQueryBuilder.selectInitiateMainTable(tableNames, mainAncDetailsColumns(tableNames[ancDetailsColumnsTableIndex]));
         smartRegisterQueryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.ANC_MEMBER_LOG + " ON  " + tableNames[ancDetailsColumnsTableIndex] + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.ANC_MEMBER_LOG + ".id COLLATE NOCASE ");
         return smartRegisterQueryBuilder.mainCondition(selectCondition);
     }
@@ -117,7 +120,7 @@ public class CoreReferralUtils {
 
     public static String pncFamilyMemberProfileDetailsSelect(String familyTableName, String baseEntityId) {
         SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
-        queryBuilder.SelectInitiateMainTable(familyTableName, pncFamilyMemberProfileDetails(familyTableName));
+        queryBuilder.selectInitiateMainTable(familyTableName, pncFamilyMemberProfileDetails(familyTableName));
         queryBuilder.customJoin("LEFT JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON  " + familyTableName + "." + DBConstants.KEY.BASE_ENTITY_ID + " = " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.RELATIONAL_ID);
         return queryBuilder.mainCondition(CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID + " = '" + baseEntityId + "'");
     }
@@ -137,18 +140,18 @@ public class CoreReferralUtils {
         createReferralTask(baseEvent.getBaseEntityId(), allSharedPreferences, assignReferralFocus(referralTable), getReferralProblems(jsonString));
     }
 
-    private static String setEntityId(String jsonString, String entityId) {
-        String referralForm = "";
+    public static String setEntityId(String jsonString, String entityId) {
+        String jsonForm = "";
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             jsonObject.put(CoreConstants.ENTITY_ID, entityId);
 
-            referralForm = jsonObject.toString();
+            jsonForm = jsonObject.toString();
         } catch (JSONException e) {
-            Timber.e(e, "CoreChildProfileInteractor --> setEntityId");
+            Timber.e(e, "Interactor --> setEntityId");
         }
 
-        return referralForm;
+        return jsonForm;
     }
 
     private static void createReferralTask(String baseEntityId, AllSharedPreferences allSharedPreferences, String focus, String referralProblems) {
@@ -195,6 +198,12 @@ public class CoreReferralUtils {
                 break;
             case CoreConstants.TABLE_NAME.PNC_REFERRAL:
                 focus = CoreConstants.TASKS_FOCUS.PNC_DANGER_SIGNS;
+                break;
+            case CoreConstants.TABLE_NAME.FP_REFERRAL:
+                focus = CoreConstants.TASKS_FOCUS.FP_SIDE_EFFECTS;
+                break;
+            case CoreConstants.TABLE_NAME.MALARIA_REFERRAL:
+                focus = CoreConstants.TASKS_FOCUS.SUSPECTED_MALARIA;
                 break;
             default:
                 focus = "";
@@ -304,13 +313,46 @@ public class CoreReferralUtils {
         return Utils.context().commonrepository(tableName);
     }
 
-    public static boolean checkIfStartedFromReferrals(Activity startActivity) {
-        boolean startedFromReferrals = false;
-        String referrerActivity = startActivity.getLocalClassName();
-        if ("activity.ReferralTaskViewActivity".equals(referrerActivity)) {
-            startedFromReferrals = true;
+    @NotNull
+    public static String getFamilyMemberFtsSearchQuery(@Nullable String filters) {
+        if (TextUtils.isEmpty(filters)) {
+            return "SELECT object_id, last_interacted_with\n" +
+                    "FROM (SELECT object_id, last_interacted_with FROM ec_family_member_search WHERE date_removed IS NULL)\n" +
+                    "ORDER BY last_interacted_with DESC";
+        } else {
+            String query = "SELECT object_id\n" +
+                    "FROM (SELECT object_id, last_interacted_with\n" +
+                    "      FROM ec_family_member_search\n" +
+                    "      WHERE date_removed IS NULL\n" +
+                    "        AND phrase MATCH '%s*'\n" +
+                    "     )\n" +
+                    "ORDER BY last_interacted_with DESC";
+            query = query.replace("%s", filters);
+            return query;
         }
-        return startedFromReferrals;
     }
 
+    /**
+     * This method is used by CHW to complete a referral task by marking it as done.
+     */
+    public static void completeClosedReferralTasks() {
+        List<Task> tasksToBeCompleted = ReferralTaskDao.getToBeCompletedReferralTasks();
+        if (tasksToBeCompleted != null) {
+            Timber.d("Tasks to be completed size: %s ", tasksToBeCompleted.size());
+            for (Task task : tasksToBeCompleted) {
+                completeTask(task, true);
+            }
+        }
+    }
+
+    public static void completeTask(Task currentTask, boolean endTask) {
+        DateTime now = new DateTime();
+        if (endTask) {
+            currentTask.setStatus(Task.TaskStatus.COMPLETED);
+        }
+        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.COMPLETE);
+        currentTask.setLastModified(now);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+    }
 }

@@ -17,11 +17,13 @@ public interface ChwDBConstants {
     String NEAREST_HEALTH_FACILITY = "nearest_facility";
     String IS_CLOSED = "is_closed";
     String DELIVERY_DATE = "delivery_date";
+    String DATE_CREATED = "date_created";
     String NEXT_VISIT_DATE = "next_visit_date";
     String TASK_STATUS = "status";
     String TASK_CODE = "code";
     String TASK_STATUS_READY = "READY";
     String TASK_STATUS_REFERRAL = "Referral";
+    String DETAILS = "details";
 
     interface TaskTable {
         String FOR = "for";
@@ -29,5 +31,7 @@ public interface ChwDBConstants {
         String BUSINESS_STATUS = "business_status";
         String START = "start";
         String FOCUS = "focus";
+        String REASON_REFERENCE = "reason_reference";
+        String LOCATION = "location";
     }
 }

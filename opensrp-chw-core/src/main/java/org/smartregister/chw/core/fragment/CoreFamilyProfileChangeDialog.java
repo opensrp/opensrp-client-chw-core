@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Display;
@@ -24,6 +21,10 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
@@ -165,7 +166,7 @@ public abstract class CoreFamilyProfileChangeDialog extends DialogFragment imple
         progressBar.setVisibility(View.INVISIBLE);
 
 
-        if (actionType.equals(CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER)) {
+        if (CoreConstants.PROFILE_CHANGE_ACTION.PRIMARY_CARE_GIVER.equals(actionType)) {
             tvTitle.setText(getString(R.string.select_caregiver));
             tvInfo.setText(getString(R.string.remove_caregiver_warning_message));
         } else {

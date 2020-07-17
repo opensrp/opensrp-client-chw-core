@@ -3,11 +3,10 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.Menu;
@@ -15,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -30,6 +32,7 @@ import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -48,6 +51,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.TITLE_VIEW_TEXT;
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
+import static org.smartregister.family.util.DBConstants.KEY.LAST_NAME;
 
 public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivity implements FamilyProfileExtendedContract.View {
     protected String familyBaseEntityId;
@@ -311,14 +316,9 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (view.getTag() instanceof CommonPersonObjectClient) {
             CommonPersonObjectClient commonPersonObjectClient = (CommonPersonObjectClient) view.getTag();
             String entityType = Utils.getValue(commonPersonObjectClient.getColumnmaps(), ChildDBConstants.KEY.ENTITY_TYPE, false);
-            if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType)) {
-                if (isAncMember(commonPersonObjectClient.entityId())) {
-                    goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else if (isPncMember(commonPersonObjectClient.entityId())) {
-                    gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
-                } else {
-                    goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
-                }
+            if (CoreConstants.TABLE_NAME.FAMILY_MEMBER.equals(entityType) || CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT.equals(entityType)) {
+                org.smartregister.util.Utils.startAsyncTask(new GoToMemberProfileBaseOnRegisterTask(commonPersonObjectClient, fragmentArguments, this), null);
+
             } else {
                 goToChildProfileActivity(commonPersonObjectClient, fragmentArguments);
             }
@@ -334,6 +334,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, patient);
         intent.putExtra(Constants.INTENT_KEY.FAMILY_HEAD, getFamilyHead());
         intent.putExtra(Constants.INTENT_KEY.PRIMARY_CAREGIVER, getPrimaryCaregiver());
+        passToolbarTitle(this, intent);
         startActivity(intent);
     }
 
@@ -349,9 +350,11 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, true);
+        MemberObject memberObject = new MemberObject(patient);
+        memberObject.setFamilyName(Utils.getValue(patient.getColumnmaps(), LAST_NAME, false));
+        passToolbarTitle(this, intent);
         intent.putExtra(Constants.INTENT_KEY.BASE_ENTITY_ID, patient.getCaseId());
-        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, new MemberObject(patient));
+        intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject );
         startActivity(intent);
     }
 
@@ -365,6 +368,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         startActivity(initProfileActivityIntent(patient, bundle, getPncMemberProfileActivityClass()));
     }
 
+
     private Intent initProfileActivityIntent(CommonPersonObjectClient patient, Bundle bundle, Class activityClass) {
         Intent intent = new Intent(this, activityClass);
         if (bundle != null) {
@@ -373,7 +377,34 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, patient.entityId());
         intent.putExtra(CoreConstants.INTENT_KEY.CLIENT, patient);
         intent.putExtra(TITLE_VIEW_TEXT, String.format(getString(org.smartregister.chw.core.R.string.return_to_family_name), ""));
+        passToolbarTitle(this, intent);
         return intent;
+    }
+
+    private class GoToMemberProfileBaseOnRegisterTask extends AsyncTask<Void, Void, Void> {
+        private final CommonPersonObjectClient commonPersonObjectClient;
+        private final Bundle fragmentArguments;
+        private final Activity activity;
+
+        private GoToMemberProfileBaseOnRegisterTask(CommonPersonObjectClient commonPersonObjectClient, Bundle fragmentArguments, Activity activity) {
+            this.commonPersonObjectClient = commonPersonObjectClient;
+            this.fragmentArguments = fragmentArguments;
+            this.activity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (isAncMember(commonPersonObjectClient.entityId())) {
+                goToAncProfileActivity(commonPersonObjectClient, fragmentArguments);
+            } else if (isPncMember(commonPersonObjectClient.entityId())) {
+                gotToPncProfileActivity(commonPersonObjectClient, fragmentArguments);
+            } else if (FpDao.isRegisteredForFp(commonPersonObjectClient.entityId())) {
+                goToFpProfile(commonPersonObjectClient.entityId(), activity);
+            } else {
+                goToOtherMemberProfileActivity(commonPersonObjectClient, fragmentArguments);
+            }
+            return null;
+        }
     }
 
     protected abstract Class<?> getFamilyOtherMemberProfileActivityClass();
@@ -385,6 +416,8 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected abstract Class<? extends BaseAncMemberProfileActivity> getAncMemberProfileActivityClass();
 
     protected abstract Class<? extends BasePncMemberProfileActivity> getPncMemberProfileActivityClass();
+
+    protected abstract void goToFpProfile(String baseEntityId, Activity activity);
 
     protected abstract boolean isAncMember(String baseEntityId);
 

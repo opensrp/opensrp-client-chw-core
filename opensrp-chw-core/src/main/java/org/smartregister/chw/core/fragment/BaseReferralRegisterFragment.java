@@ -2,9 +2,10 @@ package org.smartregister.chw.core.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-import android.view.View;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.BaseReferralRegisterFragmentContract;
@@ -15,7 +16,6 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
-import org.smartregister.domain.Task;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public abstract class BaseReferralRegisterFragment extends BaseChwRegisterFragme
 
     @Override
     protected String getMainCondition() {
-        return "task.status = '" + Task.TaskStatus.READY.name() + "'";
+        return "task.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "'";
     }
 
     @Override

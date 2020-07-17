@@ -13,7 +13,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public abstract class CoreFamilyChangePresenter implements FamilyChangeContract.Presenter {
-
     protected WeakReference<FamilyChangeContract.View> view;
     protected FamilyChangeContract.Model model;
     protected FamilyChangeContract.Interactor interactor;

@@ -8,17 +8,12 @@ import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.Repository;
 
 import timber.log.Timber;
 
 public class PncRegisterRepository extends BaseRepository {
 
     public static final String TABLE_NAME = CoreConstants.TABLE_NAME.PNC_MEMBER;
-
-    public PncRegisterRepository(Repository repository) {
-        super(repository);
-    }
 
     public CommonPersonObject getPncCommonPersonObject(String baseEntityId) {
         SQLiteDatabase database = getReadableDatabase();

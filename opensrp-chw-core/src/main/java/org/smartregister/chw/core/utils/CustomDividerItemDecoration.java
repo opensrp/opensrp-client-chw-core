@@ -2,8 +2,9 @@ package org.smartregister.chw.core.utils;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
