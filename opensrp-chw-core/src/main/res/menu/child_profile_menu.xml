@@ -10,6 +10,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_thinkmd_careplan"
+        android:enabled="true"
+        android:title="@string/thinkmd_careplan"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_sick_child_form"
         android:enabled="true"
         android:title="@string/sick_child_form"

@@ -17,6 +17,7 @@ import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.model.ChildVisit;
+import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -166,6 +167,11 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     }
 
     @Override
+    public CoreFHIRBundleDataModel getFHIRBundle() {
+        return ((CoreChildProfileInteractor) interactor).getFHIRBundle();
+    }
+
+    @Override
     public void updateChildProfile(String jsonObject) {
         //todo
     }
@@ -186,6 +192,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     public void fetchProfileData() {
         interactor.refreshProfileView(childBaseEntityId, false, this);
     }
+
 
     @Override
     public void fetchTasks() {
@@ -368,6 +375,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             Timber.e(e);
         }
     }
+
 
     @Override
     public void refreshProfileTopSection(CommonPersonObjectClient client) {
