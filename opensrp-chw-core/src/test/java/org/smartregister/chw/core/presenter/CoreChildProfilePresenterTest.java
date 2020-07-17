@@ -13,6 +13,7 @@ import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
+import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.repository.AllSharedPreferences;
@@ -211,5 +212,11 @@ public class CoreChildProfilePresenterTest {
 
         Mockito.verify(view).setProgressBarState(false);
         Mockito.verify(view).onJsonProcessed(eventType, taskType, profileTask);
+    }
+
+    @Test
+    public void getFHIRBundleNotReturnNullValue(){
+        CoreFHIRBundleDataModel bundle = profilePresenter.getFHIRBundle();
+        Assert.assertNotNull(bundle);
     }
 }
