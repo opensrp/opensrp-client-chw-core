@@ -18,7 +18,6 @@ import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
-import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.CustomFontTextViewShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
@@ -95,11 +94,5 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
         Mockito.doNothing().when(interactor).saveRegistration(null, null, true);
         interactor.saveRegistration(null, null, true, callBack);
         Mockito.verify(callBack).onRegistrationSaved(true);
-    }
-
-    @Test
-    public void getFHIRBundleNotReturnNullValue(){
-        CoreFHIRBundleDataModel bundle = interactor.getFHIRBundle();
-        Assert.assertNotNull(bundle);
     }
 }

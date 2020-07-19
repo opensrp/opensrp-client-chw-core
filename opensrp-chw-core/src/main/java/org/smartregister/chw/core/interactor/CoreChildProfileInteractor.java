@@ -23,7 +23,6 @@ import org.smartregister.chw.core.dao.AlertDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;
-import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.ChwServiceSchedule;
@@ -569,12 +568,6 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         } else {
             surname.put(JsonFormUtils.VALUE, "");
         }
-    }
-
-    public CoreFHIRBundleDataModel getFHIRBundle() {
-        CoreFHIRBundleDataModel model = new CoreFHIRBundleDataModel();
-        //TODO Query and return values in CoreFHIRBundleDataModel
-        return model;
     }
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, EXPIRY, VISIT_DONE}

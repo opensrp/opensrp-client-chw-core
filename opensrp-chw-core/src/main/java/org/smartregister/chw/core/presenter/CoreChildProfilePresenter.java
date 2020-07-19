@@ -17,7 +17,6 @@ import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.model.ChildVisit;
-import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -164,11 +163,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
     public String getDateOfBirth() {
         return dob;
-    }
-
-    @Override
-    public CoreFHIRBundleDataModel getFHIRBundle() {
-        return ((CoreChildProfileInteractor) interactor).getFHIRBundle();
     }
 
     @Override

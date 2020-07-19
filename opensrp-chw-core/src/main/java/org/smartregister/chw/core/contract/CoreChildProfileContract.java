@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
-import org.smartregister.chw.core.model.CoreFHIRBundleDataModel;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
@@ -212,8 +211,6 @@ public interface CoreChildProfileContract {
         void updateAfterBackGroundProcessed();
 
         void setClientTasks(Set<Task> taskList);
-
-        CoreFHIRBundleDataModel getFHIRBundle();
     }
 
     interface Model {
