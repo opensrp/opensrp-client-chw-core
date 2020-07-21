@@ -51,17 +51,16 @@ before_script:
   - chmod +x gradlew
 
 script:
-  - echo "Travis branch is $TRAVIS_BRANCH"
-  - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
-  - chmod 755 gradlew
-  - ls -la
-  #Run jacocoTestReport -> Runs all unit tests & instrumentation tests
-  - travis_wait ./gradlew :opensrp-chw-core:clean :opensrp-chw-core:jacocoTestReport coveralls --stacktrace
+  # Run tests
+  - ./gradlew opensrp-chw-core:clean opensrp-chw-core:jacocoTestReport coveralls --stacktrace
   # Generate javadoc
   - ./gradlew javadoc
 
+after_success:
+  - ./gradlew opensrp-chw-core:coveralls --stacktrace
+
 after_failure:
-  - pandoc opensrp-app/build/reports/tests/index.html -t plain
+  - pandoc opensrp-chw-core/build/reports/tests/index.html -t plain
 
 notifications:
   slack:
