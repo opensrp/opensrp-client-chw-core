@@ -5,6 +5,7 @@ import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 import org.smartregister.Context;
 import org.smartregister.family.FamilyLibrary;
+import org.smartregister.family.domain.FamilyMetadata;
 
 /**
  * @author rkodev
@@ -22,6 +23,11 @@ public class FamilyLibraryShadowUtil {
         }
 
         return instance;
+    }
+
+    @Implementation
+    public FamilyMetadata metadata() {
+        return Mockito.mock(FamilyMetadata.class);
     }
 
     public static void setInstance(FamilyLibrary instance) {

@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 
@@ -27,6 +28,8 @@ import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.EcSyncHelperShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
+import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
+import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
@@ -49,7 +52,7 @@ import java.util.Objects;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
-        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class})
+        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -90,6 +93,46 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(baseEntityId, eventTriple.getMiddle());
         Assert.assertEquals(1, eventTriple.getRight().size());
     }
+
+    @Test
+    public void getAutoPopulatedJsonEditFormReturnsCorrectString() throws JSONException {
+        Context context = RuntimeEnvironment.application;
+        String id = "testCaseId";
+        String encounterType = "test_encounter";
+        String landMark = "police station";
+        String nearestHealthFacility = "makutano health center";
+
+        HashMap<String, String> detailsMap = new HashMap<>();
+        HashMap<String, String> columnMaps = new HashMap<>();
+        columnMaps.put(DBConstants.KEY.DOB, "01-12-2020");
+        columnMaps.put(Constants.JSON_FORM_KEY.DOB_UNKNOWN, "false");
+        columnMaps.put(DBConstants.KEY.FIRST_NAME, "Sonkore");
+        columnMaps.put(DBConstants.KEY.LANDMARK, landMark);
+        columnMaps.put(ChwDBConstants.NEAREST_HEALTH_FACILITY, nearestHealthFacility);
+        columnMaps.put(DBConstants.KEY.GPS, "-0.00001, 0.25400");
+
+        CommonPersonObjectClient testClient = new CommonPersonObjectClient(id, detailsMap, "tester");
+        testClient.setColumnmaps(columnMaps);
+
+        JSONObject jsonObject = CoreJsonFormUtils.getAutoPopulatedJsonEditFormString("family_register", context, testClient, encounterType);
+        assert jsonObject != null;
+        JSONObject step1Object = jsonObject.getJSONObject("step1");
+        String actualLandMark = null;
+        String actualHealthFacility = null;
+        JSONArray fields = step1Object.getJSONArray(JsonFormConstants.FIELDS);
+        for (int i = 0; i < fields.length(); i++) {
+            String key = fields.getJSONObject(i).getString(JsonFormConstants.KEY);
+            if (key.equals(DBConstants.KEY.LANDMARK)) {
+                actualLandMark = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+            if (key.equals(ChwDBConstants.NEAREST_HEALTH_FACILITY)) {
+                actualHealthFacility = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+        }
+        Assert.assertEquals(landMark,actualLandMark);
+        Assert.assertEquals(nearestHealthFacility, actualHealthFacility);
+    }
+
 
     @Test
     public void processPopulatableFieldsUpdatesJSONOptionsWithCorrectValues() throws JSONException {
