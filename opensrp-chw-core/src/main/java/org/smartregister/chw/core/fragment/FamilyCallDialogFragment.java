@@ -26,7 +26,6 @@ import org.smartregister.chw.core.listener.CallWidgetDialogListener;
 import org.smartregister.chw.core.presenter.FamilyCallDialogPresenter;
 import org.smartregister.util.PermissionUtils;
 
-
 public class FamilyCallDialogFragment extends DialogFragment implements FamilyCallDialogContract.View {
     public static final String DIALOG_TAG = "FamilyCallWidgetDialogFragment_DIALOG_TAG";
     private View.OnClickListener listener = null;

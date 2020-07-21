@@ -700,4 +700,6 @@
     <!-- Notification row -->
     <string name="notification_for">Notification for %1$s</string>
     <string name="full_notification_info">View full notification info</string>
+    <string name="thinkmd_health_assessment">ThinkMD health assessment</string>
+    <string name="thinkmd_careplan">ThinkMD care plan (%1$s)</string>
 </resources>
