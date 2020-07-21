@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 import android.content.Context;
+import android.os.Build;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,11 +9,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.application.TestCoreChwApplication;
 import org.smartregister.chw.core.listener.OnRetrieveNotifications;
 import org.smartregister.clientandeventmodel.Event;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class ChwNotificationUtilTest {
 
     @Test

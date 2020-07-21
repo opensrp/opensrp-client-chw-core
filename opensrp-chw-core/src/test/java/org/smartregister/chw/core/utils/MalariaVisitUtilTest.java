@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +17,7 @@ import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import java.util.Date;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class MalariaVisitUtilTest {
     private Date malariaTestDate = new DateTime().minusDays(14).toDate();
     private Date followUpDate = new DateTime().minusDays(7).toDate();

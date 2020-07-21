@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class StockUsageReportUtilsTest {
 
     private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();

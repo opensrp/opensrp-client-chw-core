@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +24,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class ReportUtilsTest {
     @Mock
     private String providerId = "12345";

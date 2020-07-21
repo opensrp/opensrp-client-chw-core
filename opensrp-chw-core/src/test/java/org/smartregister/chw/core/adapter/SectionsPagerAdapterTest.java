@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.adapter;
 
+import android.os.Build;
+
 import androidx.fragment.app.FragmentManager;
 
 import org.junit.Assert;
@@ -17,7 +19,7 @@ import org.smartregister.chw.core.fragment.DraftMonthlyFragment;
 import org.smartregister.chw.core.fragment.SentMonthlyFragment;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class SectionsPagerAdapterTest {
     @Mock
     private FragmentManager fragmentManager;

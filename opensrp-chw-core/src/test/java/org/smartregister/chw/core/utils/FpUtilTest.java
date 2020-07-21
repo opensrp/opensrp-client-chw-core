@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.jeasy.rules.api.Rules;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
 public class FpUtilTest {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private FpUtil fpUtil = new FpUtil();

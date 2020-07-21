@@ -1,4 +1,5 @@
 package org.smartregister.chw.core.adapter;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,13 +13,20 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.domain.MedicalHistory;
+import org.smartregister.chw.core.shadows.AncLibraryShadowUtil;
+import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.CustomFontTextViewShadowHelper;
+import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.P)
 public class MedicalHistoryAdapterTest {
     private MedicalHistoryAdapter medicalHistoryAdapter;
     private List<MedicalHistory> medicalHistoryList;
