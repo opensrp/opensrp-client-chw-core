@@ -25,13 +25,13 @@ public class FamilyLibraryShadowUtil {
         return instance;
     }
 
+    public static void setInstance(FamilyLibrary instance) {
+        FamilyLibraryShadowUtil.instance = instance;
+    }
+
     @Implementation
     public FamilyMetadata metadata() {
         return Mockito.mock(FamilyMetadata.class);
-    }
-
-    public static void setInstance(FamilyLibrary instance) {
-        FamilyLibraryShadowUtil.instance = instance;
     }
 
     @Implementation

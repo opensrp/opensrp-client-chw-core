@@ -19,7 +19,7 @@ import java.util.List;
 import static org.smartregister.domain.Task.TaskStatus.READY;
 
 @RunWith(MockitoJUnitRunner.class)
-public class  ReferralTaskDaoTest extends ReferralTaskDao {
+public class ReferralTaskDaoTest extends ReferralTaskDao {
     @Mock
     private Repository repository;
 

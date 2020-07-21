@@ -37,7 +37,7 @@ public class DailyTalliesRepositoryTest extends BaseRobolectricTest {
 
         Calendar calendar = Calendar.getInstance();
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.add(Calendar.DAY_OF_MONTH, - (dayOfMonth - 1));
+        calendar.add(Calendar.DAY_OF_MONTH, -(dayOfMonth - 1));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         for (int i = 0; i < counter; i++) {

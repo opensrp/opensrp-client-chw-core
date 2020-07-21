@@ -1,4 +1,5 @@
 package org.smartregister.chw.core.adapter;
+
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
-import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.domain.MedicalHistory;
-import org.smartregister.chw.core.shadows.AncLibraryShadowUtil;
-import org.smartregister.chw.core.shadows.ContextShadow;
-import org.smartregister.chw.core.shadows.CustomFontTextViewShadowHelper;
-import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +39,7 @@ public class MedicalHistoryAdapterTest {
         medicalHistory.setText("Done Today");
         medicalHistory.setTitle("Home Visit");
         medicalHistory.setText(Arrays.asList("1", "2", "3"));
-        medicalHistory.setText(Arrays.asList("1","2","3"));
+        medicalHistory.setText(Arrays.asList("1", "2", "3"));
 
         MedicalHistory medicalHistory2 = new MedicalHistory();
         medicalHistory2.setText("Done Today");

@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.smartregister.chw.core.BuildConfig;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.repository.Repository;
@@ -24,7 +23,7 @@ import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
-public class EventDaoTest extends EventDao{
+public class EventDaoTest extends EventDao {
 
     @Mock
     private Repository repository;

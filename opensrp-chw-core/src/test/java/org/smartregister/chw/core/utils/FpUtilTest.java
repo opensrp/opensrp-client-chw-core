@@ -44,7 +44,7 @@ public class FpUtilTest {
     public void testParseFpStartDate() throws Exception {
         String startDate = "2020-02-28";
         Date date = sdf.parse(startDate);
-        Date date1 = fpUtil.parseFpStartDate(startDate);
+        Date date1 = FpUtil.parseFpStartDate(startDate);
         Assert.assertEquals(date, date1);
     }
 
