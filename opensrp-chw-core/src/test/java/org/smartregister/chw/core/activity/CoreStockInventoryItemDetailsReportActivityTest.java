@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -53,7 +52,12 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
         context.configuration().getDrishtiApplication().setPassword(password);
         context.session().setPassword(password);
 
-        controller = Robolectric.buildActivity(CoreStockInventoryItemDetailsReportActivity.class).create().start();
+        String stockItemName = "Male Condoms";
+        String providerName = "All-CHWs";
+        Intent intent = new Intent();
+        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName);
+        intent.putExtra(CoreConstants.HfStockUsageUtil.PROVIDER_NAME, providerName);
+        controller = Robolectric.buildActivity(CoreStockInventoryItemDetailsReportActivity.class, intent).create().start();
         activity = controller.get();
     }
 
@@ -63,23 +67,12 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
 
     }
 
-    private void getStockName(Intent intent) {
-        String stockItemName = "Male Condoms";
-        activity = Mockito.spy(activity);
-        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName);
-        activity.setIntent(intent);
-       // Mockito.doReturn(stockItemName).when(activity.getIntent()).getStringExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME);
-    }
-
     @Test
     public void testOnCreation() {
         // check if created views are found
         activity.onCreation();
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "toolBarTextView"));
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "appBarLayout"));
-
-        Intent intent = activity.getIntent();
-        getStockName(intent);
 
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
     }
