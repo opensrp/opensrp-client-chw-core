@@ -52,11 +52,9 @@ before_script:
 
 script:
   # Run tests
-  - ./gradlew opensrp-chw-core:clean opensrp-chw-core:jacocoTestReport coveralls --stacktrace
+  - travis_wait ./gradlew opensrp-chw-core:clean opensrp-chw-core:jacocoTestReport coveralls --stacktrace
 
 after_success:
-  - ./gradlew opensrp-chw-core:coveralls --stacktrace
-    # Generate javadoc
   - ./gradlew javadoc
 
 after_failure:
