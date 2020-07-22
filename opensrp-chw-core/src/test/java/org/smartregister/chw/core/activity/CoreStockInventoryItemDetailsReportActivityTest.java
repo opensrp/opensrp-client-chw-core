@@ -30,7 +30,7 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     @Mock
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     @Mock
     private Menu menu;
     private CoreStockInventoryItemDetailsReportActivity activity;
@@ -75,9 +75,5 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "appBarLayout"));
 
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
-    }
-
-    @Test
-    public void onResumption() {
     }
 }
