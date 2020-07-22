@@ -40,6 +40,7 @@ public class SendMonthlyDraftDialogFragmentTest extends BaseUnitTest {
     public void shouldInitializeFragment(){
         Assert.assertNotNull(sendMonthlyDraftDialogFragment);
         View view = sendMonthlyDraftDialogFragment.getView();
+        Assert.assertNotNull(view);
         Button buttonSend = view.findViewById(R.id.button_send);
         buttonSend.performClick();
         Assert.assertFalse(sendMonthlyDraftDialogFragment.isVisible());
