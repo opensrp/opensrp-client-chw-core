@@ -48,6 +48,11 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
     }
 
     buildTypes {
@@ -107,7 +112,7 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
     }
 
-    api('org.smartregister:opensrp-client-core:1.12.0-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.13.4-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -156,7 +161,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:0.1.61-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:1.0.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -165,7 +170,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-immunization'
     }
 
-    api('org.smartregister:opensrp-client-chw-pnc:0.0.33-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pnc:1.0.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
