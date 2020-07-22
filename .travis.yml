@@ -53,11 +53,11 @@ before_script:
 script:
   # Run tests
   - ./gradlew opensrp-chw-core:clean opensrp-chw-core:jacocoTestReport coveralls --stacktrace
-  # Generate javadoc
-  - ./gradlew javadoc
 
 after_success:
   - ./gradlew opensrp-chw-core:coveralls --stacktrace
+    # Generate javadoc
+  - ./gradlew javadoc
 
 after_failure:
   - pandoc opensrp-chw-core/build/reports/tests/index.html -t plain
