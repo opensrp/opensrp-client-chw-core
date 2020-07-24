@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,11 +79,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
@@ -750,5 +754,21 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
                 new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
         client.setColumnmaps(commonPersonObject.getColumnmaps());
         return client;
+    }
+
+    public static String getDateDifferenceInDays(Date endDate, Date startDate) {
+        long timeDiff = endDate.getTime() - startDate.getTime();
+        return String.valueOf(TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS));
+    }
+
+    public static Pair<String, String> fetchMUACValues(String childBaseEntityId) {
+        String muacValue = getMUACValue(childBaseEntityId);
+        String muacCode = muacValue.substring(4);
+        String muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
+        return Pair.create(muacCode, muacDiaplay);
+    }
+
+    public static String getRandomGeneratedId() {
+        return UUID.randomUUID().toString();
     }
 }
