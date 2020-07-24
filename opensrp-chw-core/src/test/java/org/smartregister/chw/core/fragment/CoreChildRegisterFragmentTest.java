@@ -28,6 +28,7 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
     @Test
     public void testInitializePresenter() {
         fragment.initializePresenter();
+        Assert.assertNotNull(presenter);
     }
 
     @Test
