@@ -12,17 +12,21 @@ import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
 public class FHIRBundleDao extends AbstractDao {
 
-    public static FHIRBundleModel fetchFHIRDateModel(String childBaseEntityId){
+    public static FHIRBundleModel fetchFHIRDateModel(String childBaseEntityId) {
         FHIRBundleModel model = new FHIRBundleModel();
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
-        Triple<String, String, String> userProfile = getChildProfileData(childBaseEntityId);
-        model.setGender(userProfile.getRight());
-        model.setDob(userProfile.getMiddle());
-        model.setAgeInDays(userProfile.getLeft());
         Pair<String, String> muacPair = fetchMUACValues(childBaseEntityId);
-        model.setMUACValueCode(muacPair.first);
-        model.setMUACValueDisplay(muacPair.second);
+        if (muacPair != null) {
+            model.setMUACValueCode(muacPair.first);
+            model.setMUACValueDisplay(muacPair.second);
+        }
+        Triple<String, String, String> userProfile = getChildProfileData(childBaseEntityId);
+        if (userProfile != null) {
+            model.setGender(userProfile.getRight());
+            model.setDob(userProfile.getMiddle());
+            model.setAgeInDays(userProfile.getLeft());
+        }
         //Todo: these values needs to be query and set into model
         model.setPractitionerId(null);
         model.setPatientId(null);
