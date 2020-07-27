@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.fragment;
 
-
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,21 +65,13 @@ public class SendMonthlyDraftDialogFragment extends DialogFragment {
                 provider));
 
         Button cancelButton = view.findViewById(R.id.button_cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendMonthlyDraftDialogFragment.this.dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v -> SendMonthlyDraftDialogFragment.this.dismiss());
 
         Button sendButton = view.findViewById(R.id.button_send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendMonthlyDraftDialogFragment.this.dismiss();
-                if (onSendClickedListener != null) {
-                    onSendClickedListener.onClick(v);
-                }
+        sendButton.setOnClickListener(v -> {
+            SendMonthlyDraftDialogFragment.this.dismiss();
+            if (onSendClickedListener != null) {
+                onSendClickedListener.onClick(v);
             }
         });
 
@@ -92,21 +83,18 @@ public class SendMonthlyDraftDialogFragment extends DialogFragment {
         super.onStart();
         // without a handler, the window sizes itself correctly
         // but the keyboard does not show up
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Window window = null;
-                if (getDialog() != null) {
-                    window = getDialog().getWindow();
-                }
-
-                if (window == null) {
-                    return;
-                }
-
-                window.setLayout(FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT);
+        new Handler().post(() -> {
+            Window window = null;
+            if (getDialog() != null) {
+                window = getDialog().getWindow();
             }
+
+            if (window == null) {
+                return;
+            }
+
+            window.setLayout(FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
         });
     }
 }

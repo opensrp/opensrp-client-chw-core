@@ -717,7 +717,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         List<Client> clients = new ArrayList<>();
         List<Event> events = new ArrayList<>();
 
-
         ECSyncHelper syncHelper = coreChwApplication.getEcSyncHelper();
         JSONObject clientObject = syncHelper.getClient(familyMember.getFamilyID());
         Client familyClient = syncHelper.convert(clientObject, Client.class);

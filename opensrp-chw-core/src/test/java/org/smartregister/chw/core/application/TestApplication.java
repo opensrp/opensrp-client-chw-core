@@ -1,8 +1,10 @@
 package org.smartregister.chw.core.application;
 
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.chw.pnc.PncLibrary;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.family.BuildConfig;
 import org.smartregister.family.FamilyLibrary;
@@ -26,10 +28,12 @@ public class TestApplication extends CoreChwApplication {
         context = Context.getInstance();
         context.updateApplicationContext(getApplicationContext());
         CoreLibrary.init(context);
+
         ConfigurableViewsLibrary.init(context);
 
         SyncStatusBroadcastReceiver.init(this);
         FamilyLibrary.init(context, getMetadata(), BuildConfig.VERSION_CODE, 2);
+        PncLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, 2);
 
         setTheme(org.smartregister.family.R.style.FamilyTheme_NoActionBar);
     }
@@ -58,6 +62,11 @@ public class TestApplication extends CoreChwApplication {
     public Repository getRepository() {
         repository = mock(Repository.class);
         return repository;
+    }
+
+    @Override
+    public void onTerminate() {
+        Robolectric.flushBackgroundThreadScheduler();
     }
 
 }
