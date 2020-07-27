@@ -11,13 +11,13 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.fragment.DailyTalliesFragment;
 import org.smartregister.chw.core.fragment.DraftMonthlyFragment;
 import org.smartregister.chw.core.fragment.SentMonthlyFragment;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class)
 public class SectionsPagerAdapterTest {
     @Mock
     private FragmentManager fragmentManager;
