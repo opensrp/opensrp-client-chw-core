@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.dao;
 
+import android.os.Build;
+
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -20,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class)
-public class EventDaoTest extends EventDao{
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
+public class EventDaoTest extends EventDao {
 
     @Mock
     private Repository repository;

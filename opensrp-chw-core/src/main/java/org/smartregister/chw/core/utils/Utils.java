@@ -62,7 +62,7 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.domain.db.Event;
+import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
@@ -555,8 +555,8 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         Event event = eventClient.getEvent();
-        List<org.smartregister.domain.db.Obs> observations = new ArrayList<>();
-        for (org.smartregister.domain.db.Obs obs : event.getObs()) {
+        List<org.smartregister.domain.Obs> observations = new ArrayList<>();
+        for (org.smartregister.domain.Obs obs : event.getObs()) {
             switch (obs.getFieldCode()) {
                 case "illness_information":
                     try {
@@ -601,7 +601,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
                                     String key = service[0].substring(1, service[0].length() - 1);
                                     String val = service[1].length() > 1 ? service[1].substring(1, service[1].length() - 1) : service[1];
 
-                                    org.smartregister.domain.db.Obs obs1 = new org.smartregister.domain.db.Obs();
+                                    org.smartregister.domain.Obs obs1 = new org.smartregister.domain.Obs();
                                     obs1.setFieldType("formsubmissionField");
                                     obs1.setFieldDataType("text");
                                     obs1.setFieldCode(key);

@@ -10,7 +10,7 @@ public class CoreMalariaRegisterFragmentModelTest {
     private CoreMalariaRegisterFragmentModel malariaRegisterFragmentModel;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         malariaRegisterFragmentModel = Mockito.spy(CoreMalariaRegisterFragmentModel.class);
     }
 

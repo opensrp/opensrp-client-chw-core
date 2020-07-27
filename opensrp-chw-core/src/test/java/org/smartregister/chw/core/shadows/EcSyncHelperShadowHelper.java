@@ -11,6 +11,10 @@ public class EcSyncHelperShadowHelper {
 
     private static Client testClient;
 
+    public static void setTestClient(Client client) {
+        testClient = client;
+    }
+
     @Implementation
     public JSONObject getClient(String baseEntityId) {
         return new JSONObject();
@@ -19,9 +23,5 @@ public class EcSyncHelperShadowHelper {
     @Implementation
     public <T> T convert(JSONObject jo, Class<T> t) {
         return (testClient == null) ? (T) new Client("base-entity-test-1234") : (T) testClient;
-    }
-
-    public static void setTestClient(Client client) {
-        testClient = client;
     }
 }
