@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 
 import java.text.SimpleDateFormat;

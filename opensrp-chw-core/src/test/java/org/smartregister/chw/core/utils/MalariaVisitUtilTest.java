@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 
 import java.util.Date;

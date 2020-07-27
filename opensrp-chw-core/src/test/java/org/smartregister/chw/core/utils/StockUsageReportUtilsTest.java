@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

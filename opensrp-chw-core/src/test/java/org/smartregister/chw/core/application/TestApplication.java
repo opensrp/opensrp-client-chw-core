@@ -9,6 +9,7 @@ import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.family.BuildConfig;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.domain.FamilyMetadata;
+import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.repository.Repository;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class TestApplication extends CoreChwApplication {
 
         ConfigurableViewsLibrary.init(context);
 
+        SyncStatusBroadcastReceiver.init(this);
         FamilyLibrary.init(context, getMetadata(), BuildConfig.VERSION_CODE, 2);
         PncLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, 2);
 
@@ -56,7 +58,6 @@ public class TestApplication extends CoreChwApplication {
         return "default";
     }
 
-
     @Override
     public Repository getRepository() {
         repository = mock(Repository.class);
@@ -67,4 +68,5 @@ public class TestApplication extends CoreChwApplication {
     public void onTerminate() {
         Robolectric.flushBackgroundThreadScheduler();
     }
+
 }
