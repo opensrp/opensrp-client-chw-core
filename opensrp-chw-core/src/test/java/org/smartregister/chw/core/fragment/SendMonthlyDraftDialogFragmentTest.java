@@ -33,11 +33,11 @@ public class SendMonthlyDraftDialogFragmentTest extends BaseUnitTest {
         if (prev != null) {
             ft.remove(prev);
         }
-        sendMonthlyDraftDialogFragment.show(ft, "SendMonthlyDraftDialogFragment" );
+        sendMonthlyDraftDialogFragment.show(ft, "SendMonthlyDraftDialogFragment");
     }
 
     @Test
-    public void shouldInitializeFragment(){
+    public void shouldInitializeFragment() {
         Assert.assertNotNull(sendMonthlyDraftDialogFragment);
         View view = sendMonthlyDraftDialogFragment.getView();
         Assert.assertNotNull(view);

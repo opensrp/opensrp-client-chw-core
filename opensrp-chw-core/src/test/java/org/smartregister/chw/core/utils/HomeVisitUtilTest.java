@@ -65,7 +65,7 @@ public class HomeVisitUtilTest {
     }
 
     @Test
-    public void testGetRuleKey(){
+    public void testGetRuleKey() {
         Assert.assertEquals("malariaFollowUpRule", malariaFollowUpRule.getRuleKey());
     }
 }

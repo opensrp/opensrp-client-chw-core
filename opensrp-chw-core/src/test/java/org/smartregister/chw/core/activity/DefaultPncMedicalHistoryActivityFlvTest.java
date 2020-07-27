@@ -2,6 +2,7 @@ package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ import java.util.List;
  * @author rkodev
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, CustomFontTextViewShadowHelper.class, PncMedicalHistoryViewBuilderShadow.class, PncLibraryShadowHelper.class})
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, CustomFontTextViewShadowHelper.class, PncMedicalHistoryViewBuilderShadow.class, PncLibraryShadowHelper.class}, sdk = Build.VERSION_CODES.P)
 public class DefaultPncMedicalHistoryActivityFlvTest {
 
     @Rule
