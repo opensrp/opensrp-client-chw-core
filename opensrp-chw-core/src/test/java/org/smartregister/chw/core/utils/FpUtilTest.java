@@ -10,7 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class)
 public class FpUtilTest {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private FpUtil fpUtil = new FpUtil();
