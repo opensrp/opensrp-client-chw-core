@@ -30,13 +30,14 @@ public class FHIRBundleDaoTest {
     @PrepareForTest({ChildDao.class, Utils.class})
     @Test
     public void getFHIRBundleTest() {
+        FHIRBundleDao fhirBundleDao = Mockito.spy(FHIRBundleDao.class);
         String childBaseEntityId = "123456";
         PowerMockito.mockStatic(ChildDao.class);
         PowerMockito.mockStatic(Utils.class);
         PowerMockito.when(getChildProfileData(childBaseEntityId)).thenReturn(Triple.of("9416", "15-10-1994", "male"));
         PowerMockito.when(fetchMUACValues(childBaseEntityId)).thenReturn(Pair.create("green", "Green"));
         PowerMockito.when(getRandomGeneratedId()).thenReturn("123-456-789");
-        FHIRBundleModel bundle = Mockito.spy(FHIRBundleDao.fetchFHIRDateModel(childBaseEntityId));
+        FHIRBundleModel bundle = fhirBundleDao.fetchFHIRDateModel(childBaseEntityId);
 
         Assert.assertNotNull(bundle);
     }

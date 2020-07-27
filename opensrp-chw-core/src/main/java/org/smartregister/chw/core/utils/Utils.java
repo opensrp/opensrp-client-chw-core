@@ -763,8 +763,16 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
     public static Pair<String, String> fetchMUACValues(String childBaseEntityId) {
         String muacValue = getMUACValue(childBaseEntityId);
-        String muacCode = muacValue.substring(4);
-        String muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
+        String muacCode = null;
+        String muacDiaplay = null;
+        if (!muacValue.isEmpty()) {
+            try {
+                muacCode = muacValue.substring(4);
+                muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
+            } catch (IndexOutOfBoundsException e) {
+                Timber.e(e);
+            }
+        }
         return Pair.create(muacCode, muacDiaplay);
     }
 

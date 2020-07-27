@@ -12,7 +12,7 @@ import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
 public class FHIRBundleDao extends AbstractDao {
 
-    public static FHIRBundleModel fetchFHIRDateModel(String childBaseEntityId) {
+    protected FHIRBundleModel fetchFHIRDateModel(String childBaseEntityId) {
         FHIRBundleModel model = new FHIRBundleModel();
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
