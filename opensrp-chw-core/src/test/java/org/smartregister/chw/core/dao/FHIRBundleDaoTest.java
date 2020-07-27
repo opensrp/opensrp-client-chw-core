@@ -25,7 +25,7 @@ import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 public class FHIRBundleDaoTest {
 
     @Mock
-    Context context;
+    private Context context;
 
     @Before
     public void setUp() {
