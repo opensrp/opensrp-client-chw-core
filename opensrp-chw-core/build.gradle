@@ -48,6 +48,11 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
     }
 
     android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
@@ -108,7 +113,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
         exclude group: 'com.google.guava', module: 'guava'
     }
-    
+
    implementation('org.smartregister:opensrp-client-thinkmd:1.0.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -119,7 +124,7 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
     
-    api('org.smartregister:opensrp-client-core:1.13.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.15.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
