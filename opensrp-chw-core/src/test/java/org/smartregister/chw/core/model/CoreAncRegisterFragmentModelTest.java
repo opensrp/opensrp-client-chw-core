@@ -46,13 +46,13 @@ public class CoreAncRegisterFragmentModelTest {
     @Test
     public void mainColumns() {
         String[] mainColumns = ancRegisterFragmentModel.mainColumns(ancRegister);
-        Assert.assertEquals(22, mainColumns.length );
-        Assert.assertEquals(mainColumns[0], "anc_register.confirmed_visits" );
-        Assert.assertEquals(mainColumns[5], "ec_family.primary_caregiver" );
-        Assert.assertEquals(mainColumns[10], "ec_family_member.dob" );
-        Assert.assertEquals(mainColumns[15], "anc_register.column_one" );
-        Assert.assertEquals(mainColumns[20], "ec_family_member.relational_id" );
-        Assert.assertEquals(mainColumns[21], "anc_register.visit_not_done" );
+        Assert.assertEquals(22, mainColumns.length);
+        Assert.assertEquals(mainColumns[0], "anc_register.confirmed_visits");
+        Assert.assertEquals(mainColumns[5], "ec_family.primary_caregiver");
+        Assert.assertEquals(mainColumns[10], "ec_family_member.dob");
+        Assert.assertEquals(mainColumns[15], "anc_register.column_one");
+        Assert.assertEquals(mainColumns[20], "ec_family_member.relational_id");
+        Assert.assertEquals(mainColumns[21], "anc_register.visit_not_done");
 
     }
 

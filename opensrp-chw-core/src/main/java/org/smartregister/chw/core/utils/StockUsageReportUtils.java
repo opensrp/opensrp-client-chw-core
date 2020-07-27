@@ -3,7 +3,7 @@ package org.smartregister.chw.core.utils;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.domain.db.Obs;
+import org.smartregister.domain.Obs;
 
 import java.util.LinkedHashMap;
 import java.util.List;

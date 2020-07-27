@@ -52,7 +52,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
 
     private CoreChildProfileActivity activity;
     private ActivityController<CoreChildProfileActivity> controller;
-    private  MemberObject memberObject;
+    private MemberObject memberObject;
 
     @Before
     public void setUp() {
