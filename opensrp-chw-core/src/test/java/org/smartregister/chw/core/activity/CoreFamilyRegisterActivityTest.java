@@ -24,9 +24,6 @@ import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.family.presenter.BaseFamilyRegisterPresenter;
-import org.smartregister.family.util.JsonFormUtils;
-
-import static android.app.Activity.RESULT_OK;
 
 public class CoreFamilyRegisterActivityTest extends BaseUnitTest {
 
@@ -70,13 +67,6 @@ public class CoreFamilyRegisterActivityTest extends BaseUnitTest {
     public void testPresenterIsSetUp() {
         BaseFamilyRegisterPresenter presenter = ReflectionHelpers.getField(activity, "presenter");
         Assert.assertTrue(presenter instanceof BaseFamilyRegisterPresenter);
-    }
-
-    @Test
-    public void testOnActivityResult() {
-        // if (requestCode == JsonFormUtils.REQUEST_CODE_GET_JSON && resultCode != RESULT_OK && StringUtils.isNotBlank(action)) {
-        ReflectionHelpers.setField(activity, "action", "");
-        activity.onActivityResult(JsonFormUtils.REQUEST_CODE_GET_JSON, RESULT_OK, null);
     }
 
     @Test
