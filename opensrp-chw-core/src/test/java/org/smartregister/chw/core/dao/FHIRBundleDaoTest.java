@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import android.content.Context;
 import android.util.Pair;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -7,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
@@ -21,6 +23,9 @@ import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
 @RunWith(PowerMockRunner.class)
 public class FHIRBundleDaoTest {
+
+    @Mock
+    Context context;
 
     @Before
     public void setUp() {
@@ -37,7 +42,7 @@ public class FHIRBundleDaoTest {
         PowerMockito.when(getChildProfileData(childBaseEntityId)).thenReturn(Triple.of("9416", "15-10-1994", "male"));
         PowerMockito.when(fetchMUACValues(childBaseEntityId)).thenReturn(Pair.create("green", "Green"));
         PowerMockito.when(getRandomGeneratedId()).thenReturn("123-456-789");
-        FHIRBundleModel bundle = fhirBundleDao.fetchFHIRDateModel(childBaseEntityId);
+        FHIRBundleModel bundle = fhirBundleDao.fetchFHIRDateModel(context, childBaseEntityId);
 
         Assert.assertNotNull(bundle);
     }

@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import android.content.Context;
 import android.util.Pair;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -12,7 +13,7 @@ import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
 public class FHIRBundleDao extends AbstractDao {
 
-    protected FHIRBundleModel fetchFHIRDateModel(String childBaseEntityId) {
+    protected FHIRBundleModel fetchFHIRDateModel(Context context, String childBaseEntityId) {
         FHIRBundleModel model = new FHIRBundleModel();
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
