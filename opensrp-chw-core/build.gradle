@@ -108,7 +108,17 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
         exclude group: 'com.google.guava', module: 'guava'
     }
-
+    
+   implementation('org.smartregister:opensrp-client-thinkmd:1.0.0-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'androidx.legacy', module: 'legacy-support-v4'
+        exclude group: 'androidx.appcompat', module: 'appcompat'
+        exclude group: 'androidx.constraintlayout', module: 'constraintlayout'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'com.rengwuxian.materialedittext', module: 'library'
+    }
+    
     api('org.smartregister:opensrp-client-core:1.13.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
@@ -245,6 +255,12 @@ dependencies {
     testImplementation 'org.robolectric:shadows-multidex:4.3.1'
     testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
 
+    // unit test
+    def powerMockVersion = '2.0.4'
+    testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
+    testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
+    testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
+    testImplementation "org.powermock:powermock-classloading-xstream:$powerMockVersion"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
