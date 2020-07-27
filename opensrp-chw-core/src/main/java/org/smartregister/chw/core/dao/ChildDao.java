@@ -1,10 +1,24 @@
 package org.smartregister.chw.core.dao;
 
+import android.database.Cursor;
+
+import org.apache.commons.lang3.tuple.Triple;
+import org.joda.time.DateTime;
 import org.smartregister.chw.core.domain.Child;
+import org.smartregister.chw.core.utils.CoreChildUtils;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.dao.AbstractDao;
+import org.smartregister.family.util.DBConstants;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import timber.log.Timber;
+
+import static org.smartregister.chw.core.utils.CoreReferralUtils.getCommonRepository;
+import static org.smartregister.chw.core.utils.Utils.getDateDifferenceInDays;
 
 public class ChildDao extends AbstractDao {
 
@@ -105,4 +119,23 @@ public class ChildDao extends AbstractDao {
         List<Integer> res = readData(sql, dataMap);
         return res != null && res.equals(0);
     }
+
+
+    public static Triple<String, String, String> getChildProfileData(String childBaseEntityId) {
+        String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, childBaseEntityId);
+        try (Cursor cursor = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).rawCustomQueryForAdapter(query)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                CommonPersonObject personObject = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).readAllcommonforCursorAdapter(cursor);
+                String gender = org.smartregister.family.util.Utils.getValue(personObject.getColumnmaps(), DBConstants.KEY.GENDER, false);
+                String dob = org.smartregister.family.util.Utils.getValue(personObject.getColumnmaps(), DBConstants.KEY.DOB, false);
+                String ageInDays = getDateDifferenceInDays(new Date(), DateTime.parse(dob).toDate());
+
+                return Triple.of(ageInDays, dob, gender);
+            }
+        } catch (Exception ex) {
+            Timber.e(ex, "queryDBFromUserProfile");
+        }
+        return null;
+    }
+
 }

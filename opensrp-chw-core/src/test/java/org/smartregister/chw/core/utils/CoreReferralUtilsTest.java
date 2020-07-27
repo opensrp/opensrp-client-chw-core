@@ -19,7 +19,7 @@ public class CoreReferralUtilsTest {
     public void mainColumnsTest() {
         String tableName = "test_tbl";
         String familyTable = "family_tbl";
-        String[] expectedColumns = {tableName+".relational_id as relationalid", tableName+".last_interacted_with", tableName+".base_entity_id", tableName+".first_name", tableName+".middle_name", tableName+".last_name", familyTable+".village_town as family_home_address", familyTable+".primary_caregiver", familyTable+".family_head", tableName+".unique_id", tableName+".gender", tableName+".dob", tableName+".dob_unknown"};
+        String[] expectedColumns = {tableName + ".relational_id as relationalid", tableName + ".last_interacted_with", tableName + ".base_entity_id", tableName + ".first_name", tableName + ".middle_name", tableName + ".last_name", familyTable + ".village_town as family_home_address", familyTable + ".primary_caregiver", familyTable + ".family_head", tableName + ".unique_id", tableName + ".gender", tableName + ".dob", tableName + ".dob_unknown"};
         Assert.assertArrayEquals(expectedColumns, CoreReferralUtils.mainColumns(tableName, familyTable));
     }
 }

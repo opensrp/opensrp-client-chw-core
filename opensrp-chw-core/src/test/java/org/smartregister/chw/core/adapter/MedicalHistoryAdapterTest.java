@@ -1,4 +1,6 @@
 package org.smartregister.chw.core.adapter;
+
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.domain.MedicalHistory;
 
@@ -19,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.P)
 public class MedicalHistoryAdapterTest {
     private MedicalHistoryAdapter medicalHistoryAdapter;
     private List<MedicalHistory> medicalHistoryList;
@@ -35,7 +39,7 @@ public class MedicalHistoryAdapterTest {
         medicalHistory.setText("Done Today");
         medicalHistory.setTitle("Home Visit");
         medicalHistory.setText(Arrays.asList("1", "2", "3"));
-        medicalHistory.setText(Arrays.asList("1","2","3"));
+        medicalHistory.setText(Arrays.asList("1", "2", "3"));
 
         MedicalHistory medicalHistory2 = new MedicalHistory();
         medicalHistory2.setText("Done Today");

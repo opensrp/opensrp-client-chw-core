@@ -22,7 +22,7 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.implementation.CoreFamilyOtherMemberProfileActivityImpl;
+import org.smartregister.chw.core.activity.impl.CoreFamilyOtherMemberProfileActivityImpl;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 

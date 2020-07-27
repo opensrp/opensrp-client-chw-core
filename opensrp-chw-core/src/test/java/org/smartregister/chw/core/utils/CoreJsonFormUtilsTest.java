@@ -129,7 +129,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
                 actualHealthFacility = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
             }
         }
-        Assert.assertEquals(landMark,actualLandMark);
+        Assert.assertEquals(landMark, actualLandMark);
         Assert.assertEquals(nearestHealthFacility, actualHealthFacility);
     }
 
