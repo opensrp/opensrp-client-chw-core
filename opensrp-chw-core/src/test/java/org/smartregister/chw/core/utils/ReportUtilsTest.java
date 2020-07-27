@@ -24,7 +24,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class ReportUtilsTest {
     @Mock
     private String providerId = "12345";

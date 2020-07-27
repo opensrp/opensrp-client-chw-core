@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class StockUsageReportUtilsTest {
 
     private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();

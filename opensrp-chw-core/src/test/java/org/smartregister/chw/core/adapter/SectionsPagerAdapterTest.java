@@ -19,7 +19,7 @@ import org.smartregister.chw.core.fragment.DraftMonthlyFragment;
 import org.smartregister.chw.core.fragment.SentMonthlyFragment;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class SectionsPagerAdapterTest {
     @Mock
     private FragmentManager fragmentManager;

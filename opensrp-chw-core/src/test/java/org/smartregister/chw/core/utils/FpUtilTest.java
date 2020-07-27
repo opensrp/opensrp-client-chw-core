@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class FpUtilTest {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private FpUtil fpUtil = new FpUtil();

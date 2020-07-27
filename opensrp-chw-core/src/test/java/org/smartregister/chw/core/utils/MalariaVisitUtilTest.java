@@ -17,7 +17,7 @@ import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import java.util.Date;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class, sdk = Build.VERSION_CODES.P)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class MalariaVisitUtilTest {
     private Date malariaTestDate = new DateTime().minusDays(14).toDate();
     private Date followUpDate = new DateTime().minusDays(7).toDate();
