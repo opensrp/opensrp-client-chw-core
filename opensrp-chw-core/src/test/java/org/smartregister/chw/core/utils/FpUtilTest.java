@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.jeasy.rules.api.Rules;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +12,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class FpUtilTest {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private FpUtil fpUtil = new FpUtil();
@@ -42,7 +44,7 @@ public class FpUtilTest {
     public void testParseFpStartDate() throws Exception {
         String startDate = "2020-02-28";
         Date date = sdf.parse(startDate);
-        Date date1 = fpUtil.parseFpStartDate(startDate);
+        Date date1 = FpUtil.parseFpStartDate(startDate);
         Assert.assertEquals(date, date1);
     }
 

@@ -109,7 +109,7 @@ public class CoreAuthorizationService implements P2PAuthorizationService {
     }
 
     @Nullable
-    private LinkedHashMap<String, TreeNode<String, Location>> retrieveLocationHierarchyMap() {
+    public LinkedHashMap<String, TreeNode<String, Location>> retrieveLocationHierarchyMap() {
         String locationData = CoreLibrary.getInstance().context().anmLocationController().get();
         LocationTree locationTree = AssetHandler.jsonStringToJava(locationData, LocationTree.class);
         if (locationTree != null) {

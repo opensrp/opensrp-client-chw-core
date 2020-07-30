@@ -58,13 +58,13 @@ public class BaseReferralFragmentPresenterTest {
     }
 
     @Test
-    public void testFetchClient(){
+    public void testFetchClient() {
         referralFragmentPresenter.fetchClient();
         Mockito.verify(interactor, Mockito.atLeastOnce()).getClientDetails(baseEntityId, referralFragmentPresenter, taskFocus);
     }
 
     @Test
-    public void testGetBaseEntityIdAndTaskFocus(){
+    public void testGetBaseEntityIdAndTaskFocus() {
         Assert.assertNotNull(referralFragmentPresenter.getBaseEntityId());
         Assert.assertNotNull(referralFragmentPresenter.getTaskFocus());
     }

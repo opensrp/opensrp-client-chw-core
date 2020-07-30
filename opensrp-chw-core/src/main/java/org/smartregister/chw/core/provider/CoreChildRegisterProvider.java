@@ -34,7 +34,7 @@ import java.util.Set;
  */
 
 public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterViewHolder> {
-    private final LayoutInflater inflater;
+    public final LayoutInflater inflater;
     private Set<org.smartregister.configurableviews.model.View> visibleColumns;
     private View.OnClickListener onClickListener;
     private View.OnClickListener paginationClickListener;
