@@ -128,8 +128,4 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
         Mockito.verify(interactor).pncChildrenUnder29Days(memberObject.getBaseEntityId());
     }
 
-    @Test
-    public void testGetPNCIntent(){
-
-    }
 }
