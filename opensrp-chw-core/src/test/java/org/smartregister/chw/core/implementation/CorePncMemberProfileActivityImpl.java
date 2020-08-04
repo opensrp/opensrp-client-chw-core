@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import org.mockito.Mockito;
-import org.smartregister.chw.anc.interactor.BaseAncMemberProfileInteractor;
-import org.smartregister.chw.anc.presenter.BaseAncMemberProfilePresenter;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CorePncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
