@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import org.mockito.Mockito;
+import org.smartregister.chw.anc.interactor.BaseAncMemberProfileInteractor;
+import org.smartregister.chw.anc.presenter.BaseAncMemberProfilePresenter;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.activity.CorePncMemberProfileActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
+import org.smartregister.chw.core.presenter.CorePncMemberProfilePresenter;
 
 public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivity {
     @Override
@@ -18,6 +21,12 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
     @Override
     protected CorePncMemberProfileInteractor getPncMemberProfileInteractor() {
         return Mockito.mock(CorePncMemberProfileInteractor.class);
+    }
+
+
+    @Override
+    public void registerPresenter() {
+        this.presenter = Mockito.mock(CorePncMemberProfilePresenter.class);
     }
 
     @Override

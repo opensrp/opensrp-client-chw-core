@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.activity;
 
+import android.content.Intent;
 import android.view.MenuItem;
 
 import org.junit.After;
@@ -36,6 +37,8 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
     @Mock
     private CorePncMemberProfilePresenter presenter;
 
+    private MemberObject memberObject = new MemberObject();
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -49,8 +52,9 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
         context.configuration().getDrishtiApplication().setPassword(password);
         context.session().setPassword(password);
 
-
-        controller = Robolectric.buildActivity(CorePncMemberProfileActivityImpl.class).create().start();
+        Intent intent = new Intent();
+        intent.putExtra("MemberObject", memberObject);
+        controller = Robolectric.buildActivity(CorePncMemberProfileActivityImpl.class, intent).create().start();
         activity = controller.get();
     }
 
@@ -122,5 +126,10 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
         MemberObject memberObject = Mockito.mock(MemberObject.class);
         activity.getChildren(memberObject);
         Mockito.verify(interactor).pncChildrenUnder29Days(memberObject.getBaseEntityId());
+    }
+
+    @Test
+    public void testGetPNCIntent(){
+
     }
 }
