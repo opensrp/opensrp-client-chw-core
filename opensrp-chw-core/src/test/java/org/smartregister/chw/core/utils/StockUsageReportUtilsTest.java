@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,13 +9,13 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class StockUsageReportUtilsTest {
 
     private StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();

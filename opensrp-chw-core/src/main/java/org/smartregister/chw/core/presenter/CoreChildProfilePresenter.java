@@ -187,6 +187,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         interactor.refreshProfileView(childBaseEntityId, false, this);
     }
 
+
     @Override
     public void fetchTasks() {
         // // TODO: 08/08/19  Change to use correct plan id
@@ -368,6 +369,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             Timber.e(e);
         }
     }
+
 
     @Override
     public void refreshProfileTopSection(CommonPersonObjectClient client) {

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -20,10 +21,10 @@ import org.smartregister.chw.malaria.util.MalariaUtil;
 import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
-import org.smartregister.domain.db.Client;
-import org.smartregister.domain.db.Event;
+import org.smartregister.domain.Client;
+import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
-import org.smartregister.domain.db.Obs;
+import org.smartregister.domain.Obs;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -44,6 +45,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -278,6 +280,13 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CoreReferralUtils.completeClosedReferralTasks();
                 }
                 break;
+            case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.SICK_CHILD_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.FAMILY_PLANNING_NOTIFICATION_DISMISSAL:
+                processNotificationDismissalEvent(eventClient.getEvent());
+                break;
             default:
                 if (eventClient.getClient() != null) {
                     if (eventType.equals(CoreConstants.EventType.UPDATE_FAMILY_RELATIONS) && event.getEntityType().equalsIgnoreCase(CoreConstants.TABLE_NAME.FAMILY_MEMBER)) {
@@ -339,6 +348,25 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             String formSubmissionId = event.getFormSubmissionId();
             usage.setId(formSubmissionId);
             repo.addOrUpdateStockUsage(usage);
+        }
+    }
+
+    private void processNotificationDismissalEvent(Event event) {
+        List<Obs> notificationObs = event.getObs();
+        String notificationId = null;
+        String dateMarkedAsDone = null;
+        if (notificationObs.size() > 0) {
+            for (Obs obs : notificationObs) {
+                if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.NOTIFICATION_ID.equals(obs.getFormSubmissionField())) {
+                    notificationId = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.DATE_NOTIFICATION_MARKED_AS_DONE.equals(obs.getFormSubmissionField())) {
+                    dateMarkedAsDone = (String) obs.getValue();
+                }
+            }
+            if (StringUtils.isBlank(dateMarkedAsDone)) {
+                dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDateCreated().toDate());
+            }
+            ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType(), dateMarkedAsDone);
         }
     }
 

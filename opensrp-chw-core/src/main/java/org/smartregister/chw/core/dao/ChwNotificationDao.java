@@ -199,10 +199,8 @@ public class ChwNotificationDao extends AbstractDao {
         return res.get(0);
     }
 
-    public static void markNotificationAsDone(Context context, String notificationId, String notificationType) {
-        String dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        String table = ChwNotificationUtil.getNotificationDetailsTable(context, notificationType);
-        String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", table, dateMarkedAsDone, notificationId);
+    public static void markNotificationAsDone(Context context, String notificationId, String notificationTable, String dateMarkedAsDone) {
+        String sql = String.format("UPDATE %s SET is_closed = '1', date_marked_as_done = '%s' WHERE id = '%s'", notificationTable, dateMarkedAsDone, notificationId);
         updateDB(sql);
     }
 

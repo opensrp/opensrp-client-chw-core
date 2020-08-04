@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +62,7 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.domain.db.Event;
+import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
@@ -78,11 +79,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
@@ -551,8 +555,8 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         Event event = eventClient.getEvent();
-        List<org.smartregister.domain.db.Obs> observations = new ArrayList<>();
-        for (org.smartregister.domain.db.Obs obs : event.getObs()) {
+        List<org.smartregister.domain.Obs> observations = new ArrayList<>();
+        for (org.smartregister.domain.Obs obs : event.getObs()) {
             switch (obs.getFieldCode()) {
                 case "illness_information":
                     try {
@@ -597,7 +601,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
                                     String key = service[0].substring(1, service[0].length() - 1);
                                     String val = service[1].length() > 1 ? service[1].substring(1, service[1].length() - 1) : service[1];
 
-                                    org.smartregister.domain.db.Obs obs1 = new org.smartregister.domain.db.Obs();
+                                    org.smartregister.domain.Obs obs1 = new org.smartregister.domain.Obs();
                                     obs1.setFieldType("formsubmissionField");
                                     obs1.setFieldDataType("text");
                                     obs1.setFieldCode(key);
@@ -750,5 +754,29 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
                 new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
         client.setColumnmaps(commonPersonObject.getColumnmaps());
         return client;
+    }
+
+    public static String getDateDifferenceInDays(Date endDate, Date startDate) {
+        long timeDiff = endDate.getTime() - startDate.getTime();
+        return String.valueOf(TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS));
+    }
+
+    public static Pair<String, String> fetchMUACValues(String childBaseEntityId) {
+        String muacValue = getMUACValue(childBaseEntityId);
+        String muacCode = null;
+        String muacDiaplay = null;
+        if (!muacValue.isEmpty()) {
+            try {
+                muacCode = muacValue.substring(4);
+                muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
+            } catch (IndexOutOfBoundsException e) {
+                Timber.e(e);
+            }
+        }
+        return Pair.create(muacCode, muacDiaplay);
+    }
+
+    public static String getRandomGeneratedId() {
+        return UUID.randomUUID().toString();
     }
 }

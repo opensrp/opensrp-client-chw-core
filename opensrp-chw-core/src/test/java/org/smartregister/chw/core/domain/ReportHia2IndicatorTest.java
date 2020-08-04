@@ -3,7 +3,6 @@ package org.smartregister.chw.core.domain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public class ReportHia2IndicatorTest {
@@ -24,19 +23,19 @@ public class ReportHia2IndicatorTest {
     @Test
     public void testGetAndSetIndicatorCode() {
         reportHia2Indicator.setIndicatorCode("123");
-        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(),"123");
+        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(), "123");
     }
 
     @Test
     public void testGetAndSetDescription() {
         reportHia2Indicator.setIndicatorCode("123");
-        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(),"123");
+        Assert.assertEquals(reportHia2Indicator.getIndicatorCode(), "123");
     }
 
     @Test
     public void testGetAndSetCategory() {
         reportHia2Indicator.setCategory("123");
-        Assert.assertEquals(reportHia2Indicator.getCategory(),"123");
+        Assert.assertEquals(reportHia2Indicator.getCategory(), "123");
     }
 
 

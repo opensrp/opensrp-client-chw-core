@@ -18,11 +18,10 @@ import org.smartregister.chw.core.BaseUnitTest;
  */
 public abstract class BaseActivityTestSetUp<T extends Activity> extends BaseUnitTest {
 
-    protected T activity;
-    protected ActivityController<T> controller;
-
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
+    protected T activity;
+    protected ActivityController<T> controller;
 
     @Before
     public void setUp() {

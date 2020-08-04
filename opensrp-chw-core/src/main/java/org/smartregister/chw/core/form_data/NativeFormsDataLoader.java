@@ -21,7 +21,7 @@ import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.dao.AbstractDao;
-import org.smartregister.domain.db.Client;
+import org.smartregister.domain.Client;
 import org.smartregister.domain.jsonmapping.ClassificationRule;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.ClientField;

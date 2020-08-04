@@ -56,6 +56,19 @@ public class VisitDaoTest extends VisitDao {
     }
 
     @Test
+    public void canQueryMUACValue() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"details", "max(visit_date)"});
+        matrixCursor.addRow(new Object[]{"green", "1588982400000"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        VisitDao.getMUACValue("base-ID-123456");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+    }
+
+    @Test
     public void testGetChildDateCreated() throws ParseException {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 

@@ -1,4 +1,4 @@
-package org.smartregister.chw.core.implementation;
+package org.smartregister.chw.core.activity.impl;
 
 import android.content.Context;
 
