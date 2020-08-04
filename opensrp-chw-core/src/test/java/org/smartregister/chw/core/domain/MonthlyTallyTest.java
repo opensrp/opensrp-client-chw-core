@@ -20,7 +20,7 @@ public class MonthlyTallyTest {
         MockitoAnnotations.initMocks(this);
         date = sdf.parse("2020-02-08");
     }
-    
+
     @Test
     public void testGetDateAndSetDateSent() {
         monthlyTally.setDateSent(date);

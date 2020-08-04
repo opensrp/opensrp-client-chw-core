@@ -74,7 +74,7 @@ public class CoreChildRegisterFragmentModelTest extends BaseUnitTest {
     }
 
     @Test
-    public void getJsonThrowsIsNull(){
+    public void getJsonThrowsIsNull() {
         Response<String> response = new Response<>(ResponseStatus.success, "{\"ok\": \"true\"}");
         JSONArray jsonArray = childRegisterFragmentModel.getJsonArray(response);
         Assert.assertNull(jsonArray);

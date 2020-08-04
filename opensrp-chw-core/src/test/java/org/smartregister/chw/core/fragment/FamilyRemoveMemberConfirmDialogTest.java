@@ -3,9 +3,8 @@ package org.smartregister.chw.core.fragment;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +22,7 @@ public class FamilyRemoveMemberConfirmDialogTest extends BaseUnitTest {
     private FamilyRemoveMemberConfirmDialog familyRemoveMemberConfirmDialog;
 
     @Spy
-    private Runnable onRemove ;
+    private Runnable onRemove;
 
     @Spy
     private Runnable onRemoveActivity;

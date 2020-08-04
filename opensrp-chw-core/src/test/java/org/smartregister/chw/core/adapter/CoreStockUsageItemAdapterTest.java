@@ -56,7 +56,7 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
         ReflectionHelpers.setField(viewHolder, "view", view);
         ReflectionHelpers.setField(viewHolder, "goToItemDetails", goToItemDetails);
 
-        StockUsageItemModel stockUsageItemModel = stockUsageItemModelList.get(0) ;
+        StockUsageItemModel stockUsageItemModel = stockUsageItemModelList.get(0);
         adapter.onBindViewHolder(viewHolder, 0);
 
         Mockito.verify(stockName).setText(stockUsageItemModel.getStockName());
