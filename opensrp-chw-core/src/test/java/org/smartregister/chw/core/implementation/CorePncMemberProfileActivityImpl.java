@@ -63,6 +63,16 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
     }
 
     @Override
+    protected void startHivRegister() {
+        // do nothing
+    }
+
+    @Override
+    protected void startTbRegister() {
+        // do nothing
+    }
+
+    @Override
     public void getRemoveBabyMenuItem(MenuItem item) {
         // do nothing
     }
