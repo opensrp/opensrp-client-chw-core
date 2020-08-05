@@ -699,7 +699,6 @@
     <!-- Notification row -->
     <string name="notification_for">Taarifa za %1$s</string>
     <string name="full_notification_info">Angalia taarifa zote</string>
-    <string name="return_to_all_client">Rudi kwenye Wateja wote</string>
     <string name="menu_tb">Kifua Kikuu</string>
 
     <!--    HIV Register-->
