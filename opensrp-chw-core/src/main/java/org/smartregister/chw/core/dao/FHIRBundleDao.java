@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Pair;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.smartregister.CoreLibrary;
-import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
@@ -13,6 +11,7 @@ import static org.smartregister.chw.core.dao.ChildDao.getChildProfileData;
 import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FHIRBundleDao extends AbstractDao {
 
@@ -33,11 +32,19 @@ public class FHIRBundleDao extends AbstractDao {
         }
         model.setUniqueIdGeneratedForThinkMD(getRandomGeneratedId());
         model.setPatientId(model.getUniqueIdGeneratedForThinkMD());
-        model.setPractitionerId(Utils.context().allSharedPreferences().fetchRegisteredANM());
-        model.setUserName(Utils.context().allSharedPreferences().fetchRegisteredANM());
-        model.setLocationId(locationId(CoreLibrary.getInstance().context().allSharedPreferences()));
+        String providerId = getProviderId();
+        model.setPractitionerId(providerId);
+        model.setUserName(providerId);
+        model.setLocationId(getLocationId());
 
         return model;
     }
 
+    public String getLocationId() {
+        return locationId(getAllSharedPreferences());
+    }
+
+    public String getProviderId() {
+        return getAllSharedPreferences().fetchRegisteredANM();
+    }
 }

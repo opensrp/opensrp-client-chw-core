@@ -94,11 +94,6 @@ android {
             includeAndroidResources = true
         }
     }
-
-    configurations.all {
-        all*.exclude group: 'xml-apis'
-        all*.exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-    }
 }
 
 tasks.withType(Test) {
@@ -118,7 +113,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
         exclude group: 'com.google.guava', module: 'guava'
     }
-   implementation('org.smartregister:opensrp-client-thinkmd:1.0.1-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-thinkmd:1.0.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'androidx.legacy', module: 'legacy-support-v4'
@@ -126,7 +121,7 @@ dependencies {
         exclude group: 'androidx.constraintlayout', module: 'constraintlayout'
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
-       exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
     }
 
     api('org.smartregister:opensrp-client-core:1.15.1-SNAPSHOT@aar') {
@@ -137,7 +132,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
-        exclude group: 'com.ibm.fhir', module:'fhir-model'
+        exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
     compileOnly 'com.ibm.fhir:fhir-model:4.2.3'
