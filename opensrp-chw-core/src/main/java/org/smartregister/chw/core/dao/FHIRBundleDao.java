@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.Pair;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.smartregister.CoreLibrary;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
 import static org.smartregister.chw.core.dao.ChildDao.getChildProfileData;
 import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
 
 public class FHIRBundleDao extends AbstractDao {
 
@@ -28,12 +31,11 @@ public class FHIRBundleDao extends AbstractDao {
             model.setDob(userProfile.getMiddle());
             model.setAgeInDays(userProfile.getLeft());
         }
-        //Todo: these values needs to be query and set into model
-        model.setPractitionerId(null);
-        model.setPatientId(null);
-        model.setUserName(null);
-        model.setLocationId(null);
-        model.setUniqueIdGeneratedForThinkMD(null);
+        model.setUniqueIdGeneratedForThinkMD(Utils.getRandomGeneratedId());
+        model.setPatientId(model.getUniqueIdGeneratedForThinkMD());
+        model.setPractitionerId(Utils.context().allSharedPreferences().fetchRegisteredANM());
+        model.setUserName(Utils.context().allSharedPreferences().fetchRegisteredANM());
+        model.setLocationId(locationId(CoreLibrary.getInstance().context().allSharedPreferences()));
 
         return model;
     }
