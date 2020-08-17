@@ -31,7 +31,7 @@ public class FHIRBundleDao extends AbstractDao {
             model.setDob(userProfile.getMiddle());
             model.setAgeInDays(userProfile.getLeft());
         }
-        model.setUniqueIdGeneratedForThinkMD(Utils.getRandomGeneratedId());
+        model.setUniqueIdGeneratedForThinkMD(getRandomGeneratedId());
         model.setPatientId(model.getUniqueIdGeneratedForThinkMD());
         model.setPractitionerId(Utils.context().allSharedPreferences().fetchRegisteredANM());
         model.setUserName(Utils.context().allSharedPreferences().fetchRegisteredANM());
