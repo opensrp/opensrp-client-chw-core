@@ -94,6 +94,11 @@ android {
             includeAndroidResources = true
         }
     }
+
+    configurations.all {
+        all*.exclude group: 'xml-apis'
+        all*.exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    }
 }
 
 tasks.withType(Test) {
