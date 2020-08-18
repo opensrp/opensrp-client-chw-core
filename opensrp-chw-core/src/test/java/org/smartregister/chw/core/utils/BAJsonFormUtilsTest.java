@@ -53,16 +53,16 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
 
         CoreChwApplication coreChwApplication = Mockito.mock(CoreChwApplication.class, Mockito.CALLS_REAL_METHODS);
 
-        MatrixCursor clientJsonMatrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
+        MatrixCursor clientJsonMatrixCursor = new MatrixCursor(new String[]{"json"});
         clientJsonMatrixCursor.addRow(new Object[]{getClientJsonString()});
 
-        MatrixCursor eventJsonMatrixCursor = new MatrixCursor(new String[]{});
+        MatrixCursor eventJsonMatrixCursor = new MatrixCursor(new String[]{"json"});
         eventJsonMatrixCursor.addRow(new Object[]{getEventJsonString()});
 
         Mockito.doReturn(repository).when(coreChwApplication).getRepository();
         Mockito.doReturn(database).when(repository).getReadableDatabase();
         Mockito.doReturn(clientJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from client where baseEntityId = ? order by updatedAt desc"), Mockito.any());
-        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from event where baseEntityId = '%s' and eventType in ('%s','%s') order by updatedAt desc limit 1;"), Mockito.any());
+        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from event where baseEntityId = 'testId' and eventType in ('Update Family Member Registration','Family Member Registration') order by updatedAt desc limit 1;"), Mockito.any());
 
         FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
                 BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
