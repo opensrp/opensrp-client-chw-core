@@ -133,5 +133,9 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
         Mockito.doReturn(R.id.action_remove_member).when(item).getItemId();
         activity.onOptionsItemSelected(item);
         Mockito.verify(activity).removeIndividualProfile();
+
+        Mockito.doReturn(R.id.action_malaria_diagnosis).when(item).getItemId();
+        activity.onOptionsItemSelected(item);
+        Mockito.verify(activity).startHfMalariaFollowupForm();
     }
 }

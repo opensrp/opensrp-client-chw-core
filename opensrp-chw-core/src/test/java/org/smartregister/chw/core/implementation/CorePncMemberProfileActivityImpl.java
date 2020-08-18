@@ -63,7 +63,7 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
     }
 
     @Override
-    protected void startHfMalariaFollowupForm() {
+    public void startHfMalariaFollowupForm() {
         // do nothing
     }
 

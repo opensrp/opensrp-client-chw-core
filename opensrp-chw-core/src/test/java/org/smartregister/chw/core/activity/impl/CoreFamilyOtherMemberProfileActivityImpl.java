@@ -38,7 +38,7 @@ public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMem
     }
 
     @Override
-    protected void startHfMalariaFollowupForm() {
+    public void startHfMalariaFollowupForm() {
         // do nothing
     }
 
