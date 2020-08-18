@@ -88,6 +88,10 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             getPncMemberProfilePresenter().startPncDangerSignsOutcomeForm();
             return true;
         }
+        else if(itemId == R.id.action_malaria_diagnosis){
+            startHfMalariaFollowupForm();
+            return  true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -257,6 +261,8 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
     protected abstract void startFpChangeMethod();
 
     protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHfMalariaFollowupForm();
 
     protected abstract void getRemoveBabyMenuItem(MenuItem item);
 
