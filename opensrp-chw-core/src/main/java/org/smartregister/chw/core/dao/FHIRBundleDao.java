@@ -40,11 +40,11 @@ public class FHIRBundleDao extends AbstractDao {
         return model;
     }
 
-    public String getLocationId() {
+    protected String getLocationId() {
         return locationId(getAllSharedPreferences());
     }
 
-    public String getProviderId() {
+    protected String getProviderId() {
         return getAllSharedPreferences().fetchRegisteredANM();
     }
 }
