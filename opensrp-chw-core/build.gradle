@@ -123,8 +123,7 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
     }
-
-    api('org.smartregister:opensrp-client-core:1.15.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.15.4-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -176,7 +175,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:1.0.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:1.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
