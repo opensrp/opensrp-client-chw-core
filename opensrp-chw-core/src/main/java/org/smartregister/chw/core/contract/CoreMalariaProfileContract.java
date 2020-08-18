@@ -16,6 +16,6 @@ public class CoreMalariaProfileContract {
     }
 
     public interface Interactor extends MalariaProfileContract.Interactor {
-        void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityID) throws Exception;
+        void createHfMalariaFollowupEvent(AllSharedPreferences allSharedPreferences, String jsonString, String entityIDd) throws Exception;
     }
 }

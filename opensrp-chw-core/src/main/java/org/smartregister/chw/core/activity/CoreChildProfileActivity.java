@@ -23,6 +23,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -43,7 +45,6 @@ import org.smartregister.chw.core.presenter.CoreChildProfilePresenter;
 import org.smartregister.chw.core.utils.CoreChildUtils;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -58,10 +59,11 @@ import java.util.Set;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
+import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
 public class CoreChildProfileActivity extends BaseProfileActivity implements CoreChildProfileContract.View, CoreChildRegisterContract.InteractorCallBack {
     public static IntentFilter sIntentFilter;
-    private static boolean isStartedFromReferrals;
 
     static {
         sIntentFilter = new IntentFilter();
@@ -71,7 +73,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     public String childBaseEntityId;
-    public boolean isComesFromFamily = false;
     public String lastVisitDay;
     public OnClickFloatingMenu onClickFloatingMenu;
     public Handler handler = new Handler();
@@ -83,6 +84,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     protected View recordVisitPanel;
     protected MemberObject memberObject;
     protected ImageView imageViewCrossChild;
+    protected RelativeLayout notificationAndReferralLayout;
+    protected RecyclerView notificationAndReferralRecyclerView;
     private boolean appBarTitleIsShown = true;
     private int appBarLayoutScrollRange = -1;
     private TextView textViewTitle;
@@ -115,7 +118,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     };
     private View viewFamilyRow;
     private View viewDividerSickRow;
-    private View textViewSickChildArrow;
     private TextView textViewNotVisitMonth;
     private TextView textViewUndo;
     private TextView textViewNameDue;
@@ -124,10 +126,9 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private ImageView imageViewCross;
     private ProgressBar progressBar;
 
-    public static void startMe(Activity activity, boolean isComesFromFamily, MemberObject memberObject, Class<?> cls) {
-        isStartedFromReferrals = CoreReferralUtils.checkIfStartedFromReferrals(activity);
+    public static void startMe(Activity activity, MemberObject memberObject, Class<?> cls) {
         Intent intent = new Intent(activity, cls);
-        intent.putExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, isComesFromFamily);
+        passToolbarTitle(activity, intent);
         intent.putExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT, memberObject);
         activity.startActivity(intent);
     }
@@ -151,7 +152,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         if (extras != null) {
             memberObject = (MemberObject) getIntent().getSerializableExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT);
             childBaseEntityId = memberObject.getBaseEntityId();
-            isComesFromFamily = getIntent().getBooleanExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, false);
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -169,6 +169,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         }
         imageRenderHelper = new ImageRenderHelper(this);
         registerReceiver(mDateTimeChangedReceiver, getsIntentFilter());
+        initializeNotificationReferralRecyclerView();
     }
 
     @Override
@@ -187,7 +188,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     @Override
     protected void initializePresenter() {
         childBaseEntityId = getIntent().getStringExtra(Constants.INTENT_KEY.BASE_ENTITY_ID);
-        isComesFromFamily = getIntent().getBooleanExtra(CoreConstants.INTENT_KEY.IS_COMES_FROM_FAMILY, false);
         String familyName = getIntent().getStringExtra(Constants.INTENT_KEY.FAMILY_NAME);
         if (familyName == null) {
             familyName = "";
@@ -243,8 +243,13 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         viewDividerSickRow = findViewById(R.id.view_sick_visit_row);
         layoutSickVisit = findViewById(R.id.sick_visit_row);
         textViewSickChild = findViewById(R.id.textview_sick_visit_has);
-        textViewSickChildArrow = findViewById(R.id.sick_visit_arrow_image);
         fetchProfileTasks();
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -260,28 +265,18 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-        if (appBarLayoutScrollRange == -1) {
-            appBarLayoutScrollRange = appBarLayout.getTotalScrollRange();
-        }
+        appBarLayoutScrollRange = (appBarLayoutScrollRange == -1) ? appBarLayout.getTotalScrollRange() : appBarLayoutScrollRange;
         if (appBarLayoutScrollRange + verticalOffset == 0) {
-
             textViewTitle.setText(patientName);
             appBarTitleIsShown = true;
         } else if (appBarTitleIsShown) {
             setUpToolbar();
             appBarTitleIsShown = false;
         }
-
     }
 
     public void setUpToolbar() {
-        if (isComesFromFamily) {
-            textViewTitle.setText(getString(R.string.return_to_family_members));
-        } else {
-            textViewTitle.setText(isStartedFromReferrals ? getString(R.string.return_to_task_details) : getString(R.string.return_to_all_children));
-        }
-
+        updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
     }
 
     /**
@@ -399,8 +394,8 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     @Override
     public void setVisitNotDoneThisMonth(boolean withinEditPeriod) {
         openVisitMonthView();
-        textViewNotVisitMonth.setText(getString(R.string.not_visiting_this_month));
-        textViewUndo.setText(getString(R.string.undo));
+        textViewNotVisitMonth.setText(R.string.not_visiting_this_month);
+        textViewUndo.setText(R.string.undo);
         textViewUndo.setVisibility(withinEditPeriod ? View.VISIBLE : View.GONE);
         imageViewCrossChild.setImageResource(R.drawable.activityrow_notvisited);
     }
@@ -416,7 +411,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             textViewLastVisit.setText(getString(R.string.last_visit_40_days_ago, days));
             viewLastVisitRow.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -443,7 +437,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutMostDueOverdue.setVisibility(View.VISIBLE);
         viewMostDueRow.setVisibility(View.VISIBLE);
         textViewNameDue.setText(CoreChildUtils.fromHtml(getString(R.string.vaccine_service_upcoming, serviceName, dueDate)));
-
     }
 
     @Override
@@ -515,7 +508,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutNotRecordView.setVisibility(View.VISIBLE);
         layoutRecordButtonDone.setVisibility(View.GONE);
         layoutRecordView.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -610,16 +602,10 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             onBackPressed();
             return true;
         } else if (i == R.id.action_registration) {
-            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
-            if (profilePresenter != null) {
-                profilePresenter.startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), profilePresenter.getChildClient());
-            }
+            presenter().startFormForEdit(getString(R.string.edit_child_form_title, memberObject.getFirstName()), presenter().getChildClient());
             return true;
         } else if (i == R.id.action_sick_child_form) {
-            CoreChildProfilePresenter profilePresenter = (CoreChildProfilePresenter) presenter();
-            if (profilePresenter != null) {
-                profilePresenter.startSickChildForm(profilePresenter.getChildClient());
-            }
+            presenter().startSickChildForm(presenter().getChildClient());
             return true;
         }
         return super.onOptionsItemSelected(item);

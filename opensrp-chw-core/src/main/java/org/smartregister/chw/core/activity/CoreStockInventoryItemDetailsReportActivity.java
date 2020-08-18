@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -30,6 +31,9 @@ import java.util.Map;
 
 public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
+    protected CustomFontTextView toolBarTextView;
+    private CoreStockUsageItemDetailsAdapter coreStockUsageItemDetailsAdapter;
+
 
     private String evaluateStockName(String stockName) {
         String stock_name;
@@ -81,16 +85,19 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
     protected void onCreation() {
         setContentView(R.layout.activity_stock_usage_item_details);
         Intent intent = getIntent();
-        String stockName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME);
-        String providerName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.PROVIDER_NAME);
-
-
         TextView textViewName = findViewById(R.id.item_detail_name);
-        textViewName.setText(String.format(this.getString(R.string.stock_used_text), stockName));
+
+        Bundle extras = this.getIntent().getExtras();
+        if (extras != null) {
+            String stockName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME);
+            String providerName = intent.getStringExtra(CoreConstants.HfStockUsageUtil.PROVIDER_NAME);
+
+            textViewName.setText(String.format(this.getString(R.string.stock_used_text), stockName));
+            coreStockUsageItemDetailsAdapter = new CoreStockUsageItemDetailsAdapter(stockUsageItemDetailsModelList(stockName, providerName));
+        }
 
         RecyclerView recyclerView = findViewById(R.id.rv_stock_usage_item_detail_report);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        CoreStockUsageItemDetailsAdapter coreStockUsageItemDetailsAdapter = new CoreStockUsageItemDetailsAdapter(stockUsageItemDetailsModelList(stockName, providerName));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -99,7 +106,7 @@ public class CoreStockInventoryItemDetailsReportActivity extends SecuredActivity
 
 
         Toolbar toolbar = findViewById(R.id.back_stock_usage_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

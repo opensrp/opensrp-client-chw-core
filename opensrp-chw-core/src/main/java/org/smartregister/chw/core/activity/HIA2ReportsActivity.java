@@ -78,14 +78,14 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     public static final int REQUEST_CODE_GET_JSON = 3432;
     public static final String FORM_KEY_CONFIRM = "confirm";
     public static final int TOOLBAR_ID = R.id.location_switching_toolbar;
-    private static final String TAG = HIA2ReportsActivity.class.getCanonicalName();
+    protected static final String TAG = HIA2ReportsActivity.class.getCanonicalName();
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
-    private TabLayout tabLayout;
+    protected ViewPager mViewPager;
+    protected TabLayout tabLayout;
     private ProgressDialog progressDialog;
 
     @Override
@@ -110,7 +110,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     }
 
 
-    private Fragment currentFragment() {
+    protected Fragment currentFragment() {
         if (mViewPager == null || mSectionsPagerAdapter == null) {
             return null;
         }
@@ -181,7 +181,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
         super.onResumeFragments();
     }
 
-    private void sendReport(final Date month) {
+    protected void sendReport(final Date month) {
         if (month != null) {
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
@@ -273,8 +273,13 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     }
 
     public void onClickReport(View view) {
-        if (view.getId() == R.id.toggle_action_menu) {
-            NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+        try{
+            if (view != null && view.getId() == R.id.toggle_action_menu) {
+                NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+            }
+        }
+        catch (Exception ex){
+            Timber.e(ex, "View is NUll");
         }
     }
 
@@ -303,7 +308,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     /*
       Generates monthly report and pushes to server
      */
-    private class GenerateAndSendMonthlyTask extends AsyncTask<String, Void, Boolean> {
+    protected class GenerateAndSendMonthlyTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -377,7 +382,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
         }
 
 
-        private void pushReportsToServer() {
+        protected void pushReportsToServer() {
             final String REPORTS_SYNC_PATH = "/rest/report/add";
             final Context context = CoreChwApplication.getInstance().getContext().applicationContext();
             HTTPAgent httpAgent = CoreChwApplication.getInstance().getContext().getHttpAgent();

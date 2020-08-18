@@ -6,15 +6,17 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'https://jitpack.io' }
         maven { url "http://repo.maven.apache.org/maven2" }
         maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.5.0-x'
+        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
+        classpath 'org.smartregister:gradle-jarjar-plugin:1.0.0-SNAPSHOT'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -52,6 +54,7 @@ allprojects {
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://dl.bintray.com/ona/rdt-capture" }
+        maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases'}
     }
 }
 
@@ -77,11 +80,11 @@ subprojects {
 
     group = 'org.smartregister'
 
-    ext.androidToolsBuildGradle = '28.0.3'
-    ext.androidBuildToolsVersion = '28.0.3'
-    ext.androidMinSdkVersion = 18
-    ext.androidCompileSdkVersion = 28
-    ext.androidTargetSdkVersion = 28
+    ext.androidToolsBuildGradle     = '4.0.0'
+    ext.androidBuildToolsVersion    = '29.0.3'
+    ext.androidMinSdkVersion        = 18
+    ext.androidCompileSdkVersion    = 28
+    ext.androidTargetSdkVersion     = 28
 
     ext.androidAnnotationsVersion = '3.0.1'
     ext.androidAnnotationsAPIVersion = '3.0.1'
@@ -102,9 +105,9 @@ task clean(type: Delete) {
 }
 
 task jacocoTestReport(type: JacocoReport) {
-    sourceDirectories = files()
-    classDirectories = files()
-    executionData = files()
+    sourceDirectories.setFrom(files())
+    classDirectories.setFrom(files())
+    executionData.setFrom(files())
 
     reports {
         html {
@@ -140,9 +143,9 @@ task jacocoTestReport(type: JacocoReport) {
             }
         }
 
-        executionData = files(executionData.findAll {
+        executionData.setFrom(files(executionData.findAll {
             it.exists()
-        })
+        }))
     }
 }
 

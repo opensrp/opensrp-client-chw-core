@@ -20,8 +20,10 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
+import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;
+import org.smartregister.chw.core.repository.ChwTaskRepository;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.ChwServiceSchedule;
 import org.smartregister.chw.core.utils.CoreChildService;
@@ -48,6 +50,7 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
@@ -265,7 +268,8 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
     @Override
     public void getClientTasks(String planId, String baseEntityId, CoreChildProfileContract.InteractorCallBack callback) {
-        Set<Task> taskList = CoreChwApplication.getInstance().getTaskRepository().getTasksByEntityAndStatus(planId, baseEntityId, Task.TaskStatus.READY);
+        TaskRepository taskRepository = CoreChwApplication.getInstance().getTaskRepository();
+        Set<Task> taskList = ((ChwTaskRepository) taskRepository).getReferralTasksForClientByStatus(planId, baseEntityId, CoreConstants.BUSINESS_STATUS.REFERRED);
         callback.setClientTasks(taskList);
     }
 
@@ -375,7 +379,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     }
 
     @Override
-    public String getCurrentLocationID(Context context){
+    public String getCurrentLocationID(Context context) {
         LocationPickerView lpv = new LocationPickerView(context);
         lpv.init();
         return LocationHelper.getInstance().getOpenMrsLocationId(lpv.getSelectedItem());
@@ -389,6 +393,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     @Override
     public void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
         CoreReferralUtils.createReferralEvent(allSharedPreferences, jsonString, CoreConstants.TABLE_NAME.CHILD_REFERRAL, getChildBaseEntityId());
+    }
+
+    @Override
+    public void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception {
+        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, CoreReferralUtils.setEntityId(jsonString, getChildBaseEntityId()), CoreConstants.TABLE_NAME.SICK_CHILD_FOLLOW_UP);
+        org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(allSharedPreferences, baseEvent);
+        String syncLocationId = ChwNotificationDao.getSyncLocationId(baseEvent.getBaseEntityId());
+        if (syncLocationId != null) {
+            // Allows setting the ID for sync purposes
+            baseEvent.setLocationId(syncLocationId);
+        }
+        NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
     }
 
     @Override
@@ -440,6 +456,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
         appExecutors.diskIO().execute(runnable);
     }
+
 
     public void processPopulatableFields(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray) throws JSONException {
 

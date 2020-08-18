@@ -57,6 +57,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private static PlanDefinitionRepository planDefinitionRepository;
     private static ScheduleRepository scheduleRepository;
     private static MalariaRegisterRepository malariaRegisterRepository;
+    private static StockUsageReportRepository stockUsageReportRepository;
     public JsonSpecHelper jsonSpecHelper;
     protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
@@ -67,11 +68,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
-
-
     private RulesEngineHelper rulesEngineHelper;
-    private static StockUsageReportRepository stockUsageReportRepository;
-
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return getInstance().jsonSpecHelper;

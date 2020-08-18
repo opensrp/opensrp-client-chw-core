@@ -19,5 +19,6 @@
     <color name="toolbar_grey">#494949</color>
     <color name="status_bar_bg_dark_grey">#494949</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="disabled_button_background">#C6C6C6</color>
 
 </resources>

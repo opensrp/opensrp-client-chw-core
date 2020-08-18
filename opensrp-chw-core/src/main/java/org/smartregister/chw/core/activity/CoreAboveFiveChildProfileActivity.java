@@ -20,13 +20,6 @@ public abstract class CoreAboveFiveChildProfileActivity extends CoreChildProfile
     }
 
     @Override
-    public void setProfileImage(String baseEntityId) {
-        imageViewProfile.setBorderWidth(2);
-        imageRenderHelper.refreshProfileImage(baseEntityId, imageViewProfile, R.mipmap.ic_member);
-        imageViewProfile.setBorderColor(getResources().getColor(R.color.white));
-    }
-
-    @Override
     public void setParentName(String parentName) {
         textViewParentName.setVisibility(View.GONE);
     }

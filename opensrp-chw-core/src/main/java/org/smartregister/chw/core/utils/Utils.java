@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -43,6 +45,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
+import org.smartregister.chw.core.activity.BaseReferralTaskViewActivity;
+import org.smartregister.chw.core.activity.CoreAllClientsRegisterActivity;
+import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyCallDialogContract;
 import org.smartregister.chw.core.custom_views.CoreAncFloatingMenu;
@@ -56,7 +62,7 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.domain.db.Event;
+import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
@@ -73,11 +79,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
@@ -546,8 +555,8 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         Event event = eventClient.getEvent();
-        List<org.smartregister.domain.db.Obs> observations = new ArrayList<>();
-        for (org.smartregister.domain.db.Obs obs : event.getObs()) {
+        List<org.smartregister.domain.Obs> observations = new ArrayList<>();
+        for (org.smartregister.domain.Obs obs : event.getObs()) {
             switch (obs.getFieldCode()) {
                 case "illness_information":
                     try {
@@ -592,7 +601,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
                                     String key = service[0].substring(1, service[0].length() - 1);
                                     String val = service[1].length() > 1 ? service[1].substring(1, service[1].length() - 1) : service[1];
 
-                                    org.smartregister.domain.db.Obs obs1 = new org.smartregister.domain.db.Obs();
+                                    org.smartregister.domain.Obs obs1 = new org.smartregister.domain.Obs();
                                     obs1.setFieldType("formsubmissionField");
                                     obs1.setFieldDataType("text");
                                     obs1.setFieldCode(key);
@@ -709,5 +718,65 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         }
 
         return defaultValue;
+    }
+
+    public static void updateToolbarTitle(Activity activity, int toolbarTextViewId, String familyName) {
+        int titleResource = -1;
+        if (activity.getIntent().getExtras() != null)
+            titleResource = activity.getIntent().getExtras().getInt(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, -1);
+        if (titleResource != -1) {
+            TextView toolbarTitleTextView = activity.findViewById(toolbarTextViewId);
+            if (titleResource == R.string.return_to_family_name) {
+                toolbarTitleTextView.setText(activity.getString(R.string.return_to_family_name, familyName));
+            } else {
+                toolbarTitleTextView.setText(titleResource);
+            }
+        }
+    }
+
+    public static void passToolbarTitle(Activity activity, Intent intent) {
+        if (activity instanceof CoreAllClientsRegisterActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_all_client);
+        else if (activity instanceof BaseChwNotificationDetailsActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_notification_details);
+        else if (activity instanceof CoreFamilyProfileActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_family_name);
+        else if (activity instanceof BaseReferralTaskViewActivity)
+            intent.putExtra(CoreConstants.INTENT_KEY.TOOLBAR_TITLE, R.string.return_to_task_details);
+    }
+
+    @NotNull
+    public static CommonPersonObjectClient getCommonPersonObjectClient(@NonNull String baseEntityId) {
+        CommonRepository commonRepository = org.smartregister.family.util.Utils.context().commonrepository(org.smartregister.family.util.Utils.metadata().familyMemberRegister.tableName);
+
+        final CommonPersonObject commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
+        final CommonPersonObjectClient client =
+                new CommonPersonObjectClient(commonPersonObject.getCaseId(), commonPersonObject.getDetails(), "");
+        client.setColumnmaps(commonPersonObject.getColumnmaps());
+        return client;
+    }
+
+    public static String getDateDifferenceInDays(Date endDate, Date startDate) {
+        long timeDiff = endDate.getTime() - startDate.getTime();
+        return String.valueOf(TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS));
+    }
+
+    public static Pair<String, String> fetchMUACValues(String childBaseEntityId) {
+        String muacValue = getMUACValue(childBaseEntityId);
+        String muacCode = null;
+        String muacDiaplay = null;
+        if (!muacValue.isEmpty()) {
+            try {
+                muacCode = muacValue.substring(4);
+                muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
+            } catch (IndexOutOfBoundsException e) {
+                Timber.e(e);
+            }
+        }
+        return Pair.create(muacCode, muacDiaplay);
+    }
+
+    public static String getRandomGeneratedId() {
+        return UUID.randomUUID().toString();
     }
 }

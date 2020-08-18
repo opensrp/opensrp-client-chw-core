@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.contract;
 
 import android.content.Context;
+import android.util.Pair;
 
 public interface FamilyCallDialogContract {
 
@@ -52,5 +53,13 @@ public interface FamilyCallDialogContract {
         String getPhoneNumber();
 
         void setPhoneNumber(String phoneNumber);
+
+        boolean isIndependent();
+
+        void setIndependent(boolean independent);
+
+        Pair<String, String> getOtherContact();
+
+        void setOtherContact(Pair<String, String> otherContact);
     }
 }

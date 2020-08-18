@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 
@@ -20,22 +21,38 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestApplication;
+import org.smartregister.chw.core.domain.FamilyMember;
 import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.EcSyncHelperShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
+import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
+import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
+import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationProperty;
+import org.smartregister.family.activity.FamilyWizardFormActivity;
+import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.util.JsonFormUtils;
+import org.smartregister.view.activity.BaseProfileActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class, UtilsShadowUtil.class})
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
+        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -43,7 +60,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        String jsonString = "{\"count\": \"2\",\"metadata\": {},\"step1\": {\"title\": \"Family Registration Info\",\"next\": \"step2\",\"fields\": [] },\"step2\": {\"title\": \"Family Registration Page two\",\"fields\": [] }}";
+        String jsonString = "{\"count\": \"2\",\"metadata\": {},\"step1\": {\"title\": \"Family Registration Info\",\"next\": \"step2\",\"fields\": [{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"},\"values\":[\"Tabata Dampo - Unified\"],\"keys\":[\"Tabata Dampo - Unified\"],\"openmrs_choice_ids\":{\"Tabata Dampo - Unified\":\"Tabata Dampo - Unified\"},\"location_uuids\":{\"Tabata Dampo - Unified\":\"fb7ed5db-138d-4e6f-94d8-bc443b58dadb\"},\"value\":\"Tabata Dampo - Unified\"}] },\"step2\": {\"title\": \"Family Registration Page two\",\"fields\": [] }}";
         try {
             jsonForm = new JSONObject(jsonString);
 
@@ -76,6 +93,46 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(baseEntityId, eventTriple.getMiddle());
         Assert.assertEquals(1, eventTriple.getRight().size());
     }
+
+    @Test
+    public void getAutoPopulatedJsonEditFormReturnsCorrectString() throws JSONException {
+        Context context = RuntimeEnvironment.application;
+        String id = "testCaseId";
+        String encounterType = "test_encounter";
+        String landMark = "police station";
+        String nearestHealthFacility = "makutano health center";
+
+        HashMap<String, String> detailsMap = new HashMap<>();
+        HashMap<String, String> columnMaps = new HashMap<>();
+        columnMaps.put(DBConstants.KEY.DOB, "01-12-2020");
+        columnMaps.put(Constants.JSON_FORM_KEY.DOB_UNKNOWN, "false");
+        columnMaps.put(DBConstants.KEY.FIRST_NAME, "Sonkore");
+        columnMaps.put(DBConstants.KEY.LANDMARK, landMark);
+        columnMaps.put(ChwDBConstants.NEAREST_HEALTH_FACILITY, nearestHealthFacility);
+        columnMaps.put(DBConstants.KEY.GPS, "-0.00001, 0.25400");
+
+        CommonPersonObjectClient testClient = new CommonPersonObjectClient(id, detailsMap, "tester");
+        testClient.setColumnmaps(columnMaps);
+
+        JSONObject jsonObject = CoreJsonFormUtils.getAutoPopulatedJsonEditFormString("family_register", context, testClient, encounterType);
+        assert jsonObject != null;
+        JSONObject step1Object = jsonObject.getJSONObject("step1");
+        String actualLandMark = null;
+        String actualHealthFacility = null;
+        JSONArray fields = step1Object.getJSONArray(JsonFormConstants.FIELDS);
+        for (int i = 0; i < fields.length(); i++) {
+            String key = fields.getJSONObject(i).getString(JsonFormConstants.KEY);
+            if (key.equals(DBConstants.KEY.LANDMARK)) {
+                actualLandMark = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+            if (key.equals(ChwDBConstants.NEAREST_HEALTH_FACILITY)) {
+                actualHealthFacility = fields.getJSONObject(i).getString(JsonFormConstants.VALUE);
+            }
+        }
+        Assert.assertEquals(landMark, actualLandMark);
+        Assert.assertEquals(nearestHealthFacility, actualHealthFacility);
+    }
+
 
     @Test
     public void processPopulatableFieldsUpdatesJSONOptionsWithCorrectValues() throws JSONException {
@@ -126,6 +183,55 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(value, keyValueObject.optString(JsonFormConstants.VALUE));
     }
 
+    @Test
+    public void processFamilyUpdateRelationsReturnsCorrectPair() throws Exception {
+        CoreChwApplication application = (CoreChwApplication) RuntimeEnvironment.application;
+        CoreLibrary.init(org.smartregister.Context.getInstance());
+        String memberId = "test-member-id-123";
+        String familyId = "test-family-id-123";
+
+        FamilyMember testMember = new FamilyMember();
+        testMember.setFamilyID(familyId);
+        testMember.setMemberID(memberId);
+        testMember.setPrimaryCareGiver(true);
+        testMember.setFamilyHead(true);
+
+        Client testClient = new Client(memberId, "Mr", "Miyagi", "Sakamoto", new Date(), null,
+                false, false, "male");
+        testClient.setRelationships(new HashMap<>());
+        EcSyncHelperShadowHelper.setTestClient(testClient);
+
+        FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
+                BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
+        metadata.updateFamilyRegister("family_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyHeadRelationKey", "familyCareGiverRelationKey");
+        metadata.updateFamilyMemberRegister("family_member_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyRelationKey");
+        UtilsShadowUtil.setMetadata(metadata);
+
+        Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, RuntimeEnvironment.application, testMember, "Kenya");
+
+        // Client validation
+        Assert.assertEquals(1, resultPair.first.size());
+        Assert.assertEquals(memberId, Objects.requireNonNull(resultPair.first.get(0).getRelationships().get(CoreConstants.RELATIONSHIP.PRIMARY_CAREGIVER)).get(0));
+
+        // Events validation
+        Assert.assertEquals(2, resultPair.second.size());
+        Assert.assertEquals(CoreConstants.EventType.UPDATE_FAMILY_RELATIONS, resultPair.second.get(0).getEventType());
+        Assert.assertEquals(familyId, resultPair.second.get(0).getBaseEntityId());
+        Assert.assertEquals(CoreConstants.EventType.UPDATE_FAMILY_MEMBER_RELATIONS, resultPair.second.get(1).getEventType());
+        Assert.assertEquals(memberId, resultPair.second.get(1).getBaseEntityId());
+        Assert.assertEquals(3, resultPair.second.get(1).getObs().size());
+    }
+
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
         return "{\"count\":\"1\",\"encounter_type\":\"" + encounterType + "\",\"entity_id\":\"" + baseEntityId + "\",\"relational_id\":\"\",\"metadata\":{},\"step1\":{\"title\":\"RemoveFamilyMember\",\"fields\":[{\"key\":\"details\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":" +
                 "\"label\",\"text\":\"MelissaYoJiwanji,25Female\",\"text_size\":\"25px\"},{\"key\":\"remove_reason\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"160417AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"selectone\",\"type\":\"spinner\",\"hint\":\"Reasonforremoval\",\"v_required\"" +
@@ -135,5 +241,45 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
                 ":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedatethatthemembermovedaway\"},\"is_visible\":false,\"is-rule-check\":false},{\"key\":\"date_died\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"1543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\"" +
                 ":\"text\",\"type\":\"date_picker\",\"label\":\"Dateofdeath\",\"hint\":\"Dateofdeath\",\"expanded\":false,\"min_date\":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedateofdeath\"},\"step\":\"step1\",\"is-rule-check\":false,\"is_visible\":false},{\"key\":\"age_at_death\",\"openmrs_entity_parent\"" +
                 ":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"label\":\"Ageatdeath\",\"hint\":\"Ageatdeath\",\"type\":\"edit_text\",\"read_only\":\"true\",\"is_visible\":false}]},\"invisible_required_fields\":\"[date_died,date_moved]\",\"details\":{\"appVersionName\":\"1.7.23-SNAPSHOT\",\"formVersion\":\"\"}}";
+    }
+
+    @Test
+    public void addLocationsToDropdownField() throws JSONException {
+        List<Location> locations = new ArrayList<>();
+        Location location1 = new Location();
+        location1.setId("uuid1");
+        location1.setProperties(new LocationProperty());
+        location1.getProperties().setName("Madona");
+        location1.getProperties().setUid("uuid1");
+
+        Location location2 = new Location();
+        location2.setId("uuid2");
+        location2.setProperties(new LocationProperty());
+        location2.getProperties().setName("Ebrahim Haji");
+        location2.getProperties().setUid("uuid2");
+
+        locations.add(location1);
+        locations.add(location2);
+
+        JSONObject dropdownField = new JSONObject("{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"}}");
+        CoreJsonFormUtils.addLocationsToDropdownField(locations, dropdownField);
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.VALUES));
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.KEYS));
+        Assert.assertTrue(dropdownField.has(JsonFormConstants.OPENMRS_CHOICE_IDS));
+    }
+
+    @Test
+    public void getSyncLocationUUIDFromDropdown() throws JSONException {
+        JSONObject dropdownField = new JSONObject("{\"key\":\"sync_location_id\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"person_attribute\",\"openmrs_entity_id\":\"sync_location_id\",\"type\":\"spinner\",\"hint\":\"Select CHW Location\",\"v_required\":{\"value\":\"true\",\"err\":\"Please select CHW Location\"},\"values\":[\"Tabata Dampo - Unified\"],\"keys\":[\"Tabata Dampo - Unified\"],\"openmrs_choice_ids\":{\"Tabata Dampo - Unified\":\"Tabata Dampo - Unified\"},\"location_uuids\":{\"Tabata Dampo - Unified\":\"fb7ed5db-138d-4e6f-94d8-bc443b58dadb\"},\"value\":\"Tabata Dampo - Unified\"}");
+        String locationUUID = CoreJsonFormUtils.getSyncLocationUUIDFromDropdown(dropdownField);
+        Assert.assertNotNull(locationUUID);
+        Assert.assertEquals(locationUUID, "fb7ed5db-138d-4e6f-94d8-bc443b58dadb");
+        Assert.assertNull(CoreJsonFormUtils.getSyncLocationUUIDFromDropdown(new JSONObject()));
+    }
+
+    @Test
+    public void getJsonField() {
+        JSONObject locationId = CoreJsonFormUtils.getJsonField(jsonForm, JsonFormUtils.STEP1, "sync_location_id");
+        Assert.assertNotNull(locationId);
     }
 }

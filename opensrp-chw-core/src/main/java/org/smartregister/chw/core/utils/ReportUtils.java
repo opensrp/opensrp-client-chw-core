@@ -19,7 +19,7 @@ import org.smartregister.chw.core.domain.ReportHia2Indicator;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.clientandeventmodel.Event;
-import org.smartregister.domain.db.Obs;
+import org.smartregister.domain.Obs;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
@@ -36,7 +36,6 @@ import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
 
 public class ReportUtils {
     private static final String TAG = ReportUtils.class.getCanonicalName();
-
 
     public static void createReport(List<ReportHia2Indicator> hia2Indicators, Date month, String reportType) {
         try {

@@ -95,7 +95,7 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     }
 
     @Override
-    protected void registerPresenter() {
+    public void registerPresenter() {
         presenter = new PncMemberProfilePresenter(this, new PncMemberProfileInteractor(), memberObject);
     }
 
@@ -213,6 +213,11 @@ public class PncMemberProfileActivity extends CorePncMemberProfileActivity imple
     @Override
     protected void startMalariaFollowUpVisit() {
 //        TODO implement functionality to malaria home visit
+    }
+
+    @Override
+    protected void startHfMalariaFollowupForm() {
+        //        TODO implement functionality to malaria HF follow up
     }
 
     @Override

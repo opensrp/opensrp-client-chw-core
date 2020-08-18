@@ -14,14 +14,12 @@ import timber.log.Timber;
 
 public class EventDao extends AbstractDao {
 
-
     public static List<Event> getEvents(String baseEntityID, String eventType, int limit) {
         String sql = "select json from event where baseEntityId = '" + baseEntityID + "' COLLATE NOCASE and eventType = '" + eventType + "' COLLATE NOCASE order by updatedAt desc limit " + limit;
 
-        final ECSyncHelper syncHelper = CoreChwApplication.getInstance().getEcSyncHelper();
         DataMap<Event> dataMap = c -> {
             try {
-                return syncHelper.convert(new JSONObject(getCursorValue(c, "json")), Event.class);
+                return getEcSyncHelper().convert(new JSONObject(getCursorValue(c, "json")), Event.class);
             } catch (JSONException e) {
                 Timber.e(e);
             }
@@ -42,10 +40,9 @@ public class EventDao extends AbstractDao {
 
         String sql = "select json from event where baseEntityId = '" + baseEntityID + "' COLLATE NOCASE and eventType in (" + types.toString() + ") COLLATE NOCASE order by updatedAt desc limit 1";
 
-        final ECSyncHelper syncHelper = CoreChwApplication.getInstance().getEcSyncHelper();
         DataMap<Event> dataMap = c -> {
             try {
-                return syncHelper.convert(new JSONObject(getCursorValue(c, "json")), Event.class);
+                return getEcSyncHelper().convert(new JSONObject(getCursorValue(c, "json")), Event.class);
             } catch (JSONException e) {
                 Timber.e(e);
             }
@@ -57,5 +54,9 @@ public class EventDao extends AbstractDao {
             return res.get(0);
 
         return null;
+    }
+
+    private static ECSyncHelper getEcSyncHelper() {
+        return CoreChwApplication.getInstance().getEcSyncHelper();
     }
 }

@@ -33,16 +33,18 @@ import java.util.List;
 import java.util.Map;
 
 public class CoreStockInventoryReportActivity extends SecuredActivity {
-    protected AppBarLayout appBarLayout;
-    private RecyclerView recyclerView;
     public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
+    protected AppBarLayout appBarLayout;
+    protected RecyclerView recyclerView;
+    protected CustomFontTextView toolBarTextView;
 
     public static List<String> getItems() {
-      return  new ArrayList<>(
+        return new ArrayList<>(
                 Arrays.asList("ORS 5", "Zinc 10", "Panadol", "COC", "POP", "Male condom", "Female condom", "Standard day method", "Emergency contraceptive", "RDTs", "ALU 6", "ALU 12", "ALU 18", "ALU 24")
-        ); }
+        );
+    }
 
-    private List<MonthStockUsageModel> getMonthStockUsageReportList() {
+   protected List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
         if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
@@ -55,15 +57,23 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
     public List<StockUsageItemModel> getStockUsageItemReportList(String month, String year) {
         List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
-        String providerName = CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
+        String providerName = getProviderName();
         for (String item : getItems()) {
-            String usage = StockUsageReportDao.getStockUsageForMonth(month, item, year, providerName);
+            String usage = getStockUsageForMonth(month, item, year, providerName);
             stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage, providerName));
         }
         return stockUsageItemModelsList;
     }
 
-    private void reloadRecycler(MonthStockUsageModel selected) {
+    public String getProviderName() {
+        return CoreChwApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
+    }
+
+    public String getStockUsageForMonth(String month, String stockName, String year, String providerName) {
+        return StockUsageReportDao.getStockUsageForMonth(month, stockName, year, providerName);
+    }
+
+    protected void reloadRecycler(MonthStockUsageModel selected) {
         String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 
@@ -97,12 +107,12 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                   //Implements Method From super Class
+                //Implements Method From super Class
             }
         });
 
         Toolbar toolbar = findViewById(R.id.back_to_nav_toolbar);
-        CustomFontTextView toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTextView = toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -115,7 +125,6 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         }
         toolbar.setNavigationOnClickListener(v -> finish());
         toolBarTextView.setText(getString(R.string.stock_usage_report));
-
         toolBarTextView.setOnClickListener(v -> finish());
         appBarLayout = findViewById(R.id.app_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

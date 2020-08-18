@@ -124,6 +124,8 @@ public interface CoreChildProfileContract {
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
+        void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
+
         void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID);
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
@@ -131,6 +133,12 @@ public interface CoreChildProfileContract {
         void processJson(@NotNull Context context, String eventType, @Nullable String tableName, String jsonString);
 
         void onJsonProcessed(String eventType, String taskType, @Nullable ProfileTask profileTask);
+
+        void startFormForEdit(String title, CommonPersonObjectClient client);
+
+        CommonPersonObjectClient getChildClient();
+
+        void startSickChildForm(CommonPersonObjectClient client);
     }
 
     interface Interactor {
@@ -157,6 +165,8 @@ public interface CoreChildProfileContract {
         String getCurrentLocationID(Context context);
 
         void createSickChildEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
+
+        void createSickChildFollowUpEvent(AllSharedPreferences allSharedPreferences, String jsonString) throws Exception;
 
         String getChildBaseEntityId();
 

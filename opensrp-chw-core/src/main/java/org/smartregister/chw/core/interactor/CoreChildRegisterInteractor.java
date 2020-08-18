@@ -143,10 +143,10 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
 
             List<EventClient> eventClientList = new ArrayList<>();
-            org.smartregister.domain.db.Event domainEvent = (eventJson != null) ?
-                    JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.db.Event.class) : null;
-            org.smartregister.domain.db.Client domainClient = (clientJson != null) ?
-                    JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.db.Client.class) : null;
+            org.smartregister.domain.Event domainEvent = (eventJson != null) ?
+                    JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
+            org.smartregister.domain.Client domainClient = (clientJson != null) ?
+                    JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
 
             eventClientList.add(new EventClient(domainEvent, domainClient));
 
