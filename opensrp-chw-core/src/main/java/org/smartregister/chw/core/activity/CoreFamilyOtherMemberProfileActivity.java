@@ -162,6 +162,10 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
             removeIndividualProfile();
             return true;
         }
+        else if(i == R.id.action_malaria_diagnosis){
+            startHfMalariaFollowupForm();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -179,6 +183,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     protected abstract void startMalariaRegister();
 
     protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHfMalariaFollowupForm();
 
     protected abstract void setIndependentClient(boolean isIndependent);
 

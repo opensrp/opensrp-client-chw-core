@@ -63,6 +63,11 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
     }
 
     @Override
+    public void startHfMalariaFollowupForm() {
+        // do nothing
+    }
+
+    @Override
     public void getRemoveBabyMenuItem(MenuItem item) {
         // do nothing
     }

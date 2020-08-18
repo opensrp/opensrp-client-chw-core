@@ -38,6 +38,11 @@ public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMem
     }
 
     @Override
+    public void startHfMalariaFollowupForm() {
+        // do nothing
+    }
+
+    @Override
     public void setIndependentClient(boolean isIndependent) {
         // do nothing
     }

@@ -269,8 +269,13 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     }
 
     public void onClickReport(View view) {
-        if (view.getId() == R.id.toggle_action_menu) {
-            NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+        try{
+            if (view != null && view.getId() == R.id.toggle_action_menu) {
+                NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+            }
+        }
+        catch (Exception ex){
+            Timber.e(ex, "View is NUll");
         }
     }
 
