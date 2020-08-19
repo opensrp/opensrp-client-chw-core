@@ -50,7 +50,7 @@ public class ReportUtilsTest {
         monthlyTally.setUpdatedAt(date);
         monthlyTally.setEdited(false);
         monthlyTally.setProviderId(providerId);
-        monthlyTally.setSubmissionId(Mockito.anyString());
+        monthlyTally.setSubmissionId("some-submission-id");
         monthlyTally.setCreatedAt(date);
         return monthlyTally;
     }
