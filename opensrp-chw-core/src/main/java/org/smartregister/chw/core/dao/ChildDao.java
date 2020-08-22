@@ -111,6 +111,18 @@ public class ChildDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
+    public static String getBaseEntityID(String thinkmdId) {
+        String sql = "select base_entity_id from ec_child where thinkmd_id = '" + thinkmdId + "'";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
+
+        List<String> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return null;
+
+        return res.get(0);
+    }
+
     public static boolean isMotherAlive(String motherBaseEntityId) {
         String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
 
