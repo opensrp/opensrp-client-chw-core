@@ -2,14 +2,19 @@ package org.smartregister.chw.core.provider;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jeasy.rules.api.Rules;
@@ -80,14 +85,39 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
     }
 
     private void addImageView(RegisterViewHolder viewHolder, int res_id) {
-        ImageView imageView = new ImageView(context);
-        int size = convertDpToPixel(22, context);
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        imageView.setImageResource(res_id);
-        imageView.getLayoutParams().height = size;
-        imageView.getLayoutParams().width = size;
-        LinearLayout linearLayout = (LinearLayout) viewHolder.memberIcon;
-        linearLayout.addView(imageView);
+        //Limit size of icons added to 3
+       if (viewHolder.memberIcon instanceof LinearLayout) {
+            LinearLayout iconsLayout = (LinearLayout) viewHolder.memberIcon;
+             if (iconsLayout.getChildCount() > 3) {
+                TextView counterTextView = (TextView) iconsLayout.getChildAt(iconsLayout.getChildCount() - 1);
+                counterTextView.setText(context.getString(R.string.icons_counter, Integer.parseInt(counterTextView.getText().toString().substring(1)) + 1));
+            } else if (iconsLayout.getChildCount() == 3) {
+                addCounterTextView(iconsLayout);
+            } else {
+                ImageView imageView = new ImageView(context);
+                int size = convertDpToPixel(22, context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.gravity = Gravity.CENTER;
+                imageView.setLayoutParams(layoutParams);
+                imageView.setImageResource(res_id);
+                imageView.getLayoutParams().height = size;
+                imageView.getLayoutParams().width = size;
+                iconsLayout.addView(imageView);
+            }
+        }
+    }
+
+    private void addCounterTextView(LinearLayout iconsLayout) {
+        TextView counterTextView = new TextView(context);
+        counterTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        counterTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.counter_drawable));
+        counterTextView.setText(context.getString(R.string.icons_counter, 1));
+        int size = convertDpToPixel(34, context);
+        counterTextView.getLayoutParams().height = size;
+        counterTextView.getLayoutParams().width = size;
+        counterTextView.setGravity(Gravity.CENTER);
+        counterTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        iconsLayout.addView(counterTextView);
     }
 
     private void updatePncAncIcons(RegisterViewHolder viewHolder, int womanCount, String register) {

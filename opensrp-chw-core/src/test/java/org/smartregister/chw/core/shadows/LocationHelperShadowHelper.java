@@ -8,14 +8,15 @@ import org.smartregister.location.helper.LocationHelper;
 @Implements(LocationHelper.class)
 public class LocationHelperShadowHelper {
 
+    private static LocationHelper locationHelperInstance;
+
     @Implementation
     public static LocationHelper getInstance() {
-        return Mockito.mock(LocationHelper.class);
-    }
+        if (locationHelperInstance == null) {
+            locationHelperInstance = Mockito.mock(LocationHelper.class);
+        }
+        Mockito.doReturn("test_location_id").when(locationHelperInstance).getOpenMrsLocationId(Mockito.anyString());
 
-
-    @Implementation
-    public String getOpenMrsLocationId(String locationName) {
-        return "test_location_id";
+        return locationHelperInstance;
     }
 }
