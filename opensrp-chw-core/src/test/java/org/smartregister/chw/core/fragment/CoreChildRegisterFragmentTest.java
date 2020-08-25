@@ -146,8 +146,8 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.refreshSyncProgressSpinner();
-        verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
-        verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(1)).setVisibility(View.GONE);
+        verify(syncButton, Mockito.times(1)).setVisibility(View.GONE);
     }
 
 
@@ -175,8 +175,8 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.onSyncComplete(fetchStatus);
-        verify(syncProgressBar, Mockito.times(2)).setVisibility(android.view.View.GONE);
-        verify(syncButton, Mockito.times(2)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(2)).setVisibility(View.GONE);
+        verify(syncButton, Mockito.times(2)).setVisibility(View.GONE);
     }
 
 
@@ -227,7 +227,7 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
     public void testSetupViews() {
         when(fragment.getActivity()).thenReturn(activity);
         when(fragment.getContext()).thenReturn(activity);
-        android.view.View view = LayoutInflater.from(activity).inflate(R.layout.fragment_base_register, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.fragment_base_register, null);
         fragment.setupViews(view);
 
         View dueOnlyLayout = view.findViewById(R.id.due_only_layout);
