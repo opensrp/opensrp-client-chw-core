@@ -5,30 +5,35 @@ import android.content.Context;
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
+import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.HashMap;
 
-@Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class})
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
+import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
+import static org.smartregister.util.JsonFormUtils.STEP1;
+
+@Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
 
     @Mock
@@ -43,7 +48,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void getAutoJsonEditMemberFormStringReturnsCorrectJSONObject() {
+    public void getAutoJsonEditMemberFormStringReturnsCorrectJSONObject() throws JSONException {
         Context context = RuntimeEnvironment.application;
         HashMap<String, String> detailsMap = new HashMap<>();
         HashMap<String, String> columnMaps = new HashMap<>();
@@ -80,11 +85,16 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
                 "familyRelationKey");
         UtilsShadowUtil.setMetadata(metadata);
 
+        String formTitle = "Sample test registration form";
+        String familyName = "Sample Family Name";
         BAJsonFormUtils baJsonFormUtils = new BAJsonFormUtils(coreChwApplication);
-        JSONObject resultObject = baJsonFormUtils.getAutoJsonEditMemberFormString("test form", "family_register",
-                context, client, Utils.metadata().familyMemberRegister.updateEventType, "familyName", false);
+        JSONObject resultObject = baJsonFormUtils.getAutoJsonEditMemberFormString(formTitle, "family_register",
+                context, client, Utils.metadata().familyMemberRegister.updateEventType, familyName, false);
         Assert.assertNotNull(resultObject);
-        // Assert object contains expected values
+        JSONObject formMetadata = resultObject.getJSONObject(org.smartregister.family.util.JsonFormUtils.METADATA);
+        Assert.assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
+        JSONObject stepOne = resultObject.getJSONObject(STEP1);
+        Assert.assertEquals(formTitle, stepOne.getString(TITLE));
     }
 
     private String getClientJsonString() {
