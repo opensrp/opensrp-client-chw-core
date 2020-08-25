@@ -34,7 +34,7 @@ public class FamilyRegisterFragmentPresenter extends BaseFamilyRegisterFragmentP
 
     @Override
     public String getMainCondition() {
-     return  String.format(" %s is NULL AND (%s is NULL OR %s = '%s')", DBConstants.KEY.DATE_REMOVED,
-             DBConstants.KEY.ENTITY_TYPE, DBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.FAMILY);
+        return  String.format(" %s is NULL AND (%s is NULL OR %s = '%s' OR %s = '%s')", DBConstants.KEY.DATE_REMOVED,
+                DBConstants.KEY.ENTITY_TYPE, DBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.FAMILY, DBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.FAMILY_MEMBER);
     }
 }
