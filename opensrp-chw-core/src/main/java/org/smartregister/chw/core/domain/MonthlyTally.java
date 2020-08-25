@@ -13,13 +13,21 @@ public class MonthlyTally extends Tally implements Serializable {
     private boolean edited;
     @JsonProperty
     private String providerId;
-
+    @JsonProperty
+    private String submissionId;
     @JsonProperty
     private Date updatedAt;
-
-
     @JsonProperty
     private Date createdAt;
+
+
+    public String getSubmissionId() {
+        return submissionId;
+    }
+
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
+    }
 
     public Date getDateSent() {
         return dateSent;

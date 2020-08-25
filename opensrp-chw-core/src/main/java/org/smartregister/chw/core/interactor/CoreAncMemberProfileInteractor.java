@@ -68,7 +68,7 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
     }
 
     @Override
-    protected MemberObject getEmergencyTransportDetails(MemberObject memberObject) {
+    protected MemberObject getPregnancyRiskDetails(MemberObject memberObject) {
         memberObject.setPregnancyRiskLevel(VisitDao.getMemberPregnancyRiskLevel(memberObject.getBaseEntityId()));
         return memberObject;
     }

@@ -95,7 +95,7 @@ public abstract class CoreFamilyProfileChangeHead extends Fragment implements Vi
     }
 
     protected void validateSave() {
-        Boolean valid = memberAdapter.validateSave();
+        boolean valid = memberAdapter.validateSave();
         if (valid) {
             FamilyMember res = memberAdapter.getSelectedResults();
             if (res != null) {
@@ -113,7 +113,7 @@ public abstract class CoreFamilyProfileChangeHead extends Fragment implements Vi
             if (memberAdapter == null) {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 memberAdapter = new MemberAdapter(getMyContext(), members, this);
-                memberAdapter.setFlavorPhoneNumberLength(phoneNumberLengthFlavor);
+                memberAdapter.setFlavor(phoneNumberLengthFlavor);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(memberAdapter);
             } else {
