@@ -192,7 +192,8 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
         switchViews(dueOnlyLayout, true);
     }
 
-    protected void FilterAndSortExecute() {
+    protected void filterAndSortExecute()
+    {
         filterandSortExecute(countBundle());
     }
 
@@ -200,7 +201,7 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
         filters = filterString;
         joinTable = joinTableString;
         mainCondition = mainConditionString;
-        FilterAndSortExecute();
+        filterAndSortExecute();
     }
 
     private String searchText() {
