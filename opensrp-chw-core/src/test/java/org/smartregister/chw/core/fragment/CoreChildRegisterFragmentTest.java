@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -103,17 +102,17 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
     @Test
     public void testInitializePresenter() {
         fragment.initializePresenter();
-        Assert.assertNotNull(presenter);
+        assertNotNull(presenter);
     }
 
     @Test
     public void testGetMainCondition() {
-        Assert.assertEquals(fragment.getMainCondition(), presenter.getMainCondition());
+        assertEquals(fragment.getMainCondition(), presenter.getMainCondition());
     }
 
     @Test
     public void testGetDefaultSortQuery() {
-        Assert.assertEquals(fragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
+        assertEquals(fragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
     }
 
     private void getDueFilterCondition() {
@@ -126,14 +125,13 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         getDueFilterCondition();
         Mockito.doReturn(textView).when(fragment).getDueOnlyTextView(fragment.dueOnlyLayout);
         fragment.onResumption();
-        Assert.assertEquals(fragment.dueOnlyLayout, view);
+        assertEquals(fragment.dueOnlyLayout, view);
     }
 
     @Test
     public void testGetToolBarTitle() {
         int title = R.string.child_register_title;
-        ;
-        Assert.assertEquals(fragment.getToolBarTitle(), title);
+        assertEquals(fragment.getToolBarTitle(), title);
     }
 
     @Test
@@ -148,27 +146,27 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.refreshSyncProgressSpinner();
-        Mockito.verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
-        Mockito.verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
+        verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
     }
 
 
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
         fragment.getMainCondition();
-        Mockito.verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
+        verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
     }
 
     @Test
     public void getDefaultSortQueryCallsPresenterGetSortQuery() {
         fragment.getDefaultSortQuery();
-        Mockito.verify(fragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
+        verify(fragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
     }
 
     @Test
     public void getDueFilterConditionCallsPresenterGetSortQuery() {
         fragment.getDueFilterCondition();
-        Mockito.verify(fragment.presenter(), Mockito.times(1)).getDueFilterCondition();
+        verify(fragment.presenter(), Mockito.times(1)).getDueFilterCondition();
     }
 
     @Test
@@ -177,8 +175,8 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.onSyncComplete(fetchStatus);
-        Mockito.verify(syncProgressBar, Mockito.times(2)).setVisibility(android.view.View.GONE);
-        Mockito.verify(syncButton, Mockito.times(2)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(2)).setVisibility(android.view.View.GONE);
+        verify(syncButton, Mockito.times(2)).setVisibility(android.view.View.GONE);
     }
 
 
@@ -204,7 +202,6 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         fragment.onViewClicked(view);
         Intent intent = shadowOf(childRegisterActivity).getNextStartedActivity();
         assertNotNull(intent);
-        // assertEquals( Utils.metadata().profileActivity, shadowOf(intent).getIntentClass());
     }
 
     @Test
@@ -223,14 +220,14 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         Whitebox.setInternalState(fragment, "syncProgressBar", syncProgressBar);
         Whitebox.setInternalState(fragment, "syncButton", syncButton);
         fragment.refreshSyncProgressSpinner();
-        verify(syncButton).setVisibility(android.view.View.GONE);
+        verify(syncButton).setVisibility(View.GONE);
     }
 
     @Test
     public void testSetupViews() {
         when(fragment.getActivity()).thenReturn(activity);
         when(fragment.getContext()).thenReturn(activity);
-        android.view.View view = LayoutInflater.from(activity).inflate(org.smartregister.family.R.layout.fragment_base_register, null);
+        android.view.View view = LayoutInflater.from(activity).inflate(R.layout.fragment_base_register, null);
         fragment.setupViews(view);
 
         View dueOnlyLayout = view.findViewById(R.id.due_only_layout);
