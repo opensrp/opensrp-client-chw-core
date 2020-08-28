@@ -14,10 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.robolectric.annotation.Config;
 import org.smartregister.CoreLibrary;
-import org.smartregister.chw.core.application.TestApplication;
-import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
@@ -26,7 +23,6 @@ import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
 @RunWith(PowerMockRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class})
 public class FHIRBundleDaoTest {
 
     @Mock
