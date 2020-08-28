@@ -111,8 +111,8 @@ public class ChildDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
-    public static String getBaseEntityID(String thinkmdId) {
-        String sql = "select base_entity_id from ec_child where thinkmd_id = '" + thinkmdId + "'";
+    public static String getBaseEntityID(String identifierType, String id) {
+        String sql = "select base_entity_id from ec_child where " + identifierType + " = '" + id + "'";
 
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
 
