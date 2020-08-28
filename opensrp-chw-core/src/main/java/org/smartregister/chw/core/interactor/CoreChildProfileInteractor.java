@@ -422,6 +422,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         // save the event in event table
         try {
             final Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(org.smartregister.family.util.Utils.getAllSharedPreferences(), jsonString, tableName);
+            org.smartregister.chw.anc.util.JsonFormUtils.tagEvent(org.smartregister.family.util.Utils.getAllSharedPreferences(), baseEvent);
             NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
             presenter.onJsonProcessed(eventType, CoreConstants.EventType.SICK_CHILD, getSickChildVisit(context, baseEvent.getBaseEntityId()));
         } catch (Exception e) {
