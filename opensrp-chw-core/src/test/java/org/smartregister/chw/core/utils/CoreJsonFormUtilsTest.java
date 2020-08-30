@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
         UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
