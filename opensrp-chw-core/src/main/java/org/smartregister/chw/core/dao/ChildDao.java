@@ -123,10 +123,10 @@ public class ChildDao extends AbstractDao {
         return res.get(0);
     }
 
-    public static String getCarePlanEventDate(String baseEntityId) {
-        String sql = "select care_plan_date from ec_child where base_entity_id = '" + baseEntityId + "'";
+    public static String queryColumnWithEntityId(String baseEntityId, String columnName) {
+        String sql = "select '" + columnName + "' from ec_child where base_entity_id = '" + baseEntityId + "'";
 
-        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, columnName);
 
         List<String> res = readData(sql, dataMap);
         if (res == null || res.size() != 1)
@@ -135,16 +135,14 @@ public class ChildDao extends AbstractDao {
         return res.get(0);
     }
 
-    public static String getCarePlanAssessment(String baseEntityId) {
-        String sql = "select html_assessment from ec_child where base_entity_id = '" + baseEntityId + "'";
+    public static boolean isThinkmdCarePlanExist(String baseEntityId){
+        String sql = "select thinkmd_id from ec_child where base_entity_id = '" + baseEntityId + "'";
 
-        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
 
-        List<String> res = readData(sql, dataMap);
-        if (res == null || res.size() != 1)
-            return null;
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "thinkmd_id");
 
-        return res.get(0);
+        List<Integer> res = readData(sql, dataMap);
+        return res != null && res.equals(0);
     }
 
     public static boolean isMotherAlive(String motherBaseEntityId) {
