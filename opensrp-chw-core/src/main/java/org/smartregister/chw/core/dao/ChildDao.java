@@ -123,6 +123,30 @@ public class ChildDao extends AbstractDao {
         return res.get(0);
     }
 
+    public static String getCarePlanEventDate(String baseEntityId) {
+        String sql = "select care_plan_date from ec_child where base_entity_id = '" + baseEntityId + "'";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
+
+        List<String> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return null;
+
+        return res.get(0);
+    }
+
+    public static String getCarePlanAssessment(String baseEntityId) {
+        String sql = "select html_assessment from ec_child where base_entity_id = '" + baseEntityId + "'";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
+
+        List<String> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return null;
+
+        return res.get(0);
+    }
+
     public static boolean isMotherAlive(String motherBaseEntityId) {
         String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
 

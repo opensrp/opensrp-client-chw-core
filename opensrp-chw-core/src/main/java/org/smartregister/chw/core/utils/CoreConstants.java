@@ -671,6 +671,7 @@ public class CoreConstants {
         public static final String FAMILY_HEAD_NAME = "family_head_name";
         public static final String FAMILY_HEAD_PHONE_NUMBER = "family_head_phone_number";
         public static final String TOOLBAR_TITLE = "toolbar_title";
+        public static final String CONTENT_TO_DISPLAY = "content_to_display";
     }
 
     public static final class IMMUNIZATION_CONSTANT {
