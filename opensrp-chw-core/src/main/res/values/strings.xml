@@ -704,4 +704,7 @@
     <string name="thinkmd_health_assessment">ThinkMD health assessment</string>
     <string name="thinkmd_careplan">ThinkMD care plan (%1$s)</string>
     <string name="care_plan">Care plan</string>
+    <string name="thinkmd_identifier_type">thinkmd_id</string>
+    <string name="thinkmd_assessment_saved">ThinkMD health assessment saved</string>
+    <string name="no_thinkmd_care_plan_found">No thinkmd care plan found</string>
 </resources>

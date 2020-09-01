@@ -439,4 +439,32 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             interactor = null;
         }
     }
+
+    public void createCarePlanEvent(@NotNull Context context, @NotNull String encodedBundle) {
+        interactor.createCarePlanEvent(context, encodedBundle, this);
+        getView().displayToast(R.string.thinkmd_assessment_saved);
+    }
+
+    @Override
+    public void carePlanEventCreated() {
+        if (getView() == null) return;
+        getView().displayToast(R.string.thinkmd_assessment_saved);
+    }
+
+    @Override
+    public void launchThinkMDHealthAssessment(@NotNull Context context) {
+        interactor.launchThinkMDHealthAssessment(context);
+    }
+
+    @Override
+    public void showThinkMDCarePlan(@NotNull Context context) {
+        interactor.showThinkMDCarePlan(context, this);
+    }
+
+    @Override
+    public void noThinkMDCarePlanFound() {
+        if (getView() == null) return;
+        getView().displayToast(R.string.no_thinkmd_care_plan_found);
+    }
+
 }
