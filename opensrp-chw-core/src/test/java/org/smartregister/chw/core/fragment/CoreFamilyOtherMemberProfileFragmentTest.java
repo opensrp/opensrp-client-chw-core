@@ -40,15 +40,14 @@ public class CoreFamilyOtherMemberProfileFragmentTest extends BaseUnitTest {
     @Mock
     private FamilyOtherMemberProfileFragmentContract.Presenter presenter;
     private CoreFamilyOtherMemberProfileFragment fragment;
-    private FragmentActivity activity;
 
     @Before
     public void setUp() {
-        org.smartregister.Context.bindtypes = new ArrayList<>();
+        Context.bindtypes = new ArrayList<>();
         fragment = Mockito.mock(CoreFamilyOtherMemberProfileFragment.class, Mockito.CALLS_REAL_METHODS);
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        FragmentActivity activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(fragment, "presenter", presenter);
         SyncStatusBroadcastReceiver.init(activity);
