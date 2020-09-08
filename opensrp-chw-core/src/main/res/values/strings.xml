@@ -210,6 +210,7 @@
     <string name="select_a_new_family_head">Select a new family head</string>
     <string name="remove_family_count">%s adults and %s U5 children</string>
 
+    <string name="yellow_fever">Yellow Fever</string>
 
     <string name="medical_title">Back to %1$s\'s profile</string>
     <string name="medical_last_visit">%1$s ago</string>
@@ -703,4 +704,7 @@
     <string name="full_notification_info">View full notification info</string>
     <string name="thinkmd_health_assessment">ThinkMD health assessment</string>
     <string name="thinkmd_careplan">ThinkMD care plan (%1$s)</string>
+
+    <!-- LMH Last Visit Row-->
+    <string name="view_vaccine_histroy">View vaccine history</string>
 </resources>
