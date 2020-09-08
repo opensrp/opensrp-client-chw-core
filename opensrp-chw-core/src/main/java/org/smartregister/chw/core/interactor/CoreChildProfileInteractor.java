@@ -24,6 +24,7 @@ import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;
 import org.smartregister.chw.core.repository.ChwTaskRepository;
+import org.smartregister.chw.core.utils.BaChildUtilsFlv;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.ChwServiceSchedule;
 import org.smartregister.chw.core.utils.CoreChildService;
@@ -72,7 +73,7 @@ import timber.log.Timber;
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
     protected AppExecutors appExecutors;
-    private CommonPersonObjectClient pClient;
+    public CommonPersonObjectClient pClient;
     private Map<String, Date> vaccineList = new LinkedHashMap<>();
     private String childBaseEntityId;
 
@@ -181,13 +182,20 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void onDestroy(boolean isChangingConfiguration) {        //todo
     }
 
+    private String getQuery(String baseEntityId){
+        if(CoreChwApplication.getInstance().getChildFlavorUtil()){
+            return BaChildUtilsFlv.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
+        }
+        else {
+            return CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
+        }
+    }
+
     @Override
     public void updateChildCommonPerson(String baseEntityId) {
-        String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
-
         Cursor cursor = null;
         try {
-            cursor = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).rawCustomQueryForAdapter(query);
+            cursor = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).rawCustomQueryForAdapter(getQuery(baseEntityId));
             if (cursor != null && cursor.moveToFirst()) {
                 CommonPersonObject personObject = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).readAllcommonforCursorAdapter(cursor);
                 pClient = new CommonPersonObjectClient(personObject.getCaseId(),
@@ -217,11 +225,11 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     @Override
     public void refreshProfileView(final String baseEntityId, final boolean isForEdit, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
-            String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
+           // String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
 
             Cursor cursor = null;
             try {
-                cursor = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).rawCustomQueryForAdapter(query);
+                cursor = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).rawCustomQueryForAdapter(getQuery(baseEntityId));
                 if (cursor != null && cursor.moveToFirst()) {
                     CommonPersonObject personObject = getCommonRepository(CoreConstants.TABLE_NAME.CHILD).readAllcommonforCursorAdapter(cursor);
                     pClient = new CommonPersonObjectClient(personObject.getCaseId(),

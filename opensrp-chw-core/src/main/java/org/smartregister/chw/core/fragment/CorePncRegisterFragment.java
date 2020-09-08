@@ -239,6 +239,11 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
                 MessageFormat.format(" or {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.UNIQUE_ID, search);
     }
 
+    private String getCountMainCondition() {
+        return " " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.DATE_REMOVED + " is null " +
+                "AND " + CoreConstants.TABLE_NAME.ANC_MEMBER + "." + DBConstants.KEY.IS_CLOSED + " is 0 ";
+    }
+
     @Override
     public void countExecute() {
         Cursor cursor = null;
@@ -252,7 +257,7 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
                             + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
                             + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
 
-                    .withWhereClause(presenter().getMainCondition());
+                    .withWhereClause(getCountMainCondition());
 
             if (dueFilterActive)
                 generator.withWhereClause(getDueCondition());
