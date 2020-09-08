@@ -32,7 +32,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
-import org.smartregister.chw.core.utils.UpdateMalariaFollowUpStatusTaskUtil;
+import org.smartregister.chw.core.utils.MalariaFollowUpStatusTaskUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.domain.FpMemberObject;
@@ -126,7 +126,7 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.family_planning_member_profile_menu, menu);
         if (MalariaDao.isRegisteredForMalaria(fpMemberObject.getBaseEntityId())) {
-            org.smartregister.util.Utils.startAsyncTask(new UpdateMalariaFollowUpStatusTaskUtil(menu, fpMemberObject.getBaseEntityId()), null);
+            org.smartregister.util.Utils.startAsyncTask(new MalariaFollowUpStatusTaskUtil(menu, fpMemberObject.getBaseEntityId()), null);
         } else {
             menu.findItem(R.id.action_malaria_registration).setVisible(true);
         }

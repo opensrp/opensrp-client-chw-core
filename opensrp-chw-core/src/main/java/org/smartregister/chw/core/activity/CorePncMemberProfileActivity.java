@@ -2,7 +2,6 @@ package org.smartregister.chw.core.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +23,9 @@ import org.smartregister.chw.core.interactor.CoreChildProfileInteractor;
 import org.smartregister.chw.core.interactor.CorePncMemberProfileInteractor;
 import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.presenter.CorePncMemberProfilePresenter;
-import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.MalariaVisitUtil;
-import org.smartregister.chw.core.utils.UpdateMalariaFollowUpStatusTaskUtil;
+import org.smartregister.chw.core.utils.MalariaFollowUpStatusTaskUtil;
 import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.chw.pnc.activity.BasePncMemberProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -36,7 +33,6 @@ import org.smartregister.domain.AlertStatus;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.util.Utils;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +142,7 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
             menu.add(0, R.id.action_pnc_remove_baby, 700 + i, getString(R.string.remove_child_form_title, childModels.get(i).getFirstName()));
             menuItemRemoveNames.put(getString(R.string.remove_child_form_title, childModels.get(i).getFirstName()), childModels.get(i).getBaseEntityId());
             if (MalariaDao.isRegisteredForMalaria(baseEntityID)) {
-                Utils.startAsyncTask(new UpdateMalariaFollowUpStatusTaskUtil(menu, baseEntityID), null);
+                Utils.startAsyncTask(new MalariaFollowUpStatusTaskUtil(menu, baseEntityID), null);
             } else {
                 menu.findItem(R.id.action_malaria_registration).setVisible(true);
             }

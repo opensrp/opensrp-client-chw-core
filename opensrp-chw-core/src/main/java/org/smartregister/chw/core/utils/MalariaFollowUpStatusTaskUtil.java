@@ -9,13 +9,13 @@ import org.smartregister.chw.malaria.dao.MalariaDao;
 
 import java.util.Date;
 
-public class UpdateMalariaFollowUpStatusTaskUtil extends AsyncTask<Void, Void, Void> {
+public class MalariaFollowUpStatusTaskUtil extends AsyncTask<Void, Void, Void> {
 
     public final Menu menu;
     public final String baseEntityId;
     public MalariaFollowUpRule malariaFollowUpRule;
 
-    public UpdateMalariaFollowUpStatusTaskUtil(Menu menu, String baseEntityId) {
+    public MalariaFollowUpStatusTaskUtil(Menu menu, String baseEntityId) {
         this.menu = menu;
         this.baseEntityId = baseEntityId;
     }
