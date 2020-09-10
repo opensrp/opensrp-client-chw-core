@@ -111,6 +111,10 @@ public class CorePncMemberProfileActivityTest extends BaseUnitTest {
         Mockito.doReturn(R.id.action__pnc_danger_sign_outcome).when(item).getItemId();
         activity.onOptionsItemSelected(item);
         Mockito.verify(presenter).startPncDangerSignsOutcomeForm();
+
+        Mockito.doReturn(R.id.action_malaria_diagnosis).when(item).getItemId();
+        activity.onOptionsItemSelected(item);
+        Mockito.verify(activity).startHfMalariaFollowupForm();
     }
 
     @Test

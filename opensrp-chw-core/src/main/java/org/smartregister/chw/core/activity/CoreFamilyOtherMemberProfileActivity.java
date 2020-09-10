@@ -86,6 +86,11 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     }
 
     @Override
+    public void setProfileDetailOne(String gender) {
+        super.setProfileDetailOne(org.smartregister.chw.core.utils.Utils.getGenderLanguageSpecific(this, gender));
+    }
+
+    @Override
     protected void setupViews() {
         super.setupViews();
 
@@ -154,7 +159,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_registration) {
             if (isIndependent) {
                 startFormForEdit(R.string.edit_all_client_member_form_title);
-            }else {
+            } else {
                 startFormForEdit(R.string.edit_member_form_title);
             }
             return true;
@@ -166,6 +171,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
             return true;
         } else if (i == R.id.action_tb_registration) {
             startTbRegister();
+        } else if (i == R.id.action_malaria_diagnosis) {
+            startHfMalariaFollowupForm();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -189,6 +196,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     protected abstract void startTbRegister();
 
     protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHfMalariaFollowupForm();
 
     protected abstract void setIndependentClient(boolean isIndependent);
 

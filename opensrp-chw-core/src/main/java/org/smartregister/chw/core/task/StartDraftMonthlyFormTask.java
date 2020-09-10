@@ -82,38 +82,51 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             // This map holds each category as key and all the fields for that category as the
             // value (jsonarray)
             for (Hia2Indicator hia2Indicator : hia2Indicators) {
-                JSONObject jsonObject = new JSONObject();
+
                 if (hia2Indicator.getDescription() == null) {
                     hia2Indicator.setDescription("");
                 }
                 int resourceId = baseActivity.getResources().getIdentifier(hia2Indicator.getDescription(), "string", baseActivity.getPackageName());
                 String label = baseActivity.getResources().getString(resourceId);
-
-                createJsonObject(jsonObject, hia2Indicator, label, monthlyTallies);
+                JSONObject labelJsonObject = new JSONObject();
+                JSONObject editTextJsonObject = new JSONObject();
+                updateJsonObjects(editTextJsonObject, labelJsonObject, hia2Indicator, label, monthlyTallies);
                 if (i <= 5) {
-                    fieldsArray.put(jsonObject);
+                    fieldsArray.put(labelJsonObject);
+                    fieldsArray.put(editTextJsonObject);
                 } else if (i <= 9) {
-                    fieldsArray2.put(jsonObject);
+                    fieldsArray2.put(labelJsonObject);
+                    fieldsArray2.put(editTextJsonObject);
                 } else if (i <= 10) {
-                    fieldsArray3.put(jsonObject);
+                    fieldsArray3.put(labelJsonObject);
+                    fieldsArray3.put(editTextJsonObject);
                 } else if (i <= 15) {
-                    fieldsArray4.put(jsonObject);
+                    fieldsArray4.put(labelJsonObject);
+                    fieldsArray4.put(editTextJsonObject);
                 } else if (i <= 17) {
-                    fieldsArray5.put(jsonObject);
+                    fieldsArray5.put(labelJsonObject);
+                    fieldsArray5.put(editTextJsonObject);
                 } else if (i <= 29) {
-                    fieldsArray6.put(jsonObject);
+                    fieldsArray6.put(labelJsonObject);
+                    fieldsArray6.put(editTextJsonObject);
                 } else if (i <= 54) {
-                    fieldsArray7.put(jsonObject);
+                    fieldsArray7.put(labelJsonObject);
+                    fieldsArray7.put(editTextJsonObject);
                 } else if (i <= 74) {
-                    fieldsArray8.put(jsonObject);
+                    fieldsArray8.put(labelJsonObject);
+                    fieldsArray8.put(editTextJsonObject);
                 } else if (i <= 99) {
-                    fieldsArray9.put(jsonObject);
+                    fieldsArray9.put(labelJsonObject);
+                    fieldsArray9.put(editTextJsonObject);
                 } else if (i <= 104) {
-                    fieldsArray10.put(jsonObject);
+                    fieldsArray10.put(labelJsonObject);
+                    fieldsArray10.put(editTextJsonObject);
                 } else if (i <= 119) {
-                    fieldsArray11.put(jsonObject);
+                    fieldsArray11.put(labelJsonObject);
+                    fieldsArray11.put(editTextJsonObject);
                 } else {
-                    fieldsArray12.put(jsonObject);
+                    fieldsArray12.put(labelJsonObject);
+                    fieldsArray12.put(editTextJsonObject);
                 }
                 i++;
             }
@@ -146,34 +159,36 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         paramForm.setHidePreviousButton(true);
         paramForm.setNavigationBackground(R.color.due_profile_blue);
         intent.putExtra("form", paramForm);
-
         intent.putExtra(JsonFormConstants.SKIP_VALIDATION, false);
-
         return intent;
     }
 
-    private void createJsonObject(JSONObject jsonObject, Hia2Indicator hia2Indicator, String label, List<MonthlyTally> monthlyTallies) {
+    private void updateJsonObjects(JSONObject editTextJsonObject, JSONObject labelJsonObject, Hia2Indicator hia2Indicator, String label, List<MonthlyTally> monthlyTallies) {
         try {
+            //Update label JsonObject
+            labelJsonObject.put(JsonFormConstants.KEY, String.format("%s_%s", JsonFormConstants.LABEL, hia2Indicator.getIndicatorCode()));
+            labelJsonObject.put(JsonFormConstants.TYPE, JsonFormConstants.LABEL);
+            labelJsonObject.put(JsonFormConstants.TEXT_COLOR, "#636462");
+            labelJsonObject.put(JsonFormConstants.TEXT, label);
+            labelJsonObject.put(JsonFormConstants.V_REQUIRED, new JSONObject().put(JsonFormConstants.VALUE, true));
 
+             //Update EditTextJsonObject
+            editTextJsonObject.put(JsonFormConstants.KEY, hia2Indicator.getIndicatorCode());
+            editTextJsonObject.put(JsonFormConstants.TYPE, JsonFormConstants.NATIVE_EDIT_TEXT);
+            editTextJsonObject.put(JsonFormConstants.EDIT_TEXT_STYLE, JsonFormConstants.BORDERED_EDIT_TEXT);
+            editTextJsonObject.put(JsonFormConstants.VALUE, Utils.retrieveValue(monthlyTallies, hia2Indicator));
             JSONObject vRequired = new JSONObject();
             vRequired.put(JsonFormConstants.VALUE, "true");
-            vRequired.put(JsonFormConstants.ERR, "Specify: " + hia2Indicator.getDescription());
+            vRequired.put(JsonFormConstants.ERR,"Specify: " + label);
+            editTextJsonObject.put(JsonFormConstants.V_REQUIRED, vRequired);
             JSONObject vNumeric = new JSONObject();
             vNumeric.put(JsonFormConstants.VALUE, "true");
-            vNumeric.put(JsonFormConstants.ERR, "Value should be numeric");
-
-            jsonObject.put(JsonFormConstants.KEY, hia2Indicator.getIndicatorCode());
-            jsonObject.put(JsonFormConstants.TYPE, "edit_text");
-            //jsonObject.put(JsonFormConstants.READ_ONLY, HIA2ReportsActivity.getReadOnlyList().contains(hia2Indicator.getIndicatorCode()));
-            jsonObject.put(JsonFormConstants.HINT, label);
-            jsonObject.put(JsonFormConstants.VALUE, Utils.retrieveValue(monthlyTallies, hia2Indicator));
-            jsonObject.put(JsonFormConstants.V_REQUIRED, vRequired);
-            jsonObject.put(JsonFormConstants.V_NUMERIC, vNumeric);
-            jsonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
-            jsonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
-            jsonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
-            jsonObject.put(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR, hia2Indicator.getIndicatorCode());
-
+            vNumeric.put(JsonFormConstants.ERR, baseActivity.getString(R.string.stock_report_value_error));
+            editTextJsonObject.put(JsonFormConstants.V_NUMERIC, vNumeric);
+            editTextJsonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
+            editTextJsonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
+            editTextJsonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
+            editTextJsonObject.put(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR, hia2Indicator.getIndicatorCode());
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }

@@ -33,7 +33,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
     private Animation slideUp;
     private Animation slideDown;
     private MemberAdapterListener memberAdapterListener;
-    private Flavor flavorPhoneNumberLength;
+    private Flavor flavor;
 
     public MemberAdapter(@NonNull Context context, List<FamilyMember> myDataset, MemberAdapterListener memberAdapterListener) {
         familyMembers = myDataset;
@@ -43,8 +43,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         slideDown = AnimationUtils.loadAnimation(context, R.anim.slide_up);
     }
 
-    public void setFlavorPhoneNumberLength(Flavor flavorPhoneNumberLength) {
-        this.flavorPhoneNumberLength = flavorPhoneNumberLength;
+    public void setFlavor(Flavor flavor) {
+        this.flavor = flavor;
     }
 
     @NonNull
@@ -128,7 +128,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         if (currentViewHolder == null) {
             return false;
         }
-        boolean res = validateTextView(currentViewHolder.etPhone);
+        boolean res = flavor.isPhoneNumberValid(currentViewHolder.etPhone, currentViewHolder.etAlternatePhone);
 
         if (!res) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -145,17 +145,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
 
         return res;
 
-    }
-
-    private boolean validateTextView(TextView textView) {
-        String text = textView.getText().toString().trim();
-        /*
-        if (text.length() > 0 && text.length() < 8 || text.length() > 16) {
-            textView.setError(context.getString(R.string.number_8_16));
-            return false;
-        }
-         */
-        return text.length() != 0;
     }
 
     public FamilyMember getSelectedResults() {
@@ -178,6 +167,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
 
     public interface Flavor {
         boolean isPhoneNumberLength16Digit();
+
+        default boolean isPhoneNumberValid(EditText phoneEditText, EditText alternatePhoneEditText) {
+            return phoneEditText.getText().length() != 0 || alternatePhoneEditText.length() != 0;
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -89,6 +89,13 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
+    public void settingGenderSetsTranslatedString() {
+        String gender = "Female";
+        activity.setProfileDetailOne(gender);
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "detailOneView"));
+    }
+
+    @Test
     public void testOnOptionsItemSelected() {
         activity = Mockito.spy(activity);
         Mockito.doNothing().when(activity).startActivityForResult(Mockito.any(), Mockito.anyInt());
@@ -133,5 +140,9 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
         Mockito.doReturn(R.id.action_remove_member).when(item).getItemId();
         activity.onOptionsItemSelected(item);
         Mockito.verify(activity).removeIndividualProfile();
+
+        Mockito.doReturn(R.id.action_malaria_diagnosis).when(item).getItemId();
+        activity.onOptionsItemSelected(item);
+        Mockito.verify(activity).startHfMalariaFollowupForm();
     }
 }

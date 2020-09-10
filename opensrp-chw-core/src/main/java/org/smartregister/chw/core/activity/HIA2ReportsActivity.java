@@ -26,6 +26,7 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.SectionsPagerAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -42,6 +43,7 @@ import org.smartregister.chw.core.utils.ReportUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Response;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.service.HTTPAgent;
 import org.smartregister.util.JsonFormUtils;
@@ -62,8 +64,10 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
 import static org.smartregister.util.JsonFormUtils.KEY;
 import static org.smartregister.util.JsonFormUtils.VALUE;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class HIA2ReportsActivity extends MultiLanguageActivity
         implements NavigationView.OnNavigationItemSelectedListener, SyncStatusBroadcastReceiver.SyncStatusListener {
@@ -121,13 +125,14 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 Utils.startAsyncTask(new StartDraftMonthlyFormTask(this, date, formName), null);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
             try {
                 String jsonString = data.getStringExtra("json");
@@ -269,8 +274,13 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     }
 
     public void onClickReport(View view) {
-        if (view.getId() == R.id.toggle_action_menu) {
-            NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+        try{
+            if (view != null && view.getId() == R.id.toggle_action_menu) {
+                NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+            }
+        }
+        catch (Exception ex){
+            Timber.e(ex, "View is NUll");
         }
     }
 
@@ -353,9 +363,16 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                         ReportUtils.createReport(tallyReports, month, REPORT_NAME);
 
                         for (MonthlyTally curTally : tallies) {
-                            curTally.setDateSent(Calendar.getInstance().getTime());
-                            monthlyTalliesRepository.save(curTally);
+                            Date dateSent = curTally.getDateSent() != null ? curTally.getDateSent() : Calendar.getInstance().getTime();
+                            Date dateCreated = curTally.getCreatedAt() != null ? curTally.getCreatedAt() : Calendar.getInstance().getTime();
+                            curTally.setDateSent(dateSent);
+                            curTally.setCreatedAt(dateCreated);
+                            ReportUtils.addEvent(ReportUtils.geValues(curTally, null), curTally.getSubmissionId(), CoreConstants.JSON_FORM.IN_APP_REPORT_FORM, CoreConstants.TABLE_NAME.MONTHLY_TALLIES_REPORT);
                         }
+                        long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+                        Date lastSyncDate = new Date(lastSyncTimeStamp);
+                        NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
+                        getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
                     } else {
                         Log.d("Tallies", "tallies are  null");
                     }

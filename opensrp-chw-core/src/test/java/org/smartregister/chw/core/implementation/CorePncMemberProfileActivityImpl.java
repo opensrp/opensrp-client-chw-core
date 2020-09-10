@@ -69,6 +69,9 @@ public class CorePncMemberProfileActivityImpl extends CorePncMemberProfileActivi
 
     @Override
     protected void startTbRegister() {
+
+    }
+    public void startHfMalariaFollowupForm() {
         // do nothing
     }
 
