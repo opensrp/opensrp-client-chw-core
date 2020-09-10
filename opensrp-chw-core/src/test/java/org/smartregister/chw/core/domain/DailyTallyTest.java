@@ -17,7 +17,8 @@ public class DailyTallyTest {
 
     @Test
     public void testGetAndSetDay() {
-        dailyTally.setDay(new Date());
-        Assert.assertEquals(dailyTally.getDay(), new Date());
+        Date day = new Date();
+        dailyTally.setDay(day);
+        Assert.assertEquals(dailyTally.getDay(), day);
     }
 }

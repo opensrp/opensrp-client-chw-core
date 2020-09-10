@@ -674,6 +674,8 @@
     <string name="provider_text">%s stock usage</string>
     <string name="all_chw">All-CHWs</string>
     <string name="stock_used_text">%s Stock Used</string>
+    <string name="stock_report_value_error">Value should be numeric</string>
+    <string name="stock_report_value_required_error">Specify: %1$s</string>
 
     <!--In app Reporting-->
     <string name="service_activity_title">Service Activity</string>

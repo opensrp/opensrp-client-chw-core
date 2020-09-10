@@ -15,7 +15,7 @@ public class ServiceJsonFormFragmentPresenter extends JsonWizardFormFragmentPres
 
     @Override
     protected boolean moveToNextWizardStep() {
-        if (!"".equals(mStepDetails.optString(JsonFormConstants.NEXT))) {
+        if (mStepDetails != null && !mStepDetails.optString(JsonFormConstants.NEXT).equalsIgnoreCase("")) {
             JsonFormFragment next = ServiceJsonFormFragment.getFormFragment(mStepDetails.optString(JsonFormConstants.NEXT));
             getView().hideKeyBoard();
             getView().transactThis(next);
