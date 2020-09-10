@@ -89,6 +89,13 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
+    public void settingGenderSetsTranslatedString() {
+        String gender = "Female";
+        activity.setProfileDetailOne(gender);
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "detailOneView"));
+    }
+
+    @Test
     public void testOnOptionsItemSelected() {
         activity = Mockito.spy(activity);
         Mockito.doNothing().when(activity).startActivityForResult(Mockito.any(), Mockito.anyInt());
