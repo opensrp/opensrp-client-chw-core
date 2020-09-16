@@ -164,7 +164,7 @@ public class ChwServiceSchedule {
             Calendar today = Calendar.getInstance();
             standardiseCalendarDate(today);
 
-            if (expiredCal.getTimeInMillis() < today.getTimeInMillis()) {// expired
+            if (expiredCal.getTimeInMillis() <= today.getTimeInMillis()) {// expired
                 return AlertStatus.expired;
             } else if (dueCal.getTimeInMillis() <= today.getTimeInMillis()) {// Due
                 return AlertStatus.normal;
