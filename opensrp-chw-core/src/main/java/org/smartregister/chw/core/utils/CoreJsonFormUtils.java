@@ -29,6 +29,8 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
+import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.Photo;
 import org.smartregister.domain.tag.FormTag;
 import org.smartregister.family.FamilyLibrary;
@@ -49,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -70,6 +73,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static final String CURRENT_OPENSRP_ID = "current_opensrp_id";
     public static final String READ_ONLY = "read_only";
     private static HashMap<String, String> actionMap = null;
+    private static final String LOCATION_UUIDS = "location_uuids";
 
     public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass) {
         Intent intent = new Intent(context, activityClass);
@@ -713,7 +717,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         List<Client> clients = new ArrayList<>();
         List<Event> events = new ArrayList<>();
 
-
         ECSyncHelper syncHelper = coreChwApplication.getEcSyncHelper();
         JSONObject clientObject = syncHelper.getClient(familyMember.getFamilyID());
         Client familyClient = syncHelper.convert(clientObject, Client.class);
@@ -935,5 +938,48 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
             step++;
         }
+    }
+
+    public static void addLocationsToDropdownField(List<Location> locations, JSONObject dropdownField) throws JSONException {
+        if (dropdownField != null) {
+            Collections.sort(locations, (firstLocation, secondLocation) ->
+                    firstLocation.getProperties().getName().compareTo(secondLocation.getProperties().getName()));
+
+            if (dropdownField.has(JsonFormConstants.TYPE) && dropdownField.getString(JsonFormConstants.TYPE)
+                    .equalsIgnoreCase(JsonFormConstants.SPINNER)) {
+
+                JSONArray values = new JSONArray();
+                JSONObject openMrsChoiceIds = new JSONObject();
+                JSONObject locationUUIDs = new JSONObject();
+
+                for (Location location : locations) {
+                    LocationProperty locationProperties = location.getProperties();
+                    values.put(locationProperties.getName());
+                    openMrsChoiceIds.put(locationProperties.getName(), locationProperties.getName());
+                    locationUUIDs.put(locationProperties.getName(), location.getId());
+                }
+
+                dropdownField.put(JsonFormConstants.VALUES, values);
+                dropdownField.put(JsonFormConstants.KEYS, values);
+                dropdownField.put(JsonFormConstants.OPENMRS_CHOICE_IDS, openMrsChoiceIds);
+                dropdownField.put(LOCATION_UUIDS, locationUUIDs);
+            }
+        }
+    }
+
+    public static String getSyncLocationUUIDFromDropdown(JSONObject dropdownField) throws JSONException {
+        if (dropdownField.has(JsonFormConstants.TYPE) && dropdownField.getString(JsonFormConstants.TYPE)
+                .equalsIgnoreCase(JsonFormConstants.SPINNER) && dropdownField.has(JsonFormConstants.VALUE)) {
+            String fieldValue = dropdownField.getString(JsonFormConstants.VALUE);
+            if (dropdownField.has(LOCATION_UUIDS) && dropdownField.getJSONObject(LOCATION_UUIDS).has(fieldValue)) {
+                return dropdownField.getJSONObject(LOCATION_UUIDS).getString(fieldValue);
+            }
+        }
+        return null;
+    }
+
+    public static JSONObject getJsonField(JSONObject form, String step, String key) {
+        JSONArray field = fields(form, step);
+        return getFieldJSONObject(field, key);
     }
 }

@@ -1,14 +1,15 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.smartregister.chw.core.application.TestCoreChwApplication;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.domain.Hia2Indicator;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.Report;
@@ -28,7 +29,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestCoreChwApplication.class)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class ReportUtilsTest {
 
     private String providerId = "CHW";
@@ -48,7 +49,7 @@ public class ReportUtilsTest {
         monthlyTally.setUpdatedAt(date);
         monthlyTally.setEdited(false);
         monthlyTally.setProviderId(providerId);
-        monthlyTally.setSubmissionId(Mockito.anyString());
+        monthlyTally.setSubmissionId("some-submission-id");
         monthlyTally.setCreatedAt(date);
         return monthlyTally;
     }

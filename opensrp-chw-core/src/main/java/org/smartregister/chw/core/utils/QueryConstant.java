@@ -63,6 +63,7 @@ public interface QueryConstant {
             "       ec_family_member.last_name     AS last_name,\n" +
             "       ec_family_member.dob           AS dob,\n" +
             "       ec_family_member.id            AS _id,\n" +
+                    "       ec_family_member.base_entity_id      AS base_entity_id,\n" +
             "       ec_family_member.relational_id AS relationalid,\n" +
             "       task._id                       AS referral_task_id,\n" +
             "       event.dateCreated              AS notification_date,\n" +
@@ -234,8 +235,8 @@ public interface QueryConstant {
             "    UNION ALL\n" +
             "    SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
             "    FROM ec_family_planning\n" +
-            ")"+
-            "UNION ALL"+
+            ")" +
+            "UNION ALL" +
             "/*ONLY MALARIA PATIENTS*/\n" +
             "SELECT ec_family_member.first_name,\n" +
             "       ec_family_member.middle_name,\n" +
@@ -314,7 +315,7 @@ public interface QueryConstant {
             "FROM ec_sick_child_followup\n" +
             "inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.entity_id\n" +
             "WHERE ec_family_member.is_closed = '0'\n" +
-            " AND ec_sick_child_followup.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_sick_child_followup.date_marked_as_done) <= 3)\n" +
+            " AND (ec_sick_child_followup.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_sick_child_followup.date_marked_as_done) <= 3))\n" +
             "  AND ec_family_member.date_removed is null\n" +
             "  AND ec_family_member.base_entity_id NOT IN (\n" +
             "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
@@ -325,7 +326,7 @@ public interface QueryConstant {
             "FROM ec_anc_danger_signs_outcome\n" +
             "inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.entity_id\n" +
             "WHERE ec_family_member.is_closed = '0'\n" +
-            " AND ec_anc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_anc_danger_signs_outcome.date_marked_as_done) <= 3)\n" +
+            " AND (ec_anc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_anc_danger_signs_outcome.date_marked_as_done) <= 3))\n" +
             "  AND ec_family_member.date_removed is null\n" +
             "  AND ec_family_member.base_entity_id NOT IN (\n" +
             "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
@@ -336,7 +337,7 @@ public interface QueryConstant {
             "FROM ec_pnc_danger_signs_outcome\n" +
             "inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.entity_id\n" +
             "WHERE ec_family_member.is_closed = '0'\n" +
-            " AND ec_pnc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_pnc_danger_signs_outcome.date_marked_as_done) <= 3)\n" +
+            " AND (ec_pnc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_pnc_danger_signs_outcome.date_marked_as_done) <= 3))\n" +
             "  AND ec_family_member.date_removed is null\n" +
             "  AND ec_family_member.base_entity_id NOT IN (\n" +
             "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
@@ -350,7 +351,7 @@ public interface QueryConstant {
             "FROM ec_family_planning_update\n" +
             "inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.entity_id\n" +
             "WHERE ec_family_member.is_closed = '0'\n" +
-            " AND ec_family_planning_update.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_family_planning_update.date_marked_as_done) <= 3)\n" +
+            " AND (ec_family_planning_update.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_family_planning_update.date_marked_as_done) <= 3))\n" +
             "  AND ec_family_member.date_removed is null\n" +
             "  AND ec_family_member.base_entity_id NOT IN (\n" +
             "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
@@ -364,7 +365,7 @@ public interface QueryConstant {
             "FROM ec_malaria_followup_hf\n" +
             "inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.entity_id\n" +
             "WHERE ec_family_member.is_closed = '0'\n" +
-            " AND ec_malaria_followup_hf.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_malaria_followup_hf.date_marked_as_done) <= 3)\n" +
+            " AND (ec_malaria_followup_hf.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_malaria_followup_hf.date_marked_as_done) <= 3))\n" +
             "  AND ec_family_member.date_removed is null\n" +
             "  AND ec_family_member.base_entity_id NOT IN (\n" +
             "    SELECT ec_pnc_danger_signs_outcome.entity_id AS base_entity_id\n" +
@@ -391,10 +392,10 @@ public interface QueryConstant {
                     "       'ANC Danger Signs'          AS notification_type\n" +
                     "FROM ec_anc_danger_signs_outcome\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_danger_signs_outcome.entity_id\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    " AND ec_anc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_anc_danger_signs_outcome.date_marked_as_done) <= 3)\n" +
+                    "WHERE  ec_anc_danger_signs_outcome.entity_id IN (%s)\n" +
+                    " AND (ec_anc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_anc_danger_signs_outcome.date_marked_as_done) <= 3))\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    "  AND ec_anc_danger_signs_outcome.entity_id IN (%s)\n" +
+                    "  AND ec_family_member.is_closed = '0'\n" +
                     "  AND ec_anc_danger_signs_outcome.entity_id NOT IN (\n" +
                     "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
                     "    FROM ec_malaria_followup_hf\n" +
@@ -414,10 +415,10 @@ public interface QueryConstant {
                     "       'Sick Child'          AS notification_type\n" +
                     "FROM ec_sick_child_followup\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_sick_child_followup.entity_id\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    " AND ec_sick_child_followup.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_sick_child_followup.date_marked_as_done) <= 3)\n" +
+                    "WHERE ec_sick_child_followup.entity_id IN (%s)\n" +
+                    " AND (ec_sick_child_followup.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_sick_child_followup.date_marked_as_done) <= 3))\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    "  AND ec_sick_child_followup.entity_id IN (%s)\n" +
+                    "  AND ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_member.base_entity_id NOT IN (\n" +
                     "    SELECT ec_malaria_followup_hf.entity_id AS base_entity_id\n" +
                     "    FROM ec_malaria_followup_hf\n" +
@@ -437,10 +438,10 @@ public interface QueryConstant {
                     "       'PNC Danger Signs'          AS notification_type\n" +
                     "FROM ec_pnc_danger_signs_outcome\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_pnc_danger_signs_outcome.entity_id\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    " AND ec_pnc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_pnc_danger_signs_outcome.date_marked_as_done) <= 3)\n" +
+                    "WHERE ec_pnc_danger_signs_outcome.entity_id IN (%s)\n" +
+                    " AND (ec_pnc_danger_signs_outcome.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_pnc_danger_signs_outcome.date_marked_as_done) <= 3))\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    "  AND ec_pnc_danger_signs_outcome.entity_id IN (%s)\n" +
+                    "  AND ec_family_member.is_closed = '0'\n" +
                     "  AND ec_pnc_danger_signs_outcome.entity_id NOT IN (\n" +
                     "    SELECT ec_anc_danger_signs_outcome.entity_id AS base_entity_id\n" +
                     "    FROM ec_anc_danger_signs_outcome\n" +
@@ -463,10 +464,10 @@ public interface QueryConstant {
                     "       'Family Planning'          AS notification_type\n" +
                     "FROM ec_family_planning_update\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_family_planning_update.entity_id\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    " AND ec_family_planning_update.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_family_planning_update.date_marked_as_done) <= 3)\n" +
+                    "WHERE ec_family_planning_update.entity_id IN (%s)\n" +
+                    " AND (ec_family_planning_update.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_family_planning_update.date_marked_as_done) <= 3))\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    "  AND ec_family_planning_update.entity_id IN (%s)\n" +
+                    "  AND ec_family_member.is_closed = '0'\n" +
                     "  AND ec_family_planning_update.entity_id NOT IN (\n" +
                     "    SELECT ec_pnc_danger_signs_outcome.entity_id AS base_entity_id\n" +
                     "    FROM ec_pnc_danger_signs_outcome\n" +
@@ -489,10 +490,10 @@ public interface QueryConstant {
                     "       'Malaria Follow-up'          AS notification_type\n" +
                     "FROM ec_malaria_followup_hf\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_malaria_followup_hf.entity_id\n" +
-                    "WHERE ec_family_member.is_closed = '0'\n" +
-                    " AND ec_malaria_followup_hf.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_malaria_followup_hf.date_marked_as_done) <= 3)\n" +
+                    "WHERE  ec_malaria_followup_hf.entity_id IN (%s)\n" +
+                    " AND (ec_malaria_followup_hf.date_marked_as_done IS NULL OR (julianday('now', 'localtime') - julianday(ec_malaria_followup_hf.date_marked_as_done) <= 3))\n" +
                     "  AND ec_family_member.date_removed is null\n" +
-                    "  AND ec_malaria_followup_hf.entity_id IN (%s)\n" +
+                    "  AND ec_family_member.is_closed = '0'\n" +
                     "  AND ec_malaria_followup_hf.entity_id NOT IN (\n" +
                     "    SELECT ec_anc_danger_signs_outcome.entity_id AS base_entity_id\n" +
                     "    FROM ec_anc_danger_signs_outcome\n" +
@@ -505,6 +506,5 @@ public interface QueryConstant {
                     "    UNION ALL\n" +
                     "    SELECT ec_family_planning_update.entity_id AS base_entity_id\n" +
                     "    FROM ec_family_planning_update\n" +
-                    ")\n" +
-                    "ORDER BY notification_date DESC;";
+                    ")\n";
 }

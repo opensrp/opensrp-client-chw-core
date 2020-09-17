@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
@@ -33,10 +32,12 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
+import org.smartregister.chw.core.utils.MalariaFollowUpStatusTaskUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -58,25 +59,25 @@ import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 import static org.smartregister.chw.fp.util.FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT;
 
 public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProfileActivity implements FamilyProfileExtendedContract.PresenterCallBack, CoreFamilyPlanningMemberProfileContract.View {
-    
+
     protected RecyclerView notificationAndReferralRecyclerView;
     protected RelativeLayout notificationAndReferralLayout;
-    
+
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         return org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient(baseEntityId);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initializeNotificationReferralRecyclerView();
+    protected void onCreation() {
+        super.onCreation();
         updateToolbarTitle(this, R.id.toolbar_title, fpMemberObject.getFamilyName());
+        initializeNotificationReferralRecyclerView();
     }
 
     protected void initializeNotificationReferralRecyclerView() {
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
         notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager( new LinearLayoutManager(this));
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -107,6 +108,16 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             return true;
         } else if (itemId == R.id.action_fp_change) {
             startFamilyPlanningRegistrationActivity();
+        } else if (itemId == R.id.action_malaria_registration) {
+            startMalariaRegister();
+            return true;
+        } else if (itemId == R.id.action_malaria_followup_visit) {
+            startMalariaFollowUpVisit();
+            return true;
+        }
+        else if(itemId == R.id.action_malaria_diagnosis){
+            startHfMalariaFollowupForm();
+            return  true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,6 +125,11 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.family_planning_member_profile_menu, menu);
+        if (MalariaDao.isRegisteredForMalaria(fpMemberObject.getBaseEntityId())) {
+            org.smartregister.util.Utils.startAsyncTask(new MalariaFollowUpStatusTaskUtil(menu, fpMemberObject.getBaseEntityId()), null);
+        } else {
+            menu.findItem(R.id.action_malaria_registration).setVisible(true);
+        }
         return true;
     }
 
@@ -294,6 +310,12 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     public Context getContext() {
         return this;
     }
+
+    protected abstract void startMalariaRegister();
+
+    protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHfMalariaFollowupForm();
 
     public interface OnMemberTypeLoadedListener {
         void onMemberTypeLoaded(MemberType memberType);

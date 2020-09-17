@@ -15,7 +15,7 @@ public class ImmunizationExpiredRuleTest {
 
     @Test
     public void isOpv0Expired() {
-       Assert.assertTrue(immunizationExpiredRule.isOpv0Expired(1));
+        Assert.assertTrue(immunizationExpiredRule.isOpv0Expired(1));
     }
 
     @Test

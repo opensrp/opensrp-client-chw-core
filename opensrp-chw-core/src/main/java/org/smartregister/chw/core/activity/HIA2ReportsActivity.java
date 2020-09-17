@@ -125,13 +125,14 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 Utils.startAsyncTask(new StartDraftMonthlyFormTask(this, date, formName), null);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
             try {
                 String jsonString = data.getStringExtra("json");
@@ -273,8 +274,13 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
     }
 
     public void onClickReport(View view) {
-        if (view.getId() == R.id.toggle_action_menu) {
-            NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+        try{
+            if (view != null && view.getId() == R.id.toggle_action_menu) {
+                NavigationMenu.getInstance(this, null, null).getDrawer().openDrawer(GravityCompat.START);
+            }
+        }
+        catch (Exception ex){
+            Timber.e(ex, "View is NUll");
         }
     }
 

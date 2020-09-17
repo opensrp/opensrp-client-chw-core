@@ -42,13 +42,14 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     @Override
     public void createNotificationDismissalEvent(String notificationId, String notificationType) {
-        Event baseEvent = ChwNotificationUtil.createNotificationDismissalBaseEvent(presenter.getClientBaseEntityId(), ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType));
+        String dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Event baseEvent = ChwNotificationUtil.createNotificationDismissalEvent(context, presenter.getClientBaseEntityId(), notificationId,notificationType, dateMarkedAsDone);
         JsonFormUtils.tagEvent(getAllSharedPreferences(), baseEvent);
         try {
             NCUtils.addEvent(getAllSharedPreferences(), baseEvent);
             long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
-            ChwNotificationDao.markNotificationAsDone(context, notificationId, notificationType);
+            ChwNotificationDao.markNotificationAsDone(context, notificationId,  ChwNotificationUtil.getNotificationDetailsTable(context, notificationType), dateMarkedAsDone);
             getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
 
         } catch (Exception ex) {
@@ -69,7 +70,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
             notificationItem = getMalariaFollowUpDetails(notificationId);
         else if (notificationType.contains(context.getString(R.string.notification_type_family_planning)))
             notificationItem = getDetailsForFamilyPlanning(notificationId);
-        else if (notificationType.contains(context.getString(R.string.notification_type_not_yet_done_referrals)))
+        else if (notificationType.equalsIgnoreCase(context.getString(R.string.notification_type_not_yet_done_referrals)))
             notificationItem = getDetailsForNotYetDoneReferral(notificationId);
 
         presenter.onNotificationDetailsFetched(notificationItem);
@@ -125,32 +126,36 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     @NotNull
     private NotificationItem getDetailsForNotYetDoneReferral(String referralTaskId) {
         NotificationRecord record = ChwNotificationDao.getNotYetDoneReferral(referralTaskId);
-        List<String> details = setNotificationRecordDetails(record);
+        List<String> details = getNotificationRecordDetails(record);
         details.add(context.getString(R.string.notification_record_not_yet_done));
         String title = context.getString(R.string.successful_referral_notification_title,
                 record.getClientName(), getClientAge(record.getClientDateOfBirth()));
         return new NotificationItem(title, details).setClientBaseEntityId(record.getClientBaseEntityId());
     }
 
-    private List<String> setNotificationRecordDetails(NotificationRecord record) {
-        Pair<String, String> notificationDatesPair = null;
-        String notificationDate = record.getNotificationDate();
-        try {
-            notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
-            notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
-        } catch (ParseException e) {
-            Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
-        }
-        presenter.setNotificationDates(notificationDatesPair);
-
+    private List<String> getNotificationRecordDetails(NotificationRecord record) {
         List<String> details = new ArrayList<>();
-        details.add(context.getString(R.string.notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
-        details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
-        if (record.getVillage() != null) {
-            details.add(context.getString(R.string.notification_village, record.getVillage()));
+        if (record != null) {
+            Pair<String, String> notificationDatesPair = null;
+            String notificationDate = record.getNotificationDate();
+            try {
+                notificationDate = dateFormat.format(dateFormat.parse(record.getNotificationDate()));
+                notificationDatesPair = Pair.create(notificationDate, getDismissalDate(dateFormat.format(new Date())));
+            } catch (ParseException e) {
+                Timber.e(e, "Error Parsing date: %s", record.getNotificationDate());
+            }
+            presenter.setNotificationDates(notificationDatesPair);
+
+
+            details.add(context.getString(R.string.notification_phone, record.getPhone() != null ? record.getPhone() : context.getString(R.string.no_phone_provided)));
+            details.add(context.getString(R.string.referral_notification_closure_date, notificationDate));
+            if (record.getVillage() != null) {
+                details.add(context.getString(R.string.notification_village, record.getVillage()));
+            }
         }
         return details;
     }
+
     /**
      * This method is used to obtain the date when the referral will be dismissed from the updates
      * register
@@ -169,6 +174,7 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         return dateFormat.format(calendar.getTime());
     }
+
     private String getClientAge(String dobString) {
         String translatedYearInitial = context.getResources().getString(R.string.abbrv_years);
         return OpdUtils.getClientAge(Utils.getDuration(dobString), translatedYearInitial);

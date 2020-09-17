@@ -20,7 +20,7 @@ public class StockUsageItemModelTest {
 
     @Test
     public void getStockName() {
-        StockUsageItemModel stockUsageItemModel = new StockUsageItemModel(stockName, unitsOfMeasure, stockUsage,providerName);
+        StockUsageItemModel stockUsageItemModel = new StockUsageItemModel(stockName, unitsOfMeasure, stockUsage, providerName);
         Assert.assertEquals("Zinc 10", stockUsageItemModel.getStockName());
     }
 
