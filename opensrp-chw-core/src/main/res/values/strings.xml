@@ -210,6 +210,7 @@
     <string name="select_a_new_family_head">Select a new family head</string>
     <string name="remove_family_count">%s adults and %s U5 children</string>
 
+    <string name="yellow_fever">Yellow Fever</string>
 
     <string name="medical_title">Back to %1$s\'s profile</string>
     <string name="medical_last_visit">%1$s ago</string>
@@ -673,6 +674,8 @@
     <string name="provider_text">%s stock usage</string>
     <string name="all_chw">All-CHWs</string>
     <string name="stock_used_text">%s Stock Used</string>
+    <string name="stock_report_value_error">Value should be numeric</string>
+    <string name="stock_report_value_required_error">Specify: %1$s</string>
 
     <!--In app Reporting-->
     <string name="service_activity_title">Service Activity</string>
@@ -707,4 +710,7 @@
     <string name="thinkmd_identifier_type">thinkmd_id</string>
     <string name="thinkmd_assessment_saved">ThinkMD health assessment saved</string>
     <string name="no_thinkmd_care_plan_found">No thinkmd care plan found</string>
+
+    <!-- LMH Last Visit Row-->
+    <string name="view_vaccine_histroy">View vaccine history</string>
 </resources>

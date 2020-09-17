@@ -297,4 +297,9 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         }
         return hia2ReportRepository;
     }
+
+    public boolean getChildFlavorUtil(){
+        return false;
+    }
+
 }

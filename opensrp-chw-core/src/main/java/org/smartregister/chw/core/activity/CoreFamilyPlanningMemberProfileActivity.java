@@ -32,10 +32,12 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
+import org.smartregister.chw.core.utils.MalariaFollowUpStatusTaskUtil;
 import org.smartregister.chw.fp.activity.BaseFpProfileActivity;
 import org.smartregister.chw.fp.dao.FpDao;
 import org.smartregister.chw.fp.domain.FpMemberObject;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -106,6 +108,16 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
             return true;
         } else if (itemId == R.id.action_fp_change) {
             startFamilyPlanningRegistrationActivity();
+        } else if (itemId == R.id.action_malaria_registration) {
+            startMalariaRegister();
+            return true;
+        } else if (itemId == R.id.action_malaria_followup_visit) {
+            startMalariaFollowUpVisit();
+            return true;
+        }
+        else if(itemId == R.id.action_malaria_diagnosis){
+            startHfMalariaFollowupForm();
+            return  true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -113,6 +125,11 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.family_planning_member_profile_menu, menu);
+        if (MalariaDao.isRegisteredForMalaria(fpMemberObject.getBaseEntityId())) {
+            org.smartregister.util.Utils.startAsyncTask(new MalariaFollowUpStatusTaskUtil(menu, fpMemberObject.getBaseEntityId()), null);
+        } else {
+            menu.findItem(R.id.action_malaria_registration).setVisible(true);
+        }
         return true;
     }
 
@@ -293,6 +310,12 @@ public abstract class CoreFamilyPlanningMemberProfileActivity extends BaseFpProf
     public Context getContext() {
         return this;
     }
+
+    protected abstract void startMalariaRegister();
+
+    protected abstract void startMalariaFollowUpVisit();
+
+    protected abstract void startHfMalariaFollowupForm();
 
     public interface OnMemberTypeLoadedListener {
         void onMemberTypeLoaded(MemberType memberType);
