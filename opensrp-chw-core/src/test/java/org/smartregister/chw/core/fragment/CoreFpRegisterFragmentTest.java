@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.fragment;
 
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -26,14 +25,11 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
-import org.smartregister.family.contract.FamilyProfileMemberContract;
-import org.smartregister.family.presenter.BaseFamilyProfileMemberPresenter;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -64,7 +60,7 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
     private FragmentActivity activity;
 
-    private  BaseRegisterFragmentContract.Presenter  presenter;
+    private BaseRegisterFragmentContract.Presenter presenter;
 
     @Before
     public void setUp() {
