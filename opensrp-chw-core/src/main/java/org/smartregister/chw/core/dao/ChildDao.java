@@ -13,7 +13,6 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,7 +118,7 @@ public class ChildDao extends AbstractDao {
 
     public static String getBaseEntityID(String identifierType, String id) {
         String[] projectionArgs = new String[]{BASE_ENTITY_ID};
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
             if (database == null) {
@@ -146,7 +145,7 @@ public class ChildDao extends AbstractDao {
 
     public static String queryColumnWithEntityId(String baseEntityId, String columnName) {
         String[] projectionArgs = new String[]{columnName};
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
             if (database == null) {
@@ -173,7 +172,7 @@ public class ChildDao extends AbstractDao {
 
     public static boolean isThinkMDCarePlanExist(String baseEntityId) {
         String[] projectionArgs = new String[]{THINK_MD_ID};
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
             String selection = "select ? from ec_child where base_entity_id = ?";
@@ -220,9 +219,5 @@ public class ChildDao extends AbstractDao {
             Timber.e(ex, "queryDBFromUserProfile");
         }
         return null;
-    }
-
-    private static SQLiteDatabase getReadableDatabase() {
-        return DrishtiApplication.getInstance().getRepository().getReadableDatabase();
     }
 }
