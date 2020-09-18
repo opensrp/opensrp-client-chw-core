@@ -36,4 +36,10 @@ public class CoreAncMemberProfileActivityTest {
         activity.registerPresenter();
         Assert.assertNotNull(activity.ancMemberProfilePresenter());
     }
+
+    @Test
+    public void openFamilyLocationStartsAncMemberMapActivity() {
+        activity.openFamilyLocation();
+        Mockito.verify(activity).startActivity(Mockito.any());
+    }
 }
