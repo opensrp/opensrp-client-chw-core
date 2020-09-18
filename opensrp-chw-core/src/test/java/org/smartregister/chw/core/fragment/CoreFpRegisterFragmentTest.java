@@ -2,31 +2,82 @@ package org.smartregister.chw.core.fragment;
 
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import org.powermock.reflect.Whitebox;
+import org.robolectric.Robolectric;
+import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.commonregistry.CommonRepository;
+import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
+import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CoreFpRegisterFragmentTest extends BaseUnitTest {
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
+    @Mock
+    public RecyclerView clientsView;
+    @Mock
+    private Context context;
+
+    @Captor
+    private ArgumentCaptor<RecyclerViewPaginatedAdapter> adapterArgumentCaptor;
 
     @Mock
     private CoreFpRegisterFragment coreFpRegisterFragment;
 
     @Mock
-    private View view;
+    private CommonRepository commonRepository;
 
     @Mock
-    private Set<org.smartregister.configurableviews.model.View> visibleColumns;
+    private View view;
+
+    private FragmentActivity activity;
+
+    private BaseRegisterFragmentContract.Presenter presenter;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        coreFpRegisterFragment = Mockito.mock(CoreFpRegisterFragment.class, Mockito.CALLS_REAL_METHODS);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "presenter", presenter);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "view", view);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "dueOnlyLayout", view);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "dueFilterActive", true);
+
+        CoreLibrary.init(context);
+        when(context.commonrepository(anyString())).thenReturn(commonRepository);
+        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        Context.bindtypes = new ArrayList<>();
+        Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
+        Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
+        SyncStatusBroadcastReceiver.init(activity);
     }
 
     @Test
@@ -40,13 +91,12 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void whenInitializeAdapterAnswered() {
-        Mockito.doNothing().when(coreFpRegisterFragment).initializeAdapter(visibleColumns);
-        coreFpRegisterFragment.initializeAdapter(visibleColumns);
-
-        ArgumentCaptor<Set> captor = ArgumentCaptor.forClass(Set.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).initializeAdapter(captor.capture());
-        Assert.assertEquals(captor.getValue(), visibleColumns);
+    public void testInitializeAdapter() {
+        when(coreFpRegisterFragment.getActivity()).thenReturn(activity);
+        coreFpRegisterFragment.initializeAdapter(new HashSet<>());
+        verify(clientsView).setAdapter(adapterArgumentCaptor.capture());
+        assertNotNull(adapterArgumentCaptor.getValue());
+        assertEquals(20, adapterArgumentCaptor.getValue().currentlimit);
     }
 
     @Test
