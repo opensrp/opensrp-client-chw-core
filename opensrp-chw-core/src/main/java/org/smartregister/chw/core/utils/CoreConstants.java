@@ -42,6 +42,7 @@ public class CoreConstants {
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
         String BASE_ENTITY_ID = "base_entity_id";
+        String THINK_MD_ID = "thinkmd_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";

@@ -2,6 +2,9 @@ package org.smartregister.chw.core.dao;
 
 import android.database.Cursor;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.joda.time.DateTime;
 import org.smartregister.chw.core.domain.Child;
@@ -10,6 +13,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +21,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINK_MD_ID;
 import static org.smartregister.chw.core.utils.CoreReferralUtils.getCommonRepository;
 import static org.smartregister.chw.core.utils.Utils.getDateDifferenceInDays;
 
@@ -112,37 +118,81 @@ public class ChildDao extends AbstractDao {
     }
 
     public static String getBaseEntityID(String identifierType, String id) {
-        String sql = "select base_entity_id from ec_child where " + identifierType + " = '" + id + "'";
+        String[] projectionArgs = new String[]{BASE_ENTITY_ID};
+        SQLiteDatabase database = getReadableDatabase();
+        net.sqlcipher.Cursor cursor = null;
+        try {
+            if (database == null) {
+                return null;
+            }
+            String selection = "select base_entity_id from ec_child where ? = ?";
+            String[] selectionArgs = new String[]{identifierType, id};
 
-        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
 
-        List<String> res = readData(sql, dataMap);
-        if (res == null || res.size() != 1)
-            return null;
+            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
 
-        return res.get(0);
+            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
     }
 
     public static String queryColumnWithEntityId(String baseEntityId, String columnName) {
-        String sql = "select '" + columnName + "' from ec_child where base_entity_id = '" + baseEntityId + "'";
+        String[] projectionArgs = new String[]{columnName};
+        SQLiteDatabase database = getReadableDatabase();
+        net.sqlcipher.Cursor cursor = null;
+        try {
+            if (database == null) {
+                return null;
+            }
+            String selection = "select ? from ec_child where base_entity_id = ?";
+            String[] selectionArgs = new String[]{columnName, baseEntityId};
 
-        DataMap<String> dataMap = cursor -> getCursorValue(cursor, columnName);
 
-        List<String> res = readData(sql, dataMap);
-        if (res == null || res.size() != 1)
-            return null;
+            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
 
-        return res.get(0);
+            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndex(columnName));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
     }
 
-    public static boolean isThinkmdCarePlanExist(String baseEntityId){
-        String sql = "select thinkmd_id from ec_child where base_entity_id = '" + baseEntityId + "'";
+    public static boolean isThinkMDCarePlanExist(String baseEntityId) {
+        String[] projectionArgs = new String[]{THINK_MD_ID};
+        SQLiteDatabase database = getReadableDatabase();
+        net.sqlcipher.Cursor cursor = null;
+        try {
+            String selection = "select ? from ec_child where base_entity_id = ?";
+            String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
 
 
-        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "thinkmd_id");
+            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
 
-        List<Integer> res = readData(sql, dataMap);
-        return res != null && res.equals(0);
+            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+                return !StringUtils.isEmpty(cursor.getString(cursor.getColumnIndex(THINK_MD_ID)));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 
     public static boolean isMotherAlive(String motherBaseEntityId) {
@@ -172,4 +222,7 @@ public class ChildDao extends AbstractDao {
         return null;
     }
 
+    private static SQLiteDatabase getReadableDatabase() {
+        return DrishtiApplication.getInstance().getRepository().getReadableDatabase();
+    }
 }

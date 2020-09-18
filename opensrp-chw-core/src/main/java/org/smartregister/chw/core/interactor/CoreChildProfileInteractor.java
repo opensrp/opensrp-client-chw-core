@@ -18,7 +18,7 @@ import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.ChromeContainer;
+import org.smartregister.chw.core.activity.WebViewActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
@@ -515,7 +515,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 if (carePlan == null || carePlan.isEmpty())
                     appExecutors.mainThread().execute(callback::noThinkMDCarePlanFound);
 
-                Intent intent = new Intent(context, ChromeContainer.class);
+                Intent intent = new Intent(context, WebViewActivity.class);
                 intent.putExtra(CONTENT_TO_DISPLAY, carePlan);
                 context.startActivity(intent);
 
