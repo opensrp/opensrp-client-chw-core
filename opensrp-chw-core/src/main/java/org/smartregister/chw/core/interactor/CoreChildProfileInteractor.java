@@ -511,7 +511,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 String carePlan = ChildDao.queryColumnWithEntityId(getChildBaseEntityId(), HTML_ASSESSMENT);
                 appExecutors.mainThread().execute(() -> {
 
-                    if (carePlan == null || carePlan.isEmpty())
+                    if (!StringUtils.isEmpty(carePlan))
                         callback.noThinkMDCarePlanFound();
                     else {
                         Intent intent = new Intent(context, WebViewActivity.class);
