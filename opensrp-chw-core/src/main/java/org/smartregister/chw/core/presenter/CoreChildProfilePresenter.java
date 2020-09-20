@@ -442,7 +442,6 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
     public void createCarePlanEvent(@NotNull Context context, @NotNull String encodedBundle) {
         interactor.createCarePlanEvent(context, encodedBundle, this);
-        getView().displayToast(R.string.thinkmd_assessment_saved);
     }
 
     @Override
