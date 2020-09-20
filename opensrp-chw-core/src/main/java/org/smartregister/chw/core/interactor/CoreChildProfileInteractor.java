@@ -190,11 +190,10 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void onDestroy(boolean isChangingConfiguration) {        //todo
     }
 
-    private String getQuery(String baseEntityId){
-        if(CoreChwApplication.getInstance().getChildFlavorUtil()){
+    private String getQuery(String baseEntityId) {
+        if (CoreChwApplication.getInstance().getChildFlavorUtil()) {
             return BaChildUtilsFlv.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
-        }
-        else {
+        } else {
             return CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
         }
     }
@@ -233,7 +232,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     @Override
     public void refreshProfileView(final String baseEntityId, final boolean isForEdit, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
-           // String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
+            // String query = CoreChildUtils.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, baseEntityId);
 
             Cursor cursor = null;
             try {
@@ -512,12 +511,16 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         Runnable runnable = () -> {
             try {
                 String carePlan = ChildDao.queryColumnWithEntityId(getChildBaseEntityId(), HTML_ASSESSMENT);
-                if (carePlan == null || carePlan.isEmpty())
-                    appExecutors.mainThread().execute(callback::noThinkMDCarePlanFound);
+                appExecutors.mainThread().execute(() -> {
 
-                Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra(CONTENT_TO_DISPLAY, carePlan);
-                context.startActivity(intent);
+                    if (carePlan == null || carePlan.isEmpty())
+                        callback.noThinkMDCarePlanFound();
+                    else {
+                        Intent intent = new Intent(context, WebViewActivity.class);
+                        intent.putExtra(CONTENT_TO_DISPLAY, carePlan);
+                        context.startActivity(intent);
+                    }
+                });
 
             } catch (Exception e) {
                 Timber.e(e);

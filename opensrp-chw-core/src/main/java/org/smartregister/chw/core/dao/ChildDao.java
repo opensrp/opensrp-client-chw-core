@@ -117,10 +117,10 @@ public class ChildDao extends AbstractDao {
     }
 
     public static String getBaseEntityID(String identifierType, String id) {
-        String[] projectionArgs = new String[]{BASE_ENTITY_ID};
-        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
+            String[] projectionArgs = new String[]{BASE_ENTITY_ID};
+            SQLiteDatabase database = getRepository().getReadableDatabase();
             if (database == null) {
                 return null;
             }
@@ -144,16 +144,15 @@ public class ChildDao extends AbstractDao {
     }
 
     public static String queryColumnWithEntityId(String baseEntityId, String columnName) {
-        String[] projectionArgs = new String[]{columnName};
-        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
+            String[] projectionArgs = new String[]{columnName};
+            SQLiteDatabase database = getRepository().getReadableDatabase();
             if (database == null) {
                 return null;
             }
             String selection = "select ? from ec_child where base_entity_id = ?";
             String[] selectionArgs = new String[]{columnName, baseEntityId};
-
 
             cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
 
@@ -171,10 +170,10 @@ public class ChildDao extends AbstractDao {
     }
 
     public static boolean isThinkMDCarePlanExist(String baseEntityId) {
-        String[] projectionArgs = new String[]{THINK_MD_ID};
-        SQLiteDatabase database = getRepository().getReadableDatabase();
         net.sqlcipher.Cursor cursor = null;
         try {
+            String[] projectionArgs = new String[]{THINK_MD_ID};
+            SQLiteDatabase database = getRepository().getReadableDatabase();
             String selection = "select ? from ec_child where base_entity_id = ?";
             String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
 
