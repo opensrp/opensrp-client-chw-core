@@ -479,20 +479,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String baseEntityId = ChildDao.getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type),
-                        thinkMdId);
+                String baseEntityId = ChildDao.getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type), thinkMdId);
                 // creating the event to sync with server
-                Event carePlanEvent = null;
                 if (baseEntityId != null) {
-                    carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
+                    Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
                             baseEntityId);
+
+                    JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(carePlanEvent));
+                    ECSyncHelper.getInstance(context).addEvent(baseEntityId, eventPartialJson);
+
+                    appExecutors.mainThread().execute(callback::carePlanEventCreated);
                 }
-                JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(carePlanEvent));
-                ECSyncHelper.getInstance(context).addEvent(baseEntityId, eventPartialJson);
-
-
-                appExecutors.mainThread().execute(callback::carePlanEventCreated);
             } catch (Exception e) {
                 Timber.e(e);
             }
