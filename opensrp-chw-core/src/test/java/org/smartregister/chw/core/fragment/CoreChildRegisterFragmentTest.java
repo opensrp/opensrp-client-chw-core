@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,6 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
@@ -72,6 +74,8 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
 
     private FragmentActivity activity;
 
+    private ActivityController controller;
+
     @Mock
     private CoreChildRegisterActivity coreChildRegisterActivity;
 
@@ -92,7 +96,8 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
 
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        controller = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
+        activity = (FragmentActivity) controller.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(fragment, "clientsView", clientsView);
         Whitebox.setInternalState(fragment, "presenter", presenter);
@@ -233,6 +238,17 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
         View dueOnlyLayout = view.findViewById(R.id.due_only_layout);
         dueOnlyLayout.setVisibility(View.VISIBLE);
         assertEquals(View.VISIBLE, dueOnlyLayout.getVisibility());
+    }
+
+
+    @After
+    public void tearDown() {
+        try {
+            controller.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

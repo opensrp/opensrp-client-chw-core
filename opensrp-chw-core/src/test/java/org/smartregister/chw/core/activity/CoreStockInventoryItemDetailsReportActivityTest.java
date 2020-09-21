@@ -5,6 +5,7 @@ import android.view.Menu;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,10 +39,10 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
     @Mock
     private CoreStockUsageItemDetailsAdapter coreStockUsageItemDetailsAdapter;
 
+    private ActivityController<CoreStockInventoryItemDetailsReportActivity> controller;
+
     @Before
     public void setUp() {
-        ActivityController<CoreStockInventoryItemDetailsReportActivity> controller;
-
         MockitoAnnotations.initMocks(this);
         Context context = Context.getInstance();
         CoreLibrary.init(context);
@@ -64,7 +65,6 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
     @Test
     public void testOnCreateOptionsMenu() {
         Assert.assertFalse(activity.onCreateOptionsMenu(menu));
-
     }
 
     @Test
@@ -76,4 +76,15 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
 
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
     }
+
+    @After
+    public void tearDown() {
+        try {
+            controller.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

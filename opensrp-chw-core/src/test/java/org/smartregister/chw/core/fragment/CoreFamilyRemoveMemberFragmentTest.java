@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
@@ -46,6 +48,7 @@ public class CoreFamilyRemoveMemberFragmentTest extends BaseUnitTest {
     @Mock
     private CommonRepository commonRepository;
     private FragmentActivity activity;
+    private ActivityController<AppCompatActivity> activityController;
     @Captor
     private ArgumentCaptor<RecyclerViewPaginatedAdapter> adapterArgumentCaptor;
     private CoreFamilyRemoveMemberFragment familyProfileMemberFragment;
@@ -62,7 +65,8 @@ public class CoreFamilyRemoveMemberFragmentTest extends BaseUnitTest {
                 Mockito.mock(FamilyProfileMemberContract.Model.class), null, "familybaseid", "Head", "Caregiver");
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
+        activity = activityController.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(familyProfileMemberFragment, "searchView", new EditText(activity));
         Whitebox.setInternalState(familyProfileMemberFragment, "clientsView", clientsView);
@@ -108,5 +112,15 @@ public class CoreFamilyRemoveMemberFragmentTest extends BaseUnitTest {
         assertNotNull(adapterArgumentCaptor.getValue());
         assertEquals(100, adapterArgumentCaptor.getValue().currentlimit);
 
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

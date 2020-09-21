@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,6 +20,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
@@ -59,6 +61,7 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     private View view;
 
     private FragmentActivity activity;
+    private ActivityController<AppCompatActivity> activityController;
 
     private BaseRegisterFragmentContract.Presenter presenter;
 
@@ -73,7 +76,8 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
+        activity = activityController.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
         Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
@@ -156,5 +160,13 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
         Assert.assertEquals(captor2.getValue(), mainConditionString);
     }
 
-
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
