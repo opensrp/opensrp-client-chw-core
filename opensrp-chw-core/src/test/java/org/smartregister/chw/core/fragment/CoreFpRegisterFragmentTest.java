@@ -42,7 +42,6 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
-import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
