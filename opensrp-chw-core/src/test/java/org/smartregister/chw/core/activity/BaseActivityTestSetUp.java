@@ -3,6 +3,7 @@ package org.smartregister.chw.core.activity;
 import android.app.Activity;
 import android.content.Intent;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.mockito.MockitoAnnotations;
@@ -39,5 +40,16 @@ public abstract class BaseActivityTestSetUp<T extends Activity> extends BaseUnit
     }
 
     protected abstract Class<T> getActivityClass();
+
+    @After
+    public void tearDown() {
+        try {
+            controller.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

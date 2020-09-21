@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,6 +17,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
@@ -40,6 +42,8 @@ public class CoreFamilyOtherMemberProfileFragmentTest extends BaseUnitTest {
     @Mock
     private FamilyOtherMemberProfileFragmentContract.Presenter presenter;
     private CoreFamilyOtherMemberProfileFragment fragment;
+    private FragmentActivity activity;
+    private ActivityController<AppCompatActivity> activityController;
 
     @Before
     public void setUp() {
@@ -47,7 +51,8 @@ public class CoreFamilyOtherMemberProfileFragmentTest extends BaseUnitTest {
         fragment = Mockito.mock(CoreFamilyOtherMemberProfileFragment.class, Mockito.CALLS_REAL_METHODS);
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        FragmentActivity activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
+        activity = activityController.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(fragment, "presenter", presenter);
         SyncStatusBroadcastReceiver.init(activity);
@@ -65,6 +70,16 @@ public class CoreFamilyOtherMemberProfileFragmentTest extends BaseUnitTest {
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         Mockito.verify(fragment, Mockito.times(1)).onViewClicked(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
