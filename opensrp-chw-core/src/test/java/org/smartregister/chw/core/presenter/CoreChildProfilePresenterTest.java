@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
@@ -251,4 +252,17 @@ public class CoreChildProfilePresenterTest {
         profilePresenter.createCarePlanEvent(context, encodedBundle);
         Mockito.verify(interactor).createCarePlanEvent(context, encodedBundle, profilePresenter);
     }
+
+    @Test
+    public void onNoThinkMDCarePlanFound() {
+        profilePresenter.noThinkMDCarePlanFound();
+        Mockito.verify(view).displayToast(R.string.no_thinkmd_care_plan_found);
+    }
+
+    @Test
+    public void onCarePlanEventCreated() {
+        profilePresenter.carePlanEventCreated();
+        Mockito.verify(view).displayToast(R.string.thinkmd_assessment_saved);
+    }
+
 }
