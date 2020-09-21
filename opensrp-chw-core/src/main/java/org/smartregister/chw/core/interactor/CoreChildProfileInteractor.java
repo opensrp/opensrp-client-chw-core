@@ -22,7 +22,6 @@ import org.smartregister.chw.core.activity.WebViewActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
-import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.enums.ImmunizationState;

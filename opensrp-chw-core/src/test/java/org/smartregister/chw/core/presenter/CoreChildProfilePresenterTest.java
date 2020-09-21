@@ -16,6 +16,7 @@ import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.view.contract.BaseProfileContract;
 
 import java.util.Date;
 
@@ -211,5 +212,43 @@ public class CoreChildProfilePresenterTest {
 
         Mockito.verify(view).setProgressBarState(false);
         Mockito.verify(view).onJsonProcessed(eventType, taskType, profileTask);
+    }
+
+
+    @Mock
+    private BaseProfileContract.View displayToast;
+
+    @Test
+    public void testLaunchThinkMDHealthAssessment() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        profilePresenter.launchThinkMDHealthAssessment(context);
+        Mockito.verify(interactor).launchThinkMDHealthAssessment(context);
+    }
+
+    @Test
+    public void testShowThinkMDCarePlan() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        profilePresenter.showThinkMDCarePlan(context);
+        Mockito.verify(interactor).showThinkMDCarePlan(context, profilePresenter);
+    }
+
+    @Test
+    public void testCreateCarePlanEvent() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        String encodedBundle = "";
+        profilePresenter.createCarePlanEvent(context, encodedBundle);
+        Mockito.verify(interactor).createCarePlanEvent(context, encodedBundle, profilePresenter);
     }
 }
