@@ -49,8 +49,7 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             int menuItemItemId = menuItem.getItemId();
             if (menuItemItemId == R.id.call_responder) {
-                BaseAncRespondersCallDialogFragment.launchDialog(activity, communityResponderModel.getResponderName(), communityResponderModel.getResponderPhoneNumber(), true,
-                        null, null, false, false, null);
+                BaseAncRespondersCallDialogFragment.launchDialog(activity, communityResponderModel.getResponderName(), communityResponderModel.getResponderPhoneNumber(), null, null, null);
 
             } else if (menuItemItemId == R.id.edit_responder) {
                 try {
