@@ -103,14 +103,6 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-// Improve test performance
-subprojects {
-    tasks.withType(Test) {
-        maxParallelForks = 2
-        maxHeapSize = "2048m"
-        minHeapSize = "1024m"
-    }
-}
 
 task jacocoTestReport(type: JacocoReport) {
     sourceDirectories.setFrom(files())
