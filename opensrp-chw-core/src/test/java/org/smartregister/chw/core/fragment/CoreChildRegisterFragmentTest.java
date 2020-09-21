@@ -156,6 +156,7 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
     }
 
 
+
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
         fragment.getMainCondition();
