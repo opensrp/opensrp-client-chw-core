@@ -60,6 +60,7 @@ public class CoreAncMemberMapActivityTest extends BaseUnitTest {
         PowerMockito.verifyStatic(BaseAncRespondersCallDialogFragment.class, Mockito.times(1));
         BaseAncRespondersCallDialogFragment.launchDialog(eq(activity), eq("ttony"), eq("123456789"), eq(true), eq(null),
                 eq(null), eq(false), eq(false), eq(null));
+        Assert.assertNotNull(activity);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.repository;
 
 import android.content.ContentValues;
+import android.content.Context;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -11,17 +12,23 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseRobolectricTest;
+import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
+import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
 import org.smartregister.chw.core.model.CommunityResponderModel;
+import org.smartregister.chw.core.shadows.LayoutInflaterShadowHelper;
 import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.smartregister.chw.core.repository.CommunityResponderRepository.BASE_ID_INDEX;
 import static org.smartregister.chw.core.repository.CommunityResponderRepository.CREATE_TABLE_SQL;
 import static org.smartregister.chw.core.repository.CommunityResponderRepository.TABLE_NAME;
 
+@Config(shadows = {LayoutInflaterShadowHelper.class})
 public class CommunityResponderRepositoryTest extends BaseRobolectricTest {
 
     private CommunityResponderRepository repository;
@@ -31,7 +38,7 @@ public class CommunityResponderRepositoryTest extends BaseRobolectricTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         repository = Mockito.spy(new CommunityResponderRepository());
         Mockito.doReturn(database).when(repository).getReadableDatabase();
         Mockito.doReturn(database).when(repository).getWritableDatabase();
@@ -60,10 +67,7 @@ public class CommunityResponderRepositoryTest extends BaseRobolectricTest {
 
     @Test
     public void canGetAllResponders() {
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{CoreConstants.JsonAssets.RESPONDER_ID, CoreConstants.JsonAssets.RESPONDER_NAME,
-                CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER, CoreConstants.JsonAssets.RESPONDER_GPS});
-        matrixCursor.addRow(new Object[]{"id-123", "James Bond", "078900111", "1.2000,-0.1000"});
-        Mockito.doReturn(matrixCursor).when(database).query(Mockito.anyString(), Mockito.any(), eq(null), eq(null), eq(null), eq(null), eq(null), eq(null));
+        initializeGetResponderFromDB();
         List<CommunityResponderModel> communityResponderModelList = repository.readAllResponders();
         Assert.assertEquals(1, communityResponderModelList.size());
         Assert.assertEquals("James Bond", communityResponderModelList.get(0).getResponderName());
@@ -71,7 +75,12 @@ public class CommunityResponderRepositoryTest extends BaseRobolectricTest {
 
     @Test
     public void canGetCommunityResponderCustomAdapter() {
-
+        initializeGetResponderFromDB();
+        Context context = Mockito.mock(Context.class);
+        CoreCommunityRespondersRegisterActivity registerActivity = Mockito.mock(CoreCommunityRespondersRegisterActivity.class);
+        CommunityResponderCustomAdapter customAdapter = repository.readAllRespondersAdapter(context, registerActivity);
+        Assert.assertNotNull(customAdapter);
+        Assert.assertEquals("James Bond", Objects.requireNonNull(customAdapter.getItem(0)).getResponderName());
     }
 
     @Test
@@ -85,7 +94,18 @@ public class CommunityResponderRepositoryTest extends BaseRobolectricTest {
 
     @Test
     public void canGetRespondersCount() {
+        MatrixCursor countCursor = new MatrixCursor(new String[]{"count(*)"});
+        countCursor.addRow(new Object[]{5});
+        Mockito.doReturn(countCursor).when(database).query(Mockito.anyString(), Mockito.any(String[].class), eq(null), eq(null), eq(null), eq(null), eq(null));
+        Assert.assertEquals(5, repository.getRespondersCount());
+    }
 
+
+    private void initializeGetResponderFromDB() {
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{CoreConstants.JsonAssets.RESPONDER_ID, CoreConstants.JsonAssets.RESPONDER_NAME,
+                CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER, CoreConstants.JsonAssets.RESPONDER_GPS});
+        matrixCursor.addRow(new Object[]{"id-123", "James Bond", "078900111", "1.2000,-0.1000"});
+        Mockito.doReturn(matrixCursor).when(database).query(Mockito.anyString(), Mockito.any(), eq(null), eq(null), eq(null), eq(null), eq(null), eq(null));
     }
 
 }
