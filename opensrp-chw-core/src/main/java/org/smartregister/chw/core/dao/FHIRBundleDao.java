@@ -15,7 +15,7 @@ import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FHIRBundleDao extends AbstractDao {
 
-    protected FHIRBundleModel fetchFHIRDateModel(Context context, String childBaseEntityId) {
+    public FHIRBundleModel fetchFHIRDateModel(Context context, String childBaseEntityId) {
         FHIRBundleModel model = new FHIRBundleModel();
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
