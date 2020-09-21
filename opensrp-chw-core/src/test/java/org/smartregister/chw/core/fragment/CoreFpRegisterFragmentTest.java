@@ -107,9 +107,6 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     @Mock
     private BaseFpRegisterFragmentContract.Presenter presenter;
 
-    @Mock
-    private BaseRegisterFragment baseRegisterFragment;
-
 
     @Before
     public void setUp() {
@@ -184,7 +181,7 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     @Test
     public void getDueCondition() {
         String expectedDueCondition = "ec_family_planning.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and ifnull(expiry_date,strftime('%Y-%m-%d')) and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.FP_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
-        Assert.assertEquals(expectedDueCondition, coreFpRegisterFragment.getDueCondition());
+        assertEquals(expectedDueCondition, coreFpRegisterFragment.getDueCondition());
     }
 
 
