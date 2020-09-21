@@ -117,33 +117,28 @@ public class ChildDao extends AbstractDao {
     }
 
     public static String getBaseEntityID(String identifierType, String id) {
-        net.sqlcipher.Cursor cursor = null;
-        try {
-            String[] projectionArgs = new String[]{BASE_ENTITY_ID};
-            SQLiteDatabase database = getRepository().getReadableDatabase();
-            if (database == null) {
-                return null;
-            }
-            String selection = "select base_entity_id from ec_child where ? = ?";
-            String[] selectionArgs = new String[]{identifierType, id};
-
-
-            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
-
-            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
-                return cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID));
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return null;
+        String selection = "select base_entity_id from ec_child where ? = ?";
+        String[] selectionArgs = new String[]{identifierType, id};
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, BASE_ENTITY_ID);
     }
 
-    public static String queryColumnWithEntityId(String baseEntityId, String columnName) {
+
+    public static String getThinkMDCarePlan(String childBaseEntityId, String htmlAssessment) {
+        String selection = "select ? from ec_child where base_entity_id = ?";
+        String[] selectionArgs = new String[]{htmlAssessment, childBaseEntityId};
+
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, htmlAssessment);
+    }
+
+    public static boolean isThinkMDCarePlanExist(String baseEntityId) {
+        String selection = "select ? from ec_child where base_entity_id = ?";
+        String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
+        String thinkMDId = queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
+        return !StringUtils.isEmpty(thinkMDId);
+    }
+
+
+    public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
         net.sqlcipher.Cursor cursor = null;
         try {
             String[] projectionArgs = new String[]{columnName};
@@ -151,9 +146,6 @@ public class ChildDao extends AbstractDao {
             if (database == null) {
                 return null;
             }
-            String selection = "select ? from ec_child where base_entity_id = ?";
-            String[] selectionArgs = new String[]{columnName, baseEntityId};
-
             cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
 
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
@@ -167,30 +159,6 @@ public class ChildDao extends AbstractDao {
             }
         }
         return null;
-    }
-
-    public static boolean isThinkMDCarePlanExist(String baseEntityId) {
-        net.sqlcipher.Cursor cursor = null;
-        try {
-            String[] projectionArgs = new String[]{THINK_MD_ID};
-            SQLiteDatabase database = getRepository().getReadableDatabase();
-            String selection = "select ? from ec_child where base_entity_id = ?";
-            String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
-
-
-            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
-
-            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
-                return !StringUtils.isEmpty(cursor.getString(cursor.getColumnIndex(THINK_MD_ID)));
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return false;
     }
 
     public static boolean isMotherAlive(String motherBaseEntityId) {

@@ -74,6 +74,8 @@ import java.util.Set;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.dao.ChildDao.getBaseEntityID;
+import static org.smartregister.chw.core.dao.ChildDao.getThinkMDCarePlan;
 import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
 import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
 import static org.smartregister.chw.core.utils.Utils.getFormTag;
@@ -479,7 +481,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String baseEntityId = ChildDao.getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type), thinkMdId);
+                String baseEntityId = getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type), thinkMdId);
                 // creating the event to sync with server
                 if (baseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
@@ -508,7 +510,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void showThinkMDCarePlan(@NotNull Context context, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
             try {
-                String carePlan = ChildDao.queryColumnWithEntityId(getChildBaseEntityId(), HTML_ASSESSMENT);
+                String carePlan = getThinkMDCarePlan(getChildBaseEntityId(), HTML_ASSESSMENT);
                 appExecutors.mainThread().execute(() -> {
 
                     if (!StringUtils.isEmpty(carePlan))

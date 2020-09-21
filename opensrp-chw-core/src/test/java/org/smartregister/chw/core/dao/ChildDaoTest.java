@@ -117,7 +117,7 @@ public class ChildDaoTest extends ChildDao {
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String htmlAssessment = ChildDao.queryColumnWithEntityId("1234","html_assessment");
+        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234","html_assessment");
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
