@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -15,7 +14,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
-
 import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -34,16 +32,13 @@ import static org.mockito.ArgumentMatchers.eq;
 @PrepareForTest({BaseAncRespondersCallDialogFragment.class, CoreChwApplication.class})
 public class CoreAncMemberMapActivityTest extends BaseUnitTest {
 
-    private CoreAncMemberMapActivity activity;
-
-    @Mock
-    private CoreChwApplication coreChwApplication;
-
-    @Mock
-    private CommunityResponderRepository communityResponderRepository;
-
     @Rule
     public PowerMockRule rule = new PowerMockRule();
+    private CoreAncMemberMapActivity activity;
+    @Mock
+    private CoreChwApplication coreChwApplication;
+    @Mock
+    private CommunityResponderRepository communityResponderRepository;
 
     @Before
     public void setUp() {
@@ -73,7 +68,7 @@ public class CoreAncMemberMapActivityTest extends BaseUnitTest {
     @Test
     public void loadTransportersReturnsCorrectFeatureCollection() throws Exception {
         PowerMockito.mockStatic(CoreChwApplication.class);
-        List<CommunityResponderModel> responders =  new ArrayList<>();
+        List<CommunityResponderModel> responders = new ArrayList<>();
         responders.add(new CommunityResponderModel("First Responder", "001122", "-1.958955 33.7909233", "123456"));
         responders.add(new CommunityResponderModel("Second Responder", "003344", "-1.958955 33.7909233", "16789"));
         Mockito.when(CoreChwApplication.getInstance()).thenReturn(coreChwApplication);
