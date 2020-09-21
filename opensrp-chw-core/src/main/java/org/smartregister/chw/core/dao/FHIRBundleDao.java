@@ -15,7 +15,7 @@ import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FHIRBundleDao extends AbstractDao {
 
-    public FHIRBundleModel fetchFHIRDateModel(Context context, String childBaseEntityId) {
+    protected FHIRBundleModel fetchFHIRDateModel(Context context, String childBaseEntityId) {
         FHIRBundleModel model = new FHIRBundleModel();
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
@@ -40,11 +40,11 @@ public class FHIRBundleDao extends AbstractDao {
         return model;
     }
 
-    public String getLocationId() {
+    protected String getLocationId() {
         return locationId(getAllSharedPreferences());
     }
 
-    public String getProviderId() {
+    protected String getProviderId() {
         return getAllSharedPreferences().fetchRegisteredANM();
     }
 }
