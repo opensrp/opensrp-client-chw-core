@@ -139,24 +139,18 @@ public class ChildDao extends AbstractDao {
 
 
     public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
-        net.sqlcipher.Cursor cursor = null;
-        try {
-            String[] projectionArgs = new String[]{columnName};
-            SQLiteDatabase database = getRepository().getReadableDatabase();
+      SQLiteDatabase database = getRepository().getReadableDatabase();
             if (database == null) {
                 return null;
             }
-            cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);
-
-            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+        String[] projectionArgs = new String[]{columnName};
+        try(net.sqlcipher.Cursor  cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
+   
+            if (cursor.getCount() > 0 && cursor.moveToFirst()) {
                 return cursor.getString(cursor.getColumnIndex(columnName));
             }
         } catch (Exception e) {
             Timber.e(e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
         return null;
     }
