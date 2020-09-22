@@ -43,8 +43,6 @@ public class CoreAncFloatingMenuTest extends BaseUnitTest {
     @Mock
     private FloatingActionButton floatingActionButton;
 
-    private ActivityController<AppCompatActivity> activityController;
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -57,8 +55,6 @@ public class CoreAncFloatingMenuTest extends BaseUnitTest {
         ReflectionHelpers.setField(coreAncFloatingMenu, "menuBar", linearLayout);
         ReflectionHelpers.setField(coreAncFloatingMenu, "referLayout", view);
         ReflectionHelpers.setField(coreAncFloatingMenu, "isFabMenuOpen", true);
-
-        activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
     }
 
     @Test
