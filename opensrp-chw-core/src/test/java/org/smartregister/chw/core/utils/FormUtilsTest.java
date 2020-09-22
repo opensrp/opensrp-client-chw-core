@@ -60,6 +60,6 @@ public class FormUtilsTest extends BaseUnitTest {
         Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
         Assert.assertNotNull(testIntent);
         Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
-        Assert.assertEquals("test form", form.getName());
+        assertEquals("test form", form.getName());
     }
 }
