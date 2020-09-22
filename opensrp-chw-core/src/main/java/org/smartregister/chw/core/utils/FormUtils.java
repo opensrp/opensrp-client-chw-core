@@ -1,8 +1,13 @@
 package org.smartregister.chw.core.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -11,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.util.JsonFormUtils;
+import org.smartregister.chw.anc.util.NCUtils;
+import org.smartregister.chw.core.R;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
@@ -18,39 +25,60 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Utils;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
 import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FormUtils {
     public static FamilyMetadata getFamilyMetadata(BaseProfileActivity baseProfileActivity, String defaultLocation, ArrayList<String> locationHierarchy, ArrayList<Pair<String, String>> locationFields) {
         FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
                 baseProfileActivity.getClass(), CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
-
         metadata.updateFamilyRegister(CoreConstants.JSON_FORM.getFamilyRegister(), CoreConstants.TABLE_NAME.FAMILY,
                 CoreConstants.EventType.FAMILY_REGISTRATION, CoreConstants.EventType.UPDATE_FAMILY_REGISTRATION,
                 CoreConstants.CONFIGURATION.FAMILY_REGISTER, CoreConstants.RELATIONSHIP.FAMILY_HEAD, CoreConstants.RELATIONSHIP.PRIMARY_CAREGIVER);
-
         metadata.updateFamilyMemberRegister(CoreConstants.JSON_FORM.getFamilyMemberRegister(),
                 CoreConstants.TABLE_NAME.FAMILY_MEMBER, CoreConstants.EventType.FAMILY_MEMBER_REGISTRATION,
                 CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION, CoreConstants.CONFIGURATION.FAMILY_MEMBER_REGISTER, CoreConstants.RELATIONSHIP.FAMILY);
 
         metadata.updateFamilyDueRegister(CoreConstants.TABLE_NAME.CHILD, Integer.MAX_VALUE, false);
-
         metadata.updateFamilyActivityRegister(CoreConstants.TABLE_NAME.CHILD_ACTIVITY, Integer.MAX_VALUE, false);
-
         metadata.updateFamilyOtherMemberRegister(CoreConstants.TABLE_NAME.FAMILY_MEMBER, Integer.MAX_VALUE, false);
-
         metadata.setDefaultLocation(defaultLocation);
         metadata.setLocationHierarchy(locationHierarchy);
         metadata.setLocationFields(locationFields);
         return metadata;
+    }
+
+    public static Intent getStartFormActivity(JSONObject jsonForm, String title, Context context) {
+        Intent intent = new Intent(context, Utils.metadata().familyMemberFormActivity);
+        intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        form.setHomeAsUpIndicator(R.mipmap.ic_cross_white);
+        form.setSaveLabel(context.getResources().getString(R.string.submit));
+
+        if (isMultiPartForm(jsonForm)) {
+            form.setWizard(true);
+            form.setNavigationBackground(R.color.family_navigation);
+            form.setName(title);
+            form.setNextLabel(context.getResources().getString(R.string.next));
+            form.setPreviousLabel(context.getResources().getString(R.string.back));
+        }
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        return intent;
+
     }
 
     public static void updateWraForBA(FamilyEventClient familyEventClient) {
@@ -132,6 +160,17 @@ public class FormUtils {
                 currJsonObject.remove(org.smartregister.util.JsonFormUtils.VALUE);
                 currJsonObject.put(org.smartregister.util.JsonFormUtils.VALUE, updateValue);
             }
+        }
+    }
+
+    public static void processEvent() {
+        try {
+            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
+            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

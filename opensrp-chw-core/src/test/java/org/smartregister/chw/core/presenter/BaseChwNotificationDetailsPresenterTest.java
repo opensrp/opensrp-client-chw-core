@@ -4,6 +4,7 @@ import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,17 +36,18 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     private TextView notificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout notificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
     private String baseEntityId = "some-base-entity-id";
+    private BaseChwNotificationDetailsActivity activityView;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        BaseChwNotificationDetailsActivity view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
-        ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
-        ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
+        activityView = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
+        ReflectionHelpers.setField(activityView, "notificationTitle", notificationTitle);
+        ReflectionHelpers.setField(activityView, "notificationDetails", notificationDetails);
         Map<String, String> detailsMap = new HashMap<>();
         CommonPersonObjectClient client = new CommonPersonObjectClient(baseEntityId, detailsMap, "Patient 0");
-        view.setCommonPersonsObjectClient(client);
-        notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(view);
+        activityView.setCommonPersonsObjectClient(client);
+        notificationDetailsPresenter = new BaseChwNotificationDetailsPresenter(activityView);
         notificationDetailsPresenter.setInteractor(interactor);
         notificationDetailsPresenter.setNotificationDates(Pair.create("2020-04-28", "2020-05-01"));
     }
@@ -81,6 +83,15 @@ public class BaseChwNotificationDetailsPresenterTest extends BaseUnitTest {
     @Test
     public void testGetNotificationDates() {
         Assert.assertNotNull(notificationDetailsPresenter.getNotificationDates());
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activityView.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {

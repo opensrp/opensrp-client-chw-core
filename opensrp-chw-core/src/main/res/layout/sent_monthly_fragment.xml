@@ -75,23 +75,8 @@
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="@color/white"
             android:textSize="22sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
-        <Button
-            android:id="@+id/start_new_report_disabled"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/vaccination_earlier_bg"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
-            android:text="@string/start_new_report"
-            android:textAllCaps="false"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/translucent_client_list_grey"
-            android:textSize="22sp"
-            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

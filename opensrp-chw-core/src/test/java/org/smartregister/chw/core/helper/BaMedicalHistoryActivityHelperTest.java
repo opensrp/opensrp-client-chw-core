@@ -1,7 +1,10 @@
 package org.smartregister.chw.core.helper;
 
+import android.app.Activity;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,11 +28,13 @@ public class BaMedicalHistoryActivityHelperTest extends BaseUnitTest {
     private BaMedicalHistoryActivityHelper baMedicalHistoryActivityHelper;
 
     private List<Visit> visits = Arrays.asList(new Visit(), new Visit());
+    private Activity activity;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        baMedicalHistoryActivityHelper.bindViews(Robolectric.buildActivity(AppCompatActivity.class).get());
+        activity = Robolectric.buildActivity(AppCompatActivity.class).get();
+        baMedicalHistoryActivityHelper.bindViews(activity);
     }
 
     @Test
@@ -48,5 +53,14 @@ public class BaMedicalHistoryActivityHelperTest extends BaseUnitTest {
         baMedicalHistoryActivityHelper.processViewData(groupedVisits, RuntimeEnvironment.systemContext, memberObject);
         Mockito.verify(baMedicalHistoryActivityHelper, Mockito.atLeastOnce()).processMotherDetails(eq(visits), eq(memberObject));
         Mockito.verify(baMedicalHistoryActivityHelper, Mockito.atLeastOnce()).processChildDetails(eq(visits), Mockito.anyString());
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

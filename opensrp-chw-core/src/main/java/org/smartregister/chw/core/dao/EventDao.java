@@ -56,6 +56,23 @@ public class EventDao extends AbstractDao {
         return null;
     }
 
+    @Nullable
+    public static String getLatestJson(String baseEntityID, String... eventTypes) {
+        StringBuilder types = new StringBuilder();
+        for (String eventType : eventTypes) {
+            if (types.length() > 0)
+                types.append(" , ");
+
+            types.append("'").append(eventType).append("'");
+        }
+
+        String sql = "select json from event where baseEntityId = '" + baseEntityID + "' COLLATE NOCASE and eventType in (" + types.toString() + ") COLLATE NOCASE order by updatedAt desc limit 1";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "json");
+
+        return AbstractDao.readSingleValue(sql, dataMap);
+    }
+
     private static ECSyncHelper getEcSyncHelper() {
         return CoreChwApplication.getInstance().getEcSyncHelper();
     }
