@@ -11,11 +11,12 @@ import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.VisitDaoShadowHelper;
 
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = TestApplication.class, shadows = {ContextShadow.class})
+@Config(application = TestApplication.class, shadows = {ContextShadow.class, VisitDaoShadowHelper.class})
 public class CoreChildMedicalHistoryActivityInteractorTest extends BaseUnitTest {
 
     private CoreChildMedicalHistoryActivityInteractor interactor;
@@ -28,7 +29,9 @@ public class CoreChildMedicalHistoryActivityInteractorTest extends BaseUnitTest 
     @Test
     public void getVisitsReturnsCorrectList() {
         List<Visit> visits = interactor.getVisits("memberID");
-        Assert.assertNotNull(visits);
+        Assert.assertEquals(1, visits.size());
+        Assert.assertEquals("test-visit-id", visits.get(0).getVisitId());
+        Assert.assertEquals("test_details", visits.get(0).getVisitDetails().get("test_visit_key").get(0).getDetails());
     }
 
 }
