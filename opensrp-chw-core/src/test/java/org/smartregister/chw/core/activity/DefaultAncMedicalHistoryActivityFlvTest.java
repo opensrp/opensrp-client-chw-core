@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,6 +16,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
@@ -35,12 +37,14 @@ public class DefaultAncMedicalHistoryActivityFlvTest extends BaseUnitTest {
     private DefaultAncMedicalHistoryActivityFlv ancMedicalHistoryActivityFlv;
 
     private Activity activity;
+    private ActivityController<Activity> activityController;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         ancMedicalHistoryActivityFlv = Mockito.mock(DefaultAncMedicalHistoryActivityFlv.class, Mockito.CALLS_REAL_METHODS);
-        activity = Robolectric.buildActivity(Activity.class).create().start().get();
+        activityController = Robolectric.buildActivity(Activity.class).create().start();
+        activity = activityController.get();
         //activity.setContentView(R.layout.activity_base);
     }
 
@@ -101,5 +105,15 @@ public class DefaultAncMedicalHistoryActivityFlvTest extends BaseUnitTest {
 
         visits.add(visit);
         return visits;
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

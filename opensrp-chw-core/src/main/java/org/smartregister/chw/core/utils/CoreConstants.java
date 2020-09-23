@@ -151,10 +151,12 @@ public class CoreConstants {
         public static final String CHW_IN_APP_REPORT_EVENT = "CHW Monthly tallies Report";
         public static final String HF_IN_APP_REPORT_EVENT = "HF Monthly tallies Report";
         public static final String SICK_CHILD_FOLLOW_UP = "Sick Child Follow-up";
+        public static final String COMMUNITY_RESPONDER_REGISTRATION = "Community Responder Registration";
         public static final String ANC_DANGER_SIGNS_OUTCOME = "ANC Danger Signs Outcome";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "PNC Danger Signs Outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "Malaria Follow-up HF";
         public static final String FAMILY_PLANNING_UPDATE = "Family Planning Update";
+        public static final String REMOVE_COMMUNITY_RESPONDER = "Remove Community Responder";
     }
 
     public static final class EncounterType {
@@ -166,7 +168,6 @@ public class CoreConstants {
      */
     public static class JSON_FORM {
         public static final String BIRTH_CERTIFICATION = "birth_certification";
-
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
@@ -174,12 +175,11 @@ public class CoreConstants {
         public static final String CHILD_SICK_FORM = "child_sick_form";
         public static final String FAMILY_DETAILS_REGISTER = "family_details_register";
         public static final String FAMILY_DETAILS_REMOVE_MEMBER = "family_details_remove_member";
-
         public static final String FAMILY_DETAILS_REMOVE_CHILD = "family_details_remove_child";
         public static final String FAMILY_DETAILS_REMOVE_FAMILY = "family_details_remove_family";
         public static final String HOME_VISIT_COUNSELLING = "routine_home_visit";
+        public static final String COMMUNITY_RESPONDER_REGISTRATION_FORM = "community_responder_registration";
         public static final String IN_APP_REPORT_FORM = "in_app_monthly_tallies_report";
-
         private static final String ANC_REGISTRATION = "anc_member_registration";
         private static final String PREGNANCY_OUTCOME = "anc_pregnancy_outcome";
         private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
@@ -210,8 +210,6 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
-
-
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -646,6 +644,7 @@ public class CoreConstants {
         public static final String REFERRAL_DISMISSAL = "ec_referral_dismissal";
         public static final String PNC_DANGER_SIGNS_OUTCOME = "ec_pnc_danger_signs_outcome";
         public static final String MALARIA_FOLLOW_UP_HF = "ec_malaria_followup_hf";
+        public static final String COMMUNITY_RESPONDERS = "community_responders";
         public static final String REFERRAL = "ec_referral";
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
@@ -752,6 +751,10 @@ public class CoreConstants {
         public static final String STOCK_MONTH = "stock_month";
         public static final String STOCK_USAGE = "stock_usage";
         public static final String STOCK_PROVIDER = "stock_provider";
+        public static final String RESPONDER_ID = "id";
+        public static final String RESPONDER_NAME = "responder_name";
+        public static final String RESPONDER_PHONE_NUMBER = "responder_phone_number";
+        public static final String RESPONDER_GPS = "responder_gps";
         public static final String IN_APP_REPORT_INDICATOR_CODE = "indicator_code";
         public static final String IN_APP_REPORT_MONTH = "month";
         public static final String IN_APP_REPORT_EDITED = "edited";
@@ -858,8 +861,17 @@ public class CoreConstants {
     }
 
     public static final class PEER_TO_PEER {
-
         public static final String LOCATION_ID = "location-id";
+    }
+
+    public static final class KujakuConstants {
+        public static final String LAT_LNG = "latLng";
+        public static final String LAND_MARK = "landMark";
+        public static final String NAME = "name";
+        public static final String ANC_WOMAN_PHONE = "ancWomanPhone";
+        public static final String ANC_WOMAN_FAMILY_HEAD = "ancWomanFamilyHead";
+        public static final String ANC_WOMAN_FAMILY_HEAD_PHONE = "ancWomanFamilyHeadPhone";
+        public static final String FAMILY_NAME = "familyName";
     }
 
     public static final class ACTIVITY_PAYLOAD {
@@ -912,10 +924,10 @@ public class CoreConstants {
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "FP Initiation";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
-        public static final String SUSPECTED_HIV= "Suspected HIV";
-        public static final String SUSPECTED_TB= "Suspected TB";
-        public static final String SUSPECTED_GBV= "Suspected GBV";
-        public static final String SUSPECTED_CHILD_GBV= "Suspected Child GBV";
+        public static final String SUSPECTED_HIV = "Suspected HIV";
+        public static final String SUSPECTED_TB = "Suspected TB";
+        public static final String SUSPECTED_GBV = "Suspected GBV";
+        public static final String SUSPECTED_CHILD_GBV = "Suspected Child GBV";
     }
 
     public static final class REGISTER_TYPE {

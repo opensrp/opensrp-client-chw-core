@@ -1,11 +1,20 @@
 package org.smartregister.chw.core.fragment;
 
+import android.content.Intent;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,16 +28,23 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.mock.MockCoreFpRegisterFragment;
+import org.smartregister.chw.core.shadows.CoreChildRegisterActivityShadow;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.fp.contract.BaseFpRegisterFragmentContract;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
-import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
@@ -36,6 +52,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
+import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
 
 public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
@@ -59,8 +77,35 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     private View view;
 
     private FragmentActivity activity;
+    private ActivityController<AppCompatActivity> activityController;
 
-    private BaseRegisterFragmentContract.Presenter presenter;
+    @Mock
+    private ImageView imageView;
+
+    @Mock
+    private ProgressBar clientsProgressView;
+
+    @Mock
+    private TextView textView;
+
+    @Mock
+    private RelativeLayout relativeLayout;
+
+    @Mock
+    private EditText editText;
+
+    @Mock
+    private TextWatcher textWatcher;
+
+    @Mock
+    private View.OnKeyListener hideKeyboard;
+
+    @Mock
+    private ProgressBar syncProgressBar;
+
+    @Mock
+    private BaseFpRegisterFragmentContract.Presenter presenter;
+
 
     @Before
     public void setUp() {
@@ -69,11 +114,23 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(coreFpRegisterFragment, "presenter", presenter);
         ReflectionHelpers.setField(coreFpRegisterFragment, "view", view);
         ReflectionHelpers.setField(coreFpRegisterFragment, "dueOnlyLayout", view);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "clientsProgressView", clientsProgressView);
         ReflectionHelpers.setField(coreFpRegisterFragment, "dueFilterActive", true);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "qrCodeScanImageView", imageView);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "headerTextDisplay", textView);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "filterStatus", textView);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "filterRelativeLayout", relativeLayout);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "searchView", editText);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "textWatcher", textWatcher);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "hideKeyboard", hideKeyboard);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "syncButton", imageView);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "globalQrSearch", false);
 
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        activity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
+        activity = activityController.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
         Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
@@ -81,13 +138,17 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void whenSetupViewsAnswered() {
-        Mockito.doNothing().when(coreFpRegisterFragment).setupViews(view);
+    public void testSetupViews() {
+        when(coreFpRegisterFragment.getActivity()).thenReturn(activity);
+        when(coreFpRegisterFragment.getContext()).thenReturn(activity);
+        View view = LayoutInflater.from(activity).inflate(R.layout.fragment_base_register, null);
         coreFpRegisterFragment.setupViews(view);
 
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).setupViews(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+        View dueOnlyLayout = view.findViewById(R.id.due_only_layout);
+        dueOnlyLayout.setVisibility(View.VISIBLE);
+        View searchBarLayout = view.findViewById(org.smartregister.R.id.search_bar_layout);
+        searchBarLayout.setBackgroundResource(R.color.customAppThemeBlue);
+        assertEquals(View.VISIBLE, dueOnlyLayout.getVisibility());
     }
 
     @Test
@@ -100,14 +161,28 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void whenOnViewClickedAnswered() {
-        Mockito.doNothing().when(coreFpRegisterFragment).onViewClicked(view);
+    public void testOnViewClickedOpensProfile() {
+        CoreChildRegisterActivityShadow childRegisterActivity = Robolectric.buildActivity(CoreChildRegisterActivityShadow.class, new Intent()).create().start().resume().get();
+        coreFpRegisterFragment = new MockCoreFpRegisterFragment();
+        Context.bindtypes = new ArrayList<>();
+        Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
+        Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
+        childRegisterActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
+        when(view.getTag(org.smartregister.family.R.id.VIEW_ID)).thenReturn(CLICK_VIEW_NORMAL);
+        CommonPersonObjectClient client = new CommonPersonObjectClient("12", null, "");
+        client.setColumnmaps(new HashMap<String, String>());
+        when(view.getTag()).thenReturn(client);
         coreFpRegisterFragment.onViewClicked(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+        Intent intent = shadowOf(childRegisterActivity).getNextStartedActivity();
+        assertNotNull(intent);
     }
+
+    @Test
+    public void getDueCondition() {
+        String expectedDueCondition = "ec_family_planning.base_entity_id in (select base_entity_id from schedule_service where strftime('%Y-%m-%d') BETWEEN due_date and ifnull(expiry_date,strftime('%Y-%m-%d')) and schedule_name = '" + CoreConstants.SCHEDULE_TYPES.FP_VISIT + "' and ifnull(not_done_date,'') = '' and ifnull(completion_date,'') = '' )  ";
+        assertEquals(expectedDueCondition, coreFpRegisterFragment.getDueCondition());
+    }
+
 
     @Test
     public void whenToggleFilterSelectionAnswered() {
@@ -119,42 +194,13 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
         Assert.assertEquals(captor.getValue(), view);
     }
 
-    @Test
-    public void whenDueFiltersAnswered() {
-        Mockito.doNothing().when(coreFpRegisterFragment).dueFilter(view);
-        coreFpRegisterFragment.dueFilter(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).dueFilter(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-    @Test
-    public void whenNormalFilterAnswered() {
-        Mockito.doNothing().when(coreFpRegisterFragment).normalFilter(view);
-        coreFpRegisterFragment.normalFilter(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).normalFilter(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }
-
-    @Test
-    public void whenFilterDueAnswered() {
-        String filterString = "filterString";
-        String joinTableString = "joinTableString";
-        String mainConditionString = "mainConditionString";
-        Mockito.doNothing().when(coreFpRegisterFragment).filterDue(filterString, joinTableString, mainConditionString);
-        coreFpRegisterFragment.filterDue(filterString, joinTableString, mainConditionString);
-
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> captor1 = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).filterDue(captor.capture(), captor1.capture(), captor2.capture());
-        Assert.assertEquals(captor.getValue(), filterString);
-        Assert.assertEquals(captor1.getValue(), joinTableString);
-        Assert.assertEquals(captor2.getValue(), mainConditionString);
-    }
-
-
 }
