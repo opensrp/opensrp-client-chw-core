@@ -1,11 +1,14 @@
 package org.smartregister.chw.core.model;
 
-public class CommunityResponderModel {
+import org.smartregister.chw.anc.contract.BaseAncRespondersCallDialogContract;
+
+public class CommunityResponderModel implements BaseAncRespondersCallDialogContract.Model {
 
     private String responderName;
     private String responderPhoneNumber;
     private String responderLocation;
     private String id;
+    private boolean isAncResponder;
 
     public CommunityResponderModel() {
     }
@@ -47,6 +50,16 @@ public class CommunityResponderModel {
 
     public String getResponderLocation() {
         return responderLocation;
+    }
+
+    @Override
+    public boolean isAncResponder() {
+        return isAncResponder;
+    }
+
+    @Override
+    public void setIsAncResponder(boolean isAncResponder) {
+        this.isAncResponder = isAncResponder;
     }
 
 

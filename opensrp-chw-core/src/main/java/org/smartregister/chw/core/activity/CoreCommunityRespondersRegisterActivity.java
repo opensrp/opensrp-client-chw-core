@@ -44,13 +44,13 @@ import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
 
-    private ListView communityRespondersList;
+    private ListView communityRespondersListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.community_responders);
-        communityRespondersList = findViewById(R.id.lv_responder);
+        communityRespondersListView = findViewById(R.id.lv_responder);
         Toolbar toolbar = findViewById(R.id.location_switching_toolbar);
         setSupportActionBar(toolbar);
         findViewById(R.id.toggle_action_menu).setOnClickListener(v -> onClickDrawer(v));
@@ -66,7 +66,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
     protected void onResume() {
         CommunityResponderRepository communityResponderRepository = CoreChwApplication.getInstance().communityResponderRepository();
         CommunityResponderCustomAdapter adapter = communityResponderRepository.readAllRespondersAdapter(getApplicationContext(), this);
-        communityRespondersList.setAdapter(adapter);
+        communityRespondersListView.setAdapter(adapter);
         super.onResume();
     }
 
@@ -105,10 +105,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity {
             JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
             getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson);
 
-            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            CoreChwApplication.getInstance().getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
-            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+            FormUtils.processEvent();
         } catch (Exception e) {
             e.printStackTrace();
         }
