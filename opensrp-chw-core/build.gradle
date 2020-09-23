@@ -127,7 +127,7 @@ dependencies {
 
     compileOnly 'com.ibm.fhir:fhir-model:4.2.3'
 
-    api('org.smartregister:opensrp-client-core:2.0.6-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:2.1.4-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
