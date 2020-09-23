@@ -17,7 +17,6 @@ import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.view.contract.BaseProfileContract;
 
 import java.util.Date;
 
@@ -214,10 +213,6 @@ public class CoreChildProfilePresenterTest {
         Mockito.verify(view).setProgressBarState(false);
         Mockito.verify(view).onJsonProcessed(eventType, taskType, profileTask);
     }
-
-
-    @Mock
-    private BaseProfileContract.View displayToast;
 
     @Test
     public void testLaunchThinkMDHealthAssessment() {
