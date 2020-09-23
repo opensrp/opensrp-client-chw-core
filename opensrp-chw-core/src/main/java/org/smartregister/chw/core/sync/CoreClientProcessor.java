@@ -10,11 +10,14 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.model.CommunityResponderModel;
+import org.smartregister.chw.core.repository.CommunityResponderRepository;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.ReportUtils;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.fp.util.FpUtil;
@@ -252,6 +255,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.STOCK_USAGE_REPORT:
                 clientProcessStockEvent(event);
                 break;
+            case CoreConstants.EventType.REMOVE_COMMUNITY_RESPONDER:
+                CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+                repo.purgeCommunityResponder(event.getBaseEntityId());
+                break;
+            case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
+                clientProcessCommunityResponderEvent(event);
             case CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT:
                 clientProcessInAppReportingEvent(event);
                 break;
@@ -710,5 +719,53 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e);
         }
         return null;
+    }
+
+    private CommunityResponderModel getCommunityResponderFromObs(Event event) {
+        List<Obs> responderObs = event.getObs();
+        CommunityResponderModel communityResponderModel = new CommunityResponderModel();
+        for (Obs obs : responderObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderPhoneNumber(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_ID)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setId(value);
+                } else {
+                    communityResponderModel.setId(event.getBaseEntityId());
+                    continue;
+                }
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_GPS)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderLocation(value);
+                    continue;
+                } else
+                    return null;
+            }
+        }
+        return communityResponderModel;
+    }
+
+    private void clientProcessCommunityResponderEvent(Event event) {
+        CommunityResponderModel communityResponderModel = getCommunityResponderFromObs(event);
+        if (communityResponderModel != null) {
+            CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+            if (StringUtils.isBlank(communityResponderModel.getId()))
+                communityResponderModel.setId(event.getBaseEntityId());
+            repo.addOrUpdate(communityResponderModel);
+        }
     }
 }

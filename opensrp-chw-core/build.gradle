@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
     }
 }
@@ -93,6 +93,10 @@ android {
             returnDefaultValues = true
             includeAndroidResources = true
         }
+
+        unitTests.all {
+            jvmArgs "-Xmx3g"
+        }
     }
 }
 
@@ -103,6 +107,10 @@ tasks.withType(Test) {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
+    implementation ('io.ona.kujaku:library:0.8.4') {
+        exclude group: 'com.android.volley', module: 'volley'
+    }
 
    implementation('org.smartregister:opensrp-client-thinkmd:1.0.0-SNAPSHOT@aar') {
         transitive = true
@@ -177,7 +185,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:1.0.3-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:1.0.4-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'

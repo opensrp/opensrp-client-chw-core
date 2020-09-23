@@ -3,6 +3,7 @@ package org.smartregister.chw.core.activity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,10 +23,12 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
     private TextView notificationTitle = new TextView(RuntimeEnvironment.systemContext);
     private TextView markAsDoneTextView = new TextView(RuntimeEnvironment.systemContext);
     private LinearLayout notificationDetails = new LinearLayout(RuntimeEnvironment.systemContext);
+    private TestableChwNotificationDetailsActivity activity;
 
     @Before
     public void setUp() {
-        view = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
+        activity = Robolectric.buildActivity(TestableChwNotificationDetailsActivity.class).get();
+        view = activity;
         ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
         ReflectionHelpers.setField(view, "markAsDoneTextView", markAsDoneTextView);
         ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
@@ -52,6 +55,15 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
     public void testDisableMarkAsDoneAction() {
         view.disableMarkAsDoneAction(true);
         Assert.assertFalse(markAsDoneTextView.isEnabled());
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static class TestableChwNotificationDetailsActivity extends BaseChwNotificationDetailsActivity {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.anc.domain.Visit;
@@ -54,12 +56,14 @@ public class DefaultChildMedicalHistoryActivityFlvTest {
     private DefaultChildMedicalHistoryActivityFlv childMedicalHistoryActivityFlv;
 
     private Activity activity;
+    private ActivityController<Activity> activityController;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         childMedicalHistoryActivityFlv = Mockito.mock(DefaultChildMedicalHistoryActivityFlv.class, Mockito.CALLS_REAL_METHODS);
-        activity = Robolectric.buildActivity(Activity.class).create().start().get();
+        activityController = Robolectric.buildActivity(Activity.class).create().start();
+        activity = activityController.get();
     }
 
     @Test
@@ -149,6 +153,16 @@ public class DefaultChildMedicalHistoryActivityFlvTest {
 
         ReflectionHelpers.callInstanceMethod(childMedicalHistoryActivityFlv, "evaluateGrowthAndNutrition");
         Mockito.verify(parentView).addView(Mockito.any());
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activityController.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Map<String, List<Vaccine>> getSampleVaccineMap() {

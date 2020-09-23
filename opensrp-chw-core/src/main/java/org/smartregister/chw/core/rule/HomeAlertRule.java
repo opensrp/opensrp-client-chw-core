@@ -193,4 +193,15 @@ public class HomeAlertRule implements ICommonRule {
         }
         return anchor;
     }
+
+    public boolean isLmhChildDueWithinMonth() {
+        if (todayDate.getDayOfMonth() == 1) {
+            return true;
+        }
+        if (lastVisitDate == null) {
+            return true;
+        }
+
+        return !isVisitThisMonth(lastVisitDate, todayDate);
+    }
 }

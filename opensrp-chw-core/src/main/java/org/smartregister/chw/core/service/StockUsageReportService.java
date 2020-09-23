@@ -7,20 +7,15 @@ import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
-import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.StockUsageReportDao;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.chw.core.utils.ReportUtils;
-import org.smartregister.repository.BaseRepository;
 
-import java.util.Date;
 import java.util.List;
-
-import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
-import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class StockUsageReportService extends IntentService {
     /**
@@ -48,10 +43,7 @@ public class StockUsageReportService extends IntentService {
                     ReportUtils.addEvent(ReportUtils.geValues(null, usage), formSubmissionId, CoreConstants.JSON_FORM.getStockUsageForm(), CoreConstants.TABLE_NAME.STOCK_USAGE_REPORT);
                 }
 
-                long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-                Date lastSyncDate = new Date(lastSyncTimeStamp);
-                NCUtils.getClientProcessorForJava().processClient(getSyncHelper().getEvents(lastSyncDate, BaseRepository.TYPE_Unprocessed));
-                getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+                FormUtils.processEvent();
 
             } catch (JSONException e) {
                 e.printStackTrace();
