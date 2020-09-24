@@ -2,6 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import androidx.annotation.VisibleForTesting;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -88,7 +89,8 @@ public class CoreCommunityRespondersInteractor implements CoreCommunityResponder
     private void createAddCommunityResponderEvent(String jsonString) {
         try {
             Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(Utils.context().allSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
-            baseEvent.setBaseEntityId(UUID.randomUUID().toString());
+            if (StringUtils.isBlank(baseEvent.getBaseEntityId()))
+                baseEvent.setBaseEntityId(UUID.randomUUID().toString());
             CoreJsonFormUtils.tagSyncMetadata(Utils.context().allSharedPreferences(), baseEvent);
             JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
             getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson);
