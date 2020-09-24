@@ -1,8 +1,8 @@
 package org.smartregister.chw.core.model;
 
-import org.smartregister.chw.anc.contract.BaseAncRespondersCallDialogContract;
+import org.smartregister.chw.core.contract.CoreCommunityRespondersContract;
 
-public class CommunityResponderModel implements BaseAncRespondersCallDialogContract.Model {
+public class CommunityResponderModel implements CoreCommunityRespondersContract.Model {
 
     private String responderName;
     private String responderPhoneNumber;
