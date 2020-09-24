@@ -152,7 +152,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity i
 
     @Override
     public CoreCommunityRespondersContract.Presenter presenter() {
-        return new CoreCommunityRespondersPresenter(this);
+        return presenter;
     }
 
     @Override
@@ -180,7 +180,7 @@ public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity i
                 }
             } else if (menuItemItemId == R.id.remove_responder) {
                 try {
-                        this.confirmPurgeResponder(communityResponderModel.getId());
+                    this.confirmPurgeResponder(communityResponderModel.getId());
                 } catch (Exception e) {
                     Timber.e(e);
                 }

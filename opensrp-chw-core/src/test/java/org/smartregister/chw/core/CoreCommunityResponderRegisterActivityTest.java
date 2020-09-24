@@ -1,7 +1,6 @@
 package org.smartregister.chw.core;
 
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.junit.After;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
@@ -19,6 +17,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
+import org.smartregister.chw.core.contract.CoreCommunityRespondersContract;
 import org.smartregister.chw.core.shadows.CommunityResponderRepositoryShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 
@@ -31,20 +30,21 @@ public class CoreCommunityResponderRegisterActivityTest extends BaseUnitTest {
 
     private CoreCommunityRespondersRegisterActivity activity;
     private ActivityController<CoreCommunityRespondersRegisterActivity> activityController;
+    private CoreCommunityRespondersContract.Presenter presenter;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         activityController = Robolectric.buildActivity(CoreCommunityRespondersRegisterActivity.class).create();
-        activity = (CoreCommunityRespondersRegisterActivity) activityController.get();
+        activity = activityController.get();
+        presenter = Mockito.mock(CoreCommunityRespondersContract.Presenter.class);
+        ReflectionHelpers.setField(activity, "presenter", presenter);
     }
 
     @Test
-    public void onResumeSetsCommunityResponderListAdapter() {
-        ListView communityRespondersListView = Mockito.mock(ListView.class);
-        ReflectionHelpers.setField(activity, "communityRespondersList", communityRespondersListView);
+    public void onResumeFetchesCommunityResponders() {
         activityController.resume();
-        Mockito.verify(communityRespondersListView, Mockito.times(1)).setAdapter(null);
+        Mockito.verify(presenter, Mockito.times(1)).fetchAllCommunityResponders();
     }
 
     @Test
