@@ -16,7 +16,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
 import org.smartregister.chw.core.R;
@@ -25,31 +24,22 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreCommunityRespondersContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.model.CommunityResponderModel;
-import org.smartregister.chw.core.model.CoreChildProfileModel;
-import org.smartregister.chw.core.presenter.CoreChildProfilePresenter;
 import org.smartregister.chw.core.presenter.CoreCommunityRespondersPresenter;
 import org.smartregister.chw.core.repository.CommunityResponderRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
-import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
-import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.repository.BaseRepository;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import timber.log.Timber;
 
-import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
-import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity implements CoreCommunityRespondersContract.View {
 

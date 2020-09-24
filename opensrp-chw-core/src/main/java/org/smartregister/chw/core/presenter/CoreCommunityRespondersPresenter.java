@@ -9,7 +9,6 @@ import java.util.List;
 
 public class CoreCommunityRespondersPresenter implements CoreCommunityRespondersContract.Presenter, CoreCommunityRespondersContract.InteractorCallBack {
 
-    private CoreCommunityRespondersContract.Model model;
     private WeakReference<CoreCommunityRespondersContract.View> viewWeakReference;
     private CoreCommunityRespondersContract.Interactor interactor;
 
