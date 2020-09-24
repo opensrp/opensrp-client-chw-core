@@ -85,4 +85,64 @@ public class ChildDaoTest extends ChildDao {
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertFalse(isAlive);
     }
+
+    @Test
+    public void testGetBaseEntityID() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","thinkmd_id"});
+        matrixCursor.addRow(new Object[]{"12345","45678"});
+
+        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        String baseEntityID = ChildDao.getBaseEntityID("thinkmd_id","45678");
+
+        Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        Assert.assertEquals(baseEntityID, "12345");
+    }
+
+    @Test
+    public void testQueryColumnWithEntityId() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","html_assessment"});
+        matrixCursor.addRow(new Object[]{"1234","assessment plan"});
+
+        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234","html_assessment");
+
+        Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        Assert.assertEquals(htmlAssessment, "assessment plan");
+    }
+
+    @Test
+    public void testIsThinkMDCarePlanExist() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","thinkmd_id"});
+        matrixCursor.addRow(new Object[]{"1234","5678"});
+
+        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        boolean thinkMDCarePlanExist = ChildDao.isThinkMDCarePlanExist("1234");
+
+        Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
+                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
+                , Mockito.nullable(String.class), Mockito.nullable(String.class));
+
+        Assert.assertTrue(thinkMDCarePlanExist);
+    }
 }

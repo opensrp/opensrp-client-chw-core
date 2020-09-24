@@ -42,6 +42,7 @@ public class CoreConstants {
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
         String BASE_ENTITY_ID = "base_entity_id";
+        String THINK_MD_ID = "thinkmd_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
@@ -670,6 +671,7 @@ public class CoreConstants {
         public static final String FAMILY_HEAD_NAME = "family_head_name";
         public static final String FAMILY_HEAD_PHONE_NUMBER = "family_head_phone_number";
         public static final String TOOLBAR_TITLE = "toolbar_title";
+        public static final String CONTENT_TO_DISPLAY = "content_to_display";
     }
 
     public static final class IMMUNIZATION_CONSTANT {
@@ -962,4 +964,10 @@ public class CoreConstants {
         public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
     }
 
+
+    public static class ThinkMdConstants {
+        public static String HTML_ASSESSMENT = "html_assessment";
+        public static String CARE_PLAN_DATE = "care_plan_date";
+        public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
+    }
 }
