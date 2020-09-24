@@ -20,6 +20,11 @@ public class CommunityResponderModel implements CoreCommunityRespondersContract.
         this.responderLocation = responderLocation;
     }
 
+    @Override
+    public void setId() {
+        // TODO --> Correct this
+    }
+
     public String getId() {
         return id;
     }

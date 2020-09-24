@@ -2,6 +2,7 @@ package org.smartregister.chw.core.contract;
 
 import android.content.Context;
 
+import org.json.JSONObject;
 import org.smartregister.chw.anc.contract.BaseAncRespondersCallDialogContract;
 import org.smartregister.chw.core.model.CommunityResponderModel;
 
@@ -15,12 +16,21 @@ public interface CoreCommunityRespondersContract {
 
         Context getContext();
 
+        void startEditFormActivity(CommunityResponderModel communityResponderModel, String baseEntityID) throws Exception;
+
+        void startFormActivity(JSONObject jsonForm);
+
+        void showPopUpMenu(android.view.View view, CoreCommunityRespondersContract.Model model);
+
         void refreshCommunityResponders(List<CommunityResponderModel> communityResponderModelList);
+
     }
 
     interface Presenter {
 
         View getView();
+
+        void fetchAllCommunityResponders();
 
         void updateCommunityResponders(List<CommunityResponderModel> communityResponderModelList);
 
@@ -35,11 +45,11 @@ public interface CoreCommunityRespondersContract {
 
     interface Interactor {
 
-        List<CommunityResponderModel> getAllCommunityResponders();
+        void addCommunityResponder(String jsonString, InteractorCallBack callBack);
 
-        void addCommunityResponder(String jsonString);
+        void fetchAllCommunityResponders(InteractorCallBack callBack);
 
-        void removeCommunityResponder(String baseEntityId);
+        void removeCommunityResponder(String baseEntityId, InteractorCallBack callBack);
 
     }
 

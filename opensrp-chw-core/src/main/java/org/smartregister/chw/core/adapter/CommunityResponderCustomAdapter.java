@@ -10,18 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.PopupMenu;
 
 import org.jetbrains.annotations.NotNull;
-import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.model.CommunityResponderModel;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityResponderModel> implements View.OnClickListener {
 
@@ -39,36 +34,7 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         CommunityResponderModel object = getItem(position);
-        showPopupMenu(v, object);
-    }
-
-    private void showPopupMenu(View view, CommunityResponderModel communityResponderModel) {
-        PopupMenu popupMenu = new PopupMenu(activity, view);
-        popupMenu.getMenuInflater().inflate(R.menu.community_responder_contex_menu, popupMenu.getMenu());
-        popupMenu.show();
-
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            int menuItemItemId = menuItem.getItemId();
-            if (menuItemItemId == R.id.call_responder) {
-                communityResponderModel.setIsAncResponder(true); // TODO -> This should be persisted
-                BaseAncRespondersCallDialogFragment.launchDialog(activity, communityResponderModel, null, null, false, false, null);
-
-            } else if (menuItemItemId == R.id.edit_responder) {
-                try {
-                    activity.startJsonActivity(communityResponderModel, communityResponderModel.getId());
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-            } else if (menuItemItemId == R.id.remove_responder) {
-                try {
-                    activity.confirmPurgeResponder(communityResponderModel.getId());
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-            }
-            return false;
-        });
-
+        activity.showPopUpMenu(v, object);
     }
 
     @NotNull

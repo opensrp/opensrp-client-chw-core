@@ -28,18 +28,23 @@ public class CoreCommunityRespondersPresenter implements CoreCommunityResponders
     }
 
     @Override
+    public void fetchAllCommunityResponders() {
+        interactor.fetchAllCommunityResponders(this);
+    }
+
+    @Override
     public void updateCommunityResponders(List<CommunityResponderModel> communityResponderModelList) {
         getView().refreshCommunityResponders(communityResponderModelList);
     }
 
     @Override
     public void addCommunityResponder(String jsonString) {
-        interactor.addCommunityResponder(jsonString);
+        interactor.addCommunityResponder(jsonString, this);
     }
 
     @Override
     public void removeCommunityResponder(String baseEntityId) {
-        interactor.removeCommunityResponder(baseEntityId);
+        interactor.removeCommunityResponder(baseEntityId, this);
     }
 
     @Override
