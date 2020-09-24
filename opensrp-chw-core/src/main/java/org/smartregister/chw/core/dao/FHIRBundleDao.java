@@ -10,6 +10,8 @@ import org.smartregister.thinkmd.model.FHIRBundleModel;
 import static org.smartregister.chw.core.dao.ChildDao.getChildProfileData;
 import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FHIRBundleDao extends AbstractDao {
 
@@ -28,14 +30,21 @@ public class FHIRBundleDao extends AbstractDao {
             model.setDob(userProfile.getMiddle());
             model.setAgeInDays(userProfile.getLeft());
         }
-        //Todo: these values needs to be query and set into model
-        model.setPractitionerId(null);
-        model.setPatientId(null);
-        model.setUserName(null);
-        model.setLocationId(null);
-        model.setUniqueIdGeneratedForThinkMD(null);
+        model.setUniqueIdGeneratedForThinkMD(getRandomGeneratedId());
+        model.setPatientId(model.getUniqueIdGeneratedForThinkMD());
+        String providerId = getProviderId();
+        model.setPractitionerId(providerId);
+        model.setUserName(providerId);
+        model.setLocationId(getLocationId());
 
         return model;
     }
 
+    protected String getLocationId() {
+        return locationId(getAllSharedPreferences());
+    }
+
+    protected String getProviderId() {
+        return getAllSharedPreferences().fetchRegisteredANM();
+    }
 }
