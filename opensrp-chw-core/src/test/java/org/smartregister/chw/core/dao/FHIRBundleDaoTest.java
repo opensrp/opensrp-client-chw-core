@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
@@ -30,6 +31,8 @@ public class FHIRBundleDaoTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        org.smartregister.Context context = org.smartregister.Context.getInstance();
+        CoreLibrary.init(context);
     }
 
     @PrepareForTest({ChildDao.class, Utils.class})
@@ -42,6 +45,8 @@ public class FHIRBundleDaoTest {
         PowerMockito.when(getChildProfileData(childBaseEntityId)).thenReturn(Triple.of("9416", "15-10-1994", "male"));
         PowerMockito.when(fetchMUACValues(childBaseEntityId)).thenReturn(Pair.create("green", "Green"));
         PowerMockito.when(getRandomGeneratedId()).thenReturn("123-456-789");
+        PowerMockito.doReturn("111-222-333").when(fhirBundleDao).getLocationId();
+        PowerMockito.doReturn("dummy").when(fhirBundleDao).getProviderId();
         FHIRBundleModel bundle = fhirBundleDao.fetchFHIRDateModel(context, childBaseEntityId);
 
         Assert.assertNotNull(bundle);

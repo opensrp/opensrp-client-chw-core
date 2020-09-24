@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
@@ -212,4 +213,51 @@ public class CoreChildProfilePresenterTest {
         Mockito.verify(view).setProgressBarState(false);
         Mockito.verify(view).onJsonProcessed(eventType, taskType, profileTask);
     }
+
+    @Test
+    public void testLaunchThinkMDHealthAssessment() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        profilePresenter.launchThinkMDHealthAssessment(context);
+        Mockito.verify(interactor).launchThinkMDHealthAssessment(context);
+    }
+
+    @Test
+    public void testShowThinkMDCarePlan() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        profilePresenter.showThinkMDCarePlan(context);
+        Mockito.verify(interactor).showThinkMDCarePlan(context, profilePresenter);
+    }
+
+    @Test
+    public void testCreateCarePlanEvent() {
+        profilePresenter.setInteractor(interactor);
+
+        Context context = Mockito.mock(Context.class);
+        Mockito.doReturn(context).when(view).getContext();
+
+        String encodedBundle = "";
+        profilePresenter.createCarePlanEvent(context, encodedBundle);
+        Mockito.verify(interactor).createCarePlanEvent(context, encodedBundle, profilePresenter);
+    }
+
+    @Test
+    public void onNoThinkMDCarePlanFound() {
+        profilePresenter.noThinkMDCarePlanFound();
+        Mockito.verify(view).displayToast(R.string.no_thinkmd_care_plan_found);
+    }
+
+    @Test
+    public void onCarePlanEventCreated() {
+        profilePresenter.carePlanEventCreated();
+        Mockito.verify(view).displayToast(R.string.thinkmd_assessment_saved);
+    }
+
 }
