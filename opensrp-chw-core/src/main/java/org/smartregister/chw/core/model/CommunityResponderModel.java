@@ -21,16 +21,12 @@ public class CommunityResponderModel implements CoreCommunityRespondersContract.
     }
 
     @Override
-    public void setId() {
-        // TODO --> Correct this
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setResponderName(String responderName) {
