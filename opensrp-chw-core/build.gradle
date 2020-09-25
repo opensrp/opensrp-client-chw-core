@@ -111,7 +111,6 @@ dependencies {
     implementation('io.ona.kujaku:library:0.8.4') {
         exclude group: 'com.android.volley', module: 'volley'
         exclude group: 'stax', module: 'stax-api'
-        exclude group: 'xpp3', module: 'xpp3'
     }
 
     implementation('org.smartregister:opensrp-client-thinkmd:1.0.2-SNAPSHOT@aar') {
