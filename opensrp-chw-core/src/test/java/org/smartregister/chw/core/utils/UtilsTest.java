@@ -1,16 +1,21 @@
 package org.smartregister.chw.core.utils;
 
+import android.os.Build;
+
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.referral.domain.MemberObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.domain.tag.FormTag;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +25,7 @@ import java.util.Map;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 27)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class UtilsTest {
 
     private Map<String, String> details;
@@ -31,6 +36,7 @@ public class UtilsTest {
     public void setUp() {
         details = new HashMap<>();
         columnMap = new HashMap<>();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -77,10 +83,18 @@ public class UtilsTest {
         Assert.assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.application));
     }
 
+
+    @Test
+    public void getFormTagShouldNotReturnNullValues() {
+        FormTag formTag = Utils.getFormTag(org.smartregister.util.Utils.getAllSharedPreferences());
+        Assert.assertNotNull(formTag);
+    }
+
     @After
     public void tearDown() {
         columnMap = null;
         details = null;
         client = null;
     }
+
 }

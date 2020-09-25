@@ -259,6 +259,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
                 clientProcessCommunityResponderEvent(event);
+                break;
             case CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT:
                 clientProcessInAppReportingEvent(event);
                 break;

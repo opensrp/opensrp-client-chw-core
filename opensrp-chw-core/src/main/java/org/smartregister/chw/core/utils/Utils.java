@@ -64,8 +64,11 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
+import org.smartregister.domain.tag.FormTag;
+import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.PermissionUtils;
 
@@ -87,6 +90,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
@@ -778,5 +782,18 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
     public static String getRandomGeneratedId() {
         return UUID.randomUUID().toString();
+    }
+
+    public static FormTag getFormTag(AllSharedPreferences allSharedPreferences) {
+        FormTag formTag = new FormTag();
+        String providerId = allSharedPreferences.fetchRegisteredANM();
+        formTag.providerId = allSharedPreferences.fetchRegisteredANM();
+        formTag.locationId = locationId(allSharedPreferences);
+        formTag.childLocationId = allSharedPreferences.fetchCurrentLocality();
+        formTag.teamId = allSharedPreferences.fetchDefaultTeamId(providerId);
+        formTag.team = allSharedPreferences.fetchDefaultTeam(providerId);
+        formTag.databaseVersion = FamilyLibrary.getInstance().getDatabaseVersion();
+        formTag.appVersion = FamilyLibrary.getInstance().getApplicationVersion();
+        return formTag;
     }
 }

@@ -140,9 +140,11 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
     private void featureClicked(@NonNull Feature feature) {
         String responderName = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_NAME);
         String respondersPhoneNumber = feature.getStringProperty(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER);
+        CommunityResponderModel model = new CommunityResponderModel(responderName, respondersPhoneNumber, null, null);
+        model.setIsAncResponder(true);
         if (StringUtils.isNotBlank(responderName) && StringUtils.isNotBlank(respondersPhoneNumber)) {
-            BaseAncRespondersCallDialogFragment.launchDialog(this, responderName, respondersPhoneNumber, true,
-                    null, null, false, false, null);
+            BaseAncRespondersCallDialogFragment.launchDialog(this, model, null,
+                    null, false, false, null);
             return;
         }
 
@@ -152,8 +154,11 @@ public class CoreAncMemberMapActivity extends AppCompatActivity {
         String basicServiceProvided = feature.getStringProperty("Basic Service Provided ANC_BEmONC_PPC_QI_MIP_ENC_FP_HIV_RMNCH_integration");
         String cEmONC = feature.getStringProperty("CEmONC");
         String ownership = feature.getStringProperty("Ownership");
+
         if (StringUtils.isNotBlank(facilityName) && StringUtils.isNotBlank(status)) {
-            BaseAncRespondersCallDialogFragment.launchDialog(this, null, null, false,
+            model.setResponderName(null);
+            model.setResponderPhoneNumber(null);
+            BaseAncRespondersCallDialogFragment.launchDialog(this, model,
                     facilityName, facilityType, basicServiceProvided.equalsIgnoreCase("yes"), cEmONC.equalsIgnoreCase("yes"), ownership);
         } else {
             Toast.makeText(this, getString(R.string.invalid_feature), Toast.LENGTH_SHORT).show();
