@@ -17,10 +17,13 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
+import org.smartregister.chw.core.adapter.CommunityResponderCustomAdapter;
 import org.smartregister.chw.core.contract.CoreCommunityRespondersContract;
+import org.smartregister.chw.core.model.CommunityResponderModel;
 import org.smartregister.chw.core.shadows.CommunityResponderRepositoryShadowHelper;
 import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -57,6 +60,20 @@ public class CoreCommunityResponderRegisterActivityTest extends BaseUnitTest {
         List<Toast> toasts = Shadows.shadowOf(RuntimeEnvironment.application).getShownToasts();
         Assert.assertEquals(1, toasts.size());
         Assert.assertTrue(ShadowToast.showedToast("You have reached the maximum number of responders allowed"));
+    }
+
+
+    @Test
+    public void refreshCommunityRespondersUpdatesAdapter() {
+        activity = Mockito.spy(activity);
+        CommunityResponderCustomAdapter adapter = Mockito.mock(CommunityResponderCustomAdapter.class);
+        List<CommunityResponderModel> communityResponderModelList = new ArrayList<>();
+
+        ReflectionHelpers.setField(activity, "adapter", adapter);
+        ReflectionHelpers.setField(activity, "communityResponders", communityResponderModelList);
+        activity.refreshCommunityResponders(communityResponderModelList);
+        Mockito.verify(adapter, Mockito.times(1)).notifyDataSetChanged();
+
     }
 
     @After
