@@ -10,16 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.PopupMenu;
 
-import org.smartregister.chw.anc.fragment.BaseAncRespondersCallDialogFragment;
+import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.model.CommunityResponderModel;
 
-import java.util.ArrayList;
-
-import timber.log.Timber;
+import java.util.List;
 
 public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityResponderModel> implements View.OnClickListener {
 
@@ -27,8 +24,8 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
     private int lastPosition = -1;
     private CoreCommunityRespondersRegisterActivity activity;
 
-    public CommunityResponderCustomAdapter(ArrayList<CommunityResponderModel> data, Context context, CoreCommunityRespondersRegisterActivity activity) {
-        super(context, R.layout.row_item, data);
+    public CommunityResponderCustomAdapter(List<CommunityResponderModel> data, Context context, CoreCommunityRespondersRegisterActivity activity) {
+        super(context, 0, data);
         this.mContext = context;
         this.activity = activity;
     }
@@ -36,41 +33,13 @@ public class CommunityResponderCustomAdapter extends ArrayAdapter<CommunityRespo
     @Override
     public void onClick(View v) {
         int position = (Integer) v.getTag();
-        Object object = getItem(position);
-        CommunityResponderModel communityResponderModel = (CommunityResponderModel) object;
-        showPopupMenu(v, communityResponderModel);
+        CommunityResponderModel object = getItem(position);
+        activity.showPopUpMenu(v, object);
     }
 
-    private void showPopupMenu(View view, CommunityResponderModel communityResponderModel) {
-        PopupMenu popupMenu = new PopupMenu(activity, view);
-        popupMenu.getMenuInflater().inflate(R.menu.community_responder_contex_menu, popupMenu.getMenu());
-        popupMenu.show();
-
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            int menuItemItemId = menuItem.getItemId();
-            if (menuItemItemId == R.id.call_responder) {
-                BaseAncRespondersCallDialogFragment.launchDialog(activity, communityResponderModel.getResponderName(), communityResponderModel.getResponderPhoneNumber(), null, null, null);
-
-            } else if (menuItemItemId == R.id.edit_responder) {
-                try {
-                    activity.startJsonActivity(communityResponderModel, communityResponderModel.getId());
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-            } else if (menuItemItemId == R.id.remove_responder) {
-                try {
-                    activity.confirmPurgeResponder(communityResponderModel.getId());
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-            }
-            return false;
-        });
-
-    }
-
+    @NotNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
         CommunityResponderModel communityResponderModel = getItem(position);
         View view = convertView;
         ViewHolder viewHolder;
