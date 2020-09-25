@@ -58,11 +58,9 @@ public class CommunityResponderRepository extends BaseRepository {
 
     public CommunityResponderCustomAdapter readAllRespondersAdapter(Context context, CoreCommunityRespondersRegisterActivity activity) {
         try {
-            ArrayList<CommunityResponderModel> communityResponderModels = new ArrayList<>(readAllResponders());
-
-            return new CommunityResponderCustomAdapter(communityResponderModels, context, activity);
+            return new CommunityResponderCustomAdapter(readAllResponders(), context, activity);
         } catch (Exception e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
         }
         return null;
     }

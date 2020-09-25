@@ -108,11 +108,12 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
-    implementation ('io.ona.kujaku:library:0.8.4') {
+    implementation('io.ona.kujaku:library:0.8.4') {
         exclude group: 'com.android.volley', module: 'volley'
+        exclude group: 'stax', module: 'stax-api'
     }
 
-   implementation('org.smartregister:opensrp-client-thinkmd:1.0.2-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-thinkmd:1.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'androidx.legacy', module: 'legacy-support-v4'
@@ -121,6 +122,8 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+        exclude group: 'xpp3', module: 'xpp3'
     }
 
     api('org.smartregister:opensrp-client-native-form:1.14.1-SNAPSHOT@aar') {
@@ -188,7 +191,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:1.0.4-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:1.0.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
