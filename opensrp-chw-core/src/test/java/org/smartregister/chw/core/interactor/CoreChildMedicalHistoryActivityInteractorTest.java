@@ -2,7 +2,6 @@ package org.smartregister.chw.core.interactor;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -14,9 +13,9 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.VisitDaoShadowHelper;
+
 import java.util.List;
 
-@Ignore
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, VisitDaoShadowHelper.class})
 public class CoreChildMedicalHistoryActivityInteractorTest extends BaseUnitTest {
