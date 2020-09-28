@@ -108,7 +108,7 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
-    implementation('io.ona.kujaku:library:0.8.4') {
+    implementation('io.ona.kujaku:library:0.8.9') {
         exclude group: 'com.android.volley', module: 'volley'
         exclude group: 'stax', module: 'stax-api'
     }
@@ -191,7 +191,7 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
 
-    api('org.smartregister:opensrp-client-chw-anc:1.0.5-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-anc:1.0.6-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'

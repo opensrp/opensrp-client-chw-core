@@ -102,6 +102,7 @@ public class CoreChildUpcomingServiceInteractor extends BaseAncUpcomingServicesI
                     BaseUpcomingService service = new BaseUpcomingService();
                     service.setServiceDate(new LocalDate(alert.startDate()).toDate());
                     service.setServiceName(getTranslatedText(alert.scheduleName()));
+                    service.setExpiryDate(new LocalDate(alert.expiryDate()).toDate());
                     groupServices.add(service);
                 }
             }
