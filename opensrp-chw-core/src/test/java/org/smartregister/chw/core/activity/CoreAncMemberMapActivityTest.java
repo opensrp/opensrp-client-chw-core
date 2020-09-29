@@ -29,7 +29,7 @@ import io.ona.kujaku.views.KujakuMapView;
 
 import static org.mockito.ArgumentMatchers.eq;
 
-@PrepareForTest({BaseAncRespondersCallDialogFragment.class, CoreChwApplication.class})
+@PrepareForTest({BaseAncRespondersCallDialogFragment.class, CoreChwApplication.class, CoreAncMemberMapActivity.class})
 public class CoreAncMemberMapActivityTest extends BaseUnitTest {
 
     @Rule
@@ -44,17 +44,19 @@ public class CoreAncMemberMapActivityTest extends BaseUnitTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         activity = Mockito.mock(CoreAncMemberMapActivity.class, Mockito.CALLS_REAL_METHODS);
+
     }
 
     @Test
     public void featureClickedLaunchesRespondersCallDialog() throws Exception {
+        CommunityResponderModel communityResponderModel = Mockito.mock(CommunityResponderModel.class);
+        PowerMockito.whenNew(CommunityResponderModel.class).withArguments("ttony", "123456789", null, null).thenReturn(communityResponderModel);
         PowerMockito.mockStatic(BaseAncRespondersCallDialogFragment.class);
         Feature feature = Feature.fromJson("{\"type\":\"Feature\",\"properties\":{\"" + CoreConstants.JsonAssets.RESPONDER_NAME + "\":\"ttony\", " +
                 "\"" + CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER + "\":\"123456789\"}}");
         Whitebox.invokeMethod(activity, "featureClicked", feature);
         PowerMockito.verifyStatic(BaseAncRespondersCallDialogFragment.class, Mockito.times(1));
-        BaseAncRespondersCallDialogFragment.launchDialog(eq(activity), eq("ttony"), eq("123456789"), eq(true), eq(null),
-                eq(null), eq(false), eq(false), eq(null));
+        BaseAncRespondersCallDialogFragment.launchDialog(eq(activity), eq(communityResponderModel), eq(null), eq(null), eq(false), eq(false), eq(null));
         Assert.assertNotNull(activity);
     }
 
