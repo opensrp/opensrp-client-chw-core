@@ -30,6 +30,8 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
+import timber.log.Timber;
+
 public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
 
     private Context context;
@@ -63,8 +65,12 @@ public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNoti
 
         String notificationEventDate = Utils.getValue(client.getColumnmaps(), CoreConstants.DB_CONSTANTS.NOTIFICATION_DATE, false);
         if (StringUtils.isNotBlank(notificationEventDate)) {
-            DateTime duration = new DateTime(Timestamp.valueOf(notificationEventDate));
-            viewHolder.setNotificationDate(org.smartregister.chw.core.utils.Utils.formatReferralDuration(duration, context));
+            try {
+                DateTime duration = new DateTime(Timestamp.valueOf(notificationEventDate));
+                viewHolder.setNotificationDate(org.smartregister.chw.core.utils.Utils.formatReferralDuration(duration, context));
+            }catch (IllegalArgumentException e){
+                Timber.e(e);
+            }
         }
         attachPatientOnclickListener(viewHolder.itemView, client);
     }
