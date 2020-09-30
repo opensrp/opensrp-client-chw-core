@@ -75,6 +75,8 @@ public interface CoreChildProfileContract {
 
         void setFamilyHasServiceOverdue();
 
+        void setDueTodayServices();
+
         CoreChildProfileContract.Presenter presenter();
 
         void updateHasPhone(boolean hasPhone);
