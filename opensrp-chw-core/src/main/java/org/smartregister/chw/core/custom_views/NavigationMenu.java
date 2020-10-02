@@ -483,6 +483,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         return drawer;
     }
 
+    public static String getChildNavigationCountString(){
+       return menuFlavor.childNavigationMenuCountString();
+    }
+
     public interface Flavour {
         List<Pair<String, Locale>> getSupportedLanguages();
 
@@ -497,6 +501,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         Intent getStockReportIntent(Activity activity);
 
         Intent getServiceReportIntent(Activity activity);
+
+        String childNavigationMenuCountString();
 
     }
 }
