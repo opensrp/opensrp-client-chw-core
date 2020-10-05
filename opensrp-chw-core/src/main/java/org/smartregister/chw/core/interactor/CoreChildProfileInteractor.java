@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +39,8 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.core.utils.VaccineScheduleUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
+import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -480,16 +483,24 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String baseEntityId = getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type), thinkMdId);
+                String baseEntityId = getBaseEntityID(thinkMdId);
                 // creating the event to sync with server
                 if (baseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
                             baseEntityId);
 
+                    for (Obs obs : carePlanEvent.getObs()) {
+                        if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
+                        if (obs.getFormSubmissionField().equals("carePlanDate")) {
+                            updateLocalStorage("care_plan_date", String.valueOf(obs.getValue()));
+                        } else if (obs.getFormSubmissionField().equals("generatedDiv")) {
+                            updateLocalStorage("html_assessment", String.valueOf(obs.getValue()));
+                        }
+                    }
+
                     JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(carePlanEvent));
                     ECSyncHelper.getInstance(context).addEvent(baseEntityId, eventPartialJson);
-
                     appExecutors.mainThread().execute(callback::carePlanEventCreated);
                 }
             } catch (Exception e) {
@@ -498,6 +509,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         };
 
         appExecutors.diskIO().execute(runnable);
+    }
+
+    private void updateLocalStorage(String fieldName, String fieldValue) {
+        if (getChildAllCommonsRepository() != null) {
+            ContentValues values = new ContentValues();
+            values.put(fieldName, fieldValue);
+            getChildAllCommonsRepository().update("ec_child", values, childBaseEntityId);
+        }
+    }
+
+    private AllCommonsRepository getChildAllCommonsRepository() {
+        return CoreChwApplication.getInstance().getAllCommonsRepository("ec_child");
     }
 
     @Override
@@ -512,7 +535,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 String carePlan = getThinkMDCarePlan(getChildBaseEntityId(), HTML_ASSESSMENT);
                 appExecutors.mainThread().execute(() -> {
 
-                    if (!StringUtils.isEmpty(carePlan))
+                    if (StringUtils.isEmpty(carePlan))
                         callback.noThinkMDCarePlanFound();
                     else {
                         Intent intent = new Intent(context, WebViewActivity.class);

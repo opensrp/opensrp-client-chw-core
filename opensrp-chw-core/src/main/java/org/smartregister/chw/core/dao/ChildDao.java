@@ -116,36 +116,36 @@ public class ChildDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
-    public static String getBaseEntityID(String identifierType, String id) {
-        String selection = "select base_entity_id from ec_child where ? = ?";
-        String[] selectionArgs = new String[]{identifierType, id};
+    public static String getBaseEntityID(String thinkMdId) {
+        String selection = " thinkmd_id = ? ";
+        String[] selectionArgs = new String[]{thinkMdId};
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, BASE_ENTITY_ID);
     }
 
 
-    public static String getThinkMDCarePlan(String childBaseEntityId, String htmlAssessment) {
-        String selection = "select ? from ec_child where base_entity_id = ?";
-        String[] selectionArgs = new String[]{htmlAssessment, childBaseEntityId};
+    public static String getThinkMDCarePlan(String childBaseEntityId, String requiredField) {
+        String selection = " base_entity_id = ? ";
+        String[] selectionArgs = new String[]{childBaseEntityId};
 
-        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, htmlAssessment);
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, requiredField);
     }
 
     public static boolean isThinkMDCarePlanExist(String baseEntityId) {
-        String selection = "select ? from ec_child where base_entity_id = ?";
-        String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
+        String selection = " base_entity_id = ? ";
+        String[] selectionArgs = new String[]{baseEntityId};
         String thinkMDId = queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
         return !StringUtils.isEmpty(thinkMDId);
     }
 
 
     public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
-      SQLiteDatabase database = getRepository().getReadableDatabase();
-            if (database == null) {
-                return null;
-            }
+        SQLiteDatabase database = getRepository().getReadableDatabase();
+        if (database == null) {
+            return null;
+        }
         String[] projectionArgs = new String[]{columnName};
-        try(net.sqlcipher.Cursor  cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
-   
+        try (net.sqlcipher.Cursor cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
+
             if (cursor.getCount() > 0 && cursor.moveToFirst()) {
                 return cursor.getString(cursor.getColumnIndex(columnName));
             }

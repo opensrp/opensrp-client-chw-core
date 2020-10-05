@@ -16,6 +16,8 @@ import org.smartregister.repository.Repository;
 
 import java.util.List;
 
+import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ChildDaoTest extends ChildDao {
 
@@ -97,7 +99,7 @@ public class ChildDaoTest extends ChildDao {
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String baseEntityID = ChildDao.getBaseEntityID("thinkmd_id","45678");
+        String baseEntityID = ChildDao.getBaseEntityID("45678");
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
@@ -117,7 +119,7 @@ public class ChildDaoTest extends ChildDao {
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234","html_assessment");
+        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234",HTML_ASSESSMENT);
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
