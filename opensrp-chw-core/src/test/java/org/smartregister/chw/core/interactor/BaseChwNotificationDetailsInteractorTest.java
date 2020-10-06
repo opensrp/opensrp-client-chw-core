@@ -9,19 +9,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.domain.NotificationItem;
-import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.presenter.BaseChwNotificationDetailsPresenter;
 import org.smartregister.chw.core.shadows.ChwNotificationDaoShadowHelper;
-import org.smartregister.chw.core.shadows.ContextShadow;
-import org.smartregister.chw.core.shadows.VisitDaoShadowHelper;
 
 @Config(shadows = {ChwNotificationDaoShadowHelper.class})
 public class BaseChwNotificationDetailsInteractorTest extends BaseUnitTest {
