@@ -11,16 +11,16 @@ public class ChwNotificationDaoShadowHelper {
     @Implementation
     public static NotificationRecord getSickChildFollowUpRecord(String notificationId) {
         NotificationRecord record = initNotificationRecord();
-        record.setCareGiverName();
-        record.setVillage();
-        record.setDiagnosis();
+        record.setCareGiverName("Mama Yake");
+        record.setVillage("Gachie");
+        record.setDiagnosis("Dehydration");
         return record;
     }
 
     private static NotificationRecord initNotificationRecord() {
         NotificationRecord record = new NotificationRecord("test-base-entity-id");
-        record.setClientName();
-        record.setVisitDate();
+        record.setClientName("Test Client");
+        record.setVisitDate("2020-05-21 17:16:31");
         return record;
     }
 
