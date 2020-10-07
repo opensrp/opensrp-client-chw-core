@@ -31,7 +31,7 @@ public class CoreChildRegisterFragmentModelTest extends BaseUnitTest {
 
     @Test
     public void countSelect() {
-        String countSelect = childRegisterFragmentModel.countSelect("ec_table", "date_removed is null");
+        String countSelect = childRegisterFragmentModel.countSelect("ec_table", "date_removed is null","ec_family_member");
         Assert.assertNotNull(countSelect);
         Assert.assertEquals("SELECT COUNT(*) FROM ec_table WHERE date_removed is null ", countSelect);
     }

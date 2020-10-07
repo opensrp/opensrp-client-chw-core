@@ -38,9 +38,10 @@ public class CoreChildRegisterFragmentModel implements CoreChildRegisterFragment
     }
 
     @Override
-    public String countSelect(String tableName, String mainCondition) {
+    public String countSelect(String tableName, String mainCondition, String familyMemberTableName) {
         SmartRegisterQueryBuilder countQueryBuilder = new SmartRegisterQueryBuilder();
         countQueryBuilder.selectInitiateMainTableCounts(tableName);
+        countQueryBuilder.customJoin("INNER JOIN " + familyMemberTableName + " ON  " + tableName + ".base_entity_id =  " + familyMemberTableName + ".base_entity_id");
         return countQueryBuilder.mainCondition(mainCondition);
     }
 
