@@ -483,7 +483,7 @@
     <string name="total_U5_visit_label">Jumla ya watoto (chini ya miaka 5)</string>
     <string name="hh_visited_label">Jumla ya kaya zilizotembelewa mwezi huu</string>
     <string name="F_referral_hf_label">Idadi ya wanawake waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
-    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &lt; umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
+    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &lt, umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="reporting_1m1yr_referral_hf_label">Idadi ya watoto umri kuanzia (mwezi 1 hadi mwaka 1) waliopewa rufaa kwenda kituo cha kutolea huduma za afya</string>
     <string name="reporting_1yr5yr_referral_hf_label">Idadi ya watoto kuanzia umri wa (oynatma mwaka 1 hadi miaka 5) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="total_referral_label">Jumla ya wateja walipewa rufaa</string>
@@ -690,6 +690,19 @@
     <string name="notification_type_not_yet_done_referrals">Rufaa haijakamilika</string>
     <string name="perform_click_action">fanya hatua ya kubofya</string>
 
+
+    <!--Emergency Transport-->
+    <string name="community_responders">Usafiri wa dharura</string>
+    <string name="add_community_responder">Wasafirishaji</string>
+    <string name="add_responder">Sajili</string>
+    <string name="return_to_profile">Rudi kwenye taarifa za %1$s</string>
+    <string name="house_hold_family_name">Kaya: %1$s</string>
+    <string name="house_hold_discription">Kaya iko karibu na: %1$s</string>
+    <string name="map_facility">Kituo cha kutolea huduma za afya</string>
+    <string name="facility_name">Jina</string>
+    <string name="facility_status">Hali</string>
+    <string name="invalid_feature">Kipengele batili</string>
+
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Hariri taarifa za mteja</string>
     <string name="location_info">Taarifa za ramani</string>
@@ -698,12 +711,24 @@
     <string name="remove_client">Ondoa mteja</string>
     <string name="call_all_clients_member">Piga simu kwa mteja au mlezi</string>
 
+    <!--Emergency Transport-->
+    <string name="edit_responder">Hariri</string>
+    <string name="remove_responder">Ondoa</string>
+    <string name="remove_responder_dialog_title">Ondoa msafirishaji</string>
+    <string name="remove_responder_dialog_message">Msafirishaji atafungiwa na kuondolewa kwenye mfumo.</string>
+    <string name="add_responder_max_message">Umefikia idadi ya mwisho ya wasafirishaji wanaoruhusiwa</string>
+
     <!-- Notification row -->
     <string name="notification_for">Taarifa kwa %1$s</string>
     <string name="full_notification_info">Angalia taarifa kwa ujumla</string>
     <string name="thinkmd_health_assessment">Tathimini ya afya ya ThinkMD</string>
     <string name="thinkmd_careplan">Mpango wa utunzaji wa ThinkMD (%1$s)</string>
+    <string name="care_plan">Mpango huduma</string>
+    <string name="thinkmd_identifier_type">thinkmd_id</string>
+    <string name="thinkmd_assessment_saved">ThinkMD tathmini ya afya imehifadhiwa</string>
+    <string name="no_thinkmd_care_plan_found">Hakuna mpango huduma wa thinkmd ulioonekana</string>
 
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">Angalia historia ya chanjo</string>
+    <string name="see_vaccines_due_today">Angalia chanjo zinazopaswa kutolewa leo</string>
 </resources>
