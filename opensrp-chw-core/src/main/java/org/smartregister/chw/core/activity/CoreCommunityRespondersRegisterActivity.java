@@ -32,6 +32,8 @@ import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
+import org.smartregister.view.activity.MultiLanguageActivity;
+import org.smartregister.view.activity.SecuredActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 
-public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity implements CoreCommunityRespondersContract.View {
+public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivity implements CoreCommunityRespondersContract.View {
 
     private ListView communityRespondersListView;
     private CoreCommunityRespondersContract.Presenter presenter;
