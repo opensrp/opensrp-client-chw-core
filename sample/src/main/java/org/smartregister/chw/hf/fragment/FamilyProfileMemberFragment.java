@@ -7,10 +7,10 @@ import org.smartregister.chw.core.provider.CoreMemberRegisterProvider;
 import org.smartregister.chw.hf.model.FamilyProfileMemberModel;
 import org.smartregister.chw.hf.presenter.FamilyProfileMemberPresenter;
 import org.smartregister.chw.hf.provider.HfMemberRegisterProvider;
-import org.smartregister.configurableviews.model.View;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.family.fragment.BaseFamilyProfileMemberFragment;
 import org.smartregister.family.util.Constants;
+import org.smartregister.view.contract.IView;
 
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class FamilyProfileMemberFragment extends CoreFamilyProfileMemberFragment
     }
 
     @Override
-    public void initializeAdapter(Set<View> visibleColumns, String familyHead, String primaryCaregiver) {
+    public void initializeAdapter(Set<IView> visibleColumns, String familyHead, String primaryCaregiver) {
         CoreMemberRegisterProvider chwMemberRegisterProvider = new HfMemberRegisterProvider(this.getActivity(), this.commonRepository(), visibleColumns, this.registerActionHandler, this.paginationViewHandler, familyHead, primaryCaregiver);
         this.clientAdapter = new RecyclerViewPaginatedAdapter(null, chwMemberRegisterProvider, this.context().commonrepository(this.tablename));
         this.clientAdapter.setCurrentlimit(20);

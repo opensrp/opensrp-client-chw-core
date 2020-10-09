@@ -22,6 +22,7 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.fragment.BaseFpRegisterFragment;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
+import org.smartregister.view.contract.IView;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.text.MessageFormat;
@@ -38,7 +39,7 @@ public abstract class CoreFpRegisterFragment extends BaseFpRegisterFragment {
     private boolean dueFilterActive = false;
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         CoreFpProvider fpRegisterProvider = new CoreFpProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, fpRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);

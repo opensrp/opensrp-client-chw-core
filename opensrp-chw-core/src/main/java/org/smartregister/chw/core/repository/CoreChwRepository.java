@@ -110,9 +110,9 @@ public class CoreChwRepository extends Repository {
         super.onUpgrade(db, oldVersion, newVersion);
     }
 
-    @Override
+   /* @Override
     public SQLiteDatabase getReadableDatabase() {
-        String pass = CoreChwApplication.getInstance().getPassword();
+        byte[] pass = CoreChwApplication.getInstance().getPassword();
         if (StringUtils.isNotBlank(pass)) {
             return getReadableDatabase(pass);
         } else {
@@ -122,13 +122,13 @@ public class CoreChwRepository extends Repository {
 
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        String pass = CoreChwApplication.getInstance().getPassword();
+        byte[] pass = CoreChwApplication.getInstance().getPassword();
         if (StringUtils.isNotBlank(pass)) {
             return getWritableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
         }
-    }
+    }*/
 
     @Override
     public synchronized SQLiteDatabase getWritableDatabase(String password) {

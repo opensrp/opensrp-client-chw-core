@@ -2,8 +2,8 @@ package org.smartregister.chw.core.fragment;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreFamilyProfileActivity;
-import org.smartregister.configurableviews.model.View;
 import org.smartregister.family.fragment.BaseFamilyProfileMemberFragment;
+import org.smartregister.view.contract.IView;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -13,7 +13,7 @@ import timber.log.Timber;
 public abstract class CoreFamilyProfileMemberFragment extends BaseFamilyProfileMemberFragment {
 
     @Override
-    public abstract void initializeAdapter(Set<View> visibleColumns, String familyHead, String primaryCaregiver);
+    public abstract void initializeAdapter(Set<IView> visibleColumns, String familyHead, String primaryCaregiver);
 
     @Override
     protected abstract void initializePresenter();
