@@ -4,7 +4,6 @@ import android.content.Context;
 
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.domain.Obs;
 
 import java.util.LinkedHashMap;
@@ -12,18 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class StockUsageReportUtils {
-    public Map<String, String> getPreviousMonths(Context context) {
+
+    public static Map<String, String> getPreviousMonths(Context context) {
         Map<String, String> monthsAndYearsMap = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
-            String month = this.monthConverter(prevDate.getMonthOfYear(), context);
+            String month = monthConverter(prevDate.getMonthOfYear(), context);
             String year = String.valueOf(prevDate.getYear());
             monthsAndYearsMap.put(month, year);
         }
         return monthsAndYearsMap;
     }
 
-    public String getMonthNumber(String month) {
+    public static String getMonthNumber(String month) {
         String valMonth = "";
         switch (month) {
             case "Jan":
@@ -69,7 +69,7 @@ public class StockUsageReportUtils {
     }
 
 
-    public String getFormattedItem(String item, Context context) {
+    public static String getFormattedItem(String item, Context context) {
         String formattedItem = "";
         switch (item) {
             case "ORS 5":
@@ -120,7 +120,7 @@ public class StockUsageReportUtils {
         return formattedItem;
     }
 
-    public String getUnitOfMeasure(String item, Context context) {
+    public static String getUnitOfMeasure(String item, Context context) {
         String unitOfMeasure = "";
         switch (item) {
             case "ORS 5":
@@ -153,7 +153,7 @@ public class StockUsageReportUtils {
         return unitOfMeasure;
     }
 
-    public String monthConverter(Integer value, Context context) {
+    public static String monthConverter(Integer value, Context context) {
         String formattedMonth;
         switch (value) {
             case 1:
