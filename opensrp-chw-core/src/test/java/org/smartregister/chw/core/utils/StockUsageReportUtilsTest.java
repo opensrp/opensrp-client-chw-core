@@ -29,11 +29,11 @@ public class StockUsageReportUtilsTest {
     @Test
     public void testGetPreviousMonths() {
         for (int i = 0; i < 12; i++) {
-            String month = stockUsageReportUtils.monthConverter(testDate.minusMonths(i).getMonthOfYear());
+            String month = stockUsageReportUtils.monthConverter(testDate.minusMonths(i).getMonthOfYear(), context);
             String year = String.valueOf(testDate.minusMonths(i).getYear());
             monthsAndYearsMap.put(month, year);
         }
-        Assert.assertEquals(stockUsageReportUtils.getPreviousMonths(), monthsAndYearsMap);
+        Assert.assertEquals(stockUsageReportUtils.getPreviousMonths(this), monthsAndYearsMap);
     }
 
     @Test
@@ -54,45 +54,45 @@ public class StockUsageReportUtilsTest {
 
     @Test
     public void testGetFormattedItem() {
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Panadol"), "Paracetamol");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ORS 5"), "ORS 5");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Zinc 10"), "Zinc 10");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 6"), "ALU 6");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 12"), "ALU 12");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 24"), "ALU 24");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 18"), "ALU 18");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("COC"), "COC");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("POP"), "POP");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Emergency contraceptive"), "Emergency contraceptive");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("RDTs"), "RDTs");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Male condom"), "Male Condoms");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Female condom"), "Female Condoms");
-        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Standard day method"), "Cycle beads (Standard day method)");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Panadol", this), "Paracetamol");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ORS 5", this), "ORS 5");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Zinc 10", this), "Zinc 10");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 6", this), "ALU 6");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 12", this), "ALU 12");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 24", this), "ALU 24");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("ALU 18", this), "ALU 18");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("COC", this), "COC");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("POP", this), "POP");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Emergency contraceptive", this), "Emergency contraceptive");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("RDTs", this), "RDTs");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Male condom", this), "Male Condoms");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Female condom", this), "Female Condoms");
+        Assert.assertEquals(stockUsageReportUtils.getFormattedItem("Standard day method", this), "Cycle beads (Standard day method)");
 
     }
 
     @Test
     public void testGetUnitOfMeasure() {
-        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("ORS 5"), "Packets");
-        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("Zinc 10"), "Tablets");
-        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("COC"), "Packs");
-        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("RDTs"), "Tests");
-        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("Male condom"), "Pieces");
+        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("ORS 5", this), "Packets");
+        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("Zinc 10", this), "Tablets");
+        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("COC", this), "Packs");
+        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("RDTs", this), "Tests");
+        Assert.assertEquals(stockUsageReportUtils.getUnitOfMeasure("Male condom", this), "Pieces");
     }
 
     @Test
     public void testMonthConverter() {
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(1), "January");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(2), "February");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(3), "March");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(4), "April");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(5), "May");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(6), "June");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(7), "July");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(8), "August");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(9), "September");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(10), "October");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(11), "November");
-        Assert.assertEquals(stockUsageReportUtils.monthConverter(12), "December");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(1, context), "January");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(2, context), "February");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(3, context), "March");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(4, context), "April");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(5, context), "May");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(6, context), "June");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(7, context), "July");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(8, context), "August");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(9, context), "September");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(10, context), "October");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(11, context), "November");
+        Assert.assertEquals(stockUsageReportUtils.monthConverter(12, context), "December");
     }
 }

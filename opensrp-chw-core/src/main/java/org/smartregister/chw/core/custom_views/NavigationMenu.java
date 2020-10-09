@@ -31,7 +31,6 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
-import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
@@ -246,8 +245,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, HIA2ReportsActivity.class);
-                activity.startActivity(intent);
+                activity.startActivity( menuFlavor.getHIA2ReportActivityIntent(activity));
             });
         }
     }
@@ -504,5 +502,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         String childNavigationMenuCountString();
 
+        Intent getHIA2ReportActivityIntent(Activity activity);
     }
 }

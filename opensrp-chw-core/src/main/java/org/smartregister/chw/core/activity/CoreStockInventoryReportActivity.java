@@ -47,8 +47,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
    protected List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
-        if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
-            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
+        if (stockUsageReportUtils.getPreviousMonths(this).size() > 0) {
+            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths(this).entrySet()) {
                 monthStockUsageReportList.add(new MonthStockUsageModel(entry.getKey(), entry.getValue()));
             }
         }
@@ -60,7 +60,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         String providerName = getProviderName();
         for (String item : getItems()) {
             String usage = getStockUsageForMonth(month, item, year, providerName);
-            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage, providerName));
+            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item, this), stockUsageReportUtils.getUnitOfMeasure(item, this), usage, providerName));
         }
         return stockUsageItemModelsList;
     }
