@@ -28,6 +28,7 @@ import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -84,6 +85,11 @@ public class CoreChildRegisterActivity extends BaseRegisterActivity implements C
         if (menu != null) {
             menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.CHILD_CLIENTS);
         }
+    }
+
+    @Override
+    public void startFormActivity(String formName, String entityId, Map<String, String> metaData) {
+        // Abstract method implementation
     }
 
     @Override
@@ -158,6 +164,6 @@ public class CoreChildRegisterActivity extends BaseRegisterActivity implements C
 
     @Override
     public void startRegistration() {
-        startFormActivity(Utils.metadata().familyRegister.formName, null, null);
+        startFormActivity(Utils.metadata().familyRegister.formName, null, (String) null);
     }
 }

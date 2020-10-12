@@ -6,11 +6,11 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildRegisterFragmentContract;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.configurableviews.model.Field;
 import org.smartregister.configurableviews.model.RegisterConfiguration;
-import org.smartregister.configurableviews.model.View;
-import org.smartregister.configurableviews.model.ViewConfiguration;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.view.contract.IField;
+import org.smartregister.view.contract.IView;
+import org.smartregister.view.contract.IViewConfiguration;
 
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
@@ -21,7 +21,7 @@ import java.util.TreeSet;
 public class CoreChildRegisterFragmentPresenter implements CoreChildRegisterFragmentContract.Presenter {
 
 
-    protected Set<View> visibleColumns = new TreeSet<>();
+    protected Set<IView> visibleColumns = new TreeSet<>();
     private WeakReference<CoreChildRegisterFragmentContract.View> viewReference;
     private CoreChildRegisterFragmentContract.Model model;
     private RegisterConfiguration config;
@@ -40,7 +40,7 @@ public class CoreChildRegisterFragmentPresenter implements CoreChildRegisterFrag
             return;
         }
 
-        ViewConfiguration viewConfiguration = model.getViewConfiguration(viewConfigurationIdentifier);
+        IViewConfiguration viewConfiguration = model.getViewConfiguration(viewConfigurationIdentifier);
         if (viewConfiguration != null) {
             config = (RegisterConfiguration) viewConfiguration.getMetadata();
             setVisibleColumns(model.getRegisterActiveColumns(viewConfigurationIdentifier));
@@ -74,7 +74,7 @@ public class CoreChildRegisterFragmentPresenter implements CoreChildRegisterFrag
         // TODO implement search global
     }
 
-    private void setVisibleColumns(Set<View> visibleColumns) {
+    private void setVisibleColumns(Set<IView> visibleColumns) {
         this.visibleColumns = visibleColumns;
     }
 
@@ -87,7 +87,7 @@ public class CoreChildRegisterFragmentPresenter implements CoreChildRegisterFrag
     }
 
     @Override
-    public void updateSortAndFilter(List<Field> filterList, Field sortField) {
+    public void updateSortAndFilter(List<IField> filterList, IField sortField) {
         String filterText = model.getFilterText(filterList, getView().getString(org.smartregister.R.string.filter));
         String sortText = model.getSortText(sortField);
 
