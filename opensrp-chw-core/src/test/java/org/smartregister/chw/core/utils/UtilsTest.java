@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -88,6 +89,21 @@ public class UtilsTest {
     public void getFormTagShouldNotReturnNullValues() {
         FormTag formTag = Utils.getFormTag(org.smartregister.util.Utils.getAllSharedPreferences());
         Assert.assertNotNull(formTag);
+    }
+
+    @Test
+    public void assertGetDurationTests() {
+
+        Locale locale = RuntimeEnvironment.application.getApplicationContext().getResources().getConfiguration().locale;
+        String timeDiff = "157334400000";
+        DateTime todayDateTime = new DateTime("2020-10-09T18:17:07.830+05:00");
+        /*Assert.assertEquals("4y 11m", Utils.getDuration(Long.parseLong(timeDiff),
+                new DateTime("2015-10-10T05:00:00.000+05:00"),
+                todayDateTime,
+                locale));*/
+        String duration = Utils.getDuration("2020-10-12T00:00:00.000+00:00",
+                "1994-10-15T00:00:00.000+00:00");
+        Assert.assertEquals("25y 11m", duration);
     }
 
     @After

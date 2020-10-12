@@ -28,6 +28,8 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
     private final Context context;
     private final CommonRepository commonRepository;
@@ -75,7 +77,7 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
                 if (notDoneSummary != null)
                     visitNot = notDoneSummary.getVisitDate().getTime();
 
-                String dobString = Utils.getDuration(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.DOB, false));
+                String dobString = getDuration(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.DOB, false));
                 childVisit = CoreChildUtils.getChildVisitStatus(context, rules, dobString, lastVisit, visitNot, dateCreated);
             }
             return null;

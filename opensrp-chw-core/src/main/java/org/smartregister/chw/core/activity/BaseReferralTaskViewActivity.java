@@ -21,10 +21,10 @@ import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.family.util.Utils;
 import org.smartregister.view.activity.SecuredActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
