@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.util.AssetHandler.jsonStringToJava;
 
 public class BAJsonFormUtils {
@@ -207,7 +208,7 @@ public class BAJsonFormUtils {
 
     private void computeAge(JSONObject jsonObject, CommonPersonObjectClient client) throws JSONException {
         String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
-        dobString = org.smartregister.family.util.Utils.getDuration(dobString);
+        dobString = getDuration(dobString);
         dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : "0";
         jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Integer.valueOf(dobString));
     }
