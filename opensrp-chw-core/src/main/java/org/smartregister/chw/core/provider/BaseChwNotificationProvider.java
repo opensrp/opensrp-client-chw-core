@@ -30,6 +30,8 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNotificationViewHolder> {
 
     private Context context;
@@ -54,7 +56,7 @@ public class BaseChwNotificationProvider implements RecyclerViewProvider<ChwNoti
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String fullName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
-        String dobString = Utils.getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String dobString = getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false));
         String translatedYearInitial = context.getResources().getString(org.smartregister.opd.R.string.abbrv_years);
         viewHolder.setNameAndAge(StringUtils.capitalize(fullName) + ", " + StringUtils.capitalize(OpdUtils.getClientAge(dobString, translatedYearInitial)));
 

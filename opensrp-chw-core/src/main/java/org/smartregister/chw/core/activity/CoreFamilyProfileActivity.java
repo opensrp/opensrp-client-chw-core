@@ -51,6 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.TITLE_VIEW_TEXT;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
 import static org.smartregister.family.util.DBConstants.KEY.LAST_NAME;
 
@@ -339,7 +340,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     }
 
     public void goToChildProfileActivity(CommonPersonObjectClient patient, Bundle bundle) {
-        String dobString = Utils.getDuration(Utils.getValue(patient.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String dobString = getDuration(Utils.getValue(patient.getColumnmaps(), DBConstants.KEY.DOB, false));
         Integer yearOfBirth = CoreChildUtils.dobStringToYear(dobString);
         Intent intent;
         if (yearOfBirth != null && yearOfBirth >= 5) {
