@@ -873,7 +873,6 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     }
 
     private static Locale getLocale() {
-
         Locale locale = CoreLibrary.getInstance().context().applicationContext().getResources().getConfiguration().locale;
         locale = locale != null && locale.toString().startsWith("ar") ? Locale.ENGLISH : locale;
 

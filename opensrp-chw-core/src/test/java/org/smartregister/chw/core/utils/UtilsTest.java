@@ -93,17 +93,38 @@ public class UtilsTest {
 
     @Test
     public void assertGetDurationTests() {
-
+        Utils.getDuration("2020-10-09T18:17:07.830+05:00","2020-05-15T18:17:07.830+05:00");
         Locale locale = RuntimeEnvironment.application.getApplicationContext().getResources().getConfiguration().locale;
-        String timeDiff = "157334400000";
         DateTime todayDateTime = new DateTime("2020-10-09T18:17:07.830+05:00");
-        /*Assert.assertEquals("4y 11m", Utils.getDuration(Long.parseLong(timeDiff),
+
+        Assert.assertEquals("1d", Utils.getDuration(Long.parseLong("100000000"),
+                new DateTime("2020-10-10T18:17:07.830+05:00"),
+                todayDateTime,
+                locale));
+
+        Assert.assertEquals("2w 5d", Utils.getDuration(Long.parseLong("1641600000"),
+                new DateTime("2020-11-12T18:17:07.830+05:00"),
+                todayDateTime,
+                locale));
+
+
+        Assert.assertEquals("4m 3w", Utils.getDuration(Long.parseLong("12700800000"),
+                new DateTime("2020-11-12T18:17:07.830+05:00"),
+                todayDateTime,
+                locale));
+
+        Assert.assertEquals("4y 11m", Utils.getDuration(Long.parseLong("157334400000"),
                 new DateTime("2015-10-10T05:00:00.000+05:00"),
                 todayDateTime,
-                locale));*/
-        String duration = Utils.getDuration("2020-10-12T00:00:00.000+00:00",
-                "1994-10-15T00:00:00.000+00:00");
-        Assert.assertEquals("25y 11m", duration);
+                locale));
+
+        Assert.assertEquals("5y", Utils.getDuration(Long.parseLong("157334400000"),
+                new DateTime("2015-10-09T05:00:00.000+05:00"),
+                todayDateTime,
+                locale));
+
+        Assert.assertEquals("25y 11m", Utils.getDuration("2020-10-12T00:00:00.000+00:00",
+                "1994-10-15T00:00:00.000+00:00"));
     }
 
     @After
