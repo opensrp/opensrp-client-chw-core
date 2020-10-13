@@ -1,7 +1,13 @@
 package org.smartregister.chw.core.presenter;
 
+import android.content.ContentValues;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
@@ -10,6 +16,8 @@ import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.interactor.CoreFamilyInteractor;
 import org.smartregister.chw.core.interactor.CoreFamilyProfileInteractor;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyOtherMemberContract;
 import org.smartregister.family.contract.FamilyProfileContract;
@@ -17,6 +25,7 @@ import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.presenter.BaseFamilyOtherMemberProfileActivityPresenter;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.Utils;
+import org.smartregister.repository.AllSharedPreferences;
 
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
@@ -151,12 +160,49 @@ public abstract class CoreFamilyOtherMemberActivityPresenter extends BaseFamilyO
             if (isIndependent) {
                 familyEventClient.getEvent().setEntityType(CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT);
             }
+            updateLocalStorage(familyEventClient.getClient().getBaseEntityId(), CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL, getValueForKey(CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL, jsonString));
+            updateLocalStorage(familyEventClient.getClient().getBaseEntityId(), CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL, getValueForKey(CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL, jsonString));
             profileInteractor.saveRegistration(familyEventClient, jsonString, true, this);
+
+            AllSharedPreferences allSharedPreferences = org.smartregister.util.Utils.getAllSharedPreferences();
+            Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, jsonString, Constants.TABLES.FAMILY_MEMBER);
+            NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
         } catch (Exception e) {
             getView().hideProgressDialog();
             Timber.e(e);
         }
     }
+
+    public String getValueForKey(String key, String jsonString) {
+        String value = "";
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject step1 = jsonObject.getJSONObject("step1");
+            JSONArray fields = step1.getJSONArray("fields");
+            for (int i = 0; i < fields.length(); i++) {
+                JSONObject field = fields.getJSONObject(i);
+                if (field.getString("key").equalsIgnoreCase(key)) {
+                    value = field.optString("value", "");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    private void updateLocalStorage(String baseEntityId, String fieldName, String fieldValue) {
+        if (getChildAllCommonsRepository() != null) {
+            ContentValues values = new ContentValues();
+            values.put(fieldName, fieldValue);
+            getChildAllCommonsRepository().update(Constants.TABLES.FAMILY_MEMBER, values, baseEntityId);
+        }
+    }
+
+    private AllCommonsRepository getChildAllCommonsRepository() {
+        return CoreChwApplication.getInstance().getAllCommonsRepository(Constants.TABLES.FAMILY_MEMBER);
+    }
+
 
     @Override
     public void updateFamilyMemberServiceDue(String serviceDueStatus) {

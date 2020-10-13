@@ -764,6 +764,8 @@ public class CoreConstants {
 
         public static class FAMILY_MEMBER {
             public static final String HIGHEST_EDUCATION_LEVEL = "highest_edu_level";
+            public static final String EVER_SCHOOL = "ever_school";
+            public static final String SCHOOL_LEVEL = "school_level";
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
         }
