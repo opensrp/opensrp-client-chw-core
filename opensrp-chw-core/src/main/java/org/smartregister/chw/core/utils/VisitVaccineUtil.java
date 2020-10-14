@@ -276,7 +276,7 @@ public class VisitVaccineUtil {
             if (vaccineSchedules != null && vaccineSchedules.containsKey(vaccineCategory)) {
                 for (VaccineSchedule curSchedule : vaccineSchedules.get(vaccineCategory).values()) {
                     Alert curAlert = curSchedule.getOfflineAlert(baseEntityId, dob.toDate(), issuedVaccines);
-                    if (curAlert != null) {
+                    if (curAlert != null && curAlert.startDate() != null) {
                         generatedAlerts.add(curAlert);
                     }
                 }
