@@ -22,6 +22,9 @@ import java.text.MessageFormat;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
+
 public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivity {
 
     public static void startMe(Activity activity, MemberObject memberObject, Boolean isEditMode, Class<?> cls) {
@@ -67,7 +70,7 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
 
     @Override
     public void redrawHeader(MemberObject memberObject) {
-        tvTitle.setText(MessageFormat.format("{0}, {1} {2}", memberObject.getFullName(), org.smartregister.util.Utils.getDuration(memberObject.getDob()), getString(R.string.home_visit_suffix)));
+        tvTitle.setText(MessageFormat.format("{0}, {1} {2}", memberObject.getFullName(), getDuration(memberObject.getDob()), getString(R.string.home_visit_suffix)));
     }
 
     @Override

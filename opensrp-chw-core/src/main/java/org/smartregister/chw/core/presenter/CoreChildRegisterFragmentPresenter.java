@@ -54,7 +54,7 @@ public class CoreChildRegisterFragmentPresenter implements CoreChildRegisterFrag
     @Override
     public void initializeQueries(String mainCondition) {
 
-        String countSelect = model.countSelect(CoreConstants.TABLE_NAME.CHILD, mainCondition);
+        String countSelect = model.countSelect(CoreConstants.TABLE_NAME.CHILD, mainCondition, CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         String mainSelect = model.mainSelect(CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, mainCondition);
 
         getView().initializeQueryParams(CoreConstants.TABLE_NAME.CHILD, countSelect, mainSelect);
