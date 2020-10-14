@@ -38,11 +38,52 @@ public class BaseChwNotificationDetailsInteractorTest extends BaseUnitTest {
     }
 
     @Test
-    public void canGetSickChildFollowUpDetails() {
+    public void canFetchSickChildFollowUpDetails() {
         ArgumentCaptor<NotificationItem> notificationItemCaptor = ArgumentCaptor.forClass(NotificationItem.class);
         interactor.fetchNotificationDetails("testNotificationId", context.getString(R.string.notification_type_sick_child_follow_up));
         Mockito.verify(presenter, Mockito.times(1)).onNotificationDetailsFetched(notificationItemCaptor.capture());
         Assert.assertEquals("Test Client has attended the facility on 2020-05-21 17:16:31", notificationItemCaptor.getValue().getTitle());
         Assert.assertEquals("CG: Mama Yake", notificationItemCaptor.getValue().getDetails().get(0));
+    }
+
+
+    @Test
+    public void canFetchAncOutcomeDetails() {
+        ArgumentCaptor<NotificationItem> notificationItemCaptor = ArgumentCaptor.forClass(NotificationItem.class);
+        interactor.fetchNotificationDetails("testNotificationId", context.getString(R.string.notification_type_anc_danger_signs));
+        Mockito.verify(presenter, Mockito.times(1)).onNotificationDetailsFetched(notificationItemCaptor.capture());
+        Assert.assertEquals("Test Client has attended the facility on 2020-05-21 17:16:31", notificationItemCaptor.getValue().getTitle());
+        Assert.assertEquals("Danger signs: Headache", notificationItemCaptor.getValue().getDetails().get(0));
+        Assert.assertEquals("Action taken: Referred", notificationItemCaptor.getValue().getDetails().get(1));
+    }
+
+    @Test
+    public void canFetchPncOutcomeDetails() {
+        ArgumentCaptor<NotificationItem> notificationItemCaptor = ArgumentCaptor.forClass(NotificationItem.class);
+        interactor.fetchNotificationDetails("testNotificationId", context.getString(R.string.notification_type_pnc_danger_signs));
+        Mockito.verify(presenter, Mockito.times(1)).onNotificationDetailsFetched(notificationItemCaptor.capture());
+        Assert.assertEquals("Test Client has attended the facility on 2020-05-21 17:16:31", notificationItemCaptor.getValue().getTitle());
+        Assert.assertEquals("Danger signs: Headache", notificationItemCaptor.getValue().getDetails().get(0));
+        Assert.assertEquals("Action taken: Referred", notificationItemCaptor.getValue().getDetails().get(1));
+    }
+
+    @Test
+    public void canFetchMalariaFollowUpDetails() {
+        ArgumentCaptor<NotificationItem> notificationItemCaptor = ArgumentCaptor.forClass(NotificationItem.class);
+        interactor.fetchNotificationDetails("testNotificationId", context.getString(R.string.notification_type_malaria_follow_up));
+        Mockito.verify(presenter, Mockito.times(1)).onNotificationDetailsFetched(notificationItemCaptor.capture());
+        Assert.assertEquals("Test Client has attended the facility on 2020-05-21 17:16:31", notificationItemCaptor.getValue().getTitle());
+        Assert.assertEquals("Diagnosis: Malaria", notificationItemCaptor.getValue().getDetails().get(0));
+        Assert.assertEquals("Action taken: Referred", notificationItemCaptor.getValue().getDetails().get(1));
+    }
+
+    @Test
+    public void canFetchFamilyPlanningDetails() {
+        ArgumentCaptor<NotificationItem> notificationItemCaptor = ArgumentCaptor.forClass(NotificationItem.class);
+        interactor.fetchNotificationDetails("testNotificationId", context.getString(R.string.notification_type_family_planning));
+        Mockito.verify(presenter, Mockito.times(1)).onNotificationDetailsFetched(notificationItemCaptor.capture());
+        Assert.assertEquals("Test Client has attended the facility on 2020-05-21 17:16:31", notificationItemCaptor.getValue().getTitle());
+        Assert.assertEquals("Selected method: Pills", notificationItemCaptor.getValue().getDetails().get(0));
+        Assert.assertEquals("Village: Gachie", notificationItemCaptor.getValue().getDetails().get(1));
     }
 }

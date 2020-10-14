@@ -29,6 +29,8 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 
 import java.text.MessageFormat;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class BaseReferralRegisterProvider implements RecyclerViewProvider<ReferralViewHolder> {
     private Context context;
     private View.OnClickListener onClickListener;
@@ -53,7 +55,7 @@ public class BaseReferralRegisterProvider implements RecyclerViewProvider<Referr
         String middleName = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String lastName = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String childName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
-        String dobString = Utils.getDuration(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String dobString = getDuration(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DOB, false));
         viewHolder.setName(WordUtils.capitalize(childName) + ", " + WordUtils.capitalize(Utils.getTranslatedDate(dobString, context)));
 
         String focus = Utils.getValue(pc.getColumnmaps(), CoreConstants.DB_CONSTANTS.FOCUS, true);

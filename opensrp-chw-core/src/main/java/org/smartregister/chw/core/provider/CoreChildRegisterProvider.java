@@ -29,6 +29,8 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 import java.text.MessageFormat;
 import java.util.Set;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 /**
  * Created by keyman on 13/11/2018.
  */
@@ -141,7 +143,7 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
 
         fillValue(viewHolder.textViewParentName, WordUtils.capitalize(parentName));
 
-        String dobString = Utils.getDuration(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String dobString = getDuration(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DOB, false));
         //dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : dobString;
         fillValue(viewHolder.textViewChildName, WordUtils.capitalize(childName) + ", " + WordUtils.capitalize(Utils.getTranslatedDate(dobString, context)));
         setAddressAndGender(pc, viewHolder);
