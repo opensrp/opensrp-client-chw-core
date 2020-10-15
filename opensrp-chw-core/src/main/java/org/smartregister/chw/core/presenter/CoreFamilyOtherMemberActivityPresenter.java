@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.presenter;
 
 import android.content.ContentValues;
+import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -13,10 +14,13 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyOtherMemberProfileExtendedContract;
 import org.smartregister.chw.core.contract.FamilyProfileExtendedContract;
 import org.smartregister.chw.core.dao.AncDao;
+import org.smartregister.chw.core.domain.FamilyMember;
 import org.smartregister.chw.core.interactor.CoreFamilyInteractor;
 import org.smartregister.chw.core.interactor.CoreFamilyProfileInteractor;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyOtherMemberContract;
@@ -36,6 +40,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.toList;
 import static org.smartregister.util.Utils.getName;
 
 public abstract class CoreFamilyOtherMemberActivityPresenter extends BaseFamilyOtherMemberProfileActivityPresenter implements FamilyOtherMemberProfileExtendedContract.Presenter, FamilyProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
@@ -148,59 +153,32 @@ public abstract class CoreFamilyOtherMemberActivityPresenter extends BaseFamilyO
     }
 
     @Override
-    public void updateFamilyMember(String jsonString, boolean isIndependent) {
+    public void updateFamilyMember(Context context, String jsonString, boolean isIndependent) {
 
         try {
             getView().showProgressDialog(org.smartregister.family.R.string.saving_dialog_title);
 
             FamilyEventClient familyEventClient = profileModel.processUpdateMemberRegistration(jsonString, familyBaseEntityId);
+            FamilyMember familyMember = CoreJsonFormUtils.getFamilyMemberFromRegistrationForm(jsonString, familyBaseEntityId, familyBaseEntityId);
+            Event eventMember = familyEventClient.getEvent();
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EVER_SCHOOL.CODE, "",
+                    toList(CoreJsonFormUtils.getEverSchoolOptions(context).get(familyMember.getEverSchool())), toList(familyMember.getEverSchool()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
+
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.SCHOOL_LEVEL.CODE, "",
+                    toList(CoreJsonFormUtils.getSchoolLevels(context).get(familyMember.getSchoolLevel())), toList(familyMember.getSchoolLevel()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL));
+
+
             if (familyEventClient == null) {
                 return;
             }
             if (isIndependent) {
                 familyEventClient.getEvent().setEntityType(CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT);
             }
-            updateLocalStorage(familyEventClient.getClient().getBaseEntityId(), CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL, getValueForKey(CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL, jsonString));
-            updateLocalStorage(familyEventClient.getClient().getBaseEntityId(), CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL, getValueForKey(CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL, jsonString));
             profileInteractor.saveRegistration(familyEventClient, jsonString, true, this);
-
-            AllSharedPreferences allSharedPreferences = org.smartregister.util.Utils.getAllSharedPreferences();
-            Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, jsonString, Constants.TABLES.FAMILY_MEMBER);
-            NCUtils.processEvent(baseEvent.getBaseEntityId(), new JSONObject(org.smartregister.chw.anc.util.JsonFormUtils.gson.toJson(baseEvent)));
         } catch (Exception e) {
             getView().hideProgressDialog();
             Timber.e(e);
         }
-    }
-
-    public String getValueForKey(String key, String jsonString) {
-        String value = "";
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            JSONObject step1 = jsonObject.getJSONObject("step1");
-            JSONArray fields = step1.getJSONArray("fields");
-            for (int i = 0; i < fields.length(); i++) {
-                JSONObject field = fields.getJSONObject(i);
-                if (field.getString("key").equalsIgnoreCase(key)) {
-                    value = field.optString("value", "");
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return value;
-    }
-
-    private void updateLocalStorage(String baseEntityId, String fieldName, String fieldValue) {
-        if (getChildAllCommonsRepository() != null) {
-            ContentValues values = new ContentValues();
-            values.put(fieldName, fieldValue);
-            getChildAllCommonsRepository().update(Constants.TABLES.FAMILY_MEMBER, values, baseEntityId);
-        }
-    }
-
-    private AllCommonsRepository getChildAllCommonsRepository() {
-        return CoreChwApplication.getInstance().getAllCommonsRepository(Constants.TABLES.FAMILY_MEMBER);
     }
 
 

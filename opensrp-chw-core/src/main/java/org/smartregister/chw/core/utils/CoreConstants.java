@@ -614,6 +614,7 @@ public class CoreConstants {
         public static final String FAMILY = "family";
         public static final String FAMILY_HEAD = "family_head";
         public static final String PRIMARY_CAREGIVER = "primary_caregiver";
+        public static final String EVER_SCHOOL = "ever_school";
     }
 
     public static class TABLE_NAME {
@@ -796,6 +797,14 @@ public class CoreConstants {
 
             public static class HIGHEST_EDU_LEVEL {
                 public static final String CODE = "1712AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+            }
+
+            public static class EVER_SCHOOL {
+                public static final String CODE = "everSchool";
+            }
+
+            public static class SCHOOL_LEVEL {
+                public static final String CODE = "schoolLevel";
             }
         }
 

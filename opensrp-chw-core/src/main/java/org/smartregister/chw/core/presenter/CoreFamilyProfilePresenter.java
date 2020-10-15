@@ -24,6 +24,7 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
@@ -35,6 +36,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import timber.log.Timber;
+
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.toList;
 
 public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresenter implements FamilyProfileExtendedContract.Presenter, CoreChildRegisterContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
@@ -130,7 +133,7 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
     }
 
     @Override
-    public String saveChwFamilyMember(String jsonString) {
+    public String saveChwFamilyMember(Context context, String jsonString) {
         try {
             getView().showProgressDialog(org.smartregister.family.R.string.saving_dialog_title);
 
@@ -138,6 +141,14 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
             if (familyEventClient == null) {
                 return null;
             }
+            FamilyMember familyMember = CoreJsonFormUtils.getFamilyMemberFromRegistrationForm(jsonString, familyBaseEntityId, familyBaseEntityId);
+            Event eventMember = familyEventClient.getEvent();
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EVER_SCHOOL.CODE, "",
+                    toList(CoreJsonFormUtils.getEverSchoolOptions(context).get(familyMember.getEverSchool())), toList(familyMember.getEverSchool()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
+
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.SCHOOL_LEVEL.CODE, "",
+                    toList(CoreJsonFormUtils.getSchoolLevels(context).get(familyMember.getSchoolLevel())), toList(familyMember.getSchoolLevel()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL));
+
 
             interactor.saveRegistration(familyEventClient, jsonString, false, this);
             return familyEventClient.getClient().getBaseEntityId();
