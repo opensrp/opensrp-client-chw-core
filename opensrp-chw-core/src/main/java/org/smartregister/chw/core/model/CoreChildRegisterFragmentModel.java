@@ -16,6 +16,7 @@ import org.smartregister.view.contract.IView;
 import org.smartregister.view.contract.IViewConfiguration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,9 @@ public class CoreChildRegisterFragmentModel implements CoreChildRegisterFragment
 
     @Override
     public Set<IView> getRegisterActiveColumns(String viewConfigurationIdentifier) {
-        return ConfigurableViewsLibrary.getInstance().getConfigurableViewsHelper().getRegisterActiveColumns(viewConfigurationIdentifier);
+        HashSet<IView> iviews = new HashSet();
+        iviews.addAll(ConfigurableViewsLibrary.getInstance().getConfigurableViewsHelper().getRegisterActiveColumns(viewConfigurationIdentifier));
+        return iviews;
     }
 
     @Override
