@@ -40,7 +40,10 @@ public class MemberAdapterTest extends BaseUnitTest {
         familyMember.setMemberID("2020022");
         familyMember.setFirstName("jane");
         familyMember.setMiddleName("kenna");
+        familyMember.setEduLevel("University");
         familyMember.setLastName("Kenya");
+        familyMember.setEverSchool("Yes");
+        familyMember.setSchoolLevel("Higher");
         familyMember.setPhone("290380-83080390-93");
         familyMember.setOtherPhone("67987983-3787494-87798");
 
