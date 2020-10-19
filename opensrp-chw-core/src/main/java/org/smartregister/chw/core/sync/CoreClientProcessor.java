@@ -80,6 +80,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 return;
             }
 
+            // if its an updated vaccine, delete the previous object
+            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
+
             // Add the vaccine
             vaccineRepository.add(vaccine);
 
