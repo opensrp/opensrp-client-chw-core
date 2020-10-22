@@ -75,11 +75,10 @@ public class VisitDao extends AbstractDao {
     }
 
     public static boolean memberHasBirthCert(String baseEntityID) {
-        String sql = "select count(*) certificates " +
-                "from visit_details d " +
+        String sql = "select count(*) certificates from visit_details d " +
                 "inner join visits v on v.visit_id = d.visit_id COLLATE NOCASE " +
                 "where base_entity_id = '" + baseEntityID + "' COLLATE NOCASE and v.processed = 1 " +
-                "and (visit_key in ('birth_certificate','birth_cert') and details = 'GIVEN' or human_readable_details = 'Yes')";
+                "and (visit_key in ('birth_cert', 'birth_certificate') and human_readable_details = 'Yes')";
 
         DataMap<String> dataMap = c -> getCursorValue(c, "certificates");
         List<String> values = AbstractDao.readData(sql, dataMap);
