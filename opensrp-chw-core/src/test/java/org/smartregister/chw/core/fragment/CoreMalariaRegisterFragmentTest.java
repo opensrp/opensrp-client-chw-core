@@ -201,22 +201,6 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
         Assert.assertEquals(captor.getValue(), view);
     }
 
-  /*  @Test
-    public void whenToggleFilterSelectionAnswered() {
-        when(coreMalariaRegisterFragment.getActivity()).thenReturn(activity);
-        when(malariaRegisterActivity.getFragmentManager()).thenReturn(fragmentManager);
-        when(fragmentManager.beginTransaction()).thenReturn(fragmentTransaction);
-        Mockito.doReturn("abcd").when(coreMalariaRegisterFragment).searchText();
-        Mockito.doNothing().when(coreMalariaRegisterFragment).filterDue("abcd", "", presenter.getMainCondition());
-
-
-        coreMalariaRegisterFragment.toggleFilterSelection(view);
-
-        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreMalariaRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
-    }*/
-
     @After
     public void tearDown() {
         try {
