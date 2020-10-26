@@ -124,15 +124,6 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
     @Mock
     private ActionBar actionBar;
 
-    @Mock
-    private FragmentManager fragmentManager;
-
-    @Mock
-    private FragmentTransaction fragmentTransaction;
-
-    @Mock
-    private CoreMalariaRegisterActivity malariaRegisterActivity;
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -189,7 +180,7 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
 
         coreMalariaRegisterFragment.onCreateView(layoutInflater, container, bundle);
 
-        Mockito.verify(coreMalariaRegisterFragment).setupViews(parentLayout);
+        verify(coreMalariaRegisterFragment).setupViews(parentLayout);
     }
 
 
@@ -197,7 +188,7 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
     public void testOnViewClick() {
         coreMalariaRegisterFragment.onViewClicked(view);
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreMalariaRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
+        verify(coreMalariaRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
         Assert.assertEquals(captor.getValue(), view);
     }
 
