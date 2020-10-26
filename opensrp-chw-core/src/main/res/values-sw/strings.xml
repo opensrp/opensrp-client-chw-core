@@ -4,7 +4,6 @@
     <color name="chw_primary_dark">#0d384e</color>
     <string name="powered_by">Imedhaminiwa na</string>
     <string name="username">Jina la mtumiaji</string>
-
     <!-- Date manipulation-->
     <string name="password">Neno la Siri</string>
     <string name="nav_logo">Mfumo wa Boresha Afya</string>
@@ -21,7 +20,7 @@
 
     <string name="navigation_drawer_open">Fungua</string>
     <string name="navigation_drawer_close">Funga</string>
-    <string name="action_log_out">Toka kwenye mfumo</string>
+    <string name="action_log_out">Kutoka kwenye mfumo</string>
 
     <!-- Navigation Strings -->
     <string name="action_start_sync">Sync imeanza</string>
@@ -31,7 +30,7 @@
     <string name="nav_sync">Sync</string>
     <string name="nav_last">Mwisho:</string>
     <string name="nav_last_sync_time">HH:mm a , MMM DD</string>
-    <string name="all_registers">Rejesta zote</string>
+    <string name="all_registers">Rejesta Zote</string>
     <string name="log_out_as">Toka kwenye mfumo kama</string>
 
     <!--Navigation side menu -->
@@ -44,21 +43,21 @@
     <string name="menu_hiv_clients">Wateja wenye VVU</string>
     <string name="menu_anc">Wajawazito</string>
     <string name="menu_pnc">Baada ya kujifungua</string>
-    <string name="menu_child">Watoto</string>
-    <string name="menu_family_planning">Uzazi wa mpango</string>
+    <string name="menu_child">Mtoto</string>
+    <string name="menu_family_planning">Uzazi wa Mpango</string>
 
     <!-- Family Register -->
     <string name="menu_malaria">Malaria</string>
     <string name="menu_referrals">Rufaa</string>
     <string name="search_name_or_id">Tafuta jina au namba ya utambulisho</string>
-    <string name="visit_not_done">Hudhurio halijafanyika</string>
-    <string name="visit_done">Hudhurio limekamilika</string>
+    <string name="visit_not_done">Tembeleo halijafanyika</string>
+    <string name="visit_done">Tembeleo limekamilika</string>
     <string name="record_visit">Rekodi tembeleo</string>
 
     <!-- Floating menu -->
     <string name="due_visit">Tembeleo la mwisho \n %1$s</string>
     <string name="record_home_visit">Rekodi tembeleo</string>
-    <string name="family_details">Taarifa za kaya</string>
+    <string name="family_details">Taarifa ya kaya</string>
     <string name="add_new_family_member">Sajili mwanafamilia mpya</string>
     <string name="remove_existing_family_member">Ondoa mwanafamilia aliyepo</string>
     <string name="change_family_head">Badili mkuu wa kaya</string>
@@ -96,10 +95,10 @@
     <string name="november">Novemba</string>
     <string name="december">Disemba</string>
 
-    <string name="no_services_due">Hakuna huduma zilizofika muda wake</string>
+    <string name="no_services_due">Hakuna huduma</string>
     <string name="due_details">Huduma kwa mwanafamilia ikifika muda wake itaonekana hapa</string>
     <string name="due_only">Zilizofika muda tu</string>
-    <string name="care_giver_initials">CG</string>
+    <string name="care_giver_initials">Mlezi</string>
 
     <string name="less_than_twenty_four">chini ya massa 24</string>
     <string name="child_register_title">Watoto</string>
@@ -115,7 +114,7 @@
     <string name="muac_choice_1">Kijani</string>
     <string name="muac_choice_2">Njano</string>
     <string name="muac_choice_3">Nyekundu</string>
-    <string name="llitn_title">Analala kwenye chandarua chenye viuwatilifu cha muda mrefu</string>
+    <string name="llitn_title">Analala kwenye chandarua chenye viwatilifu cha muda mrefu</string>
     <string name="ecd_title">Maendeleo ya awali ya mtoto (ECD)</string>
 
     <string name="edu_level_none">Hakuna</string>
@@ -125,7 +124,7 @@
     <string name="remove_this_person">Ondoa huyu mtu</string>
     <string name="remove_the_mother">Ondoa mama</string>
     <string name="registration_info">Taarifa za usajili</string>
-    <string name="anc_registration">Usajili wa wajawazito</string>
+    <string name="anc_registration">Usajili wa ujauzito</string>
     <string name="malaria_registration">Uthibitisho wa malaria</string>
     <string name="fp_registration">Usajili wa Uzazi wa Mpango</string>
     <string name="malaria_follow_up">Tembeleo la ufuatiliaji</string>
@@ -162,13 +161,13 @@
     <string name="given">Amepewa</string>
     <string name="provided_on">Zilizotolewa katika %1$s</string>
     <string name="given_on">Imetolewa %1$s</string>
-    <string name="not_given">Hajapewa</string>
+    <string name="not_given">Haijatolewa</string>
     <string name="visit_mnp_dose">Dozi ya MNP</string>
     <string name="visit_months">miezi</string>
     <string name="visit_dose">dozi</string>
     <string name="visit_pack">pakiti</string>
     <string name="visit_vitamin_a_dose">Dozi ya Vitamini A</string>
-    <string name="visit_deworming_dose">Dozi ya tiba na kinga ya minyoo</string>
+    <string name="visit_deworming_dose">Dozi ya tiba kinga ya minyoo</string>
     <string name="exclusive_breastfeeding">Unyonyeshwaji wa maziwa ya mama pekee</string>
     <string name="deworming">Tiba kinga dhidi ya minyoo</string>
     <string name="vaccine_card_title">Kadi ya chanjo ya mtoto imepokelewa</string>
@@ -182,35 +181,36 @@
 
     <!--Change family member head -->
     <string name="change_head_member_title">Badili mkuu wa kaya</string>
-    <string name="change_head_member_title_question">Chagua mkuu mpya wa kaya</string>
+    <string name="change_head_member_title_question">Chagua mkuu wa kaya mpya</string>
     <string name="change_caregiver_member_title">Badili mlezi</string>
     <string name="change_caregiver_member_title_question">Chagua mlezi mpya</string>
     <string name="phone_number">Namba ya simu</string>
     <string name="other_phone_number">Namba ya simu nyingine</string>
-    <string name="save_title">Hifadhi</string>
+    <string name="save_title">HIFADHI</string>
     <string name="number_8_16">Namba iwe na tarakimu 8 mpaka 16</string>
     <string name="status_saving">Kuhifadhi taarifa</string>
 
     <!--Remove family member -->
     <string name="remove_member_title">Ondoa mwanafamilia katifa orodha</string>
     <string name="remove_member_prompt">Mwanafamilia yupi unataka kumuondoa katika orodha?</string>
-    <string name="confirm_remove_text">Una uhakika unataka kuondoa  tarifa za? Hii itaondoa taarifa zote %s  toka kwenye simu yako. Hii haiwezekani kurekebishika.</string>
+    <string name="confirm_remove_text">Una uhakika unataka kuondoa  tarifa za %s? Hii itaondoa taarifa zote   toka kwenye simu yako. Hii haiwezekani kurekebishika.</string>
     <string name="remove">ONDOA</string>
     <string name="remove_entire_family">Kuondoa kaya yote</string>
-    <string name="remove_warning_family">Una uhakika unataka kuondoa %s tarifa zote za kaya? Hii itaondoa taarifa zote za kaya husika NA  %s tarifa za afya ya kila mwanafamilia toka kwenye simu yako. Hii haiwezekani kurekebishika.</string>
+    <string name="remove_warning_family">Una uhakika unataka kuondoa  tarifa zote za kaya %s? Hii itaondoa taarifa zote za kaya husika NA  tarifa za afya ya kila mwanafamilia wa %s toka kwenye simu yako. Hii haiwezekani kurekebishika.</string>
     <string name="family">Kaya ya %s</string>
 
     <!--Change care giver-->
     <string name="select_caregiver">Chagua mlezi mpya</string>
-    <string name="select_family_head">Chagua mkuu mpya wa kaya</string>
+    <string name="select_family_head">Chagua mkuu wa kaya mpya</string>
     <string name="remove_caregiver_warning_message">Kabla hujamuondoa mwanafamilia huyu, chagua mlezi mpya</string>
     <string name="remove_familyhead_warning_message">Kabla hujamuondoa mwanafamilia huyu, chagua mkuu mpya wa kaya.</string>
     <string name="profile_change_dialog_message">Kabla hujamuondoa mwanafamilia huyu, chagua mkuu wa kaya mpya.</string>
     <string name="select_a_new_family_head">Chagua mkuu wa kaya mpya</string>
     <string name="remove_family_count">%s watu wazima na %s watoto chini ya miaka 5</string>
 
+    <string name="yellow_fever">Homa ya manjano</string>
 
-    <string name="medical_title">Rudi kwenye taarifa za msingi za %1$s</string>
+    <string name="medical_title">Rudi kwenye taarifa za %1$s</string>
     <string name="medical_last_visit">%1$s iliyopita</string>
     <string name="back_to_children">Kurudi nyuma \'%1$s\'</string>
     <string name="last_visit">TEMBELEO LA MWISHO</string>
@@ -231,8 +231,8 @@
     <string name="birth">kuzaliwa</string>
     <string name="week_full">wiki</string>
     <string name="month_full">mwezi</string>
-    <string name="at_birth">kuzaliwa</string>
-    <string name="pnc_health_facility_visit_num">Hudhurio katika kituo cha kutolea huduma za afya kwa huduma ya mtoto na mama baada ya kujifungua {0}</string>
+    <string name="at_birth">wakati wa kuzaliwa</string>
+    <string name="pnc_health_facility_visit_num">Hudhurio katika kituo cha kutolea huduma za afya kwa huduma ya  mama na mtoto baada ya kujifungua {0}</string>
     <string name="child">mtoto</string>
     <string name="birth_cap">Kuzaliwa</string>
     <string name="done">imefanyika</string>
@@ -249,14 +249,14 @@
     <string name="fp_method_start_date">Tarehe kuanza njia za uzazi wa mpango </string>
     <string name="none">Hakuna</string>
     <string name="abstinence">Kugunga / Kutofanya tendo la ndoa</string>
-    <string name="condom">Condom</string>
+    <string name="condom">Kondomu</string>
     <string name="tablets">Vidonge</string>
     <string name="injectable">Sindano</string>
     <string name="iud">Kitanzi</string>
     <string name="implant">Kipandikizi</string>
-    <string name="managed">Imesimamiwa</string>
+    <string name="managed">Amepata huduma</string>
     <string name="referred">Amepewa rufaa</string>
-    <string name="no_action_taken">Hatua hailiyochukuliwa</string>
+    <string name="no_action_taken">Hakuna hatua iliyochukuliwa</string>
 
 
     <string name="handwashing_facilities">Je, kaya inatumia vifaa safi vya kunawia mikono?</string>
@@ -264,28 +264,28 @@
     <string name="hygienic_latrine">Je, wakazi wa kaya hii wanatumia choo kisafi wanapojisaidia haja kubwa na ndogo?</string>
     <string name="wash_check">Cheki WASH</string>
 
-    <string name="abv_first">1st</string>
-    <string name="abv_second">2nd</string>
-    <string name="abv_third">3rd</string>
-    <string name="abv_fourth">4th</string>
-    <string name="abv_fifth">5th</string>
-    <string name="abv_sixth">6th</string>
-    <string name="abv_seventh">7th</string>
-    <string name="abv_eigth">8th</string>
-    <string name="abv_nineth">9th</string>
-    <string name="abv_tenth">10th</string>
-    <string name="abv_eleventh">11th</string>
-    <string name="abv_twelfth">12th</string>
+    <string name="abv_first">1</string>
+    <string name="abv_second">2</string>
+    <string name="abv_third">3</string>
+    <string name="abv_fourth">4</string>
+    <string name="abv_fifth">5</string>
+    <string name="abv_sixth">6</string>
+    <string name="abv_seventh">7</string>
+    <string name="abv_eigth">8</string>
+    <string name="abv_nineth">9</string>
+    <string name="abv_tenth">10</string>
+    <string name="abv_eleventh">11</string>
+    <string name="abv_twelfth">12</string>
 
-    <string name="anc_register">Rejesta ya ujazito</string>
-    <string name="edit_anc_registration_form_title">Hariri usajili wa huduma za kliniki ya wajawazito</string>
-    <string name="anc_registration_form_title">Usajili wa wajawazito</string>
+    <string name="anc_register">Rejesta ya Wajawazito</string>
+    <string name="edit_anc_registration_form_title">Hariri usajili wa ujauzito </string>
+    <string name="anc_registration_form_title">Usajili wa ujauzito</string>
     <string name="anc_pregnancy_outcome_form_title">Matokeo ya mimba</string>
-    <string name="anc_registration_info">Taarifa za usajili wa wajawazito</string>
+    <string name="anc_registration_info">Taarifa za usajili wa ujauzito</string>
     <string name="anc_pregnancy_out_come">Matokeo ya mimba</string>
 
-    <string name="anc_health_facility_visits">MAHUDHURIO YA KLINIKI YA WAJAMZITO KWENYE KITUO CHA KUTOLEA HUDUMA ZA AFYA. </string>
-    <string name="anc_card">Kadi ya kliniki ya mama mjamzito</string>
+    <string name="anc_health_facility_visits">MAHUDHURIO YA KLINIKI YA WAJAWAZITO KWENYE KITUO CHA KUTOLEA HUDUMA ZA AFYA. </string>
+    <string name="anc_card">Kadi ya kliniki ya mjamzito</string>
     <string name="anc_tt_immunization">CHANJO YA PEPOPUNDA</string>
     <string name="anc_iptp_sp">DOZI YA IPTp-SP</string>
     <string name="urine_analysis">Kipimo kwenye njia ya mkojo</string>
@@ -315,8 +315,8 @@
     <string name="child_details">Taarifa za mtoto %1$s</string>
 
     <!-- Other family member profile -->
-    <string name="return_to_family_name">Kurudi kwenye kaya ya %1$s</string>
-    <string name="return_to_family_members">Rudi kwenye wanafamilia</string>
+    <string name="return_to_family_name">Rudi kwenye kaya ya %1$s</string>
+    <string name="return_to_family_members">Rudi kwa wanafamilia</string>
     <string name="edit_member_form_title">Hariri mwanafamilia</string>
     <string name="follow_up_visit">Tembeleo la ufuatiliaji</string>
 
@@ -325,26 +325,26 @@
     <string name="pnc_eight_to_twenty_eight">siku 8-28</string>
     <string name="pnc_twenty_nine_to_forty_two">siku 29-42</string>
 
-    <string name="pnc_health_facility_visit_title">Hudhurio katika kituo cha kutolea huduma za afya kwa huduma ya mtoto na mama baada ya kujifungua</string>
+    <string name="pnc_health_facility_visit_title">Hudhurio katika kituo cha kutolea huduma za afya kwa huduma ya mama na mtoto baada ya kujifungua</string>
     <string name="pnc_home_visit_title">Matembeleo baada ya kujifungua</string>
-    <string name="pnc_family_planning_title">Uzazi wa mpango</string>
+    <string name="pnc_family_planning_title">UZAZI WA MPANGO</string>
     <string name="pnc_child_vaccine">Kadi ya chanjo ya mtoto imetolewa</string>
     <string name="pnc_immunization">Chanjo</string>
     <string name="pnc_growth_and_nutrition">UKUAJI NA LISHE</string>
 
-    <string name="pnc_home_day_one_visit">siku 1</string>
-    <string name="pnc_home_day_three_visit">siku 3</string>
-    <string name="pnc_home_day_eight_visit">siku 8</string>
-    <string name="pnc_home_day_twenty_one_to_twenty_seven_visit">siku 21-27</string>
-    <string name="pnc_home_day_thirty_five_to_forty_one_visit">siku 35-41</string>
+    <string name="pnc_home_day_one_visit">siku ya 1</string>
+    <string name="pnc_home_day_three_visit">siku ya 3</string>
+    <string name="pnc_home_day_eight_visit">siku ya 8</string>
+    <string name="pnc_home_day_twenty_one_to_twenty_seven_visit">siku ya 21-27</string>
+    <string name="pnc_home_day_thirty_five_to_forty_one_visit">siku ya 35-41</string>
 
     <string name="pnc_visit_date">Tembeleo baada ya kujifungua {0}: {1}</string>
     <string name="pnc_baby_weight">Uzito wa mtoto: %1$s kgs</string>
     <string name="pnc_baby_temp">Joto la mtoto: %1$s °C</string>
     <string name="pnc_wcaro_health_facility_visit">Tembeleo baada ya kujifungua: {0}</string>
 
-    <string name="pnc_family_planning_method">Njia ya uzazi wa mpango: {0}</string>
-    <string name="pnc_family_planning_date">Tarehe kuanza: {0}</string>
+    <string name="pnc_family_planning_method">Njia: {0}</string>
+    <string name="pnc_family_planning_date">Tarehe ya kuanza: {0}</string>
     <string name="pnc_none">Hakuna</string>
     <string name="pnc_abstinence">Kugunga / Kutofanya tendo la ndoa</string>
     <string name="pnc_condom">Kondomu</string>
@@ -355,37 +355,37 @@
     <string name="pnc_other">Nyingine</string>
     <string name="pnc_child_vaccine_card">{0}</string>
 
-    <string name="pnc_bcg">BCG - Imefanyika {0}</string>
-    <string name="pnc_opv0">OPV 0 - Imefanyika {0}</string>
+    <string name="pnc_bcg">BCG - Imetolewa {0}</string>
+    <string name="pnc_opv0">OPV 0 - Imetolewa{0}</string>
     <string name="pnc_bcg_not_done">BCG - {0}</string>
     <string name="pnc_opv0_not_done">OPV 0 - {0}</string>
     <string name="pnc_birth">Kuzaliwa</string>
     <string name="pnc_yes">Ndiyo</string>
     <string name="pnc_no">Hapana</string>
-    <string name="pnc_vaccine_not_given">Chanjo haijapewa</string>
+    <string name="pnc_vaccine_not_given">Chanjo haijatolewa</string>
 
-    <string name="pnc_early_initiation_bf">Kuanzisha mapema ya kunyonyesha: {0}</string>
-    <string name="pnc_exclusive_bf_0_months">Unyonyeshwaji wa maziwa ya mama pekee kwa mwezi 0: {0}</string>
+    <string name="pnc_early_initiation_bf">Uanzishaji wa mapema wa kunyonyesha: {0}</string>
+    <string name="pnc_exclusive_bf_0_months">Unyonyeshaji wa maziwa ya mama pekee kwa mwezi 0: {0}</string>
 
-    <string name="issued">Iliyotolewa</string>
-    <string name="exclusive_breastfeeding_months">Unyonyeshwaji wa maziwa ya mama pekee kwa miezi %s</string>
-    <string name="deworming_number_dose">Dozi ya tiba na kinga ya minyoo %s</string>
+    <string name="issued">Ilimetolewa</string>
+    <string name="exclusive_breastfeeding_months">Unyonyeshaji wa maziwa ya mama pekee kwa miezi %s</string>
+    <string name="deworming_number_dose">Dozi ya tiba kinga ya minyoo %s</string>
     <string name="vitamin_a_number_dose">Dozi ya Vitamini A %s</string>
     <string name="mnp_number_pack">MNP %s pack</string>
 
     <!-- Referrals -->
-    <string name="return_to_task_details">Rudi kwa taarifa ya rufaa</string>
-    <string name="referral_submitted">Rufaa imeenda kituo cha kutolea huduma</string>
+    <string name="return_to_task_details">Rudi kwenye rufaa</string>
+    <string name="referral_submitted">Rufaa imetumwa kwenye kituo cha kutolea huduma za afya</string>
     <string name="ga_label">Umri wa mimba</string>
-    <string name="cancel">GHAIRI</string>
+    <string name="cancel">Ghairi</string>
     <string name="referral_day">Rufaa %s</string>
-    <string name="care_giver_prefix">CG: %s</string>
+    <string name="care_giver_prefix">Mlezi: %s</string>
     <string name="child_prefix">Mtoto: %s</string>
     <string name="children_prefix">Watoto: %s</string>
     <string name="return_to">Rudi kwa %s</string>
 
     <string name="phone_not_provided">Hakuna namba iliyotolewa</string>
-    <string name="anc_danger_sign_prefix">Dalili za hatari ya ujazito; Dalili: %s</string>
+    <string name="anc_danger_sign_prefix">Dalili za hatari za ujauzito; Dalili: %s</string>
     <string name="client_name_age_suffix">%s, %s</string>
 
     <!--PNC -->
@@ -393,10 +393,10 @@
     <string name="pnc_visit_day_overdue">Siku %s tembeleo limepitiliza muda wake</string>
 
     <!-- Completed tasks subtitles (text) -->
-    <string name="family_planning">Uzazi wa mpango</string>
-    <string name="period_received">Muda yamepewa</string>
-    <string name="method_chosen">Njia za uzazi wa mpango imechaguliwa</string>
-    <string name="start_date">Tarehe kuanza</string>
+    <string name="family_planning">Uzazi wa Mpango</string>
+    <string name="period_received">Kipindi kilichopokelewa</string>
+    <string name="method_chosen">Njia iliyochaguliwa</string>
+    <string name="start_date">Tarehe ya kuanza</string>
     <string name="subtask_visit_not_done">Tembeleo halijafanyika</string>
     <string name="subtask_done">Imefanyika</string>
     <string name="subtask_not_done">Haijafanyika</string>
@@ -406,26 +406,26 @@
 
     <!-- Family Register -->
     <string name="tasks_status">{0}</string>
-    <string name="tasks_not_done">Kazi hazijafanyika</string>
-    <string name="tasks_done">Kazi zimefanyika</string>
+    <string name="tasks_not_done">Huduma hazijafanyika</string>
+    <string name="tasks_done">Huduma zimefanyika</string>
 
     <!-- Family Register tasks -->
     <string name="home_visit_suffix"> &#183; Tembeleo</string>
-    <string name="anc_visit_suffix"> &#183; Tembeleo la ujazito</string>
+    <string name="anc_visit_suffix"> &#183; Tembeleo la ujauzito</string>
     <string name="pnc_visit_suffix"> &#183; Tembeleo baada ya kujifungua</string>
     <string name="malaria_visit_suffix"> &#183; Tembeleo la Malaria</string>
 
     <!-- BA family Planning-->
     <string name="ppiucd">Kitanzi</string>
-    <string name="pills">Vidonge vya kumeza (POP)</string>
+    <string name="pills">Vidonge</string>
     <string name="condoms">Kondomu</string>
     <string name="lam">Njia ya uzazi wa mpango kwa unyonyeshaji (LAM)</string>
-    <string name="standard_day_method">Shanga</string>
+    <string name="standard_day_method">Njia ya shanga</string>
     <string name="permanent_blt">Kufunga kizazi mwanamke</string>
-    <string name="permanent_vasectomy">Kufunga kizazi mwanamme</string>
+    <string name="permanent_vasectomy">Kufunga kizazi mwanaume </string>
     <string name="hf_malaria_follow_up">Ufuatiliaji wa Malaria</string>
-    <string name="family_planning_initiation">Uanzishwaji wa huduma ya uzazi wa mpango</string>
-    <string name="family_planning_change">Badilisha njia ya uzazi wa mpango</string>
+    <string name="family_planning_initiation">Uanzishaji wa huduma ya uzazi wa mpango</string>
+    <string name="family_planning_change">Badilisha njia</string>
     <string name="pregnancy_confirmation">Uhakiki wa mimba</string>
     <string name="pnc_danger_sign_outcome">Matokeo ya dalili za hatari baada ya kujifungua</string>
     <string name="anc_danger_signs_outcome">Matokeo ya dalili za hatari wakati wa ujauzito</string>
@@ -458,18 +458,18 @@
     <string name="date_months">Miezi</string>
 
     <string name="last_visit_x_days_ago">Tembeleo la mwisho limepita kwa siku %1$s</string>
-    <string name="sick_child_form">Form ya mtoto mgonjwa</string>
+    <string name="sick_child_form">Fomu ya mtoto mgonjwa</string>
     <string name="sick_visit_on">Kumtembelea mgonjwa %s</string>
     <string name="view_sick_visits">Angalia matembeleo ya mgonjwa</string>
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Rudi kwa wateja wote</string>
-    <string name="return_to_notification_details">Rudi kwenye taarifa</string>
+    <string name="return_to_notification_details">Rudi kwenye mrejesho</string>
 
     <string name="indicator">Kiashiria</string>
-    <string name="value">Thamani</string>
+    <string name="value">Idadi</string>
     <string name="report">Ripoti</string>
-    <string name="draft">Rasimu</string>
+    <string name="draft">Taarifa ya mwezi</string>
 
     <!---daily Reporting-->
     <string name="newpreg_mama_visit_label">Wajawazito wapya waliotembelewa mwezi huu</string>
@@ -483,7 +483,7 @@
     <string name="total_U5_visit_label">Jumla ya watoto (chini ya miaka 5)</string>
     <string name="hh_visited_label">Jumla ya kaya zilizotembelewa mwezi huu</string>
     <string name="F_referral_hf_label">Idadi ya wanawake waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
-    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &lt;, umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
+    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &amp;lt, umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="reporting_1m1yr_referral_hf_label">Idadi ya watoto umri kuanzia (mwezi 1 hadi mwaka 1) waliopewa rufaa kwenda kituo cha kutolea huduma za afya</string>
     <string name="reporting_1yr5yr_referral_hf_label">Idadi ya watoto kuanzia umri wa (oynatma mwaka 1 hadi miaka 5) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="total_referral_label">Jumla ya wateja walipewa rufaa</string>
@@ -601,26 +601,26 @@
     <string name="reporting_20y24y_men_referral_label">Idadi ya wanaume waliopewa rufaa (miaka 20 -24)</string>
     <string name="reporting_25_men_referral_label">Idadi ya wanaume waliopewa rufaa (miaka 25+)</string>
     <string name="all_changes_saved">Mabadiliko yote yamehifadhiwa</string>
-    <string name="side_nav_hia2">Ripoti za mwezi</string>
-    <string name="hia2_daily_tallies">Takwimu za kila siku</string>
-    <string name="hia2_draft_monthly">Rasimu ya kila mwezi</string>
-    <string name="hia2_draft_monthly_with_count">Rasimu ya kila mwezi (%1$d)</string>
-    <string name="hia2_sent_monthly">Iliyotumwa kila mwezi</string>
-    <string name="start_new_report">Anza ripoti mpya</string>
-    <string name="no_draft_reports">Hakuna ripoti za rasimu</string>
-    <string name="no_monthly_ready">Hakuna ripoti ya mwezi iliyopo teyari kukamilishwa</string>
-    <string name="reports_available">Ripoti zilizopo</string>
-    <string name="sent_reports_">Ripoti zilizotumwa > %1$s</string>
-    <string name="submitted_by_">Iliyowasilishwa %1$s na %2$s</string>
+    <string name="side_nav_hia2">Ripoti za kila mwezi</string>
+    <string name="hia2_daily_tallies">Muoanisho wa siku</string>
+    <string name="hia2_draft_monthly">Taarifa ya mwezi</string>
+    <string name="hia2_draft_monthly_with_count">Taarifa ya mwezi (%1$d)</string>
+    <string name="hia2_sent_monthly">Zilizotumwa</string>
+    <string name="start_new_report">Anza taarifa mpya ya mwezi</string>
+    <string name="no_draft_reports">Hakuna taarifa ya mwezi</string>
+    <string name="no_monthly_ready">Hakuna taarifa ya mwezi iliyo tayari kukamilishwa</string>
+    <string name="reports_available">Taarifa zilizopo</string>
+    <string name="sent_reports_">Taarifa zilizotumwa > %1$s</string>
+    <string name="submitted_by_">Imetumwa %1$s na %2$s</string>
     <string name="sent_by">Imetumwa %1$s by %2$s</string>
     <string name="send">Tuma</string>
-    <string name="daily_tally_">Takwimu za kila siku > %1$s</string>
+    <string name="daily_tally_">Muoanisho wa siku > %1$s</string>
     <string name="started">Imeanza</string>
-    <string name="send_report_warning">Tuma %1$s repoti?\nTarehe: %2$s\nUser: %3$s</string>
+    <string name="send_report_warning">Tuma taarifa ya %1$s?\nTarehe: %2$s\nMJA: %3$s</string>
 
     <!--ba stockUsageModel inv reporting-->
-    <string name="stock_usage_report">Ripoti ya matumizi ya akiba</string>
-    <string name="stock_item_detail">%s akiba iliyotumika</string>
+    <string name="stock_usage_report">Ripoti ya Vifaa Tiba na Kinga</string>
+    <string name="stock_item_detail">%s Vilivyotumika</string>
     <string name="ors_5">ORS 5</string>
     <string name="zinc_10"> Zinc 10	</string>
     <string name="paracetamol">Paracetamol</string>
@@ -641,62 +641,94 @@
     <string name="sick_child">MTOTO MGONJWA</string>
 
     <!--Navigation Menu String -->
-    <string name="service_activity">Shughuli za huduma</string>
-    <string name="updates">Updates</string>
+    <string name="service_activity">Muhutasari wa Mwezi</string>
+    <string name="updates">Mrejesho</string>
 
-    <string name="facility_visit">%1$s Hudhurio katika kituo cha afya</string>
+    <string name="facility_visit">%1$s Hudhurio</string>
 
     <!-- Notification details -->
-    <string name="mark_as_done">Weka alama kama imekamika</string>
-    <string name="view_profile">Angalia profiili</string>
-    <string name="back_to_updates">Rudi kwenye updates</string>
+    <string name="mark_as_done">Kamilisha</string>
+    <string name="view_profile">Angalia taarifa</string>
+    <string name="back_to_updates">Rudi kwenye mrejesho</string>
     <string name="successful_referral_notification_title">Jina: %1$s, %2$s</string>
-    <string name="followup_notification_title">%1$s amehudhuria kituo cha afya %2$s</string>
-    <string name="notification_care_giver">CG: %1$s</string>
+    <string name="followup_notification_title">%1$s amehudhuria kwenye kituo cha kutolea huduma za afya tarehe%2$s</string>
+    <string name="notification_care_giver">Mlezi: %1$s</string>
     <string name="notification_diagnosis">Uchunguzi:%1$s</string>
     <string name="notification_danger_sign">Dalili za hatari: %1$s</string>
     <string name="notification_action_taken">Hatua iliyochukuliwa: %1$s</string>
     <string name="notification_village">Kijiji: %1$s</string>
     <string name="notification_selected_method">Njia iliyochaguliwa: %1$s</string>
     <string name="notification_record_closed">Rekodi imefungwa</string>
-    <string name="notification_phone">Namba ya simu ya Mwenyenyumba/Mlezi: %1$s</string>
-    <string name="notification_record_not_yet_done">Rufaa haijafanyika</string>
-    <string name="no_phone_provided">Hakuna namba iliyotolewa</string>
+    <string name="notification_phone">Namba ya simu ya Mkuu wa kaya / Mlezi: %1$s</string>
+    <string name="notification_record_not_yet_done">Rufaa haijakamilika</string>
+    <string name="no_phone_provided">Hakuna namba ya simu iliyotolewa</string>
     <string name="referral_notification_closure_date">Tarehe ya kufunga: %1$s</string>
 
 
     <!--stock usage reporting-->
-    <string name="stock_usage_title">Pitia matumizi ya akiba ya Mja</string>
-    <string name="select_chw_to_review">Chagua Mja wa kumhakiki</string>
-    <string name="provider_text">%s matumizi ya akiba</string>
+    <string name="stock_usage_title">Pitia matumizi ya vifaa vya MJA</string>
+    <string name="select_chw_to_review">Chagua MJA</string>
+    <string name="provider_text">%s matumizi ya vifaa tiba na kinga</string>
     <string name="all_chw">WAJA - wote</string>
-    <string name="stock_used_text">%s akiba iliyotumika</string>
+    <string name="stock_used_text">%s Vilivyotumika</string>
+    <string name="stock_report_value_error">Thamani inapaswa kuwa namba</string>
+    <string name="stock_report_value_required_error">Taja: %1$s</string>
 
     <!--In app Reporting-->
-    <string name="service_activity_title">Shughuli za huduma</string>
-    <string name="service_activity_reporting">repoti ya shughuli za huduma</string>
-    <string name="review_chw_services">Pitia huduma za Mja</string>
-    <string name="provider_service_text">%s huduma</string>
-    <string name="service_review">Hakiki huduma</string>
+    <string name="service_activity_title">Muhutasari wa Mwezi</string>
+    <string name="service_activity_reporting">kutoa muhutasari wa mwezi</string>
+    <string name="review_chw_services">Pitia huduma za MJA</string>
+    <string name="provider_service_text"> huduma ya %s</string>
+    <string name="service_review">Kuangalia huduma</string>
 
     <!--Referral notification types -->
     <string name="notification_type_sick_child_follow_up">Mtoto Mgonjwa</string>
     <string name="notification_type_pnc_danger_signs">Dalili za hatari baada ya kujifungua</string>
-    <string name="notification_type_anc_danger_signs">Dalili za hatari ya ujazito</string>
+    <string name="notification_type_anc_danger_signs">Dalili za hatari wakati wa ujauzito</string>
     <string name="notification_type_malaria_follow_up">Ufuatiliaji wa Malaria</string>
     <string name="notification_type_family_planning">Uzazi wa Mpango</string>
     <string name="notification_type_not_yet_done_referrals">Rufaa haijakamilika</string>
-    <string name="perform_click_action">Bonyeza</string>
+    <string name="perform_click_action">fanya hatua ya kubofya</string>
+
+
+    <!--Emergency Transport-->
+    <string name="community_responders">Usafiri wa dharura</string>
+    <string name="add_community_responder">Wasafirishaji</string>
+    <string name="add_responder">Sajili</string>
+    <string name="return_to_profile">Rudi kwenye taarifa za %1$s</string>
+    <string name="house_hold_family_name">Kaya: %1$s</string>
+    <string name="house_hold_discription">Kaya iko karibu na: %1$s</string>
+    <string name="map_facility">Kituo cha kutolea huduma za afya</string>
+    <string name="facility_name">Jina</string>
+    <string name="facility_status">Hali</string>
+    <string name="invalid_feature">Kipengele batili</string>
 
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Hariri taarifa za mteja</string>
-    <string name="location_info">Taarifa za mahali</string>
+    <string name="location_info">Taarifa za ramani</string>
     <string name="hiv_registration">Usajili wa VVU</string>
     <string name="tb_registration">Usajili wa TB</string>
-    <string name="remove_client">Ondoa huyu mteja</string>
+    <string name="remove_client">Ondoa mteja</string>
     <string name="call_all_clients_member">Piga simu kwa mteja au mlezi</string>
 
+    <!--Emergency Transport-->
+    <string name="edit_responder">Hariri</string>
+    <string name="remove_responder">Ondoa</string>
+    <string name="remove_responder_dialog_title">Ondoa msafirishaji</string>
+    <string name="remove_responder_dialog_message">Msafirishaji atafungiwa na kuondolewa kwenye mfumo.</string>
+    <string name="add_responder_max_message">Umefikia idadi ya mwisho ya wasafirishaji wanaoruhusiwa</string>
+
     <!-- Notification row -->
-    <string name="notification_for">Taarifa za %1$s</string>
-    <string name="full_notification_info">Angalia taarifa zote</string>
+    <string name="notification_for">Taarifa kwa %1$s</string>
+    <string name="full_notification_info">Angalia taarifa kwa ujumla</string>
+    <string name="thinkmd_health_assessment">Tathimini ya afya ya ThinkMD</string>
+    <string name="thinkmd_careplan">Mpango wa utunzaji wa ThinkMD (%1$s)</string>
+    <string name="care_plan">Mpango huduma</string>
+    <string name="thinkmd_identifier_type">thinkmd_id</string>
+    <string name="thinkmd_assessment_saved">ThinkMD tathmini ya afya imehifadhiwa</string>
+    <string name="no_thinkmd_care_plan_found">Hakuna mpango huduma wa thinkmd ulioonekana</string>
+
+    <!-- LMH Last Visit Row-->
+    <string name="view_vaccine_histroy">Angalia historia ya chanjo</string>
+    <string name="see_vaccines_due_today">Angalia chanjo zinazopaswa kutolewa leo</string>
 </resources>

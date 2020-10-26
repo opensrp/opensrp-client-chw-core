@@ -94,7 +94,7 @@ public class VisitDao extends AbstractDao {
                 "from visit_details d " +
                 "inner join visits v on v.visit_id = d.visit_id COLLATE NOCASE " +
                 "where base_entity_id = '" + baseEntityID + "' COLLATE NOCASE and v.processed = 1 " +
-                "and (visit_key in ('vaccine_card') and human_readable_details = 'Yes')";
+                "and (visit_key in ('vaccine_card', 'child_vaccine_card') and human_readable_details = 'Yes')";
 
         DataMap<String> dataMap = c -> getCursorValue(c, "certificates");
         List<String> values = AbstractDao.readData(sql, dataMap);

@@ -183,9 +183,43 @@ public class HomeAlertRule implements ICommonRule {
                 anchor = getLastDayOfMonth(dateCreated.toDate());
             }
         } else {
-            if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
+            if (visitNotDoneDate == null || lastVisitDate.isAfter(visitNotDoneDate)) {
                 if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
                     anchor = getLastDayOfMonth(todayDate.toDate());
+                }
+            } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
+                anchor = visitNotDoneDate.toDate();
+            }
+        }
+        return anchor;
+    }
+
+
+    public boolean evaluateIfOverdueWithinMonth(Integer value) {
+        LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(overDueDate()));
+        int diff = getMonthsDifference(overdue, todayDate);
+        if (diff >= value) {
+            noOfMonthDue = diff + StringUtils.upperCase(context.getString(R.string.abbrv_months));
+            return true;
+        }
+        return false;
+    }
+
+    private Date overDueDate(){
+        Date anchor = null;
+        if (lastVisitDate == null) {
+            if (visitNotDoneDate != null) {
+                anchor = visitNotDoneDate.toDate();
+            } else {
+                anchor = getLastDayOfMonth(dateCreated.toDate());
+            }
+        } else {
+            if (visitNotDoneDate == null || lastVisitDate.isAfter(visitNotDoneDate)) {
+                if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
+                    anchor = getLastDayOfMonth(todayDate.toDate());
+                }
+                else if((getMonthsDifference(lastVisitDate, todayDate) > 1)){
+                    anchor = getLastDayOfMonth(lastVisitDate.toDate());
                 }
             } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
                 anchor = visitNotDoneDate.toDate();

@@ -2,6 +2,7 @@ package org.smartregister.chw.core.activity;
 
 import android.view.Menu;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,6 +32,8 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
     public MockitoRule rule = MockitoJUnit.rule();
     private CoreStockInventoryReportActivity activity;
     private List<StockUsageItemModel> stockUsageItemModelsList = new ArrayList<>();
+    private ActivityController<CoreStockInventoryReportActivity> controller;
+
     @Mock
     private Menu menu;
 
@@ -41,8 +44,6 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
-        ActivityController<CoreStockInventoryReportActivity> controller;
-
         MockitoAnnotations.initMocks(this);
         Context context = Context.getInstance();
         CoreLibrary.init(context);
@@ -118,5 +119,15 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
     @Test
     public void testOnCreateOptionsMenu() {
         Assert.assertFalse(activity.onCreateOptionsMenu(menu));
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            controller.pause().stop().destroy();
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

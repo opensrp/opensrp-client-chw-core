@@ -298,10 +298,10 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
         String query = countSelect;
         try {
             if (StringUtils.isNotBlank(filters))
-                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
+                query = sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
 
             if (dueFilterActive)
-                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
+                query = sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
             query = sqb.Endquery(query);
         } catch (Exception e) {
             Timber.e(e);

@@ -8,13 +8,17 @@ import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
+import org.smartregister.chw.core.model.CommunityResponderModel;
+import org.smartregister.chw.core.repository.CommunityResponderRepository;
 import org.smartregister.chw.core.repository.MonthlyTalliesRepository;
 import org.smartregister.chw.core.repository.StockUsageReportRepository;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.core.utils.ReportUtils;
+import org.smartregister.chw.core.utils.StockUsageReportUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.fp.util.FpUtil;
@@ -25,8 +29,8 @@ import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.Obs;
+import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -40,6 +44,7 @@ import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.service.intent.RecurringIntentService;
 import org.smartregister.immunization.service.intent.VaccineIntentService;
+import org.smartregister.immunization.util.IMConstants;
 import org.smartregister.sync.ClientProcessorForJava;
 
 import java.text.DateFormat;
@@ -48,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -73,6 +79,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             if (vaccineRepository == null || vaccine == null) {
                 return;
             }
+
+            // if its an updated vaccine, delete the previous object
+            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -250,6 +259,13 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.STOCK_USAGE_REPORT:
                 clientProcessStockEvent(event);
                 break;
+            case CoreConstants.EventType.REMOVE_COMMUNITY_RESPONDER:
+                CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+                repo.purgeCommunityResponder(event.getBaseEntityId());
+                break;
+            case CoreConstants.EventType.COMMUNITY_RESPONDER_REGISTRATION:
+                clientProcessCommunityResponderEvent(event);
+                break;
             case CoreConstants.EventType.CHW_IN_APP_REPORT_EVENT:
                 clientProcessInAppReportingEvent(event);
                 break;
@@ -286,6 +302,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CoreReferralUtils.completeClosedReferralTasks();
                 }
                 break;
+            case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.DELETE_EVENT:
+                processDeleteEvent(eventClient.getEvent());
+                break;
             case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
@@ -301,6 +320,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
                 break;
+        }
+    }
+
+    public void processDeleteEvent(Event event) {
+        try {
+            // delete from vaccine table
+            EventDao.deleteVaccineByFormSubmissionId(event.getFormSubmissionId());
+            // delete from visit table
+            EventDao.deleteVisitByFormSubmissionId(event.getFormSubmissionId());
+            // delete from recurring service table
+            EventDao.deleteServiceByFormSubmissionId(event.getFormSubmissionId());
+
+            Timber.d("Ending processDeleteEvent: %s", event.getEventId());
+        } catch (Exception e) {
+            Timber.e(e);
         }
     }
 
@@ -418,6 +452,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
                 Date createdAt = getDate(createdAtString);
@@ -434,6 +469,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private String getVaccineProgramClient(EventClient eventClient) {
+        Map<String, String> details = eventClient.getEvent().getDetails();
+        return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
     // possible to delegate
@@ -706,5 +746,53 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e);
         }
         return null;
+    }
+
+    private CommunityResponderModel getCommunityResponderFromObs(Event event) {
+        List<Obs> responderObs = event.getObs();
+        CommunityResponderModel communityResponderModel = new CommunityResponderModel();
+        for (Obs obs : responderObs) {
+            if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_NAME)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderName(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_PHONE_NUMBER)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderPhoneNumber(value);
+                    continue;
+                } else
+                    return null;
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_ID)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setId(value);
+                } else {
+                    communityResponderModel.setId(event.getBaseEntityId());
+                    continue;
+                }
+            } else if (obs.getFormSubmissionField().equals(CoreConstants.JsonAssets.RESPONDER_GPS)) {
+                String value = StockUsageReportUtils.getObsValue(obs);
+                if (StringUtils.isNotBlank(value)) {
+                    communityResponderModel.setResponderLocation(value);
+                    continue;
+                } else
+                    return null;
+            }
+        }
+        return communityResponderModel;
+    }
+
+    private void clientProcessCommunityResponderEvent(Event event) {
+        CommunityResponderModel communityResponderModel = getCommunityResponderFromObs(event);
+        if (communityResponderModel != null) {
+            CommunityResponderRepository repo = CoreChwApplication.getInstance().communityResponderRepository();
+            if (StringUtils.isBlank(communityResponderModel.getId()))
+                communityResponderModel.setId(event.getBaseEntityId());
+            repo.addOrUpdate(communityResponderModel);
+        }
     }
 }

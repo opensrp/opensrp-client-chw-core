@@ -2,6 +2,9 @@ package org.smartregister.chw.core.dao;
 
 import android.database.Cursor;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.joda.time.DateTime;
 import org.smartregister.chw.core.domain.Child;
@@ -17,6 +20,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINK_MD_ID;
 import static org.smartregister.chw.core.utils.CoreReferralUtils.getCommonRepository;
 import static org.smartregister.chw.core.utils.Utils.getDateDifferenceInDays;
 
@@ -51,8 +56,8 @@ public class ChildDao extends AbstractDao {
         return values;
     }
 
-    public static Child getChild(String baseEntityID) {
-        String sql = "select  c.base_entity_id , c.first_name , c.last_name , c.middle_name , c.mother_entity_id , c.relational_id , c.dob , c.date_created ,  lastVisit.last_visit_date , last_visit_not_done_date " +
+    public static String getChildQuery(String baseEntityID){
+        return "select  c.base_entity_id , c.first_name , c.last_name , c.middle_name , c.mother_entity_id , c.relational_id , c.dob , c.date_created ,  lastVisit.last_visit_date , last_visit_not_done_date " +
                 "from ec_child c " +
                 "inner join ec_family_member m on c.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                 "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE  " +
@@ -72,6 +77,10 @@ public class ChildDao extends AbstractDao {
                 "and  m.date_removed is null and m.is_closed = 0 " +
                 "and ((( julianday('now') - julianday(c.dob))/365.25) < 5) and c.is_closed = 0  " +
                 " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
+    }
+
+    public static Child getChild(String baseEntityID) {
+        String sql = getChildQuery(baseEntityID);
 
         List<Child> values = AbstractDao.readData(sql, getChildDataMap());
         if (values == null || values.size() != 1)
@@ -80,7 +89,8 @@ public class ChildDao extends AbstractDao {
         return values.get(0);
     }
 
-    private static DataMap<Child> getChildDataMap() {
+
+    public static DataMap<Child> getChildDataMap() {
         return c -> {
             Child record = new Child();
             record.setBaseEntityID(getCursorValue(c, "base_entity_id"));
@@ -111,6 +121,45 @@ public class ChildDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
+    public static String getBaseEntityID(String identifierType, String id) {
+        String selection = "select base_entity_id from ec_child where ? = ?";
+        String[] selectionArgs = new String[]{identifierType, id};
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, BASE_ENTITY_ID);
+    }
+
+
+    public static String getThinkMDCarePlan(String childBaseEntityId, String htmlAssessment) {
+        String selection = "select ? from ec_child where base_entity_id = ?";
+        String[] selectionArgs = new String[]{htmlAssessment, childBaseEntityId};
+
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, htmlAssessment);
+    }
+
+    public static boolean isThinkMDCarePlanExist(String baseEntityId) {
+        String selection = "select ? from ec_child where base_entity_id = ?";
+        String[] selectionArgs = new String[]{THINK_MD_ID, baseEntityId};
+        String thinkMDId = queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
+        return !StringUtils.isEmpty(thinkMDId);
+    }
+
+
+    public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
+      SQLiteDatabase database = getRepository().getReadableDatabase();
+            if (database == null) {
+                return null;
+            }
+        String[] projectionArgs = new String[]{columnName};
+        try(net.sqlcipher.Cursor  cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
+   
+            if (cursor.getCount() > 0 && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndex(columnName));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
+    }
+
     public static boolean isMotherAlive(String motherBaseEntityId) {
         String sql = "SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id";
 
@@ -137,5 +186,4 @@ public class ChildDao extends AbstractDao {
         }
         return null;
     }
-
 }

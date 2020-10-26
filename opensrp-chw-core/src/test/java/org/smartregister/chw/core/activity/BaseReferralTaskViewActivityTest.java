@@ -38,4 +38,12 @@ public class BaseReferralTaskViewActivityTest extends BaseUnitTest {
     public void getPersonObjectClient() {
         Assert.assertNotNull(referralTaskViewActivity.getPersonObjectClient());
     }
+
+    public void tearDown() {
+        try {
+            referralTaskViewActivity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

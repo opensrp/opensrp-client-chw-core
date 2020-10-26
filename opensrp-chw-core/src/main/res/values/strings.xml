@@ -693,6 +693,19 @@
     <string name="notification_type_not_yet_done_referrals">Referral not completed yet</string>
     <string name="perform_click_action">perform click action</string>
 
+
+    <!--Emergency Transport-->
+    <string name="community_responders">Community responders</string>
+    <string name="add_community_responder">Responders</string>
+    <string name="add_responder">Add</string>
+    <string name="return_to_profile">Return to %1$s profile</string>
+    <string name="house_hold_family_name">Family: %1$s</string>
+    <string name="house_hold_discription">Household located near: %1$s</string>
+    <string name="map_facility">Facility</string>
+    <string name="facility_name">Name</string>
+    <string name="facility_status">Status</string>
+    <string name="invalid_feature">Invalid feature</string>
+
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Edit Client Details</string>
     <string name="location_info">Location info</string>
@@ -701,12 +714,24 @@
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>
 
+    <!--Emergency Transport-->
+    <string name="edit_responder">Edit</string>
+    <string name="remove_responder">Remove</string>
+    <string name="remove_responder_dialog_title">Remove Responder</string>
+    <string name="remove_responder_dialog_message">Responder will be closed and disappear from app.</string>
+    <string name="add_responder_max_message">You have reached the maximum number of responders allowed</string>
+
     <!-- Notification row -->
     <string name="notification_for">Notification for %1$s</string>
     <string name="full_notification_info">View full notification info</string>
     <string name="thinkmd_health_assessment">ThinkMD health assessment</string>
     <string name="thinkmd_careplan">ThinkMD care plan (%1$s)</string>
+    <string name="care_plan">Care plan</string>
+    <string name="thinkmd_identifier_type">thinkmd_id</string>
+    <string name="thinkmd_assessment_saved">ThinkMD health assessment saved</string>
+    <string name="no_thinkmd_care_plan_found">No thinkmd care plan found</string>
 
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">View vaccine history</string>
+    <string name="see_vaccines_due_today">See vaccines due today</string>
 </resources>

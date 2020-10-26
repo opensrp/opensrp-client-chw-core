@@ -75,6 +75,8 @@ public interface CoreChildProfileContract {
 
         void setFamilyHasServiceOverdue();
 
+        void setDueTodayServices();
+
         CoreChildProfileContract.Presenter presenter();
 
         void updateHasPhone(boolean hasPhone);
@@ -139,6 +141,14 @@ public interface CoreChildProfileContract {
         CommonPersonObjectClient getChildClient();
 
         void startSickChildForm(CommonPersonObjectClient client);
+
+        void createCarePlanEvent(@NotNull Context context, @NotNull String encodedBundle);
+
+        void carePlanEventCreated();
+
+        void launchThinkMDHealthAssessment(@NotNull Context context);
+
+        void showThinkMDCarePlan(@NotNull Context context);
     }
 
     interface Interactor {
@@ -175,6 +185,12 @@ public interface CoreChildProfileContract {
         void processJson(@NotNull Context context, String eventType, String tableName, String jsonString, @NonNull Presenter presenter);
 
         void fetchProfileTask(@NotNull Context context, @NotNull String baseEntityID, @Nullable Presenter presenter);
+
+        void createCarePlanEvent(@NotNull Context context, @NotNull String encodedBundle, final CoreChildProfileContract.InteractorCallBack callback);
+
+        void launchThinkMDHealthAssessment(@NotNull Context context);
+
+        void showThinkMDCarePlan(@NotNull Context context, final CoreChildProfileContract.InteractorCallBack callback);
     }
 
     interface InteractorCallBack {
@@ -211,6 +227,10 @@ public interface CoreChildProfileContract {
         void updateAfterBackGroundProcessed();
 
         void setClientTasks(Set<Task> taskList);
+
+        void carePlanEventCreated();
+
+        void noThinkMDCarePlanFound();
     }
 
     interface Model {

@@ -21,15 +21,15 @@ import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
 public abstract class CoreAncFloatingMenu extends BaseAncFloatingMenu {
     public FloatingActionButton fab;
     protected View referLayout;
+    protected View callLayout;
+    protected RelativeLayout activityMain;
+    protected boolean isFabMenuOpen = false;
+    protected LinearLayout menuBar;
+    protected OnClickFloatingMenu onClickFloatingMenu;
     private Animation fabOpen;
     private Animation fabClose;
     private Animation rotateForward;
     private Animation rotateBack;
-    private View callLayout;
-    private RelativeLayout activityMain;
-    private boolean isFabMenuOpen = false;
-    private LinearLayout menuBar;
-    private OnClickFloatingMenu onClickFloatingMenu;
 
     public CoreAncFloatingMenu(Context context, String ancWomanName, String ancWomanPhone,
                                String ancFamilyHeadName, String ancFamilyHeadPhone, String profileType) {
@@ -47,7 +47,6 @@ public abstract class CoreAncFloatingMenu extends BaseAncFloatingMenu {
     @Override
     protected void initUi() {
         inflate(getContext(), R.layout.view_anc_call_woma_floating_menu, this);
-
         fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
         rotateForward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);

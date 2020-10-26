@@ -36,6 +36,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
     public CoreChildProfileContract.Model model;
@@ -387,7 +389,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String childName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
         getView().setProfileName(childName);
-        getView().setAge(Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false)), view.get().getContext()));
+        getView().setAge(Utils.getTranslatedDate(getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false)), view.get().getContext()));
 
         dob = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
 
@@ -439,4 +441,31 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
             interactor = null;
         }
     }
+
+    public void createCarePlanEvent(@NotNull Context context, @NotNull String encodedBundle) {
+        interactor.createCarePlanEvent(context, encodedBundle, this);
+    }
+
+    @Override
+    public void carePlanEventCreated() {
+        if (getView() == null) return;
+        getView().displayToast(R.string.thinkmd_assessment_saved);
+    }
+
+    @Override
+    public void launchThinkMDHealthAssessment(@NotNull Context context) {
+        interactor.launchThinkMDHealthAssessment(context);
+    }
+
+    @Override
+    public void showThinkMDCarePlan(@NotNull Context context) {
+        interactor.showThinkMDCarePlan(context, this);
+    }
+
+    @Override
+    public void noThinkMDCarePlanFound() {
+        if (getView() == null) return;
+        getView().displayToast(R.string.no_thinkmd_care_plan_found);
+    }
+
 }

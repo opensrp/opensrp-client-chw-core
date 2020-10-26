@@ -1,9 +1,21 @@
 package org.smartregister.chw.core.utils;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
+
+import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -12,10 +24,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 
-public class FormUtilsTest {
+@Config(shadows = {UtilsShadowUtil.class})
+public class FormUtilsTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
@@ -37,5 +51,15 @@ public class FormUtilsTest {
         assertEquals(event.getObs().get(0).getFieldDataType(), "text");
         assertEquals(event.getObs().get(0).getFieldCode(), "162849AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         assertEquals(event.getObs().get(0).getFormSubmissionField(), "wra");
+    }
+
+
+    @Test
+    public void getStartFormActivityReturnsCorrectIntent() {
+        Context context = RuntimeEnvironment.application;
+        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
+        Assert.assertNotNull(testIntent);
+        Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
+        assertEquals("test form", form.getName());
     }
 }
