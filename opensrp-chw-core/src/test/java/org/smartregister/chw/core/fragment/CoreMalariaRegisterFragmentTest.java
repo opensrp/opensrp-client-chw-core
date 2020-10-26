@@ -1,7 +1,5 @@
 package org.smartregister.chw.core.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +36,6 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.CoreMalariaRegisterActivity;
 import org.smartregister.chw.malaria.presenter.BaseMalariaRegisterFragmentPresenter;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
@@ -189,7 +185,7 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
         coreMalariaRegisterFragment.onViewClicked(view);
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         verify(coreMalariaRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+        assertEquals(captor.getValue(), view);
     }
 
     @After
