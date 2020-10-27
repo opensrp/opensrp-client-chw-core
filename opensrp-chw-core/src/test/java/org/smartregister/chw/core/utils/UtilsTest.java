@@ -1,17 +1,23 @@
 package org.smartregister.chw.core.utils;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Build;
 
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.referral.domain.MemberObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -32,6 +38,9 @@ public class UtilsTest {
     private Map<String, String> details;
     private Map<String, String> columnMap;
     private CommonPersonObjectClient client;
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -93,7 +102,7 @@ public class UtilsTest {
 
     @Test
     public void assertGetDurationTests() {
-        Utils.getDuration("2020-10-09T18:17:07.830+05:00","2020-05-15T18:17:07.830+05:00");
+        Utils.getDuration("2020-10-09T18:17:07.830+05:00", "2020-05-15T18:17:07.830+05:00");
         Locale locale = RuntimeEnvironment.application.getApplicationContext().getResources().getConfiguration().locale;
         DateTime todayDateTime = new DateTime("2020-10-09T18:17:07.830+05:00");
 
@@ -125,6 +134,50 @@ public class UtilsTest {
 
         Assert.assertEquals("25y 11m", Utils.getDuration("2020-10-12T00:00:00.000+00:00",
                 "1994-10-15T00:00:00.000+00:00"));
+    }
+
+    @Test
+    public void getGenderLanguageSpecificReturnsCorrectString() {
+        Context context = RuntimeEnvironment.application.getApplicationContext();
+        Assert.assertEquals("", Utils.getGenderLanguageSpecific(context, ""));
+        Assert.assertEquals("Male", Utils.getGenderLanguageSpecific(context, "male"));
+        Assert.assertEquals("Female", Utils.getGenderLanguageSpecific(context, "female"));
+    }
+
+    @Test
+    public void getImmunizationHeaderLanguageSpecificReturnsCorrectString() {
+        Context context = RuntimeEnvironment.application.getApplicationContext();
+        Assert.assertEquals("", Utils.getImmunizationHeaderLanguageSpecific(context, ""));
+        Assert.assertEquals("at birth", Utils.getImmunizationHeaderLanguageSpecific(context, "at birth"));
+        Assert.assertEquals("weeks", Utils.getImmunizationHeaderLanguageSpecific(context, "weeks"));
+        Assert.assertEquals("months", Utils.getImmunizationHeaderLanguageSpecific(context, "months"));
+    }
+
+    @Test
+    public void getFileNameReturnsFormIdentityIfFormExists() {
+        Locale locale = CoreChwApplication.getCurrentLocale();
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        Assert.assertEquals("test_form", Utils.getFileName("test_form", locale, assetManager));
+        Assert.assertEquals("child_enrollment", Utils.getFileName("child_enrollment", locale, assetManager));
+    }
+
+    @Test
+    public void getDayOfMonthWithSuffixThrowsExceptionWhenIllegalDaySupplied() {
+        Context context = RuntimeEnvironment.application.getApplicationContext();
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("illegal day of month: 99");
+        Utils.getDayOfMonthWithSuffix(99, context);
+    }
+
+    @Test
+    public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
+        Context context = RuntimeEnvironment.application.getApplicationContext();
+        Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
+        Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
+        Assert.assertEquals("8th", Utils.getDayOfMonthWithSuffix(8, context));
+        Assert.assertEquals("11th", Utils.getDayOfMonthWithSuffix(11, context));
+        Assert.assertEquals("12th", Utils.getDayOfMonthWithSuffix(12, context));
+        Assert.assertNull(Utils.getDayOfMonthWithSuffix(22, context));
     }
 
     @After
