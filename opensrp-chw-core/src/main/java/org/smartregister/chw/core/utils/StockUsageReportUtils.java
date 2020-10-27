@@ -1,8 +1,9 @@
 package org.smartregister.chw.core.utils;
 
+import android.content.Context;
+
 import org.joda.time.LocalDate;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.domain.Obs;
 
 import java.util.LinkedHashMap;
@@ -10,18 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class StockUsageReportUtils {
-    public Map<String, String> getPreviousMonths() {
+
+    public static Map<String, String> getPreviousMonths(Context context) {
         Map<String, String> monthsAndYearsMap = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             LocalDate prevDate = new LocalDate().minusMonths(i);
-            String month = this.monthConverter(prevDate.getMonthOfYear());
+            String month = monthConverter(prevDate.getMonthOfYear(), context);
             String year = String.valueOf(prevDate.getYear());
             monthsAndYearsMap.put(month, year);
         }
         return monthsAndYearsMap;
     }
 
-    public String getMonthNumber(String month) {
+    public static String getMonthNumber(String month) {
         String valMonth = "";
         switch (month) {
             case "Jan":
@@ -67,50 +69,50 @@ public class StockUsageReportUtils {
     }
 
 
-    public String getFormattedItem(String item) {
+    public static String getFormattedItem(String item, Context context) {
         String formattedItem = "";
         switch (item) {
             case "ORS 5":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.ors_5);
+                formattedItem = context.getString(R.string.ors_5);
                 break;
             case "Zinc 10":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.zinc_10);
+                formattedItem = context.getString(R.string.zinc_10);
                 break;
             case "Panadol":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.paracetamol);
+                formattedItem = context.getString(R.string.paracetamol);
                 break;
             case "ALU 6":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.alu_6);
+                formattedItem = context.getString(R.string.alu_6);
                 break;
             case "ALU 12":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.alu_12);
+                formattedItem = context.getString(R.string.alu_12);
                 break;
             case "ALU 18":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.alu_18);
+                formattedItem = context.getString(R.string.alu_18);
                 break;
             case "ALU 24":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.alu_24);
+                formattedItem = context.getString(R.string.alu_24);
                 break;
             case "COC":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.coc);
+                formattedItem = context.getString(R.string.coc);
                 break;
             case "POP":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.pop);
+                formattedItem = context.getString(R.string.pop);
                 break;
             case "Emergency contraceptive":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.emergency_contraceptive);
+                formattedItem = context.getString(R.string.emergency_contraceptive);
                 break;
             case "RDTs":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.rdts);
+                formattedItem = context.getString(R.string.rdts);
                 break;
             case "Male condom":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.male_condoms);
+                formattedItem = context.getString(R.string.male_condoms);
                 break;
             case "Female condom":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.female_condoms);
+                formattedItem = context.getString(R.string.female_condoms);
                 break;
             case "Standard day method":
-                formattedItem = CoreChwApplication.getInstance().getString(R.string.cycle_beads);
+                formattedItem = context.getString(R.string.cycle_beads);
                 break;
             default:
                 break;
@@ -118,11 +120,11 @@ public class StockUsageReportUtils {
         return formattedItem;
     }
 
-    public String getUnitOfMeasure(String item) {
+    public static String getUnitOfMeasure(String item, Context context) {
         String unitOfMeasure = "";
         switch (item) {
             case "ORS 5":
-                unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.packets);
+                unitOfMeasure = context.getString(R.string.packets);
                 break;
             case "Zinc 10":
             case "Panadol":
@@ -130,20 +132,20 @@ public class StockUsageReportUtils {
             case "ALU 12":
             case "ALU 18":
             case "ALU 24":
-                unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.tablets);
+                unitOfMeasure = context.getString(R.string.tablets);
                 break;
             case "COC":
             case "POP":
             case "Emergency contraceptive":
-                unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.packs);
+                unitOfMeasure = context.getString(R.string.packs);
                 break;
             case "RDTs":
-                unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.tests);
+                unitOfMeasure = context.getString(R.string.tests);
                 break;
             case "Male condom":
             case "Female condom":
             case "Standard day method":
-                unitOfMeasure = CoreChwApplication.getInstance().getString(R.string.pieces);
+                unitOfMeasure = context.getString(R.string.pieces);
                 break;
             default:
                 break;
@@ -151,47 +153,47 @@ public class StockUsageReportUtils {
         return unitOfMeasure;
     }
 
-    public String monthConverter(Integer value) {
+    public static String monthConverter(Integer value, Context context) {
         String formattedMonth;
         switch (value) {
             case 1:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.january);
+                formattedMonth = context.getString(R.string.january);
                 break;
             case 2:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.february);
+                formattedMonth = context.getString(R.string.february);
                 break;
             case 3:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.march);
+                formattedMonth = context.getString(R.string.march);
                 break;
             case 4:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.april);
+                formattedMonth = context.getString(R.string.april);
                 break;
             case 5:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.may);
+                formattedMonth = context.getString(R.string.may);
                 break;
             case 6:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.june);
+                formattedMonth = context.getString(R.string.june);
                 break;
             case 7:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.july);
+                formattedMonth = context.getString(R.string.july);
                 break;
             case 8:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.august);
+                formattedMonth = context.getString(R.string.august);
                 break;
             case 9:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.september);
+                formattedMonth = context.getString(R.string.september);
                 break;
             case 10:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.october);
+                formattedMonth = context.getString(R.string.october);
                 break;
             case 11:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.november);
+                formattedMonth = context.getString(R.string.november);
                 break;
             case 12:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.december);
+                formattedMonth = context.getString(R.string.december);
                 break;
             default:
-                formattedMonth = CoreChwApplication.getInstance().getString(R.string.january);
+                formattedMonth = context.getString(R.string.january);
                 break;
         }
         return formattedMonth;
