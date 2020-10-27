@@ -143,10 +143,10 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
             }
             FamilyMember familyMember = CoreJsonFormUtils.getFamilyMemberFromRegistrationForm(jsonString, familyBaseEntityId, familyBaseEntityId);
             Event eventMember = familyEventClient.getEvent();
-            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EVER_SCHOOL.CODE, "",
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EverSchool.CODE, "",
                     toList(CoreJsonFormUtils.getEverSchoolOptions(context).get(familyMember.getEverSchool())), toList(familyMember.getEverSchool()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
 
-            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.SCHOOL_LEVEL.CODE, "",
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.SchoolLevel.CODE, "",
                     toList(CoreJsonFormUtils.getSchoolLevels(context).get(familyMember.getSchoolLevel())), toList(familyMember.getSchoolLevel()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL));
 
 
