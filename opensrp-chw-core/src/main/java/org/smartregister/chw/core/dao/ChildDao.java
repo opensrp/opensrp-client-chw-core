@@ -56,7 +56,7 @@ public class ChildDao extends AbstractDao {
         return values;
     }
 
-    public static String getChildQuery(String baseEntityID){
+    public static String getChildQuery(String baseEntityID) {
         return "select  c.base_entity_id , c.first_name , c.last_name , c.middle_name , c.mother_entity_id , c.relational_id , c.dob , c.date_created ,  lastVisit.last_visit_date , last_visit_not_done_date " +
                 "from ec_child c " +
                 "inner join ec_family_member m on c.base_entity_id = m.base_entity_id COLLATE NOCASE " +
@@ -144,13 +144,13 @@ public class ChildDao extends AbstractDao {
 
 
     public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
-      SQLiteDatabase database = getRepository().getReadableDatabase();
-            if (database == null) {
-                return null;
-            }
+        SQLiteDatabase database = getRepository().getReadableDatabase();
+        if (database == null) {
+            return null;
+        }
         String[] projectionArgs = new String[]{columnName};
-        try(net.sqlcipher.Cursor  cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
-   
+        try (net.sqlcipher.Cursor cursor = database.query(CoreConstants.TABLE_NAME.CHILD, projectionArgs, selection, selectionArgs, null, null, null);) {
+
             if (cursor.getCount() > 0 && cursor.moveToFirst()) {
                 return cursor.getString(cursor.getColumnIndex(columnName));
             }
@@ -185,5 +185,17 @@ public class ChildDao extends AbstractDao {
             Timber.e(ex, "queryDBFromUserProfile");
         }
         return null;
+    }
+
+    public static List<String> getFamilyMembers(String baseEntityId) {
+        String sql = "SELECT base_entity_id from ec_family_member where relational_id = '" + baseEntityId + "'";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
+
+        List<String> values = readData(sql, dataMap);
+        if (values == null || values.size() == 0)
+            return new ArrayList<>();
+
+        return values;
     }
 }
