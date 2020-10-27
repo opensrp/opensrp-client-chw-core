@@ -7,7 +7,6 @@ import android.util.Pair;
 import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
@@ -18,6 +17,8 @@ import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
+import org.smartregister.domain.Client;
+import org.smartregister.domain.db.EventClient;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.family.util.AppExecutors;
 import org.smartregister.family.util.DBConstants;
@@ -29,6 +30,7 @@ import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -208,11 +210,17 @@ public abstract class CoreFamilyRemoveMemberInteractor implements FamilyRemoveMe
         return res;
     }
 
-    private void processEvents(List<Event> events) throws JSONException {
+    private void processEvents(List<Event> events) throws Exception {
         ECSyncHelper syncHelper = coreChwApplication.getEcSyncHelper();
+        List<EventClient> clients = new ArrayList<>();
         for (Event e : events) {
-            syncHelper.addEvent(e.getBaseEntityId(), new JSONObject(CoreJsonFormUtils.gson.toJson(e)));
+            JSONObject json = new JSONObject(CoreJsonFormUtils.gson.toJson(e));
+            syncHelper.addEvent(e.getBaseEntityId(), json);
+
+            org.smartregister.domain.Event event = CoreJsonFormUtils.gson.fromJson(json.toString(), org.smartregister.domain.Event.class);
+            clients.add(new EventClient(event, new Client(e.getBaseEntityId())));
         }
+        getClientProcessorForJava().processClient(clients);
     }
 
     private void updateRepo(Triple<Pair<Date, String>, String, List<Event>> triple, String tableName) {
