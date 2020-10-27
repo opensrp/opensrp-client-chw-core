@@ -799,11 +799,11 @@ public class CoreConstants {
                 public static final String CODE = "1712AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
             }
 
-            public static class EVER_SCHOOL {
+            public static class EverSchool {
                 public static final String CODE = "everSchool";
             }
 
-            public static class SCHOOL_LEVEL {
+            public static class SchoolLevel {
                 public static final String CODE = "schoolLevel";
             }
         }
