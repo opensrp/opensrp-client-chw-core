@@ -37,6 +37,7 @@ public class UtilsTest {
     private Map<String, String> details;
     private Map<String, String> columnMap;
     private CommonPersonObjectClient client;
+    private Context context;
 
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
@@ -45,6 +46,7 @@ public class UtilsTest {
     public void setUp() {
         details = new HashMap<>();
         columnMap = new HashMap<>();
+        context = RuntimeEnvironment.application.getApplicationContext();
         MockitoAnnotations.initMocks(this);
     }
 
@@ -137,7 +139,6 @@ public class UtilsTest {
 
     @Test
     public void getGenderLanguageSpecificReturnsCorrectString() {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
         Assert.assertEquals("", Utils.getGenderLanguageSpecific(context, ""));
         Assert.assertEquals("Male", Utils.getGenderLanguageSpecific(context, "male"));
         Assert.assertEquals("Female", Utils.getGenderLanguageSpecific(context, "female"));
@@ -145,7 +146,6 @@ public class UtilsTest {
 
     @Test
     public void getImmunizationHeaderLanguageSpecificReturnsCorrectString() {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
         Assert.assertEquals("", Utils.getImmunizationHeaderLanguageSpecific(context, ""));
         Assert.assertEquals("at birth", Utils.getImmunizationHeaderLanguageSpecific(context, "at birth"));
         Assert.assertEquals("weeks", Utils.getImmunizationHeaderLanguageSpecific(context, "weeks"));
@@ -162,7 +162,6 @@ public class UtilsTest {
 
     @Test
     public void getDayOfMonthWithSuffixThrowsExceptionWhenIllegalDaySupplied() {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
         exceptionRule.expect(IllegalArgumentException.class);
         exceptionRule.expectMessage("illegal day of month: 99");
         Utils.getDayOfMonthWithSuffix(99, context);
@@ -170,7 +169,6 @@ public class UtilsTest {
 
     @Test
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
         Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
         Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
         Assert.assertEquals("8th", Utils.getDayOfMonthWithSuffix(8, context));
