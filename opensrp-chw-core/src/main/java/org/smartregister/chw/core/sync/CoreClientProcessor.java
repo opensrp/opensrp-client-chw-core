@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
@@ -79,6 +80,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             if (vaccineRepository == null || vaccine == null) {
                 return;
             }
+
+            // if its an updated vaccine, delete the previous object
+            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -613,6 +617,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     String.format(" %s in (select base_entity_id from %s where relational_id = ? )  ", CommonFtsObject.idColumn, CoreConstants.TABLE_NAME.FAMILY_MEMBER), new String[]{familyID});
 
+            List<String> familyMembers = ChildDao.getFamilyMembers(familyID);
+            for (String baseEntityId : familyMembers) {
+                CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            }
         }
     }
 
@@ -642,7 +650,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     " object_id  = ?  ", new String[]{baseEntityId});
 
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-
+            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 
@@ -672,7 +680,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CommonFtsObject.idColumn + "  = ?  ", new String[]{baseEntityId});
 
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-
+            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 

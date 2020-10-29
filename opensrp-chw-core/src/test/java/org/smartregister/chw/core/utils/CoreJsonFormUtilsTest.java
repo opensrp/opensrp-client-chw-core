@@ -14,9 +14,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.CoreLibrary;
@@ -229,6 +227,58 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(CoreConstants.EventType.UPDATE_FAMILY_MEMBER_RELATIONS, resultPair.second.get(1).getEventType());
         Assert.assertEquals(memberId, resultPair.second.get(1).getBaseEntityId());
         Assert.assertEquals(3, resultPair.second.get(1).getObs().size());
+    }
+
+    @Test
+    public void testGetSchoolLevels(){
+        HashMap<String, String> schoolLevelsTestMap = new HashMap<>();
+        schoolLevelsTestMap.put("Not currently attending school or any learning program", "school_level_none");
+        schoolLevelsTestMap.put("Early childhood programme", "school_level_early_childhood");
+        schoolLevelsTestMap.put("Primary", "school_level_primary");
+        schoolLevelsTestMap.put("Lower secondary", "school_level_lower_secondary");
+        schoolLevelsTestMap.put("Upper secondary", "school_level_upper_secondary");
+        schoolLevelsTestMap.put("Alternative learning program", "school_level_alternative");
+        schoolLevelsTestMap.put("Higher", "school_level_Higher");
+
+        Assert.assertEquals(schoolLevelsTestMap, CoreJsonFormUtils.getSchoolLevels(RuntimeEnvironment.application));
+    }
+
+    @Test
+    public void testGetChoice(){
+        HashMap<String, String> choicesTestMap = new HashMap<>();
+        choicesTestMap.put("Yes", "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesTestMap.put("No", "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        Assert.assertEquals(choicesTestMap, CoreJsonFormUtils.getChoice(RuntimeEnvironment.application));
+    }
+
+    @Test
+    public void testGetChoiceMuac(){
+        HashMap<String, String> choicesMuacTestMap = new HashMap<>();
+        choicesMuacTestMap.put("Green", "160909AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesMuacTestMap.put("Yellow", "160910AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesMuacTestMap.put("Red", "127778AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        Assert.assertEquals(choicesMuacTestMap, CoreJsonFormUtils.getChoiceMuac(RuntimeEnvironment.application));
+    }
+
+    @Test
+    public void testGetChoiceDietary(){
+        HashMap<String, String> choicesDietaryTestMap = new HashMap<>();
+        choicesDietaryTestMap.put("0 - no animal products or fruit", "");
+        choicesDietaryTestMap.put("1 - one animal product OR one fruit", "");
+        choicesDietaryTestMap.put("2 - one animal product AND one fruit", "");
+
+        Assert.assertEquals(choicesDietaryTestMap, CoreJsonFormUtils.getChoiceDietary(RuntimeEnvironment.application));
+    }
+
+    @Test
+    public void testGetEverSchoolOptions(){
+        HashMap<String, String> everSchoolOptionsTestMap = new HashMap<>();
+        everSchoolOptionsTestMap.put("Yes", "key_yes");
+        everSchoolOptionsTestMap.put("No", "key_no");
+
+        Assert.assertEquals(everSchoolOptionsTestMap, CoreJsonFormUtils.getEverSchoolOptions(RuntimeEnvironment.application));
     }
 
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {

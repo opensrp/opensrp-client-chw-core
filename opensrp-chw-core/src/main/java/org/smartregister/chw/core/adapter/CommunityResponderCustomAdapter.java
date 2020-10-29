@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;

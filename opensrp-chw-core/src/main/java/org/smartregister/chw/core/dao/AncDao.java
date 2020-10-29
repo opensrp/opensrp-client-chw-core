@@ -74,6 +74,7 @@ public class AncDao extends AlertDao {
             memberObject.setDateCreated(getCursorValue(cursor, "date_created"));
             memberObject.setAddress(getCursorValue(cursor, "village_town"));
             memberObject.setHasAncCard(getCursorValue(cursor, "has_anc_card", ""));
+            memberObject.setDeliveryKit(getCursorValue(cursor, "delivery_kit",""));
             memberObject.setGps(getCursorValue(cursor, "gps"));
             memberObject.setLandmark(getCursorValue(cursor, "landmark"));
 

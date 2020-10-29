@@ -224,6 +224,12 @@ public abstract class CoreFamilyChangeContractInteractor implements FamilyChange
                         case DBConstants.KEY.HIGHEST_EDU_LEVEL:
                             columns.setEduLevel(value);
                             break;
+                        case CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL:
+                            columns.setEverSchool(value);
+                            break;
+                        case CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL:
+                            columns.setSchoolLevel(value);
+                            break;
                         case DBConstants.KEY.DOB:
                             columns.setDob(value);
                             dob = Utils.dobStringToDate(String.valueOf(cursor.getString(i)));
