@@ -13,6 +13,8 @@ public class FamilyMember {
     private String phone;
     private String otherPhone;
     private String eduLevel;
+    private String everSchool;
+    private String schoolLevel;
     private boolean isPrimaryCareGiver = false;
     private boolean isFamilyHead = false;
 
@@ -38,6 +40,22 @@ public class FamilyMember {
 
     public void setDod(String dod) {
         this.dod = dod;
+    }
+
+    public String getEverSchool() {
+        return everSchool;
+    }
+
+    public void setEverSchool(String everSchool) {
+        this.everSchool = everSchool;
+    }
+
+    public String getSchoolLevel() {
+        return schoolLevel;
+    }
+
+    public void setSchoolLevel(String schoolLevel) {
+        this.schoolLevel = schoolLevel;
     }
 
     public String getFamilyID() {
