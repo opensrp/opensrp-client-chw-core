@@ -155,7 +155,7 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
 
                         } else if (encounter_type.equals(Utils.metadata().familyMemberRegister.registerEventType)) {
 
-                            String careGiver = presenter().saveChwFamilyMember(jsonString);
+                            String careGiver = presenter().saveChwFamilyMember(this, jsonString);
                             if (presenter().updatePrimaryCareGiver(getApplicationContext(), jsonString, familyBaseEntityId, careGiver)) {
                                 setPrimaryCaregiver(careGiver);
                                 refreshPresenter();
