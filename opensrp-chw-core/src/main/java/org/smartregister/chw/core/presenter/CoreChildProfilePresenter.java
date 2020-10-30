@@ -38,7 +38,8 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
-public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
+public class
+CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
     public CoreChildProfileContract.Model model;
     public String childBaseEntityId;

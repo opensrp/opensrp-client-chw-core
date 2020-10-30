@@ -86,7 +86,7 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    public void onPostExecute(Void param) {
+    protected void onPostExecute(Void param) {
         if (commonPersonObject != null) {
             viewHolder.dueButton.setVisibility(View.VISIBLE);
             if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.DUE.name())) {
