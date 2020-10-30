@@ -139,7 +139,7 @@ dependencies {
 
     compileOnly 'com.ibm.fhir:fhir-model:4.2.3'
 
-    api('org.smartregister:opensrp-client-core:3.0.4-GS-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:3.1.0-GS-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -152,7 +152,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
 
-    api('org.smartregister:opensrp-client-configurable-views:1.1.5.1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-configurable-views:1.2.0-GS-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
