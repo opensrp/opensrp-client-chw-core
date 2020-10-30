@@ -297,7 +297,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         }
     }
 
-    private boolean isWithinEditPeriod(@Nullable Long checkDate) {
+    public boolean isWithinEditPeriod(@Nullable Long checkDate) {
         if (checkDate == null)
             return false;
 
