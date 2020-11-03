@@ -119,10 +119,19 @@
     <string name="llitn_title">Sleeping under a LLITN</string>
     <string name="ecd_title">Early childhood development (ECD)</string>
 
+    <string name="school_level_none">Not currently attending school or any learning program</string>
+    <string name="school_level_early_childhood">Early childhood programme</string>
+    <string name="school_level_primary">Primary</string>
+    <string name="school_level_lower_secondary">Lower secondary</string>
+    <string name="school_level_upper_secondary">Upper secondary</string>
+    <string name="school_level_alternative">Alternative learning program</string>
+    <string name="school_level_Higher">Higher</string>
+
     <string name="edu_level_none">None</string>
     <string name="edu_level_primary">Primary</string>
     <string name="edu_level_secondary">Secondary</string>
     <string name="edu_level_post_secondary">Post-secondary</string>
+
     <string name="remove_this_person">Remove this person</string>
     <string name="remove_the_mother">Remove the mother</string>
     <string name="registration_info">Registration info</string>
