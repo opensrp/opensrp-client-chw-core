@@ -11,12 +11,12 @@ buildscript {
         maven { url "http://repo.maven.apache.org/maven2" }
         maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         maven { url "http://dl.bintray.com/ona/kujaku" }
+        maven{  url "https://plugins.gradle.org/m2/" }
         mavenLocal()
     }
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.5.0-x'
         classpath 'com.android.tools.build:gradle:4.0.0'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
+        classpath 'gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.10.2'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
         classpath 'org.smartregister:gradle-jarjar-plugin:1.0.0-SNAPSHOT'
         // NOTE: Do not place your application dependencies here; they belong
