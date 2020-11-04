@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.mock;
 
 import org.smartregister.chw.core.fragment.CoreFpRegisterFragment;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 
 import java.util.HashMap;
@@ -25,5 +26,10 @@ public class MockCoreFpRegisterFragment extends CoreFpRegisterFragment {
     @Override
     protected String getDefaultSortQuery() {
         return null;
+    }
+
+    @Override
+    public void openProfile(CommonPersonObjectClient client) {
+        super.openProfile(client);
     }
 }
