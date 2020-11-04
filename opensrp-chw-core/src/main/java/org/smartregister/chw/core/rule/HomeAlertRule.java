@@ -205,7 +205,7 @@ public class HomeAlertRule implements ICommonRule {
         return false;
     }
 
-    private Date overDueDate(){
+    public Date overDueDate(){
         Date anchor = null;
         if (lastVisitDate == null) {
             if (visitNotDoneDate != null) {
