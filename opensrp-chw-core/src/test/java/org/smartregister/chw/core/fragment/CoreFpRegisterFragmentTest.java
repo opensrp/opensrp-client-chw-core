@@ -35,7 +35,6 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.mock.MockCoreFpRegisterFragment;
-import org.smartregister.chw.core.shadows.CoreChildRegisterActivityShadow;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.contract.BaseFpRegisterFragmentContract;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -162,7 +161,7 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
     @Test
     public void testOnViewClickedOpensProfile() {
-        CoreChildRegisterActivityShadow childRegisterActivity = Robolectric.buildActivity(CoreChildRegisterActivityShadow.class, new Intent()).create().start().resume().get();
+        FragmentActivity childRegisterActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
         coreFpRegisterFragment = new MockCoreFpRegisterFragment();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
