@@ -161,19 +161,19 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
     @Test
     public void testOnViewClickedOpensProfile() {
-        FragmentActivity childRegisterActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
-        coreFpRegisterFragment = new MockCoreFpRegisterFragment();
+        FragmentActivity registerActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        MockCoreFpRegisterFragment coreFpRegisterFragment = new MockCoreFpRegisterFragment();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
         Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
-        childRegisterActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
+        registerActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
         when(view.getTag(org.smartregister.family.R.id.VIEW_ID)).thenReturn(CLICK_VIEW_NORMAL);
         CommonPersonObjectClient client = new CommonPersonObjectClient("12", null, "");
         client.setColumnmaps(new HashMap<String, String>());
         when(view.getTag()).thenReturn(client);
         coreFpRegisterFragment.onViewClicked(view);
-        Intent intent = shadowOf(childRegisterActivity).getNextStartedActivity();
-        assertNotNull(intent);
+        Intent intent = shadowOf(registerActivity).getNextStartedActivity();
+        Mockito.verify(coreFpRegisterFragment).openProfile(client);
     }
 
     @Test
