@@ -274,6 +274,7 @@
     <string name="drinking_water">Does the household have access to clean drinking water?</string>
     <string name="hygienic_latrine">Do household members use a hygienic latrine for the disposal of feces?</string>
     <string name="wash_check">WASH check</string>
+    <string name="family_kit">Family Kit</string>
 
     <string name="abv_first">1st</string>
     <string name="abv_second">2nd</string>
