@@ -1,7 +1,9 @@
 package org.smartregister.chw.core.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -92,6 +94,39 @@ public class MemberAdapterTest extends BaseUnitTest {
 
     }
 
+    @Test
+    public void phoneInputFieldsShowByDefault() {
+        MemberAdapter.Flavor flavor = () -> false;
+        ViewGroup viewGroup = Mockito.mock(ViewGroup.class, Mockito.CALLS_REAL_METHODS);
+        Mockito.when(viewGroup.getContext()).thenReturn(context);
+        MemberAdapter.MyViewHolder viewHolder = adapter.onCreateViewHolder(viewGroup, 0);
+        adapter.setFlavor(flavor);
+        adapter.onBindViewHolder(viewHolder, 0);
+        viewHolder.radioButton.setChecked(true);
+        Assert.assertEquals(View.VISIBLE, viewHolder.llQuestions.getVisibility());
+    }
+
+    @Test
+    public void settingShowPhoneInputFieldsFalseHidesFields() {
+        MemberAdapter.Flavor flavor = new MemberAdapter.Flavor() {
+            @Override
+            public boolean isPhoneNumberLength16Digit() {
+                return false;
+            }
+
+            @Override
+            public boolean showPhoneNumberInputFields() {
+                return false;
+            }
+        };
+        ViewGroup viewGroup = Mockito.mock(ViewGroup.class, Mockito.CALLS_REAL_METHODS);
+        Mockito.when(viewGroup.getContext()).thenReturn(context);
+        MemberAdapter.MyViewHolder viewHolder = adapter.onCreateViewHolder(viewGroup, 0);
+        adapter.setFlavor(flavor);
+        adapter.onBindViewHolder(viewHolder, 0);
+        Assert.assertEquals(View.GONE, viewHolder.llQuestions.getVisibility());
+    }
+    
     @Test
     public void testSetSelected() {
         String selected = "selected";
