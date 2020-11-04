@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.fragment;
 
-import android.content.Intent;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +50,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
 
 public class CoreFpRegisterFragmentTest extends BaseUnitTest {
@@ -162,7 +160,7 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
     @Test
     public void testOnViewClickedOpensProfile() {
         FragmentActivity registerActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
-        MockCoreFpRegisterFragment coreFpRegisterFragment = new MockCoreFpRegisterFragment();
+        MockCoreFpRegisterFragment coreFpRegisterFragment = Mockito.spy(new MockCoreFpRegisterFragment());
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
         Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
@@ -172,7 +170,6 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
         client.setColumnmaps(new HashMap<String, String>());
         when(view.getTag()).thenReturn(client);
         coreFpRegisterFragment.onViewClicked(view);
-        Intent intent = shadowOf(registerActivity).getNextStartedActivity();
         Mockito.verify(coreFpRegisterFragment).openProfile(client);
     }
 
