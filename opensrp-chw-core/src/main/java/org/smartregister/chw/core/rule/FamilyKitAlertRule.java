@@ -9,7 +9,7 @@ import android.content.Context;
  */
 public class FamilyKitAlertRule extends MonthlyAlertRule {
 
-    public FamilyKitAlertRule(Context context, String baseEntityId, long lastVisitDateLong, long dateCreatedLong) {
+    public FamilyKitAlertRule(Context context, long lastVisitDateLong, long dateCreatedLong) {
         super(context, lastVisitDateLong, dateCreatedLong);
     }
 
