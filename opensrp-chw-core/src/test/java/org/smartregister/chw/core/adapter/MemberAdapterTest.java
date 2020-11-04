@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -126,7 +125,7 @@ public class MemberAdapterTest extends BaseUnitTest {
         adapter.onBindViewHolder(viewHolder, 0);
         Assert.assertEquals(View.GONE, viewHolder.llQuestions.getVisibility());
     }
-    
+
     @Test
     public void testSetSelected() {
         String selected = "selected";
