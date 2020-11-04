@@ -26,3 +26,7 @@ jobs:
       run: ./gradlew :opensrp-chw-core:jacocoTestReport coveralls --stacktrace
     - name: Generate Javadoc with Gradle
       run: ./gradlew javadoc
+    - name: Upload coverage to Coveralls with Gradle
+      run: ./gradlew coveralls --stacktrace
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
