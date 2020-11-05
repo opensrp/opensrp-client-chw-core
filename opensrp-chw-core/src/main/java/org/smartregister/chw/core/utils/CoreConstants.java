@@ -51,6 +51,7 @@ public class CoreConstants {
 
     public interface SERVICE_GROUPS {
         String CHILD = "child";
+        String CHILD_OVER_5 = "child_over_5";
         String WOMAN = "woman";
         String PNC = "pnc";
         String ANC = "anc";

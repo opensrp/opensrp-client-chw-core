@@ -20,6 +20,7 @@ import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.immunization.util.VaccinatorUtils;
 import org.smartregister.service.AlertService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -176,9 +177,23 @@ public class VaccineScheduleUtil {
      * @return
      */
     public static List<VaccineGroup> getVaccineGroups(Context context, String vaccineType) {
-        return CoreConstants.SERVICE_GROUPS.WOMAN.equals(vaccineType) ?
-                VaccinatorUtils.getSupportedWomanVaccines(context) :
+        List<VaccineGroup> vaccineGroupList = null;
+        switch (vaccineType) {
+
+            case CoreConstants.SERVICE_GROUPS.WOMAN:
+                vaccineGroupList = VaccinatorUtils.getSupportedWomanVaccines(context);
+                break;
+
+            case CoreConstants.SERVICE_GROUPS.CHILD:
                 VaccinatorUtils.getSupportedVaccines(context);
+                break;
+
+            default:
+                vaccineGroupList = VaccinatorUtils.getVaccineGroupsFromVaccineConfigFile(context, new StringBuilder(VaccinatorUtils.vaccines_folder).append(File.separator).append("_vaccines.json").toString());
+                break;
+        }
+
+        return vaccineGroupList;
     }
 
     /**

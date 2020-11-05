@@ -59,17 +59,19 @@ public class CoreChildUpcomingServiceInteractor extends BaseAncUpcomingServicesI
     }
 
     private void evaluateUpcomingServicesVaccines() {
+        String vaccineCategory = memberObject.getAge() >= 5 ? CoreConstants.SERVICE_GROUPS.CHILD_OVER_5 : CoreConstants.SERVICE_GROUPS.CHILD;
 
-        List<VaccineGroup> vaccineGroups = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
+        List<VaccineGroup> vaccineGroups = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), vaccineCategory);
+
         List<Vaccine> specialVaccines = VaccinatorUtils.getSpecialVaccines(context);
         VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
         List<org.smartregister.immunization.domain.Vaccine> vaccines = vaccineRepository.findByEntityId(memberObject.getBaseEntityId());
 
         // get the schedule
-        HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules = VisitVaccineUtil.getSchedule(vaccineGroups, specialVaccines, CoreConstants.SERVICE_GROUPS.CHILD);
+        HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules = VisitVaccineUtil.getSchedule(vaccineGroups, specialVaccines, vaccineCategory);
 
         // get all the alerts for the child
-        List<Alert> alerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, memberObject.getBaseEntityId(), new DateTime(dob), CoreConstants.SERVICE_GROUPS.CHILD, vaccines);
+        List<Alert> alerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, memberObject.getBaseEntityId(), new DateTime(dob), vaccineCategory, vaccines);
 
         Map<String, Alert> alertMap = new HashMap<>();
         for (Alert alert : alerts) {

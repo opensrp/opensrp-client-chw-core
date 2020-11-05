@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.smartregister.chw.anc.domain.VaccineDisplay;
@@ -177,15 +178,29 @@ public class VisitVaccineUtil {
             List<Vaccine> issuedVaccines,
             Map<String, List<VisitDetail>> edit_details
     ) {
+        return generateVisitVaccines(baseEntityID, vaccinesRepo, dob, vaccineGroups, specialVaccines, issuedVaccines, edit_details, CoreConstants.SERVICE_GROUPS.CHILD);
 
+    }
+
+    /**
+     * @param baseEntityID
+     * @param vaccinesRepo
+     * @param dob
+     * @param vaccineGroups
+     * @param specialVaccines
+     * @param issuedVaccines
+     * @param edit_details
+     * @param vaccineCategory Category of the vaccine e.g. CHILD , WOMAN, CHILD_OVER_5
+     * @return an ordered map of the vaccine title and the list of vaccines to be displayed.
+     */
+    @NotNull
+    public static Map<VaccineGroup, List<Pair<VaccineRepo.Vaccine, Alert>>> generateVisitVaccines(String baseEntityID, Map<String, VaccineRepo.Vaccine> vaccinesRepo, DateTime dob, List<VaccineGroup> vaccineGroups, List<org.smartregister.immunization.domain.jsonmapping.Vaccine> specialVaccines, List<Vaccine> issuedVaccines, Map<String, List<VisitDetail>> edit_details, String vaccineCategory) {
         // prepare tools
 
         /// compute the alerts
-        HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules =
-                getSchedule(vaccineGroups, specialVaccines, CoreConstants.SERVICE_GROUPS.CHILD);
+        HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules = getSchedule(vaccineGroups, specialVaccines, vaccineCategory);
 
-        List<Alert> alerts =
-                getInMemoryAlerts(vaccineSchedules, baseEntityID, dob, CoreConstants.SERVICE_GROUPS.CHILD, issuedVaccines);
+        List<Alert> alerts = getInMemoryAlerts(vaccineSchedules, baseEntityID, dob, vaccineCategory, issuedVaccines);
 
         Map<String, Alert> alertMap = new HashMap<>();
         for (Alert alert : alerts) {
