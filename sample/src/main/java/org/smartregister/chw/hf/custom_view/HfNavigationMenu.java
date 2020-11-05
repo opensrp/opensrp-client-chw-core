@@ -52,6 +52,11 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
     }
 
     @Override
+    public Intent getHIA2ReportActivityIntent(Activity activity) {
+        return null;
+    }
+
+    @Override
     public boolean hasCommunityResponders() {
         return false;
     }
