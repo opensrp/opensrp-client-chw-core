@@ -59,7 +59,7 @@ public class CoreChildUpcomingServiceInteractor extends BaseAncUpcomingServicesI
     }
 
     private void evaluateUpcomingServicesVaccines() {
-        String vaccineCategory = memberObject.getAge() >= 5 ? CoreConstants.SERVICE_GROUPS.CHILD_OVER_5 : CoreConstants.SERVICE_GROUPS.CHILD;
+        String vaccineCategory = memberObject.getAge() > 5 ? CoreConstants.SERVICE_GROUPS.CHILD_OVER_5 : CoreConstants.SERVICE_GROUPS.CHILD;
 
         List<VaccineGroup> vaccineGroups = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), vaccineCategory);
 

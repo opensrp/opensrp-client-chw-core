@@ -92,7 +92,7 @@ public class VaccineScheduleUtil {
     public static void updateOfflineAlerts(String baseEntityID, DateTime anchorDate, String vaccineGroupName) {
         // recompute offline alerts
         VaccineSchedule.updateOfflineAlerts(baseEntityID, anchorDate, vaccineGroupName);
-        // delete all vaccine alerts that have been administered
+        // delete all vaccin    e alerts that have been administered
         AlertDao.updateOfflineVaccineAlerts(baseEntityID);
     }
 
@@ -185,7 +185,7 @@ public class VaccineScheduleUtil {
                 break;
 
             case CoreConstants.SERVICE_GROUPS.CHILD:
-                VaccinatorUtils.getSupportedVaccines(context);
+                vaccineGroupList = VaccinatorUtils.getSupportedVaccines(context);
                 break;
 
             default:

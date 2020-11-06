@@ -111,8 +111,11 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
             String dobString = org.smartregister.util.Utils.getValue(pClient.getColumnmaps(), DBConstants.KEY.DOB, false);
             DateTime dob = new DateTime(Utils.dobStringToDate(dobString));
 
-            VaccineScheduleUtil.updateOfflineAlerts(childBaseEntityId, dob, CoreConstants.SERVICE_GROUPS.CHILD);
-            ChwServiceSchedule.updateOfflineAlerts(childBaseEntityId, dob, CoreConstants.SERVICE_GROUPS.CHILD);
+            int age = StringUtils.isNotBlank(dobString) ? org.smartregister.family.util.Utils.getAgeFromDate(dobString) : 0;
+
+            VaccineScheduleUtil.updateOfflineAlerts(childBaseEntityId, dob, age > 5 ? CoreConstants.SERVICE_GROUPS.CHILD_OVER_5 : CoreConstants.SERVICE_GROUPS.CHILD);
+            ChwServiceSchedule.updateOfflineAlerts(childBaseEntityId, dob, age > 5 ? CoreConstants.SERVICE_GROUPS.CHILD_OVER_5 : CoreConstants.SERVICE_GROUPS.CHILD)
+            ;
 
             Map<String, Date> receivedVaccines = VaccineScheduleUtil.getReceivedVaccines(childBaseEntityId);
             setVaccineList(receivedVaccines);

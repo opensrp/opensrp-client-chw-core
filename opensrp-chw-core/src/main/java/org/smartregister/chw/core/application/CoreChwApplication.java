@@ -42,6 +42,7 @@ import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.view.activity.DrishtiApplication;
 import org.smartregister.view.activity.LoginActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -206,6 +207,14 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         } catch (Exception e) {
             Timber.e(e);
         }
+        try {
+            // over 5 child schedules
+            List<VaccineGroup> childVaccines = VaccinatorUtils.getVaccineGroupsFromVaccineConfigFile(this, new StringBuilder(VaccinatorUtils.vaccines_folder).append(File.separator).append("_vaccines.json").toString());
+            VaccineSchedule.init(childVaccines, null, CoreConstants.SERVICE_GROUPS.CHILD_OVER_5);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
     }
 
     public AllCommonsRepository getAllCommonsRepository(String table) {

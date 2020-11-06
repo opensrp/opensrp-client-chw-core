@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class CoreChildMedicalHistoryActivityInteractor extends BaseAncMedicalHistoryInteractor implements CoreChildMedicalHistoryContract.Interactor {
 
     @Override
@@ -75,8 +77,16 @@ public class CoreChildMedicalHistoryActivityInteractor extends BaseAncMedicalHis
 
     @Override
     public Map<String, List<Vaccine>> getVaccinesReceivedGroup(String baseEntityID) {
-        List<VaccineGroup> vaccineGroups =
-                VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
+        List<VaccineGroup> vaccineGroups = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
+        List<VaccineGroup> vaccineGroupsOver5;
+        try {
+            vaccineGroupsOver5 = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
+            if (vaccineGroups != null) {
+                vaccineGroups.addAll(vaccineGroupsOver5);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
 
 
         Map<String, Date> receivedDateMap = VisitVaccineUtil.getIssuedVaccines(baseEntityID, true);
