@@ -31,7 +31,6 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreChildRegisterActivity;
 import org.smartregister.chw.core.mock.MockCoreChildRegisterFragment;
 import org.smartregister.chw.core.presenter.CoreChildRegisterFragmentPresenter;
-import org.smartregister.chw.core.shadows.CoreChildRegisterActivityShadow;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.FetchStatus;
@@ -156,7 +155,6 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
     }
 
 
-
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
         fragment.getMainCondition();
@@ -195,7 +193,7 @@ public class CoreChildRegisterFragmentTest extends BaseUnitTest {
 
     @Test
     public void testOnViewClickedOpensProfile() {
-        CoreChildRegisterActivityShadow childRegisterActivity = Robolectric.buildActivity(CoreChildRegisterActivityShadow.class, new Intent()).create().start().resume().get();
+        FragmentActivity childRegisterActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
         fragment = new MockCoreChildRegisterFragment();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(fragment, "clientsView", clientsView);

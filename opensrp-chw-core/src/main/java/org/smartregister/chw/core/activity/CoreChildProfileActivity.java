@@ -389,6 +389,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewChildName.append(", " + age);
     }
 
+    public void setNoButtonView(){
+        layoutRecordButtonDone.setVisibility(View.GONE);
+        layoutNotRecordView.setVisibility(View.GONE);
+        layoutRecordView.setVisibility(View.GONE);
+    }
+
     @Override
     public void setVisitButtonDueStatus() {
         openVisitButtonView();
@@ -454,8 +460,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void setDueTodayServices() {
         layoutServiceDueRow.setVisibility(View.VISIBLE);
         textViewDueToday.setVisibility(View.VISIBLE);
-        //   layoutMostDueOverdue.setVisibility(View.GONE);
-        //   viewMostDueRow.setVisibility(View.GONE);
     }
 
     @Override

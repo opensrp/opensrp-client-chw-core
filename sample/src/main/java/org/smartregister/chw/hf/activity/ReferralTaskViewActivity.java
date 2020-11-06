@@ -48,6 +48,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class ReferralTaskViewActivity extends SecuredActivity {
     protected AppBarLayout appBarLayout;
     protected String startingActivity;
@@ -267,7 +269,7 @@ public class ReferralTaskViewActivity extends SecuredActivity {
     private void getReferralDetails() {
         if (getPersonObjectClient() != null && getTask() != null) {
             updateProblemDisplay();
-            clientAge = (Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
+            clientAge = (Utils.getTranslatedDate(getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
             clientName.setText(getString(R.string.client_name_age_suffix, name, clientAge));
             referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(task.getExecutionStartDate().toDate()));
 
@@ -303,7 +305,7 @@ public class ReferralTaskViewActivity extends SecuredActivity {
         List<ChildModel> childModels = PNCDao.childrenForPncWoman(baseEntityId);
         StringBuilder stringBuilder = new StringBuilder();
         for (ChildModel childModel : childModels) {
-            String childAge = (Utils.getTranslatedDate(Utils.getDuration(childModel.getDateOfBirth()), getBaseContext()));
+            String childAge = (Utils.getTranslatedDate(getDuration(childModel.getDateOfBirth()), getBaseContext()));
             stringBuilder.append(childModel.getChildFullName())
                     .append(", ")
                     .append(childAge)

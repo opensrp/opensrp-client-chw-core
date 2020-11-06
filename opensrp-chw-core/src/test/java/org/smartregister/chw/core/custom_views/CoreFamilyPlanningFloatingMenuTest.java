@@ -9,10 +9,23 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
+import org.smartregister.commonregistry.CommonRepository;
+
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class CoreFamilyPlanningFloatingMenuTest {
     @Mock
+    private CommonRepository commonRepository;
+
+    @Mock
+    private Context context;
+
     private CoreFamilyPlanningFloatingMenu coreFamilyPlanningFloatingMenu;
 
     @Mock
@@ -24,10 +37,15 @@ public class CoreFamilyPlanningFloatingMenuTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        coreFamilyPlanningFloatingMenu = Mockito.mock(CoreFamilyPlanningFloatingMenu.class, Mockito.CALLS_REAL_METHODS);
+
+        CoreLibrary.init(context);
+        when(context.commonrepository(anyString())).thenReturn(commonRepository);
+        Context.bindtypes = new ArrayList<>();
     }
+
     @Test
     public void whenSetupViewsAnswered() {
-        Mockito.doNothing().when(coreFamilyPlanningFloatingMenu).setFloatingMenuOnClickListener(onClickFloatingMenu);
         coreFamilyPlanningFloatingMenu.setFloatingMenuOnClickListener(onClickFloatingMenu);
 
         ArgumentCaptor<OnClickFloatingMenu> captor = ArgumentCaptor.forClass(OnClickFloatingMenu.class);

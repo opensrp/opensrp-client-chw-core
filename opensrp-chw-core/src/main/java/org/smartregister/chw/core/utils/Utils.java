@@ -39,10 +39,13 @@ import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
+import org.joda.time.Months;
 import org.joda.time.Period;
+import org.joda.time.Years;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.BaseChwNotificationDetailsActivity;
@@ -77,6 +80,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -795,5 +799,152 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         formTag.databaseVersion = FamilyLibrary.getInstance().getDatabaseVersion();
         formTag.appVersion = FamilyLibrary.getInstance().getApplicationVersion();
         return formTag;
+    }
+
+    // date utils from core
+    public static String getDuration(String date) {
+        DateTime duration;
+        if (StringUtils.isNotBlank(date)) {
+            try {
+                duration = new DateTime(date);
+                return getDuration(duration);
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+        return "";
+    }
+
+
+    public static String getDuration(String date1, String date2) {
+        try {
+            DateTime dateTime1 = toDateTime(date1);
+            DateTime dateTime2 = toDateTime(date2);
+
+            if (dateTime1 == null || dateTime2 == null) {
+                return "";
+            }
+
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(dateTime1.toDate());
+            calendar1.set(Calendar.HOUR_OF_DAY, 0);
+            calendar1.set(Calendar.MINUTE, 0);
+            calendar1.set(Calendar.SECOND, 0);
+            calendar1.set(Calendar.MILLISECOND, 0);
+
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(dateTime2.toDate());
+            calendar2.set(Calendar.HOUR_OF_DAY, 0);
+            calendar2.set(Calendar.MINUTE, 0);
+            calendar2.set(Calendar.SECOND, 0);
+            calendar2.set(Calendar.MILLISECOND, 0);
+
+            long timeDiff = Math.abs(calendar1.getTimeInMillis() - calendar2.getTimeInMillis());
+
+            return getDuration(timeDiff, dateTime1, dateTime2, getLocale());
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return "";
+    }
+
+    public static String getDuration(DateTime dateTime) {
+        if (dateTime != null) {
+            Calendar dateCalendar = Calendar.getInstance();
+            dateCalendar.setTime(dateTime.toDate());
+            dateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+            dateCalendar.set(Calendar.MINUTE, 0);
+            dateCalendar.set(Calendar.SECOND, 0);
+            dateCalendar.set(Calendar.MILLISECOND, 0);
+
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR_OF_DAY, 0);
+            today.set(Calendar.MINUTE, 0);
+            today.set(Calendar.SECOND, 0);
+            today.set(Calendar.MILLISECOND, 0);
+
+            long timeDiff = Math.abs(dateCalendar.getTimeInMillis() - today.getTimeInMillis());
+
+            DateTime todayDateTime = new DateTime();
+            return getDuration(timeDiff, dateTime, todayDateTime, getLocale());
+        }
+        return null;
+    }
+
+    private static Locale getLocale() {
+        Locale locale = CoreLibrary.getInstance().context().applicationContext().getResources().getConfiguration().locale;
+        locale = locale != null && locale.toString().startsWith("ar") ? Locale.ENGLISH : locale;
+
+        return locale;
+    }
+
+    public static String getDuration(long timeDiff, DateTime dateTime, DateTime todayDateTime, Locale locale) {
+
+        Context context = CoreLibrary.getInstance().context().applicationContext();
+        String duration;
+        if (timeDiff >= 0
+                && timeDiff <= TimeUnit.MILLISECONDS.convert(13, TimeUnit.DAYS)) {
+            // Represent in days
+            long days = Math.abs(Days.daysBetween(dateTime.toLocalDate(), todayDateTime.toLocalDate()).getDays());
+            duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_days), days);
+        } else if (timeDiff > TimeUnit.MILLISECONDS.convert(13, TimeUnit.DAYS)
+                && timeDiff <= TimeUnit.MILLISECONDS.convert(97, TimeUnit.DAYS)) {
+            // Represent in weeks and days
+            int weeks = (int) Math.floor((float) timeDiff /
+                    TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS));
+            int days = (int) Math.floor((float) (timeDiff -
+                    TimeUnit.MILLISECONDS.convert(weeks * 7, TimeUnit.DAYS)) /
+                    TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
+
+            if (days >= 7) {
+                days = 0;
+                weeks++;
+            }
+
+            if (days > 0) {
+                duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_weeks_days), weeks, days);
+            } else {
+                duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_weeks), weeks);
+            }
+
+        } else if (timeDiff > TimeUnit.MILLISECONDS.convert(97, TimeUnit.DAYS)
+                && timeDiff <= TimeUnit.MILLISECONDS.convert(363, TimeUnit.DAYS)) {
+            // Represent in months and weeks
+            int months = (int) Math.floor((float) timeDiff /
+                    TimeUnit.MILLISECONDS.convert(30, TimeUnit.DAYS));
+            int weeks = (int) Math.floor((float) (timeDiff - TimeUnit.MILLISECONDS.convert(
+                    months * 30, TimeUnit.DAYS)) /
+                    TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS));
+
+            if (weeks >= 4) {
+                weeks = 0;
+                months++;
+            }
+
+            if (months < 12) {
+                if (weeks > 0) {
+                    duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_months_weeks), months, weeks);
+                } else {
+                    duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_months), months);
+                }
+            } else {
+                duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_years), 1);
+            }
+        } else {
+            // Represent in years and months
+            int years = Math.abs(Years.yearsBetween(dateTime.toLocalDate(), todayDateTime.toLocalDate()).getYears());
+            int totalMonths = Math.abs(Months.monthsBetween(dateTime.toLocalDate(), todayDateTime.toLocalDate()).getMonths());
+            int months = Math.abs(totalMonths - (12 * years));
+
+            if (months > 0) {
+                duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_years_months), years, months);
+            } else {
+                duration = String.format(locale, context.getResources().getString(org.smartregister.R.string.x_years), years);
+            }
+        }
+
+        return duration;
+
     }
 }

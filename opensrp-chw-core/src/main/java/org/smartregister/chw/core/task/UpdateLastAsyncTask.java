@@ -28,15 +28,17 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
-    private final Context context;
+    public final Context context;
     private final CommonRepository commonRepository;
-    private final RegisterViewHolder viewHolder;
-    private final String baseEntityId;
+    public final RegisterViewHolder viewHolder;
+    public final String baseEntityId;
     private final Rules rules;
-    private CommonPersonObject commonPersonObject;
-    private ChildVisit childVisit;
-    private View.OnClickListener onClickListener;
+    public CommonPersonObject commonPersonObject;
+    public ChildVisit childVisit;
+    public View.OnClickListener onClickListener;
     private SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public UpdateLastAsyncTask(Context context, CommonRepository commonRepository, RegisterViewHolder viewHolder, String baseEntityId, View.OnClickListener onClickListener) {
@@ -49,7 +51,7 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    public Void doInBackground(Void... params) {
         if (commonRepository != null) {
             commonPersonObject = commonRepository.findByBaseEntityId(baseEntityId);
 
@@ -75,7 +77,7 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
                 if (notDoneSummary != null)
                     visitNot = notDoneSummary.getVisitDate().getTime();
 
-                String dobString = Utils.getDuration(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.DOB, false));
+                String dobString = getDuration(Utils.getValue(commonPersonObject.getColumnmaps(), DBConstants.KEY.DOB, false));
                 childVisit = CoreChildUtils.getChildVisitStatus(context, rules, dobString, lastVisit, visitNot, dateCreated);
             }
             return null;
@@ -104,14 +106,14 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
 
     }
 
-    private void setVisitButtonDueStatus(Context context, Button dueButton) {
+    public void setVisitButtonDueStatus(Context context, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
         dueButton.setText(context.getString(R.string.record_home_visit));
         dueButton.setBackgroundResource(R.drawable.blue_btn_selector);
         dueButton.setOnClickListener(onClickListener);
     }
 
-    private void setVisitButtonOverdueStatus(Context context, Button dueButton, String lastVisitDays) {
+    public void setVisitButtonOverdueStatus(Context context, Button dueButton, String lastVisitDays) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
         if (TextUtils.isEmpty(lastVisitDays)) {
             dueButton.setText(context.getString(R.string.record_visit));
@@ -123,18 +125,18 @@ public class UpdateLastAsyncTask extends AsyncTask<Void, Void, Void> {
         dueButton.setOnClickListener(onClickListener);
     }
 
-    private void setVisitLessTwentyFourView(Context context, Button dueButton) {
+    public void setVisitLessTwentyFourView(Context context, Button dueButton) {
         setVisitAboveTwentyFourView(context, dueButton);
     }
 
-    private void setVisitAboveTwentyFourView(Context context, Button dueButton) {
+    public void setVisitAboveTwentyFourView(Context context, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_complete_green));
         dueButton.setText(context.getString(R.string.visit_done));
         dueButton.setBackgroundColor(context.getResources().getColor(R.color.transparent));
         dueButton.setOnClickListener(null);
     }
 
-    private void setVisitNotDone(Context context, Button dueButton) {
+    public void setVisitNotDone(Context context, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.progress_orange));
         dueButton.setText(context.getString(R.string.visit_not_done));
         dueButton.setBackgroundColor(context.getResources().getColor(R.color.transparent));

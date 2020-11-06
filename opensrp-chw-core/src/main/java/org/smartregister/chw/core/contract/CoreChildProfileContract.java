@@ -75,6 +75,8 @@ public interface CoreChildProfileContract {
 
         void setFamilyHasServiceOverdue();
 
+        void setNoButtonView();
+
         void setDueTodayServices();
 
         CoreChildProfileContract.Presenter presenter();

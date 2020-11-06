@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -28,8 +30,8 @@ import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.Obs;
+import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -43,6 +45,7 @@ import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.service.intent.RecurringIntentService;
 import org.smartregister.immunization.service.intent.VaccineIntentService;
+import org.smartregister.immunization.util.IMConstants;
 import org.smartregister.sync.ClientProcessorForJava;
 
 import java.text.DateFormat;
@@ -51,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -76,6 +80,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             if (vaccineRepository == null || vaccine == null) {
                 return;
             }
+
+            // if its an updated vaccine, delete the previous object
+            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -296,6 +303,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CoreReferralUtils.completeClosedReferralTasks();
                 }
                 break;
+            case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.DELETE_EVENT:
+                processDeleteEvent(eventClient.getEvent());
+                break;
             case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
@@ -311,6 +321,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 }
                 break;
+        }
+    }
+
+    public void processDeleteEvent(Event event) {
+        try {
+            // delete from vaccine table
+            EventDao.deleteVaccineByFormSubmissionId(event.getFormSubmissionId());
+            // delete from visit table
+            EventDao.deleteVisitByFormSubmissionId(event.getFormSubmissionId());
+            // delete from recurring service table
+            EventDao.deleteServiceByFormSubmissionId(event.getFormSubmissionId());
+
+            Timber.d("Ending processDeleteEvent: %s", event.getEventId());
+        } catch (Exception e) {
+            Timber.e(e);
         }
     }
 
@@ -428,6 +453,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
                 Date createdAt = getDate(createdAtString);
@@ -444,6 +470,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private String getVaccineProgramClient(EventClient eventClient) {
+        Map<String, String> details = eventClient.getEvent().getDetails();
+        return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
     // possible to delegate
@@ -586,6 +617,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     String.format(" %s in (select base_entity_id from %s where relational_id = ? )  ", CommonFtsObject.idColumn, CoreConstants.TABLE_NAME.FAMILY_MEMBER), new String[]{familyID});
 
+            List<String> familyMembers = ChildDao.getFamilyMembers(familyID);
+            for (String baseEntityId : familyMembers) {
+                CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            }
         }
     }
 
@@ -615,7 +650,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     " object_id  = ?  ", new String[]{baseEntityId});
 
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-
+            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 
@@ -645,7 +680,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     CommonFtsObject.idColumn + "  = ?  ", new String[]{baseEntityId});
 
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-
+            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 

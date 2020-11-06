@@ -69,7 +69,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         }
         holder.tvGender.setText(Utils.getGenderLanguageSpecific(context, model.getGender()));
         holder.tvName.setText(String.format("%s, %s", model.getFullNames(), dobString));
-        holder.llQuestions.setVisibility(model.getMemberID().equals(selected) ? View.VISIBLE : View.GONE);
+        holder.llQuestions.setVisibility(model.getMemberID().equals(selected) && flavor.showPhoneNumberInputFields() ? View.VISIBLE : View.GONE);
         holder.radioButton.setChecked(model.getMemberID().equals(selected));
 
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -91,7 +91,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         setSelected(holder, model.getMemberID());
 
         boolean isVisible = (holder.llQuestions.getVisibility() == View.VISIBLE);
-        if (model.getMemberID().equals(selected) && !isVisible) {
+        if (model.getMemberID().equals(selected) && !isVisible && flavor.showPhoneNumberInputFields()) {
             holder.llQuestions.setVisibility(View.VISIBLE);
             holder.llQuestions.startAnimation(slideDown);
         }
@@ -128,19 +128,22 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
         if (currentViewHolder == null) {
             return false;
         }
-        boolean res = flavor.isPhoneNumberValid(currentViewHolder.etPhone, currentViewHolder.etAlternatePhone);
+        boolean res = true;
+        if (flavor.showPhoneNumberInputFields()) {
+            res = flavor.isPhoneNumberValid(currentViewHolder.etPhone, currentViewHolder.etAlternatePhone);
+            if (!res) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setMessage(context.getString(R.string.change_member_alert));
+                alertDialogBuilder.setCancelable(true);
 
-        if (!res) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-            alertDialogBuilder.setMessage(context.getString(R.string.change_member_alert));
-            alertDialogBuilder.setCancelable(true);
+                alertDialogBuilder.setPositiveButton(
+                        context.getString(R.string.dismiss),
+                        (dialog, id) -> dialog.cancel());
 
-            alertDialogBuilder.setPositiveButton(
-                    context.getString(R.string.dismiss),
-                    (dialog, id) -> dialog.cancel());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
         }
 
         return res;
@@ -170,6 +173,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyViewHold
 
         default boolean isPhoneNumberValid(EditText phoneEditText, EditText alternatePhoneEditText) {
             return phoneEditText.getText().length() != 0 || alternatePhoneEditText.length() != 0;
+        }
+
+        default boolean showPhoneNumberInputFields() {
+            return true;
         }
     }
 

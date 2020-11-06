@@ -50,6 +50,19 @@ public class ChildDaoTest extends ChildDao {
     }
 
     @Test
+    public void testGetFamilyChildrenReturnsNewArrayList() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<Child> children = ChildDao.getFamilyChildren("12345");
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(children.size(), 0);
+    }
+
+    @Test
     public void testGetChild() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
@@ -65,7 +78,37 @@ public class ChildDaoTest extends ChildDao {
     }
 
     @Test
+    public void testGetChildReturnsNull() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        Child child = ChildDao.getChild("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertNull(child);
+    }
+
+
+    @Test
     public void testIsChild() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"count"});
+        matrixCursor.addRow(new Object[]{2});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        Boolean dueVaccines = ChildDao.isChild("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(dueVaccines, true);
+    }
+
+    @Test
+    public void testIsChildReturnsFalse() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
         boolean status = ChildDao.isChild("123456");
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
@@ -92,14 +135,14 @@ public class ChildDaoTest extends ChildDao {
     public void testGetBaseEntityID() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","thinkmd_id"});
-        matrixCursor.addRow(new Object[]{"12345","45678"});
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id", "thinkmd_id"});
+        matrixCursor.addRow(new Object[]{"12345", "45678"});
 
         Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String baseEntityID = ChildDao.getBaseEntityID("45678");
+        String baseEntityID = ChildDao.getBaseEntityID("thinkmd_id", "45678");
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
@@ -112,14 +155,14 @@ public class ChildDaoTest extends ChildDao {
     public void testQueryColumnWithEntityId() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","html_assessment"});
-        matrixCursor.addRow(new Object[]{"1234","assessment plan"});
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id", "html_assessment"});
+        matrixCursor.addRow(new Object[]{"1234", "assessment plan"});
 
         Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234",HTML_ASSESSMENT);
+        String htmlAssessment = ChildDao.getThinkMDCarePlan("1234", "html_assessment");
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
@@ -132,8 +175,8 @@ public class ChildDaoTest extends ChildDao {
     public void testIsThinkMDCarePlanExist() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id","thinkmd_id"});
-        matrixCursor.addRow(new Object[]{"1234","5678"});
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id", "thinkmd_id"});
+        matrixCursor.addRow(new Object[]{"1234", "5678"});
 
         Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
@@ -146,5 +189,35 @@ public class ChildDaoTest extends ChildDao {
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
         Assert.assertTrue(thinkMDCarePlanExist);
+    }
+
+    @Test
+    public void testGetFamilyMembers() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
+        matrixCursor.addRow(new Object[]{"12345"});
+        matrixCursor.addRow(new Object[]{"23456"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<String> children = ChildDao.getFamilyMembers("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(children.size(), 2);
+    }
+
+    @Test
+    public void testGetFamilyMembersReturnsEmptyArrayList() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<String> children = ChildDao.getFamilyMembers("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(children.size(), 0);
     }
 }
