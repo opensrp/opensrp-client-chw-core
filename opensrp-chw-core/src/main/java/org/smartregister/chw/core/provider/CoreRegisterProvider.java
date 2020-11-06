@@ -86,9 +86,9 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
     private void addImageView(RegisterViewHolder viewHolder, int res_id) {
         //Limit size of icons added to 3
-       if (viewHolder.memberIcon instanceof LinearLayout) {
+        if (viewHolder.memberIcon instanceof LinearLayout) {
             LinearLayout iconsLayout = (LinearLayout) viewHolder.memberIcon;
-             if (iconsLayout.getChildCount() > 3) {
+            if (iconsLayout.getChildCount() > 3) {
                 TextView counterTextView = (TextView) iconsLayout.getChildAt(iconsLayout.getChildCount() - 1);
                 counterTextView.setText(context.getString(R.string.icons_counter, Integer.parseInt(counterTextView.getText().toString().substring(1)) + 1));
             } else if (iconsLayout.getChildCount() == 3) {
@@ -202,16 +202,21 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         dueButton.setOnClickListener(onClickListener);
     }
 
+    public String getChildAgeLimitFilter() {
+        return ChildDBConstants.childAgeLimitFilter();
+    }
+
     protected List<Map<String, String>> getChildren(String familyEntityId) {
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.selectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.GENDER, ChildDBConstants.KEY.LAST_HOME_VISIT, ChildDBConstants.KEY.VISIT_NOT_DONE, ChildDBConstants.KEY.DATE_CREATED, DBConstants.KEY.DOB, CoreConstants.DB_CONSTANTS.ENTRY_POINT, ChildDBConstants.KEY.MOTHER_ENTITY_ID});
+        queryBUilder.selectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.BASE_ENTITY_ID, CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.GENDER, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.LAST_HOME_VISIT, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.VISIT_NOT_DONE, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.DATE_CREATED, CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DOB, CoreConstants.TABLE_NAME.CHILD + "." + CoreConstants.DB_CONSTANTS.ENTRY_POINT, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.MOTHER_ENTITY_ID});
+        queryBUilder.customJoin("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON  " + CoreConstants.TABLE_NAME.CHILD + ".base_entity_id =  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + ".base_entity_id");
         queryBUilder.mainCondition(String.format(" %s is null AND %s = '%s' AND %s ",
-                DBConstants.KEY.DATE_REMOVED,
-                DBConstants.KEY.RELATIONAL_ID,
+                CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DATE_REMOVED,
+                CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.RELATIONAL_ID,
                 familyEntityId,
-                ChildDBConstants.childAgeLimitFilter()));
+                getChildAgeLimitFilter()));
 
-        String query = queryBUilder.orderbyCondition(DBConstants.KEY.DOB + " ASC ");
+        String query = queryBUilder.orderbyCondition(CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DOB + " ASC ");
 
         CommonRepository commonRepository = Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD);
         List<Map<String, String>> res = new ArrayList<>();
