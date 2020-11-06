@@ -261,14 +261,10 @@ public class NativeFormProcessor {
 
                 mergeJsonObject(updatedJSONObject, originalJSONObject);
 
-            } else if (original.get(key) instanceof String) {
-                if (!updated.has(key))
-                    updated.put(key, original.getString(key));
-
-            } else if (original.get(key) instanceof JSONArray) {
-                if (!updated.has(key))
-                    updated.put(key, original.getJSONArray(key));
-
+            } else if (original.get(key) instanceof String && !updated.has(key)) {
+                updated.put(key, original.getString(key));
+            } else if (original.get(key) instanceof JSONArray && !updated.has(key)) {
+                updated.put(key, original.getJSONArray(key));
             }
         }
     }
