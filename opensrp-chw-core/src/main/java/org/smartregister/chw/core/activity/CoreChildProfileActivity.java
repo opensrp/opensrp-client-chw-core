@@ -122,7 +122,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             }
         }
     };
-    private View viewFamilyRow;
+    public View viewFamilyRow;
     private View viewDividerSickRow;
     private TextView textViewNotVisitMonth;
     private TextView textViewUndo;
@@ -479,15 +479,17 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewRecord.setTextColor(getResources().getColor(R.color.light_grey_text));
     }
 
-    public void setFamilyHasNoDueServicesText() {
-        textViewFamilyHas.setText(getString(R.string.family_has_nothing_due));
+    @Override
+    public void setFamilyHasNothingElseDue() {
+        layoutFamilyHasRow.setVisibility(View.VISIBLE);
+        viewFamilyRow.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setFamilyHasNothingDue() {
         layoutFamilyHasRow.setVisibility(View.VISIBLE);
         viewFamilyRow.setVisibility(View.VISIBLE);
-        setFamilyHasNoDueServicesText();
+        textViewFamilyHas.setText(getString(R.string.family_has_nothing_due));
     }
 
     @Override
