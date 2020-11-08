@@ -39,6 +39,17 @@ public class AlertDaoTest extends AlertDao {
     }
 
     @Test
+    public void testGetAlert() {
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"scheduleName"});
+        matrixCursor.addRow(new Object[]{"1232434"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        AlertDao.getActiveAlert("123456");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+    }
+
+    @Test
     public void testGetActiveAlertsForVaccines() {
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"scheduleName"});
         matrixCursor.addRow(new Object[]{"1232434"});
