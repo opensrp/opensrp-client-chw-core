@@ -48,7 +48,7 @@ public class CoreConstantsTest {
     }
 
     @Test
-    public void TestGetFamilyKit() {
+    public void testGetFamilyKit() {
         Locale locale = CoreChwApplication.getCurrentLocale();
         AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
         Assert.assertEquals("family_kit", Utils.getLocalForm("family_kit", locale, assetManager));
