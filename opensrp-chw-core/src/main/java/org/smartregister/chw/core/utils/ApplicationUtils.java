@@ -19,7 +19,7 @@ public class ApplicationUtils {
     }
 
     private static String[] getFtsTables() {
-        return new String[]{CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, CoreConstants.TABLE_NAME.CHILD};
+        return new String[]{CoreConstants.TABLE_NAME.FAMILY, CoreConstants.TABLE_NAME.FAMILY_MEMBER, CoreConstants.TABLE_NAME.CHILD, CoreConstants.TABLE_NAME.ANC_MEMBER};
     }
 
     private static String[] getFtsSearchFields(String tableName) {
@@ -39,6 +39,10 @@ public class ApplicationUtils {
                         DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.MIDDLE_NAME,
                         DBConstants.KEY.LAST_NAME, DBConstants.KEY.UNIQUE_ID, ChildDBConstants.KEY.ENTRY_POINT, DBConstants.KEY.DOB, DBConstants.KEY.DATE_REMOVED
                 };
+            case CoreConstants.TABLE_NAME.ANC_MEMBER:
+                return new String[] {
+                        DBConstants.KEY.BASE_ENTITY_ID, DBConstants.KEY.UNIQUE_ID,  DBConstants.KEY.RELATIONAL_ID
+                };
             default:
                 return null;
         }
@@ -56,6 +60,10 @@ public class ApplicationUtils {
             case CoreConstants.TABLE_NAME.CHILD:
                 return new String[]{ChildDBConstants.KEY.LAST_HOME_VISIT, ChildDBConstants.KEY.VISIT_NOT_DONE, DBConstants.KEY
                         .LAST_INTERACTED_WITH, ChildDBConstants.KEY.DATE_CREATED, DBConstants.KEY.DATE_REMOVED, DBConstants.KEY.DOB, ChildDBConstants.KEY.ENTRY_POINT};
+            case CoreConstants.TABLE_NAME.ANC_MEMBER:
+                return new String[] {
+                        DBConstants.KEY.LAST_INTERACTED_WITH, DBConstants.KEY.RELATIONAL_ID, org.smartregister.chw.anc.util.DBConstants.KEY.LAST_HOME_VISIT,
+                        org.smartregister.chw.anc.util.DBConstants.KEY.VISIT_NOT_DONE};
             default:
                 return null;
         }
