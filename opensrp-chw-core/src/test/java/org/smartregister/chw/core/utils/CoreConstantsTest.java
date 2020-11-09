@@ -32,6 +32,16 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void getRegisterForms() {
+        Locale locale = CoreChwApplication.getCurrentLocale();
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        Assert.assertEquals("child_enrollment", Utils.getLocalForm("child_enrollment", locale, assetManager));
+        Assert.assertEquals("family_register", Utils.getLocalForm("family_register", locale, assetManager));
+        Assert.assertEquals("family_member_register", Utils.getLocalForm("family_member_register", locale, assetManager));
+        Assert.assertEquals("anc_pregnancy_outcome", Utils.getLocalForm("anc_pregnancy_outcome", locale, assetManager));
+    }
+
+    @Test
     public void getRegisterType() {
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.ANC, "ANC");
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.PNC, "PNC");
