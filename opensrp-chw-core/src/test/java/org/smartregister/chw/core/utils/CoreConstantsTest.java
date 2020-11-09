@@ -28,4 +28,10 @@ public class CoreConstantsTest {
         Assert.assertEquals(CoreConstants.REGISTER_TYPE.OTHER, "Other");
     }
 
+    @Test
+    public void getMenuType() {
+        Assert.assertEquals(CoreConstants.MenuType.ChangeHead, "ChangeHead");
+        Assert.assertEquals(CoreConstants.MenuType.ChangePrimaryCare, "ChangePrimaryCare");
+    }
+
 }
