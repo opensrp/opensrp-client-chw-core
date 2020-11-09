@@ -165,7 +165,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-immunization:2.0.3-beta1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-immunization:2.0.3-beta2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -251,7 +251,7 @@ dependencies {
     api 'com.evernote:android-job:1.2.6'
     api 'org.greenrobot:eventbus:3.1.1'
 
-    api("org.smartregister:android-p2p-sync:0.3.7-SNAPSHOT") {
+    api("org.smartregister:android-p2p-sync:0.3.8-apha1-SNAPSHOT") {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
