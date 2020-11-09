@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.fragment;
 
-import android.content.Intent;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,6 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.mock.MockCoreFpRegisterFragment;
-import org.smartregister.chw.core.shadows.CoreChildRegisterActivityShadow;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.contract.BaseFpRegisterFragmentContract;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -52,7 +50,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
 
 public class CoreFpRegisterFragmentTest extends BaseUnitTest {
@@ -162,19 +159,18 @@ public class CoreFpRegisterFragmentTest extends BaseUnitTest {
 
     @Test
     public void testOnViewClickedOpensProfile() {
-        CoreChildRegisterActivityShadow childRegisterActivity = Robolectric.buildActivity(CoreChildRegisterActivityShadow.class, new Intent()).create().start().resume().get();
-        coreFpRegisterFragment = new MockCoreFpRegisterFragment();
+        FragmentActivity registerActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        MockCoreFpRegisterFragment coreFpRegisterFragment = Mockito.spy(new MockCoreFpRegisterFragment());
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
         Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
-        childRegisterActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
+        registerActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
         when(view.getTag(org.smartregister.family.R.id.VIEW_ID)).thenReturn(CLICK_VIEW_NORMAL);
         CommonPersonObjectClient client = new CommonPersonObjectClient("12", null, "");
         client.setColumnmaps(new HashMap<String, String>());
         when(view.getTag()).thenReturn(client);
         coreFpRegisterFragment.onViewClicked(view);
-        Intent intent = shadowOf(childRegisterActivity).getNextStartedActivity();
-        assertNotNull(intent);
+        verify(coreFpRegisterFragment).openProfile(client);
     }
 
     @Test

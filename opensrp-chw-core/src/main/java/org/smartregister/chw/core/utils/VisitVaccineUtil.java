@@ -17,6 +17,7 @@ import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.domain.Alert;
 import org.smartregister.domain.AlertStatus;
+import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.domain.VaccineCondition;
@@ -50,8 +51,13 @@ public class VisitVaccineUtil {
         if (vaccineMap == null || vaccineMap.size() == 0) {
             vaccineMap = new HashMap<>();
 
-            List<VaccineRepo.Vaccine> allVacs = VaccineRepo.getVaccines("woman");
-            allVacs.addAll(VaccineRepo.getVaccines("child"));
+            List<VaccineRepo.Vaccine> allVacs = new ArrayList<>();
+
+            List<VaccineRepo.Vaccine> woman =   ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo;
+            allVacs.addAll(woman);
+
+            List<VaccineRepo.Vaccine> child =   ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo;
+            allVacs.addAll(child);
 
             for (VaccineRepo.Vaccine vaccine : allVacs) {
                 vaccineMap.put(
