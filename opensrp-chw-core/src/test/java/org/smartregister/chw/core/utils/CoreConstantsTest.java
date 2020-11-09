@@ -48,6 +48,14 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void getKeyIndicatorsUtil() {
+        Assert.assertEquals(CoreConstants.KeyIndicatorsUtil.HIA_2_INDICATOR, "hia2_indicator");
+        Assert.assertEquals(CoreConstants.KeyIndicatorsUtil.STEPNAME, "stepName");
+        Assert.assertEquals(CoreConstants.KeyIndicatorsUtil.LOOK_UP, "look_up");
+        Assert.assertEquals(CoreConstants.KeyIndicatorsUtil.ENTITY_ID, "entity_id");
+    }
+
+    @Test
     public void testGetFamilyKit() {
         Locale locale = CoreChwApplication.getCurrentLocale();
         AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
