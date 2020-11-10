@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.presenter;
 
+import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,10 +32,10 @@ public class CoreFamilyRemoveMemberPresenterTest {
     private FamilyRemoveMemberContract.View view;
 
     @Mock
-    FamilyRemoveMemberContract.Interactor interactor;
+    private FamilyRemoveMemberContract.Interactor interactor;
 
     @Mock
-    FamilyRemoveMemberContract.Model model;
+    private FamilyRemoveMemberContract.Model model;
 
     private CoreFamilyRemoveMemberPresenter removeMemberPresenter;
 
@@ -81,4 +83,43 @@ public class CoreFamilyRemoveMemberPresenterTest {
                 ArgumentMatchers.any(CoreFamilyRemoveMemberPresenter.class));
     }
 
+    @Test
+    public void removeEveryoneStartsRemovalForm() {
+        JSONObject form = Mockito.mock(JSONObject.class);
+        Mockito.when(model.prepareFamilyRemovalForm(
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString())).thenReturn(form);
+        removeMemberPresenter.removeEveryone(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+        Mockito.verify(view, Mockito.times(1)).startJsonActivity(form);
+    }
+
+    @Test
+    public void familyRemovedExecutesViewEveryoneRemoved(){
+        removeMemberPresenter.onFamilyRemoved(false);
+        Mockito.verify(view, Mockito.times(0)).onEveryoneRemoved();
+        removeMemberPresenter.onFamilyRemoved(true);
+        Mockito.verify(view, Mockito.times(1)).onEveryoneRemoved();
+    }
+
+    @Test
+    public void memberRemovedExecutesViewOnMemberRemoved(){
+        removeMemberPresenter.memberRemoved("test-removal");
+        Mockito.verify(view, Mockito.times(1)).onMemberRemoved("test-removal");
+    }
+
+    @Test
+    public void getMainConditionReturnsCorrectString() {
+        String mainCondition = String.format(" %s = '%s' and %s is null and %s is null ",
+                DBConstants.KEY.OBJECT_RELATIONAL_ID, "family-entity-id",
+                DBConstants.KEY.DATE_REMOVED,
+                DBConstants.KEY.DOD);
+        Assert.assertEquals(mainCondition, removeMemberPresenter.getMainCondition());
+    }
+
+    @Test
+    public void getDefaultSortQueryReturnsCorrectString() {
+        String defaultSortQuery = String.format(" %s ASC ", DBConstants.KEY.DOB);
+        Assert.assertEquals(defaultSortQuery, removeMemberPresenter.getDefaultSortQuery());
+    }
 }
