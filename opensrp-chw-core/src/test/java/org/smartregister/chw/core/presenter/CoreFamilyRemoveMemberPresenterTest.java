@@ -66,6 +66,7 @@ public class CoreFamilyRemoveMemberPresenterTest {
         columnMaps.put(OpdDbConstants.KEY.REGISTER_TYPE, "");
         CoreFamilyRemoveMemberPresenter presenterSpy = PowerMockito.spy(removeMemberPresenter);
         PowerMockito.doNothing().when(presenterSpy, "startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
+        Assert.assertNotNull(commonPersonClient);
         presenterSpy.removeMember(commonPersonClient);
         PowerMockito.verifyPrivate(presenterSpy).invoke("startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
     }
