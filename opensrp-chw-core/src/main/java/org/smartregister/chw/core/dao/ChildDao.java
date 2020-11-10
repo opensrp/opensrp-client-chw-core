@@ -188,7 +188,9 @@ public class ChildDao extends AbstractDao {
     }
 
     public static List<String> getFamilyMembers(String baseEntityId) {
-        String sql = "SELECT base_entity_id from ec_family_member where relational_id = '" + baseEntityId + "'";
+        String sql = "SELECT base_entity_id from ec_family_member" +
+                " where relational_id = '" + baseEntityId + "'" +
+                " and is_closed = 0";
 
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "base_entity_id");
 
