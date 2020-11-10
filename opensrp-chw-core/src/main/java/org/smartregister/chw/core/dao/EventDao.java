@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +9,9 @@ import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.sync.helper.ECSyncHelper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -78,6 +81,15 @@ public class EventDao extends AbstractDao {
     }
 
     public static void deleteVaccineByFormSubmissionId(String submissionId) {
+        String sql0 = "delete from visit_details where visit_details_id in ( " +
+                " select vd.visit_details_id " +
+                " from visit_details vd  " +
+                " inner join visits v on v.visit_id = vd.visit_id " +
+                " inner join vaccines va on va.name = visit_key and va.base_entity_id = v.base_entity_id " +
+                " where va.formSubmissionId = '" + submissionId + "' " +
+                ")";
+        updateDB(sql0);
+
         String sql = "delete from vaccines where formSubmissionId = '" + submissionId + "'";
         updateDB(sql);
     }
