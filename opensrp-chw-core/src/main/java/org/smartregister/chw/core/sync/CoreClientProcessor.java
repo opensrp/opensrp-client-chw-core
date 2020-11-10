@@ -82,7 +82,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             }
 
             // if its an updated vaccine, delete the previous object
-            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
+            //vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -327,12 +327,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     public void processDeleteEvent(Event event) {
         try {
+            String formSubmissionId = event.getDetails() == null ? "" : event.getDetails().get("deleted_form_submission_id");
             // delete from vaccine table
-            EventDao.deleteVaccineByFormSubmissionId(event.getFormSubmissionId());
-            // delete from visit table
-            EventDao.deleteVisitByFormSubmissionId(event.getFormSubmissionId());
-            // delete from recurring service table
-            EventDao.deleteServiceByFormSubmissionId(event.getFormSubmissionId());
+            if (StringUtils.isNotBlank(formSubmissionId)) {
+                EventDao.deleteVaccineByFormSubmissionId(formSubmissionId);
+                // delete from visit table
+                EventDao.deleteVisitByFormSubmissionId(formSubmissionId);
+                // delete from recurring service table
+                EventDao.deleteServiceByFormSubmissionId(formSubmissionId);
+            }
 
             Timber.d("Ending processDeleteEvent: %s", event.getEventId());
         } catch (Exception e) {
