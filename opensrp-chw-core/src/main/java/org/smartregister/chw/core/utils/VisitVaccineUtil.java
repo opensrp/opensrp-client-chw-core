@@ -53,10 +53,10 @@ public class VisitVaccineUtil {
 
             List<VaccineRepo.Vaccine> allVacs = new ArrayList<>();
 
-            List<VaccineRepo.Vaccine> woman =   ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo;
+            List<VaccineRepo.Vaccine> woman = ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo;
             allVacs.addAll(woman);
 
-            List<VaccineRepo.Vaccine> child =   ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo;
+            List<VaccineRepo.Vaccine> child = ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo;
             allVacs.addAll(child);
 
             for (VaccineRepo.Vaccine vaccine : allVacs) {
@@ -281,6 +281,7 @@ public class VisitVaccineUtil {
         try {
             if (vaccineSchedules != null && vaccineSchedules.containsKey(vaccineCategory)) {
                 for (VaccineSchedule curSchedule : vaccineSchedules.get(vaccineCategory).values()) {
+                    if (curSchedule == null) continue;
                     Alert curAlert = curSchedule.getOfflineAlert(baseEntityId, dob.toDate(), issuedVaccines);
                     if (curAlert != null && curAlert.startDate() != null) {
                         generatedAlerts.add(curAlert);
