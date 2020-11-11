@@ -650,7 +650,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         String strDod = obsMap.get(key);
         if (StringUtils.isBlank(strDod)) return null;
 
-        SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         SimpleDateFormat nfDf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         return nfDf.parse(strDod);
     }
