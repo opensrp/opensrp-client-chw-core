@@ -11,8 +11,6 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
-import org.smartregister.domain.jsonmapping.ClientClassification;
-import org.smartregister.domain.jsonmapping.Table;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.repository.VaccineRepository;
 
@@ -20,15 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoreClientProcessorTest extends BaseUnitTest {
-
-    @Mock
-    private ClientClassification classification;
-
-    @Mock
-    private Table vaccineTable;
-
-    @Mock
-    private Table serviceTable;
 
     @Mock
     private Context context;
