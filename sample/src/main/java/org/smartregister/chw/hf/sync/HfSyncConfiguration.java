@@ -5,6 +5,7 @@ import org.smartregister.SyncConfiguration;
 import org.smartregister.SyncFilter;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.hf.BuildConfig;
+import org.smartregister.view.activity.BaseLoginActivity;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,5 +67,20 @@ public class HfSyncConfiguration extends SyncConfiguration {
     @Override
     public String getTopAllowedLocationLevel() {
         return "";
+    }
+
+    @Override
+    public String getOauthClientId() {
+        return null;
+    }
+
+    @Override
+    public String getOauthClientSecret() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends BaseLoginActivity> getAuthenticationActivity() {
+        return null;
     }
 }
