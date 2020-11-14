@@ -3,6 +3,7 @@ package org.smartregister.chw.core.dao;
 import android.content.Context;
 import android.util.Pair;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
@@ -30,7 +31,7 @@ public class FHIRBundleDao extends AbstractDao {
             model.setDob(userProfile.getMiddle());
             model.setAgeInDays(userProfile.getLeft());
         }
-        model.setUniqueIdGeneratedForThinkMD(getRandomGeneratedId());
+        model.setUniqueIdGeneratedForThinkMD(getThinkMDUniqueId(childBaseEntityId));
         model.setPatientId(model.getUniqueIdGeneratedForThinkMD());
         String providerId = getProviderId();
         model.setPractitionerId(providerId);
@@ -38,6 +39,11 @@ public class FHIRBundleDao extends AbstractDao {
         model.setLocationId(getLocationId());
 
         return model;
+    }
+
+    private String getThinkMDUniqueId(String childBaseEntityId) {
+        String thinkMDId = ChildDao.getThinkMDId(childBaseEntityId);
+        return StringUtils.isNotBlank(thinkMDId) ? thinkMDId : getRandomGeneratedId();
     }
 
     protected String getLocationId() {

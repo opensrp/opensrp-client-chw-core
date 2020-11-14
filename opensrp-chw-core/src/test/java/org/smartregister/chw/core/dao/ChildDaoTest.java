@@ -16,8 +16,6 @@ import org.smartregister.repository.Repository;
 
 import java.util.List;
 
-import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ChildDaoTest extends ChildDao {
 

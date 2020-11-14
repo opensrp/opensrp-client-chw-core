@@ -484,12 +484,12 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String baseEntityId = getBaseEntityID(thinkMdId);
+                childBaseEntityId = getBaseEntityID(thinkMdId);
                 // creating the event to sync with server
-                if (baseEntityId != null) {
+                if (childBaseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
-                            baseEntityId);
+                            childBaseEntityId);
 
                     for (Obs obs : carePlanEvent.getObs()) {
                         if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
@@ -501,7 +501,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                     }
 
                     JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(carePlanEvent));
-                    ECSyncHelper.getInstance(context).addEvent(baseEntityId, eventPartialJson);
+                    ECSyncHelper.getInstance(context).addEvent(childBaseEntityId, eventPartialJson);
                     appExecutors.mainThread().execute(callback::carePlanEventCreated);
                 }
             } catch (Exception e) {

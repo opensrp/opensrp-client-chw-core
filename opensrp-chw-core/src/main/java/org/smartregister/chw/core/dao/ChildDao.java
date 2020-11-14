@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.joda.time.DateTime;
 import org.smartregister.chw.core.domain.Child;
@@ -127,6 +126,12 @@ public class ChildDao extends AbstractDao {
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, BASE_ENTITY_ID);
     }
 
+    public static String getThinkMDId(String childBaseEntityId) {
+        String selection = " base_entity_id = ? ";
+        String[] selectionArgs = new String[]{childBaseEntityId};
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
+    }
+
 
     public static String getThinkMDCarePlan(String childBaseEntityId, String requiredField) {
         String selection = " base_entity_id = ? ";
@@ -134,14 +139,6 @@ public class ChildDao extends AbstractDao {
 
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, requiredField);
     }
-
-    public static boolean isThinkMDCarePlanExist(String baseEntityId) {
-        String selection = " base_entity_id = ? ";
-        String[] selectionArgs = new String[]{baseEntityId};
-        String thinkMDId = queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
-        return !StringUtils.isEmpty(thinkMDId);
-    }
-
 
     public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
         SQLiteDatabase database = getRepository().getReadableDatabase();
