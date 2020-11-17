@@ -50,7 +50,7 @@ public class CoreFamilyRemoveMemberPresenterTest {
         ReflectionHelpers.setField(removeMemberPresenter, "viewReference", new WeakReference<>(view));
         ReflectionHelpers.setField(removeMemberPresenter, "interactor", interactor);
         ReflectionHelpers.setField(removeMemberPresenter, "model", model);
-        ReflectionHelpers.setField(removeMemberPresenter, "familyHead", "family-head");
+        ReflectionHelpers.setField(removeMemberPresenter, "familyHead", "family-head-entity-id");
         ReflectionHelpers.setField(removeMemberPresenter, "primaryCaregiver", "primary-care-giver");
         ReflectionHelpers.setField(removeMemberPresenter, "familyBaseEntityId", "family-entity-id");
 
@@ -74,12 +74,12 @@ public class CoreFamilyRemoveMemberPresenterTest {
 
     @Test
     public void removeFamilyHeadInvokesProcessFamilyMember() {
-        columnMaps.put(DBConstants.KEY.BASE_ENTITY_ID, "family-head");
+        columnMaps.put(DBConstants.KEY.BASE_ENTITY_ID, "family-head-entity-id");
         columnMaps.put(OpdDbConstants.KEY.REGISTER_TYPE, "");
 
         removeMemberPresenter.removeMember(commonPersonClient);
         Mockito.verify(interactor, Mockito.times(1)).processFamilyMember(
-                ArgumentMatchers.anyString(),
+                ArgumentMatchers.eq("family-entity-id"),
                 ArgumentMatchers.any(CommonPersonObjectClient.class),
                 ArgumentMatchers.any(CoreFamilyRemoveMemberPresenter.class));
     }
@@ -88,10 +88,10 @@ public class CoreFamilyRemoveMemberPresenterTest {
     public void removeEveryoneStartsRemovalForm() {
         JSONObject form = Mockito.mock(JSONObject.class);
         Mockito.when(model.prepareFamilyRemovalForm(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString())).thenReturn(form);
-        removeMemberPresenter.removeEveryone(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+                ArgumentMatchers.eq("family-entity-id"),
+                ArgumentMatchers.eq("family-name"),
+                ArgumentMatchers.eq("family-details"))).thenReturn(form);
+        removeMemberPresenter.removeEveryone("family-name", "family-details");
         Mockito.verify(view, Mockito.times(1)).startJsonActivity(form);
     }
 
