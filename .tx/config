@@ -6,3 +6,4 @@ file_filter = opensrp-chw-core/src/main/res/values-<lang>/strings.xml
 source_file = opensrp-chw-core/src/main/res/values/strings.xml
 source_lang = en
 type = ANDROID
+

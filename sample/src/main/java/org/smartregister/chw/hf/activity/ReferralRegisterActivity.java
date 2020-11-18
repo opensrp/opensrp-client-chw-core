@@ -6,6 +6,8 @@ import org.smartregister.chw.hf.fragment.ReferralRegisterFragment;
 import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
+import java.util.Map;
+
 public class ReferralRegisterActivity extends BaseReferralRegister {
 
     @Override
@@ -21,6 +23,11 @@ public class ReferralRegisterActivity extends BaseReferralRegister {
     @Override
     protected BaseRegisterFragment getRegisterFragment() {
         return new ReferralRegisterFragment();
+    }
+
+    @Override
+    public void startFormActivity(String s, String s1, Map<String, String> map) {
+
     }
 
     @Override
