@@ -2,7 +2,10 @@ package org.smartregister.chw.core.activity;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +24,14 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreAncMemberProfileActivityImpl;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.domain.AlertStatus;
+
+import timber.log.Timber;
 
 public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
 
     private CoreAncMemberProfileActivity activity;
 
-    private View viewFamilyRow = new View(RuntimeEnvironment.systemContext);
     private ActivityController<CoreAncMemberProfileActivityImpl> controller;
 
     @Mock
@@ -51,7 +56,18 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
         memberObject.setFamilyName("Some Family Name");
 
         ReflectionHelpers.setField(activity, "memberObject", memberObject);
+        View viewFamilyRow = new View(RuntimeEnvironment.systemContext);
         ReflectionHelpers.setField(activity, "view_family_row", viewFamilyRow);
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+            controller.pause().stop().destroy(); //destroy controller if we can
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     @Test
@@ -96,6 +112,18 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
 
         activity.onOptionsItemSelected(menuItem);
         Mockito.verify(presenter).startAncDangerSignsOutcomeForm(memberObject);
+    }
+
+    @Test
+    public void testSetFamilyStatus() {
+        ReflectionHelpers.setField(activity, "rlFamilyServicesDue", Mockito.mock(RelativeLayout.class));
+        ReflectionHelpers.setField(activity, "tvFamilyStatus", Mockito.mock(TextView.class));
+
+        activity.setFamilyStatus(AlertStatus.complete);
+        Assert.assertFalse(ReflectionHelpers.getField(activity, "hasDueServices"));
+
+        activity.setFamilyStatus(AlertStatus.normal);
+        Assert.assertTrue(ReflectionHelpers.getField(activity, "hasDueServices"));
     }
 
     @Test
