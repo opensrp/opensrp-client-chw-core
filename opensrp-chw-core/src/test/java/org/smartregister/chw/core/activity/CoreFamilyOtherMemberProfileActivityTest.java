@@ -23,6 +23,7 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreFamilyOtherMemberProfileActivityImpl;
+import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 
@@ -45,16 +46,14 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
-        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        //context.configuration().getDrishtiApplication().setPassword(password);
-        //context.session().setPassword(password);
 
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, commonPersonObjectClient);
 
         controller = Robolectric.buildActivity(CoreFamilyOtherMemberProfileActivityImpl.class, intent).create().start();
         activity = controller.get();
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
     }
 
     @After
@@ -69,7 +68,12 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
 
     @Test
     public void testSetupViewsInitializesViews() {
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_family_other_member_profile_chw);
+
+        ReflectionHelpers.setField(activity,"presenter", Mockito.mock(CoreFamilyOtherMemberActivityPresenter.class));
         activity.setupViews();
+
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "familyFloatingMenu"));
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "textViewFamilyHas"));
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "layoutFamilyHasRow"));
@@ -91,6 +95,12 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
     @Test
     public void settingGenderSetsTranslatedString() {
         String gender = "Female";
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_family_other_member_profile_chw);
+
+        ReflectionHelpers.setField(activity,"presenter", Mockito.mock(CoreFamilyOtherMemberActivityPresenter.class));
+        activity.setupViews();
+
         activity.setProfileDetailOne(gender);
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "detailOneView"));
     }

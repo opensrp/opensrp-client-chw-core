@@ -62,10 +62,7 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
-        //String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        //context.configuration().getDrishtiApplication().setPassword(password);
-        //context.session().setPassword(password);
 
         controller = Robolectric.buildActivity(CoreChildProfileActivity.class).create().start();
         activity = controller.get();
@@ -128,6 +125,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetUpViews() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         activity.memberObject = memberObject;
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
@@ -280,6 +280,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetVisitButtonDueStatusMutatesViewsDesign() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -295,6 +298,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetVisitButtonOverdueStatus() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -310,6 +316,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetVisitNotDoneThisMonth() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -354,6 +363,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetServiceNameDue() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -372,6 +384,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetServiceNameOverDue() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -384,6 +399,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetServiceNameUpcoming() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -396,6 +414,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetVisitLessTwentyFourView() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -413,6 +434,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetVisitAboveTwentyFourView() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -424,6 +448,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetFamilyHasNothingDue() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -436,6 +463,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetFamilyHasServiceDueDue() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -448,6 +478,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testSetFamilyHasServiceOverdue() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();
@@ -524,6 +557,9 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
     @Test
     public void testonProfileTaskFetched() {
         activity = Mockito.spy(activity);
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_child_profile);
+
         CoreChildProfileContract.Presenter presenter = Mockito.mock(CoreChildProfileContract.Presenter.class);
         Mockito.doReturn(presenter).when(activity).presenter();
         activity.setupViews();

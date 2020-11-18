@@ -55,10 +55,7 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         year = "2019";
 
         //Auto login by default
-        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        //context.configuration().getDrishtiApplication().setPassword(password);
-        //context.session().setPassword(password);
 
         controller = Robolectric.buildActivity(CoreStockInventoryReportActivity.class).create().start();
         activity = controller.get();
@@ -101,6 +98,8 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         getProvider();
         List<StockUsageItemModel> stockUsageItemReportList = activity.getStockUsageItemReportList(stockMonth, stockYear);
         CoreStockUsageItemAdapter coreStockUsageItemAdapter = new CoreStockUsageItemAdapter(stockUsageItemReportList, activity);
+
+        activity.onCreation();
         activity.recyclerView.setAdapter(coreStockUsageItemAdapter);
 
         activity.reloadRecycler(selected);
