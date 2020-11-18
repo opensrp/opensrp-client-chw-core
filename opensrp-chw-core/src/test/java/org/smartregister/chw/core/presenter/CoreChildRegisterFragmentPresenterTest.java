@@ -62,7 +62,7 @@ public class CoreChildRegisterFragmentPresenterTest {
 
     @Test
     public void testUpdateSortAndFilter() {
-        List<org.smartregister.configurableviews.model.Field> filterList = new ArrayList<>();
+        List<Field> filterList = new ArrayList<>();
         Field sortField = Mockito.mock(Field.class);
         presenter.updateSortAndFilter(filterList, sortField);
         Mockito.verify(view).updateFilterAndFilterStatus(Mockito.any(), Mockito.any());
