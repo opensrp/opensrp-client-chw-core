@@ -86,6 +86,15 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void testGetChildRegister() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("child_enrollment", locale, assetManager), CoreConstants.JSON_FORM.getChildRegister());
+    }
+
+    @Test
     public void testGetStockUsageForm() {
         Assert.assertEquals("stock_usage_report", CoreConstants.JSON_FORM.getStockUsageForm());
     }
