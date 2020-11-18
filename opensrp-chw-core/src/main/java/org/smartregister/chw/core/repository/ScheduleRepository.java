@@ -171,6 +171,14 @@ public class ScheduleRepository extends BaseRepository {
         }
     }
 
+    public void deleteChildMember(String baseEntityID) {
+        try {
+            getWritableDatabase().delete("ec_child", BASE_ENTITY_ID + "= ?", new String[]{baseEntityID});
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
     public void deleteScheduleByName(String name) {
         try {
             getWritableDatabase().delete(TABLE_NAME, SCHEDULE_NAME + "= ?", new String[]{name});
