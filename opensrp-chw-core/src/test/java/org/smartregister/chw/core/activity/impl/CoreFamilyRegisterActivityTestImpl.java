@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class CoreFamilyRegisterActivityTestImpl extends CoreFamilyRegisterActivity {
     @Override
     protected BaseRegisterFragment getRegisterFragment() {
@@ -16,7 +18,7 @@ public class CoreFamilyRegisterActivityTestImpl extends CoreFamilyRegisterActivi
 
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
-
+        Timber.v("startFormActivity stub");
     }
 
     public List<String> getViewIdentifiers() {

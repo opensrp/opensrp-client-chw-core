@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 import static org.mockito.Mockito.mock;
 
 public class BaseChwNotificationRegisterMock extends BaseChwNotificationRegister {
@@ -43,7 +45,7 @@ public class BaseChwNotificationRegisterMock extends BaseChwNotificationRegister
 
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
-
+        Timber.v("startFormActivity stub");
     }
 
     @Override
