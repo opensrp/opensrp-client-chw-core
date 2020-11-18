@@ -150,8 +150,12 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 for (int j = 0; j < fieldsArray.length(); j++) {
                     JSONObject fieldJsonObject = fieldsArray.getJSONObject(j);
                     String key = fieldJsonObject.getString(KEY);
-                    String value = fieldJsonObject.getString(VALUE);
-                    result.put(key, value);
+                    if (!fieldJsonObject.has(VALUE)) {
+                        result.put(key, "");
+                    } else {
+                        String value = fieldJsonObject.getString(VALUE);
+                        result.put(key, value);
+                    }
                 }
 
                 boolean saveClicked;
