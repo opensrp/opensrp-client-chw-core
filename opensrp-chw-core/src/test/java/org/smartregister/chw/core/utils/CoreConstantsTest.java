@@ -14,9 +14,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.application.TestApplication;
-import org.smartregister.chw.core.fragment.CoreFpRegisterFragment;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 @RunWith(RobolectricTestRunner.class)
