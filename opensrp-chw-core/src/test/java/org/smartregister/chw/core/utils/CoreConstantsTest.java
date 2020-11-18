@@ -34,6 +34,14 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void testBusinessStatus() {
+        Assert.assertEquals(CoreConstants.BUSINESS_STATUS.REFERRED, "Referred");
+        Assert.assertEquals(CoreConstants.BUSINESS_STATUS.IN_PROGRESS, "In-Progress");
+        Assert.assertEquals(CoreConstants.BUSINESS_STATUS.COMPLETE, "Complete");
+        Assert.assertEquals(CoreConstants.BUSINESS_STATUS.EXPIRED, "Expired");
+    }
+
+    @Test
     public void testGetStockUsageForm() {
         Assert.assertEquals("stock_usage_report", CoreConstants.JSON_FORM.getStockUsageForm());
     }
