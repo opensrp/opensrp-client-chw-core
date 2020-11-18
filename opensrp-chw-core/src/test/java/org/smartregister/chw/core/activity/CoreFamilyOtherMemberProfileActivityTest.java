@@ -47,8 +47,8 @@ public class CoreFamilyOtherMemberProfileActivityTest extends BaseUnitTest {
         //Auto login by default
         String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        context.configuration().getDrishtiApplication().setPassword(password);
-        context.session().setPassword(password);
+        //context.configuration().getDrishtiApplication().setPassword(password);
+        //context.session().setPassword(password);
 
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.INTENT_KEY.CHILD_COMMON_PERSON, commonPersonObjectClient);

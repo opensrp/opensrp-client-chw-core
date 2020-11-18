@@ -62,10 +62,10 @@ public class CoreChildProfileActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
-        String password = "pwd";
+        //String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        context.configuration().getDrishtiApplication().setPassword(password);
-        context.session().setPassword(password);
+        //context.configuration().getDrishtiApplication().setPassword(password);
+        //context.session().setPassword(password);
 
         controller = Robolectric.buildActivity(CoreChildProfileActivity.class).create().start();
         activity = controller.get();

@@ -6,11 +6,17 @@ import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CoreFamilyRegisterActivityTestImpl extends CoreFamilyRegisterActivity {
     @Override
     protected BaseRegisterFragment getRegisterFragment() {
         return Mockito.mock(BaseRegisterFragment.class);
+    }
+
+    @Override
+    public void startFormActivity(String s, String s1, Map<String, String> map) {
+
     }
 
     public List<String> getViewIdentifiers() {
