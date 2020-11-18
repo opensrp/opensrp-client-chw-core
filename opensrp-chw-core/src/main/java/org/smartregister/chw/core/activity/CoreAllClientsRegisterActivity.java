@@ -15,6 +15,8 @@ import org.smartregister.opd.contract.OpdRegisterActivityContract;
 import org.smartregister.opd.presenter.BaseOpdRegisterActivityPresenter;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
+import java.util.Map;
+
 public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
 
     @Override
@@ -50,6 +52,11 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
         if (menu != null) {
             menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.ALL_CLIENTS);
         }
+    }
+
+    @Override
+    public void startFormActivity(String s, String s1, Map<String, String> map) {
+        // to do
     }
 
     @Override
