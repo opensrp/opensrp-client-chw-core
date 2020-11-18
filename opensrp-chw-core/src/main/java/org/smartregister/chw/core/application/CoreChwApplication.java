@@ -39,8 +39,8 @@ import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
+import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.activity.DrishtiApplication;
-import org.smartregister.view.activity.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
     private ECSyncHelper ecSyncHelper;
-    private String password;
     private UniqueIdRepository uniqueIdRepository;
     private HIA2IndicatorsRepository hIA2IndicatorsRepository;
     private DailyTalliesRepository dailyTalliesRepository;
@@ -155,7 +154,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
 
     @Override
     public void logoutCurrentUser() {
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), BaseLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -164,6 +163,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         context.userService().logoutSession();
     }
 
+    /*
     @Override
     public String getPassword() {
         if (password == null) {
@@ -172,6 +172,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         }
         return password;
     }
+     */
 
     @Override
     public ClientProcessorForJava getClientProcessor() {
