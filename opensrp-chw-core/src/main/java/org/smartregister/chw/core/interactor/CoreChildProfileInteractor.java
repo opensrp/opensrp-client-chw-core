@@ -484,7 +484,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                childBaseEntityId = getBaseEntityID(thinkMdId);
+                String childBaseEntityId = getBaseEntityID(thinkMdId);
                 // creating the event to sync with server
                 if (childBaseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
@@ -494,9 +494,9 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                     for (Obs obs : carePlanEvent.getObs()) {
                         if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
                         if (obs.getFormSubmissionField().equals("carePlanDate")) {
-                            updateLocalStorage("care_plan_date", String.valueOf(obs.getValue()));
+                            updateLocalStorage(childBaseEntityId, "care_plan_date", String.valueOf(obs.getValue()));
                         } else if (obs.getFormSubmissionField().equals("generatedDiv")) {
-                            updateLocalStorage("html_assessment", String.valueOf(obs.getValue()));
+                            updateLocalStorage(childBaseEntityId,"html_assessment", String.valueOf(obs.getValue()));
                         }
                     }
 
@@ -512,7 +512,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         appExecutors.diskIO().execute(runnable);
     }
 
-    private void updateLocalStorage(String fieldName, String fieldValue) {
+    private void updateLocalStorage(String childBaseEntityId, String fieldName, String fieldValue) {
         if (getChildAllCommonsRepository() != null) {
             ContentValues values = new ContentValues();
             values.put(fieldName, fieldValue);

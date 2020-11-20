@@ -25,6 +25,10 @@ public class WebViewActivity extends AppCompatActivity {
         if (getIntent().hasExtra(CONTENT_TO_DISPLAY) &&
                 getIntent().getStringExtra(CONTENT_TO_DISPLAY) != null) {
             String contentToDisplay = getIntent().getStringExtra(CONTENT_TO_DISPLAY);
+
+            contentToDisplay = contentToDisplay.replace("&lt;", "<")
+                    .replace("&gt;", ">");
+
             WebView webView = findViewById(R.id.web_view);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadDataWithBaseURL(null, contentToDisplay, "text/html", "utf-8", null);

@@ -584,9 +584,10 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     }
 
     @Override
-    public void finishActivity() {
-        this.finish();
+    public void thinkMdAssessmentProcessed() {
+        invalidateOptionsMenu();
     }
+
 
     protected View.OnClickListener getSickListener() {
         return null;

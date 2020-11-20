@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.core.domain.VisitSummary;
@@ -378,19 +379,27 @@ public class VisitDao extends AbstractDao {
     }
 
     public static String getMUACValue(String baseEntityID) {
-        String sql = String.format("select details, max(visit_date)  \n" +
+        String sql = String.format("select details, human_readable_details  \n" +
                 "                from visit_details d  \n" +
                 "                inner join visits v on v.visit_id = d.visit_id COLLATE NOCASE  \n" +
                 "                where base_entity_id = '%s' COLLATE NOCASE \n" +
                 "                and visit_key == 'muac'", baseEntityID);
 
-        DataMap<String> dataMap = c -> getCursorValue(c, "details");
+        DataMap<VisitDetail> dataMap = c -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setHumanReadable(getCursorValue(c, "human_readable_details"));
+            detail.setDetails(getCursorValue(c, "details"));
+            return detail;
+        };
 
-        List<String> values = AbstractDao.readData(sql, dataMap);
+        List<VisitDetail> values = AbstractDao.readData(sql, dataMap);
         if (values == null || values.size() == 0)
             return "";
-
-        return values.get(0) == null ? "" : values.get(0); // Return a default value of Low
+        else {
+            if (StringUtils.isNotBlank(values.get(0).getHumanReadable()))
+                return values.get(0).getHumanReadable();
+            else return values.get(0).getDetails();
+        }
     }
 
 }

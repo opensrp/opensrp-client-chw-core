@@ -105,7 +105,7 @@ public interface CoreChildProfileContract {
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
 
-        void finishActivity();
+        void thinkMdAssessmentProcessed();
     }
 
     interface Presenter extends BaseProfileContract.Presenter {

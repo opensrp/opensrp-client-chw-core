@@ -450,7 +450,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     public void carePlanEventCreated() {
         if (getView() == null) return;
         getView().displayToast(R.string.thinkmd_assessment_saved);
-        getView().finishActivity();
+        getView().thinkMdAssessmentProcessed();
     }
 
     @Override
