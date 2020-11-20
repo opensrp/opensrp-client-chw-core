@@ -746,5 +746,4 @@
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">View vaccine history</string>
     <string name="see_vaccines_due_today">See vaccines due today</string>
-    <string name="anc_home_visit_delivery_kit_received">Delivery kit received</string>
 </resources>
