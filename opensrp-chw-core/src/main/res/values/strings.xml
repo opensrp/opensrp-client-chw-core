@@ -299,6 +299,7 @@
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
     <string name="anc_card">ANC Card</string>
+    <string name="delivery_kit">Delivery Kit</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -745,4 +746,5 @@
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">View vaccine history</string>
     <string name="see_vaccines_due_today">See vaccines due today</string>
+    <string name="anc_home_visit_delivery_kit_received">Delivery kit received</string>
 </resources>

@@ -286,6 +286,7 @@
 
     <string name="anc_health_facility_visits">MAHUDHURIO YA KLINIKI YA WAJAWAZITO KWENYE KITUO CHA KUTOLEA HUDUMA ZA AFYA. </string>
     <string name="anc_card">Kadi ya kliniki ya mjamzito</string>
+    <string name="delivery_kit">Kitanda cha Uwasilishaji</string>
     <string name="anc_tt_immunization">CHANJO YA PEPOPUNDA</string>
     <string name="anc_iptp_sp">DOZI YA IPTp-SP</string>
     <string name="urine_analysis">Kipimo kwenye njia ya mkojo</string>
