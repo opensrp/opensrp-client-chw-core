@@ -301,6 +301,7 @@
     <string name="ifa_received_status">FAF reçu: {0}</string>
     <string name="tests_done_details">Examens effectués: {0}</string>
     <string name="anc_home_visit_anc_card_received">Carnet CPN reçu</string>
+    <string name="anc_home_visit_delivery_kit_received">Kit de livraison reçu</string>
     <string name="tt_done">VAT{0} - fait {1}</string>
     <string name="iptpsp_done">SP dose{0}- fait {1} </string>
     <string name="one">un</string>

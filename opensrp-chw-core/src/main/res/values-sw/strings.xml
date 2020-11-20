@@ -301,6 +301,7 @@
     <string name="ifa_received_status">Amepewa IFA: {0}</string>
     <string name="tests_done_details">Vipimo vimefanyika: {0}</string>
     <string name="anc_home_visit_anc_card_received">Kadi ya mama mjamzito imepokelewa</string>
+    <string name="anc_home_visit_delivery_kit_received">Vifaa vya kujifungua vimepokelewa</string>
     <string name="tt_done">TT{0} - Imefanyika {1}</string>
     <string name="iptpsp_done">Dozi ya IPTp-SP {0}- Imefanyika {1}</string>
     <string name="one">1</string>
