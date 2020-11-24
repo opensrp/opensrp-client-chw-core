@@ -32,6 +32,7 @@ import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
 import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
+import org.smartregister.chw.core.adapter.NavigationAdapterHost;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.model.NavigationModel;
@@ -56,7 +57,7 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener , NavigationAdapterHost {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -75,6 +76,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private NavigationContract.Presenter mPresenter;
     private View parentView;
     private Timer timer;
+    private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
                                            NavigationModel.Flavor modelFlavor, Map<String, Class> registeredActivities, boolean showDeviceToDeviceSync) {
@@ -288,10 +290,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (recyclerView != null) {
 
             List<NavigationOption> navigationOptions = mPresenter.getOptions();
-            if (navigationAdapter == null) {
-                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities);
-            }
-
+            navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -481,6 +480,16 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         return drawer;
     }
 
+    @Override
+    public String getSelectedView() {
+        return NavigationMenu.selectedView;
+    }
+
+    @Override
+    public void setSelectedView(String selectedView) {
+        NavigationMenu.selectedView = selectedView;
+    }
+  
     public static String getChildNavigationCountString(){
        return menuFlavor.childNavigationMenuCountString();
     }

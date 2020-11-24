@@ -91,11 +91,12 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
             if (iconsLayout.getChildCount() > 3) {
                 TextView counterTextView = (TextView) iconsLayout.getChildAt(iconsLayout.getChildCount() - 1);
                 counterTextView.setText(context.getString(R.string.icons_counter, Integer.parseInt(counterTextView.getText().toString().substring(1)) + 1));
+                counterTextView.setTextSize(context.getResources().getDimension(R.dimen.family_register_text_size));
             } else if (iconsLayout.getChildCount() == 3) {
                 addCounterTextView(iconsLayout);
             } else {
                 ImageView imageView = new ImageView(context);
-                int size = convertDpToPixel(22, context);
+                int size = (int) context.getResources().getDimension(R.dimen.family_register_image_size);//convertDpToPixel(22, context);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.gravity = Gravity.CENTER;
                 imageView.setLayoutParams(layoutParams);
@@ -112,7 +113,7 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
         counterTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         counterTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.counter_drawable));
         counterTextView.setText(context.getString(R.string.icons_counter, 1));
-        int size = convertDpToPixel(34, context);
+        int size = (int) context.getResources().getDimension(R.dimen.family_register_count_size);//convertDpToPixel(34, context);
         counterTextView.getLayoutParams().height = size;
         counterTextView.getLayoutParams().width = size;
         counterTextView.setGravity(Gravity.CENTER);
