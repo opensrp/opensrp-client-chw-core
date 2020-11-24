@@ -161,7 +161,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     }
 
     private int getMonthsDifference(LocalDate date1, LocalDate date2) {
-        return Months.monthsBetween( date1.withDayOfMonth(1), date2.withDayOfMonth(1)).getMonths();
+        return Months.monthsBetween(date1.withDayOfMonth(1), date2.withDayOfMonth(1)).getMonths();
     }
 
     private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
@@ -260,7 +260,8 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     protected void initializeNotificationReferralRecyclerView() {
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
         notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (notificationAndReferralRecyclerView != null)
+            notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

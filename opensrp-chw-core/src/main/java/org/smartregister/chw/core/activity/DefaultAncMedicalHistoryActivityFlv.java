@@ -25,6 +25,7 @@ import java.util.TreeMap;
 public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedicalHistoryActivity.Flavor {
 
     protected LinearLayout linearLayoutAncCard;
+    protected LinearLayout linearLayoutDeliveryKit;
     protected LinearLayout linearLayoutHealthFacilityVisit;
     protected LinearLayout linearLayoutHealthFacilityVisitDetails;
     protected LayoutInflater inflater;
@@ -33,6 +34,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
     private LinearLayout linearLayoutIPTp, linearLayoutIPTpDetails;
     private TextView customFontTextViewLastVisit;
     private TextView customFontTextViewAncCard;
+    private TextView customFontTextViewDeliveryKit;
 
     @Override
     public View bindViews(Activity activity) {
@@ -41,6 +43,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
         linearLayoutLastVisit = view.findViewById(R.id.linearLayoutLastVisit);
         linearLayoutAncCard = view.findViewById(R.id.linearLayoutAncCard);
+        linearLayoutDeliveryKit = view.findViewById(R.id.linearLayoutDeliveryKit);
         linearLayoutHealthFacilityVisit = view.findViewById(R.id.linearLayoutHealthFacilityVisit);
         linearLayoutHealthFacilityVisitDetails = view.findViewById(R.id.linearLayoutHealthFacilityVisitDetails);
         linearLayoutTTImmunization = view.findViewById(R.id.linearLayoutTTImmunization);
@@ -49,6 +52,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
         linearLayoutIPTpDetails = view.findViewById(R.id.linearLayoutIPTpDetails);
         customFontTextViewLastVisit = view.findViewById(R.id.customFontTextViewLastVisit);
         customFontTextViewAncCard = view.findViewById(R.id.customFontTextViewAncCard);
+        customFontTextViewDeliveryKit = view.findViewById(R.id.customFontTextViewDeliveryKit);
         return view;
     }
 
@@ -59,6 +63,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
             int days = 0;
             String has_card = "No";
+            String has_delivery_kit = "No";
             List<Map<String, String>> hf_visits = new ArrayList<>();
             Map<String, String> immunizations = new HashMap<>();
             Map<String, String> services = new HashMap<>();
@@ -80,6 +85,15 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
                 }
 
+                // delivery kiy
+                if (has_delivery_kit.equalsIgnoreCase("No")) {
+                    List<VisitDetail> details = visits.get(x).getVisitDetails().get("delivery_kit");
+                    if (details != null && StringUtils.isNotBlank(details.get(0).getHumanReadable())) {
+                        has_delivery_kit = details.get(0).getHumanReadable();
+                    }
+
+                }
+
 
                 String[] hf_params = {"anc_hf_visit_date", "weight", "sys_bp", "dia_bp", "hb_level", "ifa_received", "tests_done"};
                 extractHFVisit(visits, hf_params, hf_visits, x, context);
@@ -91,6 +105,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
             processLastVisit(days, context);
             processAncCard(has_card, context);
+            processDeliveryKit(has_delivery_kit, context);
             processHealthFacilityVisit(hf_visits, context);
             processTTImmunization(immunizations, context);
             processIPTp(services, context);
@@ -181,6 +196,11 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
     protected void processAncCard(String has_card, Context context) {
         linearLayoutAncCard.setVisibility(View.VISIBLE);
         customFontTextViewAncCard.setText(MessageFormat.format("{0}: {1}", context.getString(R.string.anc_home_visit_anc_card_received), getTranslatedText(context, has_card.toLowerCase())));
+    }
+
+    protected void processDeliveryKit(String has_delivery_kit, Context context) {
+        linearLayoutDeliveryKit.setVisibility(View.VISIBLE);
+        customFontTextViewDeliveryKit.setText(MessageFormat.format("{0}: {1}", context.getString(R.string.anc_home_visit_delivery_kit_received), getTranslatedText(context, has_delivery_kit.toLowerCase())));
     }
 
     protected void processHealthFacilityVisit(List<Map<String, String>> hf_visits, Context context) {
