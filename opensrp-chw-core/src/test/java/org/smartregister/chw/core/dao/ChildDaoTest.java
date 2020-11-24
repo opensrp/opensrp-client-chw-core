@@ -108,7 +108,9 @@ public class ChildDaoTest extends ChildDao {
     @Test
     public void testIsChildReturnsFalse() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
+
         boolean status = ChildDao.isChild("123456");
+
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
         Assert.assertFalse(status);
     }
