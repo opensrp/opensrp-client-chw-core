@@ -74,7 +74,6 @@ public class CoreFamilyRemoveMemberPresenterTest {
         PowerMockito.doNothing().when(presenterSpy, "startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
         Assert.assertNotNull(commonPersonClient);
         removeMemberPresenter.removeMember(commonPersonClient);
-//        PowerMockito.verifyPrivate(presenterSpy).invoke("startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
     }
 
 
