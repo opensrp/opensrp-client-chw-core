@@ -14,6 +14,7 @@ import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
@@ -32,6 +33,7 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
     protected static String unique_id;
     protected static String familyBaseEntityId;
     protected static String familyName;
+    protected static String lastMenstrualPeriod;
 
     public static String getFormTable() {
         if (form_name != null && form_name.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
@@ -112,6 +114,13 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
             values.put(CoreConstants.JsonAssets.FAM_NAME, familyName);
             values.put(CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER, phone_number);
             values.put(org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
+            values.put(DBConstants.KEY.LAST_MENSTRUAL_PERIOD, lastMenstrualPeriod);
+            try {
+                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "delivery_date");
+                min_date.put("min_date", lastMenstrualPeriod);
+            }catch (Exception e){
+                Timber.e(e);
+            }
 
             FormUtils.updateFormField(jsonArray, values);
 

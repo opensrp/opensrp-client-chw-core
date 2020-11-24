@@ -71,9 +71,13 @@ public interface CoreChildProfileContract {
 
         void setFamilyHasNothingDue();
 
+        void setFamilyHasNothingElseDue();
+
         void setFamilyHasServiceDue();
 
         void setFamilyHasServiceOverdue();
+
+        void setNoButtonView();
 
         void setDueTodayServices();
 
