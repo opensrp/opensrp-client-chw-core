@@ -72,11 +72,4 @@ public class CoreFamilyMemberFloatingMenuTest {
         Mockito.verify(coreFamilyMemberFloatingMenu, Mockito.times(1)).reDraw(captor.capture());
         Assert.assertEquals(captor.getValue(), true);
     }
-
-    @Test
-    public void testGetCallLayout() {
-        Mockito.when(coreFamilyMemberFloatingMenu.getCallLayout())
-                .thenReturn(view);
-        Assert.assertEquals(view, coreFamilyMemberFloatingMenu.getCallLayout());
-    }
 }
