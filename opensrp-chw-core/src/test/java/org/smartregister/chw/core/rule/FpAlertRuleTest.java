@@ -18,7 +18,6 @@ import java.util.Date;
 public class FpAlertRuleTest extends BaseRobolectricTest {
 
     private FpAlertRule fpAlertRule;
-    private String dateTimeFormat = "dd-MM-yyyy HH:mm:ss";
     private DateTime lastVisitDate;
     private DateTime dueDate;
     private DateTime expiryDate;
