@@ -3,8 +3,6 @@ package org.smartregister.chw.core.rule;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,10 +19,10 @@ public class FpAlertRuleTest extends BaseRobolectricTest {
 
     private FpAlertRule fpAlertRule;
     private String dateTimeFormat = "dd-MM-yyyy HH:mm:ss";
-    DateTime lastVisitDate;
-    DateTime dueDate;
-    DateTime expiryDate;
-    DateTime overDueDate;
+    private DateTime lastVisitDate;
+    private DateTime dueDate;
+    private DateTime expiryDate;
+    private DateTime overDueDate;
 
     @Before
     public void setUp() throws ParseException {
