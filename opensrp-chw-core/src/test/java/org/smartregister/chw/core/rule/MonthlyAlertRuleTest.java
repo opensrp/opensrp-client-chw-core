@@ -15,7 +15,7 @@ import java.util.Date;
  * Created by Qazi Abubakar
  */
 public class MonthlyAlertRuleTest {
-    Context context = RuntimeEnvironment.application;
+    private final Context context = RuntimeEnvironment.application;
     private final long lastVisitDate = new DateTime().minusDays(7).toDate().getTime();
     private final long dateCreated = new DateTime().minusDays(30).toDate().getTime();
     private final MonthlyAlertRule monthlyAlertRule = new MonthlyAlertRule(context, lastVisitDate, dateCreated) {
