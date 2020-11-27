@@ -20,7 +20,7 @@ public abstract class MonthlyAlertRule implements ICommonRule {
     public String visitMonthName;
     private LocalDate dateCreated;
     private LocalDate todayDate;
-    private LocalDate lastVisitDate;
+    public LocalDate lastVisitDate;
     private Context context;
 
     public MonthlyAlertRule(Context context, long lastVisitDateLong, long dateCreatedLong) {
@@ -94,11 +94,11 @@ public abstract class MonthlyAlertRule implements ICommonRule {
         return (lastVisitDate != null) && isVisitThisMonth(lastVisitDate, todayDate);
     }
 
-    private Date getFirstDayOfMonth(Date refDate) {
+    public Date getFirstDayOfMonth(Date refDate) {
         return new DateTime(refDate).withDayOfMonth(1).toDate();
     }
 
-    protected Date getLastDayOfMonth(Date refDate) {
+    public Date getLastDayOfMonth(Date refDate) {
         DateTime first = new DateTime(refDate).withDayOfMonth(1);
         return first.plusMonths(1).minusDays(1).toDate();
     }
@@ -117,7 +117,7 @@ public abstract class MonthlyAlertRule implements ICommonRule {
         }
     }
 
-    private Date getLastDueDate() {
+    public Date getLastDueDate() {
         if (lastVisitDate != null && getFirstDayOfMonth(lastVisitDate.toDate()).getTime() < dateCreated.toDate().getTime()) {
             return getFirstDayOfMonth(lastVisitDate.toDate());
         } else {
