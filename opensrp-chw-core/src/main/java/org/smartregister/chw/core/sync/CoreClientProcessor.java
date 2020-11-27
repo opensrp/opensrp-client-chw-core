@@ -189,9 +189,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
+            case CoreConstants.EventType.FAMILY_KIT:
+                processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.FAMILY_KIT);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
             case CoreConstants.EventType.WASH_CHECK:
-            case CoreConstants.EventType.FAMILY_KIT:
             case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
