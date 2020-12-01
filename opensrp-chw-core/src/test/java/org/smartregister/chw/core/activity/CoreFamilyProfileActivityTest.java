@@ -23,6 +23,7 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreFamilyProfileActivityTestImpl;
 import org.smartregister.chw.core.custom_views.FamilyFloatingMenu;
+import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -46,10 +47,7 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
-        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        context.configuration().getDrishtiApplication().setPassword(password);
-        context.session().setPassword(password);
 
         controller = Robolectric.buildActivity(CoreFamilyProfileActivityTestImpl.class).create().start();
         activity = controller.get();
@@ -67,7 +65,11 @@ public class CoreFamilyProfileActivityTest extends BaseUnitTest {
 
     @Test
     public void testSetupViews() {
+        activity.setTheme(org.smartregister.R.style.AppTheme); //we need this here
+        activity.setContentView(R.layout.activity_family_profile);
+        ReflectionHelpers.setField(activity, "presenter", Mockito.mock(CoreFamilyProfilePresenter.class));
         activity.setupViews();
+
         Assert.assertNotNull(ReflectionHelpers.getField(activity, "familyFloatingMenu"));
     }
 

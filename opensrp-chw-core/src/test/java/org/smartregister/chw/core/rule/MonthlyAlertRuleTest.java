@@ -2,6 +2,7 @@ package org.smartregister.chw.core.rule;
 
 import android.content.Context;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +14,11 @@ import org.smartregister.chw.core.BaseRobolectricTest;
 import org.smartregister.chw.core.implementation.MonthlyAlertRuleImpl;
 
 import java.util.Date;
+
+
+/**
+ * Created by Qazi Abubakar
+ */
 
 public class MonthlyAlertRuleTest extends BaseRobolectricTest {
 
@@ -34,5 +40,21 @@ public class MonthlyAlertRuleTest extends BaseRobolectricTest {
         ReflectionHelpers.setField(monthlyAlertRule, "lastVisitDate", lastVisitDate);
 
         Assert.assertEquals(firstDayOfThisMonth, Whitebox.invokeMethod(monthlyAlertRule, "getLastDueDate"));
+    }
+    
+    @Test
+    public void testGetLastDayOfMonth(){
+        DateTime first = new DateTime(new Date()).withDayOfMonth(1);
+        Date lastDate = first.plusMonths(1).minusDays(1).toDate();
+        Assert.assertNotEquals(first.toDate(), monthlyAlertRule.getLastDayOfMonth(new Date()));
+        Assert.assertEquals(lastDate.toString(), monthlyAlertRule.getLastDayOfMonth(new Date()).toString());
+    }
+
+    @Test
+    public void testGetFirstDayOfMonth(){
+        DateTime first = new DateTime(new Date()).withDayOfMonth(1);
+        Date lastDate = first.plusMonths(1).minusDays(1).toDate();
+        Assert.assertEquals(first.toDate(), monthlyAlertRule.getFirstDayOfMonth(new Date()));
+        Assert.assertNotEquals(lastDate, monthlyAlertRule.getFirstDayOfMonth(new Date()));
     }
 }

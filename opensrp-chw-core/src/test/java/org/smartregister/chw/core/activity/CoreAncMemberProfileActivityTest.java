@@ -1,22 +1,38 @@
 package org.smartregister.chw.core.activity;
 
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.impl.CoreAncMemberProfileActivityImpl;
+import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.domain.AlertStatus;
 
-public class CoreAncMemberProfileActivityTest {
+import timber.log.Timber;
+
+public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
 
     private CoreAncMemberProfileActivity activity;
 
-    private View viewFamilyRow = new View(RuntimeEnvironment.systemContext);
+    private ActivityController<CoreAncMemberProfileActivityImpl> controller;
 
     @Mock
     private MemberObject memberObject;
@@ -24,11 +40,34 @@ public class CoreAncMemberProfileActivityTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        activity = Mockito.mock(CoreAncMemberProfileActivity.class, Mockito.CALLS_REAL_METHODS);
-        String baseEntityId = "base-entity-id";
-        memberObject.setBaseEntityId(baseEntityId);
+
+        MockitoAnnotations.initMocks(this);
+
+        Context context = Context.getInstance();
+        CoreLibrary.init(context);
+
+        //Auto login by default
+        context.session().start(context.session().lengthInMilliseconds());
+
+        controller = Robolectric.buildActivity(CoreAncMemberProfileActivityImpl.class).create().start();
+        activity = controller.get();
+        memberObject = Mockito.mock(MemberObject.class);
+        memberObject.setBaseEntityId("some-base-entity-id");
+        memberObject.setFamilyName("Some Family Name");
+
         ReflectionHelpers.setField(activity, "memberObject", memberObject);
+        View viewFamilyRow = new View(RuntimeEnvironment.systemContext);
         ReflectionHelpers.setField(activity, "view_family_row", viewFamilyRow);
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+            controller.pause().stop().destroy(); //destroy controller if we can
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     @Test
@@ -38,7 +77,58 @@ public class CoreAncMemberProfileActivityTest {
     }
 
     @Test
+    public void testOnOptionsItemSelected() {
+        activity = Mockito.spy(activity);
+
+        MenuItem menuItem = Mockito.mock(MenuItem.class);
+        CoreConstants.JSON_FORM.setLocaleAndAssetManager(activity.getApplicationContext().getResources().getConfiguration().locale, activity.getApplicationContext().getAssets());
+
+        // back pressed
+        Mockito.doReturn(android.R.id.home).when(menuItem).getItemId();
+        Mockito.doNothing().when(activity).onBackPressed();
+
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).onBackPressed();
+
+        // start form
+        Mockito.doReturn(R.id.action_anc_member_registration).when(menuItem).getItemId();
+        Mockito.doNothing().when(activity).startFormForEdit(Mockito.any(), Mockito.any());
+
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startFormForEdit(Mockito.eq(R.string.edit_member_form_title), Mockito.any());
+
+
+        // start form
+        Mockito.doReturn(R.id.action_anc_registration).when(menuItem).getItemId();
+        Mockito.doNothing().when(activity).startFormForEdit(Mockito.any(), Mockito.any());
+
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startFormForEdit(Mockito.eq(R.string.edit_anc_registration_form_title), Mockito.any());
+
+        // start form
+        Mockito.doReturn(R.id.anc_danger_signs_outcome).when(menuItem).getItemId();
+        CoreAncMemberProfilePresenter presenter = Mockito.mock(CoreAncMemberProfilePresenter.class);
+        ReflectionHelpers.setField(activity, "presenter", presenter);
+
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(presenter).startAncDangerSignsOutcomeForm(memberObject);
+    }
+
+    @Test
+    public void testSetFamilyStatus() {
+        ReflectionHelpers.setField(activity, "rlFamilyServicesDue", Mockito.mock(RelativeLayout.class));
+        ReflectionHelpers.setField(activity, "tvFamilyStatus", Mockito.mock(TextView.class));
+
+        activity.setFamilyStatus(AlertStatus.complete);
+        Assert.assertFalse(ReflectionHelpers.getField(activity, "hasDueServices"));
+
+        activity.setFamilyStatus(AlertStatus.normal);
+        Assert.assertTrue(ReflectionHelpers.getField(activity, "hasDueServices"));
+    }
+
+    @Test
     public void openFamilyLocationStartsAncMemberMapActivity() {
+        activity = Mockito.spy(activity);
         activity.openFamilyLocation();
         Mockito.verify(activity).startActivity(Mockito.any());
     }

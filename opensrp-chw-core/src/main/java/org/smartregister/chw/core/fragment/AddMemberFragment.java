@@ -83,7 +83,7 @@ public class AddMemberFragment extends DialogFragment implements View.OnClickLis
                 ((CoreFamilyProfileActivity) context).startChildForm(CoreConstants.JSON_FORM.getChildRegister(), "", "", "");
                 dismiss();
             } else if (i == R.id.layout_add_other_family_member) {
-                ((CoreFamilyProfileActivity) context).startFormActivity(CoreConstants.JSON_FORM.getFamilyMemberRegister(), null, null);
+                ((CoreFamilyProfileActivity) context).startFormActivity(CoreConstants.JSON_FORM.getFamilyMemberRegister(), null, "");
                 dismiss();
             }
         } catch (Exception e) {
