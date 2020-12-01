@@ -16,23 +16,19 @@ import java.util.Date;
 
 public class MonthlyAlertRuleTest extends BaseRobolectricTest {
 
-    private LocalDate dateCreated;
-    private LocalDate todayDate;
-    private LocalDate lastVisitDate;
-    private Context context;
     private MonthlyAlertRule monthlyAlertRule;
 
     @Before
     public void setUp() {
-        context = RuntimeEnvironment.application;
+        Context context = RuntimeEnvironment.application;
         monthlyAlertRule = new MonthlyAlertRuleImpl(context, new Date().getTime(), new Date().getTime());
     }
 
     @Test
     public void lastDueDateIs1stIfLastVisitEarlierThanCreated() throws Exception {
         Date firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1).toDate();
-        dateCreated = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(2);
-        lastVisitDate = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(1);
+        LocalDate dateCreated = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(2);
+        LocalDate lastVisitDate = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(1);
 
         ReflectionHelpers.setField(monthlyAlertRule, "dateCreated", dateCreated);
         ReflectionHelpers.setField(monthlyAlertRule, "lastVisitDate", lastVisitDate);
