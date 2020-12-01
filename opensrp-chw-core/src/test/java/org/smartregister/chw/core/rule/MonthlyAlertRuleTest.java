@@ -2,9 +2,7 @@ package org.smartregister.chw.core.rule;
 
 import android.content.Context;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
