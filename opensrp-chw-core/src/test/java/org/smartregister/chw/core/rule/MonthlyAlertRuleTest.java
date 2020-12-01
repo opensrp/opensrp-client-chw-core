@@ -3,31 +3,41 @@ package org.smartregister.chw.core.rule;
 import android.content.Context;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.chw.core.implementation.MonthlyAlertRuleImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by Qazi Abubakar
  */
 public class MonthlyAlertRuleTest {
-    private final Context context = RuntimeEnvironment.application;
-    private final long lastVisitDate = new DateTime().minusDays(7).toDate().getTime();
-    private final long dateCreated = new DateTime().minusDays(30).toDate().getTime();
-    private final MonthlyAlertRule monthlyAlertRule = new MonthlyAlertRule(context, lastVisitDate, dateCreated) {
-        @Override
-        public String getRuleKey() {
-            return "familyKitAlertRule";
-        }
-    };
+
+    private MonthlyAlertRule monthlyAlertRule;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        Context context = RuntimeEnvironment.application;
+        monthlyAlertRule = new MonthlyAlertRuleImpl(context, new Date().getTime(), new Date().getTime());
+    }
+
+    @Test
+    public void lastDueDateIs1stIfLastVisitEarlierThanCreated() throws Exception {
+        Date firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1).toDate();
+        LocalDate dateCreated = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(2);
+        LocalDate lastVisitDate = LocalDate.fromDateFields(firstDayOfThisMonth).plusWeeks(1);
+
+        ReflectionHelpers.setField(monthlyAlertRule, "dateCreated", dateCreated);
+        ReflectionHelpers.setField(monthlyAlertRule, "lastVisitDate", lastVisitDate);
+
+        Assert.assertEquals(firstDayOfThisMonth, Whitebox.invokeMethod(monthlyAlertRule, "getLastDueDate"));
     }
 
     @Test
@@ -42,7 +52,10 @@ public class MonthlyAlertRuleTest {
     public void testGetFirstDayOfMonth(){
         DateTime first = new DateTime(new Date()).withDayOfMonth(1);
         Date lastDate = first.plusMonths(1).minusDays(1).toDate();
-        Assert.assertEquals(first.toDate(), monthlyAlertRule.getFirstDayOfMonth(new Date()));
-        Assert.assertNotEquals(lastDate, monthlyAlertRule.getFirstDayOfMonth(new Date()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Assert.assertEquals(sdf.format(first.toDate()), sdf.format(monthlyAlertRule.getFirstDayOfMonth(new Date())));
+        Assert.assertNotEquals(sdf.format(lastDate), sdf.format(monthlyAlertRule.getFirstDayOfMonth(new Date())));
     }
 }
