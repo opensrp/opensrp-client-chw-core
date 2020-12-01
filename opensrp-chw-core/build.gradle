@@ -260,9 +260,7 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
 
-    api('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
+    api 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     androidTestImplementation 'org.mockito:mockito-android:3.0.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
