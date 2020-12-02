@@ -42,9 +42,9 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
     protected List<Visit> visits;
     protected Map<String, List<Visit>> visitMap = new LinkedHashMap<>();
     protected Map<String, List<Vaccine>> vaccineMap = new LinkedHashMap<>();
-    private Context context;
+    protected Context context;
     private LinearLayout parentView;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+    protected SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
     @Override
     public View bindViews(Activity activity) {
@@ -271,7 +271,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         };
     }
 
-    private VisitDetailsFormatter getDieataryFormatter() {
+    protected VisitDetailsFormatter getDieataryFormatter() {
         return (title, details, visitDate) -> {
             String diet_diversity = NCUtils.getText(details);
             String value = "";
@@ -423,7 +423,7 @@ public abstract class DefaultChildMedicalHistoryActivityFlv implements CoreChild
         }
     }
 
-    private interface VisitDetailsFormatter {
+    protected interface VisitDetailsFormatter {
         String format(String title, List<VisitDetail> details, Date visitDate);
     }
 }
