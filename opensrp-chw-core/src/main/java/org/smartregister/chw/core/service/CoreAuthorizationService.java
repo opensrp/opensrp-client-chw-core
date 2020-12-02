@@ -26,11 +26,21 @@ public class CoreAuthorizationService implements P2PAuthorizationService {
 
     private Map<String, Object> authorizationDetails = new HashMap<>();
 
+    private boolean checkTeamId;
+
+    public CoreAuthorizationService(boolean checkTeamId) {
+        this.checkTeamId = checkTeamId;
+    }
+
+    public CoreAuthorizationService() {
+        this.checkTeamId = true;
+    }
+
     @Override
     public void authorizeConnection(@NonNull final Map<String, Object> peerDeviceMap, @NonNull final AuthorizationCallback authorizationCallback) {
         getAuthorizationDetails(map -> {
             Object peerDeviceTeamId = peerDeviceMap.get(AllConstants.PeerToPeer.KEY_TEAM_ID);
-            if (peerDeviceTeamId instanceof String
+            if (!checkTeamId || peerDeviceTeamId instanceof String
                     && peerDeviceTeamId.equals(map.get(AllConstants.PeerToPeer.KEY_TEAM_ID))) {
                 Object peerDeviceLocationId = peerDeviceMap.get(CoreConstants.PEER_TO_PEER.LOCATION_ID);
                 Object myLocationId = authorizationDetails.get(CoreConstants.PEER_TO_PEER.LOCATION_ID);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.NavigationListener;
 import org.smartregister.chw.core.model.NavigationOption;
@@ -23,27 +24,25 @@ import java.util.Map;
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.MyViewHolder> {
 
     private List<NavigationOption> navigationOptionList;
-    private String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
     private View.OnClickListener onClickListener;
     private Context context;
     private Map<String, Class> registeredActivities;
+    private NavigationAdapterHost host;
 
-    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities) {
+    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities, NavigationAdapterHost host) {
         this.navigationOptionList = navigationOptions;
         this.context = context;
         this.onClickListener = new NavigationListener(context, this);
         this.registeredActivities = registeredActivities;
+        this.host = host;
     }
 
     public String getSelectedView() {
-        if (selectedView == null || selectedView.equals(""))
-            setSelectedView(CoreConstants.DrawerMenu.ALL_FAMILIES);
-
-        return selectedView;
+        return StringUtils.isBlank(host.getSelectedView()) ? CoreConstants.DrawerMenu.ALL_FAMILIES : host.getSelectedView();
     }
 
     public void setSelectedView(String selectedView) {
-        this.selectedView = selectedView;
+        host.setSelectedView(selectedView);
         this.notifyDataSetChanged();
     }
 
@@ -65,7 +64,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         holder.getView().setTag(model.getMenuTitle());
 
 
-        if (selectedView != null && selectedView.equals(model.getMenuTitle())) {
+        if (host.getSelectedView().equals(model.getMenuTitle())) {
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.ivIcon.setImageResource(model.getResourceActiveID());

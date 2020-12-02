@@ -27,6 +27,28 @@ public class CoreConstants {
     public enum FamilyServiceType {DUE, OVERDUE, NOTHING}
 
 
+    interface Properties {
+        String TASK_IDENTIFIER = "taskIdentifier";
+        String TASK_BUSINESS_STATUS = "taskBusinessStatus";
+        String TASK_STATUS = "taskStatus";
+        String TASK_CODE = "taskCode";
+        String LOCATION_UUID = "locationUUID";
+        String LOCATION_VERSION = "locationVersion";
+        String LOCATION_TYPE = "locationType";
+        String LOCATION_PARENT = "locationParent";
+        String LOCATION_ID = "location_id";
+        String FEATURE_SELECT_TASK_BUSINESS_STATUS = "featureSelectTaskBusinessStatus";
+        String BASE_ENTITY_ID = "baseEntityId";
+        String STRUCTURE_NAME = "structure_name";
+        String APP_VERSION_NAME = "appVersionName";
+        String FORM_VERSION = "form_version";
+        String TASK_CODE_LIST = "task_code_list";
+        String FAMILY_MEMBER_NAMES = "family_member_names";
+        String PLAN_IDENTIFIER = "planIdentifier";
+        String STRUCTURE_ID = "structure_id";
+        String TASK_AGGREGATE_STATUS = "taskAggregateStatus";
+    }
+
     public interface DB_CONSTANTS {
         String ID = "_id";
         String FOR = "for";
@@ -61,6 +83,7 @@ public class CoreConstants {
         String ANC_VISIT = "ANC_VISIT";
         String PNC_VISIT = "PNC_VISIT";
         String WASH_CHECK = "WASH_CHECK";
+        String FAMILY_KIT = "FAMILY_KIT";
         String MALARIA_VISIT = "MALARIA_VISIT";
         String FP_VISIT = "FP_VISIT";
         String ROUTINE_HOUSEHOLD_VISIT = "ROUTINE_HOUSEHOLD_VISIT";
@@ -137,6 +160,7 @@ public class CoreConstants {
         public static final String PNC_HOME_VISIT_NOT_DONE = "PNC Home Visit Not Done";
         public static final String PNC_HOME_VISIT_NOT_DONE_UNDO = "PNC Home Visit Not Done Undo";
         public static final String WASH_CHECK = "WASH check";
+        public static final String FAMILY_KIT = "Family Kit";
         public static final String NUTRITION_STATUS_BABY = "Nutrition Status - Baby";
         public static final String REFERRAL_DISMISSAL = "Referral Dismissal";
         public static final String ANC_NOTIFICATION_DISMISSAL = "ANC Notification Dismissal";
@@ -185,6 +209,7 @@ public class CoreConstants {
         private static final String MALARIA_CONFIRMATION = "malaria_confirmation";
         private static final String MALARIA_FOLLOW_UP_VISIT_FORM = "malaria_follow_up_visit";
         private static final String WASH_CHECK = "wash_check";
+        private static final String FAMILY_KIT = "family_kit";
         private static final String CHILD_REFERRAL_FORM = "child_referral_form";
         private static final String ANC_REFERRAL_FORM = "anc_referral_form";
         private static final String STOCK_USAGE_REPORT_FORM = "stock_usage_report";
@@ -342,6 +367,10 @@ public class CoreConstants {
 
         public static String getWashCheck() {
             return Utils.getLocalForm(WASH_CHECK, locale, assetManager);
+        }
+
+        public static String getFamilyKit() {
+            return Utils.getLocalForm(FAMILY_KIT, locale, assetManager);
         }
 
         public static String getRoutineHouseholdVisit() {
@@ -630,6 +659,7 @@ public class CoreConstants {
         public static final String ANC_PREGNANCY_OUTCOME = "ec_pregnancy_outcome";
         public static final String TASK = "task";
         public static final String WASH_CHECK_LOG = "ec_wash_check_log";
+        public static final String FAMILY_KIT_LOG = "ec_family_kit_log";
         public static final String CHILD_REFERRAL = "ec_child_referral";
         public static final String ANC_REFERRAL = "ec_anc_referral";
         public static final String PNC_REFERRAL = "ec_pnc_referral";
@@ -844,6 +874,8 @@ public class CoreConstants {
             public static final String HOME_VISIT_ILLNESS = "illness_information";
             public static final String WASH_CHECK_DETAILS = "details_info";
             public static final String WASH_CHECK_LAST_VISIT = "last_visit";
+            public static final String FAMILY_KIT_DETAILS = "family_kit_details_info";
+            public static final String FAMILY_KIT_LAST_VISIT = "family_kit_last_visit";
             public static final String FAMILY_ID = "family_id";
             public static final String REFERRAL_TASK = "referral_task";
             public static final String REFERRAL_TASK_PREVIOUS_STATUS = "referral_task_previous_status";

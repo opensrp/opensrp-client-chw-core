@@ -164,6 +164,6 @@ public class CoreChildRegisterActivity extends BaseRegisterActivity implements C
 
     @Override
     public void startRegistration() {
-        startFormActivity(Utils.metadata().familyRegister.formName, null, (String) null);
+        startFormActivity(Utils.metadata().familyRegister.formName, null, "");
     }
 }

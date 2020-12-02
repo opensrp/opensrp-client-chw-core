@@ -274,6 +274,7 @@
     <string name="drinking_water">Does the household have access to clean drinking water?</string>
     <string name="hygienic_latrine">Do household members use a hygienic latrine for the disposal of feces?</string>
     <string name="wash_check">WASH check</string>
+    <string name="family_kit">Family Kit</string>
 
     <string name="abv_first">1st</string>
     <string name="abv_second">2nd</string>
@@ -298,6 +299,7 @@
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
     <string name="anc_card">ANC Card</string>
+    <string name="delivery_kit">Delivery Kit</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -313,6 +315,7 @@
     <string name="ifa_received_status">IFA received: {0}</string>
     <string name="tests_done_details">Tests done: {0}</string>
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
+    <string name="anc_home_visit_delivery_kit_received">Delivery kit received</string>
     <string name="tt_done">TT{0} - done {1}</string>
     <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
     <string name="one">1</string>

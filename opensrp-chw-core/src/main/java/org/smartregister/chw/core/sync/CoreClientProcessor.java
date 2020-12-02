@@ -3,6 +3,8 @@ package org.smartregister.chw.core.sync;
 import android.content.ContentValues;
 import android.content.Context;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
@@ -52,6 +54,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -82,7 +85,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             }
 
             // if its an updated vaccine, delete the previous object
-            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
+            //vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -167,7 +170,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return serviceTable;
     }
 
-    protected void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
+    public void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
         switch (eventType) {
             case VaccineIntentService.EVENT_TYPE:
             case VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT:
@@ -184,6 +187,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 break;
             case CoreConstants.EventType.CHILD_HOME_VISIT:
                 processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.CHILD_HOME_VISIT);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
+            case CoreConstants.EventType.FAMILY_KIT:
+                processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.FAMILY_KIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
@@ -236,7 +243,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (eventClient.getClient() == null) {
                     return;
                 }
-                processRemoveMember(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                processRemoveMember(eventClient.getClient().getBaseEntityId(), event);
                 break;
             case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
                 clientProcessByObs(eventClient, clientClassification, event, "reason_stop_fp_chw", "decided_to_change_method");
@@ -277,7 +284,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (eventClient.getClient() == null) {
                     return;
                 }
-                processRemoveChild(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                processRemoveChild(eventClient.getClient().getBaseEntityId(), event);
                 break;
             case CoreConstants.EventType.CHILD_VACCINE_CARD_RECEIVED:
                 if (eventClient.getClient() == null) {
@@ -326,12 +333,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     public void processDeleteEvent(Event event) {
         try {
+            String formSubmissionId = event.getDetails() == null ? "" : event.getDetails().get("deleted_form_submission_id");
             // delete from vaccine table
-            EventDao.deleteVaccineByFormSubmissionId(event.getFormSubmissionId());
-            // delete from visit table
-            EventDao.deleteVisitByFormSubmissionId(event.getFormSubmissionId());
-            // delete from recurring service table
-            EventDao.deleteServiceByFormSubmissionId(event.getFormSubmissionId());
+            if (StringUtils.isNotBlank(formSubmissionId)) {
+                EventDao.deleteVaccineByFormSubmissionId(formSubmissionId);
+                // delete from visit table
+                EventDao.deleteVisitByFormSubmissionId(formSubmissionId);
+                // delete from recurring service table
+                EventDao.deleteServiceByFormSubmissionId(formSubmissionId);
+            }
 
             Timber.d("Ending processDeleteEvent: %s", event.getEventId());
         } catch (Exception e) {
@@ -624,9 +634,32 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    private void processRemoveMember(String baseEntityId, Date eventDate) {
+    private SQLiteDatabase getWritableDatabase() {
+        return CoreChwApplication.getInstance().getRepository().getWritableDatabase();
+    }
 
-        Date myEventDate = eventDate;
+    private Map<String, String> readObs(Event event) {
+        Map<String, String> obsMap = new HashMap<>();
+        if (event.getObs() != null) {
+            for (Obs obs : event.getObs()) {
+                if (obs.getValues().size() > 0)
+                    obsMap.put(obs.getFormSubmissionField(), obs.getValues().get(0).toString());
+            }
+        }
+        return obsMap;
+    }
+
+    private Date getDate(Map<String, String> obsMap, String key) throws ParseException {
+        String strDod = obsMap.get(key);
+        if (StringUtils.isBlank(strDod)) return null;
+
+        SimpleDateFormat nfDf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        return nfDf.parse(strDod);
+    }
+
+    private void processRemoveMember(String baseEntityId, Event event) {
+
+        Date myEventDate = event.getEventDate().toDate();
         if (myEventDate == null) {
             myEventDate = new Date();
         }
@@ -634,29 +667,41 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         if (baseEntityId == null) {
             return;
         }
+
+        SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Map<String, String> obsMap = readObs(event);
 
         AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         if (commonsRepository != null) {
 
             ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(myEventDate));
+            values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
             values.put("is_closed", 1);
 
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CoreConstants.TABLE_NAME.FAMILY_MEMBER, values,
-                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
-
             // clean fts table
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
+            getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     " object_id  = ?  ", new String[]{baseEntityId});
 
+
+            try {
+                Date dod = getDate(obsMap, "date_died");
+                if (dod != null)
+                    values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+
+            getWritableDatabase().update(CoreConstants.TABLE_NAME.FAMILY_MEMBER, values,
+                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
+
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 
-    private void processRemoveChild(String baseEntityId, Date eventDate) {
+    private void processRemoveChild(String baseEntityId, Event event) {
 
-        Date myEventDate = eventDate;
+        Date myEventDate = event.getEventDate().toDate();
         if (myEventDate == null) {
             myEventDate = new Date();
         }
@@ -665,22 +710,33 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return;
         }
 
+        Map<String, String> obsMap = readObs(event);
+        SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
         AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.CHILD);
         if (commonsRepository != null) {
 
             ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(myEventDate));
+            values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
             values.put("is_closed", 1);
 
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CoreConstants.TABLE_NAME.CHILD, values,
-                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
-
             // clean fts table
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.CHILD), values,
+            getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.CHILD), values,
                     CommonFtsObject.idColumn + "  = ?  ", new String[]{baseEntityId});
 
+            try {
+                Date dod = getDate(obsMap, "date_died");
+                if (dod != null)
+                    values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+
+            getWritableDatabase().update(CoreConstants.TABLE_NAME.CHILD, values,
+                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
+
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 

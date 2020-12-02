@@ -63,7 +63,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     protected ClientProcessorForJava clientProcessorForJava;
     private LocationRepository locationRepository;
     private ECSyncHelper ecSyncHelper;
-    private String password;
     private UniqueIdRepository uniqueIdRepository;
     private HIA2IndicatorsRepository hIA2IndicatorsRepository;
     private DailyTalliesRepository dailyTalliesRepository;

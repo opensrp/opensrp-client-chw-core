@@ -125,7 +125,7 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
 
-    api('org.smartregister:opensrp-client-native-form:1.14.5.4-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:1.14.5.5-disable_hwid-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -165,7 +165,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-immunization:2.0.3-beta1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-immunization:2.0.3-beta2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -251,7 +251,7 @@ dependencies {
     api 'com.evernote:android-job:1.2.6'
     api 'org.greenrobot:eventbus:3.1.1'
 
-    api("org.smartregister:android-p2p-sync:0.3.7-SNAPSHOT") {
+    api("org.smartregister:android-p2p-sync:0.3.8-apha1-SNAPSHOT") {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -260,9 +260,7 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
 
-    api('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
+    api 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     androidTestImplementation 'org.mockito:mockito-android:3.0.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

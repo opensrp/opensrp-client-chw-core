@@ -88,7 +88,7 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
 
     @Override
     protected void startRegistration() {
-        ((CoreChildRegisterActivity) getActivity()).startFormActivity(CoreConstants.JSON_FORM.getChildRegister(), null, (String) null);
+        ((CoreChildRegisterActivity) getActivity()).startFormActivity(CoreConstants.JSON_FORM.getChildRegister(), null, "");
         //getActivity().startFormActivity(Utils.metadata().familyRegister.formName, null, null);
     }
 
