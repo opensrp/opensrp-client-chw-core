@@ -76,7 +76,7 @@ public class CoreFamilyMemberFloatingMenuTest {
 
     @Test
     public void testGetCallLayout() {
-        Mockito.when(coreFamilyMemberFloatingMenuTest.getCallLayout())
+        when(coreFamilyMemberFloatingMenuTest.getCallLayout())
                 .thenReturn(view);
         Assert.assertEquals(view, coreFamilyMemberFloatingMenuTest.getCallLayout());
     }
