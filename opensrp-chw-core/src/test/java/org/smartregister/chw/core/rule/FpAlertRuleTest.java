@@ -98,4 +98,26 @@ public class FpAlertRuleTest extends BaseRobolectricTest {
     }
 
 
+    @Test
+    public void canGetDueDate() {
+        dueDate = LocalDate.now().plusDays(10).toDateTime(LocalTime.MIDNIGHT);
+        ReflectionHelpers.setField(fpAlertRule, "dueDate", dueDate);
+        Assert.assertEquals(dueDate.toDate(), fpAlertRule.getDueDate());
+    }
+
+    @Test
+    public void canGetOverdueDate() {
+        overDueDate = LocalDate.now().minusDays(1).toDateTime(LocalTime.MIDNIGHT);
+        ReflectionHelpers.setField(fpAlertRule, "overDueDate", overDueDate);
+        Assert.assertEquals(overDueDate.toDate(), fpAlertRule.getOverDueDate());
+    }
+
+    @Test
+    public void canGetExpiryDate() {
+        expiryDate = LocalDate.now().plusDays(10).toDateTime(LocalTime.MIDNIGHT);
+        ReflectionHelpers.setField(fpAlertRule, "expiryDate", expiryDate);
+        Assert.assertEquals(expiryDate.toDate(), fpAlertRule.getExpiryDate());
+    }
+
+
 }
