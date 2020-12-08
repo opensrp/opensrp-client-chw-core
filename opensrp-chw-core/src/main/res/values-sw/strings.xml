@@ -117,10 +117,19 @@
     <string name="llitn_title">Analala kwenye chandarua chenye viwatilifu cha muda mrefu</string>
     <string name="ecd_title">Maendeleo ya awali ya mtoto (ECD)</string>
 
+    <string name="school_level_none">Kutokuhudhuria shule au programu ya kujifunza yoyote sasa</string>
+    <string name="school_level_early_childhood">Programu ya makuzi wa watoto wadogo</string>
+    <string name="school_level_primary">Msingi</string>
+    <string name="school_level_lower_secondary">Sekondari ya chini</string>
+    <string name="school_level_upper_secondary">Sekondari ya juu</string>
+    <string name="school_level_alternative">Programu mbadala ya kujifunza</string>
+    <string name="school_level_Higher">Elimu ya juu</string>
+
     <string name="edu_level_none">Hakuna</string>
     <string name="edu_level_primary">Msingi</string>
     <string name="edu_level_secondary">Sekondari</string>
     <string name="edu_level_post_secondary">Chuo kikuu</string>
+
     <string name="remove_this_person">Ondoa huyu mtu</string>
     <string name="remove_the_mother">Ondoa mama</string>
     <string name="registration_info">Taarifa za usajili</string>
@@ -263,6 +272,7 @@
     <string name="drinking_water">Je,  Kaya inapata maji ya kunywa yaliyo safi na salama?</string>
     <string name="hygienic_latrine">Je, wakazi wa kaya hii wanatumia choo kisafi wanapojisaidia haja kubwa na ndogo?</string>
     <string name="wash_check">Cheki WASH</string>
+    <string name="family_kit">Vifaa vya Kaya</string>
 
     <string name="abv_first">1</string>
     <string name="abv_second">2</string>
@@ -286,7 +296,7 @@
 
     <string name="anc_health_facility_visits">MAHUDHURIO YA KLINIKI YA WAJAWAZITO KWENYE KITUO CHA KUTOLEA HUDUMA ZA AFYA. </string>
     <string name="anc_card">Kadi ya kliniki ya mjamzito</string>
-    <string name="delivery_kit">Kitanda cha Uwasilishaji</string>
+    <string name="delivery_kit">Vifaa vya Kujifungulia </string>
     <string name="anc_tt_immunization">CHANJO YA PEPOPUNDA</string>
     <string name="anc_iptp_sp">DOZI YA IPTp-SP</string>
     <string name="urine_analysis">Kipimo kwenye njia ya mkojo</string>
@@ -302,7 +312,7 @@
     <string name="ifa_received_status">Amepewa IFA: {0}</string>
     <string name="tests_done_details">Vipimo vimefanyika: {0}</string>
     <string name="anc_home_visit_anc_card_received">Kadi ya mama mjamzito imepokelewa</string>
-    <string name="anc_home_visit_delivery_kit_received">Vifaa vya kujifungua vimepokelewa</string>
+    <string name="anc_home_visit_delivery_kit_received">Vifaa vya Kujifungulia vimepokelewa</string>
     <string name="tt_done">TT{0} - Imefanyika {1}</string>
     <string name="iptpsp_done">Dozi ya IPTp-SP {0}- Imefanyika {1}</string>
     <string name="one">1</string>
@@ -485,7 +495,7 @@
     <string name="total_U5_visit_label">Jumla ya watoto (chini ya miaka 5)</string>
     <string name="hh_visited_label">Jumla ya kaya zilizotembelewa mwezi huu</string>
     <string name="F_referral_hf_label">Idadi ya wanawake waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
-    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &amp;lt, umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
+    <string name="less1m_referral_hf_label">Idadi ya watoto wachanga( &lt, umri chini ya mwezi 1) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="reporting_1m1yr_referral_hf_label">Idadi ya watoto umri kuanzia (mwezi 1 hadi mwaka 1) waliopewa rufaa kwenda kituo cha kutolea huduma za afya</string>
     <string name="reporting_1yr5yr_referral_hf_label">Idadi ya watoto kuanzia umri wa (oynatma mwaka 1 hadi miaka 5) waliopewa rufaa kwenda kwenye kituo cha kutolea huduma za afya</string>
     <string name="total_referral_label">Jumla ya wateja walipewa rufaa</string>
