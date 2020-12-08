@@ -23,6 +23,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
+import org.smartregister.family.dao.ChildDao;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
@@ -396,9 +397,11 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         //dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : dobString;
         String address = Utils.getValue(client.getColumnmaps(), ChildDBConstants.KEY.FAMILY_HOME_ADDRESS, true);
         String gender = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true);
+        boolean physicallyChallenged = ChildDao.isPhysicallyChallenged(childBaseEntityId);
 
         getView().setAddress(address);
         getView().setGender(gender);
+        getView().togglePhysicallyDisabled(physicallyChallenged);
 
         String uniqueId = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.UNIQUE_ID, false);
         uniqueId = String.format(getView().getString(org.smartregister.family.R.string.unique_id_text), uniqueId);

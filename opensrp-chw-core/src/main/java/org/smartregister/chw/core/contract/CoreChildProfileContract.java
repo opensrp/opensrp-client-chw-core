@@ -53,6 +53,8 @@ public interface CoreChildProfileContract {
 
         void setVisitButtonDueStatus();
 
+        void togglePhysicallyDisabled(boolean show);
+
         void setVisitButtonOverdueStatus();
 
         void setVisitNotDoneThisMonth(boolean withinEditPeriod);
