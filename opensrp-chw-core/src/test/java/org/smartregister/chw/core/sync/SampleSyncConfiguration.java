@@ -1,57 +1,45 @@
-package org.smartregister.chw.hf.sync;
-
+package org.smartregister.chw.core.sync;
 
 import org.smartregister.SyncConfiguration;
 import org.smartregister.SyncFilter;
-import org.smartregister.chw.core.utils.Utils;
-import org.smartregister.chw.hf.BuildConfig;
 import org.smartregister.view.activity.BaseLoginActivity;
 
-import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Elly Nerdstone
- */
-public class HfSyncConfiguration extends SyncConfiguration {
+public class SampleSyncConfiguration extends SyncConfiguration {
     @Override
     public int getSyncMaxRetries() {
-        return BuildConfig.MAX_SYNC_RETRIES;
+        return 0;
     }
 
     @Override
     public SyncFilter getSyncFilterParam() {
-        return SyncFilter.LOCATION;
+        return SyncFilter.LOCATION_ID;
     }
 
     @Override
     public String getSyncFilterValue() {
-        return Utils.getSyncFilterValue();
+        return "12324";
     }
 
     @Override
     public int getUniqueIdSource() {
-        return BuildConfig.OPENMRS_UNIQUE_ID_SOURCE;
+        return 0;
     }
 
     @Override
     public int getUniqueIdBatchSize() {
-        return BuildConfig.OPENMRS_UNIQUE_ID_BATCH_SIZE;
+        return 0;
     }
 
     @Override
     public int getUniqueIdInitialBatchSize() {
-        return BuildConfig.OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE;
-    }
-
-    @Override
-    public boolean isSyncSettings() {
-        return BuildConfig.IS_SYNC_SETTINGS;
+        return 0;
     }
 
     @Override
     public SyncFilter getEncryptionParam() {
-        return SyncFilter.LOCATION;
+        return SyncFilter.LOCATION_ID;
     }
 
     @Override
@@ -61,12 +49,12 @@ public class HfSyncConfiguration extends SyncConfiguration {
 
     @Override
     public List<String> getSynchronizedLocationTags() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
     public String getTopAllowedLocationLevel() {
-        return "";
+        return null;
     }
 
     @Override

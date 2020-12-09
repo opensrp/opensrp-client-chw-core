@@ -123,13 +123,15 @@
     <string name="edu_level_secondary">Secondaire</string>
     <string name="edu_level_post_secondary">Université</string>
     <string name="remove_this_person">Enlever cette personne</string>
+    <string name="remove_the_mother">Enlever la mère</string>
     <string name="registration_info">Information d\'enregistrement</string>
     <string name="anc_registration">Enregistrement CPN</string>
     <string name="malaria_registration">Confirmation pour paludisme</string>
     <string name="malaria_follow_up">Visite de suivi du paludisme</string>
     <string name="malaria_diagnosis">Diagnostic du paludisme</string>
     <string name="sick_child_follow_up">Suivi de l\'enfant malade</string>
-    <string name="edit_child_form_title">Corriger enfant %1$s\'s détails</string>
+    <string name="edit_child_form_title">Corriger les détails de bébé %1$s</string>
+    <string name="remove_child_form_title">Enlever bébé %1$s</string>
     <string name="visit_month">Visite de %1$s faite</string>
     <string name="refer_to_facility">Référer au centre de santé</string>
     <string name="updating">Mise à jour en cours...</string>
@@ -206,6 +208,7 @@
     <string name="select_a_new_family_head">Sélectionner un nouveau chef de ménage</string>
     <string name="remove_family_count">%s adultes et %s enfants de moins de 5 ans</string>
 
+    <string name="yellow_fever">Fièvre Jaune</string>
 
     <string name="medical_title">Retour à profil de %1$s</string>
     <string name="medical_last_visit">Depuis %1$s </string>
@@ -283,7 +286,8 @@
 
     <string name="anc_health_facility_visits">VISITE CPN A LA FORMATION SANITAIRE</string>
     <string name="anc_card">Carnet CPN</string>
-    <string name="anc_tt_immunization">Td</string>
+    <string name="anc_tt_immunization">VAT</string>
+    <string name="delivery_kit">Kit de livraison</string>
     <string name="anc_iptp_sp">SP dose</string>
     <string name="urine_analysis">Analyse urinaire</string>
     <string name="hiv_test">Dépistage VIH</string>
@@ -298,7 +302,8 @@
     <string name="ifa_received_status">FAF reçu: {0}</string>
     <string name="tests_done_details">Examens effectués: {0}</string>
     <string name="anc_home_visit_anc_card_received">Carnet CPN reçu</string>
-    <string name="tt_done">Td{0} - fait {1}</string>
+    <string name="anc_home_visit_delivery_kit_received">Kit de livraison reçu</string>
+    <string name="tt_done">VAT{0} - fait {1}</string>
     <string name="iptpsp_done">SP dose{0}- fait {1} </string>
     <string name="one">un</string>
     <string name="two">deux</string>
@@ -375,7 +380,9 @@
     <string name="ga_label">ÂG</string>
     <string name="cancel">ANNULER</string>
     <string name="referral_day">Références%s</string>
-
+    <string name="care_giver_prefix">G: %s</string>
+    <string name="child_prefix">Enfant: %s</string>
+    <string name="children_prefix">Enfants: %s</string>
     <string name="phone_not_provided">Aucun numéro de téléphone fourni</string>
     <string name="anc_danger_sign_prefix">Signes de danger de la CPN; Symptômes:%s</string>
     <string name="client_name_age_suffix">%s, %s</string>
@@ -424,9 +431,23 @@
     <!-- Medical history -->
     <string name="dose_number">%s dose</string>
 
+    <string name="pnc_medical_history_mother_title">{0} (MÈRE)</string>
+    <string name="pnc_medical_history_child_title">{0} (BÉBÉ)</string>
+    <string name="pnc_health_facility_visits_title">Visites CPoN au Centre de Santé</string>
+    <string name="pnc_home_visits_title">Visites CPoN</string>
+    <string name="pnc_medical_history_family_planning_title">Planification Familiale</string>
+    <string name="pnc_medical_history_child_vaccine_title">Carte de vaccination enfant</string>
+    <string name="pnc_medical_history_child_immunizations_title">Immunisations (à la naissance)</string>
+    <string name="pnc_medical_history_child_exclusive_breastfeeding_title">Allaitement maternel exclusif</string>
+    <string name="pnc_medical_history_hf_visit">Visite {0}: {}</string>
+    <string name="pnc_medical_history_child_vaccine_card_received">Carte de vaccination enfant reçu: {0}</string>
+    <string name="pnc_medical_history_child_vaccine_card_date">Date: {0}</string>
+    <string name="pnc_medical_history_child_immunization_opv0">VPO 0: {0}</string>
+    <string name="pnc_medical_history_child_immunization_bcg">BCG: {0}</string>
+
     <!--Wcaro Upcoming Services -->
-    <string name="upcoming_immunizations">Vaccinations (%s) \n%s \n%s</string>
-    <string name="up_immunizations">Vaccinations (%s) \n%s</string>
+    <string name="upcoming_immunizations">Immunisations (%s) (%s) \n%s \n%s</string>
+    <string name="up_immunizations">Immunisations (%s) (%s) \n%s</string>
 
     <!-- dates -->
     <string name="date_days">Jours</string>
@@ -434,6 +455,12 @@
     <string name="date_months">Mois</string>
 
     <string name="last_visit_x_days_ago">Dernière visite il y a %1$s jours</string>
+    <string name="notification_care_giver">G: %1$s</string>
+    <string name="notification_danger_sign">Signes de danger: %1$s</string>
+    <string name="notification_action_taken">Action prise: %1$s</string>
+    <string name="notification_village">Village: %1$s</string>
+    <string name="thinkmd_health_assessment">Évaluation de la santé ThinkMD</string>
+    <string name="thinkmd_careplan">Plan de soins ThinkMD (%1$s)</string>
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Revenir à tous les clients</string>

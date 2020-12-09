@@ -5,8 +5,11 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.smartregister.chw.anc.util.DBConstants;
+import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.ScheduleTask;
 import org.smartregister.chw.core.domain.BaseScheduleTask;
+import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.repository.BaseRepository;
 
 import java.text.ParseException;
@@ -163,6 +166,21 @@ public class ScheduleRepository extends BaseRepository {
         }
     }
 
+    public void deleteFamilyKitSchedule(String baseEntityID) {
+        try {
+            getWritableDatabase().execSQL("DELETE from schedule_service where schedule_name = 'FAMILY_KIT' and  base_entity_id = '" + baseEntityID + "'");
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    public void closeChildMember(String baseEntityID) {
+        ContentValues values = new ContentValues();
+        values.put("is_closed", 1);
+        CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CoreConstants.TABLE_NAME.CHILD, values,
+                DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityID});
+    }
+
     public void deleteScheduleByName(String name) {
         try {
             getWritableDatabase().delete(TABLE_NAME, SCHEDULE_NAME + "= ?", new String[]{name});
@@ -259,6 +277,7 @@ public class ScheduleRepository extends BaseRepository {
 
         return sdf.format(date);
     }
+
     private Date getCursorDate(Cursor c, String column_name) {
         String val = c.getType(c.getColumnIndex(column_name)) == Cursor.FIELD_TYPE_NULL ? null : c.getString(c.getColumnIndex(column_name));
         if (val == null)

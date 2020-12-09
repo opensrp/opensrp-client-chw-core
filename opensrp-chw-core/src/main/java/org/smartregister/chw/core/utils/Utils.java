@@ -101,14 +101,29 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat yyyy_mm_dd = new SimpleDateFormat("yyyy-mm-dd");
     private static List<String> assets;
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getAnCWomanImageResourceIdentifier() {
         return R.drawable.anc_woman;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getPnCWomanImageResourceIdentifier() {
         return R.drawable.pnc_woman;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getMemberImageResourceIdentifier() {
         return R.mipmap.ic_member;
     }
@@ -154,7 +169,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     }
 
     public static String convertToDateFormateString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault());//12-08-2018
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());//12-08-2018
         try {
             Date date = sdf.parse(timeAsDDMMYYYY);
             return dateFormat.format(date);
@@ -229,10 +244,20 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return result;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getOverDueProfileImageResourceIDentifier() {
         return R.color.visit_status_over_due;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getDueProfileImageResourceIDentifier() {
         return R.color.due_profile_blue;
     }
