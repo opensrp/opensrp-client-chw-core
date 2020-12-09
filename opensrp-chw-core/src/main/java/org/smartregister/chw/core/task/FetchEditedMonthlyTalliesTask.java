@@ -32,7 +32,9 @@ public class FetchEditedMonthlyTalliesTask extends AsyncTask<Void, Void, List<Mo
         endDate.set(Calendar.MILLISECOND, 999);
         endDate.add(Calendar.DATE, -1); // Move the date to last day of last month
 
-        return monthlyTalliesRepository.findEditedDraftMonths(null, endDate.getTime());
+    //    return monthlyTalliesRepository.findEditedDraftMonths(null, endDate.getTime());
+         return monthlyTalliesRepository.findEditedDraftMonths(null, null);
+
     }
 
     @Override
