@@ -19,6 +19,7 @@ import org.smartregister.chw.core.model.CoreChildProfileModel;
 import org.smartregister.chw.core.model.CoreChildRegisterModel;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
+import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.Utils;
@@ -27,9 +28,12 @@ import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.family.activity.BaseFamilyProfileActivity;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.presenter.BaseFamilyProfilePresenter;
+import org.smartregister.family.util.Constants;
+import org.smartregister.family.util.DBConstants;
 import org.smartregister.view.LocationPickerView;
 
 import java.lang.ref.WeakReference;
@@ -201,5 +205,18 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
     private PncRegisterRepository getPncRegisterRepository() {
         return CoreChwApplication.pncRegisterRepository();
+    }
+
+    @Override
+    public void refreshProfileTopSection(CommonPersonObjectClient client) {
+        super.refreshProfileTopSection(client);
+
+        if (client == null || client.getColumnmaps() == null) {
+            return;
+        }
+        String eventDateValue = Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, true);
+        String eventDate = eventDateValue != null ? eventDateValue : "";
+
+        getView().setEventDate(eventDate);
     }
 }
