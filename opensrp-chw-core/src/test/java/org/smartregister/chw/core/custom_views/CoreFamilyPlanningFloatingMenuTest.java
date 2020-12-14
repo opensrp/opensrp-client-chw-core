@@ -1,30 +1,27 @@
 package org.smartregister.chw.core.custom_views;
 
+import android.os.Build;
 import android.view.View;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.smartregister.Context;
-import org.smartregister.CoreLibrary;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
-import org.smartregister.commonregistry.CommonRepository;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
+@RunWith(RobolectricTestRunner.class)
+@Config(application = TestApplication.class, sdk = Build.VERSION_CODES.P)
 public class CoreFamilyPlanningFloatingMenuTest {
-    @Mock
-    private CommonRepository commonRepository;
-
-    @Mock
-    private Context context;
 
     private CoreFamilyPlanningFloatingMenu coreFamilyPlanningFloatingMenu;
 
@@ -38,9 +35,6 @@ public class CoreFamilyPlanningFloatingMenuTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         coreFamilyPlanningFloatingMenu = Mockito.mock(CoreFamilyPlanningFloatingMenu.class, Mockito.CALLS_REAL_METHODS);
-
-        CoreLibrary.init(context);
-        when(context.commonrepository(anyString())).thenReturn(commonRepository);
         Context.bindtypes = new ArrayList<>();
     }
 
