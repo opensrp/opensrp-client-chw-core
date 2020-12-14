@@ -80,4 +80,14 @@ public class CoreFamilyProfilePresenterTest {
         profilePresenter.saveChildRegistration(pair, jsonString, false, callBack);
         Mockito.verify(childRegisterInteractor).saveRegistration(pair, jsonString, false, profilePresenter);
     }
+
+    @Test
+    public void testonUniqueIdFetched() throws Exception {
+        Triple<String, String, String> triple = Triple.of("1", "2", "3");
+        String entityId = "12345";
+
+        profilePresenter = Mockito.spy(profilePresenter);
+        profilePresenter.onUniqueIdFetched(triple, entityId);
+        Mockito.verify(profilePresenter).startForm(triple.getLeft(), entityId, triple.getMiddle(), triple.getRight());
+    }
 }
