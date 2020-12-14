@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu dimens -->
-    <dimen name="sync_time_padding_right">20dp</dimen>
-    <dimen name="sync_time_padding">15dp</dimen>
+    <dimen name="sync_time_padding_right">16dp</dimen>
+    <dimen name="sync_time_padding">10dp</dimen>
 
     <!--Child register -->
     <dimen name="child_register_title_size">16sp</dimen>
