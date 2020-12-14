@@ -40,16 +40,6 @@ public class CoreFamilyProfilePresenterTest {
     }
 
     @Test
-    public void testOnUniqueIdFetched() throws Exception {
-
-        Triple<String, String, String> triple = Triple.of("1234", "2345", "3456");
-        String entityId = "entityId";
-
-        profilePresenter.startChildForm(triple.getLeft(), entityId, triple.getMiddle(), triple.getRight());
-        Mockito.verify(view).startFormActivity(Mockito.any());
-    }
-
-    @Test
     public void testGetView() {
         Assert.assertEquals(profilePresenter.getView(), view);
     }
@@ -79,5 +69,13 @@ public class CoreFamilyProfilePresenterTest {
 
         profilePresenter.saveChildRegistration(pair, jsonString, false, callBack);
         Mockito.verify(childRegisterInteractor).saveRegistration(pair, jsonString, false, profilePresenter);
+    }
+
+    @Test
+    public void testOnUniqueIdFetched() {
+        String anyString = Mockito.anyString();
+        Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
+        profilePresenter.onUniqueIdFetched(triple, Mockito.anyString(), Mockito.anyString());
+        Assert.assertNotNull(view);
     }
 }
