@@ -102,6 +102,6 @@ public class CoreFamilyProfileActivityTestImpl extends CoreFamilyProfileActivity
 
     @Override
     public void setEventDate(String eventDate) {
-
+        // do nothing
     }
 }

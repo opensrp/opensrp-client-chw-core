@@ -28,12 +28,9 @@ import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.family.activity.BaseFamilyProfileActivity;
 import org.smartregister.family.contract.FamilyProfileContract;
 import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.presenter.BaseFamilyProfilePresenter;
-import org.smartregister.family.util.Constants;
-import org.smartregister.family.util.DBConstants;
 import org.smartregister.view.LocationPickerView;
 
 import java.lang.ref.WeakReference;
@@ -45,9 +42,9 @@ import static org.smartregister.chw.core.utils.CoreJsonFormUtils.toList;
 
 public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresenter implements FamilyProfileExtendedContract.Presenter, CoreChildRegisterContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
+    protected CoreChildProfileModel childProfileModel;
     private WeakReference<FamilyProfileExtendedContract.View> viewReference;
     private CoreChildRegisterInteractor childRegisterInteractor;
-    protected CoreChildProfileModel childProfileModel;
 
 
     public CoreFamilyProfilePresenter(FamilyProfileExtendedContract.View view, FamilyProfileContract.Model model, String familyBaseEntityId, String familyHead, String primaryCaregiver, String familyName) {
