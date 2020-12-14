@@ -31,6 +31,7 @@ public interface FamilyProfileExtendedContract {
 
         void updateHasPhone(boolean hasPhone);
 
+        void setEventDate(String eventDate);
     }
 
     interface PresenterCallBack {

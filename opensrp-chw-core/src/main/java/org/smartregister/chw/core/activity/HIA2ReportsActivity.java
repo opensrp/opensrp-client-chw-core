@@ -151,7 +151,9 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                     JSONObject fieldJsonObject = fieldsArray.getJSONObject(j);
                     String key = fieldJsonObject.getString(KEY);
                     String value = !fieldJsonObject.has(VALUE) ? "" : fieldJsonObject.getString(VALUE);
-                    result.put(key, value);
+                    if(!value.equals("")){
+                        result.put(key, value);
+                    }
                 }
 
                 boolean saveClicked;
