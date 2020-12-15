@@ -64,10 +64,7 @@ public class ChildDao extends AbstractDao {
         AbstractDao.DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        if (res == null || res.size() == 0 || res.get(0) == 0)
-            return false;
-
-        return true;
+        return res != null && res.size() != 0 && res.get(0) != 0;
     }
 
     public static String getChildQuery(String baseEntityID) {
