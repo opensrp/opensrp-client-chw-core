@@ -16,7 +16,6 @@ public class CoreFamilyRegisterActivityTestImpl extends CoreFamilyRegisterActivi
         return Mockito.mock(BaseRegisterFragment.class);
     }
 
-    @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
         Timber.v("startFormActivity stub");
     }
