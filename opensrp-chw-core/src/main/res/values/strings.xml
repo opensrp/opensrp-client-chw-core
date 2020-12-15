@@ -746,4 +746,5 @@
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">View vaccine history</string>
     <string name="see_vaccines_due_today">See vaccines due today</string>
+    <string name="physically_challenged">Physically Challenged</string>
 </resources>
