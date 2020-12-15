@@ -212,7 +212,7 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
             return;
         }
         String eventDateValue = Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, true);
-        String eventDate = eventDateValue != null ? eventDateValue : "";
+        String eventDate = eventDateValue != null ? eventDateValue.substring(0,10) : "";
 
         getView().setEventDate(eventDate);
     }
