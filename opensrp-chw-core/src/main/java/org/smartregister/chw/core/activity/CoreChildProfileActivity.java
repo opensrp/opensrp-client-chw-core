@@ -104,6 +104,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
+    protected TextView physicallyChallenged;
     private RelativeLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
@@ -240,6 +241,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         viewMostDueRow = findViewById(R.id.view_most_due_overdue_row);
         viewFamilyRow = findViewById(R.id.view_family_row);
         progressBar = findViewById(R.id.progress_bar);
+        physicallyChallenged = findViewById(R.id.physically_challenged);
         textViewRecord.setOnClickListener(this);
         textViewVisitNot.setOnClickListener(this);
         textViewUndo.setOnClickListener(this);
