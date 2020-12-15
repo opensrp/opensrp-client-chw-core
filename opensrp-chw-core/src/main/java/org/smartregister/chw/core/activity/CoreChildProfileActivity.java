@@ -104,7 +104,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
-    private View physicallyChallenged;
+    protected TextView physicallyChallenged;
     private RelativeLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
@@ -404,14 +404,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewRecord.setTextColor(getResources().getColor(R.color.white));
     }
 
-    @Override
-    public void togglePhysicallyDisabled(boolean show) {
-        if (show) {
-            physicallyChallenged.setVisibility(View.VISIBLE);
-        } else {
-            physicallyChallenged.setVisibility(View.GONE);
-        }
-    }
     @Override
     public void setVisitButtonOverdueStatus() {
         openVisitButtonView();

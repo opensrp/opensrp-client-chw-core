@@ -162,6 +162,7 @@
                         android:paddingTop="@dimen/register_list_top_bottom_min_padding"
                         android:text="@string/physically_challenged"
                         android:textAllCaps="true"
+                        android:visibility="gone"
                         android:layout_marginBottom="10dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/register_list_desc_size" />
