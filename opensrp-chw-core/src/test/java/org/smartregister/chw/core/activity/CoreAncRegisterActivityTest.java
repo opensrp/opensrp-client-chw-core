@@ -4,15 +4,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.BaseUnitTest;
 
 import timber.log.Timber;
@@ -23,11 +20,9 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
     private ActivityController<CoreAncRegisterActivity> controller;
 
-    @Mock
-    private MemberObject memberObject;
-
     @Before
     public void setUp() {
+
         MockitoAnnotations.initMocks(this);
 
         MockitoAnnotations.initMocks(this);
@@ -40,10 +35,6 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
         controller = Robolectric.buildActivity(CoreAncRegisterActivity.class).create().start();
         activity = controller.get();
-        memberObject = Mockito.mock(MemberObject.class);
-        memberObject.setBaseEntityId("some-base-entity-id");
-        memberObject.setFamilyName("Some Family Name");
-        memberObject.setFamilyBaseEntityId("123455");
 
         ReflectionHelpers.setField(activity, "phone_number", "phone_number");
         ReflectionHelpers.setField(activity, "form_name", "form_name");
