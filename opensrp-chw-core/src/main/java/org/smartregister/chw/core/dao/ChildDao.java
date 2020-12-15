@@ -67,7 +67,6 @@ public class ChildDao extends AbstractDao {
         if (res == null || res.size() == 0 || res.get(0) == 0)
             return false;
 
-        res.size();
         return true;
     }
 

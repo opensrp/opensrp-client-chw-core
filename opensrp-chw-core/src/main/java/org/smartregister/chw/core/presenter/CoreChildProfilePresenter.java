@@ -39,12 +39,13 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
-public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
+public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack, CoreChildProfileContract {
 
     public CoreChildProfileContract.Model model;
     public String childBaseEntityId;
     public String familyID;
     private WeakReference<CoreChildProfileContract.View> view;
+    private WeakReference<CoreChildProfileContract.Flavor> flavor;
     private CoreChildProfileContract.Interactor interactor;
     private String dob;
     private String familyName;
@@ -181,8 +182,20 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         return null;
     }
 
+    @Override
+    public CoreChildProfileContract.Flavor getFlavor() {
+        if (flavor != null)
+            return flavor.get();
+
+        return null;
+    }
+
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
         this.view = view;
+    }
+
+    public void setFlavor(WeakReference<CoreChildProfileContract.Flavor> flavor) {
+        this.flavor = flavor;
     }
 
     @Override
@@ -397,11 +410,9 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         //dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : dobString;
         String address = Utils.getValue(client.getColumnmaps(), ChildDBConstants.KEY.FAMILY_HOME_ADDRESS, true);
         String gender = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true);
-        boolean physicallyChallenged = ChildDao.isPhysicallyChallenged(childBaseEntityId);
 
         getView().setAddress(address);
         getView().setGender(gender);
-        getView().togglePhysicallyDisabled(physicallyChallenged);
 
         String uniqueId = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.UNIQUE_ID, false);
         uniqueId = String.format(getView().getString(org.smartregister.family.R.string.unique_id_text), uniqueId);
