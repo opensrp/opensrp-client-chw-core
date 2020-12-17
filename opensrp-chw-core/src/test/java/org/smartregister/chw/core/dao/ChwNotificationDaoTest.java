@@ -102,4 +102,10 @@ public class ChwNotificationDaoTest extends ChwNotificationDao {
         boolean markedAsDone = ChwNotificationDao.isMarkedAsDone(context, "123456", "Sick Child");
         Assert.assertFalse(markedAsDone);
     }
+
+    @Test
+    public void formatVisitDateTest() {
+        String markedAsDone = ChwNotificationDao.formatVisitDate("2020-12-17 04:25:45");
+        Assert.assertEquals("17-12-2020",markedAsDone);
+    }
 }
