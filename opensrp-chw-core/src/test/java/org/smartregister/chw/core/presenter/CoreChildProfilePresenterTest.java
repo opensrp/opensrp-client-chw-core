@@ -16,11 +16,15 @@ import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.dao.AbstractDao;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.Repository;
 
 import java.util.Date;
 
-public class CoreChildProfilePresenterTest {
+public class CoreChildProfilePresenterTest extends AbstractDao {
+    @Mock
+    private Repository repository;
 
     @Mock
     private CoreChildProfileContract.View view;
@@ -39,6 +43,7 @@ public class CoreChildProfilePresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         profilePresenter = new CoreChildProfilePresenter(view, model, "12345");
+        setRepository(repository);
     }
 
     @Test
