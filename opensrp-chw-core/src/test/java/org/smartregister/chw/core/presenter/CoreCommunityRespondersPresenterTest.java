@@ -77,4 +77,5 @@ public class CoreCommunityRespondersPresenterTest {
         view.refreshCommunityResponders(communityResponderModelList);
         Assert.assertNotNull(view);
     }
+
 }
