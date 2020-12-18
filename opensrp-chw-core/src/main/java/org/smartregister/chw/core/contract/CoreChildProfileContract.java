@@ -106,11 +106,17 @@ public interface CoreChildProfileContract {
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
     }
 
+    interface Flavor {
+        void togglePhysicallyDisabled(boolean show);
+    }
+
     interface Presenter extends BaseProfileContract.Presenter {
 
         void updateChildProfile(String jsonObject);
 
         CoreChildProfileContract.View getView();
+
+        CoreChildProfileContract.Flavor getFlavor();
 
         void fetchProfileData();
 

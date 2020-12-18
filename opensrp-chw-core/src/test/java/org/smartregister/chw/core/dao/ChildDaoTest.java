@@ -106,6 +106,21 @@ public class ChildDaoTest extends ChildDao {
     }
 
     @Test
+    public void testIsPhysicallyChallenged() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"count"});
+        matrixCursor.addRow(new Object[]{2});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        Boolean isPhysicallyChallenged = ChildDao.isPhysicallyChallenged("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+        Assert.assertEquals(isPhysicallyChallenged, true);
+    }
+
+    @Test
     public void testIsChildReturnsFalse() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
         boolean status = ChildDao.isChild("123456");
