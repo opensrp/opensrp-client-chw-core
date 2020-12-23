@@ -38,12 +38,13 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
-public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
+public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack, CoreChildProfileContract {
 
     public CoreChildProfileContract.Model model;
     public String childBaseEntityId;
     public String familyID;
     private WeakReference<CoreChildProfileContract.View> view;
+    private WeakReference<CoreChildProfileContract.Flavor> flavor;
     private CoreChildProfileContract.Interactor interactor;
     private String dob;
     private String familyName;
@@ -180,8 +181,20 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         return null;
     }
 
+    @Override
+    public CoreChildProfileContract.Flavor getFlavor() {
+        if (flavor != null)
+            return flavor.get();
+
+        return null;
+    }
+
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
         this.view = view;
+    }
+
+    public void setFlavor(WeakReference<CoreChildProfileContract.Flavor> flavor) {
+        this.flavor = flavor;
     }
 
     @Override

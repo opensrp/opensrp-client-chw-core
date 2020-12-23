@@ -55,6 +55,17 @@ public class ChildDao extends AbstractDao {
         return values;
     }
 
+    public static boolean isPhysicallyChallenged(String baseEntityId) {
+        String sql = "select count(*) count FROM ec_child\n" +
+                "    where base_entity_id = '" + baseEntityId + "'" +
+                "    and physically_challenged = 'Yes'";
+
+        AbstractDao.DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+        List<Integer> res = readData(sql, dataMap);
+        return res != null && res.size() != 0 && res.get(0) != 0;
+    }
+
     public static String getChildQuery(String baseEntityID) {
         return "select  c.base_entity_id , c.first_name , c.last_name , c.middle_name , c.mother_entity_id , c.relational_id , c.dob , c.date_created ,  lastVisit.last_visit_date , last_visit_not_done_date " +
                 "from ec_child c " +
