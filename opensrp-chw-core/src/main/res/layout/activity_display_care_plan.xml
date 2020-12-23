@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     android:orientation="vertical"
-    tools:context=".activity.WebViewActivity">
+    tools:context=".activity.DisplayCarePlanActivity">
 
 
     <com.google.android.material.appbar.AppBarLayout
