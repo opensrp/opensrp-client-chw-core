@@ -144,14 +144,14 @@ public class ChildDao extends AbstractDao {
     }
 
 
-    public static String getThinkMDCarePlan(String childBaseEntityId, String requiredField) {
+    public static String queryColumnWithBaseEntityId(String childBaseEntityId, String requiredField) {
         String selection = " base_entity_id = ? ";
         String[] selectionArgs = new String[]{childBaseEntityId};
 
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, requiredField);
     }
 
-    public static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
+    private static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
         SQLiteDatabase database = getRepository().getReadableDatabase();
         if (database == null) {
             return null;

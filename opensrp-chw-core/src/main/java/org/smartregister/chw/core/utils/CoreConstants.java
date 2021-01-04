@@ -1009,7 +1009,6 @@ public class CoreConstants {
 
 
     public static class ThinkMdConstants {
-        public static String HTML_ASSESSMENT = "html_assessment";
         public static String CARE_PLAN_DATE = "care_plan_date";
         public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
         public static String FHIR_BUNDLE_INTENT = "fhirBundle";

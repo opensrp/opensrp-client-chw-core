@@ -19,7 +19,7 @@ import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.WebViewActivity;
+import org.smartregister.chw.core.activity.DisplayCarePlanActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
@@ -77,11 +77,12 @@ import io.reactivex.Observable;
 import timber.log.Timber;
 
 import static org.smartregister.chw.core.dao.ChildDao.getBaseEntityID;
-import static org.smartregister.chw.core.dao.ChildDao.getThinkMDCarePlan;
+import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithBaseEntityId;
 import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
-import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.getFormTag;
+import static org.smartregister.thinkmd.utils.Constants.THINKMD_FHIR_BUNDLE;
+import static org.smartregister.thinkmd.utils.Utils.decodeBase64;
 
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
@@ -490,13 +491,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
                             childBaseEntityId);
+                    updateLocalStorage(childBaseEntityId, "thinkmd_fhir_bundle", decodeBase64(encodedBundle));
 
                     for (Obs obs : carePlanEvent.getObs()) {
                         if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
                         if (obs.getFormSubmissionField().equals("carePlanDate")) {
                             updateLocalStorage(childBaseEntityId, "care_plan_date", String.valueOf(obs.getValue()));
-                        } else if (obs.getFormSubmissionField().equals("generatedDiv")) {
-                            updateLocalStorage(childBaseEntityId,"html_assessment", String.valueOf(obs.getValue()));
+                            break;
                         }
                     }
 
@@ -533,14 +534,14 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void showThinkMDCarePlan(@NotNull Context context, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
             try {
-                String carePlan = getThinkMDCarePlan(getChildBaseEntityId(), HTML_ASSESSMENT);
+                String thinkMDFHIRBundle = queryColumnWithBaseEntityId(getChildBaseEntityId(), THINKMD_FHIR_BUNDLE);
                 appExecutors.mainThread().execute(() -> {
 
-                    if (StringUtils.isEmpty(carePlan))
+                    if (StringUtils.isEmpty(thinkMDFHIRBundle))
                         callback.noThinkMDCarePlanFound();
                     else {
-                        Intent intent = new Intent(context, WebViewActivity.class);
-                        intent.putExtra(CONTENT_TO_DISPLAY, carePlan);
+                        Intent intent = new Intent(context, DisplayCarePlanActivity.class);
+                        intent.putExtra(CONTENT_TO_DISPLAY, thinkMDFHIRBundle);
                         context.startActivity(intent);
                     }
                 });
