@@ -204,7 +204,7 @@ public class ChwNotificationDao extends AbstractDao {
         updateDB(sql);
     }
 
-    protected static String formatVisitDate(String visitDate) {
+    private static String formatVisitDate(String visitDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());//12-08-2018 14:05:10
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         try {
