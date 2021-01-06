@@ -13,6 +13,7 @@ import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseRobolectricTest;
 import org.smartregister.chw.core.implementation.MonthlyAlertRuleImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -41,9 +42,9 @@ public class MonthlyAlertRuleTest extends BaseRobolectricTest {
 
         Assert.assertEquals(firstDayOfThisMonth, Whitebox.invokeMethod(monthlyAlertRule, "getLastDueDate"));
     }
-    
+
     @Test
-    public void testGetLastDayOfMonth(){
+    public void testGetLastDayOfMonth() {
         DateTime first = new DateTime(new Date()).withDayOfMonth(1);
         Date lastDate = first.plusMonths(1).minusDays(1).toDate();
         Assert.assertNotEquals(first.toDate(), monthlyAlertRule.getLastDayOfMonth(new Date()));
@@ -51,10 +52,13 @@ public class MonthlyAlertRuleTest extends BaseRobolectricTest {
     }
 
     @Test
-    public void testGetFirstDayOfMonth(){
+    public void testGetFirstDayOfMonth() {
         DateTime first = new DateTime(new Date()).withDayOfMonth(1);
         Date lastDate = first.plusMonths(1).minusDays(1).toDate();
-        Assert.assertEquals(first.toDate(), monthlyAlertRule.getFirstDayOfMonth(new Date()));
-        Assert.assertNotEquals(lastDate, monthlyAlertRule.getFirstDayOfMonth(new Date()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Assert.assertEquals(sdf.format(first.toDate()), sdf.format(monthlyAlertRule.getFirstDayOfMonth(new Date())));
+        Assert.assertNotEquals(sdf.format(lastDate), sdf.format(monthlyAlertRule.getFirstDayOfMonth(new Date())));
     }
 }
