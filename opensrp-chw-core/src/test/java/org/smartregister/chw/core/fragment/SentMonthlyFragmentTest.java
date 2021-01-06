@@ -1,5 +1,8 @@
 package org.smartregister.chw.core.fragment;
 
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,7 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.domain.MonthlyTally;
@@ -53,5 +58,28 @@ public class SentMonthlyFragmentTest extends BaseUnitTest {
     public void testExpandableListNotNull() {
         Assert.assertNotNull(sentMonthlyFragment);
         Assert.assertNotNull(sentMonthlyFragment.getExpandableListView());
+    }
+
+    @Test
+    public void testUpdateExpandedList() {
+        ExpandableListView expandableListView = Mockito.mock(ExpandableListView.class);
+        sentMonthlyFragment = Mockito.spy(sentMonthlyFragment);
+        HashMap<String, ArrayList<MonthlyTally>> monthlyTallies = new HashMap<String, ArrayList<MonthlyTally>>() {
+            {
+                ArrayList<MonthlyTally> juneTally = new ArrayList<>();
+                MonthlyTally june = new MonthlyTally();
+                june.setCreatedAt(new Date());
+                june.setMonth(new Date());
+                june.setDateSent(new Date());
+                juneTally.add(june);
+                put("June", juneTally);
+            }
+        };
+        sentMonthlyFragment.setSentMonthlyTallies(monthlyTallies);
+
+        Whitebox.setInternalState(sentMonthlyFragment, "expandableListView", expandableListView);
+        sentMonthlyFragment.updateExpandedList();
+
+        Mockito.verify(expandableListView).setAdapter(Mockito.any(ExpandableListAdapter.class));
     }
 }
