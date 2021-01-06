@@ -40,7 +40,7 @@ public class MonthlyAlertRuleTest {
     }
 
     @Test
-    public void testGetLastDayOfMonth(){
+    public void testGetLastDayOfMonth() {
         DateTime first = new DateTime(new Date()).withDayOfMonth(1);
         Date lastDate = first.plusMonths(1).minusDays(1).toDate();
         Assert.assertNotEquals(first.toDate(), monthlyAlertRule.getLastDayOfMonth(new Date()));
@@ -48,7 +48,7 @@ public class MonthlyAlertRuleTest {
     }
 
     @Test
-    public void testGetFirstDayOfMonth(){
+    public void testGetFirstDayOfMonth() {
         DateTime first = new DateTime(new Date()).withDayOfMonth(1);
         Date lastDate = first.plusMonths(1).minusDays(1).toDate();
 
