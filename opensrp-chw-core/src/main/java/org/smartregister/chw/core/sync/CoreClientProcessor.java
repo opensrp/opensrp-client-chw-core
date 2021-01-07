@@ -13,6 +13,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -450,16 +451,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
-                vaccineObj.setName(contentValues.getAsString(VaccineRepository.NAME));
+                vaccineObj.setName(isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
+                        contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
-                }
-                if (isVoidEvent) {
-                    String name = EventDao.getVaccineName(vaccine.getEvent().getFormSubmissionId());
-                    vaccineObj.setName(name);
-                    vaccineObj.setIsVoided(1);
-                } else {
-                    vaccineObj.setIsVoided(0);
                 }
                 try {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -467,7 +462,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     if (!isVoidEvent) {
                         date = simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
                     } else {
-                        date = new DateTime().withMillis(Long.parseLong(EventDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate();
+                        date = new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate();
                     }
                     vaccineObj.setDate(date);
                 } catch (Exception e) {
@@ -479,6 +474,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
