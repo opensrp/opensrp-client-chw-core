@@ -450,23 +450,14 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             if (contentValues != null && contentValues.size() > 0) {
                 VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                vaccineObj.setDate(isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
+                        simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE)));
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
                 vaccineObj.setName(isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
                         contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
-                }
-                try {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date;
-                    if (!isVoidEvent) {
-                        date = simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
-                    } else {
-                        date = new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate();
-                    }
-                    vaccineObj.setDate(date);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
                 vaccineObj.setAnmId(contentValues.getAsString(VaccineRepository.ANMID));
                 vaccineObj.setLocationId(contentValues.getAsString(VaccineRepository.LOCATION_ID));
