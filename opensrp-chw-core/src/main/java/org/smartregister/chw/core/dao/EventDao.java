@@ -94,4 +94,43 @@ public class EventDao extends AbstractDao {
         String sql2 = "delete from visits where form_submission_id = '" + submissionId + "'";
         updateDB(sql2);
     }
+
+    public static boolean isVoidedEvent(String formSubmissionID) {
+        try {
+            String sql = "select count(*) count from event" +
+                    " where formSubmissionId = '" + formSubmissionID + "'" +
+                    " and eventType = 'Void Event'";
+
+            AbstractDao.DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
+
+            List<Integer> res = readData(sql, dataMap);
+            return res != null && res.size() != 0 && res.get(0) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static String getVaccineName(String formSubmissionID) {
+        try {
+            String sql = "SELECT name vaccineName FROM vaccines WHERE formSubmissionId='" + formSubmissionID + "';";
+
+            AbstractDao.DataMap<String> dataMap = cursor -> getCursorValue(cursor, "vaccineName");
+
+            return readSingleValue(sql, dataMap);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String getVaccineDate(String formSubmissionID) {
+        try {
+            String sql = "SELECT date vaccineDate FROM vaccines WHERE formSubmissionId='" + formSubmissionID + "';";
+
+            AbstractDao.DataMap<String> dataMap = cursor -> getCursorValue(cursor, "vaccineDate");
+
+            return readSingleValue(sql, dataMap);
+        } catch (Exception e) {
+            return "";
+        }
+    }
 }
