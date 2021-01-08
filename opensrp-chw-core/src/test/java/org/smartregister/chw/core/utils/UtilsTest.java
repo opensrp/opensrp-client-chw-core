@@ -233,6 +233,16 @@ public class UtilsTest {
     }
 
     @Test
+    public void testGetDayOfMonthSuffix() {
+        String suffixOne = "st";
+        String suffixTwo = "nd";
+        String suffixThree = "th";
+        Assert.assertEquals(suffixOne, Utils.getDayOfMonthSuffix(1));
+        Assert.assertEquals(suffixTwo, Utils.getDayOfMonthSuffix(2));
+        Assert.assertEquals(suffixThree, Utils.getDayOfMonthSuffix(11));
+    }
+
+    @Test
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
         Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
         Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
