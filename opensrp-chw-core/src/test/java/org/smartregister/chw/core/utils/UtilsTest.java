@@ -243,6 +243,14 @@ public class UtilsTest {
     }
 
     @Test
+    public void testGetLocale() {
+        Locale expectedLocaleNull = Locale.getDefault();
+        Locale expectedLocaleNotNull = RuntimeEnvironment.application.getResources().getConfiguration().locale;
+        Assert.assertEquals(expectedLocaleNull, Utils.getLocale(null));
+        Assert.assertEquals(expectedLocaleNotNull, Utils.getLocale(RuntimeEnvironment.application));
+    }
+
+    @Test
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
         Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
         Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
