@@ -457,8 +457,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 vaccineObj.setSyncStatus(VaccineRepository.TYPE_Synced);
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
-                vaccineObj.setOutOfCatchment(getOutOfCatchment(outOfCatchment));
-                vaccineObj.setIsVoided(getVoided(isVoidEvent));
+                vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
@@ -475,14 +475,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
-    }
-
-    private Integer getVoided(boolean isVoidEvent) {
-        return isVoidEvent ? 1 : 0;
-    }
-
-    private Integer getOutOfCatchment(boolean outOfCatchment) {
-        return outOfCatchment ? 1 : 0;
     }
 
     private Date getVaccineDate(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
