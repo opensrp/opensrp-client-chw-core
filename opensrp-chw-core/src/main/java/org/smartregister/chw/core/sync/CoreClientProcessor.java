@@ -434,11 +434,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     // possible to delegate
     private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
-            if (vaccine == null || vaccine.getEvent() == null) {
-                return false;
-            }
-
-            if (vaccineTable == null) {
+            if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
             }
 
@@ -450,22 +446,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             if (contentValues != null && contentValues.size() > 0) {
                 VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                vaccineObj.setDate(isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
-                        simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE)));
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
-                vaccineObj.setName(isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
-                        contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
                 }
+                vaccineObj.setName(getVaccineName(vaccine, contentValues, isVoidEvent));
+                vaccineObj.setDate(getVaccineDate(vaccine, contentValues, isVoidEvent));
                 vaccineObj.setAnmId(contentValues.getAsString(VaccineRepository.ANMID));
                 vaccineObj.setLocationId(contentValues.getAsString(VaccineRepository.LOCATION_ID));
                 vaccineObj.setSyncStatus(VaccineRepository.TYPE_Synced);
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
-                vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
-                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
+                vaccineObj.setOutOfCatchment(getOutOfCatchment(outOfCatchment));
+                vaccineObj.setIsVoided(getVoided(isVoidEvent));
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
@@ -479,10 +472,33 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return true;
 
         } catch (Exception e) {
-
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private Integer getVoided(boolean isVoidEvent) {
+        return isVoidEvent ? 1 : 0;
+    }
+
+    private Integer getOutOfCatchment(boolean outOfCatchment) {
+        return outOfCatchment ? 1 : 0;
+    }
+
+    private Date getVaccineDate(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
+                    simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getVaccineName(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        return isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
+                contentValues.getAsString(VaccineRepository.NAME);
     }
 
     private String getVaccineProgramClient(EventClient eventClient) {
