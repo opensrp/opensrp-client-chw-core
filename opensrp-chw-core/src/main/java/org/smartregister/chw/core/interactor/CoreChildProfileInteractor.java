@@ -491,7 +491,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
                             childBaseEntityId);
-                    updateLocalStorage(childBaseEntityId, "thinkmd_fhir_bundle", decodeBase64(encodedBundle));
+                    updateLocalStorage(childBaseEntityId, "thinkmd_fhir_bundle", encodedBundle);
 
                     for (Obs obs : carePlanEvent.getObs()) {
                         if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
@@ -541,7 +541,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                         callback.noThinkMDCarePlanFound();
                     else {
                         Intent intent = new Intent(context, DisplayCarePlanActivity.class);
-                        intent.putExtra(CONTENT_TO_DISPLAY, thinkMDFHIRBundle);
+                        intent.putExtra(CONTENT_TO_DISPLAY, decodeBase64(thinkMDFHIRBundle));
                         context.startActivity(intent);
                     }
                 });

@@ -34,7 +34,7 @@ public class FileHTTPServer {
         }
         server = new ServerThread(socket);
 
-        indexPage = readFromAssets(context, "index.html");
+        indexPage = readFromAssets(context, "thinkmd_assessment_parser.html");
 
         if (jsonFilePath != null)
             fhirBundle = jsonFilePath.getBytes();
@@ -137,7 +137,7 @@ public class FileHTTPServer {
 
         protected FileHTTPServer.Response getResponse(String request) {
             if (request.startsWith("GET /")) {
-                if (request.trim().contains("index.html"))
+                if (request.trim().contains("thinkmd_assessment_parser.html"))
                     return new FileHTTPServer.Response(indexPage, "text/html");
                 else
                     return new FileHTTPServer.Response(fhirBundle, "application/json");

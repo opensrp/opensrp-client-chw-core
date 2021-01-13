@@ -46,7 +46,7 @@ public class DisplayCarePlanActivity extends AppCompatActivity {
 
             WebView webView = findViewById(R.id.web_view);
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("http://localhost:8085/index.html");
+            webView.loadUrl("http://localhost:8085/thinkmd_assessment_parser.html");
         } else {
             showNoContentAlertDialog();
         }
