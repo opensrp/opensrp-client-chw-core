@@ -73,4 +73,9 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     public void testGetFamilyName() {
         Assert.assertEquals(CoreAncRegisterActivity.getFamilyName(), "familyName");
     }
+
+    @Test
+    public void testGetPhoneNumber() {
+        Assert.assertEquals(CoreAncRegisterActivity.getPhoneNumber(), "phone_number");
+    }
 }
