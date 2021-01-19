@@ -8,11 +8,7 @@ public class ShadowReferralTaskViewActivity extends BaseReferralTaskViewActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent().getExtras() != null) {
-            extraClientTask();
-            extraDetails();
-            inflateToolbar();
-        }
+        extraClientTask();
     }
 
     @Override
