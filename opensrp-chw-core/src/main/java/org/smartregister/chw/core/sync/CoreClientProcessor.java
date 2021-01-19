@@ -6,12 +6,14 @@ import android.content.Context;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -173,11 +175,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     public void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
         switch (eventType) {
             case VaccineIntentService.EVENT_TYPE:
+            case VaccineIntentService.EVENT_TYPE_IS_VOIDED:
             case VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT:
                 if (vaccineTable == null) {
                     return;
                 }
-                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT), eventType.equals(VaccineIntentService.EVENT_TYPE_IS_VOIDED));
                 break;
             case RecurringIntentService.EVENT_TYPE:
                 if (serviceTable == null) {
@@ -429,14 +432,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     }
 
     // possible to delegate
-    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment) {
-
+    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
-            if (vaccine == null || vaccine.getEvent() == null) {
-                return false;
-            }
-
-            if (vaccineTable == null) {
+            if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
             }
 
@@ -446,23 +444,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
-
                 VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
-                vaccineObj.setName(contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
                 }
-                vaccineObj.setDate(date);
+                vaccineObj.setName(getVaccineName(vaccine, contentValues, isVoidEvent));
+                vaccineObj.setDate(getVaccineDate(vaccine, contentValues, isVoidEvent));
                 vaccineObj.setAnmId(contentValues.getAsString(VaccineRepository.ANMID));
                 vaccineObj.setLocationId(contentValues.getAsString(VaccineRepository.LOCATION_ID));
                 vaccineObj.setSyncStatus(VaccineRepository.TYPE_Synced);
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
@@ -476,10 +472,25 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return true;
 
         } catch (Exception e) {
-
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private Date getVaccineDate(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
+                    simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getVaccineName(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        return isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
+                contentValues.getAsString(VaccineRepository.NAME);
     }
 
     private String getVaccineProgramClient(EventClient eventClient) {
@@ -532,6 +543,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
 
                 RecurringServiceRecordRepository recurringServiceRecordRepository = ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+
+                boolean isVoidEvent = EventDao.isVoidedEvent(service.getEvent().getFormSubmissionId());
                 ServiceRecord serviceObj = new ServiceRecord();
                 serviceObj.setBaseEntityId(contentValues.getAsString(RecurringServiceRecordRepository.BASE_ENTITY_ID));
                 serviceObj.setName(name);
@@ -542,6 +555,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 serviceObj.setFormSubmissionId(service.getEvent().getFormSubmissionId());
                 serviceObj.setEventId(service.getEvent().getEventId()); //FIXME hard coded id
                 serviceObj.setValue(value);
+                serviceObj.setIsVoided(isVoidEvent ? 1 : 0);
                 serviceObj.setRecurringServiceId(serviceTypeList.get(0).getId());
 
                 String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
