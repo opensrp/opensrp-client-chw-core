@@ -79,8 +79,8 @@ public class CoreCommunityResponderRegisterActivityTest extends BaseUnitTest {
     @After
     public void tearDown() {
         try {
-            activity.finish();
             activityController.pause().stop().destroy(); //destroy controller if we can
+            activity.finish();
         } catch (Exception e) {
             Timber.e(e);
         }
