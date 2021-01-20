@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.util.ReflectionHelpers;
@@ -97,11 +96,11 @@ public class FamilyCallDialogFragmentTest extends BaseUnitTest {
 
     @Test
     public void whenRefreshHeadOfFamilyViewAnswered() {
-        Mockito.when(model.getName()).thenReturn("Family head Name");
-        Mockito.when(model.getRole()).thenReturn("Family Head");
+        when(model.getName()).thenReturn("Family head Name");
+        when(model.getRole()).thenReturn("Family Head");
         fragment.refreshHeadOfFamilyView(model);
-        Assert.assertNotNull(model);
-        Assert.assertNull(model.getPhoneNumber());
+        assertNotNull(model);
+        assertNull(model.getPhoneNumber());
         Assert.assertEquals("Family head Name", model.getName());
         Assert.assertEquals("Family Head", model.getRole());
     }
@@ -109,11 +108,11 @@ public class FamilyCallDialogFragmentTest extends BaseUnitTest {
 
     @Test
     public void whenRefreshHeadOfFamilyViewAnsweredWhenPhoneNumberIsNotBlank() {
-        Mockito.when(model.getPhoneNumber()).thenReturn("0727272828");
-        Mockito.when(model.getName()).thenReturn("Family head Name");
-        Mockito.when(model.getRole()).thenReturn("Family Head");
+        when(model.getPhoneNumber()).thenReturn("0727272828");
+        when(model.getName()).thenReturn("Family head Name");
+        when(model.getRole()).thenReturn("Family Head");
         fragment.refreshHeadOfFamilyView(model);
-        Assert.assertNotNull(model);
+        assertNotNull(model);
         Assert.assertEquals("0727272828", model.getPhoneNumber());
         Assert.assertEquals("Family head Name", model.getName());
         Assert.assertEquals("Family Head", model.getRole());
@@ -122,27 +121,27 @@ public class FamilyCallDialogFragmentTest extends BaseUnitTest {
 
     @Test
     public void whenRefreshCareGiverViewAnswered() {
-        Mockito.when(model.getName()).thenReturn("Care giver Name");
-        Mockito.when(model.getRole()).thenReturn("Care Giver");
+        when(model.getName()).thenReturn("Care giver Name");
+        when(model.getRole()).thenReturn("Care Giver");
         fragment.refreshCareGiverView(model);
-        Assert.assertNotNull(model);
-        Assert.assertNull(model.getPhoneNumber());
+        assertNotNull(model);
+        assertNull(model.getPhoneNumber());
         Assert.assertEquals("Care giver Name", model.getName());
         Assert.assertEquals("Care Giver", model.getRole());
     }
 
     @Test
     public void whenRefreshCareGiverViewAnsweredWhenModelIsIndependent() {
-        Mockito.when(model.getName()).thenReturn("Care giver Name");
-        Mockito.when(model.getRole()).thenReturn("Care Giver");
-        Mockito.when(model.isIndependent()).thenReturn(true);
+        when(model.getName()).thenReturn("Care giver Name");
+        when(model.getRole()).thenReturn("Care Giver");
+        when(model.isIndependent()).thenReturn(true);
         Pair<String, String> pair = new Pair<>(null, null);
-        Mockito.when(model.getOtherContact()).thenReturn(pair);
+        when(model.getOtherContact()).thenReturn(pair);
 
         fragment.refreshCareGiverView(model);
 
-        Assert.assertNotNull(model);
-        Assert.assertNull(model.getPhoneNumber());
+        assertNotNull(model);
+        assertNull(model.getPhoneNumber());
         Assert.assertEquals("Care giver Name", model.getName());
         Assert.assertEquals("Care Giver", model.getRole());
         Assert.assertTrue(model.isIndependent());
@@ -151,16 +150,16 @@ public class FamilyCallDialogFragmentTest extends BaseUnitTest {
 
     @Test
     public void whenRefreshCareGiverViewAnsweredWhenModelIsNotIndependent() {
-        Mockito.when(model.getPhoneNumber()).thenReturn("0727272828");
-        Mockito.when(model.getName()).thenReturn("Care giver Name");
-        Mockito.when(model.getRole()).thenReturn("Care Giver");
-        Mockito.when(model.isIndependent()).thenReturn(false);
+        when(model.getPhoneNumber()).thenReturn("0727272828");
+        when(model.getName()).thenReturn("Care giver Name");
+        when(model.getRole()).thenReturn("Care Giver");
+        when(model.isIndependent()).thenReturn(false);
         Pair<String, String> pair = new Pair<>(null, null);
-        Mockito.when(model.getOtherContact()).thenReturn(pair);
+        when(model.getOtherContact()).thenReturn(pair);
 
         fragment.refreshCareGiverView(model);
 
-        Assert.assertNotNull(model);
+        assertNotNull(model);
         Assert.assertEquals("0727272828", model.getPhoneNumber());
         Assert.assertEquals("Care giver Name", model.getName());
         Assert.assertEquals("Care Giver", model.getRole());
