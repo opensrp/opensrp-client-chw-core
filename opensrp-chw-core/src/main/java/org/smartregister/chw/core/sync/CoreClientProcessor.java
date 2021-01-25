@@ -656,8 +656,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         Map<String, String> obsMap = new HashMap<>();
         if (event.getObs() != null) {
             for (Obs obs : event.getObs()) {
-                if (obs.getValues().size() > 0)
-                    obsMap.put(obs.getFormSubmissionField(), obs.getValues().get(0).toString());
+                if (obs.getValues().size() > 0) {
+                    Object object = obs.getValues().get(0);
+                    obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
+                }
             }
         }
         return obsMap;
