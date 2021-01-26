@@ -190,7 +190,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
                 getString(R.string.children_prefix, children);
     }
 
-    private void updateProblemDisplay() {
+    void updateProblemDisplay() {
         if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(getTask().getFocus())) {
             clientReferralProblem.setText(getString(R.string.anc_danger_sign_prefix, getTask().getDescription()));
         } else {
@@ -198,7 +198,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
         }
     }
 
-    private String getFamilyMemberContacts() {
+    String getFamilyMemberContacts() {
 
         String familyPhoneNumber = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER, true);
         String familyPhoneNumberOther = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER_OTHER, true);
