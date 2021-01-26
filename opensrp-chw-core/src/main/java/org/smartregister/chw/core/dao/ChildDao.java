@@ -190,7 +190,7 @@ public class ChildDao extends AbstractDao {
                 return Triple.of(ageInDays, dob, gender);
             }
         } catch (Exception ex) {
-            Timber.e(ex, "queryDBFromUserProfile");
+            Timber.e(ex, "getChildProfileData");
         }
         return null;
     }
