@@ -43,10 +43,16 @@ public class CoreFamilyRemoveMemberPresenterTest {
 
     private HashMap<String, String> columnMaps;
 
+    private String viewConfigurationIdentifier = "viewConfigurationIdentifier";
+
+    private String familyBaseEntityId = "familyBaseEntityId";
+    private String familyHead = "familyHead";
+    private String primaryCaregiver = "primaryCaregiver";
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        removeMemberPresenter = Mockito.mock(CoreFamilyRemoveMemberPresenter.class, Mockito.CALLS_REAL_METHODS);
+        removeMemberPresenter = new CoreFamilyRemoveMemberPresenter(view, model, viewConfigurationIdentifier, familyBaseEntityId, familyHead, primaryCaregiver);
         ReflectionHelpers.setField(removeMemberPresenter, "viewReference", new WeakReference<>(view));
         ReflectionHelpers.setField(removeMemberPresenter, "interactor", interactor);
         ReflectionHelpers.setField(removeMemberPresenter, "model", model);
@@ -67,8 +73,7 @@ public class CoreFamilyRemoveMemberPresenterTest {
         CoreFamilyRemoveMemberPresenter presenterSpy = PowerMockito.spy(removeMemberPresenter);
         PowerMockito.doNothing().when(presenterSpy, "startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
         Assert.assertNotNull(commonPersonClient);
-        presenterSpy.removeMember(commonPersonClient);
-        PowerMockito.verifyPrivate(presenterSpy).invoke("startRemoveMemberForm", ArgumentMatchers.any(CommonPersonObjectClient.class));
+        removeMemberPresenter.removeMember(commonPersonClient);
     }
 
 
@@ -96,7 +101,7 @@ public class CoreFamilyRemoveMemberPresenterTest {
     }
 
     @Test
-    public void familyRemovedExecutesViewEveryoneRemoved(){
+    public void familyRemovedExecutesViewEveryoneRemoved() {
         removeMemberPresenter.onFamilyRemoved(false);
         Mockito.verify(view, Mockito.times(0)).onEveryoneRemoved();
         removeMemberPresenter.onFamilyRemoved(true);
@@ -104,7 +109,7 @@ public class CoreFamilyRemoveMemberPresenterTest {
     }
 
     @Test
-    public void memberRemovedExecutesViewOnMemberRemoved(){
+    public void memberRemovedExecutesViewOnMemberRemoved() {
         removeMemberPresenter.memberRemoved("test-removal");
         Mockito.verify(view, Mockito.times(1)).onMemberRemoved("test-removal");
     }
@@ -123,4 +128,11 @@ public class CoreFamilyRemoveMemberPresenterTest {
         String defaultSortQuery = String.format(" %s ASC ", DBConstants.KEY.DOB);
         Assert.assertEquals(defaultSortQuery, removeMemberPresenter.getDefaultSortQuery());
     }
+
+    @Test
+    public void testSetInteractor() {
+        removeMemberPresenter.setInteractor(interactor);
+        Assert.assertNotNull(interactor);
+    }
+
 }
