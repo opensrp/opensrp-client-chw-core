@@ -15,6 +15,7 @@ import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.repository.AllSharedPreferences;
@@ -60,7 +61,8 @@ public class CoreChildProfilePresenterTest extends AbstractDao {
         Mockito.doReturn("String").when(view).getString(Mockito.anyInt());
 
         CommonPersonObjectClient client = Mockito.mock(CommonPersonObjectClient.class);
-        profilePresenter.refreshProfileTopSection(client);
+        CommonPersonObject personObject = Mockito.mock(CommonPersonObject.class);
+        profilePresenter.refreshProfileTopSection(client, personObject);
 
         Mockito.verify(view).setParentName(Mockito.any());
         Mockito.verify(view).setProfileName(Mockito.any());
