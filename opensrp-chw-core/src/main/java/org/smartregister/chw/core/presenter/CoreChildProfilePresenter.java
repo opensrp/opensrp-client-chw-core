@@ -389,25 +389,18 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
 
     @Override
-    public void refreshProfileTopSection(CommonPersonObjectClient client) {
+    public void refreshProfileTopSection(CommonPersonObjectClient client, CommonPersonObject familyPersonObject) {
         if (client == null || client.getColumnmaps() == null) {
             return;
         }
-        try {
-            CommonRepository commonRepository = org.smartregister.chw.core.utils.Utils.context().commonrepository(org.smartregister.chw.core.utils.Utils.metadata().familyMemberRegister.tableName);
-            final CommonPersonObject familyPersonObject = commonRepository.findByBaseEntityId(getPrimaryCareGiverID());
 
-            String parentFirstName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
-            String parentLastName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
-            String parentMiddleName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
+        String parentFirstName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
+        String parentLastName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
+        String parentMiddleName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
 
-            String parentName = view.get().getContext().getResources().getString(R.string.care_giver_initials) + ": " + org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName);
-            getView().setParentName(parentName);
-        } catch (Exception ex) {
-            Timber.e(ex, "CoreChildProfilePresenter --> refreshProfileTopSection");
-            String empty = "";
-            getView().setParentName(empty);
-        }
+        String parentName = view.get().getContext().getResources().getString(R.string.care_giver_initials) + ": " + org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName);
+        getView().setParentName(parentName);
+
         String firstName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
         String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
