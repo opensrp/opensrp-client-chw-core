@@ -21,6 +21,7 @@ import org.smartregister.dao.AbstractDao;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.Repository;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class CoreChildProfilePresenterTest extends AbstractDao {
@@ -109,6 +110,20 @@ public class CoreChildProfilePresenterTest extends AbstractDao {
     public void testGetView() {
         CoreChildProfileContract.View myView = profilePresenter.getView();
         Assert.assertEquals(view, myView);
+    }
+
+    @Test
+    public void testIsWithinEditPeriod() {
+        Calendar calendarWithInEdit = Calendar.getInstance();
+        calendarWithInEdit.add(Calendar.HOUR, -12);
+        Assert.assertTrue(profilePresenter.isWithinEditPeriod(calendarWithInEdit.getTimeInMillis()));
+    }
+
+    @Test
+    public void testIsNotWithinEditPeriod() {
+        Calendar calendarNotWithInEdit = Calendar.getInstance();
+        calendarNotWithInEdit.add(Calendar.HOUR, -25);
+        Assert.assertFalse(profilePresenter.isWithinEditPeriod(calendarNotWithInEdit.getTimeInMillis()));
     }
 
     @Test
