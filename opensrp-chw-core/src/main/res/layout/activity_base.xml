@@ -424,7 +424,7 @@
                     android:text="@string/nav_last"
                     android:gravity="end"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvSyncTime"
@@ -436,7 +436,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/nav_last_sync_time"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </RelativeLayout>
         </RelativeLayout>
