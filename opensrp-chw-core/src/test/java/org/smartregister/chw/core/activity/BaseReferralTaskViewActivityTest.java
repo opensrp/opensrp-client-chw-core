@@ -24,7 +24,6 @@ import org.smartregister.chw.core.shadows.ShadowReferralTaskViewActivity;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.domain.Period;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.view.customcontrols.CustomFontTextView;
@@ -139,7 +138,8 @@ public class BaseReferralTaskViewActivityTest extends BaseUnitTest {
         task.setLocation("some-location");
         task.setGroupIdentifier("some-group-id");
         task.setDescription("ANC Signs");
-        task.setExecutionPeriod(new Period(DateTime.now().minusDays(1), DateTime.now().plusDays(1)));
+        task.setExecutionStartDate(new DateTime().minusDays(2));
+        task.setExecutionEndDate(new DateTime().plusDays(5));
         task.setRequester("Test Requester");
         return task;
     }
