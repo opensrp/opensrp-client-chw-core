@@ -11,19 +11,12 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.Context;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
-import org.smartregister.commonregistry.CommonRepository;
-
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 
 public class CoreFamilyMemberFloatingMenuTest {
 
-    @Mock
-    private CommonRepository commonRepository;
-
-    @Mock
-    private Context context;
 
     private CoreFamilyMemberFloatingMenu coreFamilyMemberFloatingMenuTest;
 
