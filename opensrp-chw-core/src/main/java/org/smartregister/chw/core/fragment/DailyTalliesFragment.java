@@ -162,7 +162,7 @@ public class DailyTalliesFragment extends Fragment {
     }
 
     private void initializeProgressDialog() {
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setTitle(getString(R.string.loading));
         progressDialog.setMessage(getString(R.string.please_wait_message));
