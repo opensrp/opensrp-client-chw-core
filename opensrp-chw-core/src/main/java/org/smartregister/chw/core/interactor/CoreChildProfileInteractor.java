@@ -269,7 +269,8 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                         if (isForEdit) {
                             callback.startFormForEdit("", pClient);
                         } else {
-                            callback.refreshProfileTopSection(pClient);
+                            CommonPersonObject commonPersonObject = getCommonRepository(Utils.metadata().familyMemberRegister.tableName).findByBaseEntityId(primaryCaregiverID);
+                            callback.refreshProfileTopSection(pClient, commonPersonObject);
                         }
                     });
                 }
