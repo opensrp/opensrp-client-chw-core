@@ -34,7 +34,7 @@ public class CoreFamilyMemberFloatingMenuTest {
     }
 
     @Test
-    public void whenSetupViewsAnswered() {
+    public void testSetupViewsAnswered() {
         coreFamilyMemberFloatingMenuTest.setClickListener(onClickFloatingMenu);
 
         ArgumentCaptor<OnClickFloatingMenu> captor = ArgumentCaptor.forClass(OnClickFloatingMenu.class);
@@ -43,7 +43,7 @@ public class CoreFamilyMemberFloatingMenuTest {
     }
 
     @Test
-    public void whenOnClickAnswered() {
+    public void testOnClickAnswered() {
         Mockito.doNothing().when(coreFamilyMemberFloatingMenuTest).onClick(view);
         coreFamilyMemberFloatingMenuTest.onClick(view);
 
@@ -53,7 +53,7 @@ public class CoreFamilyMemberFloatingMenuTest {
     }
 
     @Test
-    public void whenRedrawAnswered() {
+    public void testRedrawAnswered() {
         Mockito.doNothing().when(coreFamilyMemberFloatingMenuTest).reDraw(true);
         coreFamilyMemberFloatingMenuTest.reDraw(true);
 
