@@ -146,22 +146,18 @@ public class AncVisitAlertRule implements ICommonRule, RegisterAlert {
 
     public Date getOverDueDate() {
         if (lastVisitDate == null) {
-            if (visitNotDoneDate != null) {
-                anchor = visitNotDoneDate.toDate();
-            } else {
-                anchor = getLastDayOfMonth(dateCreated.toDate());
-            }
+            return (visitNotDoneDate != null) ? visitNotDoneDate.toDate() : getLastDayOfMonth(dateCreated.toDate());
         } else {
-            if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
-                if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
-                    anchor = getLastDayOfMonth(todayDate.toDate());
-                }
-            } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
-                anchor = visitNotDoneDate.toDate();
+
+            if (visitNotDoneDate == null || lastVisitDate.isAfter(visitNotDoneDate)) {
+                int monthsDiff = getMonthsDifference(lastVisitDate, todayDate);
+                return monthsDiff > 1 ? getLastDayOfMonth(lastVisitDate.toDate()) : getLastDayOfMonth(todayDate.toDate());
+            } else if (visitNotDoneDate != null) {
+                return visitNotDoneDate.toDate();
+            } else {
+                return getLastDayOfMonth(lastVisitDate.toDate());
             }
         }
-        return anchor;
-
     }
 
     protected Date getLastDayOfMonth(Date refDate) {

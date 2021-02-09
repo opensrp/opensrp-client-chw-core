@@ -731,4 +731,5 @@
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">Angalia historia ya chanjo</string>
     <string name="see_vaccines_due_today">Angalia chanjo zinazopaswa kutolewa leo</string>
+    <string name="confirm">Thibitisha</string>
 </resources>

@@ -125,7 +125,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 Utils.startAsyncTask(new StartDraftMonthlyFormTask(this, date, formName), null);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
     }
