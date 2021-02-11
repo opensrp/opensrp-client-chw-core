@@ -72,7 +72,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private ClientClassification classification;
     private Table vaccineTable;
     private Table serviceTable;
-    private ConcurrentQueue visitQueue;
 
     protected CoreClientProcessor(Context context) {
         super(context);
@@ -152,13 +151,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 processEvents(clientClassification, vaccineTable, serviceTable, eventClient, event, eventType);
             }
-
-            completePrecessing();
         }
-    }
-
-    protected void completePrecessing(){
-        getVisitQueue().run();
     }
 
     private ClientClassification getClassification() {
@@ -199,24 +192,18 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processService(eventClient, serviceTable);
                 break;
             case CoreConstants.EventType.CHILD_HOME_VISIT:
-                ProcessTimer.startTiming(eventType);
-                processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.CHILD_HOME_VISIT); // 466
+                processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                ProcessTimer.endTiming();
                 break;
             case CoreConstants.EventType.FAMILY_KIT:
-                ProcessTimer.startTiming(eventType);
                 processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.FAMILY_KIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                ProcessTimer.endTiming();
                 break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
             case CoreConstants.EventType.WASH_CHECK:
             case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
-                ProcessTimer.startTiming(eventType);
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                ProcessTimer.endTiming();
                 break;
             case CoreConstants.EventType.MINIMUM_DIETARY_DIVERSITY:
             case CoreConstants.EventType.MUAC:
@@ -236,10 +223,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
-                ProcessTimer.startTiming(eventType);
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                ProcessTimer.endTiming();
                 break;
             case CoreConstants.EventType.ANC_HOME_VISIT:
             case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE:
@@ -248,13 +233,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PNC_HOME_VISIT_NOT_DONE:
             case FamilyPlanningConstants.EventType.FP_FOLLOW_UP_VISIT:
             case FamilyPlanningConstants.EventType.FAMILY_PLANNING_REGISTRATION:
-                ProcessTimer.startTiming(eventType);
                 if (eventClient.getEvent() == null) {
                     return;
                 }
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
-                ProcessTimer.endTiming();
                 break;
             case CoreConstants.EventType.REMOVE_FAMILY:
                 if (eventClient.getClient() == null) {
@@ -600,17 +583,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    private ConcurrentQueue getVisitQueue() {
-        if (visitQueue == null)
-            visitQueue = new ConcurrentQueue();
-
-        return visitQueue;
-    }
-
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            getVisitQueue().enqueueItem(() -> processHomeVisit(eventClient, getWritableDatabase(), null));
+            processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -619,7 +595,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            getVisitQueue().enqueueItem(() -> processHomeVisit(eventClient, getWritableDatabase(), parentEventName));
+            processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
