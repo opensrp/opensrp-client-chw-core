@@ -101,7 +101,7 @@ public class StockUsageReportRepositoryTest extends BaseUnitTest {
         Mockito.doReturn(cursor).when(sqLiteDatabase).query(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 
         List<StockUsage> result = stockUsageReportRepository.getStockUsageByName("3456");
-        Assert.assertEquals(result.size(), 1);
+        assertEquals(result.size(), 1);
     }
 
 }
