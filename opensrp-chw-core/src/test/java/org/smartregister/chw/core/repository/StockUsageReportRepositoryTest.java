@@ -2,8 +2,10 @@ package org.smartregister.chw.core.repository;
 
 import android.content.ContentValues;
 
+import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +22,7 @@ import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -75,6 +78,30 @@ public class StockUsageReportRepositoryTest extends BaseUnitTest {
 
         assertEquals("1234", contentValues.getAsString("id"));
         assertEquals("West", contentValues.getAsString("stock_name"));
+    }
+
+    @Test
+    public void testGetStockUsageByName() {
+        Mockito.doReturn(sqLiteDatabase).when(stockUsageReportRepository).getReadableDatabase();
+
+        MatrixCursor cursor = new MatrixCursor(StockUsageReportRepository.COLUMNS);
+        cursor.addRow(new Object[]{"STOCK_NAME", "STOCK_USAGE", "YEAR", "MONTH", "PROVIDER_ID", null, null});
+        Mockito.doReturn(cursor).when(sqLiteDatabase).query(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        List<StockUsage> result = stockUsageReportRepository.getStockUsageByBaseID("1234");
+        Assert.assertEquals(result.size(), 1);
+    }
+
+    @Test
+    public void testGetStockUsageByBaseID() {
+        Mockito.doReturn(sqLiteDatabase).when(stockUsageReportRepository).getReadableDatabase();
+
+        MatrixCursor cursor = new MatrixCursor(StockUsageReportRepository.COLUMNS);
+        cursor.addRow(new Object[]{"STOCK_NAME", "STOCK_USAGE", "YEAR", "MONTH", "PROVIDER_ID", null, null});
+        Mockito.doReturn(cursor).when(sqLiteDatabase).query(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        List<StockUsage> result = stockUsageReportRepository.getStockUsageByName("3456");
+        Assert.assertEquals(result.size(), 1);
     }
 
 }
