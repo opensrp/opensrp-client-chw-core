@@ -147,7 +147,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 processEvents(clientClassification, vaccineTable, serviceTable, eventClient, event, eventType);
             }
-
         }
     }
 
@@ -583,7 +582,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            NCUtils.processHomeVisit(eventClient); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -592,7 +591,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            NCUtils.processSubHomeVisit(eventClient, parentEventName); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
