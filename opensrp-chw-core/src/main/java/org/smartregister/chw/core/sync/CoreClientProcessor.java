@@ -7,10 +7,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.json.JSONException;
-import org.smartregister.chw.anc.AncLibrary;
-import org.smartregister.chw.anc.domain.Visit;
-import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
@@ -586,7 +582,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            processHomeVisit(eventClient, getWritableDatabase(), null);
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -595,35 +591,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
-        }
-    }
-
-
-    public static void processHomeVisit(EventClient baseEvent, SQLiteDatabase database, String parentEventType) {
-        try {
-            Visit visit = NCUtils.eventToVisit(baseEvent.getEvent());
-            if (StringUtils.isNotBlank(parentEventType) && !parentEventType.equalsIgnoreCase(visit.getVisitType())) {
-                String parentVisitID = AncLibrary.getInstance().visitRepository().getParentVisitEventID(visit.getBaseEntityId(), parentEventType, visit.getDate());
-                visit.setParentVisitID(parentVisitID);
-            }
-
-            AncLibrary.getInstance().visitRepository().addVisit(visit, database);
-
-            if (visit.getVisitDetails() != null) {
-                for (Map.Entry<String, List<VisitDetail>> entry : visit.getVisitDetails().entrySet()) {
-                    if (entry.getValue() != null) {
-                        for (VisitDetail detail : entry.getValue()) {
-                            AncLibrary.getInstance().visitDetailsRepository().addVisitDetails(detail, database);
-                        }
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            Timber.e(e);
         }
     }
 
