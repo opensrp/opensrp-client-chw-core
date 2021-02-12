@@ -457,6 +457,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case DBConstants.KEY.GPS:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GPS, false));
                 break;
+
+            case ChwDBConstants.EVENT_DATE:
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, false));
+                break;
+
             default:
                 Timber.e("ERROR:: Unprocessed Form Object Key %s", jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY));
                 break;
@@ -690,6 +695,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         member.setPhone(getJsonFieldValue(fields, CoreConstants.JsonAssets.FAMILY_MEMBER.PHONE_NUMBER));
         member.setOtherPhone(getJsonFieldValue(fields, CoreConstants.JsonAssets.FAMILY_MEMBER.OTHER_PHONE_NUMBER));
         member.setEduLevel(getJsonFieldValue(fields, CoreConstants.JsonAssets.FAMILY_MEMBER.HIGHEST_EDUCATION_LEVEL));
+        member.setEverSchool(getJsonFieldValue(fields, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
+        member.setSchoolLevel(getJsonFieldValue(fields, CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL));
         member.setPrimaryCareGiver(
                 getJsonFieldValue(fields, CoreConstants.JsonAssets.PRIMARY_CARE_GIVER).equalsIgnoreCase("Yes") ||
                         getJsonFieldValue(fields, CoreConstants.JsonAssets.IS_PRIMARY_CARE_GIVER).equalsIgnoreCase("Yes")
@@ -802,6 +809,25 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         educationLevels.put(context.getResources().getString(R.string.edu_level_secondary), "1714AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         educationLevels.put(context.getResources().getString(R.string.edu_level_post_secondary), "159785AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return educationLevels;
+    }
+
+    public static HashMap<String, String> getSchoolLevels(Context context) {
+        HashMap<String, String> schoolLevels = new HashMap<>();
+        schoolLevels.put(context.getResources().getString(R.string.school_level_none), "school_level_none");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_early_childhood), "school_level_early_childhood");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_primary), "school_level_primary");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_lower_secondary), "school_level_lower_secondary");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_upper_secondary), "school_level_upper_secondary");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_alternative), "school_level_alternative");
+        schoolLevels.put(context.getResources().getString(R.string.school_level_Higher), "school_level_Higher");
+        return schoolLevels;
+    }
+
+    public static HashMap<String, String> getEverSchoolOptions(Context context) {
+        HashMap<String, String> everSchoolOptions = new HashMap<>();
+        everSchoolOptions.put("Yes", "key_yes");
+        everSchoolOptions.put("No", "key_no");
+        return everSchoolOptions;
     }
 
     public static JSONObject getAncPncForm(Integer title_resource, String formName, MemberObject memberObject, Context context) {

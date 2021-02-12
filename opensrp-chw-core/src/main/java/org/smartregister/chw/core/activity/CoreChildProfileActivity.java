@@ -85,6 +85,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public RelativeLayout layoutServiceDueRow;
     public View viewLastVisitRow;
     public View viewVaccineHistoryRow;
+    public TextView textViewFamilyHas;
     protected TextView textViewParentName;
     protected TextView textViewMedicalHistory;
     protected CircleImageView imageViewProfile;
@@ -103,6 +104,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
+    protected TextView physicallyChallenged;
     private RelativeLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
@@ -121,12 +123,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             }
         }
     };
-    private View viewFamilyRow;
+    public View viewFamilyRow;
     private View viewDividerSickRow;
     private TextView textViewNotVisitMonth;
     private TextView textViewUndo;
     private TextView textViewNameDue;
-    private TextView textViewFamilyHas;
     private TextView textViewSickChild;
     private ImageView imageViewCross;
     private ProgressBar progressBar;
@@ -240,6 +241,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         viewMostDueRow = findViewById(R.id.view_most_due_overdue_row);
         viewFamilyRow = findViewById(R.id.view_family_row);
         progressBar = findViewById(R.id.progress_bar);
+        physicallyChallenged = findViewById(R.id.physically_challenged);
         textViewRecord.setOnClickListener(this);
         textViewVisitNot.setOnClickListener(this);
         textViewUndo.setOnClickListener(this);
@@ -389,6 +391,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewChildName.append(", " + age);
     }
 
+    public void setNoButtonView() {
+        layoutRecordButtonDone.setVisibility(View.GONE);
+        layoutNotRecordView.setVisibility(View.GONE);
+        layoutRecordView.setVisibility(View.GONE);
+    }
+
     @Override
     public void setVisitButtonDueStatus() {
         openVisitButtonView();
@@ -454,8 +462,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void setDueTodayServices() {
         layoutServiceDueRow.setVisibility(View.VISIBLE);
         textViewDueToday.setVisibility(View.VISIBLE);
-        //   layoutMostDueOverdue.setVisibility(View.GONE);
-        //   viewMostDueRow.setVisibility(View.GONE);
     }
 
     @Override
@@ -473,6 +479,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         openVisitRecordDoneView();
         textViewRecord.setBackgroundResource(R.drawable.record_btn_selector_above_twentyfr);
         textViewRecord.setTextColor(getResources().getColor(R.color.light_grey_text));
+    }
+
+    @Override
+    public void setFamilyHasNothingElseDue() {
+        layoutFamilyHasRow.setVisibility(View.VISIBLE);
+        viewFamilyRow.setVisibility(View.VISIBLE);
     }
 
     @Override
