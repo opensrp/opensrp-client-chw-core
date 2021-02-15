@@ -9,6 +9,7 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.configurableviews.model.Field;
 import org.smartregister.domain.Response;
 import org.smartregister.domain.ResponseStatus;
+import org.smartregister.view.contract.IField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class CoreChildRegisterFragmentModelTest extends BaseUnitTest {
 
     @Test
     public void getFilterText() {
-        List<Field> fields = new ArrayList<>();
+        List<IField> fields = new ArrayList<>();
         Field field = new Field();
         field.setDisplayName("am a field");
         fields.add(field);
