@@ -2,6 +2,7 @@ package org.smartregister.chw.core.rule;
 
 import android.content.Context;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,15 +10,18 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.chw.core.BaseRobolectricTest;
 import org.smartregister.chw.core.implementation.MonthlyAlertRuleImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 /**
  * Created by Qazi Abubakar
  */
-public class MonthlyAlertRuleTest {
+
+public class MonthlyAlertRuleTest extends BaseRobolectricTest {
 
     private MonthlyAlertRule monthlyAlertRule;
 
