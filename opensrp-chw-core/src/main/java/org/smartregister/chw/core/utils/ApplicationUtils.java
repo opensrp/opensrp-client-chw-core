@@ -73,7 +73,7 @@ public class ApplicationUtils {
                         org.smartregister.chw.anc.util.DBConstants.KEY.VISIT_NOT_DONE};
             case CoreConstants.TABLE_NAME.PNC_MEMBER:
                 return new String[]{
-                        DBConstants.KEY.LAST_INTERACTED_WITH, DBConstants.KEY.RELATIONAL_ID, org.smartregister.chw.core.utils.ChwDBConstants.DELIVERY_DATE};
+                        DBConstants.KEY.LAST_INTERACTED_WITH, DBConstants.KEY.RELATIONAL_ID, ChwDBConstants.DELIVERY_DATE};
             default:
                 return null;
         }
