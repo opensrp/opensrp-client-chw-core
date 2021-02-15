@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
 
-import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.joda.time.LocalDate;
@@ -25,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import timber.log.Timber;
 
 public class MonthlyTalliesRepository extends BaseRepository {
     public static final SimpleDateFormat DF_YYYYMM = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH);
@@ -135,10 +136,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                 return unsentMonths;
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -174,10 +173,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
                     }
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -202,8 +199,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
                     COLUMN_MONTH + " = '" + month + "'",
                     null, null, null, null, null);
             monthlyTallies = readAllDataElements(cursor);
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -224,8 +221,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
             }
             try {
                 value = value + Double.valueOf(dailyTallies.get(i).getValue());
-            } catch (NumberFormatException e) {
-                Log.w(TAG, Log.getStackTraceString(e));
+            } catch (Exception e) {
+                Timber.e(e);
             }
         }
 
@@ -256,16 +253,12 @@ public class MonthlyTalliesRepository extends BaseRepository {
                                     new ArrayList<MonthlyTally>());
                         }
                         if (curTally.getMonth().getTime() > minDate.getTime() && curTally.getMonth().getTime() < maxDate.getTime())
-                        tallies.get(dateFormat.format(curTally.getMonth())).add(curTally);
+                            tallies.get(dateFormat.format(curTally.getMonth())).add(curTally);
                     }
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -294,13 +287,13 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                 return true;
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             try {
                 database.endTransaction();
-            } catch (IllegalStateException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+            } catch (Exception e) {
+                Timber.e(e);
             }
         }
 
@@ -346,13 +339,13 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                 return true;
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             try {
                 database.endTransaction();
-            } catch (IllegalStateException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+            } catch (Exception e) {
+                Timber.e(e);
             }
         }
 
@@ -373,10 +366,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
                     }
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -407,7 +398,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             curTally.setUpdatedAt(
                     new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_UPDATED_AT)))
             );
-                return curTally;
+            return curTally;
         }
 
         return null;
@@ -450,10 +441,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
                     tallies.add(tally);
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
