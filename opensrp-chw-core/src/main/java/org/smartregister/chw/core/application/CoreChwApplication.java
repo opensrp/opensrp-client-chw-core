@@ -3,8 +3,13 @@ package org.smartregister.chw.core.application;
 import android.content.Intent;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.smartregister.Context;
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.helper.RulesEngineHelper;
@@ -24,6 +29,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
+import org.smartregister.domain.Setting;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.domain.VaccineSchedule;
@@ -31,6 +37,7 @@ import org.smartregister.immunization.domain.jsonmapping.Vaccine;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinatorUtils;
+import org.smartregister.repository.AllSettings;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
@@ -45,6 +52,7 @@ import org.smartregister.view.activity.DrishtiApplication;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -70,6 +78,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private Hia2ReportRepository hia2ReportRepository;
     private CommunityResponderRepository communityResponderRepository;
     private RulesEngineHelper rulesEngineHelper;
+    private Map<String, Object> serverConfigs;
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return getInstance().jsonSpecHelper;
@@ -260,6 +269,39 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         return list;
     }
 
+    public AllSettings getSettingsRepository() {
+        return getInstance().getContext().allSettings();
+    }
+
+    public void processServerConfigs() {
+        populateConfigs(getSettingsRepository().getSetting(CoreConstants.CONFIGURATION.GLOBAL_CONFIGS));
+    }
+
+    public void populateConfigs(@NonNull Setting setting) {
+        if (setting == null) {
+            return;
+        }
+        try {
+            JSONArray settingsArray = new JSONObject(setting.getValue()).getJSONArray(CoreConstants.CONFIGURATION.SETTINGS);
+            for (int i = 0; i < settingsArray.length(); i++) {
+                JSONObject jsonObject = settingsArray.getJSONObject(i);
+                String value = jsonObject.optString(CoreConstants.CONFIGURATION.VALUE, null);
+                String key = jsonObject.optString(CoreConstants.CONFIGURATION.KEY, null);
+                JSONArray values = jsonObject.optJSONArray(CoreConstants.CONFIGURATION.VALUES);
+                if (value != null && key != null) {
+                    serverConfigs.put(key, value);
+                } else if (values != null && key != null) {
+                    serverConfigs.put(key, values);
+                }
+            }
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+    }
+
+    public Map<String, Object> getServerConfigs() {
+        return serverConfigs;
+    }
 
     public DailyTalliesRepository dailyTalliesRepository() {
         if (dailyTalliesRepository == null) {
