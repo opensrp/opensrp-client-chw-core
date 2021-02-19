@@ -29,4 +29,8 @@ public interface CoreApplication {
     ArrayList<Pair<String, String>> getFamilyLocationFields();
 
     String getDefaultLocationLevel();
+
+    boolean allowLazyProcessing();
+
+    String[] lazyProcessedEvents();
 }

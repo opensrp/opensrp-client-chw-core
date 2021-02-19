@@ -55,6 +55,8 @@ import org.smartregister.sync.ClientProcessorForJava;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +70,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private ClientClassification classification;
     private Table vaccineTable;
     private Table serviceTable;
+
+    private List<String> lazyEvents;
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
+    }
 
     protected CoreClientProcessor(Context context) {
         super(context);
@@ -431,7 +442,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     }
 
     // possible to delegate
-    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
+    public Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
             if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
@@ -498,7 +509,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     }
 
     // possible to delegate
-    private Boolean processService(EventClient service, Table serviceTable) {
+    public Boolean processService(EventClient service, Table serviceTable) {
 
         try {
 
@@ -575,13 +586,16 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(List<EventClient> eventClients, String parentEventName) {
         for (EventClient eventClient : eventClients) {
-            processVisitEvent(eventClient, parentEventName); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         }
     }
 
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
             NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
@@ -591,6 +605,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
             NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
