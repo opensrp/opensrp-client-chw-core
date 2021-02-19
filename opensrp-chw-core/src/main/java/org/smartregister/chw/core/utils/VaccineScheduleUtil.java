@@ -226,7 +226,7 @@ public class VaccineScheduleUtil {
         for (Map<String, Object> mapVac : vaccineTaskModel.getScheduleList()) {
             VaccineRepo.Vaccine myVac = (VaccineRepo.Vaccine) mapVac.get("vaccine");
             String status = (String) mapVac.get("status");
-            if (myVac != null && myVac.display().toLowerCase().contains(type.toLowerCase()) && status != null && status.equals("due")) {
+            if (myVac != null && myVac.display().toLowerCase().contains(type.toLowerCase()) && status != null && (status.equals("due") || status.equals("done"))) {
                 map = mapVac;
                 break;
             }
