@@ -58,19 +58,12 @@ public class CoreAncRegisterFragmentTest extends BaseUnitTest {
     public void setUp() {
 
         AncLibrary.init(context, repository, 1, 1);
-        org.smartregister.Context.bindtypes = new ArrayList<>();
+        Context.bindtypes = new ArrayList<>();
         fragment = new CoreAncRegisterFragmentImpl();
         AppCompatActivity activity = Robolectric.buildActivity(AppCompatActivity.class).create().start().get();
         activity.setContentView(org.smartregister.family.R.layout.activity_family_profile);
         Whitebox.setInternalState(fragment, "presenter", presenter);
         activity.getSupportFragmentManager().beginTransaction().add(fragment, "Presenter").commit();
-    }
-
-
-    @Test
-    public void presenterInitializesCorrectly() {
-        fragment.initializePresenter();
-        Assert.assertNotNull(presenter);
     }
 
     @Test

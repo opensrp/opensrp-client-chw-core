@@ -508,16 +508,20 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
+    private String serviceName(ContentValues contentValues){
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
+        }
+        return name;
+    }
+
     // possible to delegate
     public Boolean processService(EventClient service, Table serviceTable) {
 
         try {
 
-            if (service == null || service.getEvent() == null) {
-                return false;
-            }
-
-            if (serviceTable == null) {
+            if (service == null || service.getEvent() == null || serviceTable == null) {
                 return false;
             }
 
@@ -527,28 +531,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-
-                if (StringUtils.isNotBlank(name)) {
-                    name = name.replaceAll("_", " ").replace("dose", "").trim();
-                }
-
+                String name = serviceName(contentValues);
 
                 String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
                 Date date = getDate(eventDateStr);
-                String value = null;
-
-                if (StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding")) {
-                    value = contentValues.getAsString(RecurringServiceRecordRepository.VALUE);
-                }
+                String value = StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding") ? contentValues.getAsString(RecurringServiceRecordRepository.VALUE) : null;
 
                 RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
                 List<ServiceType> serviceTypeList = recurringServiceTypeRepository.searchByName(name);
-                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
-                    return false;
-                }
-
-                if (date == null) {
+                if (serviceTypeList == null || serviceTypeList.isEmpty() || date == null) {
                     return false;
                 }
 
