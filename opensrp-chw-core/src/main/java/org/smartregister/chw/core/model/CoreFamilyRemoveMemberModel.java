@@ -4,6 +4,7 @@ package org.smartregister.chw.core.model;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
@@ -19,6 +20,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.FEMALE;
+import static org.smartregister.chw.core.utils.CoreConstants.MALE;
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
 public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMemberModel implements FamilyRemoveMemberContract.Model {
@@ -66,7 +69,7 @@ public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMembe
                             Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true),
                             Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true),
                             dobString,
-                            Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true)
+                            getGenderTranslated(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true))
                     );
 
                     jsonObject.put("text", details);
@@ -79,6 +82,15 @@ public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMembe
             Timber.e(e);
             return null;
         }
+    }
+
+    private String getGenderTranslated(String gender) {
+        if (gender.equalsIgnoreCase(MALE)) {
+            return Utils.context().applicationContext().getResources().getString(R.string.male);
+        } else if (gender.equalsIgnoreCase(FEMALE)) {
+            return Utils.context().applicationContext().getResources().getString(R.string.female);
+        }
+        return "";
     }
 
     @Override

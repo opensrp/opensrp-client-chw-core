@@ -19,6 +19,8 @@ public class CoreConstants {
     public static final String DATE = "date";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
+    public static String FEMALE = "Female";
+    public static String MALE = "Male";
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, DONE, EXPIRY}
 

@@ -131,7 +131,7 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
         Form form = new Form();
         form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
         form.setWizard(false);
-        form.setSaveLabel("Save");
+        form.setSaveLabel(getString(R.string.save));
         if (jsonObject.has(CoreConstants.REGISTER_TYPE.INDEPENDENT)) {
             form.setName(getString(R.string.remove_client));
         }
