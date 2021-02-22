@@ -441,6 +441,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
+    public VaccineRepository getVaccineRepository(){
+        return CoreChwApplication.getInstance().vaccineRepository();
+    }
+
     // possible to delegate
     public Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
@@ -454,7 +458,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
+                VaccineRepository vaccineRepository = getVaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
@@ -516,6 +520,18 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return name;
     }
 
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+    }
+
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+    }
+
+    public boolean eventIsVoided(String submissionId){
+        return EventDao.isVoidedEvent(submissionId);
+    }
+
     // possible to delegate
     public Boolean processService(EventClient service, Table serviceTable) {
 
@@ -537,15 +553,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 Date date = getDate(eventDateStr);
                 String value = StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding") ? contentValues.getAsString(RecurringServiceRecordRepository.VALUE) : null;
 
-                RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+                RecurringServiceTypeRepository recurringServiceTypeRepository = getRecurringServiceTypeRepository();
                 List<ServiceType> serviceTypeList = recurringServiceTypeRepository.searchByName(name);
                 if (serviceTypeList == null || serviceTypeList.isEmpty() || date == null) {
                     return false;
                 }
 
-                RecurringServiceRecordRepository recurringServiceRecordRepository = ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+                RecurringServiceRecordRepository recurringServiceRecordRepository = getRecurringServiceRecordRepository();
 
-                boolean isVoidEvent = EventDao.isVoidedEvent(service.getEvent().getFormSubmissionId());
+                boolean isVoidEvent = eventIsVoided(service.getEvent().getFormSubmissionId());
                 ServiceRecord serviceObj = new ServiceRecord();
                 serviceObj.setBaseEntityId(contentValues.getAsString(RecurringServiceRecordRepository.BASE_ENTITY_ID));
                 serviceObj.setName(name);

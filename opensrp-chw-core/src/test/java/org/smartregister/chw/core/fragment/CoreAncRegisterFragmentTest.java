@@ -2,35 +2,16 @@ package org.smartregister.chw.core.fragment;
 
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import androidx.fragment.app.FragmentActivity;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.powermock.reflect.Whitebox;
-import org.robolectric.Robolectric;
 import org.robolectric.util.ReflectionHelpers;
-import org.smartregister.Context;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.fragment.impl.CoreAncRegisterFragmentImpl;
 import org.smartregister.chw.core.presenter.AncRegisterFragmentPresenter;
-import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.configurableviews.model.View;
-import org.smartregister.repository.Repository;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CoreAncRegisterFragmentTest extends BaseUnitTest {
 
@@ -43,31 +24,13 @@ public class CoreAncRegisterFragmentTest extends BaseUnitTest {
     @Mock
     private AncRegisterFragmentPresenter presenter;
 
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-
-    private CoreAncRegisterFragmentImpl fragment;
-
-    @Mock
-    private Repository repository;
-
-    @Mock
-    private Context context;
+    private CoreAncRegisterFragment fragment;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-
-        AncLibrary.init(context, repository, 1, 1);
-        Context.bindtypes = new ArrayList<>();
-        fragment = new CoreAncRegisterFragmentImpl();
-        FragmentActivity activity = Robolectric
-                .buildActivity(FragmentActivity.class).create().start()
-                .resume().get();
-        activity.setContentView(org.smartregister.family.R.layout.activity_family_profile);
-        Whitebox.setInternalState(fragment, "presenter", presenter);
-        activity.getSupportFragmentManager().beginTransaction().add(fragment, "Presenter").commit();
+        fragment = Mockito.mock(CoreAncRegisterFragment.class, Mockito.CALLS_REAL_METHODS);
+        ReflectionHelpers.setField(fragment, "presenter", presenter);
     }
 
     @Test
@@ -83,30 +46,12 @@ public class CoreAncRegisterFragmentTest extends BaseUnitTest {
         fragment.refreshSyncProgressSpinner();
         Mockito.verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
         Mockito.verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
+
     }
 
     @Test
-    public void testInitializeAdapter() {
-        Set<View> visibleColumns = new HashSet<>();
-        fragment.initializeAdapter(visibleColumns);
-        Assert.assertNotNull(ReflectionHelpers.getField(fragment, "clientsView"));
+    public void getMainConditionCallsPresenterGetCondition() {
+        fragment.getMainCondition();
+        Mockito.verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
     }
-
-    @Test
-    public void testOnViewClicked() {
-        fragment = Mockito.spy(fragment);
-        android.view.View view = Mockito.mock(android.view.View.class);
-        Mockito.doReturn(R.id.due_only_layout).when(view).getId();
-
-        CommonRepository commonRepository = Mockito.mock(CommonRepository.class);
-        Mockito.doReturn(commonRepository).when(fragment).commonRepository();
-
-
-        TextView dueOnlyLayout = Mockito.mock(TextView.class);
-        Mockito.doReturn(dueOnlyLayout).when(view).findViewById(R.id.due_only_text_view);
-
-        fragment.onViewClicked(view);
-        Assert.assertTrue(((boolean) (ReflectionHelpers.getField(fragment, "dueFilterActive"))));
-    }
-
 }
