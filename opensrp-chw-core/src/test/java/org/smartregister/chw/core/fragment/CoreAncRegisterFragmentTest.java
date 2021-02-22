@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -54,16 +55,27 @@ public class CoreAncRegisterFragmentTest extends BaseUnitTest {
     @Mock
     private Context context;
 
+    private AppCompatActivity activity;
+
     @Before
     public void setUp() {
 
         AncLibrary.init(context, repository, 1, 1);
         Context.bindtypes = new ArrayList<>();
         fragment = new CoreAncRegisterFragmentImpl();
-        AppCompatActivity activity = Robolectric.buildActivity(AppCompatActivity.class).create().start().get();
+        activity = Robolectric.buildActivity(AppCompatActivity.class).create().start().get();
         activity.setContentView(org.smartregister.family.R.layout.activity_family_profile);
         Whitebox.setInternalState(fragment, "presenter", presenter);
         activity.getSupportFragmentManager().beginTransaction().add(fragment, "Presenter").commit();
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
