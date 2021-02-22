@@ -1012,5 +1012,6 @@ public class CoreConstants {
         public static String CARE_PLAN_DATE = "care_plan_date";
         public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
         public static String FHIR_BUNDLE_INTENT = "fhirBundle";
+        public static String THINKMD_IDENTIFIER_TYPE = "thinkmd_id";
     }
 }
