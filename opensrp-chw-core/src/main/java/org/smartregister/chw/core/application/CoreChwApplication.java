@@ -163,17 +163,6 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         context.userService().logoutSession();
     }
 
-    /*
-    @Override
-    public String getPassword() {
-        if (password == null) {
-            String username = getContext().allSharedPreferences().fetchRegisteredANM();
-            password = getContext().userService().getGroupId(username);
-        }
-        return password;
-    }
-     */
-
     @Override
     public ClientProcessorForJava getClientProcessor() {
         return CoreChwApplication.getClientProcessor(CoreChwApplication.getInstance().getApplicationContext());
@@ -312,4 +301,13 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         return false;
     }
 
+    @Override
+    public boolean allowLazyProcessing() {
+        return false;
+    }
+
+    @Override
+    public String[] lazyProcessedEvents() {
+        return new String[0];
+    }
 }
