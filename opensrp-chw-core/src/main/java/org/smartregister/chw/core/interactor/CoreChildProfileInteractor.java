@@ -76,8 +76,9 @@ import java.util.Set;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.dao.ChildDao.getBaseEntityID;
-import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithBaseEntityId;
+import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithIdentifier;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.getFormTag;
@@ -486,13 +487,13 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String childBaseEntityId = getBaseEntityID(thinkMdId);
+                String childBaseEntityId = queryColumnWithIdentifier(THINKMD_ID, thinkMdId, BASE_ENTITY_ID);
                 // creating the event to sync with server
                 if (childBaseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
                             childBaseEntityId);
-                    updateLocalStorage(childBaseEntityId, "thinkmd_fhir_bundle", encodedBundle);
+                    updateLocalStorage(childBaseEntityId, THINKMD_FHIR_BUNDLE, encodedBundle);
 
                     for (Obs obs : carePlanEvent.getObs()) {
                         if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
@@ -535,7 +536,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void showThinkMDCarePlan(@NotNull Context context, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
             try {
-                String thinkMDFHIRBundle = queryColumnWithBaseEntityId(getChildBaseEntityId(), THINKMD_FHIR_BUNDLE);
+                String thinkMDFHIRBundle = queryColumnWithIdentifier(BASE_ENTITY_ID, getChildBaseEntityId(), THINKMD_FHIR_BUNDLE);
                 appExecutors.mainThread().execute(() -> {
 
                     if (StringUtils.isEmpty(thinkMDFHIRBundle))

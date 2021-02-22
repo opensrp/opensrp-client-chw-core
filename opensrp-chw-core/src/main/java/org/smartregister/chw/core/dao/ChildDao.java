@@ -19,8 +19,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINK_MD_ID;
 import static org.smartregister.chw.core.utils.CoreReferralUtils.getCommonRepository;
 import static org.smartregister.chw.core.utils.Utils.getDateDifferenceInDays;
 
@@ -131,7 +129,13 @@ public class ChildDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
-    public static String getBaseEntityID(String thinkMdId) {
+    public static String queryColumnWithIdentifier(String identifierType, String id, String requiredField) {
+        String selection = " ? = ?";
+        String[] selectionArgs = new String[]{identifierType, id};
+        return ChildDao.queryColumnWithEntityId(selection, selectionArgs, requiredField);
+    }
+
+/*    public static String getBaseEntityID(String thinkMdId) {
         String selection = " thinkmd_id = ? ";
         String[] selectionArgs = new String[]{thinkMdId};
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, BASE_ENTITY_ID);
@@ -141,15 +145,15 @@ public class ChildDao extends AbstractDao {
         String selection = " base_entity_id = ? ";
         String[] selectionArgs = new String[]{childBaseEntityId};
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, THINK_MD_ID);
-    }
+    }*/
 
 
-    public static String queryColumnWithBaseEntityId(String childBaseEntityId, String requiredField) {
+/*    public static String queryColumnWithBaseEntityId(String childBaseEntityId, String requiredField) {
         String selection = " base_entity_id = ? ";
         String[] selectionArgs = new String[]{childBaseEntityId};
 
         return ChildDao.queryColumnWithEntityId(selection, selectionArgs, requiredField);
-    }
+    }*/
 
     private static String queryColumnWithEntityId(String selection, String[] selectionArgs, String columnName) {
         SQLiteDatabase database = getRepository().getReadableDatabase();

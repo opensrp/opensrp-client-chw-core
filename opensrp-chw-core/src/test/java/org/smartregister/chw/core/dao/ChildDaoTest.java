@@ -16,6 +16,9 @@ import org.smartregister.repository.Repository;
 
 import java.util.List;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ChildDaoTest extends ChildDao {
 
@@ -155,53 +158,13 @@ public class ChildDaoTest extends ChildDao {
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
-        String baseEntityID = ChildDao.getBaseEntityID("thinkmd_id", "45678");
+        String baseEntityID = ChildDao.queryColumnWithIdentifier(THINKMD_ID, "45678", BASE_ENTITY_ID);
 
         Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
                 , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
                 , Mockito.nullable(String.class), Mockito.nullable(String.class));
 
         Assert.assertEquals(baseEntityID, "12345");
-    }
-
-    @Test
-    public void testQueryColumnWithEntityId() {
-        Mockito.doReturn(database).when(repository).getReadableDatabase();
-
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id", "html_assessment"});
-        matrixCursor.addRow(new Object[]{"1234", "assessment plan"});
-
-        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
-                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
-                , Mockito.nullable(String.class), Mockito.nullable(String.class));
-
-        String htmlAssessment = ChildDao.queryColumnWithBaseEntityId("1234", "html_assessment");
-
-        Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
-                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
-                , Mockito.nullable(String.class), Mockito.nullable(String.class));
-
-        Assert.assertEquals(htmlAssessment, "assessment plan");
-    }
-
-    @Test
-    public void testIsThinkMDCarePlanExist() {
-        Mockito.doReturn(database).when(repository).getReadableDatabase();
-
-        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"base_entity_id", "thinkmd_id"});
-        matrixCursor.addRow(new Object[]{"1234", "5678"});
-
-        Mockito.doReturn(matrixCursor).when(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
-                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
-                , Mockito.nullable(String.class), Mockito.nullable(String.class));
-
-        boolean thinkMDCarePlanExist = ChildDao.isThinkMDCarePlanExist("1234");
-
-        Mockito.verify(database).query(Mockito.eq("ec_child"), Mockito.any(String[].class)
-                , Mockito.anyString(), Mockito.nullable(String[].class), Mockito.nullable(String.class)
-                , Mockito.nullable(String.class), Mockito.nullable(String.class));
-
-        Assert.assertTrue(thinkMDCarePlanExist);
     }
 
     @Test

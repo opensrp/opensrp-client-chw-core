@@ -9,6 +9,7 @@ import org.smartregister.dao.AbstractDao;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
 import static org.smartregister.chw.core.dao.ChildDao.getChildProfileData;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
 import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
@@ -42,7 +43,7 @@ public class FHIRBundleDao extends AbstractDao {
     }
 
     private String getThinkMDUniqueId(String childBaseEntityId) {
-        String thinkMDId = ChildDao.getThinkMDId(childBaseEntityId);
+        String thinkMDId = ChildDao.queryColumnWithIdentifier("base_entity_id", childBaseEntityId, THINKMD_ID);
         return StringUtils.isNotBlank(thinkMDId) ? thinkMDId : getRandomGeneratedId();
     }
 
