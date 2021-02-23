@@ -18,6 +18,7 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
 
 import static org.smartregister.chw.core.dao.ChildDao.getChildProfileData;
+import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
 import static org.smartregister.chw.core.utils.Utils.fetchMUACValues;
 import static org.smartregister.chw.core.utils.Utils.getRandomGeneratedId;
 
@@ -26,7 +27,7 @@ public class FHIRBundleDaoTest {
 
     @Mock
     private Context context;
-    String childBaseEntityId = "123456";
+    private final String childBaseEntityId = "123456";
 
     @Before
     public void setUp() {
@@ -53,10 +54,10 @@ public class FHIRBundleDaoTest {
     @Test
     public void testFetchMUACValues() {
         PowerMockito.mockStatic(VisitDao.class);
-        PowerMockito.when(VisitDao.getMUACValue(childBaseEntityId)).thenReturn("green");
-        Pair<String, String> MUACValues = Utils.fetchMUACValues("123456");
-        Assert.assertEquals("green",MUACValues.getKey());
-        Assert.assertEquals("Green",MUACValues.getValue());
+        PowerMockito.when(getMUACValue(childBaseEntityId)).thenReturn("green");
+        Pair<String, String> MUACValues = fetchMUACValues("123456");
+        Assert.assertEquals("green", MUACValues.getKey());
+        Assert.assertEquals("Green", MUACValues.getValue());
     }
 }
 
