@@ -346,6 +346,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 Pair<String, Locale> lang = locales.get(which);
                 tvLang.setText(lang.getLeft());
                 LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
+                CoreChwApplication.getInstance().persistLanguage(lang.getValue().getLanguage());
 
                 // destroy current instance
                 drawer.closeDrawers();

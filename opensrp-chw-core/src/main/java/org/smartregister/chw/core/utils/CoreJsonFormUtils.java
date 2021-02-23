@@ -85,25 +85,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return intent;
     }
 
-
-    public static JSONObject getBirthCertFormAsJson(JSONObject form, String baseEntityId, String currentLocationId, String dateOfBirthString) throws Exception {
-
-        if (form == null) {
-            return null;
-        }
-        //dateOfBirthString = dateOfBirthString.contains("y") ? dateOfBirthString.substring(0, dateOfBirthString.indexOf("y")) : "";
-        form.getJSONObject(METADATA).put(ENCOUNTER_LOCATION, currentLocationId);
-        form.put(ENTITY_ID, baseEntityId);
-        JSONArray field = fields(form);
-        JSONObject mindate = getFieldJSONObject(field, "birth_cert_issue_date");
-        int days = getDayFromDate(dateOfBirthString);
-        //if(mindate!=null){
-        mindate.put("min_date", "today-" + days + "d");
-        //}
-        return form;
-
-    }
-
     public static int getDayFromDate(String dateOfBirth) {
         DateTime date = DateTime.parse(dateOfBirth);
         Days days = Days.daysBetween(date.toLocalDate(), LocalDate.now());
@@ -196,59 +177,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return event;
     }
 
-    public static Pair<Client, Event> processBirthAndIllnessForm(AllSharedPreferences allSharedPreferences, String jsonString) {
-        try {
-
-            Triple<Boolean, JSONObject, JSONArray> registrationFormParams = validateParameters(jsonString);
-            if (!registrationFormParams.getLeft()) {
-                return null;
-            }
-
-            JSONObject jsonForm = registrationFormParams.getMiddle();
-            JSONArray fields = registrationFormParams.getRight();
-
-            String entityId = getString(jsonForm, ENTITY_ID);
-
-            lastInteractedWith(fields);
-
-            String birthCert = org.smartregister.family.util.JsonFormUtils.getFieldValue(jsonString, "birth_cert");
-            if (!TextUtils.isEmpty(birthCert) && birthCert.equalsIgnoreCase("Yes")) {
-                JSONObject dobJSONObject = getFieldJSONObject(fields, "birth_notification");
-                dobJSONObject.put(Constants.KEY.VALUE, "No");
-                fields.put(dobJSONObject);
-            }
-
-            Client baseClient = org.smartregister.util.JsonFormUtils.createBaseClient(fields, formTag(allSharedPreferences), entityId);
-            Event baseEvent = org.smartregister.util.JsonFormUtils.createEvent(fields, getJSONObject(jsonForm, METADATA), formTag(allSharedPreferences), entityId, getString(jsonForm, ENCOUNTER_TYPE), CoreConstants.TABLE_NAME.CHILD);
-            String illness_acton = org.smartregister.family.util.JsonFormUtils.getFieldValue(jsonString, "action_taken");
-            if (!TextUtils.isEmpty(illness_acton)) {
-                baseEvent.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.ILLNESS_ACTION_TAKEN_LEVEL.CODE, "",
-                        toList(actionMap().get(illness_acton)), toList(illness_acton), null, "action_taken"));
-
-            }
-            tagSyncMetadata(allSharedPreferences, baseEvent);// tag docs
-
-            return Pair.create(baseClient, baseEvent);
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
-
     public static List<Object> toList(String... vals) {
-        List<Object> res = new ArrayList<>();
-        res.addAll(Arrays.asList(vals));
-        return res;
-    }
-
-    private static HashMap<String, String> actionMap() {
-        if (actionMap == null) {
-            actionMap = new HashMap<>();
-            actionMap.put("Managed", "140959AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            actionMap.put("Referred", "159494AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            actionMap.put("No action taken", "1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        }
-        return actionMap;
+        return new ArrayList<>(Arrays.asList(vals));
     }
 
     public static HashMap<String, String> getChoice(Context context) {
@@ -416,7 +346,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
     protected static void processPopulatableFields(CommonPersonObjectClient client, JSONObject jsonObject) throws JSONException {
 
-        switch (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).toLowerCase()) {
+        String key = jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).toLowerCase();
+        switch (key) {
             case Constants.JSON_FORM_KEY.DOB_UNKNOWN:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, false);
                 JSONObject optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
@@ -437,29 +368,14 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, fam_name);
                 break;
             case DBConstants.KEY.VILLAGE_TOWN:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.VILLAGE_TOWN, false));
-                break;
             case DBConstants.KEY.QUATER_CLAN:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.QUATER_CLAN, false));
-                break;
             case DBConstants.KEY.STREET:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.STREET, false));
-                break;
             case DBConstants.KEY.LANDMARK:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LANDMARK, false));
-                break;
             case DBConstants.KEY.FAMILY_SOURCE_INCOME:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FAMILY_SOURCE_INCOME, false));
-                break;
             case ChwDBConstants.NEAREST_HEALTH_FACILITY:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), ChwDBConstants.NEAREST_HEALTH_FACILITY, false));
-                break;
             case DBConstants.KEY.GPS:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GPS, false));
-                break;
-
             case ChwDBConstants.EVENT_DATE:
-                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, false));
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), key, false));
                 break;
 
             default:
@@ -492,26 +408,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             JSONObject optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
             optionsObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false));
         }
-    }
-
-    public static Vaccine tagSyncMetadata(AllSharedPreferences allSharedPreferences, Vaccine vaccine) {
-        String providerId = allSharedPreferences.fetchRegisteredANM();
-        vaccine.setAnmId(providerId);
-        vaccine.setLocationId(locationId(allSharedPreferences));
-        vaccine.setChildLocationId(allSharedPreferences.fetchCurrentLocality());
-        vaccine.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-        vaccine.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
-        return vaccine;
-    }
-
-    public static ServiceRecord tagSyncMetadata(AllSharedPreferences allSharedPreferences, ServiceRecord serviceRecord) {
-        String providerId = allSharedPreferences.fetchRegisteredANM();
-        serviceRecord.setAnmId(providerId);
-        serviceRecord.setLocationId(locationId(allSharedPreferences));
-        serviceRecord.setChildLocationId(allSharedPreferences.fetchCurrentLocality());
-        serviceRecord.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-        serviceRecord.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
-        return serviceRecord;
     }
 
     /**
@@ -606,52 +502,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             if (formField != null && formField.has(JsonFormConstants.VALUE)) {
                 return formField.getString(JsonFormConstants.VALUE);
             }
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return "";
-    }
-
-    /**
-     * Returns a value from a native forms checkbox field and returns an comma separated string
-     *
-     * @param jsonObject native forms jsonObject
-     * @param key        field object key
-     * @return value
-     */
-    public static String getCheckBoxValue(JSONObject jsonObject, String key) {
-        try {
-            JSONArray jsonArray = jsonObject.getJSONObject(JsonFormConstants.STEP1).getJSONArray(JsonFormConstants.FIELDS);
-
-            JSONObject jo = null;
-            int x = 0;
-            while (jsonArray.length() > x) {
-                jo = jsonArray.getJSONObject(x);
-                if (jo.getString(JsonFormConstants.KEY).equalsIgnoreCase(key)) {
-                    break;
-                }
-                x++;
-            }
-
-            StringBuilder resBuilder = new StringBuilder();
-            if (jo != null) {
-                // read all the checkboxes
-                JSONArray jaOptions = jo.getJSONArray(JsonFormConstants.OPTIONS_FIELD_NAME);
-                int optionSize = jaOptions.length();
-                int y = 0;
-                while (optionSize > y) {
-                    JSONObject options = jaOptions.getJSONObject(y);
-                    if (options.getBoolean(JsonFormConstants.VALUE)) {
-                        resBuilder.append(options.getString(JsonFormConstants.TEXT)).append(", ");
-                    }
-                    y++;
-                }
-
-                String res = resBuilder.toString();
-                res = (res.length() >= 2) ? res.substring(0, res.length() - 2) : "";
-                return res;
-            }
-
         } catch (Exception e) {
             Timber.e(e);
         }
