@@ -25,15 +25,17 @@ public class VisitDao extends AbstractDao {
 
     @Nullable
     public static Map<String, VisitSummary> getVisitSummary(String baseEntityID) {
-        String sql = "select base_entity_id , visit_type , max(visit_date) visit_date from visits " +
+        String sql = "select base_entity_id , visit_type , max(visit_date) visit_date , max(created_at) created_at from visits " +
                 " where base_entity_id = '" + baseEntityID + "' COLLATE NOCASE " +
                 " group by base_entity_id , visit_type ";
 
         DataMap<VisitSummary> dataMap = c -> {
             Long visit_date = getCursorLongValue(c, "visit_date");
+            Long created_at = getCursorLongValue(c, "created_at");
             return new VisitSummary(
                     getCursorValue(c, "visit_type"),
                     visit_date != null ? new Date(visit_date) : null,
+                    created_at != null ? new Date(created_at) : null,
                     getCursorValue(c, "base_entity_id")
             );
         };

@@ -927,6 +927,8 @@ public class CoreConstants {
     }
 
     public static final class VISIT_STATE {
+        public static final String WITHIN_24_HR = "WITHIN_24_HR";
+        public static final String WITHIN_MONTH = "WITHIN_MONTH";
         public static final String EXPIRED = "EXPIRED";
         public static final String DUE = "DUE";
         public static final String OVERDUE = "OVERDUE";
