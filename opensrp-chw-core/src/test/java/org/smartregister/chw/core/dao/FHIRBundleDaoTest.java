@@ -26,6 +26,7 @@ public class FHIRBundleDaoTest {
 
     @Mock
     private Context context;
+    String childBaseEntityId = "123456";
 
     @Before
     public void setUp() {
@@ -36,7 +37,6 @@ public class FHIRBundleDaoTest {
     @Test
     public void getFHIRBundleTest() {
         FHIRBundleDao fhirBundleDao = Mockito.spy(FHIRBundleDao.class);
-        String childBaseEntityId = "123456";
         PowerMockito.mockStatic(ChildDao.class);
         PowerMockito.mockStatic(Utils.class);
         PowerMockito.when(getChildProfileData(childBaseEntityId)).thenReturn(Triple.of("9416", "15-10-1994", "male"));
@@ -52,7 +52,6 @@ public class FHIRBundleDaoTest {
     @PrepareForTest({VisitDao.class})
     @Test
     public void testFetchMUACValues() {
-        String childBaseEntityId = "123456";
         PowerMockito.mockStatic(VisitDao.class);
         PowerMockito.when(VisitDao.getMUACValue(childBaseEntityId)).thenReturn("green");
         Pair<String, String> MUACValues = Utils.fetchMUACValues("123456");
