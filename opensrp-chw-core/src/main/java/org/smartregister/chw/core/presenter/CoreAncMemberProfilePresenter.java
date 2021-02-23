@@ -158,6 +158,64 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
         interactor.createAncDangerSignsOutcomeEvent(allSharedPreferences, jsonString, entityID);
     }
 
+    private Pair<String, Date> visitWithinMonth(org.smartregister.chw.core.domain.VisitSummary lastVisit) {
+        if (lastVisit == null)
+            return null;
+
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+
+        boolean within24Hours = (Days.daysBetween(new DateTime(lastVisit.getDateCreated()), new DateTime()).getDays() < 1) &&
+                (Days.daysBetween(new DateTime(lastVisit.getVisitDate()), new DateTime()).getDays() <= 1);
+
+        String lastVisitDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getVisitDate());
+        int monthDiffs = Months.monthsBetween(formatter.parseLocalDate(lastVisitDate).withDayOfMonth(1), new LocalDate().withDayOfMonth(1)).getMonths();
+        boolean isVisitThisMonth = monthDiffs < 1;
+
+        if (isVisitThisMonth) {
+            if (within24Hours) {
+                Calendar cal = Calendar.getInstance();
+                int offset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+                long longDate = lastVisit.getVisitDate().getTime();
+                Date date = new Date(longDate - (long) offset);
+                return Pair.of(CoreConstants.VISIT_STATE.WITHIN_24_HR, date);
+            } else {
+                return Pair.of(CoreConstants.VISIT_STATE.WITHIN_MONTH, null);
+            }
+        }
+
+        return null;
+    }
+
+    private VisitSummary computeVisitSummary(
+            org.smartregister.chw.core.domain.VisitSummary lastVisit,
+            org.smartregister.chw.core.domain.VisitSummary lastNotDoneVisit,
+            org.smartregister.chw.core.domain.VisitSummary lastNotDoneVisitUndo,
+            MemberObject memberObject
+    ) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+        RulesEngineHelper rulesEngineHelper = CoreChwApplication.getInstance().getRulesEngineHelper();
+
+        Rules rules = rulesEngineHelper.rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
+        if (lastNotDoneVisit != null && lastNotDoneVisitUndo != null
+                && lastNotDoneVisitUndo.getVisitDate().after(lastNotDoneVisit.getVisitDate())) {
+            lastNotDoneVisit = null;
+        }
+
+        String visitDate = lastVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getVisitDate()) : null;
+        String lastVisitNotDone = lastNotDoneVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getVisitDate()) : null;
+
+        LocalDate ancCreatedDate = null;
+        try {
+            Date dateCreated = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(memberObject.getDateCreated().substring(0, 10));
+            String createdDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(dateCreated);
+            ancCreatedDate = formatter.parseLocalDate(createdDate);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return HomeVisitUtil.getAncVisitStatus(getView().getContext(), rules, visitDate, lastVisitNotDone, ancCreatedDate);
+    }
+
     @Override
     public void refreshVisitStatus(MemberObject memberObject) {
         CallableInteractor myInteractor = getCallableInteractor();
@@ -166,58 +224,16 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
 
             Callable<Pair<String, Date>> callable = () -> {
                 String baseEntityID = memberObject.getBaseEntityId();
-                RulesEngineHelper rulesEngineHelper = CoreChwApplication.getInstance().getRulesEngineHelper();
-
-                DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
                 Map<String, org.smartregister.chw.core.domain.VisitSummary> summaryMap = VisitDao.getVisitSummary(baseEntityID);
                 org.smartregister.chw.core.domain.VisitSummary lastVisit = summaryMap.get(Constants.EVENT_TYPE.ANC_HOME_VISIT);
                 org.smartregister.chw.core.domain.VisitSummary lastNotDoneVisit = summaryMap.get(org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE);
                 org.smartregister.chw.core.domain.VisitSummary lastNotDoneVisitUndo = summaryMap.get(org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE_UNDO);
 
-                if (lastVisit != null) {
-                    boolean within24Hours = (Days.daysBetween(new DateTime(lastVisit.getDateCreated()), new DateTime()).getDays() < 1) &&
-                            (Days.daysBetween(new DateTime(lastVisit.getVisitDate()), new DateTime()).getDays() <= 1);
+                Pair<String, Date> result = visitWithinMonth(lastVisit);
+                if (result != null) return result;
 
-                    String lastVisitDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getVisitDate());
-                    int monthDiffs = Months.monthsBetween(formatter.parseLocalDate(lastVisitDate).withDayOfMonth(1), new LocalDate().withDayOfMonth(1)).getMonths();
-                    boolean isVisitThisMonth = monthDiffs < 1;
-
-                    if (isVisitThisMonth) {
-                        if (within24Hours) {
-                            Calendar cal = Calendar.getInstance();
-                            int offset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
-                            long longDate = lastVisit.getVisitDate().getTime();
-                            Date date = new Date(longDate - (long) offset);
-                            return Pair.of(CoreConstants.VISIT_STATE.WITHIN_24_HR, date);
-                        } else {
-                            return Pair.of(CoreConstants.VISIT_STATE.WITHIN_MONTH, null);
-                        }
-                    }
-                }
-
-                Rules rules = rulesEngineHelper.rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-                if (lastNotDoneVisit != null) {
-                    if (lastNotDoneVisitUndo != null
-                            && lastNotDoneVisitUndo.getVisitDate().after(lastNotDoneVisit.getVisitDate())) {
-                        lastNotDoneVisit = null;
-                    }
-                }
-
-                String visitDate = lastVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getVisitDate()) : null;
-                String lastVisitNotDone = lastNotDoneVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getVisitDate()) : null;
-
-                LocalDate ancCreatedDate = null;
-                try {
-                    Date dateCreated = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(memberObject.getDateCreated().substring(0, 10));
-                    String createdDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(dateCreated);
-                    ancCreatedDate = formatter.parseLocalDate(createdDate);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-
-                VisitSummary visitSummary = HomeVisitUtil.getAncVisitStatus(getView().getContext(), rules, visitDate, lastVisitNotDone, ancCreatedDate);
-
+                VisitSummary visitSummary = computeVisitSummary(lastVisit, lastNotDoneVisit, lastNotDoneVisitUndo, memberObject);
                 return Pair.of(visitSummary.getVisitStatus(), null);
             };
 
