@@ -139,4 +139,23 @@ public class ChwNotificationDaoTest extends ChwNotificationDao {
 
         Assert.assertNotNull(clientNotifications);
     }
+
+    @Test
+    public void testGetSyncLocationId() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"sync_location_id"});
+        matrixCursor.addRow(new Object[]{"123"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        String syncLocationId = ChwNotificationDao.getSyncLocationId("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+
+        Assert.assertNotNull(syncLocationId);
+
+
+        Assert.assertEquals("123", syncLocationId);
+    }
 }
