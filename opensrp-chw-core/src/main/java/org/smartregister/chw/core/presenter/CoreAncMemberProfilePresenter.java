@@ -196,13 +196,10 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
         RulesEngineHelper rulesEngineHelper = CoreChwApplication.getInstance().getRulesEngineHelper();
 
         Rules rules = rulesEngineHelper.rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-        if (lastNotDoneVisit != null && lastNotDoneVisitUndo != null
-                && lastNotDoneVisitUndo.getVisitDate().after(lastNotDoneVisit.getVisitDate())) {
-            lastNotDoneVisit = null;
-        }
+        boolean notDoneIsAfterLastVisit = lastNotDoneVisit != null && lastNotDoneVisitUndo != null && lastNotDoneVisitUndo.getVisitDate().after(lastNotDoneVisit.getVisitDate());
 
         String visitDate = lastVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getVisitDate()) : null;
-        String lastVisitNotDone = lastNotDoneVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getVisitDate()) : null;
+        String lastVisitNotDone = lastNotDoneVisit != null && notDoneIsAfterLastVisit ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getVisitDate()) : null;
 
         LocalDate ancCreatedDate = null;
         try {
