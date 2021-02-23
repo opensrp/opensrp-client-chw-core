@@ -7,7 +7,6 @@ import org.smartregister.chw.core.helper.RulesEngineHelper;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.CallableInteractor;
-import org.smartregister.util.GenericInteractor;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
