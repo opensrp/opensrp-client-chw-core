@@ -1,9 +1,9 @@
 package org.smartregister.chw.core.dao;
 
 import android.content.Context;
-import android.util.Pair;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.thinkmd.model.FHIRBundleModel;
@@ -23,10 +23,8 @@ public class FHIRBundleDao extends AbstractDao {
         model.setRandomlyGeneratedId(getRandomGeneratedId());
         model.setEncounterId(getRandomGeneratedId());
         Pair<String, String> muacPair = fetchMUACValues(childBaseEntityId);
-        if (muacPair != null) {
-            model.setMUACValueCode(muacPair.first);
-            model.setMUACValueDisplay(muacPair.second);
-        }
+        model.setMUACValueCode(muacPair.getKey());
+        model.setMUACValueDisplay(muacPair.getValue());
         Triple<String, String, String> userProfile = getChildProfileData(childBaseEntityId);
         if (userProfile != null) {
             model.setGender(userProfile.getRight());
