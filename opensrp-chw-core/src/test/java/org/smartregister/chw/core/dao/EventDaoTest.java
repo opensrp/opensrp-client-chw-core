@@ -5,6 +5,7 @@ import android.os.Build;
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,4 +60,24 @@ public class EventDaoTest extends EventDao {
         Event event = EventDao.getLatestEvent("some-base-entity-id", Arrays.asList("some-event-type", "another-event-type"));
         Assert.assertNotNull(event);
     }
+
+    @Test
+    public void getLatestJson() {
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"json"});
+        matrixCursor.addRow(new Object[]{eventJson});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+        @Nullable String event = EventDao.getLatestJson("some-base-entity-id", "some-event-type", "another-event-type");
+        Assert.assertNotNull(event);
+    }
+
+    @Test
+    public void isVoidedEvent() {
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"eventType","formSubmissionId"});
+        matrixCursor.addRow(new Object[]{"Void Event","123345"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+        boolean event = EventDao.isVoidedEvent("12345");
+        Assert.assertFalse(event);
+    }
+
+
 }
