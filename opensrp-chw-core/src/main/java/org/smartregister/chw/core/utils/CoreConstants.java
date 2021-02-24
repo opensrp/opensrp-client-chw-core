@@ -27,7 +27,6 @@ public class CoreConstants {
 
     public enum FamilyServiceType {DUE, OVERDUE, NOTHING}
 
-
     interface Properties {
         String TASK_IDENTIFIER = "taskIdentifier";
         String TASK_BUSINESS_STATUS = "taskBusinessStatus";
@@ -920,6 +919,12 @@ public class CoreConstants {
 
     public static final class ACTIVITY_PAYLOAD {
         public static final String ACTION = "action";
+        public static final String PHONE_NUMBER = "phone_number";
+        public static final String FORM_NAME = "form_name";
+        public static final String UNIQUE_ID = "unique_id";
+        public static final String FAMILY_BASE_ENTITY_ID = "familyBaseEntityId";
+        public static final String FAMILY_NAME = "familyName";
+        public static final String LAST_LMP = "lastMenstrualPeriod";
     }
 
     public static final class ACTION {
