@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.activity;
 
+import android.content.Intent;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,10 +9,10 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.utils.CoreConstants;
 
 import timber.log.Timber;
 
@@ -33,15 +35,17 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         //Auto login by default
         context.session().start(context.session().lengthInMilliseconds());
 
-        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class).create().start();
-        activity = controller.get();
+        Intent intent = new Intent();
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.PHONE_NUMBER, "phone_number");
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FORM_NAME, "form_name");
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.UNIQUE_ID, "unique_id");
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_BASE_ENTITY_ID, "familyBaseEntityId");
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_NAME, "familyName");
+        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.LAST_LMP, "lastMenstrualPeriod");
 
-        ReflectionHelpers.setField(activity, "phone_number", "phone_number");
-        ReflectionHelpers.setField(activity, "form_name", "form_name");
-        ReflectionHelpers.setField(activity, "unique_id", "unique_id");
-        ReflectionHelpers.setField(activity, "familyBaseEntityId", "familyBaseEntityId");
-        ReflectionHelpers.setField(activity, "familyName", "familyName");
-        ReflectionHelpers.setField(activity, "lastMenstrualPeriod", "lastMenstrualPeriod");
+        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start();
+        activity = controller.get();
+        activity.onCreation();
     }
 
     @After
@@ -56,26 +60,10 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
     @Test
     public void testGetFamilyBaseEntityId() {
-        Assert.assertEquals(CoreAncRegisterActivity.getFamilyBaseEntityId(), "familyBaseEntityId");
-    }
-
-    @Test
-    public void testGetFormName() {
-        Assert.assertEquals(CoreAncRegisterActivity.getFormName(), "form_name");
-    }
-
-    @Test
-    public void testGetUniqueId() {
-        Assert.assertEquals(CoreAncRegisterActivity.getUniqueId(), "unique_id");
-    }
-
-    @Test
-    public void testGetFamilyName() {
-        Assert.assertEquals(CoreAncRegisterActivity.getFamilyName(), "familyName");
-    }
-
-    @Test
-    public void testGetPhoneNumber() {
-        Assert.assertEquals(CoreAncRegisterActivity.getPhoneNumber(), "phone_number");
+        Assert.assertEquals(activity.getFamilyBaseEntityId(), "familyBaseEntityId");
+        Assert.assertEquals(activity.getFormName(), "form_name");
+        Assert.assertEquals(activity.getUniqueId(), "unique_id");
+        Assert.assertEquals(activity.getFamilyName(), "familyName");
+        Assert.assertEquals(activity.getPhoneNumber(), "phone_number");
     }
 }
