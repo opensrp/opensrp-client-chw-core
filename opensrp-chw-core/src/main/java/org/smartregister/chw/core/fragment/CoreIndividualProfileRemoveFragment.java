@@ -155,7 +155,7 @@ public abstract class CoreIndividualProfileRemoveFragment extends BaseFamilyProf
         intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonObject.toString());
 
         Form form = new Form();
-        form.setActionBarBackground(org.smartregister.family.R.color.family_actionbar);
+        form.setActionBarBackground(R.color.family_actionbar);
         form.setWizard(false);
         form.setSaveLabel("Save");
         if (jsonObject.has(CoreConstants.REGISTER_TYPE.INDEPENDENT)) {
