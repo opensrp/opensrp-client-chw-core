@@ -55,6 +55,8 @@ import org.smartregister.sync.ClientProcessorForJava;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +70,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private ClientClassification classification;
     private Table vaccineTable;
     private Table serviceTable;
+
+    private List<String> lazyEvents;
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
+    }
 
     protected CoreClientProcessor(Context context) {
         super(context);
@@ -147,7 +158,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 processEvents(clientClassification, vaccineTable, serviceTable, eventClient, event, eventType);
             }
-
         }
     }
 
@@ -220,6 +230,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
+            case CoreConstants.EventType.BIRTH_CERTIFICATION:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -431,8 +442,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
+    public VaccineRepository getVaccineRepository(){
+        return CoreChwApplication.getInstance().vaccineRepository();
+    }
+
     // possible to delegate
-    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
+    public Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
             if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
@@ -444,7 +459,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
+                VaccineRepository vaccineRepository = getVaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
@@ -498,16 +513,32 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
+    private String serviceName(ContentValues contentValues){
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
+        }
+        return name;
+    }
+
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+    }
+
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+    }
+
+    public boolean eventIsVoided(String submissionId){
+        return EventDao.isVoidedEvent(submissionId);
+    }
+
     // possible to delegate
-    private Boolean processService(EventClient service, Table serviceTable) {
+    public Boolean processService(EventClient service, Table serviceTable) {
 
         try {
 
-            if (service == null || service.getEvent() == null) {
-                return false;
-            }
-
-            if (serviceTable == null) {
+            if (service == null || service.getEvent() == null || serviceTable == null) {
                 return false;
             }
 
@@ -517,34 +548,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-
-                if (StringUtils.isNotBlank(name)) {
-                    name = name.replaceAll("_", " ").replace("dose", "").trim();
-                }
-
+                String name = serviceName(contentValues);
 
                 String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
                 Date date = getDate(eventDateStr);
-                String value = null;
+                String value = StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding") ? contentValues.getAsString(RecurringServiceRecordRepository.VALUE) : null;
 
-                if (StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding")) {
-                    value = contentValues.getAsString(RecurringServiceRecordRepository.VALUE);
-                }
-
-                RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+                RecurringServiceTypeRepository recurringServiceTypeRepository = getRecurringServiceTypeRepository();
                 List<ServiceType> serviceTypeList = recurringServiceTypeRepository.searchByName(name);
-                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
+                if (serviceTypeList == null || serviceTypeList.isEmpty() || date == null) {
                     return false;
                 }
 
-                if (date == null) {
-                    return false;
-                }
+                RecurringServiceRecordRepository recurringServiceRecordRepository = getRecurringServiceRecordRepository();
 
-                RecurringServiceRecordRepository recurringServiceRecordRepository = ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
-
-                boolean isVoidEvent = EventDao.isVoidedEvent(service.getEvent().getFormSubmissionId());
+                boolean isVoidEvent = eventIsVoided(service.getEvent().getFormSubmissionId());
                 ServiceRecord serviceObj = new ServiceRecord();
                 serviceObj.setBaseEntityId(contentValues.getAsString(RecurringServiceRecordRepository.BASE_ENTITY_ID));
                 serviceObj.setName(name);
@@ -576,14 +594,17 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(List<EventClient> eventClients, String parentEventName) {
         for (EventClient eventClient : eventClients) {
-            processVisitEvent(eventClient, parentEventName); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         }
     }
 
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            NCUtils.processHomeVisit(eventClient); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -592,7 +613,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            NCUtils.processSubHomeVisit(eventClient, parentEventName); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
