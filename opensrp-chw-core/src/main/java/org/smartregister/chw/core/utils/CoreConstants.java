@@ -64,7 +64,7 @@ public class CoreConstants {
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
         String BASE_ENTITY_ID = "base_entity_id";
-        String THINK_MD_ID = "thinkmd_id";
+        String THINKMD_ID = "thinkmd_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
@@ -1017,8 +1017,9 @@ public class CoreConstants {
 
 
     public static class ThinkMdConstants {
-        public static String HTML_ASSESSMENT = "html_assessment";
         public static String CARE_PLAN_DATE = "care_plan_date";
         public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
+        public static String FHIR_BUNDLE_INTENT = "fhirBundle";
+        public static String THINKMD_IDENTIFIER_TYPE = "thinkmd_id";
     }
 }

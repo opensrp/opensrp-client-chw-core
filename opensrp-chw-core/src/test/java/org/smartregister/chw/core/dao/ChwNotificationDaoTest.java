@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.dao;
 
 import android.content.Context;
+import android.util.Pair;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -13,6 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.repository.Repository;
+
+import java.util.List;
 
 public class ChwNotificationDaoTest extends ChwNotificationDao {
 
@@ -101,5 +104,58 @@ public class ChwNotificationDaoTest extends ChwNotificationDao {
         Mockito.doReturn("Sick Child").when(context).getString(Mockito.anyInt());
         boolean markedAsDone = ChwNotificationDao.isMarkedAsDone(context, "123456", "Sick Child");
         Assert.assertFalse(markedAsDone);
+    }
+
+    @Test
+    public void testGetNotYetDoneReferral() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"full_name", "phone_number", "village", "_id"});
+        matrixCursor.addRow(new Object[]{"jaunny", "0333444", "tumba", "12345"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        NotificationRecord notificationRecord = ChwNotificationDao.getNotYetDoneReferral("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+
+        Assert.assertNotNull(notificationRecord);
+        Assert.assertEquals("jaunny", notificationRecord.getClientName());
+        Assert.assertEquals("tumba", notificationRecord.getVillage());
+    }
+
+    @Test
+    public void testGetClientNotifications() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"notification_id", "notification_type", "entity_id"});
+        matrixCursor.addRow(new Object[]{"123", "urjent", "123456"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<Pair<String, String>> clientNotifications = ChwNotificationDao.getClientNotifications("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+
+        Assert.assertNotNull(clientNotifications);
+    }
+
+    @Test
+    public void testGetSyncLocationId() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"sync_location_id"});
+        matrixCursor.addRow(new Object[]{"123"});
+
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        String syncLocationId = ChwNotificationDao.getSyncLocationId("12345");
+
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+
+        Assert.assertNotNull(syncLocationId);
+
+
+        Assert.assertEquals("123", syncLocationId);
     }
 }
