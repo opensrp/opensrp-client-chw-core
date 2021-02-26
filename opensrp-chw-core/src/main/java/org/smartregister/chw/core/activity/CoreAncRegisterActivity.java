@@ -28,58 +28,79 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
-    protected static String phone_number;
-    protected static String form_name;
-    protected static String unique_id;
-    protected static String familyBaseEntityId;
-    protected static String familyName;
-    protected static String lastMenstrualPeriod;
+    protected String phone_number;
+    protected String form_name;
+    protected String unique_id;
+    protected String familyBaseEntityId;
+    protected String familyName;
+    protected String lastMenstrualPeriod;
 
-    public static String getFormTable() {
+    public String getFormTable() {
         if (form_name != null && form_name.equals(CoreConstants.JSON_FORM.getAncRegistration())) {
             return CoreConstants.TABLE_NAME.ANC_MEMBER;
         }
         return CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME;
     }
 
-    public static String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phone_number;
     }
 
-    public static void setPhoneNumber(String phone_number) {
-        CoreAncRegisterActivity.phone_number = phone_number;
+    public void setPhoneNumber(String phone_number) {
+        this.phone_number = phone_number;
     }
 
-    public static String getFormName() {
+    public String getFormName() {
         return form_name;
     }
 
-    public static void setFormName(String form_name) {
-        CoreAncRegisterActivity.form_name = form_name;
+    public void setFormName(String form_name) {
+        this.form_name = form_name;
     }
 
-    public static String getUniqueId() {
+    public String getUniqueId() {
         return unique_id;
     }
 
-    public static void setUniqueId(String unique_id) {
-        CoreAncRegisterActivity.unique_id = unique_id;
+    public void setUniqueId(String unique_id) {
+        this.unique_id = unique_id;
     }
 
-    public static String getFamilyBaseEntityId() {
+    public String getFamilyBaseEntityId() {
         return familyBaseEntityId;
     }
 
-    public static void setFamilyBaseEntityId(String familyBaseEntityId) {
-        CoreAncRegisterActivity.familyBaseEntityId = familyBaseEntityId;
+    public void setFamilyBaseEntityId(String familyBaseEntityId) {
+        this.familyBaseEntityId = familyBaseEntityId;
     }
 
-    public static String getFamilyName() {
+    public String getFamilyName() {
         return familyName;
     }
 
-    public static void setFamilyName(String familyName) {
-        CoreAncRegisterActivity.familyName = familyName;
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public String getLastMenstrualPeriod() {
+        return lastMenstrualPeriod;
+    }
+
+    public void setLastMenstrualPeriod(String lastMenstrualPeriod) {
+        this.lastMenstrualPeriod = lastMenstrualPeriod;
+    }
+
+    @Override
+    protected void onCreation() {
+        super.onCreation();
+        if (getIntent() != null) {
+            setPhoneNumber(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.PHONE_NUMBER));
+            setFormName(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.FORM_NAME));
+            setUniqueId(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.UNIQUE_ID));
+            setFamilyBaseEntityId(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_BASE_ENTITY_ID));
+            setFamilyName(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_NAME));
+            setLastMenstrualPeriod(getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.LAST_LMP));
+        }
     }
 
     @Override
@@ -118,7 +139,7 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
             try {
                 JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "delivery_date");
                 min_date.put("min_date", lastMenstrualPeriod);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Timber.e(e);
             }
 

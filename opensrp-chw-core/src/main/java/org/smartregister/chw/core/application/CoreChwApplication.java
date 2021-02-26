@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,12 +47,17 @@ import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
+import org.smartregister.util.CallableInteractor;
+import org.smartregister.util.GenericInteractor;
+import org.smartregister.util.LangUtils;
 import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -78,6 +84,8 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     private Hia2ReportRepository hia2ReportRepository;
     private CommunityResponderRepository communityResponderRepository;
     private RulesEngineHelper rulesEngineHelper;
+    private ExecutorService executor;
+    private CallableInteractor interactor;
     private Map<String, Object> serverConfigs;
 
     public static JsonSpecHelper getJsonSpecHelper() {
@@ -343,4 +351,50 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         return false;
     }
 
+    @Override
+    public boolean allowLazyProcessing() {
+        return false;
+    }
+
+    @Override
+    public String[] lazyProcessedEvents() {
+        return new String[0];
+    }
+
+    @Override
+    public void persistLanguage(String language) {
+        getExecutorService().execute(() -> Context.getInstance().allSettings().put(CoreConstants.PERSISTED_LANGUAGE, language));
+    }
+
+    @Override
+    public void reloadLanguage() {
+        getExecutorService().execute(() -> {
+            String language = Context.getInstance().allSettings().get(CoreConstants.PERSISTED_LANGUAGE);
+            if (StringUtils.isNotBlank(language))
+                LangUtils.saveLanguage(getApplicationContext(), language);
+        });
+    }
+
+
+    @Override
+    public ExecutorService getExecutorService() {
+        if (executor == null) {
+            int value = 2;
+            try {
+                value = Runtime.getRuntime().availableProcessors();
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+            executor = Executors.newFixedThreadPool(Math.max(2, value));
+        }
+
+        return executor;
+    }
+
+    @Override
+    public CallableInteractor getCallableInteractor() {
+        if (interactor == null)
+            interactor = new GenericInteractor();
+        return interactor;
+    }
 }

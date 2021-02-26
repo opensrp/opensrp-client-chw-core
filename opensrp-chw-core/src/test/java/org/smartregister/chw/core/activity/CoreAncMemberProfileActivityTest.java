@@ -2,6 +2,8 @@ package org.smartregister.chw.core.activity;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +27,8 @@ import org.smartregister.chw.core.activity.impl.CoreAncMemberProfileActivityImpl
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.domain.AlertStatus;
+
+import java.util.Date;
 
 import timber.log.Timber;
 
@@ -131,5 +135,89 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
         activity = Mockito.spy(activity);
         activity.openFamilyLocation();
         Mockito.verify(activity).startActivity(Mockito.any());
+    }
+
+    @Test
+    public void testOnVisitStatusWithin24Hrs() {
+        activity = Mockito.spy(activity);
+
+        LinearLayout layoutRecordView = Mockito.mock(LinearLayout.class);
+        ReflectionHelpers.setField(activity, "layoutRecordView", layoutRecordView);
+        ReflectionHelpers.setField(activity, "tvEdit", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "textViewNotVisitMonth", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "imageViewCross", Mockito.mock(ImageView.class));
+        ReflectionHelpers.setField(activity, "textViewUndo", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "textViewAncVisitNot", Mockito.mock(TextView.class));
+
+        activity.onVisitStatusReloaded(CoreConstants.VISIT_STATE.WITHIN_24_HR, new Date());
+        Mockito.verify(layoutRecordView).setVisibility(View.GONE);
+    }
+
+    @Test
+    public void testOnVisitStatusWithinMonth() {
+        activity = Mockito.spy(activity);
+
+        LinearLayout bar = Mockito.mock(LinearLayout.class);
+        ReflectionHelpers.setField(activity, "record_reccuringvisit_done_bar", bar);
+        ReflectionHelpers.setField(activity, "layoutNotRecordView", Mockito.mock(RelativeLayout.class));
+        ReflectionHelpers.setField(activity, "textViewUndo", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "textViewAncVisitNot", Mockito.mock(TextView.class));
+
+        activity.onVisitStatusReloaded(CoreConstants.VISIT_STATE.WITHIN_MONTH, null);
+        Mockito.verify(bar).setVisibility(View.VISIBLE);
+    }
+
+    @Test
+    public void testOnVisitStatusOverDue() {
+        activity = Mockito.spy(activity);
+
+        TextView textViewUndo = Mockito.mock(TextView.class);
+
+        ReflectionHelpers.setField(activity, "layoutRecordView", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "record_reccuringvisit_done_bar", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "textViewAncVisitNot", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "layoutNotRecordView", Mockito.mock(RelativeLayout.class));
+
+        ReflectionHelpers.setField(activity, "textViewUndo", textViewUndo);
+        ReflectionHelpers.setField(activity, "textview_record_anc_visit", Mockito.mock(TextView.class));
+
+        activity.onVisitStatusReloaded(CoreConstants.VISIT_STATE.OVERDUE, null);
+        Mockito.verify(textViewUndo).setVisibility(View.GONE);
+    }
+
+    @Test
+    public void testOnVisitStatusDue() {
+        activity = Mockito.spy(activity);
+
+        TextView textViewUndo = Mockito.mock(TextView.class);
+
+        ReflectionHelpers.setField(activity, "layoutRecordView", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "record_reccuringvisit_done_bar", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "textViewAncVisitNot", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "layoutNotRecordView", Mockito.mock(RelativeLayout.class));
+
+        ReflectionHelpers.setField(activity, "textViewUndo", textViewUndo);
+        ReflectionHelpers.setField(activity, "textview_record_anc_visit", Mockito.mock(TextView.class));
+
+        activity.onVisitStatusReloaded(CoreConstants.VISIT_STATE.DUE, null);
+        Mockito.verify(textViewUndo).setVisibility(View.GONE);
+    }
+
+    @Test
+    public void testOnVisitStatusVisitThisMonth() {
+        activity = Mockito.spy(activity);
+
+        TextView textViewUndo = Mockito.mock(TextView.class);
+
+        ReflectionHelpers.setField(activity, "layoutRecordView", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "record_reccuringvisit_done_bar", Mockito.mock(LinearLayout.class));
+        ReflectionHelpers.setField(activity, "textViewAncVisitNot", Mockito.mock(TextView.class));
+        ReflectionHelpers.setField(activity, "layoutNotRecordView", Mockito.mock(RelativeLayout.class));
+
+        ReflectionHelpers.setField(activity, "textViewUndo", textViewUndo);
+        ReflectionHelpers.setField(activity, "textview_record_anc_visit", Mockito.mock(TextView.class));
+
+        activity.onVisitStatusReloaded(CoreConstants.VISIT_STATE.NOT_VISIT_THIS_MONTH, null);
+        Mockito.verify(textViewUndo).setVisibility(View.VISIBLE);
     }
 }
