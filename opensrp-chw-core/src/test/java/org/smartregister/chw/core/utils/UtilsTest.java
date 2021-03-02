@@ -260,6 +260,12 @@ public class UtilsTest {
         Assert.assertNull(Utils.getDayOfMonthWithSuffix(22, context));
     }
 
+    @Test
+    public void testGetDuration() {
+        String duration = Utils.getDuration("2006-01-01T05:00:00.000+05:00");
+        Assert.assertEquals("15y 1m",duration);
+    }
+
     @After
     public void tearDown() {
         columnMap = null;
