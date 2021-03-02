@@ -24,6 +24,7 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.tag.FormTag;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -262,8 +263,11 @@ public class UtilsTest {
 
     @Test
     public void testGetDuration() {
-        String duration = Utils.getDuration("2006-01-01T05:00:00.000+05:00");
-        Assert.assertEquals("15y 2m",duration);
+        LocalDate localDate = LocalDate.now().minusYears(15).minusMonths(1);
+        String time = localDate.toString();
+
+        String duration = Utils.getDuration(time);
+        Assert.assertEquals("15y 1m", duration);
     }
 
     @After
