@@ -105,6 +105,8 @@ public interface CoreChildProfileContract {
         void fetchProfileTasks();
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
+
+        void thinkMdAssessmentProcessed();
     }
 
     interface Flavor {

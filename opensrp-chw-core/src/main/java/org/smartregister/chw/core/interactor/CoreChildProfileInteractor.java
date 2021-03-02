@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,7 +19,7 @@ import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.WebViewActivity;
+import org.smartregister.chw.core.activity.DisplayCarePlanActivity;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.dao.AlertDao;
@@ -38,6 +39,8 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.core.utils.VaccineScheduleUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
+import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -73,12 +76,14 @@ import java.util.Set;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.dao.ChildDao.getBaseEntityID;
-import static org.smartregister.chw.core.dao.ChildDao.getThinkMDCarePlan;
+import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithIdentifier;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
-import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.getFormTag;
+import static org.smartregister.thinkmd.utils.Constants.THINKMD_FHIR_BUNDLE;
+import static org.smartregister.thinkmd.utils.Utils.decodeBase64;
 
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
@@ -482,16 +487,24 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
                 // getting thinkMD id from encoded fhir bundle
                 String thinkMdId = ThinkMDLibrary.getInstance().getThinkMDPatientId(encodedBundle);
                 // getting the baseEntityId mapped to thinkMD
-                String baseEntityId = getBaseEntityID(context.getResources().getString(R.string.thinkmd_identifier_type), thinkMdId);
+                String childBaseEntityId = queryColumnWithIdentifier(THINKMD_ID, thinkMdId, BASE_ENTITY_ID);
                 // creating the event to sync with server
-                if (baseEntityId != null) {
+                if (childBaseEntityId != null) {
                     Event carePlanEvent = ThinkMDLibrary.getInstance().createCarePlanEvent(encodedBundle,
                             getFormTag(getAllSharedPreferences()),
-                            baseEntityId);
+                            childBaseEntityId);
+                    updateLocalStorage(childBaseEntityId, THINKMD_FHIR_BUNDLE, encodedBundle);
+
+                    for (Obs obs : carePlanEvent.getObs()) {
+                        if (StringUtils.isEmpty(obs.getFormSubmissionField())) continue;
+                        if (obs.getFormSubmissionField().equals("carePlanDate")) {
+                            updateLocalStorage(childBaseEntityId, "care_plan_date", String.valueOf(obs.getValue()));
+                            break;
+                        }
+                    }
 
                     JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(carePlanEvent));
-                    ECSyncHelper.getInstance(context).addEvent(baseEntityId, eventPartialJson);
-
+                    ECSyncHelper.getInstance(context).addEvent(childBaseEntityId, eventPartialJson);
                     appExecutors.mainThread().execute(callback::carePlanEventCreated);
                 }
             } catch (Exception e) {
@@ -500,6 +513,18 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         };
 
         appExecutors.diskIO().execute(runnable);
+    }
+
+    private void updateLocalStorage(String childBaseEntityId, String fieldName, String fieldValue) {
+        if (getChildAllCommonsRepository() != null) {
+            ContentValues values = new ContentValues();
+            values.put(fieldName, fieldValue);
+            getChildAllCommonsRepository().update("ec_child", values, childBaseEntityId);
+        }
+    }
+
+    private AllCommonsRepository getChildAllCommonsRepository() {
+        return CoreChwApplication.getInstance().getAllCommonsRepository("ec_child");
     }
 
     @Override
@@ -511,14 +536,14 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
     public void showThinkMDCarePlan(@NotNull Context context, final CoreChildProfileContract.InteractorCallBack callback) {
         Runnable runnable = () -> {
             try {
-                String carePlan = getThinkMDCarePlan(getChildBaseEntityId(), HTML_ASSESSMENT);
+                String thinkMDFHIRBundle = queryColumnWithIdentifier(BASE_ENTITY_ID, getChildBaseEntityId(), THINKMD_FHIR_BUNDLE);
                 appExecutors.mainThread().execute(() -> {
 
-                    if (!StringUtils.isEmpty(carePlan))
+                    if (StringUtils.isEmpty(thinkMDFHIRBundle))
                         callback.noThinkMDCarePlanFound();
                     else {
-                        Intent intent = new Intent(context, WebViewActivity.class);
-                        intent.putExtra(CONTENT_TO_DISPLAY, carePlan);
+                        Intent intent = new Intent(context, DisplayCarePlanActivity.class);
+                        intent.putExtra(CONTENT_TO_DISPLAY, decodeBase64(thinkMDFHIRBundle));
                         context.startActivity(intent);
                     }
                 });
