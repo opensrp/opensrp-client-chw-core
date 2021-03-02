@@ -263,7 +263,7 @@ public class UtilsTest {
     @Test
     public void testGetDuration() {
         String duration = Utils.getDuration("2006-01-01T05:00:00.000+05:00");
-        Assert.assertEquals("15y 1m",duration);
+        Assert.assertEquals("15y 2m",duration);
     }
 
     @After
