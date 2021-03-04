@@ -6,12 +6,14 @@ import android.content.Context;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -53,6 +55,8 @@ import org.smartregister.sync.ClientProcessorForJava;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +70,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private ClientClassification classification;
     private Table vaccineTable;
     private Table serviceTable;
+
+    private List<String> lazyEvents;
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
+    }
 
     protected CoreClientProcessor(Context context) {
         super(context);
@@ -145,7 +158,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 processEvents(clientClassification, vaccineTable, serviceTable, eventClient, event, eventType);
             }
-
         }
     }
 
@@ -173,11 +185,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     public void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
         switch (eventType) {
             case VaccineIntentService.EVENT_TYPE:
+            case VaccineIntentService.EVENT_TYPE_IS_VOIDED:
             case VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT:
                 if (vaccineTable == null) {
                     return;
                 }
-                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT), eventType.equals(VaccineIntentService.EVENT_TYPE_IS_VOIDED));
                 break;
             case RecurringIntentService.EVENT_TYPE:
                 if (serviceTable == null) {
@@ -217,6 +230,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
+            case CoreConstants.EventType.BIRTH_CERTIFICATION:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -428,15 +442,14 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
+    public VaccineRepository getVaccineRepository(){
+        return CoreChwApplication.getInstance().vaccineRepository();
+    }
+
     // possible to delegate
-    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment) {
-
+    public Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
-            if (vaccine == null || vaccine.getEvent() == null) {
-                return false;
-            }
-
-            if (vaccineTable == null) {
+            if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
             }
 
@@ -446,23 +459,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
-
-                VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
+                VaccineRepository vaccineRepository = getVaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
-                vaccineObj.setName(contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
                 }
-                vaccineObj.setDate(date);
+                vaccineObj.setName(getVaccineName(vaccine, contentValues, isVoidEvent));
+                vaccineObj.setDate(getVaccineDate(vaccine, contentValues, isVoidEvent));
                 vaccineObj.setAnmId(contentValues.getAsString(VaccineRepository.ANMID));
                 vaccineObj.setLocationId(contentValues.getAsString(VaccineRepository.LOCATION_ID));
                 vaccineObj.setSyncStatus(VaccineRepository.TYPE_Synced);
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
@@ -476,10 +487,25 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return true;
 
         } catch (Exception e) {
-
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private Date getVaccineDate(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
+                    simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getVaccineName(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        return isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
+                contentValues.getAsString(VaccineRepository.NAME);
     }
 
     private String getVaccineProgramClient(EventClient eventClient) {
@@ -487,16 +513,32 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
+    private String serviceName(ContentValues contentValues){
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
+        }
+        return name;
+    }
+
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+    }
+
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+    }
+
+    public boolean eventIsVoided(String submissionId){
+        return EventDao.isVoidedEvent(submissionId);
+    }
+
     // possible to delegate
-    private Boolean processService(EventClient service, Table serviceTable) {
+    public Boolean processService(EventClient service, Table serviceTable) {
 
         try {
 
-            if (service == null || service.getEvent() == null) {
-                return false;
-            }
-
-            if (serviceTable == null) {
+            if (service == null || service.getEvent() == null || serviceTable == null) {
                 return false;
             }
 
@@ -506,32 +548,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-
-                if (StringUtils.isNotBlank(name)) {
-                    name = name.replaceAll("_", " ").replace("dose", "").trim();
-                }
-
+                String name = serviceName(contentValues);
 
                 String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
                 Date date = getDate(eventDateStr);
-                String value = null;
+                String value = StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding") ? contentValues.getAsString(RecurringServiceRecordRepository.VALUE) : null;
 
-                if (StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding")) {
-                    value = contentValues.getAsString(RecurringServiceRecordRepository.VALUE);
-                }
-
-                RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+                RecurringServiceTypeRepository recurringServiceTypeRepository = getRecurringServiceTypeRepository();
                 List<ServiceType> serviceTypeList = recurringServiceTypeRepository.searchByName(name);
-                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
+                if (serviceTypeList == null || serviceTypeList.isEmpty() || date == null) {
                     return false;
                 }
 
-                if (date == null) {
-                    return false;
-                }
+                RecurringServiceRecordRepository recurringServiceRecordRepository = getRecurringServiceRecordRepository();
 
-                RecurringServiceRecordRepository recurringServiceRecordRepository = ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+                boolean isVoidEvent = eventIsVoided(service.getEvent().getFormSubmissionId());
                 ServiceRecord serviceObj = new ServiceRecord();
                 serviceObj.setBaseEntityId(contentValues.getAsString(RecurringServiceRecordRepository.BASE_ENTITY_ID));
                 serviceObj.setName(name);
@@ -542,6 +573,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 serviceObj.setFormSubmissionId(service.getEvent().getFormSubmissionId());
                 serviceObj.setEventId(service.getEvent().getEventId()); //FIXME hard coded id
                 serviceObj.setValue(value);
+                serviceObj.setIsVoided(isVoidEvent ? 1 : 0);
                 serviceObj.setRecurringServiceId(serviceTypeList.get(0).getId());
 
                 String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
@@ -562,14 +594,17 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(List<EventClient> eventClients, String parentEventName) {
         for (EventClient eventClient : eventClients) {
-            processVisitEvent(eventClient, parentEventName); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         }
     }
 
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            NCUtils.processHomeVisit(eventClient); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -578,7 +613,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            NCUtils.processSubHomeVisit(eventClient, parentEventName); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -642,8 +680,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         Map<String, String> obsMap = new HashMap<>();
         if (event.getObs() != null) {
             for (Obs obs : event.getObs()) {
-                if (obs.getValues().size() > 0)
-                    obsMap.put(obs.getFormSubmissionField(), obs.getValues().get(0).toString());
+                if (obs.getValues().size() > 0) {
+                    Object object = obs.getValues().get(0);
+                    obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
+                }
             }
         }
         return obsMap;

@@ -24,6 +24,7 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.tag.FormTag;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -233,6 +234,24 @@ public class UtilsTest {
     }
 
     @Test
+    public void testGetDayOfMonthSuffix() {
+        String suffixOne = "st";
+        String suffixTwo = "nd";
+        String suffixThree = "th";
+        Assert.assertEquals(suffixOne, Utils.getDayOfMonthSuffix(1));
+        Assert.assertEquals(suffixTwo, Utils.getDayOfMonthSuffix(2));
+        Assert.assertEquals(suffixThree, Utils.getDayOfMonthSuffix(11));
+    }
+
+    @Test
+    public void testGetLocale() {
+        Locale expectedLocaleNull = Locale.getDefault();
+        Locale expectedLocaleNotNull = RuntimeEnvironment.application.getResources().getConfiguration().locale;
+        Assert.assertEquals(expectedLocaleNull, Utils.getLocale(null));
+        Assert.assertEquals(expectedLocaleNotNull, Utils.getLocale(RuntimeEnvironment.application));
+    }
+
+    @Test
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
         Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
         Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
@@ -240,6 +259,15 @@ public class UtilsTest {
         Assert.assertEquals("11th", Utils.getDayOfMonthWithSuffix(11, context));
         Assert.assertEquals("12th", Utils.getDayOfMonthWithSuffix(12, context));
         Assert.assertNull(Utils.getDayOfMonthWithSuffix(22, context));
+    }
+
+    @Test
+    public void testGetDuration() {
+        LocalDate localDate = LocalDate.now().minusYears(15).minusMonths(1);
+        String time = localDate.toString();
+
+        String duration = Utils.getDuration(time);
+        Assert.assertEquals("15y 1m", duration);
     }
 
     @After

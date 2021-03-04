@@ -20,7 +20,7 @@ public class FamilyKitAlertRule extends MonthlyAlertRule {
     public Date getDueDate() {
         Date lastDueDate = getLastDueDate();
         if (lastDueDate.getTime() < getFirstDayOfMonth(new Date()).getTime()) {
-            if (getFirstDayOfMonth(lastVisitDate.toDate()).getTime() < getFirstDayOfMonth(new Date()).getTime()) {
+            if (lastVisitDate != null && getFirstDayOfMonth(lastVisitDate.toDate()).getTime() < getFirstDayOfMonth(new Date()).getTime()) {
                 return getFirstDayOfMonth(new DateTime(lastVisitDate.toDate()).plusMonths(1).toDate());
             }
             return getFirstDayOfMonth(new Date());

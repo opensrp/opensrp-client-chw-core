@@ -121,9 +121,9 @@
                             android:id="@+id/rlReferralNotification"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp"
                             android:visibility="gone">
 
                             <ImageView
@@ -154,9 +154,9 @@
                             android:id="@+id/rlServiceReport"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp"
                             android:visibility="gone">
 
                             <ImageView
@@ -188,9 +188,9 @@
                             android:id="@+id/rlIconStockReport"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp"
                             android:visibility="gone">
 
                             <ImageView
@@ -222,9 +222,9 @@
                             android:id="@+id/rlIconResponders"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp"
                             android:visibility="gone">
 
                             <ImageView
@@ -256,9 +256,9 @@
                             android:id="@+id/rlIconLang"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp">
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp">
 
                             <ImageView
                                 android:id="@+id/ivIconLang"
@@ -289,9 +289,9 @@
                             android:id="@+id/rlIconDevice"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp">
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp">
 
                             <ImageView
                                 android:id="@+id/ivIconDevice"
@@ -322,9 +322,9 @@
                             android:id="@+id/rlLogout"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:paddingStart="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingBottom="15dp">
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="15dp">
 
                             <ImageView
                                 android:id="@+id/ivLogout"
@@ -399,11 +399,10 @@
 
                 <TextView
                     android:id="@+id/tvSync"
-                    android:layout_width="80sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="4dp"
                     android:layout_toEndOf="@+id/rlIconSync"
                     android:clickable="true"
                     android:ellipsize="end"
@@ -420,10 +419,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/tvSyncTime"
+                    android:layout_toEndOf="@+id/tvSync"
                     android:fontFamily="sans-serif"
                     android:text="@string/nav_last"
+                    android:gravity="end"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvSyncTime"
@@ -435,7 +436,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/nav_last_sync_time"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </RelativeLayout>
         </RelativeLayout>

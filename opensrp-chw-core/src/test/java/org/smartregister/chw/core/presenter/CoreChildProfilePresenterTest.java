@@ -15,12 +15,18 @@ import org.smartregister.chw.core.contract.CoreChildProfileContract;
 import org.smartregister.chw.core.domain.ProfileTask;
 import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.dao.AbstractDao;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.Repository;
 
+import java.util.Calendar;
 import java.util.Date;
 
-public class CoreChildProfilePresenterTest {
+public class CoreChildProfilePresenterTest extends AbstractDao {
+    @Mock
+    private Repository repository;
 
     @Mock
     private CoreChildProfileContract.View view;
@@ -39,6 +45,7 @@ public class CoreChildProfilePresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         profilePresenter = new CoreChildProfilePresenter(view, model, "12345");
+        setRepository(repository);
     }
 
     @Test
@@ -55,7 +62,8 @@ public class CoreChildProfilePresenterTest {
         Mockito.doReturn("String").when(view).getString(Mockito.anyInt());
 
         CommonPersonObjectClient client = Mockito.mock(CommonPersonObjectClient.class);
-        profilePresenter.refreshProfileTopSection(client);
+        CommonPersonObject personObject = Mockito.mock(CommonPersonObject.class);
+        profilePresenter.refreshProfileTopSection(client, personObject);
 
         Mockito.verify(view).setParentName(Mockito.any());
         Mockito.verify(view).setProfileName(Mockito.any());
@@ -102,6 +110,20 @@ public class CoreChildProfilePresenterTest {
     public void testGetView() {
         CoreChildProfileContract.View myView = profilePresenter.getView();
         Assert.assertEquals(view, myView);
+    }
+
+    @Test
+    public void testIsWithinEditPeriod() {
+        Calendar calendarWithInEdit = Calendar.getInstance();
+        calendarWithInEdit.add(Calendar.HOUR, -12);
+        Assert.assertTrue(profilePresenter.isWithinEditPeriod(calendarWithInEdit.getTimeInMillis()));
+    }
+
+    @Test
+    public void testIsNotWithinEditPeriod() {
+        Calendar calendarNotWithInEdit = Calendar.getInstance();
+        calendarNotWithInEdit.add(Calendar.HOUR, -25);
+        Assert.assertFalse(profilePresenter.isWithinEditPeriod(calendarNotWithInEdit.getTimeInMillis()));
     }
 
     @Test

@@ -20,6 +20,7 @@ import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
@@ -38,12 +39,13 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
-public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
+public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack, CoreChildProfileContract {
 
     public CoreChildProfileContract.Model model;
     public String childBaseEntityId;
     public String familyID;
     private WeakReference<CoreChildProfileContract.View> view;
+    private WeakReference<CoreChildProfileContract.Flavor> flavor;
     private CoreChildProfileContract.Interactor interactor;
     private String dob;
     private String familyName;
@@ -180,8 +182,20 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         return null;
     }
 
+    @Override
+    public CoreChildProfileContract.Flavor getFlavor() {
+        if (flavor != null)
+            return flavor.get();
+
+        return null;
+    }
+
     public void setView(WeakReference<CoreChildProfileContract.View> view) {
         this.view = view;
+    }
+
+    public void setFlavor(WeakReference<CoreChildProfileContract.Flavor> flavor) {
+        this.flavor = flavor;
     }
 
     @Override
@@ -374,16 +388,18 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
 
 
     @Override
-    public void refreshProfileTopSection(CommonPersonObjectClient client) {
+    public void refreshProfileTopSection(CommonPersonObjectClient client, CommonPersonObject familyPersonObject) {
         if (client == null || client.getColumnmaps() == null) {
             return;
         }
-        String parentFirstName = Utils.getValue(client.getColumnmaps(), ChildDBConstants.KEY.FAMILY_FIRST_NAME, true);
-        String parentLastName = Utils.getValue(client.getColumnmaps(), ChildDBConstants.KEY.FAMILY_LAST_NAME, true);
-        String parentMiddleName = Utils.getValue(client.getColumnmaps(), ChildDBConstants.KEY.FAMILY_MIDDLE_NAME, true);
+
+        String parentFirstName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
+        String parentLastName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
+        String parentMiddleName = Utils.getValue(familyPersonObject.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
 
         String parentName = view.get().getContext().getResources().getString(R.string.care_giver_initials) + ": " + org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName);
         getView().setParentName(parentName);
+
         String firstName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
         String lastName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
@@ -450,6 +466,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
     public void carePlanEventCreated() {
         if (getView() == null) return;
         getView().displayToast(R.string.thinkmd_assessment_saved);
+        getView().thinkMdAssessmentProcessed();
     }
 
     @Override

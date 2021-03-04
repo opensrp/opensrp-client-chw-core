@@ -38,7 +38,7 @@ public class StockUsageReportRepository extends BaseRepository {
             CREATED_AT + " VARCHAR " +
             ")";
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private String[] COLUMNS = {STOCK_NAME, STOCK_USAGE, YEAR, MONTH, PROVIDER_ID, UPDATED_AT, CREATED_AT};
+    public static String[] COLUMNS = {STOCK_NAME, STOCK_USAGE, YEAR, MONTH, PROVIDER_ID, UPDATED_AT, CREATED_AT};
     public static final String BASE_ID_INDEX = "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + ID + "_index ON " + TABLE_NAME + "(" + ID + " COLLATE NOCASE " + ")";
 
 
