@@ -53,11 +53,13 @@ public class VisitVaccineUtil {
 
             List<VaccineRepo.Vaccine> allVacs = new ArrayList<>();
 
-            List<VaccineRepo.Vaccine> woman =   ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo;
-            allVacs.addAll(woman);
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey("woman")) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo);
+            }
 
-            List<VaccineRepo.Vaccine> child =   ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo;
-            allVacs.addAll(child);
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey("child")) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo);
+            }
 
             for (VaccineRepo.Vaccine vaccine : allVacs) {
                 vaccineMap.put(
