@@ -100,7 +100,7 @@ public class CoreConstants {
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
         public static final String ANC_REGISTER = "anc_register";
         public static final String MALARIA_REGISTER = "anc_malaria_confirmation";
-        public static final String GLOBAL_CONFIGS = "global_configs";
+        public static final String INDICATOR_CONFIGS = "indicator_configs";
         public static final String KEY = "key";
         public static final String VALUE = "value";
         public static final String VALUES = "values";
