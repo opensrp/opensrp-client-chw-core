@@ -726,7 +726,6 @@
     <string name="thinkmd_health_assessment">Tathimini ya afya ya ThinkMD</string>
     <string name="thinkmd_careplan">Mpango wa utunzaji wa ThinkMD (%1$s)</string>
     <string name="care_plan">Mpango huduma</string>
-    <string name="thinkmd_identifier_type">thinkmd_id</string>
     <string name="thinkmd_assessment_saved">ThinkMD tathmini ya afya imehifadhiwa</string>
     <string name="no_thinkmd_care_plan_found">Hakuna mpango huduma wa thinkmd ulioonekana</string>
 

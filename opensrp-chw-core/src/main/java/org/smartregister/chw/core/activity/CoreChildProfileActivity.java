@@ -155,7 +155,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+        if (extras != null && getIntent().hasExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT)) {
             memberObject = (MemberObject) getIntent().getSerializableExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT);
             childBaseEntityId = memberObject.getBaseEntityId();
         }
@@ -584,6 +584,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         }
         setProgressBarState(false);
     }
+
+    @Override
+    public void thinkMdAssessmentProcessed() {
+        invalidateOptionsMenu();
+    }
+
 
     protected View.OnClickListener getSickListener() {
         return null;
