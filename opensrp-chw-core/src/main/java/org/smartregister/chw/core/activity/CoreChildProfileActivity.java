@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -104,7 +105,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
-    private RelativeLayout layoutNotRecordView;
+    private ConstraintLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
     private RelativeLayout layoutRecordButtonDone;
