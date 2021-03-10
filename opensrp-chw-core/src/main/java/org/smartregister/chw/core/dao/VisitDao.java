@@ -89,6 +89,33 @@ public class VisitDao extends AbstractDao {
         return Integer.valueOf(values.get(0)) > 0;
     }
 
+    public static String getBirthCertificateDate(String baseEntityID) {
+        String sql = "select d.updated_at from visit_details d " +
+                "inner join visits v on v.visit_id = d.visit_id COLLATE NOCASE " +
+                "where base_entity_id = '" + baseEntityID + "' COLLATE NOCASE and v.processed = 1 " +
+                "and (visit_key in ('birth_certificate','birth_cert') and (details = 'GIVEN' or human_readable_details = 'Yes'))";
+
+        DataMap<String> dataMap = c -> getCursorValue(c, "updated_at");
+        List<String> values = AbstractDao.readData(sql, dataMap);
+        if (values == null || values.size() == 0)
+            return "";
+
+        return values.get(0);
+    }
+
+    public static String getVaccineCardDate(String baseEntityID) {
+        String sql = "select d.updated_at from visit_details d inner join visits v on v.visit_id = d.visit_id " +
+                "COLLATE NOCASE where base_entity_id = '" + baseEntityID + "' " +
+                "COLLATE NOCASE and v.processed = 1 and (visit_key in ('vaccine_card', 'child_vaccine_card') and human_readable_details = 'Yes')";
+
+        DataMap<String> dataMap = c -> getCursorValue(c, "updated_at");
+        List<String> values = AbstractDao.readData(sql, dataMap);
+        if (values == null || values.size() == 0)
+            return "";
+
+        return values.get(0);
+    }
+
     public static boolean memberHasVaccineCard(String baseEntityID) {
         String sql = "select count(*) certificates " +
                 "from visit_details d " +

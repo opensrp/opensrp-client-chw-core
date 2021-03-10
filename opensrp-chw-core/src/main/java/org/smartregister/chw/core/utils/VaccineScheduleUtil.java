@@ -189,8 +189,8 @@ public class VaccineScheduleUtil {
      * @param group
      * @return
      */
-    public static List<VaccineWrapper> getChildDueVaccines(String baseEntityID, Date dob, int group) {
-        List<Alert> alerts = VisitVaccineUtil.getNextVaccines(baseEntityID, new DateTime(dob), CoreConstants.SERVICE_GROUPS.CHILD, false);
+    public static List<VaccineWrapper> getChildDueVaccines(String baseEntityID, Date dob, int group, boolean isEditMode) {
+        List<Alert> alerts = VisitVaccineUtil.getNextVaccines(baseEntityID, new DateTime(dob), CoreConstants.SERVICE_GROUPS.CHILD, false, isEditMode);
         List<VaccineWrapper> wrappers = new ArrayList<>();
         List<VaccineGroup> vaccineGroups = VaccineScheduleUtil.getVaccineGroups(CoreChwApplication.getInstance().getApplicationContext(), CoreConstants.SERVICE_GROUPS.CHILD);
         VaccineGroup vaccineGroup = vaccineGroups.get(group);

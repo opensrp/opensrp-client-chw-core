@@ -69,7 +69,7 @@ public class VisitVaccineUtil {
         return vaccineMap;
     }
 
-    public static List<Alert> getNextVaccines(String baseEntityID, DateTime anchorDate, String category, boolean includePending) {
+    public static List<Alert> getNextVaccines(String baseEntityID, DateTime anchorDate, String category, boolean includePending, boolean isEditMode) {
 
         /// compute the alerts
         HashMap<String, HashMap<String, VaccineSchedule>> vaccineSchedules = getVaccineSchedules(category);
@@ -87,7 +87,7 @@ public class VisitVaccineUtil {
             String code = alert.scheduleName().toLowerCase().replace(" ", "");
             Date dateIssued = issuedVaccines.get(code);
 
-            if (dateIssued == null) {
+            if (isEditMode || dateIssued == null) {
                 pending.add(alert);
             }
         }

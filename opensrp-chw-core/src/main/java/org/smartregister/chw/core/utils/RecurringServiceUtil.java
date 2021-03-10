@@ -182,7 +182,7 @@ public class RecurringServiceUtil {
             }
 
             for (ServiceRecord serviceRecord : model.getServiceRecords()) {
-                if (serviceRecord.getSyncStatus().equals(RecurringServiceTypeRepository.TYPE_Unsynced) && serviceRecord.getType().equals(type)) {
+                if (serviceRecord.getType().equals(type)) {
                     foundServiceTypeMap.put(type, model.getServiceTypes().get(type));
                     break;
                 }
