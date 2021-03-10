@@ -54,6 +54,7 @@ import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -167,6 +168,8 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     @Override
     public void onCreate() {
         super.onCreate();
+        if (serverConfigs == null)
+            serverConfigs = new HashMap<>();
     }
 
     @Override
@@ -282,7 +285,7 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
     }
 
     public void processServerConfigs() {
-        populateConfigs(getSettingsRepository().getSetting(CoreConstants.CONFIGURATION.GLOBAL_CONFIGS));
+        populateConfigs(getSettingsRepository().getSetting(CoreConstants.CONFIGURATION.INDICATOR_CONFIGS));
     }
 
     public void populateConfigs(@NonNull Setting setting) {
