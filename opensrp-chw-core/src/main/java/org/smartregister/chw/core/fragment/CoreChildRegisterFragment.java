@@ -28,6 +28,7 @@ import org.smartregister.family.fragment.NoMatchDialogFragment;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.BaseRegisterActivity;
+import org.smartregister.view.contract.IView;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -222,7 +223,7 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
     }
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         CoreChildRegisterProvider childRegisterProvider = new CoreChildRegisterProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, childRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);

@@ -13,9 +13,9 @@ import org.smartregister.chw.hf.provider.HfAncRegisterProvider;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.configurableviews.model.View;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.family.util.DBConstants;
+import org.smartregister.view.contract.IView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import timber.log.Timber;
 public class AncRegisterFragment extends CoreAncRegisterFragment {
 
     @Override
-    public void initializeAdapter(Set<View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         HfAncRegisterProvider provider = new HfAncRegisterProvider(getActivity(), commonRepository(), visibleColumns, registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, provider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);

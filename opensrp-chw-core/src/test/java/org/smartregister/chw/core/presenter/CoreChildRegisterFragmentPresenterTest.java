@@ -12,6 +12,7 @@ import org.smartregister.configurableviews.model.Field;
 import org.smartregister.configurableviews.model.RegisterConfiguration;
 import org.smartregister.configurableviews.model.View;
 import org.smartregister.configurableviews.model.ViewConfiguration;
+import org.smartregister.view.contract.IField;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CoreChildRegisterFragmentPresenterTest {
 
     @Test
     public void testUpdateSortAndFilter() {
-        List<Field> filterList = new ArrayList<>();
+        List<IField> filterList = new ArrayList<>();
         Field sortField = Mockito.mock(Field.class);
         presenter.updateSortAndFilter(filterList, sortField);
         Mockito.verify(view).updateFilterAndFilterStatus(Mockito.any(), Mockito.any());

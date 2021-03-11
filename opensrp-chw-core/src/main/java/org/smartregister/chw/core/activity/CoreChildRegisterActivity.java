@@ -88,8 +88,8 @@ public class CoreChildRegisterActivity extends BaseRegisterActivity implements C
     }
 
     @Override
-    public void startFormActivity(String s, String s1, Map<String, String> map) {
-        // code
+    public void startFormActivity(String formName, String entityId, Map<String, String> metaData) {
+        // Abstract method implementation
     }
 
     @Override

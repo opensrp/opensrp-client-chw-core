@@ -8,12 +8,13 @@ import org.smartregister.chw.hf.presenter.PncRegisterFragmentPresenter;
 import org.smartregister.chw.hf.provider.HfPncRegisterProvider;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
+import org.smartregister.view.contract.IView;
 
 import java.util.Set;
 
 public class PncRegisterFragment extends CorePncRegisterFragment {
 
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         ChwPncRegisterProvider provider = new HfPncRegisterProvider(getActivity(), commonRepository(), visibleColumns, registerActionHandler, paginationViewHandler);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, provider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);

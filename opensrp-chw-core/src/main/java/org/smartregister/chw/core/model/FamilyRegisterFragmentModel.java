@@ -8,7 +8,7 @@ import org.smartregister.family.util.Utils;
 /**
  * Created by keyman on 12/07/2018.
  */
-public class FamilyRegisterFramentModel extends BaseFamilyRegisterFramentModel {
+public class FamilyRegisterFragmentModel extends BaseFamilyRegisterFramentModel {
 
     @Override
     public RegisterConfiguration defaultRegisterConfiguration() {

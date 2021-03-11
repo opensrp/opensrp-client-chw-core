@@ -23,6 +23,7 @@ import org.smartregister.chw.malaria.fragment.BaseMalariaRegisterFragment;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
+import org.smartregister.view.contract.IView;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.text.MessageFormat;
@@ -40,7 +41,7 @@ public abstract class CoreMalariaRegisterFragment extends BaseMalariaRegisterFra
     private boolean dueFilterActive = false;
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         ChwMalariaRegisterProvider malariaRegisterProvider = new ChwMalariaRegisterProvider(getActivity(), paginationViewHandler, registerActionHandler, visibleColumns);
         clientAdapter = new RecyclerViewPaginatedAdapter(null, malariaRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);

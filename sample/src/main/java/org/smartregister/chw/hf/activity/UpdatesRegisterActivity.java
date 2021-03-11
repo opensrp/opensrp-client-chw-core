@@ -37,8 +37,8 @@ public class UpdatesRegisterActivity extends BaseChwNotificationRegister {
     }
 
     @Override
-    public void startFormActivity(String s, String s1, Map<String, String> map) {
-
+    public void startFormActivity(String formName, String entityId, Map<String, String> metaData) {
+        // Abstract method implementation
     }
 
     @Override

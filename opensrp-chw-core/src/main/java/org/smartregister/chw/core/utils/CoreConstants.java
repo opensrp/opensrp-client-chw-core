@@ -100,6 +100,11 @@ public class CoreConstants {
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
         public static final String ANC_REGISTER = "anc_register";
         public static final String MALARIA_REGISTER = "anc_malaria_confirmation";
+        public static final String INDICATOR_CONFIGS = "indicator_configs";
+        public static final String KEY = "key";
+        public static final String VALUE = "value";
+        public static final String VALUES = "values";
+        public static final String SETTINGS = "settings";
     }
 
     public static final class EventType {
@@ -929,6 +934,7 @@ public class CoreConstants {
 
     public static final class ACTION {
         public static final String START_REGISTRATION = "start_registration";
+        public static final String REPORTING_TARGETS_SYNCED = "reporting_targets_synced";
     }
 
     public static final class VISIT_STATE {
@@ -1011,8 +1017,8 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
-    public static class AncHealthFacilityVisitUtil{
-        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
+    public static class AncHealthFacilityVisitUtil {
+        public static final String TETANUS_TOXOID = "Tetanus toxoid (TT)";
     }
 
 

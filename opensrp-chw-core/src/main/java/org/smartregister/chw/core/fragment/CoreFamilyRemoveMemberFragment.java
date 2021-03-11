@@ -15,7 +15,6 @@ import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
 import org.smartregister.chw.core.provider.CoreFamilyRemoveMemberProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.configurableviews.model.View;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.family.fragment.BaseFamilyProfileMemberFragment;
@@ -23,6 +22,7 @@ import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
+import org.smartregister.view.contract.IView;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -36,7 +36,7 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
     protected String familyBaseEntityId;
 
     @Override
-    public void initializeAdapter(Set<View> visibleColumns, String familyHead, String primaryCaregiver) {
+    public void initializeAdapter(Set<IView> visibleColumns, String familyHead, String primaryCaregiver) {
         setRemoveMemberProvider(visibleColumns, familyHead, primaryCaregiver, familyBaseEntityId);
         this.clientAdapter = new RecyclerViewPaginatedAdapter(null, removeMemberProvider, this.context().commonrepository(this.tablename));
         this.clientAdapter.setCurrentlimit(100);

@@ -13,7 +13,7 @@ import androidx.loader.content.Loader;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreFamilyRegisterFragmentContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.model.FamilyRegisterFramentModel;
+import org.smartregister.chw.core.model.FamilyRegisterFragmentModel;
 import org.smartregister.chw.core.presenter.FamilyRegisterFragmentPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryBuilder;
@@ -25,6 +25,7 @@ import org.smartregister.family.fragment.BaseFamilyRegisterFragment;
 import org.smartregister.family.util.Utils;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.view.activity.BaseRegisterActivity;
+import org.smartregister.view.contract.IView;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         }
 
         String viewConfigurationIdentifier = ((BaseRegisterActivity) getActivity()).getViewIdentifiers().get(0);
-        presenter = new FamilyRegisterFragmentPresenter(this, new FamilyRegisterFramentModel(), viewConfigurationIdentifier);
+        presenter = new FamilyRegisterFragmentPresenter(this, new FamilyRegisterFragmentModel(), viewConfigurationIdentifier);
     }
 
     @Override
@@ -139,7 +140,7 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
     }
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+    public void initializeAdapter(Set<IView> visibleColumns) {
         super.initializeAdapter(visibleColumns);
     }
 

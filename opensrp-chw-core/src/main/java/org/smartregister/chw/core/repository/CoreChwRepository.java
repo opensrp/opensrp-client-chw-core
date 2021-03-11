@@ -4,10 +4,8 @@ import android.content.Context;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.repository.VisitDetailsRepository;
 import org.smartregister.chw.anc.repository.VisitRepository;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
@@ -110,29 +108,25 @@ public class CoreChwRepository extends Repository {
         super.onUpgrade(db, oldVersion, newVersion);
     }
 
-    /**
-    @Override
+   /* @Override
     public SQLiteDatabase getReadableDatabase() {
-        String pass = CoreChwApplication.getInstance().getPassword();
+        byte[] pass = CoreChwApplication.getInstance().getPassword();
         if (StringUtils.isNotBlank(pass)) {
             return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
         }
     }
-    **/
 
-    /**
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        String pass = CoreChwApplication.getInstance().getPassword();
+        byte[] pass = CoreChwApplication.getInstance().getPassword();
         if (StringUtils.isNotBlank(pass)) {
             return getWritableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
         }
-    }
-     **/
+    }*/
 
     @Override
     public synchronized SQLiteDatabase getWritableDatabase(String password) {

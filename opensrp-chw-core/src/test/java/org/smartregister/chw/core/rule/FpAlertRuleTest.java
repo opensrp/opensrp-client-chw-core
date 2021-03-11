@@ -97,7 +97,6 @@ public class FpAlertRuleTest extends BaseRobolectricTest {
         Assert.assertEquals(CoreConstants.VISIT_STATE.NOT_DUE_YET, fpAlertRule.getButtonStatus());
     }
 
-
     @Test
     public void canGetDueDate() {
         dueDate = LocalDate.now().plusDays(10).toDateTime(LocalTime.MIDNIGHT);
@@ -118,6 +117,5 @@ public class FpAlertRuleTest extends BaseRobolectricTest {
         ReflectionHelpers.setField(fpAlertRule, "expiryDate", expiryDate);
         Assert.assertEquals(expiryDate.toDate(), fpAlertRule.getExpiryDate());
     }
-
 
 }
