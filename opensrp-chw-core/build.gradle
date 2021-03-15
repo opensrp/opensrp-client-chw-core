@@ -5,6 +5,7 @@ buildscript {
         google()
         jcenter()
         mavenLocal()
+	mavenCentral()
     }
 
     dependencies {
