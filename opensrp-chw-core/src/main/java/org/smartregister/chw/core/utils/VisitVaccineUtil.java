@@ -30,6 +30,7 @@ import org.smartregister.immunization.domain.jsonmapping.Expiry;
 import org.smartregister.immunization.domain.jsonmapping.Schedule;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
+import org.smartregister.immunization.util.IMConstants;
 import org.smartregister.immunization.util.VaccinatorUtils;
 
 import java.util.ArrayList;
@@ -53,12 +54,12 @@ public class VisitVaccineUtil {
 
             List<VaccineRepo.Vaccine> allVacs = new ArrayList<>();
 
-            if (ImmunizationLibrary.getVaccineCacheMap().containsKey("woman")) {
-                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get("woman").vaccineRepo);
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey(IMConstants.VACCINE_TYPE.WOMAN)) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get(IMConstants.VACCINE_TYPE.WOMAN).vaccineRepo);
             }
 
-            if (ImmunizationLibrary.getVaccineCacheMap().containsKey("child")) {
-                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get("child").vaccineRepo);
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey(IMConstants.VACCINE_TYPE.CHILD)) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get(IMConstants.VACCINE_TYPE.CHILD).vaccineRepo);
             }
 
             for (VaccineRepo.Vaccine vaccine : allVacs) {
