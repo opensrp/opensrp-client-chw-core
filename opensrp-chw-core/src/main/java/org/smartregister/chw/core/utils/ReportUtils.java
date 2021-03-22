@@ -24,6 +24,7 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,7 +78,12 @@ public class ReportUtils {
     }
 
     public static void addEvent(Map<String, String> values, String formSubmissionId, String formName, String tableName) throws JSONException {
-        JSONObject form = FormUtils.getFormUtils().getFormJson(formName);
+        JSONObject form = null;
+        try {
+            form = FormUtils.getFormUtils().getFormJson(formName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         JSONObject stepOne = form.getJSONObject(org.smartregister.chw.anc.util.JsonFormUtils.STEP1);
         JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.chw.anc.util.JsonFormUtils.FIELDS);
         AllSharedPreferences allSharedPreferences = Utils.getAllSharedPreferences();

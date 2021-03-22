@@ -17,6 +17,7 @@ import org.smartregister.family.util.AppExecutors;
 import org.smartregister.family.util.Utils;
 import org.smartregister.repository.AllSharedPreferences;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,7 +85,12 @@ public class CoreCommunityRespondersInteractor implements CoreCommunityResponder
     }
 
     private void createRemoveCommunityResponderEvent(String baseEntityID) {
-        JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+        JSONObject form = null;
+        try {
+            form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AllSharedPreferences allSharedPreferences = Utils.context().allSharedPreferences();
         Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
         baseEvent.setFormSubmissionId(UUID.randomUUID().toString());

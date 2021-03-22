@@ -33,6 +33,7 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 import org.smartregister.view.activity.MultiLanguageActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +101,12 @@ public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivi
             if (repo.getRespondersCount() > 7) {
                 Toast.makeText(this, getString(R.string.add_responder_max_message), Toast.LENGTH_LONG).show();
             } else {
-                JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+                JSONObject form = null;
+                try {
+                    form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 startFormActivity(form);
             }
         }
