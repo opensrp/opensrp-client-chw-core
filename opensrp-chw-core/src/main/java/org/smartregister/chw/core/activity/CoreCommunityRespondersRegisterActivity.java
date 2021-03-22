@@ -105,7 +105,7 @@ public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivi
                 try {
                     form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
                 startFormActivity(form);
             }

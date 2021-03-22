@@ -89,7 +89,7 @@ public class CoreCommunityRespondersInteractor implements CoreCommunityResponder
         try {
             form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         AllSharedPreferences allSharedPreferences = Utils.context().allSharedPreferences();
         Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);

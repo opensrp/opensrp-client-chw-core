@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import timber.log.Timber;
+
 import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
 
 public class ReportUtils {
@@ -82,7 +84,7 @@ public class ReportUtils {
         try {
             form = FormUtils.getFormUtils().getFormJson(formName);
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         JSONObject stepOne = form.getJSONObject(org.smartregister.chw.anc.util.JsonFormUtils.STEP1);
         JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.chw.anc.util.JsonFormUtils.FIELDS);
