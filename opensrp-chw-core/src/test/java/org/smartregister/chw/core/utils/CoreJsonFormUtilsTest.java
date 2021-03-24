@@ -331,4 +331,11 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         JSONObject locationId = CoreJsonFormUtils.getJsonField(jsonForm, JsonFormUtils.STEP1, "sync_location_id");
         Assert.assertNotNull(locationId);
     }
+
+    @Test
+    public void testGetDayFromDate() {
+        int expectedDay = 1291;
+        String testDob = "2017-09-10T19:00:00.000-05:00";
+        Assert.assertEquals(expectedDay, CoreJsonFormUtils.getDayFromDate(testDob));
+    }
 }
