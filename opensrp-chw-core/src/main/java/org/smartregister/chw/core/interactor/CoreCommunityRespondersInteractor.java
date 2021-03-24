@@ -85,23 +85,22 @@ public class CoreCommunityRespondersInteractor implements CoreCommunityResponder
     }
 
     private void createRemoveCommunityResponderEvent(String baseEntityID) {
-        JSONObject form = null;
         try {
-            form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+            JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+            AllSharedPreferences allSharedPreferences = Utils.context().allSharedPreferences();
+            Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
+            baseEvent.setFormSubmissionId(UUID.randomUUID().toString());
+            baseEvent.setBaseEntityId(baseEntityID);
+            baseEvent.setEventType(CoreConstants.EventType.REMOVE_COMMUNITY_RESPONDER);
+            CoreJsonFormUtils.tagSyncMetadata(allSharedPreferences, baseEvent);
+            try {
+                JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
+                getSyncHelper().addEvent(baseEntityID, eventJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             Timber.e(e);
-        }
-        AllSharedPreferences allSharedPreferences = Utils.context().allSharedPreferences();
-        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), CoreConstants.TABLE_NAME.COMMUNITY_RESPONDERS);
-        baseEvent.setFormSubmissionId(UUID.randomUUID().toString());
-        baseEvent.setBaseEntityId(baseEntityID);
-        baseEvent.setEventType(CoreConstants.EventType.REMOVE_COMMUNITY_RESPONDER);
-        CoreJsonFormUtils.tagSyncMetadata(allSharedPreferences, baseEvent);
-        try {
-            JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
-            getSyncHelper().addEvent(baseEntityID, eventJson);
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

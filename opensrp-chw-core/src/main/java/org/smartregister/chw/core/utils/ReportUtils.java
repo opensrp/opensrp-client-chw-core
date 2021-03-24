@@ -80,29 +80,28 @@ public class ReportUtils {
     }
 
     public static void addEvent(Map<String, String> values, String formSubmissionId, String formName, String tableName) throws JSONException {
-        JSONObject form = null;
         try {
-            form = FormUtils.getFormUtils().getFormJson(formName);
+            JSONObject form = FormUtils.getFormUtils().getFormJson(formName);
+            JSONObject stepOne = form.getJSONObject(org.smartregister.chw.anc.util.JsonFormUtils.STEP1);
+            JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.chw.anc.util.JsonFormUtils.FIELDS);
+            AllSharedPreferences allSharedPreferences = Utils.getAllSharedPreferences();
+            FormUtils.updateFormField(jsonArray, values);
+
+            String baseEntityID = UUID.randomUUID().toString();
+            JSONObject jsonEventStr = CoreLibrary.getInstance().context().getEventClientRepository().getEventsByFormSubmissionId(formSubmissionId);
+            if (jsonEventStr != null)
+                baseEntityID = (new Gson().fromJson(jsonEventStr.toString(), Event.class)).getBaseEntityId();
+
+            Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), tableName);
+            baseEvent.setFormSubmissionId(formSubmissionId);
+            baseEvent.setBaseEntityId(baseEntityID);
+
+            CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);
+            JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
+            getSyncHelper().addEvent(baseEntityID, eventJson);
         } catch (IOException e) {
             Timber.e(e);
         }
-        JSONObject stepOne = form.getJSONObject(org.smartregister.chw.anc.util.JsonFormUtils.STEP1);
-        JSONArray jsonArray = stepOne.getJSONArray(org.smartregister.chw.anc.util.JsonFormUtils.FIELDS);
-        AllSharedPreferences allSharedPreferences = Utils.getAllSharedPreferences();
-        FormUtils.updateFormField(jsonArray, values);
-
-        String baseEntityID = UUID.randomUUID().toString();
-        JSONObject jsonEventStr = CoreLibrary.getInstance().context().getEventClientRepository().getEventsByFormSubmissionId(formSubmissionId);
-        if (jsonEventStr != null)
-            baseEntityID = (new Gson().fromJson(jsonEventStr.toString(), Event.class)).getBaseEntityId();
-
-        Event baseEvent = org.smartregister.chw.anc.util.JsonFormUtils.processJsonForm(allSharedPreferences, form.toString(), tableName);
-        baseEvent.setFormSubmissionId(formSubmissionId);
-        baseEvent.setBaseEntityId(baseEntityID);
-
-        CoreJsonFormUtils.tagSyncMetadata(org.smartregister.family.util.Utils.context().allSharedPreferences(), baseEvent);
-        JSONObject eventJson = new JSONObject(CoreJsonFormUtils.gson.toJson(baseEvent));
-        getSyncHelper().addEvent(baseEntityID, eventJson);
     }
 
     public static Map<String, String> geValues(@Nullable MonthlyTally monthlyTally, @Nullable StockUsage usage) {

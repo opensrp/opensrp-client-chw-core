@@ -101,13 +101,12 @@ public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivi
             if (repo.getRespondersCount() > 7) {
                 Toast.makeText(this, getString(R.string.add_responder_max_message), Toast.LENGTH_LONG).show();
             } else {
-                JSONObject form = null;
                 try {
-                    form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+                    JSONObject form = FormUtils.getFormUtils().getFormJson(CoreConstants.JSON_FORM.COMMUNITY_RESPONDER_REGISTRATION_FORM);
+                    startFormActivity(form);
                 } catch (IOException e) {
                     Timber.e(e);
                 }
-                startFormActivity(form);
             }
         }
         return super.onOptionsItemSelected(item);
