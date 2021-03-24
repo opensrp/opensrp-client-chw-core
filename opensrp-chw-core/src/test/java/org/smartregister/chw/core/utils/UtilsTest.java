@@ -23,6 +23,7 @@ import org.smartregister.chw.referral.domain.MemberObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.tag.FormTag;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -30,6 +31,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import timber.log.Timber;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -268,6 +271,23 @@ public class UtilsTest {
 
         String duration = Utils.getDuration(time);
         Assert.assertEquals("15y 1m", duration);
+    }
+
+    @Test
+    public void testGetDateDifferenceInDays() {
+        String dateOneInString = "11-Jan-2021";
+        String dateTwoInString = "10-Jan-2021";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+        Date date1 = new Date();
+        Date date2 = new Date();
+        try {
+            date1 = formatter.parse(dateOneInString);
+            date2 = formatter.parse(dateTwoInString);
+        } catch (ParseException e) {
+            Timber.e(e);
+        }
+        String expectedDifference = "1";
+        Assert.assertEquals(expectedDifference, Utils.getDateDifferenceInDays(date1, date2));
     }
 
     @After
