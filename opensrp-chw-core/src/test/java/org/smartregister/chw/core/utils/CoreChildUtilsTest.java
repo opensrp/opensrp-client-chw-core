@@ -18,4 +18,10 @@ public class CoreChildUtilsTest extends BaseUnitTest {
         Integer expectedYear = 5;
         Assert.assertEquals(expectedYear, CoreChildUtils.dobStringToYear("5y"));
     }
+
+    @Test
+    public void testGetImmunizationExpired() {
+        String expectedStatus = "false";
+        Assert.assertEquals(expectedStatus, CoreChildUtils.getImmunizationExpired("2019-09-10T19:00:00.000-05:00", "bcg"));
+    }
 }
