@@ -281,6 +281,17 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals(everSchoolOptionsTestMap, CoreJsonFormUtils.getEverSchoolOptions(RuntimeEnvironment.application));
     }
 
+    @Test
+    public void testGetEducationLevels(){
+        HashMap<String, String> choicesEducationLevels = new HashMap<>();
+        choicesEducationLevels.put("None", "1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesEducationLevels.put("Primary", "1713AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesEducationLevels.put("Secondary", "1714AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choicesEducationLevels.put("Post-secondary", "159785AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        Assert.assertEquals(choicesEducationLevels, CoreJsonFormUtils.getEducationLevels(RuntimeEnvironment.application));
+    }
+
     private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
         return "{\"count\":\"1\",\"encounter_type\":\"" + encounterType + "\",\"entity_id\":\"" + baseEntityId + "\",\"relational_id\":\"\",\"metadata\":{},\"step1\":{\"title\":\"RemoveFamilyMember\",\"fields\":[{\"key\":\"details\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":" +
                 "\"label\",\"text\":\"MelissaYoJiwanji,25Female\",\"text_size\":\"25px\"},{\"key\":\"remove_reason\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"160417AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"selectone\",\"type\":\"spinner\",\"hint\":\"Reasonforremoval\",\"v_required\"" +
