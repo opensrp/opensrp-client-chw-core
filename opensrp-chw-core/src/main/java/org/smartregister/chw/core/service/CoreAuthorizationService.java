@@ -3,6 +3,7 @@ package org.smartregister.chw.core.service;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -135,7 +136,9 @@ public class CoreAuthorizationService implements P2PAuthorizationService {
         AllSharedPreferences allSharedPreferences = CoreLibrary.getInstance().context().allSharedPreferences();
 
         authorizationDetails.put(AllConstants.PeerToPeer.KEY_TEAM_ID, allSharedPreferences.fetchDefaultTeamId(allSharedPreferences.fetchRegisteredANM()));
-        authorizationDetails.put(CoreConstants.PEER_TO_PEER.LOCATION_ID, allSharedPreferences.fetchUserLocalityId(allSharedPreferences.fetchRegisteredANM()));
+        String locationId = allSharedPreferences.fetchDefaultLocalityId(allSharedPreferences.fetchRegisteredANM());
+        if(StringUtils.isBlank(locationId)) locationId = allSharedPreferences.fetchUserLocalityId(allSharedPreferences.fetchRegisteredANM());
+        authorizationDetails.put(CoreConstants.PEER_TO_PEER.LOCATION_ID, locationId);
 
         onAuthorizationDetailsProvidedCallback.onAuthorizationDetailsProvided(authorizationDetails);
     }
