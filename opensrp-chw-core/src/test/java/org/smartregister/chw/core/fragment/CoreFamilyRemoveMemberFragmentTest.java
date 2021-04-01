@@ -22,10 +22,10 @@ import org.robolectric.android.controller.ActivityController;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
+import org.smartregister.chw.core.presenter.CoreFamilyRemoveMemberPresenter;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
-import org.smartregister.family.contract.FamilyProfileMemberContract;
-import org.smartregister.family.presenter.BaseFamilyProfileMemberPresenter;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 
@@ -53,36 +53,37 @@ public class CoreFamilyRemoveMemberFragmentTest extends BaseUnitTest {
     private ArgumentCaptor<RecyclerViewPaginatedAdapter> adapterArgumentCaptor;
     private CoreFamilyRemoveMemberFragment familyProfileMemberFragment;
 
-    private BaseFamilyProfileMemberPresenter familyProfileMemberPresenter;
+    private CoreFamilyRemoveMemberPresenter familyProfileMemberPresenter;
 
     @Before
     public void setUp() throws Exception {
         Context.bindtypes = new ArrayList<>();
         familyProfileMemberFragment = Mockito.mock(CoreFamilyRemoveMemberFragment.class, Mockito.CALLS_REAL_METHODS);
+
+        activity = Robolectric.buildActivity(AppCompatActivity.class).create().start().get();
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
-        familyProfileMemberPresenter = new BaseFamilyProfileMemberPresenter(Mockito.mock(FamilyProfileMemberContract.View.class),
-                Mockito.mock(FamilyProfileMemberContract.Model.class), null, "familybaseid", "Head", "Caregiver");
+        familyProfileMemberPresenter = new CoreFamilyRemoveMemberPresenter(Mockito.mock(FamilyRemoveMemberContract.View.class),
+                Mockito.mock(FamilyRemoveMemberContract.Model.class), null, "familybaseid", "Head", "Caregiver");
         CoreLibrary.init(context);
         when(context.commonrepository(anyString())).thenReturn(commonRepository);
         activityController = Robolectric.buildActivity(AppCompatActivity.class).create().resume();
-        activity = activityController.get();
         Context.bindtypes = new ArrayList<>();
         Whitebox.setInternalState(familyProfileMemberFragment, "searchView", new EditText(activity));
         Whitebox.setInternalState(familyProfileMemberFragment, "clientsView", clientsView);
         Whitebox.setInternalState(familyProfileMemberFragment, "presenter", familyProfileMemberPresenter);
-        activity.setContentView(org.smartregister.family.R.layout.activity_family_profile);
         SyncStatusBroadcastReceiver.init(activity);
     }
 
     @Test
     public void getMainCondition() {
-        assertEquals(familyProfileMemberFragment.getMainCondition(), String.format(" %s = '%s' and %s is null ", DBConstants.KEY.OBJECT_RELATIONAL_ID, "familybaseid", DBConstants.KEY.DATE_REMOVED));
+        assertEquals(familyProfileMemberFragment.getMainCondition(), String.format(" %s = '%s' and %s is null and %s is null ", DBConstants.KEY.OBJECT_RELATIONAL_ID, "familybaseid", DBConstants.KEY.DATE_REMOVED, DBConstants.KEY.DOD));
+
     }
 
     @Test
     public void getDefaultSortQuery() {
-        assertEquals(familyProfileMemberFragment.getDefaultSortQuery(), DBConstants.KEY.DOD + ", " + DBConstants.KEY.DOB + " ASC ");
+        assertEquals(familyProfileMemberFragment.getDefaultSortQuery(), " " + DBConstants.KEY.DOB + " ASC ");
     }
 
     @Test
@@ -90,6 +91,14 @@ public class CoreFamilyRemoveMemberFragmentTest extends BaseUnitTest {
         String familyHead = "my head";
         familyProfileMemberFragment.setFamilyHead(familyHead);
         assertEquals(familyHead, familyProfileMemberPresenter.getFamilyHead());
+    }
+
+    @Test
+    public void testInitializePresenter() {
+        String familyHead = "family_ head";
+        String primaryCareGiver = "mrs caregiver";
+        familyProfileMemberFragment.setPresenter(familyHead, primaryCareGiver);
+        assertNotNull(familyProfileMemberFragment.getPresenter());
     }
 
     @Test
