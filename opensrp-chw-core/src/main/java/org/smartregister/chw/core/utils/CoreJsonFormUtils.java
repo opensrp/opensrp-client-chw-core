@@ -3,7 +3,6 @@ package org.smartregister.chw.core.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.util.Pair;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -21,7 +20,9 @@ import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.FamilyMemberDao;
 import org.smartregister.chw.core.domain.FamilyMember;
+import org.smartregister.chw.core.model.CoreFamilyMemberModel;
 import org.smartregister.clientandeventmodel.Address;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
@@ -34,10 +35,10 @@ import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.Photo;
 import org.smartregister.domain.tag.FormTag;
 import org.smartregister.family.FamilyLibrary;
+import org.smartregister.family.domain.FamilyEventClient;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.immunization.domain.ServiceRecord;
-import org.smartregister.immunization.domain.Vaccine;
+import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.helper.ECSyncHelper;
@@ -555,6 +556,113 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
         return member;
     }
+
+    public static FamilyEventClient processFamilyUpdateForm(AllSharedPreferences allSharedPreferences, String jsonString, String familyBaseEntityId) {
+        return processFamilyForm(allSharedPreferences, jsonString, familyBaseEntityId, org.smartregister.family.util.Utils.metadata().familyRegister.updateEventType);
+    }
+
+    private static FamilyEventClient processFamilyForm(AllSharedPreferences allSharedPreferences, String jsonString, String familyBaseEntityId, String encounterType) {
+        try {
+            Triple<Boolean, JSONObject, JSONArray> registrationFormParams = validateParameters(jsonString);
+            if (!(Boolean)registrationFormParams.getLeft()) {
+                return null;
+            } else {
+                JSONObject jsonForm = (JSONObject)registrationFormParams.getMiddle();
+                JSONArray fields = (JSONArray)registrationFormParams.getRight();
+                String entityId = getString(jsonForm, "entity_id");
+                if (StringUtils.isBlank(entityId)) {
+                    entityId = generateRandomUUIDString();
+                }
+
+                lastInteractedWith(fields);
+                dobUnknownUpdateFromAge(fields);
+                Client baseClient = org.smartregister.util.JsonFormUtils.createBaseClient(fields, formTag(allSharedPreferences), entityId);
+                if (baseClient != null && !baseClient.getBaseEntityId().equals(familyBaseEntityId)) {
+                    baseClient.addRelationship(org.smartregister.family.util.Utils.metadata().familyMemberRegister.familyRelationKey, familyBaseEntityId);
+                }
+
+                Event baseEvent = org.smartregister.util.JsonFormUtils.createEvent(fields, getJSONObject(jsonForm, "metadata"), formTag(allSharedPreferences), entityId, encounterType, org.smartregister.family.util.Utils.metadata().familyMemberRegister.tableName);
+                tagSyncMetadata(allSharedPreferences, baseEvent);
+                if (encounterType.equals(org.smartregister.family.util.Utils.metadata().familyRegister.updateEventType) && baseClient != null) {
+                    updateFamilyMembersLastName(familyBaseEntityId, baseClient.getFirstName(), formTag(allSharedPreferences), allSharedPreferences);
+                }
+
+                return new FamilyEventClient(baseClient, baseEvent);
+            }
+        } catch (Exception var10) {
+            Timber.e(var10);
+            return null;
+        }
+    }
+
+    private static void updateFamilyMembersLastName(String familyBaseEntityId, String firstName, FormTag formTag, AllSharedPreferences allSharedPreferences) throws Exception {
+        List<org.apache.commons.lang3.tuple.Pair<Client, Event>> familyMembersEvents = processFamilyMemberUpdateFamilyName(familyBaseEntityId, firstName, formTag, allSharedPreferences);
+
+        for (org.apache.commons.lang3.tuple.Pair<Client, Event> familyMembersEvent : familyMembersEvents) {
+
+            JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(familyMembersEvent.getRight()));
+            getSyncHelper().addEvent(familyMembersEvent.getLeft().getBaseEntityId(), eventPartialJson);
+            JsonFormUtils.mergeAndSaveClient(getSyncHelper(), familyMembersEvent.getLeft());
+        }
+    }
+
+    private static List<org.apache.commons.lang3.tuple.Pair<Client, Event>> processFamilyMemberUpdateFamilyName(String familyBaseEntityId, String firstName, FormTag formTag, AllSharedPreferences allSharedPreferences) {
+        List<CoreFamilyMemberModel> familyMembers = FamilyMemberDao.familyMembersToUpdateLastName(familyBaseEntityId);
+        List<org.apache.commons.lang3.tuple.Pair<Client, Event>> clientEventPairsList = new ArrayList<>();
+
+
+        if (firstName != null && familyMembers != null) {
+            for (CoreFamilyMemberModel familyMember : familyMembers) {
+
+                Event event = new Event()
+                        .withBaseEntityId(familyMember.getBaseEntityId())
+                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ? "Update Family Member Registration" : "Update Child Registration")
+                        .withEntityType(familyMember.getEntityType())
+                        .withEventDate(new Date());
+                event.withDateCreated(new Date());
+
+                List<Obs> obs = new ArrayList<>();
+                obs.add(getObs(Collections.singletonList(firstName),
+                        Collections.singletonList(firstName)));
+                event.setObs(obs);
+
+                tagSyncMetadata(allSharedPreferences, event);
+
+                // client
+                Client client = (Client) new Client(familyMember.getBaseEntityId()).withFirstName(firstName)
+                        .withDateCreated(new Date());
+
+                client.setLocationId(formTag.locationId);
+                client.setTeamId(formTag.teamId);
+
+                client.setClientApplicationVersion(formTag.appVersion);
+                client.setClientApplicationVersionName(formTag.appVersionName);
+                client.setClientDatabaseVersion(formTag.databaseVersion);
+
+
+                clientEventPairsList.add(org.apache.commons.lang3.tuple.Pair.of(client, event));
+            }
+            return clientEventPairsList;
+        }
+        return clientEventPairsList;
+    }
+
+    public static ECSyncHelper getSyncHelper() {
+        return FamilyLibrary.getInstance().getEcSyncHelper();
+    }
+
+    private static Obs getObs(List<Object> values, List<Object> humanReadableValues) {
+        Obs obs = new Obs();
+        obs.setFieldType("concept");
+        obs.setFieldDataType("text");
+        obs.setFieldCode("lastName");
+        obs.setParentCode("");
+        obs.setValues(values);
+        obs.setFormSubmissionField("lastName");
+        obs.setHumanReadableValues(humanReadableValues);
+        return obs;
+    }
+
 
     public static String getJsonFieldValue(JSONArray jsonArray, String key) {
         try {
