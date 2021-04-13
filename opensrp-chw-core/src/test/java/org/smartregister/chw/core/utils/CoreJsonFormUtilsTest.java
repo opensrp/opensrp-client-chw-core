@@ -38,7 +38,6 @@ import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.ArrayList;
@@ -47,6 +46,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.METADATA;
+import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
 
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
         UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
@@ -198,21 +200,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         testClient.setRelationships(new HashMap<>());
         EcSyncHelperShadowHelper.setTestClient(testClient);
 
-        FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
-                BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
-        metadata.updateFamilyRegister("family_register",
-                "tableName",
-                "registerEventType",
-                "updateEventType",
-                "config",
-                "familyHeadRelationKey", "familyCareGiverRelationKey");
-        metadata.updateFamilyMemberRegister("family_member_register",
-                "tableName",
-                "registerEventType",
-                "updateEventType",
-                "config",
-                "familyRelationKey");
-        UtilsShadowUtil.setMetadata(metadata);
+        UtilsShadowUtil.setMetadata(initializeFamilyMetadata());
 
         Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, RuntimeEnvironment.application, testMember, "Kenya");
 
@@ -230,7 +218,30 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetSchoolLevels(){
+    public void getFormAsJsonReturnsRegistrationFormWithCorrectIds() throws Exception {
+        UtilsShadowUtil.setMetadata(initializeFamilyMetadata());
+        JSONObject form = getFormAsJson("family_register");
+        String formName = "family_register";
+        String entityId = "test-entity-id";
+        String currentLocationId = "test_location_id";
+        String familyID = "test_family_id";
+        JSONObject actualJsonObject = CoreJsonFormUtils.getFormAsJson(form, formName, entityId, currentLocationId, familyID);
+
+        Assert.assertNotNull(actualJsonObject);
+
+        String actualEncounterLocation = actualJsonObject.getJSONObject(METADATA).getString(ENCOUNTER_LOCATION);
+        JSONObject actualLookupObject = actualJsonObject.getJSONObject(METADATA).getJSONObject("look_up");
+        String actualLookupEntityId= actualLookupObject.getString("entity_id");
+        String actualLookupEntityValue= actualLookupObject.getString("value");
+
+        Assert.assertEquals(currentLocationId, actualEncounterLocation);
+        Assert.assertEquals("family", actualLookupEntityId);
+        Assert.assertEquals(familyID, actualLookupEntityValue);
+
+    }
+
+    @Test
+    public void testGetSchoolLevels() {
         HashMap<String, String> schoolLevelsTestMap = new HashMap<>();
         schoolLevelsTestMap.put("Not currently attending school or any learning program", "school_level_none");
         schoolLevelsTestMap.put("Early childhood programme", "school_level_early_childhood");
@@ -244,7 +255,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetChoice(){
+    public void testGetChoice() {
         HashMap<String, String> choicesTestMap = new HashMap<>();
         choicesTestMap.put("Yes", "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         choicesTestMap.put("No", "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -253,7 +264,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetChoiceMuac(){
+    public void testGetChoiceMuac() {
         HashMap<String, String> choicesMuacTestMap = new HashMap<>();
         choicesMuacTestMap.put("Green", "160909AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         choicesMuacTestMap.put("Yellow", "160910AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -263,7 +274,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetChoiceDietary(){
+    public void testGetChoiceDietary() {
         HashMap<String, String> choicesDietaryTestMap = new HashMap<>();
         choicesDietaryTestMap.put("0 - no animal products or fruit", "");
         choicesDietaryTestMap.put("1 - one animal product OR one fruit", "");
@@ -273,23 +284,12 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetEverSchoolOptions(){
+    public void testGetEverSchoolOptions() {
         HashMap<String, String> everSchoolOptionsTestMap = new HashMap<>();
         everSchoolOptionsTestMap.put("Yes", "key_yes");
         everSchoolOptionsTestMap.put("No", "key_no");
 
         Assert.assertEquals(everSchoolOptionsTestMap, CoreJsonFormUtils.getEverSchoolOptions(RuntimeEnvironment.application));
-    }
-
-    private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
-        return "{\"count\":\"1\",\"encounter_type\":\"" + encounterType + "\",\"entity_id\":\"" + baseEntityId + "\",\"relational_id\":\"\",\"metadata\":{},\"step1\":{\"title\":\"RemoveFamilyMember\",\"fields\":[{\"key\":\"details\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":" +
-                "\"label\",\"text\":\"MelissaYoJiwanji,25Female\",\"text_size\":\"25px\"},{\"key\":\"remove_reason\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"160417AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"selectone\",\"type\":\"spinner\",\"hint\":\"Reasonforremoval\",\"v_required\"" +
-                ":{\"value\":\"true\",\"err\":\"Selectthereasonforremovingthefamilymember'srecord\"},\"values\":[\"Death\",\"Movedaway\",\"Other\"],\"keys\":[\"Death\",\"Movedaway\",\"Other\"],\"openmrs_choice_ids\":{\"Died\":\"160034AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"Movedaway\":\"160415AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"Other\"" +
-                ":\"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"},\"is-rule-check\":true,\"step\":\"step1\",\"value\":\"Other\"},{\"key\":\"dob\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":\"spacer\",\"expanded\":false,\"read_only\":\"true\",\"hidden\":\"false\",\"value\":\"01-04-1994\",\"step\"" +
-                ":\"step1\",\"is-rule-check\":false},{\"key\":\"date_moved\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"164133AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"text\",\"type\":\"date_picker\",\"label\":\"Datemovedaway\",\"hint\":\"Datemovedaway\",\"expanded\":false,\"min_date\"" +
-                ":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedatethatthemembermovedaway\"},\"is_visible\":false,\"is-rule-check\":false},{\"key\":\"date_died\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"1543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\"" +
-                ":\"text\",\"type\":\"date_picker\",\"label\":\"Dateofdeath\",\"hint\":\"Dateofdeath\",\"expanded\":false,\"min_date\":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedateofdeath\"},\"step\":\"step1\",\"is-rule-check\":false,\"is_visible\":false},{\"key\":\"age_at_death\",\"openmrs_entity_parent\"" +
-                ":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"label\":\"Ageatdeath\",\"hint\":\"Ageatdeath\",\"type\":\"edit_text\",\"read_only\":\"true\",\"is_visible\":false}]},\"invisible_required_fields\":\"[date_died,date_moved]\",\"details\":{\"appVersionName\":\"1.7.23-SNAPSHOT\",\"formVersion\":\"\"}}";
     }
 
     @Test
@@ -328,7 +328,41 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     @Test
     public void getJsonField() {
-        JSONObject locationId = CoreJsonFormUtils.getJsonField(jsonForm, JsonFormUtils.STEP1, "sync_location_id");
+        JSONObject locationId = CoreJsonFormUtils.getJsonField(jsonForm, org.smartregister.util.JsonFormUtils.STEP1, "sync_location_id");
         Assert.assertNotNull(locationId);
+    }
+
+    private String getRemoveMemberJsonString(String encounterType, String baseEntityId) {
+        return "{\"count\":\"1\",\"encounter_type\":\"" + encounterType + "\",\"entity_id\":\"" + baseEntityId + "\",\"relational_id\":\"\",\"metadata\":{},\"step1\":{\"title\":\"RemoveFamilyMember\",\"fields\":[{\"key\":\"details\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":" +
+                "\"label\",\"text\":\"MelissaYoJiwanji,25Female\",\"text_size\":\"25px\"},{\"key\":\"remove_reason\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"160417AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"selectone\",\"type\":\"spinner\",\"hint\":\"Reasonforremoval\",\"v_required\"" +
+                ":{\"value\":\"true\",\"err\":\"Selectthereasonforremovingthefamilymember'srecord\"},\"values\":[\"Death\",\"Movedaway\",\"Other\"],\"keys\":[\"Death\",\"Movedaway\",\"Other\"],\"openmrs_choice_ids\":{\"Died\":\"160034AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"Movedaway\":\"160415AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"Other\"" +
+                ":\"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"},\"is-rule-check\":true,\"step\":\"step1\",\"value\":\"Other\"},{\"key\":\"dob\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"type\":\"spacer\",\"expanded\":false,\"read_only\":\"true\",\"hidden\":\"false\",\"value\":\"01-04-1994\",\"step\"" +
+                ":\"step1\",\"is-rule-check\":false},{\"key\":\"date_moved\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"164133AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\":\"text\",\"type\":\"date_picker\",\"label\":\"Datemovedaway\",\"hint\":\"Datemovedaway\",\"expanded\":false,\"min_date\"" +
+                ":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedatethatthemembermovedaway\"},\"is_visible\":false,\"is-rule-check\":false},{\"key\":\"date_died\",\"openmrs_entity_parent\":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"1543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"openmrs_data_type\"" +
+                ":\"text\",\"type\":\"date_picker\",\"label\":\"Dateofdeath\",\"hint\":\"Dateofdeath\",\"expanded\":false,\"min_date\":\"today-9475d\",\"max_date\":\"today\",\"v_required\":{\"value\":\"true\",\"err\":\"Enterthedateofdeath\"},\"step\":\"step1\",\"is-rule-check\":false,\"is_visible\":false},{\"key\":\"age_at_death\",\"openmrs_entity_parent\"" +
+                ":\"\",\"openmrs_entity\":\"concept\",\"openmrs_entity_id\":\"\",\"label\":\"Ageatdeath\",\"hint\":\"Ageatdeath\",\"type\":\"edit_text\",\"read_only\":\"true\",\"is_visible\":false}]},\"invisible_required_fields\":\"[date_died,date_moved]\",\"details\":{\"appVersionName\":\"1.7.23-SNAPSHOT\",\"formVersion\":\"\"}}";
+    }
+
+    private JSONObject getFormAsJson(String formName) {
+        return Objects.requireNonNull(FormUtils.getFormUtils()).getFormJson(formName);
+    }
+
+    private FamilyMetadata initializeFamilyMetadata() {
+        FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
+                BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
+        metadata.updateFamilyRegister("family_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyHeadRelationKey", "familyCareGiverRelationKey");
+        metadata.updateFamilyMemberRegister("family_member_register",
+                "tableName",
+                "registerEventType",
+                "updateEventType",
+                "config",
+                "familyRelationKey");
+
+        return metadata;
     }
 }
