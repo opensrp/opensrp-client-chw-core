@@ -64,7 +64,6 @@ import java.util.TimeZone;
 
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_TABLES.EC_FAMILY_MEMBER;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
 
@@ -623,7 +622,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 Event event = new Event()
                         .withFormSubmissionId(generateRandomUUIDString())
                         .withBaseEntityId(familyMember.getBaseEntityId())
-                        .withEventType(familyMember.getEntityType().equals(EC_FAMILY_MEMBER) ? UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
+                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ?  UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
                         .withEntityType(familyMember.getEntityType())
                         .withEventDate(new Date());
                 event.withDateCreated(new Date());
