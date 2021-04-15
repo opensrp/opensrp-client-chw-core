@@ -49,6 +49,9 @@ public class CoreConstants {
         String TASK_AGGREGATE_STATUS = "taskAggregateStatus";
     }
 
+    public interface DB_TABLES {
+        String EC_FAMILY_MEMBER = "ec_family_member";
+    }
     public interface DB_CONSTANTS {
         String ID = "_id";
         String FOR = "for";

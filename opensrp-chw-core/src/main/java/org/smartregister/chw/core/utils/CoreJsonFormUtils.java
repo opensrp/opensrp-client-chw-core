@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.FamilyMemberDao;
@@ -62,6 +63,10 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import timber.log.Timber;
+
+import static org.smartregister.chw.core.utils.CoreConstants.DB_TABLES.EC_FAMILY_MEMBER;
+import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
 
 /**
  * Created by keyman on 13/11/2018.
@@ -595,41 +600,43 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         }
     }
 
-    private static void updateFamilyMembersLastName(String familyBaseEntityId, String firstName, FormTag formTag, AllSharedPreferences allSharedPreferences) throws Exception {
-        List<org.apache.commons.lang3.tuple.Pair<Client, Event>> familyMembersEvents = processFamilyMemberUpdateFamilyName(familyBaseEntityId, firstName, formTag, allSharedPreferences);
+    private static void updateFamilyMembersLastName(String familyBaseEntityId, String familyName, FormTag formTag, AllSharedPreferences allSharedPreferences) throws Exception {
+        List<org.apache.commons.lang3.tuple.Pair<Client, Event>> familyMembersEvents = processFamilyMemberUpdateFamilyName(familyBaseEntityId, familyName, formTag, allSharedPreferences);
 
         for (org.apache.commons.lang3.tuple.Pair<Client, Event> familyMembersEvent : familyMembersEvents) {
 
             JSONObject eventPartialJson = new JSONObject(JsonFormUtils.gson.toJson(familyMembersEvent.getRight()));
             getSyncHelper().addEvent(familyMembersEvent.getLeft().getBaseEntityId(), eventPartialJson);
             JsonFormUtils.mergeAndSaveClient(getSyncHelper(), familyMembersEvent.getLeft());
+            NCUtils.processEvent(familyMembersEvent.getRight().getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(familyMembersEvent.getRight())));
         }
     }
 
-    private static List<org.apache.commons.lang3.tuple.Pair<Client, Event>> processFamilyMemberUpdateFamilyName(String familyBaseEntityId, String firstName, FormTag formTag, AllSharedPreferences allSharedPreferences) {
+    private static List<org.apache.commons.lang3.tuple.Pair<Client, Event>> processFamilyMemberUpdateFamilyName(String familyBaseEntityId, String familyName, FormTag formTag, AllSharedPreferences allSharedPreferences) {
         List<CoreFamilyMemberModel> familyMembers = FamilyMemberDao.familyMembersToUpdateLastName(familyBaseEntityId);
         List<org.apache.commons.lang3.tuple.Pair<Client, Event>> clientEventPairsList = new ArrayList<>();
 
 
-        if (firstName != null && familyMembers != null) {
+        if (familyName != null && familyMembers != null) {
             for (CoreFamilyMemberModel familyMember : familyMembers) {
 
                 Event event = new Event()
+                        .withFormSubmissionId(generateRandomUUIDString())
                         .withBaseEntityId(familyMember.getBaseEntityId())
-                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ? "Update Family Member Registration" : "Update Child Registration")
+                        .withEventType(familyMember.getEntityType().equals(EC_FAMILY_MEMBER) ? UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
                         .withEntityType(familyMember.getEntityType())
                         .withEventDate(new Date());
                 event.withDateCreated(new Date());
 
                 List<Obs> obs = new ArrayList<>();
-                obs.add(getObs(Collections.singletonList(firstName),
-                        Collections.singletonList(firstName)));
+                obs.add(getObs(Collections.singletonList(familyName),
+                        Collections.singletonList(familyName)));
                 event.setObs(obs);
 
                 tagSyncMetadata(allSharedPreferences, event);
 
                 // client
-                Client client = (Client) new Client(familyMember.getBaseEntityId()).withFirstName(firstName)
+                Client client = (Client) new Client(familyMember.getBaseEntityId()).withLastName(familyName)
                         .withDateCreated(new Date());
 
                 client.setLocationId(formTag.locationId);
