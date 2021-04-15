@@ -612,7 +612,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         }
     }
 
-    private static List<org.apache.commons.lang3.tuple.Pair<Client, Event>> processFamilyMemberUpdateFamilyName(String familyBaseEntityId, String familyName, FormTag formTag, AllSharedPreferences allSharedPreferences) {
+    protected static List<org.apache.commons.lang3.tuple.Pair<Client, Event>> processFamilyMemberUpdateFamilyName(String familyBaseEntityId, String familyName, FormTag formTag, AllSharedPreferences allSharedPreferences) {
         List<CoreFamilyMemberModel> familyMembers = FamilyMemberDao.familyMembersToUpdateLastName(familyBaseEntityId);
         List<org.apache.commons.lang3.tuple.Pair<Client, Event>> clientEventPairsList = new ArrayList<>();
 
