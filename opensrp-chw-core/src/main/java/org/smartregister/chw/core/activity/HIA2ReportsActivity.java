@@ -86,7 +86,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
      */
     protected ViewPager mViewPager;
     protected TabLayout tabLayout;
-    private ProgressDialog progressDialog;
+    protected ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

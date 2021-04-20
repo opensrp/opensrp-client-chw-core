@@ -43,7 +43,7 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_NAME, "familyName");
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.LAST_LMP, "lastMenstrualPeriod");
 
-        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start();
+        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().resume();
         activity = controller.get();
         activity.onCreation();
     }
