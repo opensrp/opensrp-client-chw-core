@@ -131,12 +131,11 @@ public abstract class CoreFamilyRemoveMemberFragment extends BaseFamilyProfileMe
         Form form = new Form();
         form.setActionBarBackground(R.color.family_actionbar);
         form.setWizard(false);
-        form.setSaveLabel("Save");
+        form.setSaveLabel(getString(R.string.submit));
         if (jsonObject.has(CoreConstants.REGISTER_TYPE.INDEPENDENT)) {
             form.setName(getString(R.string.remove_client));
         }
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
-
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
