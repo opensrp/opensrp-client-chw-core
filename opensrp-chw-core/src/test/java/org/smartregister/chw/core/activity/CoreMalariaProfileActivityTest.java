@@ -25,6 +25,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreMalariaProfileActivityImpl;
 import org.smartregister.chw.core.presenter.CoreMalariaMemberProfilePresenter;
 import org.smartregister.chw.malaria.domain.MemberObject;
+import org.smartregister.chw.malaria.presenter.BaseMalariaProfilePresenter;
 
 import timber.log.Timber;
 
@@ -37,13 +38,7 @@ public class CoreMalariaProfileActivityTest extends BaseUnitTest {
     private ActivityController<CoreMalariaProfileActivityImpl> activityController;
 
     @Mock
-    private MemberObject memberObject;
-
-    @Mock
-    private ProgressBar progressBar;
-
-    @Mock
-    private CoreMalariaMemberProfilePresenter profilePresenter;
+    private BaseMalariaProfilePresenter profilePresenter;
 
     @Before
     public void setUp() {
@@ -55,10 +50,9 @@ public class CoreMalariaProfileActivityTest extends BaseUnitTest {
         activityController = Robolectric.buildActivity(CoreMalariaProfileActivityImpl.class);
         activity = activityController.get();
 
-        memberObject = Mockito.mock(MemberObject.class);
+        MemberObject memberObject = Mockito.mock(MemberObject.class);
         memberObject.setFamilyName("Sample");
-        progressBar = Mockito.mock(ProgressBar.class);
-        profilePresenter = Mockito.mock(CoreMalariaMemberProfilePresenter.class);
+        ProgressBar progressBar = Mockito.mock(ProgressBar.class);
 
         ReflectionHelpers.setField(activity, "memberObject", memberObject);
         ReflectionHelpers.setField(activity, "progressBar", progressBar);
@@ -85,8 +79,10 @@ public class CoreMalariaProfileActivityTest extends BaseUnitTest {
 
     @Test
     public void initialisingPresenterRefreshesProfileBottomSection() {
+        activity = Mockito.spy(activity);
+        profilePresenter = Mockito.spy(Mockito.mock(CoreMalariaMemberProfilePresenter.class));
+        Mockito.when(activity.getProfilePresenter()).thenReturn((CoreMalariaMemberProfilePresenter)profilePresenter);
         activity.initializePresenter();
-        profilePresenter = Mockito.spy(profilePresenter);
         Mockito.verify(profilePresenter, Mockito.times(1)).refreshProfileBottom();
     }
 
