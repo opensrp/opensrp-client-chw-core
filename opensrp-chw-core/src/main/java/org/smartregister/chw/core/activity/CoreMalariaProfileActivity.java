@@ -93,9 +93,13 @@ public abstract class CoreMalariaProfileActivity extends BaseMalariaProfileActiv
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        profilePresenter = new CoreMalariaMemberProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
+        profilePresenter = getProfilePresenter();
         fetchProfileData();
         profilePresenter.refreshProfileBottom();
+    }
+
+    public CoreMalariaMemberProfilePresenter getProfilePresenter() {
+        return new CoreMalariaMemberProfilePresenter(this, new CoreMalariaProfileInteractor(), memberObject);
     }
 
     @Override
