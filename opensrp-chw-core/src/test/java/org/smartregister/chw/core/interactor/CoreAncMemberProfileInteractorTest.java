@@ -37,8 +37,8 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
 
     private final Visit lastVisit = new Visit();
     private final Set<Task> taskList = new HashSet<>();
+    private final MemberObject memberObject = new MemberObject();
     private CoreAncMemberProfileInteractor interactor;
-    private MemberObject memberObject;
     @Mock
     private BaseAncMemberProfileContract.InteractorCallBack interactorCallBack;
     @Mock
@@ -69,7 +69,7 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
 
         interactor = Mockito.mock(CoreAncMemberProfileInteractor.class, Mockito.CALLS_REAL_METHODS);
 
-        memberObject = Mockito.mock(MemberObject.class);
+        //memberObject = Mockito.mock(MemberObject.class);
         memberObject.setPregnancyRiskLevel("Low");
         memberObject.setBaseEntityId("some-base-entity-id");
         memberObject.setFamilyName("Some Family Name");
@@ -79,18 +79,10 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
 
     @Test
     public void getPregnancyRiskDetailsTest() {
+        interactor = spy(interactor);
         interactor.getPregnancyRiskDetails(memberObject);
-        Assert.assertNull(memberObject.getPregnancyRiskLevel());
-    }
-
-    @Test
-    public void getLastVisitDateTest() {
-        Date lastVisitDate = new Date();
-
-        doReturn(visitRepository).when(ancLibrary).visitRepository();
-        when(visitRepository.getLatestVisit(memberObject.getBaseEntityId(), "ANC Home Visit")).thenReturn(lastVisit);
-        lastVisit.setDate(lastVisitDate);
-        Assert.assertEquals(interactor.getLastVisitDate(memberObject), lastVisitDate);
+        Assert.assertNotNull(memberObject);
+        Assert.assertEquals(memberObject.getPregnancyRiskLevel(), "Low");
     }
 
     @Test
@@ -100,11 +92,11 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
         String baseEntityId = "some baseEntityId";
         when(chwTaskRepository.getReferralTasksForClientByStatus(planId, baseEntityId, "Referred")).thenReturn(taskList);
         Task task = new Task();
-        taskList.add(task);
-        callback.setClientTasks(taskList);
-        Mockito.doNothing().when(callback).setClientTasks(taskList);
+        task.setIdentifier(Mockito.anyString());
+        task.setPlanIdentifier(Mockito.anyString());
+        task.setGroupIdentifier(Mockito.anyString());
         interactor.getClientTasks(planId, baseEntityId, callback);
-        Mockito.verify(interactor).getClientTasks(planId, baseEntityId, callback);
+        Mockito.verify(callback).setClientTasks(taskList);
     }
 
     @Test
@@ -130,5 +122,4 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
 
         Assert.assertEquals(interactor.getLastVisitDate(memberObject), lastVisitDate);
     }
-
 }
