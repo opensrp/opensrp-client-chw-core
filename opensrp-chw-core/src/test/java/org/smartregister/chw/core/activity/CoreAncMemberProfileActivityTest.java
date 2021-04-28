@@ -45,8 +45,6 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        MockitoAnnotations.initMocks(this);
-
         Context context = Context.getInstance();
         CoreLibrary.init(context);
 
