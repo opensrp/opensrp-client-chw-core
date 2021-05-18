@@ -31,4 +31,4 @@ jobs:
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
         GPR_USER: ${{ github.actor }}
-        GPR_KEY: ${{ secrets.GITHUB_TOKEN }}
+        GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
