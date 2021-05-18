@@ -1,6 +1,5 @@
 package org.smartregister.chw.core.model;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
