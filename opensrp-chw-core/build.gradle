@@ -3,7 +3,6 @@ description = 'OpenSRP chw aggregated client library'
 buildscript {
     repositories {
         google()
-        jcenter()
         mavenLocal()
     }
 
