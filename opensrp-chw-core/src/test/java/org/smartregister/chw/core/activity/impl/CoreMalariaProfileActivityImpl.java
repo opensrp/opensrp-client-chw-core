@@ -23,7 +23,7 @@ public class CoreMalariaProfileActivityImpl extends CoreMalariaProfileActivity {
     @NonNull
     @Override
     public CoreFamilyOtherMemberActivityPresenter presenter() {
-        return Mockito.mock(CoreFamilyOtherMemberActivityPresenter.class);
+        return Mockito.mock(FamilyOtherMemberActivityPresenterImpl.class);
     }
 
     @Override
