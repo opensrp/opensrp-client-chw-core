@@ -104,6 +104,7 @@ public class CoreConstants {
 
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
         public static final String FAMILY_REGISTRATION = "Family Registration";
@@ -192,6 +193,7 @@ public class CoreConstants {
      */
     public static class JSON_FORM {
         public static final String BIRTH_CERTIFICATION = "birth_certification";
+        public static final String DISABILITY = "child_disability";
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
@@ -292,6 +294,10 @@ public class CoreConstants {
 
         public static String getBirthCertification() {
             return Utils.getLocalForm(BIRTH_CERTIFICATION, locale, assetManager);
+        }
+
+        public static String getDisability() {
+            return Utils.getLocalForm(DISABILITY, locale, assetManager);
         }
 
         public static String getObsIllness() {

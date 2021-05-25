@@ -102,19 +102,6 @@ public class CoreMalariaProfileActivityTest extends BaseUnitTest {
         Mockito.verify(profilePresenter, Mockito.times(1)).refreshProfileBottom();
     }
 
-    /*@Test
-    public void changeCompletedActivityResultStartsFamilyProfileActivity() {
-        activity = Mockito.spy(activity);
-        int resultCode = Activity.RESULT_OK;
-        int requestCode = CoreConstants.ProfileActivityResults.CHANGE_COMPLETED;
-        Intent data = Mockito.mock(Intent.class);
-
-        activity.onActivityResult(requestCode, resultCode, data);
-
-        Mockito.verify(activity, Mockito.times(1)).startActivity(ArgumentMatchers.any(Intent.class));
-        Mockito.verify(activity, Mockito.times(1)).finish();
-    }*/
-
     @Test
     public void getJsonActivityResultUpdatesFamilyIfEncounterIsUpdate() {
         activity = Mockito.spy(activity);
