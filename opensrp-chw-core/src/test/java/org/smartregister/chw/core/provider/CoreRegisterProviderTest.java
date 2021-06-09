@@ -36,7 +36,7 @@ public class CoreRegisterProviderTest extends BaseUnitTest {
 
     @Test
     public void canSetVisitNotDoneButtonState() {
-        Button button = Mockito.spy(Mockito.mock(Button.class));
+        Button button = Mockito.mock(Button.class);
         coreRegisterProvider.setVisitNotDone(context, button);
         Mockito.verify(button).setTextColor(context.getColor(R.color.progress_orange));
         Mockito.verify(button).setText(context.getString(R.string.visit_not_done));
@@ -46,7 +46,7 @@ public class CoreRegisterProviderTest extends BaseUnitTest {
 
     @Test
     public void canSetVisitAboveTwentyFourButtonState() {
-        Button button = Mockito.spy(Mockito.mock(Button.class));
+        Button button = Mockito.mock(Button.class);
         coreRegisterProvider.setVisitAboveTwentyFourView(context, button);
         Mockito.verify(button).setTextColor(context.getColor(R.color.alert_complete_green));
         Mockito.verify(button).setText(context.getString(R.string.visit_done));
@@ -56,7 +56,7 @@ public class CoreRegisterProviderTest extends BaseUnitTest {
 
     @Test
     public void canSetVisitOverdueButtonState() {
-        Button button = Mockito.spy(Mockito.mock(Button.class));
+        Button button = Mockito.mock(Button.class);
         String lastVisitDays = "10 days";
         coreRegisterProvider.setVisitButtonOverdueStatus(context, button, lastVisitDays);
         Mockito.verify(button).setTextColor(context.getResources().getColor(R.color.white));
@@ -67,7 +67,7 @@ public class CoreRegisterProviderTest extends BaseUnitTest {
 
     @Test
     public void canSetVisitDueButtonState() {
-        Button button = Mockito.spy(Mockito.mock(Button.class));
+        Button button = Mockito.mock(Button.class);
         coreRegisterProvider.setVisitButtonDueStatus(context, button);
         Mockito.verify(button).setTextColor(context.getColor(R.color.alert_in_progress_blue));
         Mockito.verify(button).setText(context.getString(R.string.record_home_visit));
