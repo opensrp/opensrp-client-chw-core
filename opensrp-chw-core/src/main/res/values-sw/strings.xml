@@ -748,4 +748,10 @@
     <!--HIV Index Clients-->
     <string name="register_hiv_index_clients">Sajili mshirika wa ngono/wakujidunga na /mtoto wa mteja</string>
 
+    <!--Referral Titles-->
+    <string name="hiv_referral">Kliniki ya Tiba na matunzo (CTC)</string>
+    <string name="tb_referral">Kliniki ya kutibu kifua kikuu</string>
+    <string name="gbv_referral">Huduma ya kuzui ukatili wa kijinsia (dawati la jinsia)</string>
+    <string name="child_gbv_referral">Huduma ya kuzui ukatili wa kijinsia (dawati la jinsia)</string>
+
 </resources>

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.vijay.jsonwizard.utils.FormUtils;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreHivProfileActivity;
 import org.smartregister.chw.core.contract.CoreHivProfileContract;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -40,7 +41,7 @@ public class CoreHivProfilePresenter extends BaseHivProfilePresenter implements 
     @Override
     public void startHivReferral() {
         try {
-            getView().startFormActivity((new FormUtils()).getFormJsonFromRepositoryOrAssets(((CoreHivProfileActivity) getView()), CoreConstants.JSON_FORM.getHivReferralForm()), hivMemberObject);
+            getView().startFormActivity((new FormUtils()).getFormJsonFromRepositoryOrAssets(((CoreHivProfileActivity) getView()), CoreConstants.JSON_FORM.getHivReferralForm()), hivMemberObject,((CoreHivProfileActivity) getView()).getString(R.string.hiv_referral));
         } catch (Exception e) {
             Timber.e(e);
         }
