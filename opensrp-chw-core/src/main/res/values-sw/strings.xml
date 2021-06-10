@@ -745,4 +745,7 @@
     <!-- All Clients -->
     <string name="add_client">Sajili Mteja</string>
 
+    <!--HIV Index Clients-->
+    <string name="register_hiv_index_clients">Sajili mshirika wa ngono/wakujidunga na /mtoto wa mteja</string>
+
 </resources>

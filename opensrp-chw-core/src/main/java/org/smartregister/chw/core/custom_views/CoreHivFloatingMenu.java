@@ -22,6 +22,7 @@ import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
 public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
     public FloatingActionButton fab;
     protected View referLayout;
+    protected View registerHivIndexClientsLayout;
     private Animation fabOpen;
     private Animation fabClose;
     private Animation rotateForward;
@@ -63,6 +64,10 @@ public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
         referLayout.setOnClickListener(this);
         referLayout.setClickable(false);
 
+        registerHivIndexClientsLayout = findViewById(R.id.register_index_clients_layout);
+        registerHivIndexClientsLayout.setOnClickListener(this);
+        registerHivIndexClientsLayout.setClickable(false);
+
         menuBar.setVisibility(GONE);
 
     }
@@ -87,6 +92,10 @@ public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
 
             referLayout.startAnimation(fabClose);
             referLayout.setClickable(false);
+
+            registerHivIndexClientsLayout.startAnimation(fabClose);
+            registerHivIndexClientsLayout.setClickable(false);
+
             isFabMenuOpen = false;
         } else {
             activityMain.setBackgroundResource(R.color.grey_tranparent_50);
@@ -98,6 +107,10 @@ public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
 
             referLayout.startAnimation(fabOpen);
             referLayout.setClickable(true);
+
+            registerHivIndexClientsLayout.startAnimation(fabOpen);
+            registerHivIndexClientsLayout.setClickable(true);
+
             isFabMenuOpen = true;
         }
     }

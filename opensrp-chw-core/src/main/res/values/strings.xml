@@ -765,4 +765,7 @@
     <string name="view_vaccine_histroy">View vaccine history</string>
     <string name="see_vaccines_due_today">See vaccines due today</string>
     <string name="confirm">Confirm</string>
+
+    <!--HIV Index Clients-->
+    <string name="register_hiv_index_clients">Register HIV Index Clients</string>
 </resources>
