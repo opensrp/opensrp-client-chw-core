@@ -76,4 +76,22 @@ public class EventDao extends AbstractDao {
     private static ECSyncHelper getEcSyncHelper() {
         return CoreChwApplication.getInstance().getEcSyncHelper();
     }
+
+    public static void deleteVaccineByFormSubmissionId(String submissionId) {
+        String sql = "delete from vaccines where formSubmissionId = '" + submissionId + "'";
+        updateDB(sql);
+    }
+
+    public static void deleteServiceByFormSubmissionId(String submissionId) {
+        String sql = "delete from recurring_service_records where formSubmissionId = '" + submissionId + "'";
+        updateDB(sql);
+    }
+
+    public static void deleteVisitByFormSubmissionId(String submissionId) {
+        String sql1 = "delete from visit_details where visit_id in (select visit_id from visits where form_submission_id = '" + submissionId + "')";
+        updateDB(sql1);
+
+        String sql2 = "delete from visits where form_submission_id = '" + submissionId + "'";
+        updateDB(sql2);
+    }
 }

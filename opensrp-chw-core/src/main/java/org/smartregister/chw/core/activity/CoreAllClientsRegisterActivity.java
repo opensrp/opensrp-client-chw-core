@@ -70,8 +70,7 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity impl
         super.onResumption();
         NavigationMenu menu = NavigationMenu.getInstance(this, null, null);
         if (menu != null) {
-            menu.getNavigationAdapter()
-                    .setSelectedView(CoreConstants.DrawerMenu.ALL_CLIENTS);
+            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.ALL_CLIENTS);
         }
     }
 

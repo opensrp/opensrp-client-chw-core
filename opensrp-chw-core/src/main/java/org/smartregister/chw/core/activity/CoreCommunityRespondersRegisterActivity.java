@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -32,6 +31,7 @@ import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
+import org.smartregister.view.activity.MultiLanguageActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 
-public class CoreCommunityRespondersRegisterActivity extends AppCompatActivity implements CoreCommunityRespondersContract.View {
+public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivity implements CoreCommunityRespondersContract.View {
 
     private ListView communityRespondersListView;
     private CoreCommunityRespondersContract.Presenter presenter;

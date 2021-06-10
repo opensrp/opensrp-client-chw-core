@@ -68,8 +68,18 @@ public class CoreAllClientsRegisterFragment extends BaseOpdRegisterFragment {
     }
 
     @Override
+    public void initializeAdapter() {
+//        super.initializeAdapter();
+    }
+
+    @Override
     protected void goToClientDetailActivity(@NonNull CommonPersonObjectClient commonPersonObjectClient) {
         //implement
+    }
+
+    @Override
+    protected int getToolBarTitle() {
+        return R.string.menu_all_clients;
     }
 
     @Override

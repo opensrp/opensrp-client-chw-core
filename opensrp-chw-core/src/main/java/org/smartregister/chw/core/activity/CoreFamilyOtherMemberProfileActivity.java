@@ -253,7 +253,7 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
                     String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
                     JSONObject form = new JSONObject(jsonString);
                     if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                        presenter().updateFamilyMember(jsonString, isIndependent);
+                        presenter().updateFamilyMember(this, jsonString, isIndependent);
                     }
                 } catch (Exception e) {
                     Timber.e(e);

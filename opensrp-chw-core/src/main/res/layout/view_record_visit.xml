@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/record_visit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -74,7 +76,7 @@
             android:textColor="@color/grey" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/record_visit_status_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,30 +88,36 @@
             android:id="@+id/cross_image_child"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="10dp" />
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/textview_not_visit_this_month"
             style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/textview_undo"
-            android:layout_toRightOf="@+id/cross_image_child"
+            android:gravity="start"
             android:padding="10dp"
             android:text="@string/not_visiting_this_month"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/barrier_record_visit_status_bar"
+            app:layout_constraintStart_toEndOf="@+id/cross_image_child"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/textview_undo"
             style="@style/CustomFontTextViewStyle.ListView.Normal.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:padding="10dp"
             android:text="@string/undo"
-            android:textColor="@color/primary" />
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/textview_edit"
@@ -120,9 +128,21 @@
             android:padding="10dp"
             android:text="@string/edit"
             android:textColor="@color/primary"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_record_visit_status_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="textview_edit,textview_undo"
+            tools:layout_editor_absoluteX="402dp"
+            tools:layout_editor_absoluteY="10dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view_record"

@@ -109,4 +109,9 @@ public class CoreFamilyProfileActivityTestImpl extends CoreFamilyProfileActivity
     protected boolean isPncMember(String baseEntityId) {
         return false;
     }
+
+    @Override
+    public void setEventDate(String eventDate) {
+        // do nothing
+    }
 }

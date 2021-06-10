@@ -15,7 +15,6 @@ import org.smartregister.chw.core.domain.NotificationRecord;
 import org.smartregister.chw.core.utils.ChwNotificationUtil;
 import org.smartregister.chw.hiv.util.Constants;
 import org.smartregister.clientandeventmodel.Event;
-import org.smartregister.family.util.Utils;
 import org.smartregister.opd.utils.OpdUtils;
 
 import java.text.ParseException;
@@ -28,6 +27,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class BaseChwNotificationDetailsInteractor implements ChwNotificationDetailsContract.Interactor {
@@ -206,6 +206,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
     private String getClientAge(String dobString) {
         String translatedYearInitial = context.getResources().getString(R.string.abbrv_years);
-        return OpdUtils.getClientAge(Utils.getDuration(dobString), translatedYearInitial);
+        return OpdUtils.getClientAge(getDuration(dobString), translatedYearInitial);
     }
 }

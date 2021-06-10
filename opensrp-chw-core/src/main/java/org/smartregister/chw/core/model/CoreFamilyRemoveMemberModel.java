@@ -19,6 +19,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMemberModel implements FamilyRemoveMemberContract.Model {
 
     @Override
@@ -56,7 +58,7 @@ public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMembe
                 } else if (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).equalsIgnoreCase(CoreConstants.JsonAssets.DETAILS)) {
 
                     String dob = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
-                    String dobString = Utils.getDuration(dob);
+                    String dobString = getDuration(dob);
                     dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : dobString;
 
                     String details = String.format("%s %s %s, %s %s",

@@ -8,7 +8,7 @@ public interface FamilyOtherMemberProfileExtendedContract {
 
     interface Presenter extends FamilyOtherMemberContract.Presenter {
 
-        void updateFamilyMember(String jsonString, boolean isIndependent);
+        void updateFamilyMember(Context context, String jsonString, boolean isIndependent);
 
         void updateFamilyMemberServiceDue(String serviceDueStatus);
     }

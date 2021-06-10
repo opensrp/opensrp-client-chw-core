@@ -23,6 +23,7 @@ import org.smartregister.family.util.Utils;
 
 import java.lang.ref.WeakReference;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
 
 public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask<Void, Void, Void> {
@@ -59,7 +60,7 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
     }
 
     private void goToChildProfileActivity(CommonPersonObjectClient patient, Bundle bundle) {
-        String dobString = Utils.getDuration(Utils.getValue(patient.getColumnmaps(), DBConstants.KEY.DOB, false));
+        String dobString = getDuration(Utils.getValue(patient.getColumnmaps(), DBConstants.KEY.DOB, false));
         Integer yearOfBirth = CoreChildUtils.dobStringToYear(dobString);
         Intent intent;
         if (yearOfBirth != null && yearOfBirth >= 5) {

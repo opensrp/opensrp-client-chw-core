@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -77,9 +78,16 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public OnClickFloatingMenu onClickFloatingMenu;
     public Handler handler = new Handler();
     public RelativeLayout layoutFamilyHasRow;
-    protected TextView textViewParentName;
     public TextView textViewLastVisit;
     public TextView textViewVaccineHistory;
+    public TextView textViewDueToday;
+    public RelativeLayout layoutLastVisitRow;
+    public RelativeLayout layoutVaccineHistoryRow;
+    public RelativeLayout layoutServiceDueRow;
+    public View viewLastVisitRow;
+    public View viewVaccineHistoryRow;
+    public TextView textViewFamilyHas;
+    protected TextView textViewParentName;
     protected TextView textViewMedicalHistory;
     protected CircleImageView imageViewProfile;
     protected View recordVisitPanel;
@@ -97,15 +105,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
-    private RelativeLayout layoutNotRecordView;
-    public RelativeLayout layoutLastVisitRow;
-    public RelativeLayout layoutVaccineHistoryRow;
+    private ConstraintLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
     private RelativeLayout layoutRecordButtonDone;
     private LinearLayout layoutRecordView;
-    public View viewLastVisitRow;
-    public View viewVaccineHistoryRow;
     private View viewMostDueRow;
     public final BroadcastReceiver mDateTimeChangedReceiver = new BroadcastReceiver() {
         @Override
@@ -119,12 +123,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             }
         }
     };
-    private View viewFamilyRow;
+    public View viewFamilyRow;
     private View viewDividerSickRow;
     private TextView textViewNotVisitMonth;
     private TextView textViewUndo;
     private TextView textViewNameDue;
-    private TextView textViewFamilyHas;
     private TextView textViewSickChild;
     private ImageView imageViewCross;
     private ProgressBar progressBar;
@@ -218,6 +221,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNotVisitMonth = findViewById(R.id.textview_not_visit_this_month);
         textViewLastVisit = findViewById(R.id.textview_last_vist_day);
         textViewVaccineHistory = findViewById(R.id.textview_view_vaccine_history);
+        textViewDueToday = findViewById(R.id.textview_view_due_today);
         textViewUndo = findViewById(R.id.textview_undo);
         imageViewCrossChild = findViewById(R.id.cross_image_child);
         imageViewCross = findViewById(R.id.cross_image);
@@ -225,6 +229,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         layoutNotRecordView = findViewById(R.id.record_visit_status_bar);
         layoutLastVisitRow = findViewById(R.id.last_visit_row);
         layoutVaccineHistoryRow = findViewById(R.id.vaccine_history);
+        layoutServiceDueRow = findViewById(R.id.view_due_today);
         textViewMedicalHistory = findViewById(R.id.text_view_medical_hstory);
         layoutMostDueOverdue = findViewById(R.id.most_due_overdue_row);
         textViewNameDue = findViewById(R.id.textview_name_due);
@@ -232,7 +237,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewFamilyHas = findViewById(R.id.textview_family_has);
         layoutRecordButtonDone = findViewById(R.id.record_visit_done_bar);
         viewLastVisitRow = findViewById(R.id.view_last_visit_row);
-        viewVaccineHistoryRow= findViewById(R.id.view_vaccine_history_row);
+        viewVaccineHistoryRow = findViewById(R.id.view_vaccine_history_row);
         viewMostDueRow = findViewById(R.id.view_most_due_overdue_row);
         viewFamilyRow = findViewById(R.id.view_family_row);
         progressBar = findViewById(R.id.progress_bar);
@@ -243,6 +248,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         imageViewCrossChild.setOnClickListener(this);
         layoutLastVisitRow.setOnClickListener(this);
         layoutVaccineHistoryRow.setOnClickListener(this);
+        layoutServiceDueRow.setOnClickListener(this);
         layoutMostDueOverdue.setOnClickListener(this);
         layoutFamilyHasRow.setOnClickListener(this);
         layoutRecordButtonDone.setOnClickListener(this);
@@ -384,6 +390,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewChildName.append(", " + age);
     }
 
+    public void setNoButtonView() {
+        layoutRecordButtonDone.setVisibility(View.GONE);
+        layoutNotRecordView.setVisibility(View.GONE);
+        layoutRecordView.setVisibility(View.GONE);
+    }
+
     @Override
     public void setVisitButtonDueStatus() {
         openVisitButtonView();
@@ -446,6 +458,11 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         textViewNameDue.setText(CoreChildUtils.fromHtml(getString(R.string.vaccine_service_upcoming, serviceName, dueDate)));
     }
 
+    public void setDueTodayServices() {
+        layoutServiceDueRow.setVisibility(View.VISIBLE);
+        textViewDueToday.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void setVisitLessTwentyFourView(String monthName) {
         textViewNotVisitMonth.setText(getString(R.string.visit_month, monthName));
@@ -461,6 +478,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         openVisitRecordDoneView();
         textViewRecord.setBackgroundResource(R.drawable.record_btn_selector_above_twentyfr);
         textViewRecord.setTextColor(getResources().getColor(R.color.light_grey_text));
+    }
+
+    @Override
+    public void setFamilyHasNothingElseDue() {
+        layoutFamilyHasRow.setVisibility(View.VISIBLE);
+        viewFamilyRow.setVisibility(View.VISIBLE);
     }
 
     @Override

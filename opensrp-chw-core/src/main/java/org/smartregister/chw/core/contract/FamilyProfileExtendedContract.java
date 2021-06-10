@@ -19,7 +19,7 @@ public interface FamilyProfileExtendedContract {
 
         void verifyHasPhone();
 
-        String saveChwFamilyMember(String jsonString);
+        String saveChwFamilyMember(Context context, String jsonString);
 
         boolean updatePrimaryCareGiver(Context context, String jsonString, String familyBaseEntityId, String entityID);
 
@@ -31,6 +31,7 @@ public interface FamilyProfileExtendedContract {
 
         void updateHasPhone(boolean hasPhone);
 
+        void setEventDate(String eventDate);
     }
 
     interface PresenterCallBack {

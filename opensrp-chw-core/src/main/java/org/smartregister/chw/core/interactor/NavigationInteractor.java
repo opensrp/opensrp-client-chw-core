@@ -2,6 +2,7 @@ package org.smartregister.chw.core.interactor;
 
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
+import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
@@ -76,16 +77,23 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         this.coreApplication = coreApplication;
     }
 
-    private int getCount(String tableName) {
+    private String getChildSqlString() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "select count(*) from ec_child c " +
+                    "inner join ec_family_member m on c.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                    "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                    "where m.date_removed is null and m.is_closed = 0 " +
+                    "and ((( julianday('now') - julianday(c.dob))/365.25) < 5) and c.is_closed = 0 " +
+                    " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
 
+    private int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
-                String sqlChild = "select count(*) from ec_child c " +
-                        "inner join ec_family_member m on c.base_entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and m.is_closed = 0 " +
-                        "and ((( julianday('now') - julianday(c.dob))/365.25) < 5) and c.is_closed = 0 " +
-                        " and (( ( ifnull(entry_point,'') <> 'PNC' ) ) or (ifnull(entry_point,'') = 'PNC' and ( date (c.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 0)))  or (ifnull(entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = mother_entity_id ) = 1)) ";
+                String sqlChild = getChildSqlString();
                 return NavigationDao.getQueryCount(sqlChild);
 
             case CoreConstants.TABLE_NAME.FAMILY:

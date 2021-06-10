@@ -36,6 +36,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 public class CoreChildProfilePresenter implements CoreChildProfileContract.Presenter, CoreChildProfileContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
     public CoreChildProfileContract.Model model;
@@ -295,7 +297,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         }
     }
 
-    private boolean isWithinEditPeriod(@Nullable Long checkDate) {
+    public boolean isWithinEditPeriod(@Nullable Long checkDate) {
         if (checkDate == null)
             return false;
 
@@ -387,7 +389,7 @@ public class CoreChildProfilePresenter implements CoreChildProfileContract.Prese
         String middleName = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String childName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
         getView().setProfileName(childName);
-        getView().setAge(Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false)), view.get().getContext()));
+        getView().setAge(Utils.getTranslatedDate(getDuration(Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false)), view.get().getContext()));
 
         dob = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
 

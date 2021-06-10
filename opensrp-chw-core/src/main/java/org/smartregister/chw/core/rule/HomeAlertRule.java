@@ -175,6 +175,32 @@ public class HomeAlertRule implements ICommonRule {
     }
 
     public Date getOverDueDate() {
+        if (lastVisitDate == null) {
+            return (visitNotDoneDate != null) ? visitNotDoneDate.toDate() : getLastDayOfMonth(dateCreated.toDate());
+        } else {
+            if (visitNotDoneDate == null || lastVisitDate.isAfter(visitNotDoneDate)) {
+                int monthsDiff = getMonthsDifference(lastVisitDate, todayDate);
+                return monthsDiff > 1 ? getLastDayOfMonth(lastVisitDate.toDate()) : getLastDayOfMonth(todayDate.toDate());
+            } else if (visitNotDoneDate != null) {
+                return visitNotDoneDate.toDate();
+            } else {
+                return getLastDayOfMonth(lastVisitDate.toDate());
+            }
+        }
+    }
+
+
+    public boolean evaluateIfOverdueWithinMonth(Integer value) {
+        LocalDate overdue = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(overDueDate()));
+        int diff = getMonthsDifference(overdue, todayDate);
+        if (diff >= value) {
+            noOfMonthDue = diff + StringUtils.upperCase(context.getString(R.string.abbrv_months));
+            return true;
+        }
+        return false;
+    }
+
+    public Date overDueDate() {
         Date anchor = null;
         if (lastVisitDate == null) {
             if (visitNotDoneDate != null) {
@@ -183,25 +209,16 @@ public class HomeAlertRule implements ICommonRule {
                 anchor = getLastDayOfMonth(dateCreated.toDate());
             }
         } else {
-            if (visitNotDoneDate == null || (visitNotDoneDate != null && lastVisitDate.isAfter(visitNotDoneDate))) {
+            if (visitNotDoneDate == null || lastVisitDate.isAfter(visitNotDoneDate)) {
                 if ((getMonthsDifference(lastVisitDate, todayDate) == 0) || (getMonthsDifference(lastVisitDate, todayDate) == 1)) {
                     anchor = getLastDayOfMonth(todayDate.toDate());
+                } else if ((getMonthsDifference(lastVisitDate, todayDate) > 1)) {
+                    anchor = getLastDayOfMonth(lastVisitDate.toDate());
                 }
             } else if (visitNotDoneDate != null && visitNotDoneDate.isAfter(lastVisitDate)) {
                 anchor = visitNotDoneDate.toDate();
             }
         }
         return anchor;
-    }
-
-    public boolean isLmhChildDueWithinMonth() {
-        if (todayDate.getDayOfMonth() == 1) {
-            return true;
-        }
-        if (lastVisitDate == null) {
-            return true;
-        }
-
-        return !isVisitThisMonth(lastVisitDate, todayDate);
     }
 }

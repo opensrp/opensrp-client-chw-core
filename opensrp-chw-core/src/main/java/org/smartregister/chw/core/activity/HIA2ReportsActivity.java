@@ -125,7 +125,7 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 Utils.startAsyncTask(new StartDraftMonthlyFormTask(this, date, formName), null);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
     }
@@ -150,8 +150,10 @@ public class HIA2ReportsActivity extends MultiLanguageActivity
                 for (int j = 0; j < fieldsArray.length(); j++) {
                     JSONObject fieldJsonObject = fieldsArray.getJSONObject(j);
                     String key = fieldJsonObject.getString(KEY);
-                    String value = fieldJsonObject.getString(VALUE);
-                    result.put(key, value);
+                    String value = !fieldJsonObject.has(VALUE) ? "" : fieldJsonObject.getString(VALUE);
+                    if(!value.equals("")){
+                        result.put(key, value);
+                    }
                 }
 
                 boolean saveClicked;

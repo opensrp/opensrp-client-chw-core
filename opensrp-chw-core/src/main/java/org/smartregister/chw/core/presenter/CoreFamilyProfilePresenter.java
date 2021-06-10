@@ -19,11 +19,13 @@ import org.smartregister.chw.core.model.CoreChildProfileModel;
 import org.smartregister.chw.core.model.CoreChildRegisterModel;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
+import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.contract.FamilyProfileContract;
@@ -36,11 +38,13 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.toList;
+
 public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresenter implements FamilyProfileExtendedContract.Presenter, CoreChildRegisterContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
+    protected CoreChildProfileModel childProfileModel;
     private WeakReference<FamilyProfileExtendedContract.View> viewReference;
     private CoreChildRegisterInteractor childRegisterInteractor;
-    protected CoreChildProfileModel childProfileModel;
 
 
     public CoreFamilyProfilePresenter(FamilyProfileExtendedContract.View view, FamilyProfileContract.Model model, String familyBaseEntityId, String familyHead, String primaryCaregiver, String familyName) {
@@ -130,7 +134,7 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
     }
 
     @Override
-    public String saveChwFamilyMember(String jsonString) {
+    public String saveChwFamilyMember(Context context, String jsonString) {
         try {
             getView().showProgressDialog(org.smartregister.family.R.string.saving_dialog_title);
 
@@ -138,6 +142,14 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
             if (familyEventClient == null) {
                 return null;
             }
+            FamilyMember familyMember = CoreJsonFormUtils.getFamilyMemberFromRegistrationForm(jsonString, familyBaseEntityId, familyBaseEntityId);
+            Event eventMember = familyEventClient.getEvent();
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EverSchool.CODE, "",
+                    toList(CoreJsonFormUtils.getEverSchoolOptions(context).get(familyMember.getEverSchool())), toList(familyMember.getEverSchool()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
+
+            eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.SchoolLevel.CODE, "",
+                    toList(CoreJsonFormUtils.getSchoolLevels(context).get(familyMember.getSchoolLevel())), toList(familyMember.getSchoolLevel()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.SCHOOL_LEVEL));
+
 
             interactor.saveRegistration(familyEventClient, jsonString, false, this);
             return familyEventClient.getClient().getBaseEntityId();
@@ -190,5 +202,18 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
     private PncRegisterRepository getPncRegisterRepository() {
         return CoreChwApplication.pncRegisterRepository();
+    }
+
+    @Override
+    public void refreshProfileTopSection(CommonPersonObjectClient client) {
+        super.refreshProfileTopSection(client);
+
+        if (client == null || client.getColumnmaps() == null) {
+            return;
+        }
+        String eventDateValue = Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, true);
+        String eventDate = eventDateValue != null && !eventDateValue.equals("") ? eventDateValue.substring(0,10) : "";
+
+        getView().setEventDate(eventDate);
     }
 }

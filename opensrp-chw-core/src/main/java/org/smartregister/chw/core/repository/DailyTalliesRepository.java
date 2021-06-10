@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class DailyTalliesRepository extends BaseRepository {
     private static final String TAG = DailyTalliesRepository.class.getCanonicalName();
     private static final SimpleDateFormat DAY_FORMATTER = new SimpleDateFormat(ReportIndicatorDaoImpl.DAILY_TALLY_DATE_FORMAT, Locale.ENGLISH);
@@ -71,10 +73,8 @@ public class DailyTalliesRepository extends BaseRepository {
                     selectionArgs, null, null, null, null, null);
 
             months = getUniqueMonths(dateFormat, cursor);
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -102,6 +102,8 @@ public class DailyTalliesRepository extends BaseRepository {
                     curMonth = DATE_TIME_FORMATTER.parse((cursor.getString(0)));
                 } catch (ParseException e) {
                     curMonth = DAY_FORMATTER.parse((cursor.getString(0)));
+                } catch (ArrayIndexOutOfBoundsException e){
+                    Timber.e(e);
                 }
 
                 String month = dateFormat.format(curMonth);
@@ -156,11 +158,9 @@ public class DailyTalliesRepository extends BaseRepository {
                     }
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
+        } catch (Exception e) {
+            Timber.e(e);
+        }  finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -202,12 +202,8 @@ public class DailyTalliesRepository extends BaseRepository {
                     }
                 }
             }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (NullPointerException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (Exception e) {
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();

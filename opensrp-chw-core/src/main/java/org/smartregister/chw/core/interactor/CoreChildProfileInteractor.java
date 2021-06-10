@@ -77,6 +77,7 @@ import static org.smartregister.chw.core.dao.ChildDao.getBaseEntityID;
 import static org.smartregister.chw.core.dao.ChildDao.getThinkMDCarePlan;
 import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
 import static org.smartregister.chw.core.utils.CoreConstants.ThinkMdConstants.HTML_ASSESSMENT;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.chw.core.utils.Utils.getFormTag;
 
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
@@ -594,7 +595,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
 
     private void getAge(CommonPersonObjectClient client, JSONObject jsonObject) throws JSONException {
         String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
-        dobString = org.smartregister.family.util.Utils.getDuration(dobString);
+        dobString = getDuration(dobString);
         dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : "0";
         jsonObject.put(JsonFormUtils.VALUE, Integer.valueOf(dobString));
     }

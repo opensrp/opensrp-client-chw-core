@@ -17,6 +17,7 @@ import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.dao.AbstractDao;
 import org.smartregister.domain.Alert;
 import org.smartregister.domain.AlertStatus;
+import org.smartregister.immunization.ImmunizationLibrary;
 import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.domain.VaccineCondition;
@@ -29,6 +30,7 @@ import org.smartregister.immunization.domain.jsonmapping.Expiry;
 import org.smartregister.immunization.domain.jsonmapping.Schedule;
 import org.smartregister.immunization.domain.jsonmapping.VaccineGroup;
 import org.smartregister.immunization.repository.VaccineRepository;
+import org.smartregister.immunization.util.IMConstants;
 import org.smartregister.immunization.util.VaccinatorUtils;
 
 import java.util.ArrayList;
@@ -50,8 +52,15 @@ public class VisitVaccineUtil {
         if (vaccineMap == null || vaccineMap.size() == 0) {
             vaccineMap = new HashMap<>();
 
-            List<VaccineRepo.Vaccine> allVacs = VaccineRepo.getVaccines("woman");
-            allVacs.addAll(VaccineRepo.getVaccines("child"));
+            List<VaccineRepo.Vaccine> allVacs = new ArrayList<>();
+
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey(IMConstants.VACCINE_TYPE.WOMAN)) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get(IMConstants.VACCINE_TYPE.WOMAN).vaccineRepo);
+            }
+
+            if (ImmunizationLibrary.getVaccineCacheMap().containsKey(IMConstants.VACCINE_TYPE.CHILD)) {
+                allVacs.addAll(ImmunizationLibrary.getVaccineCacheMap().get(IMConstants.VACCINE_TYPE.CHILD).vaccineRepo);
+            }
 
             for (VaccineRepo.Vaccine vaccine : allVacs) {
                 vaccineMap.put(
@@ -276,7 +285,7 @@ public class VisitVaccineUtil {
             if (vaccineSchedules != null && vaccineSchedules.containsKey(vaccineCategory)) {
                 for (VaccineSchedule curSchedule : vaccineSchedules.get(vaccineCategory).values()) {
                     Alert curAlert = curSchedule.getOfflineAlert(baseEntityId, dob.toDate(), issuedVaccines);
-                    if (curAlert != null) {
+                    if (curAlert != null && curAlert.startDate() != null) {
                         generatedAlerts.add(curAlert);
                     }
                 }

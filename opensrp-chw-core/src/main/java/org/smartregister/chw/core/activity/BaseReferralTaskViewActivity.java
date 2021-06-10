@@ -21,10 +21,10 @@ import org.smartregister.chw.core.dao.PNCDao;
 import org.smartregister.chw.core.model.ChildModel;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.DBConstants;
-import org.smartregister.family.util.Utils;
 import org.smartregister.view.activity.SecuredActivity;
 import org.smartregister.view.customcontrols.CustomFontTextView;
 
@@ -190,7 +190,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
                 getString(R.string.children_prefix, children);
     }
 
-    private void updateProblemDisplay() {
+    protected void updateProblemDisplay() {
         if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(getTask().getFocus())) {
             clientReferralProblem.setText(getString(R.string.anc_danger_sign_prefix, getTask().getDescription()));
         } else {

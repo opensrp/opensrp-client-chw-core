@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CoreStockInventoryReportActivity extends SecuredActivity {
-    public StockUsageReportUtils stockUsageReportUtils = new StockUsageReportUtils();
     protected AppBarLayout appBarLayout;
     protected RecyclerView recyclerView;
     protected CustomFontTextView toolBarTextView;
@@ -47,8 +46,8 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
    protected List<MonthStockUsageModel> getMonthStockUsageReportList() {
         List<MonthStockUsageModel> monthStockUsageReportList = new ArrayList<>();
 
-        if (stockUsageReportUtils.getPreviousMonths().size() > 0) {
-            for (Map.Entry<String, String> entry : stockUsageReportUtils.getPreviousMonths().entrySet()) {
+        if (StockUsageReportUtils.getPreviousMonths(this).size() > 0) {
+            for (Map.Entry<String, String> entry : StockUsageReportUtils.getPreviousMonths(this).entrySet()) {
                 monthStockUsageReportList.add(new MonthStockUsageModel(entry.getKey(), entry.getValue()));
             }
         }
@@ -60,7 +59,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
         String providerName = getProviderName();
         for (String item : getItems()) {
             String usage = getStockUsageForMonth(month, item, year, providerName);
-            stockUsageItemModelsList.add(new StockUsageItemModel(stockUsageReportUtils.getFormattedItem(item), stockUsageReportUtils.getUnitOfMeasure(item), usage, providerName));
+            stockUsageItemModelsList.add(new StockUsageItemModel(StockUsageReportUtils.getFormattedItem(item, this), StockUsageReportUtils.getUnitOfMeasure(item, this), usage, providerName));
         }
         return stockUsageItemModelsList;
     }
@@ -74,7 +73,7 @@ public class CoreStockInventoryReportActivity extends SecuredActivity {
     }
 
     protected void reloadRecycler(MonthStockUsageModel selected) {
-        String stockMonth = stockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
+        String stockMonth = StockUsageReportUtils.getMonthNumber(selected.getMonth().substring(0, 3));
         String stockYear = selected.getYear();
 
 
