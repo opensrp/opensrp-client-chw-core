@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
+
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
@@ -53,12 +56,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     protected RecyclerView notificationAndReferralRecyclerView;
     protected RelativeLayout notificationAndReferralLayout;
 
-    protected void initializeNotificationReferralRecyclerView() {
-        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
-        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager( new LinearLayoutManager(this));
-    }
-
     protected static CommonPersonObjectClient getClientDetailsByBaseEntityID(@NonNull String baseEntityId) {
         CommonRepository commonRepository = Utils.context().commonrepository(Utils.metadata().familyMemberRegister.tableName);
 
@@ -68,6 +65,12 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
         client.setColumnmaps(commonPersonObject.getColumnmaps());
         return client;
 
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -197,17 +200,27 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
         try {
             assert form != null;
-            startFormActivity(form, getHivMemberObject());
+            startFormActivity(form, getHivMemberObject(),formName);
         } catch (Exception e) {
             Timber.e(e);
         }
     }
 
     @Override
-    public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject) {
+    public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject, String formName) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, formJson.toString());
         intent.putExtra(org.smartregister.chw.hiv.util.Constants.HivMemberObject.MEMBER_OBJECT, hivMemberObject);
+
+        Form form = new Form();
+        form.setName(formName);
+        form.setActionBarBackground(org.smartregister.chw.core.R.color.family_actionbar);
+        form.setNavigationBackground(org.smartregister.chw.core.R.color.family_navigation);
+        form.setHomeAsUpIndicator(org.smartregister.chw.core.R.mipmap.ic_cross_white);
+        form.setPreviousLabel(getResources().getString(org.smartregister.chw.core.R.string.back));
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+
     }
 
     private void updateFollowUpVisitButton(String buttonStatus) {

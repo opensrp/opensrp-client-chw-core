@@ -8,7 +8,7 @@ import org.smartregister.repository.AllSharedPreferences;
 public interface CoreHivProfileContract {
 
     interface View extends BaseHivProfileContract.View {
-        void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject);
+        void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject, String formName);
     }
 
     interface Presenter extends BaseHivProfileContract.Presenter {
