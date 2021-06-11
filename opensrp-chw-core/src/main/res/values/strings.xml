@@ -768,11 +768,14 @@
 
     <!--HIV Index Clients-->
     <string name="register_hiv_index_clients">Register HIV Index Clients</string>
+    <string name="successful_hiv_index_registration_toast">The HIV Index has been successfully saved</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Clinic of Treatment and Care</string>
     <string name="tb_referral">Clinic Of Tuberculosis Treatment</string>
     <string name="gbv_referral">Gender Based Violence Referral</string>
     <string name="child_gbv_referral">Child Gender Based Violence Referral</string>
+
+
 
 </resources>

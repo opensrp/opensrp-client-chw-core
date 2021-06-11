@@ -187,6 +187,7 @@ public class CoreConstants {
         public static final String REMOVE_COMMUNITY_RESPONDER = "Remove Community Responder";
         public static final String CLOSE_HIV_FEEDBACK = "Close Hiv Feedback";
         public static final String CLOSE_TB_FEEDBACK = "Close Tb Feedback";
+        public static final String REGISTER_HIV_INDEX = "Register Hiv Index";
     }
 
     public static final class EncounterType {
@@ -254,6 +255,9 @@ public class CoreConstants {
         private static final String TB_COMMUNITY_FOLLOW_FEEDBACK = "tb_community_followup_feedback";
         private static final String ALL_CLIENT_REGISTRATION_FORM = "all_clients_registration_form";
         private static final String ALL_CLIENT_UPDATE_REGISTRATION_INFO_FORM = "all_clients_update_registration_info_form";
+
+        private static final String HIV_INDEX_CLIENTS_REGISTRATION_FORM = "hiv_index_clients_registration_form";
+
 
 
 
@@ -477,6 +481,10 @@ public class CoreConstants {
 
         public static String getAllClientUpdateRegistrationInfoForm() {
             return ALL_CLIENT_UPDATE_REGISTRATION_INFO_FORM;
+        }
+
+        public static String getHivIndexClientsRegistrationForm() {
+            return HIV_INDEX_CLIENTS_REGISTRATION_FORM;
         }
 
         public static String getTbCommunityFollowFeedback() {
@@ -739,6 +747,7 @@ public class CoreConstants {
         public static final String PNC_REFERRAL = "ec_pnc_referral";
         public static final String FP_REFERRAL = "ec_fp_referral";
         public static final String CLOSE_REFERRAL = "ec_close_referral";
+        public static final String HIV_INDEX = "ec_hiv_index";
         public static final String NOT_YET_DONE_REFERRAL = "ec_not_yet_done_referral";
         public static final String SCHEDULE_SERVICE = "schedule_service";
         public static final String MALARIA_REFERRAL = "ec_malaria_referral";
@@ -961,6 +970,7 @@ public class CoreConstants {
             public static final String REFERRAL_TASK_PREVIOUS_BUSINESS_STATUS = "referral_task_previous_business_status";
             public static final String NOTIFICATION_ID = "notification_id";
             public static final String DATE_NOTIFICATION_MARKED_AS_DONE = "date_marked_as_done";
+            public static final String INDEX_CLIENT_BASE_ENTITY_ID = "index_client_base_entity_id";
         }
     }
 
