@@ -9,14 +9,14 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.job.HomeVisitServiceJob;
 import org.smartregister.chw.core.job.VaccineRecurringServiceJob;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.hiv.activity.BaseHivRegisterActivity;
+import org.smartregister.chw.hiv.activity.BaseHivIndexRegisterActivity;
 import org.smartregister.chw.hiv.activity.BaseHivRegistrationFormsActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncTaskServiceJob;
 
-public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
+public class CoreHivIndexRegisterActivity extends BaseHivIndexRegisterActivity {
     private String baseEntityID;
 
     @Override
@@ -56,7 +56,7 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
         super.onResumption();
         NavigationMenu menu = NavigationMenu.getInstance(this, null, null);
         if (menu != null) {
-            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.HIV_CLIENTS);
+            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.HIV_INDEX_CLIENTS);
         }
     }
 
@@ -70,5 +70,6 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
         }
 
     }
+
 }
  

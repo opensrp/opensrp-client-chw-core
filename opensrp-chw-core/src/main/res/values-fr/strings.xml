@@ -46,6 +46,7 @@
     <string name="menu_pnc">Clients CPoN</string>
     <string name="menu_child">CH</string>
     <string name="menu_family_planning">Planning Familiale</string>
+    <string name="menu_hiv_index">HIV indexer les clients</string>
 
     <!-- Family Register -->
     <string name="menu_malaria">Paludisme</string>

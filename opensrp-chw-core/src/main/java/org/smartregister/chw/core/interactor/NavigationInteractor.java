@@ -359,6 +359,16 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              p.base_entity_id NOT IN (SELECT community_referral_form_id FROM " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_COMMUNITY_FEEDBACK + " ))";
                 return NavigationDao.getQueryCount(sqlHiv);
 
+            case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX:
+                String sqlIndex =
+                        "SELECT count(*) " +
+                                "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX + " p " +
+                                "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                                "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                                "              where m.date_removed is null and p.is_closed = '0' and " +
+                                "              (p.client_hiv_status_after_testing = 'Positive' OR p.client_hiv_status_after_testing IS NULL) ";
+                return NavigationDao.getQueryCount(sqlIndex);
+
             case org.smartregister.chw.tb.util.Constants.Tables.TB:
                 String sqlTb =
                         "SELECT SUM(c)\n" +
