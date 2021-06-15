@@ -5,11 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class NavigationOptionTest {
-    int resourceID;
-    int resourceActiveID;
-    int titleID;
-    String menuTitle;
-    long registerCount;
+    private int resourceID;
+    private int resourceActiveID;
+    private int titleID;
+    private String menuTitle;
+    private long registerCount;
 
     @Before
     public void setup() {

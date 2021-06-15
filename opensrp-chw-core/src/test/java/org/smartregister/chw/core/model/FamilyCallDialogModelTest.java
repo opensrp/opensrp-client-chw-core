@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 public class FamilyCallDialogModelTest {
-    FamilyCallDialogModel familyCallDialogModel;
+    private FamilyCallDialogModel familyCallDialogModel;
     @Before
     public void setUp(){
         familyCallDialogModel = Mockito.spy(FamilyCallDialogModel.class);
