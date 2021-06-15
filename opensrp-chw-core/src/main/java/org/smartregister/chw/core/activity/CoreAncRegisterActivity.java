@@ -13,6 +13,8 @@ import org.smartregister.chw.anc.activity.BaseAncRegisterActivity;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.dao.FamilyMemberDao;
+import org.smartregister.chw.core.model.CoreFamilyMemberModel;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
@@ -24,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -139,6 +142,18 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
             try {
                 JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "delivery_date");
                 min_date.put("min_date", lastMenstrualPeriod);
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
+            try {
+                List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
+                JSONObject linkToFather = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "link_to_father");
+                JSONArray memberNames = new JSONArray();
+                for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
+                    memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
+                }
+                Objects.requireNonNull(linkToFather).put("values", memberNames);
             } catch (Exception e) {
                 Timber.e(e);
             }
