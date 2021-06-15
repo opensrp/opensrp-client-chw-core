@@ -1,14 +1,11 @@
 package org.smartregister.chw.core.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,14 +17,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
-import org.smartregister.chw.core.domain.MedicalHistory;
 import org.smartregister.chw.core.model.NavigationOption;
-import org.smartregister.chw.core.utils.CoreConstants;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +33,6 @@ import static org.mockito.Mockito.when;
 @Config(sdk = Build.VERSION_CODES.P)
 public class NavigationAdapterTest {
     private List<NavigationOption> navigationOptionList;
-    private View.OnClickListener onClickListener;
     @Mock
     private Activity context;
     @Mock
