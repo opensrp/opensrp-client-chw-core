@@ -9,14 +9,14 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.job.HomeVisitServiceJob;
 import org.smartregister.chw.core.job.VaccineRecurringServiceJob;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.hiv.activity.BaseHivIndexRegisterActivity;
+import org.smartregister.chw.hiv.activity.BaseHivIndexContactsRegisterActivity;
 import org.smartregister.chw.hiv.activity.BaseHivRegistrationFormsActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncTaskServiceJob;
 
-public class CoreHivIndexRegisterActivity extends BaseHivIndexRegisterActivity {
+public class CoreHivIndexContactsRegisterActivity extends BaseHivIndexContactsRegisterActivity {
     private String baseEntityID;
 
     @Override

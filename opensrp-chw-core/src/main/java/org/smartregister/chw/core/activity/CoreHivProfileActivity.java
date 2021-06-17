@@ -31,7 +31,6 @@ import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.hiv.activity.BaseHivProfileActivity;
 import org.smartregister.chw.hiv.dao.HivDao;
 import org.smartregister.chw.hiv.dao.HivIndexDao;
-import org.smartregister.chw.hiv.domain.HivIndexObject;
 import org.smartregister.chw.hiv.domain.HivMemberObject;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -44,7 +43,6 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
 import java.util.Date;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -291,7 +289,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            return HivIndexDao.getHivClientIndexes(hivMemberObject.getBaseEntityId()).size();
+            return HivIndexDao.getIndexContacts(hivMemberObject.getBaseEntityId()).size();
         }
 
         @Override

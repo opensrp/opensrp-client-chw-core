@@ -19,7 +19,7 @@ import org.smartregister.chw.core.provider.CoreHivProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryBuilder;
 import org.smartregister.chw.core.utils.Utils;
-import org.smartregister.chw.hiv.fragment.BaseHivIndexRegisterFragment;
+import org.smartregister.chw.hiv.fragment.BaseHivIndexContactsRegisterFragment;
 import org.smartregister.chw.hiv.model.BaseHivRegisterFragmentModel;
 import org.smartregister.chw.hiv.presenter.BaseHivRegisterFragmentPresenter;
 import org.smartregister.commonregistry.CommonRepository;
@@ -35,7 +35,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public abstract class CoreHivIndexRegisterFragment extends BaseHivIndexRegisterFragment {
+public abstract class CoreHivIndexContactsRegisterFragment extends BaseHivIndexContactsRegisterFragment {
     private static final String DUE_FILTER_TAG = "PRESSED";
     private View view;
     private View dueOnlyLayout;
