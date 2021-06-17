@@ -30,6 +30,8 @@ import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
 import org.smartregister.chw.hiv.activity.BaseHivProfileActivity;
 import org.smartregister.chw.hiv.dao.HivDao;
+import org.smartregister.chw.hiv.dao.HivIndexDao;
+import org.smartregister.chw.hiv.domain.HivIndexObject;
 import org.smartregister.chw.hiv.domain.HivMemberObject;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -42,6 +44,7 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
 import java.util.Date;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -84,6 +87,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     public void setupViews() {
         super.setupViews();
         new UpdateFollowUpVisitButtonTask(getHivMemberObject()).execute();
+        new SetIndexClientsTask(getHivMemberObject()).execute();
     }
 
     @Override
@@ -200,7 +204,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
         try {
             assert form != null;
-            startFormActivity(form, getHivMemberObject(),formName);
+            startFormActivity(form, getHivMemberObject(), formName);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -275,6 +279,24 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
             updateFollowUpVisitStatusRow(lastVisit);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
             updateLastVisitRow(lastVisitDate);
+        }
+    }
+
+    private class SetIndexClientsTask extends AsyncTask<Void, Void, Integer> {
+        private HivMemberObject hivMemberObject;
+
+        public SetIndexClientsTask(HivMemberObject hivMemberObject) {
+            this.hivMemberObject = hivMemberObject;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            return HivIndexDao.getHivClientIndexes(hivMemberObject.getBaseEntityId()).size();
+        }
+
+        @Override
+        protected void onPostExecute(Integer param) {
+            setIndexClientsStatus(param > 0);
         }
     }
 }
