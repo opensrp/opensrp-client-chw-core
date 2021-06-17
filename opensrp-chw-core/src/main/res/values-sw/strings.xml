@@ -46,7 +46,7 @@
     <string name="menu_pnc">Baada ya kujifungua</string>
     <string name="menu_child">Mtoto</string>
     <string name="menu_family_planning">Uzazi wa Mpango</string>
-    <string name="menu_hiv_index">HIV Index</string>
+    <string name="menu_hiv_index_contacts">Washirika wa Ngono/Wakujidunga/Watoto wa wateja wenye VVU/UKIMWI</string>
 
     <!-- Family Register -->
     <string name="menu_malaria">Malaria</string>
@@ -747,8 +747,8 @@
     <string name="add_client">Sajili Mteja</string>
 
     <!--HIV Index Clients-->
-    <string name="register_hiv_index_clients">Sajili mshirika wa ngono/wakujidunga na /mtoto wa mteja</string>
-    <string name="successful_hiv_index_registration_toast">Mshirika wa ngono/wakujidunga na /mtoto amehifadhiwa</string>
+    <string name="register_hiv_index_clients_contacts">Sajili mshirika wa ngono/wakujidunga na /mtoto wa mteja</string>
+    <string name="successful_index_contact_registration_toast">Mshirika wa ngono/wakujidunga na /mtoto amehifadhiwa</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Kliniki ya Tiba na matunzo (CTC)</string>

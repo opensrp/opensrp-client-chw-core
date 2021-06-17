@@ -43,7 +43,7 @@
     <string name="menu_anc_clients">ANC Clients</string>
     <string name="menu_child_clients">Child Clients</string>
     <string name="menu_hiv">HIV</string>
-    <string name="menu_hiv_index">Index Clients</string>
+    <string name="menu_hiv_index_contacts">Index Contacts</string>
     <string name="menu_tb">TB</string>
     <string name="menu_anc">ANC</string>
     <string name="menu_pnc">PNC</string>
@@ -768,8 +768,8 @@
     <string name="confirm">Confirm</string>
 
     <!--HIV Index Clients-->
-    <string name="register_hiv_index_clients">Register HIV Index Clients</string>
-    <string name="successful_hiv_index_registration_toast">The HIV Index has been successfully saved</string>
+    <string name="register_hiv_index_clients_contacts">Register HIV Index Client Contacts</string>
+    <string name="successful_index_contact_registration_toast">The  Index Contact has been successfully saved</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Clinic of Treatment and Care</string>

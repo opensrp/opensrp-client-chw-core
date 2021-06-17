@@ -142,7 +142,7 @@
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:padding="10dp"
-                android:text="@string/register_hiv_index_clients"
+                android:text="@string/register_hiv_index_clients_contacts"
                 android:textColor="@android:color/black" />
 
 
