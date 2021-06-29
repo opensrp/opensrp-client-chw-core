@@ -28,6 +28,9 @@ import org.smartregister.opd.utils.OpdJsonFormUtils;
 import org.smartregister.opd.utils.OpdUtils;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
+import java.util.Map;
+
+public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity {
 import timber.log.Timber;
 
 public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +56,10 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity impl
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
+    @Override
+    protected void onActivityResultExtended(int i, int i1, Intent intent) {
+        //implement
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,11 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity impl
         if (menu != null) {
             menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.ALL_CLIENTS);
         }
+    }
+
+    @Override
+    public void startFormActivity(String s, String s1, Map<String, String> map) {
+        // to do
     }
 
     @Override

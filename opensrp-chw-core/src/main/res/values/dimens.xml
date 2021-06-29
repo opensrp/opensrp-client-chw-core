@@ -69,4 +69,7 @@
     <dimen name="dialog_list_padding_vertical">8dp</dimen>
 
     <dimen name="default_padding">8dp</dimen>
-    </resources>
+    <dimen name="family_register_text_size">5sp</dimen>
+    <dimen name="family_register_image_size">22dp</dimen>
+    <dimen name="family_register_count_size">34dp</dimen>
+</resources>

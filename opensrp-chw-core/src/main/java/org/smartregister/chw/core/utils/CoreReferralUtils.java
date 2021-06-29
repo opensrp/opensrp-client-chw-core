@@ -20,6 +20,7 @@ import org.smartregister.chw.core.dao.ReferralTaskDao;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
+import org.smartregister.domain.Period;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.location.helper.LocationHelper;
@@ -172,13 +173,17 @@ public class CoreReferralUtils {
         task.setGroupIdentifier(locationHelper.getOpenMrsLocationId(locationHelper.generateDefaultLocationHierarchy(CoreChwApplication.getInstance().getAllowedLocationLevels()).get(0)));
         task.setStatus(Task.TaskStatus.READY);
         task.setBusinessStatus(CoreConstants.BUSINESS_STATUS.REFERRED);
-        task.setPriority(3);
+        task.setPriority(Task.TaskPriority.ROUTINE);
         task.setCode(CoreConstants.JsonAssets.REFERRAL_CODE);
         task.setDescription(referralProblems);
         task.setFocus(focus);
         task.setForEntity(baseEntityId);
         DateTime now = new DateTime();
-        task.setExecutionStartDate(now);
+
+        Period period = new Period();
+        period.setStart(now);
+        task.setExecutionPeriod(period);
+
         task.setAuthoredOn(now);
         task.setLastModified(now);
         task.setOwner(allSharedPreferences.fetchRegisteredANM());

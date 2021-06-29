@@ -136,7 +136,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
             updateProblemDisplay();
             String clientAge = (Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
             clientName.setText(getString(R.string.client_name_age_suffix, name, clientAge));
-            referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(getTask().getExecutionStartDate().toDate()));
+            referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(getTask().getExecutionPeriod().getStart().toDate()));
 
             //For PNC get children belonging to the woman
             String childrenForPncWoman = getChildrenForPncWoman(getPersonObjectClient().entityId());

@@ -13,6 +13,7 @@ import org.smartregister.chw.core.model.ChildVisit;
 import org.smartregister.chw.core.utils.CoreChildService;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Task;
@@ -104,6 +105,12 @@ public interface CoreChildProfileContract {
         void fetchProfileTasks();
 
         void onProfileTaskFetched(@NonNull String taskType, @Nullable ProfileTask profileTask);
+
+        void thinkMdAssessmentProcessed();
+    }
+
+    interface Flavor {
+        void togglePhysicallyDisabled(boolean show);
     }
 
     interface Presenter extends BaseProfileContract.Presenter {
@@ -111,6 +118,8 @@ public interface CoreChildProfileContract {
         void updateChildProfile(String jsonObject);
 
         CoreChildProfileContract.View getView();
+
+        CoreChildProfileContract.Flavor getFlavor();
 
         void fetchProfileData();
 
@@ -210,7 +219,7 @@ public interface CoreChildProfileContract {
 
         void startSickChildForm(CommonPersonObjectClient client);
 
-        void refreshProfileTopSection(CommonPersonObjectClient client);
+        void refreshProfileTopSection(CommonPersonObjectClient client, CommonPersonObject commonPersonObject);
 
         void hideProgressBar();
 

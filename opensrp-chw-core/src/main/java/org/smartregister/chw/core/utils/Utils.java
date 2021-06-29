@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
@@ -59,6 +59,7 @@ import org.smartregister.chw.core.custom_views.CoreFamilyMemberFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreFamilyPlanningFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreHivFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreMalariaFloatingMenu;
+import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.custom_views.CoreTbFloatingMenu;
 import org.smartregister.chw.core.domain.Hia2Indicator;
 import org.smartregister.chw.core.domain.MonthlyTally;
@@ -95,7 +96,6 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
 import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
@@ -103,14 +103,29 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat yyyy_mm_dd = new SimpleDateFormat("yyyy-mm-dd");
     private static List<String> assets;
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getAnCWomanImageResourceIdentifier() {
         return R.drawable.anc_woman;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getPnCWomanImageResourceIdentifier() {
         return R.drawable.pnc_woman;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getMemberImageResourceIdentifier() {
         return R.mipmap.ic_member;
     }
@@ -156,7 +171,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     }
 
     public static String convertToDateFormateString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault());//12-08-2018
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());//12-08-2018
         try {
             Date date = sdf.parse(timeAsDDMMYYYY);
             return dateFormat.format(date);
@@ -231,10 +246,20 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return result;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getOverDueProfileImageResourceIDentifier() {
         return R.color.visit_status_over_due;
     }
 
+    /**
+     * Can be replaced with a final constant or direct reference
+     * @return
+     */
+    @Deprecated
     public static int getDueProfileImageResourceIDentifier() {
         return R.color.due_profile_blue;
     }
@@ -786,18 +811,22 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     }
 
     public static Pair<String, String> fetchMUACValues(String childBaseEntityId) {
-        String muacValue = getMUACValue(childBaseEntityId);
-        String muacCode = null;
-        String muacDiaplay = null;
-        if (!muacValue.isEmpty()) {
-            try {
-                muacCode = muacValue.substring(4);
-                muacDiaplay = muacCode.substring(0, 1).toUpperCase() + muacCode.substring(1);
-            } catch (IndexOutOfBoundsException e) {
-                Timber.e(e);
+        String muacValue = VisitDao.getMUACValue(childBaseEntityId);
+        String muacCode = "";
+        String muacDisplay = "";
+        if (StringUtils.isNotBlank(muacValue)) {
+            if (muacValue.toLowerCase().contains("red")) {
+                muacCode = "red";
+                muacDisplay = "Red";
+            } else if (muacValue.toLowerCase().contains("green")) {
+                muacCode = "green";
+                muacDisplay = "Green";
+            } else if (muacValue.toLowerCase().contains("yellow")) {
+                muacCode = "yellow";
+                muacDisplay = "Yellow";
             }
         }
-        return Pair.create(muacCode, muacDiaplay);
+        return Pair.of(muacCode, muacDisplay);
     }
 
     public static String getRandomGeneratedId() {

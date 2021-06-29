@@ -183,7 +183,7 @@ public class HomeAlertRule implements ICommonRule {
                 return monthsDiff > 1 ? getLastDayOfMonth(lastVisitDate.toDate()) : getLastDayOfMonth(todayDate.toDate());
             } else if (visitNotDoneDate != null) {
                 return visitNotDoneDate.toDate();
-            } else {
+            }else {
                 return getLastDayOfMonth(lastVisitDate.toDate());
             }
         }

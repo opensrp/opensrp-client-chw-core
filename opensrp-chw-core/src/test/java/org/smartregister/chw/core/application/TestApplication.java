@@ -4,6 +4,7 @@ import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.chw.core.sync.SampleSyncConfiguration;
 import org.smartregister.chw.pnc.PncLibrary;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.family.BuildConfig;
@@ -27,7 +28,7 @@ public class TestApplication extends CoreChwApplication {
         mInstance = this;
         context = Context.getInstance();
         context.updateApplicationContext(getApplicationContext());
-        CoreLibrary.init(context);
+        CoreLibrary.init(context, new SampleSyncConfiguration());
 
         ConfigurableViewsLibrary.init(context);
 

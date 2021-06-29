@@ -24,6 +24,9 @@ jobs:
       run: chmod +x gradlew
     - name: Run unit tests with Gradle
       run: ./gradlew :opensrp-chw-core:jacocoTestReport  --stacktrace
+      env:
+        GPR_USER: ${{ github.actor }}
+        GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
     - name: Generate Javadoc with Gradle
       run: ./gradlew javadoc
     - name: Upload coverage to Coveralls with Gradle

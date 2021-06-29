@@ -3,13 +3,17 @@ package org.smartregister.chw.core.sync;
 import android.content.ContentValues;
 import android.content.Context;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -51,7 +55,10 @@ import org.smartregister.sync.ClientProcessorForJava;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,6 +70,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     private ClientClassification classification;
     private Table vaccineTable;
     private Table serviceTable;
+
+    private List<String> lazyEvents;
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
+    }
 
     protected CoreClientProcessor(Context context) {
         super(context);
@@ -82,7 +98,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             }
 
             // if its an updated vaccine, delete the previous object
-            vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
+            //vaccineRepository.deleteVaccine(vaccine.getBaseEntityId(), vaccine.getName());
 
             // Add the vaccine
             vaccineRepository.add(vaccine);
@@ -142,7 +158,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 processEvents(clientClassification, vaccineTable, serviceTable, eventClient, event, eventType);
             }
-
         }
     }
 
@@ -167,14 +182,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return serviceTable;
     }
 
-    protected void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
+    public void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
         switch (eventType) {
             case VaccineIntentService.EVENT_TYPE:
+            case VaccineIntentService.EVENT_TYPE_IS_VOIDED:
             case VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT:
                 if (vaccineTable == null) {
                     return;
                 }
-                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+                processVaccine(eventClient, vaccineTable, eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT), eventType.equals(VaccineIntentService.EVENT_TYPE_IS_VOIDED));
                 break;
             case RecurringIntentService.EVENT_TYPE:
                 if (serviceTable == null) {
@@ -186,9 +202,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
+            case CoreConstants.EventType.FAMILY_KIT:
+                processVisitEvent(Utils.processOldEvents(eventClient), CoreConstants.EventType.FAMILY_KIT);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
             case CoreConstants.EventType.CHILD_VISIT_NOT_DONE:
             case CoreConstants.EventType.WASH_CHECK:
-            case CoreConstants.EventType.FAMILY_KIT:
             case CoreConstants.EventType.ROUTINE_HOUSEHOLD_VISIT:
                 processVisitEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
@@ -211,6 +230,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.IMMUNIZATION_VISIT:
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
+            case CoreConstants.EventType.BIRTH_CERTIFICATION:
+            case CoreConstants.EventType.DISABILITY:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
                 break;
@@ -239,7 +260,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (eventClient.getClient() == null) {
                     return;
                 }
-                processRemoveMember(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                processRemoveMember(eventClient.getClient().getBaseEntityId(), event);
                 break;
             case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
                 clientProcessByObs(eventClient, clientClassification, event, "reason_stop_fp_chw", "decided_to_change_method");
@@ -280,7 +301,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (eventClient.getClient() == null) {
                     return;
                 }
-                processRemoveChild(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                processRemoveChild(eventClient.getClient().getBaseEntityId(), event);
                 break;
             case CoreConstants.EventType.CHILD_VACCINE_CARD_RECEIVED:
                 if (eventClient.getClient() == null) {
@@ -331,12 +352,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     public void processDeleteEvent(Event event) {
         try {
+            String formSubmissionId = event.getDetails() == null ? "" : event.getDetails().get("deleted_form_submission_id");
             // delete from vaccine table
-            EventDao.deleteVaccineByFormSubmissionId(event.getFormSubmissionId());
-            // delete from visit table
-            EventDao.deleteVisitByFormSubmissionId(event.getFormSubmissionId());
-            // delete from recurring service table
-            EventDao.deleteServiceByFormSubmissionId(event.getFormSubmissionId());
+            if (StringUtils.isNotBlank(formSubmissionId)) {
+                EventDao.deleteVaccineByFormSubmissionId(formSubmissionId);
+                // delete from visit table
+                EventDao.deleteVisitByFormSubmissionId(formSubmissionId);
+                // delete from recurring service table
+                EventDao.deleteServiceByFormSubmissionId(formSubmissionId);
+            }
 
             Timber.d("Ending processDeleteEvent: %s", event.getEventId());
         } catch (Exception e) {
@@ -423,15 +447,14 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
+    public VaccineRepository getVaccineRepository(){
+        return CoreChwApplication.getInstance().vaccineRepository();
+    }
+
     // possible to delegate
-    private Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment) {
-
+    public Boolean processVaccine(EventClient vaccine, Table vaccineTable, boolean outOfCatchment, boolean isVoidEvent) {
         try {
-            if (vaccine == null || vaccine.getEvent() == null) {
-                return false;
-            }
-
-            if (vaccineTable == null) {
+            if (vaccine == null || vaccine.getEvent() == null || vaccineTable == null) {
                 return false;
             }
 
@@ -441,23 +464,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
-
-                VaccineRepository vaccineRepository = CoreChwApplication.getInstance().vaccineRepository();
+                VaccineRepository vaccineRepository = getVaccineRepository();
                 Vaccine vaccineObj = new Vaccine();
                 vaccineObj.setBaseEntityId(contentValues.getAsString(VaccineRepository.BASE_ENTITY_ID));
-                vaccineObj.setName(contentValues.getAsString(VaccineRepository.NAME));
                 if (contentValues.containsKey(VaccineRepository.CALCULATION)) {
                     vaccineObj.setCalculation(parseInt(contentValues.getAsString(VaccineRepository.CALCULATION)));
                 }
-                vaccineObj.setDate(date);
+                vaccineObj.setName(getVaccineName(vaccine, contentValues, isVoidEvent));
+                vaccineObj.setDate(getVaccineDate(vaccine, contentValues, isVoidEvent));
                 vaccineObj.setAnmId(contentValues.getAsString(VaccineRepository.ANMID));
                 vaccineObj.setLocationId(contentValues.getAsString(VaccineRepository.LOCATION_ID));
                 vaccineObj.setSyncStatus(VaccineRepository.TYPE_Synced);
                 vaccineObj.setFormSubmissionId(vaccine.getEvent().getFormSubmissionId());
                 vaccineObj.setEventId(vaccine.getEvent().getEventId());
                 vaccineObj.setOutOfCatchment(outOfCatchment ? 1 : 0);
+                vaccineObj.setIsVoided(isVoidEvent ? 1 : 0);
                 vaccineObj.setProgramClientId(getVaccineProgramClient(vaccine));
 
                 String createdAtString = contentValues.getAsString(VaccineRepository.CREATED_AT);
@@ -471,10 +492,25 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return true;
 
         } catch (Exception e) {
-
             Timber.e(e, "Process Vaccine Error");
             return null;
         }
+    }
+
+    private Date getVaccineDate(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return isVoidEvent ? new DateTime().withMillis(Long.parseLong(VaccinesDao.getVaccineDate(vaccine.getEvent().getFormSubmissionId()))).toDate() :
+                    simpleDateFormat.parse(contentValues.getAsString(VaccineRepository.DATE));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getVaccineName(EventClient vaccine, ContentValues contentValues, boolean isVoidEvent) {
+        return isVoidEvent ? VaccinesDao.getVaccineName(vaccine.getEvent().getFormSubmissionId()) :
+                contentValues.getAsString(VaccineRepository.NAME);
     }
 
     private String getVaccineProgramClient(EventClient eventClient) {
@@ -482,16 +518,32 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
+    private String serviceName(ContentValues contentValues){
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
+        }
+        return name;
+    }
+
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+    }
+
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+        return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+    }
+
+    public boolean eventIsVoided(String submissionId){
+        return EventDao.isVoidedEvent(submissionId);
+    }
+
     // possible to delegate
-    private Boolean processService(EventClient service, Table serviceTable) {
+    public Boolean processService(EventClient service, Table serviceTable) {
 
         try {
 
-            if (service == null || service.getEvent() == null) {
-                return false;
-            }
-
-            if (serviceTable == null) {
+            if (service == null || service.getEvent() == null || serviceTable == null) {
                 return false;
             }
 
@@ -501,32 +553,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
             // updateFamilyRelations the values to db
             if (contentValues != null && contentValues.size() > 0) {
-                String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-
-                if (StringUtils.isNotBlank(name)) {
-                    name = name.replaceAll("_", " ").replace("dose", "").trim();
-                }
-
+                String name = serviceName(contentValues);
 
                 String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
                 Date date = getDate(eventDateStr);
-                String value = null;
+                String value = StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding") ? contentValues.getAsString(RecurringServiceRecordRepository.VALUE) : null;
 
-                if (StringUtils.containsIgnoreCase(name, "Exclusive breastfeeding")) {
-                    value = contentValues.getAsString(RecurringServiceRecordRepository.VALUE);
-                }
-
-                RecurringServiceTypeRepository recurringServiceTypeRepository = ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
+                RecurringServiceTypeRepository recurringServiceTypeRepository = getRecurringServiceTypeRepository();
                 List<ServiceType> serviceTypeList = recurringServiceTypeRepository.searchByName(name);
-                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
+                if (serviceTypeList == null || serviceTypeList.isEmpty() || date == null) {
                     return false;
                 }
 
-                if (date == null) {
-                    return false;
-                }
+                RecurringServiceRecordRepository recurringServiceRecordRepository = getRecurringServiceRecordRepository();
 
-                RecurringServiceRecordRepository recurringServiceRecordRepository = ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
+                boolean isVoidEvent = eventIsVoided(service.getEvent().getFormSubmissionId());
                 ServiceRecord serviceObj = new ServiceRecord();
                 serviceObj.setBaseEntityId(contentValues.getAsString(RecurringServiceRecordRepository.BASE_ENTITY_ID));
                 serviceObj.setName(name);
@@ -537,6 +578,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 serviceObj.setFormSubmissionId(service.getEvent().getFormSubmissionId());
                 serviceObj.setEventId(service.getEvent().getEventId()); //FIXME hard coded id
                 serviceObj.setValue(value);
+                serviceObj.setIsVoided(isVoidEvent ? 1 : 0);
                 serviceObj.setRecurringServiceId(serviceTypeList.get(0).getId());
 
                 String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
@@ -557,14 +599,17 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(List<EventClient> eventClients, String parentEventName) {
         for (EventClient eventClient : eventClients) {
-            processVisitEvent(eventClient, parentEventName); // save locally
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         }
     }
 
     // possible to delegate
     private void processVisitEvent(EventClient eventClient) {
         try {
-            NCUtils.processHomeVisit(eventClient); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), null);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -573,7 +618,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processVisitEvent(EventClient eventClient, String parentEventName) {
         try {
-            NCUtils.processSubHomeVisit(eventClient, parentEventName); // save locally
+            if (CoreChwApplication.getInstance().allowLazyProcessing() && getLazyEvents().contains(eventClient.getEvent().getEventType()))
+                return;
+
+            NCUtils.processHomeVisit(eventClient, getWritableDatabase(), parentEventName);
         } catch (Exception e) {
             String formID = (eventClient != null && eventClient.getEvent() != null) ? eventClient.getEvent().getFormSubmissionId() : "no form id";
             Timber.e("Form id " + formID + ". " + e.toString());
@@ -629,9 +677,34 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    private void processRemoveMember(String baseEntityId, Date eventDate) {
+    private SQLiteDatabase getWritableDatabase() {
+        return CoreChwApplication.getInstance().getRepository().getWritableDatabase();
+    }
 
-        Date myEventDate = eventDate;
+    private Map<String, String> readObs(Event event) {
+        Map<String, String> obsMap = new HashMap<>();
+        if (event.getObs() != null) {
+            for (Obs obs : event.getObs()) {
+                if (obs.getValues().size() > 0) {
+                    Object object = obs.getValues().get(0);
+                    obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
+                }
+            }
+        }
+        return obsMap;
+    }
+
+    private Date getDate(Map<String, String> obsMap, String key) throws ParseException {
+        String strDod = obsMap.get(key);
+        if (StringUtils.isBlank(strDod)) return null;
+
+        SimpleDateFormat nfDf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        return nfDf.parse(strDod);
+    }
+
+    private void processRemoveMember(String baseEntityId, Event event) {
+
+        Date myEventDate = event.getEventDate().toDate();
         if (myEventDate == null) {
             myEventDate = new Date();
         }
@@ -639,29 +712,41 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         if (baseEntityId == null) {
             return;
         }
+
+        SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Map<String, String> obsMap = readObs(event);
 
         AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         if (commonsRepository != null) {
 
             ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(myEventDate));
+            values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
             values.put("is_closed", 1);
 
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CoreConstants.TABLE_NAME.FAMILY_MEMBER, values,
-                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
-
             // clean fts table
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
+            getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     " object_id  = ?  ", new String[]{baseEntityId});
 
+
+            try {
+                Date dod = getDate(obsMap, "date_died");
+                if (dod != null)
+                    values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+
+            getWritableDatabase().update(CoreConstants.TABLE_NAME.FAMILY_MEMBER, values,
+                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
+
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 
-    private void processRemoveChild(String baseEntityId, Date eventDate) {
+    private void processRemoveChild(String baseEntityId, Event event) {
 
-        Date myEventDate = eventDate;
+        Date myEventDate = event.getEventDate().toDate();
         if (myEventDate == null) {
             myEventDate = new Date();
         }
@@ -670,22 +755,33 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             return;
         }
 
+        Map<String, String> obsMap = readObs(event);
+        SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
         AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.CHILD);
         if (commonsRepository != null) {
 
             ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(myEventDate));
+            values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
             values.put("is_closed", 1);
 
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CoreConstants.TABLE_NAME.CHILD, values,
-                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
-
             // clean fts table
-            CoreChwApplication.getInstance().getRepository().getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.CHILD), values,
+            getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.CHILD), values,
                     CommonFtsObject.idColumn + "  = ?  ", new String[]{baseEntityId});
 
+            try {
+                Date dod = getDate(obsMap, "date_died");
+                if (dod != null)
+                    values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+            } catch (ParseException e) {
+                Timber.e(e);
+            }
+
+            getWritableDatabase().update(CoreConstants.TABLE_NAME.CHILD, values,
+                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
+
             // Utils.context().commonrepository(CoreConstants.TABLE_NAME.CHILD).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-            CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+            //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
         }
     }
 

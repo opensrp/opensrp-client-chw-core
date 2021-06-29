@@ -122,4 +122,9 @@ public class CoreAllClientsRegisterFragment extends BaseOpdRegisterFragment {
     protected void initializePresenter() {
         presenter = new CoreAllClientsRegisterFragmentPresenter(this, new OpdRegisterFragmentModel());
     }
+
+    @Override
+    protected int getToolBarTitle() {
+        return R.string.menu_all_clients;
+    }
 }

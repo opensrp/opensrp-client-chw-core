@@ -3,6 +3,7 @@ package org.smartregister.chw.core.service;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -26,11 +27,21 @@ public class CoreAuthorizationService implements P2PAuthorizationService {
 
     private Map<String, Object> authorizationDetails = new HashMap<>();
 
+    private boolean checkTeamId;
+
+    public CoreAuthorizationService(boolean checkTeamId) {
+        this.checkTeamId = checkTeamId;
+    }
+
+    public CoreAuthorizationService() {
+        this.checkTeamId = true;
+    }
+
     @Override
     public void authorizeConnection(@NonNull final Map<String, Object> peerDeviceMap, @NonNull final AuthorizationCallback authorizationCallback) {
         getAuthorizationDetails(map -> {
             Object peerDeviceTeamId = peerDeviceMap.get(AllConstants.PeerToPeer.KEY_TEAM_ID);
-            if (peerDeviceTeamId instanceof String
+            if (!checkTeamId || peerDeviceTeamId instanceof String
                     && peerDeviceTeamId.equals(map.get(AllConstants.PeerToPeer.KEY_TEAM_ID))) {
                 Object peerDeviceLocationId = peerDeviceMap.get(CoreConstants.PEER_TO_PEER.LOCATION_ID);
                 Object myLocationId = authorizationDetails.get(CoreConstants.PEER_TO_PEER.LOCATION_ID);
@@ -125,7 +136,9 @@ public class CoreAuthorizationService implements P2PAuthorizationService {
         AllSharedPreferences allSharedPreferences = CoreLibrary.getInstance().context().allSharedPreferences();
 
         authorizationDetails.put(AllConstants.PeerToPeer.KEY_TEAM_ID, allSharedPreferences.fetchDefaultTeamId(allSharedPreferences.fetchRegisteredANM()));
-        authorizationDetails.put(CoreConstants.PEER_TO_PEER.LOCATION_ID, allSharedPreferences.fetchUserLocalityId(allSharedPreferences.fetchRegisteredANM()));
+        String locationId = allSharedPreferences.fetchDefaultLocalityId(allSharedPreferences.fetchRegisteredANM());
+        if(StringUtils.isBlank(locationId)) locationId = allSharedPreferences.fetchUserLocalityId(allSharedPreferences.fetchRegisteredANM());
+        authorizationDetails.put(CoreConstants.PEER_TO_PEER.LOCATION_ID, locationId);
 
         onAuthorizationDetailsProvidedCallback.onAuthorizationDetailsProvided(authorizationDetails);
     }

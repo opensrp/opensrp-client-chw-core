@@ -14,6 +14,7 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.referral.util.DBConstants;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
+import org.smartregister.domain.Period;
 import org.smartregister.domain.Task;
 import org.smartregister.family.FamilyLibrary;
 import org.smartregister.repository.AllSharedPreferences;
@@ -247,7 +248,9 @@ public class CloseExpiredReferralsIntentService extends IntentService {
     private Task updateCurrentTask(String taskId, String baseEntityId) {
         Task currentTask = taskRepository.getTaskByIdentifier(taskId);
         DateTime now = new DateTime();
-        currentTask.setExecutionEndDate(now);
+        Period period = new Period();
+        period.setEnd(now);
+        currentTask.setExecutionPeriod(period);
         currentTask.setLastModified(now);
         currentTask.setForEntity(baseEntityId);
         currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);

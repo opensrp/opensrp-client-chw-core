@@ -38,6 +38,7 @@ public class FpAlertRule implements ICommonRule {
         this.visitID = visitID;
     }
 
+    // TODO -> This always returns TRUE?
     public boolean isCocPopValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
             this.dueDate = (new DateTime(this.lastVisitDate)).plusDays(this.pillCycles * 28).minusDays(dueDay);
@@ -49,6 +50,7 @@ public class FpAlertRule implements ICommonRule {
         return true;
     }
 
+    // TODO -> This always returns TRUE?
     public boolean isCondomValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
             int monthOfYear = new DateTime(lastVisitDate).getMonthOfYear();
@@ -72,6 +74,7 @@ public class FpAlertRule implements ICommonRule {
         return true;
     }
 
+    // TODO -> This always returns TRUE?
     public boolean isInjectionValid(int dueDay, int overdueDate) {
         if (lastVisitDate != null) {
             this.dueDate = new DateTime(lastVisitDate).plusDays(dueDay);
