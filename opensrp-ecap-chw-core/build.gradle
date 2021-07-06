@@ -14,29 +14,10 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'maven-publish'
 
 jacoco {
     toolVersion = "0.8.0"
-}
-
-allprojects {
-    repositories {
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
-        maven {
-            def githubProperties = new Properties()
-            if (project.rootProject.file("github.properties").exists()) {
-                githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
-            }
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/onaio/kujaku")
-            credentials {
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
-        }
-        mavenLocal()
-    }
 }
 
 android {
@@ -171,7 +152,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    api('org.smartregister:opensrp-client-family:2.0.2-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-household:1.0.0-RELEASE@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -333,8 +314,6 @@ tasks.coveralls {
 coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
-
-apply from: '../maven.gradle'
 
 task javadoc(type: Javadoc) {
     failOnError false

@@ -46,7 +46,7 @@ gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
               name = "GitHubPackages"    
               /**    
              * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */    
-              url = uri("https://github.com/BlueCodeSystems/opensrp-client-ecap-chw-core")    
+              url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-ecap-chw-core")    
               credentials {    
                   /** get credentials from local.properties in root project folder file with    
                  ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/    
