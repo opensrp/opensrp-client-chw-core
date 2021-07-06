@@ -770,6 +770,8 @@
     <!--HIV Index Clients-->
     <string name="register_hiv_index_clients_contacts">Register HIV Index Client Contacts</string>
     <string name="successful_index_contact_registration_toast">The  Index Contact has been successfully saved</string>
+    <string name="notification_type_hiv_index">HIV Index Contact Community Followup Referral</string>
+    <string name="hiv_index_community_followup_notification_title">%1$s has been referred for Community followup on %2$s</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Clinic of Treatment and Care</string>

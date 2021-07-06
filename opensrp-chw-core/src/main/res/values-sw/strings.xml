@@ -749,6 +749,7 @@
     <!--HIV Index Clients-->
     <string name="register_hiv_index_clients_contacts">Sajili mshirika wa ngono/wakujidunga na /mtoto wa mteja</string>
     <string name="successful_index_contact_registration_toast">Mshirika wa ngono/wakujidunga na /mtoto amehifadhiwa</string>
+    <string name="hiv_index_community_followup_notification_title">%1$s amepewa rufaa ya kufwatiliwa kwenye jamii tarehe %2$s</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Kliniki ya Tiba na matunzo (CTC)</string>

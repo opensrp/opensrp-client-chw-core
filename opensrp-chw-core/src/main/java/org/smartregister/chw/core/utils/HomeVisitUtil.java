@@ -58,8 +58,8 @@ public class HomeVisitUtil {
         return tbFollowupRule;
     }
 
-    public static HivFollowupRule getHivVisitStatus(Date lastVisitDate, Date tbDate) {
-        HivFollowupRule hivFollowupRule = new HivFollowupRule(tbDate, lastVisitDate);
+    public static HivFollowupRule getHivVisitStatus(Date lastVisitDate, Date hivDate) {
+        HivFollowupRule hivFollowupRule = new HivFollowupRule(hivDate, lastVisitDate);
         CoreChwApplication.getInstance().getRulesEngineHelper().getHivRule(hivFollowupRule, CoreConstants.RULE_FILE.HIV_FOLLOW_UP_VISIT);
         return hivFollowupRule;
     }

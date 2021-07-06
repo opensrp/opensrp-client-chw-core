@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.provider.CoreHivIndexContactsProvider;
 import org.smartregister.chw.core.provider.CoreHivProvider;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.QueryBuilder;
@@ -43,8 +44,8 @@ public abstract class CoreHivIndexContactsRegisterFragment extends BaseHivIndexC
 
     @Override
     public void initializeAdapter(@Nullable Set<? extends org.smartregister.configurableviews.model.View> visibleColumns) {
-        CoreHivProvider hivRegisterProvider = new CoreHivProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
-        clientAdapter = new RecyclerViewPaginatedAdapter(null, hivRegisterProvider, context().commonrepository(this.tablename));
+        CoreHivIndexContactsProvider hivIndexContactRegisterProvider = new CoreHivIndexContactsProvider(getActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
+        clientAdapter = new RecyclerViewPaginatedAdapter(null, hivIndexContactRegisterProvider, context().commonrepository(this.tablename));
         clientAdapter.setCurrentlimit(20);
         clientsView.setAdapter(clientAdapter);
     }

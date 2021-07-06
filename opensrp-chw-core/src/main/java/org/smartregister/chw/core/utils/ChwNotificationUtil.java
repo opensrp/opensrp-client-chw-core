@@ -40,6 +40,8 @@ public class ChwNotificationUtil {
             return "ec_hiv_outcome";
         } else if (context.getString(R.string.tb_problem_outcome).equals(notificationType)) {
             return "ec_tb_outcome";
+        } else if (context.getString(R.string.notification_type_hiv_index).equals(notificationType)) {
+            return "ec_hiv_index_contact_community_followup";
         }
         return null;
     }
@@ -53,6 +55,7 @@ public class ChwNotificationUtil {
         notificationEventMap.put(context.getString(R.string.notification_type_family_planning), CoreConstants.EventType.FAMILY_PLANNING_NOTIFICATION_DISMISSAL);
         notificationEventMap.put(context.getString(R.string.notification_type_hiv_problem_outcome), CoreConstants.EventType.HIV_NOTIFICATION_DISMISSAL);
         notificationEventMap.put(context.getString(R.string.notification_type_tb_problem_outcome), CoreConstants.EventType.TB_NOTIFICATION_DISMISSAL);
+        notificationEventMap.put(context.getString(R.string.notification_type_hiv_index), CoreConstants.EventType.HIV_INDEX_CONCTACT_COMMUNITY_FOLLOWUP_NOTIFICATION_DISMISSAL);
 
         return notificationEventMap.get(notificationType);
     }
@@ -63,7 +66,7 @@ public class ChwNotificationUtil {
             dismissalEvent = (Event) new Event()
                     .withBaseEntityId(baseEntityId)
                     .withEventDate(new Date())
-                    .withEventType( ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType))
+                    .withEventType(ChwNotificationUtil.getNotificationDismissalEventType(context, notificationType))
                     .withFormSubmissionId(JsonFormUtils.generateRandomUUIDString())
                     .withEntityType(getNotificationDetailsTable(context, notificationType))
                     .withDateCreated(new Date());

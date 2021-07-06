@@ -172,6 +172,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_NOTIFICATION_DISMISSAL = "Family Planning Notification Dismissal";
         public static final String HIV_NOTIFICATION_DISMISSAL = "HIV Notification Dismissal";
         public static final String TB_NOTIFICATION_DISMISSAL = "TB Notification Dismissal";
+        public static final String HIV_INDEX_CONCTACT_COMMUNITY_FOLLOWUP_NOTIFICATION_DISMISSAL = "HIV Index Contact Community Followup Notification Dismissal";
 
         public static final String ROUTINE_HOUSEHOLD_VISIT = "Routine Household Visit";
         public static final String SICK_CHILD = "Sick Child";
@@ -187,7 +188,8 @@ public class CoreConstants {
         public static final String REMOVE_COMMUNITY_RESPONDER = "Remove Community Responder";
         public static final String CLOSE_HIV_FEEDBACK = "Close Hiv Feedback";
         public static final String CLOSE_TB_FEEDBACK = "Close Tb Feedback";
-        public static final String REGISTER_HIV_INDEX = "Register Hiv Index";
+        public static final String HIV_INDEX_CONTACT_REGISTRATION = "Hiv Index Contact Registration";
+        public static final String HIV_INDEX_CONTACT_TESTING_FOLLOWUP = "HIV Index Contact Testing Followup";
     }
 
     public static final class EncounterType {
@@ -244,8 +246,12 @@ public class CoreConstants {
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
         private static final String HIV_REGISTRATION = "hiv_registration";
         private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
+        private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT = "hiv_index_contact_followup";
+        private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_NEGATIVE_CLIENTS = "hiv_index_contact_followup_for_negative_clients";
+        private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_POSITIVE_CLIENTS = "hiv_index_contact_followup_for_positive_clients";
         private static final String HIV_OUTCOME = "hiv_outcome";
         private static final String HIV_COMMUNITY_FOLLOWUP_REFERRAL = "hiv_community_followup_referral";
+        private static final String HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL = "hiv_index_contact_community_followup_referral";
         private static final String TB_OUTCOME = "tb_outcome";
         private static final String TB_COMMUNITY_FOLLOWUP_REFERRAL = "tb_community_followup_referral";
         private static final String TB_REGISTRATION = "tb_registration";
@@ -256,7 +262,7 @@ public class CoreConstants {
         private static final String ALL_CLIENT_REGISTRATION_FORM = "all_clients_registration_form";
         private static final String ALL_CLIENT_UPDATE_REGISTRATION_INFO_FORM = "all_clients_update_registration_info_form";
 
-        private static final String HIV_INDEX_CLIENTS_REGISTRATION_FORM = "hiv_index_clients_registration_form";
+        private static final String HIV_INDEX_CLIENTS_CONTACTS_REGISTRATION_FORM = "hiv_index_clients_contacts_registration_form";
 
 
 
@@ -447,12 +453,28 @@ public class CoreConstants {
             return HIV_FOLLOWUP_VISIT;
         }
 
+        public static String getHivIndexContactFollowupVisit() {
+            return HIV_INDEX_CONTACT_FOLLOWUP_VISIT;
+        }
+
+        public static String getHivIndexContactFollowupVisitForNegativeClients() {
+            return HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_NEGATIVE_CLIENTS;
+        }
+
+        public static String getHivIndexContactFollowupVisitForPositiveClients() {
+            return HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_POSITIVE_CLIENTS;
+        }
+
         public static String getHivOutcome() {
             return HIV_OUTCOME;
         }
 
         public static String getHivCommunityFollowupReferral() {
             return HIV_COMMUNITY_FOLLOWUP_REFERRAL;
+        }
+
+        public static String getHivIndexContactCommunityFollowupReferral() {
+            return HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL;
         }
 
         public static String getTbOutcome() {
@@ -483,8 +505,8 @@ public class CoreConstants {
             return ALL_CLIENT_UPDATE_REGISTRATION_INFO_FORM;
         }
 
-        public static String getHivIndexClientsRegistrationForm() {
-            return HIV_INDEX_CLIENTS_REGISTRATION_FORM;
+        public static String getHivIndexClientsContactsRegistrationForm() {
+            return HIV_INDEX_CLIENTS_CONTACTS_REGISTRATION_FORM;
         }
 
         public static String getTbCommunityFollowFeedback() {

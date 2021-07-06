@@ -12,14 +12,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.OnClickFloatingMenu;
-import org.smartregister.chw.hiv.custom_views.BaseHivFloatingMenu;
-import org.smartregister.chw.hiv.domain.HivMemberObject;
+import org.smartregister.chw.hiv.custom_views.BaseIndexFloatingMenu;
+import org.smartregister.chw.hiv.domain.HivIndexContactObject;
 import org.smartregister.chw.hiv.fragment.BaseHivClientCallDialogFragment;
 import org.smartregister.chw.hiv.util.HivUtil;
 
 import static org.smartregister.chw.core.utils.Utils.redrawWithOption;
 
-public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
+public abstract class CoreHivIndexContactFloatingMenu extends BaseIndexFloatingMenu {
     public FloatingActionButton fab;
     protected View referLayout;
     private Animation fabOpen;
@@ -32,8 +32,8 @@ public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
     private LinearLayout menuBar;
     private OnClickFloatingMenu onClickFloatingMenu;
 
-    public CoreHivFloatingMenu(Context context, HivMemberObject hivMemberObject) {
-        super(context, hivMemberObject);
+    public CoreHivIndexContactFloatingMenu(Context context, HivIndexContactObject hivIndexContactObject) {
+        super(context, hivIndexContactObject);
     }
 
     public void setFloatMenuClickListener(OnClickFloatingMenu onClickFloatingMenu) {
@@ -105,8 +105,8 @@ public abstract class CoreHivFloatingMenu extends BaseHivFloatingMenu {
     }
 
     public void launchCallWidget() {
-        BaseHivClientCallDialogFragment.Companion.launchDialog((Activity) this.getContext(), HivUtil.getFullName(this.getHivMemberObject()),
-                this.getHivMemberObject().getPhoneNumber(), this.getHivMemberObject().getPrimaryCareGiver(), this.getHivMemberObject().getPrimaryCareGiverPhoneNumber());
+        BaseHivClientCallDialogFragment.Companion.launchDialog((Activity) this.getContext(), HivUtil.getFullName(this.getHivIndexContactObject()),
+                this.getHivIndexContactObject().getPhoneNumber(), null, null);
     }
 
     public void redraw(boolean hasPhoneNumber) {
