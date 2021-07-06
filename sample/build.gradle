@@ -129,7 +129,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation (project(':opensrp-chw-core')){
+    implementation (project(':opensrp-ecap-chw-core')){
         transitive = true
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
