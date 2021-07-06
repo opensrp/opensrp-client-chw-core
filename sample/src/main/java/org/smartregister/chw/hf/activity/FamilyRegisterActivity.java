@@ -14,7 +14,6 @@ import org.smartregister.chw.hf.BuildConfig;
 import org.smartregister.chw.hf.HealthFacilityApplication;
 import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.fragment.FamilyRegisterFragment;
-import org.smartregister.chw.hf.listener.HfFamilyBottomNavListener;
 import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
@@ -51,7 +50,6 @@ public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
         if (!BuildConfig.SUPPORT_REPORT)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_job_aids);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new HfFamilyBottomNavListener(this, bottomNavigationView));
     }
 
     @Override
