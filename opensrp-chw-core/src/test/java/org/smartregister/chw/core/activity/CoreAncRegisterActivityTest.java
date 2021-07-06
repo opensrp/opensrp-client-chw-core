@@ -61,9 +61,25 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     @Test
     public void testGetFamilyBaseEntityId() {
         Assert.assertEquals(activity.getFamilyBaseEntityId(), "familyBaseEntityId");
+    }
+
+    @Test
+    public void testGetFormName() {
         Assert.assertEquals(activity.getFormName(), "form_name");
+    }
+
+    @Test
+    public void testGetUniqueId() {
         Assert.assertEquals(activity.getUniqueId(), "unique_id");
+    }
+
+    @Test
+    public void testGetFamilyName() {
         Assert.assertEquals(activity.getFamilyName(), "familyName");
+    }
+
+    @Test
+    public void testGetPhoneNumber() {
         Assert.assertEquals(activity.getPhoneNumber(), "phone_number");
     }
 }

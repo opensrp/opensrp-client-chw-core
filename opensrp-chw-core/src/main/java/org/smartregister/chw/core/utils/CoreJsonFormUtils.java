@@ -669,7 +669,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return obs;
     }
 
-
     public static String getJsonFieldValue(JSONArray jsonArray, String key) {
         try {
             JSONObject jsonObject = getFieldJSONObject(jsonArray, key);

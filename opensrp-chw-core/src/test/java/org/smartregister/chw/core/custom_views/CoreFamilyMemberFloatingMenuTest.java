@@ -25,6 +25,7 @@ public class CoreFamilyMemberFloatingMenuTest {
 
     @Mock
     private OnClickFloatingMenu onClickFloatingMenu;
+    private CoreFamilyMemberFloatingMenu familyMemberFloatingMenu;
 
     @Before
     public void setUp() {
@@ -67,5 +68,24 @@ public class CoreFamilyMemberFloatingMenuTest {
         when(coreFamilyMemberFloatingMenuTest.getCallLayout())
                 .thenReturn(view);
         Assert.assertEquals(view, coreFamilyMemberFloatingMenuTest.getCallLayout());
+    }
+
+    @Test
+    public void testOnClick() {
+        Mockito.doNothing().when(familyMemberFloatingMenu).onClick(view);
+        familyMemberFloatingMenu.onClick(view);
+
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        Mockito.verify(familyMemberFloatingMenu, Mockito.times(1)).onClick(captor.capture());
+        Assert.assertEquals(captor.getValue(), view);
+    }
+
+    @Test
+    public void testRedraw() {
+        Mockito.doNothing().when(familyMemberFloatingMenu).reDraw(true);
+        familyMemberFloatingMenu.reDraw(true);
+        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
+        Mockito.verify(familyMemberFloatingMenu, Mockito.times(1)).reDraw(captor.capture());
+        Assert.assertEquals(captor.getValue(), true);
     }
 }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -589,7 +590,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     public void thinkMdAssessmentProcessed() {
         invalidateOptionsMenu();
     }
-
 
     protected View.OnClickListener getSickListener() {
         return null;

@@ -200,7 +200,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         buttonObject.put(JsonFormConstants.KEY, HIA2ReportsActivity.FORM_KEY_CONFIRM);
         buttonObject.put(JsonFormConstants.VALUE, "false");
         buttonObject.put(JsonFormConstants.TYPE, "button");
-        buttonObject.put(JsonFormConstants.HINT, "Confirm");
+        buttonObject.put(JsonFormConstants.HINT, baseActivity.getString(R.string.confirm));
         buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
         buttonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
         buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
