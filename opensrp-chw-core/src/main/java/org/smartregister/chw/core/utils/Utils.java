@@ -60,6 +60,7 @@ import org.smartregister.chw.core.custom_views.CoreFamilyPlanningFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreHivFloatingMenu;
 import org.smartregister.chw.core.custom_views.CoreMalariaFloatingMenu;
 import org.smartregister.chw.core.dao.VisitDao;
+import org.smartregister.chw.core.dao.VisitDao;
 import org.smartregister.chw.core.custom_views.CoreTbFloatingMenu;
 import org.smartregister.chw.core.domain.Hia2Indicator;
 import org.smartregister.chw.core.domain.MonthlyTally;

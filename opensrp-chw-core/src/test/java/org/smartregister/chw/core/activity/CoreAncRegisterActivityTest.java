@@ -13,10 +13,6 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.robolectric.util.ReflectionHelpers;
-import org.smartregister.Context;
-import org.smartregister.CoreLibrary;
-import org.smartregister.chw.core.BaseUnitTest;
 
 import timber.log.Timber;
 
@@ -65,25 +61,25 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     @Test
     public void testGetFamilyBaseEntityId() {
         Assert.assertEquals(activity.getFamilyBaseEntityId(), "familyBaseEntityId");
-        Assert.assertEquals(activity.getFormName(), "form_name");
-        Assert.assertEquals(activity.getUniqueId(), "unique_id");
-        Assert.assertEquals(activity.getFamilyName(), "familyName");
-        Assert.assertEquals(activity.getPhoneNumber(), "phone_number");
-        Assert.assertEquals(CoreAncRegisterActivity.getFamilyBaseEntityId(), "familyBaseEntityId");
     }
 
     @Test
     public void testGetFormName() {
-        Assert.assertEquals(CoreAncRegisterActivity.getFormName(), "form_name");
+        Assert.assertEquals(activity.getFormName(), "form_name");
     }
 
     @Test
     public void testGetUniqueId() {
-        Assert.assertEquals(CoreAncRegisterActivity.getUniqueId(), "unique_id");
+        Assert.assertEquals(activity.getUniqueId(), "unique_id");
     }
 
     @Test
     public void testGetFamilyName() {
-        Assert.assertEquals(CoreAncRegisterActivity.getFamilyName(), "familyName");
+        Assert.assertEquals(activity.getFamilyName(), "familyName");
+    }
+
+    @Test
+    public void testGetPhoneNumber() {
+        Assert.assertEquals(activity.getPhoneNumber(), "phone_number");
     }
 }
