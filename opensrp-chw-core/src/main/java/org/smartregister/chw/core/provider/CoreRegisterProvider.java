@@ -209,7 +209,11 @@ public abstract class CoreRegisterProvider extends FamilyRegisterProvider {
 
     protected List<Map<String, String>> getChildren(String familyEntityId) {
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
-        queryBUilder.selectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.BASE_ENTITY_ID, CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.GENDER, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.LAST_HOME_VISIT, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.VISIT_NOT_DONE, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.DATE_CREATED, CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DOB, CoreConstants.TABLE_NAME.CHILD + "." + CoreConstants.DB_CONSTANTS.ENTRY_POINT, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.MOTHER_ENTITY_ID});
+        queryBUilder.selectInitiateMainTable(CoreConstants.TABLE_NAME.CHILD, new String[]{CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.BASE_ENTITY_ID,
+                CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.GENDER, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.LAST_HOME_VISIT,
+                CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.VISIT_NOT_DONE, CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.DATE_CREATED,
+                CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DOB, CoreConstants.TABLE_NAME.CHILD + "." + CoreConstants.DB_CONSTANTS.ENTRY_POINT,
+                CoreConstants.TABLE_NAME.CHILD + "." + ChildDBConstants.KEY.MOTHER_ENTITY_ID});
         queryBUilder.customJoin("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON  " + CoreConstants.TABLE_NAME.CHILD + ".base_entity_id =  " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + ".base_entity_id");
         queryBUilder.mainCondition(String.format(" %s is null AND %s = '%s' AND %s ",
                 CoreConstants.TABLE_NAME.CHILD + "." + DBConstants.KEY.DATE_REMOVED,
