@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
-import org.smartregister.chw.core.BuildConfig;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.sync.CoreClientProcessor;
 import org.smartregister.clientandeventmodel.Client;
@@ -101,7 +100,6 @@ public class NativeFormProcessor {
         if (formData == null) {
             formData = new JSONObject();
             formData.put(CoreConstants.Properties.FORM_VERSION, jsonForm.optString("form_version"));
-            formData.put(CoreConstants.Properties.APP_VERSION_NAME, BuildConfig.VERSION_NAME);
 
             jsonForm.put(DETAILS, formData);
         }

@@ -31,6 +31,13 @@ jacoco {
     toolVersion = "0.8.0"
 }
 
+def githubProperties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+} else if (project.rootProject.file("github.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+}
+
 allprojects {
 
     tasks.whenTaskAdded { task ->
@@ -56,12 +63,6 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven {
-            def githubProperties = new Properties()
-            if (project.rootProject.file("local.properties").exists()) {
-                githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
-            } else if (project.rootProject.file("github.properties").exists()) {
-                githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
-            }
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-household")
             credentials {
