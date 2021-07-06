@@ -22,7 +22,6 @@ public class VaccineTaskModelTest {
     private VaccineGroup groupMap;
     private DateTime anchorDate;
     private List<Alert> alerts;
-    private Map<String, Alert> alertsMap = null;
     private List<Vaccine> vaccines;
     private Map<String, Date> receivedVaccines;
     private List<Map<String, Object>> scheduleList;
