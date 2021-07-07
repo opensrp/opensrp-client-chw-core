@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
-import org.smartregister.chw.core.activity.CoreStockInventoryReportActivity;
-import org.smartregister.chw.core.activity.HIA2ReportsActivity;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
 
@@ -16,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class HfNavigationMenu implements NavigationMenu.Flavour {
+
     @Override
     public List<Pair<String, Locale>> getSupportedLanguages() {
         return Arrays.asList(Pair.of("English", Locale.ENGLISH), Pair.of("Kiswahili", new Locale("sw")));
@@ -28,6 +26,7 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
         return tableMap;
     }
 
+    @Override
     public boolean hasServiceReport() {
         return true;
     }
@@ -38,13 +37,18 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
     }
 
     @Override
+    public boolean hasCommunityResponders() {
+        return false;
+    }
+
+    @Override
     public Intent getStockReportIntent(Activity activity) {
-        return new Intent(activity, CoreStockInventoryReportActivity.class);
+        return null;
     }
 
     @Override
     public Intent getServiceReportIntent(Activity activity) {
-        return new Intent(activity, HIA2ReportsActivity.class);
+        return null;
     }
 
     @Override
@@ -56,10 +60,4 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
     public Intent getHIA2ReportActivityIntent(Activity activity) {
         return null;
     }
-
-    @Override
-    public boolean hasCommunityResponders() {
-        return false;
-    }
-
 }

@@ -12,6 +12,7 @@ buildscript {
         maven{  url "https://plugins.gradle.org/m2/" }
         mavenLocal()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.10.2'
@@ -28,6 +29,13 @@ apply plugin: 'io.codearte.nexus-staging'
 
 jacoco {
     toolVersion = "0.8.0"
+}
+
+def githubProperties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+} else if (project.rootProject.file("github.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 }
 
 allprojects {
@@ -52,13 +60,20 @@ allprojects {
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven{  url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-household")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
     }
 }
 
 configure(allprojects) { project ->
-
-    version = VERSION_NAME
-    group = GROUP
     buildscript {
         repositories {
             google()

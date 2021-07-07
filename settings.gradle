@@ -1,1 +1,1 @@
-include ':sample', ':opensrp-chw-core'
+include ':sample', ':opensrp-ecap-chw-core'
