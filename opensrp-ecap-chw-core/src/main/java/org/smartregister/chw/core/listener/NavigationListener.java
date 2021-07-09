@@ -28,6 +28,15 @@ public class NavigationListener implements View.OnClickListener {
                 case CoreConstants.DrawerMenu.CHILD_CLIENTS:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.CHILD_REGISTER_ACTIVITY));
                     break;
+                case CoreConstants.DrawerMenu.Index:
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.INDEX_REGISTER_ACTIVITY));
+                    break;
+                case CoreConstants.DrawerMenu.CASE_PLAN:
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.CASE_PLAN_REGISTER_ACTIVITY));
+                    break;
+                case CoreConstants.DrawerMenu.BENEFICIARIES:
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.BENEFICIARIES_REGISTER_ACTIVITY));
+                    break;
                 case CoreConstants.DrawerMenu.ALL_FAMILIES:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.FAMILY_REGISTER_ACTIVITY));
                     break;

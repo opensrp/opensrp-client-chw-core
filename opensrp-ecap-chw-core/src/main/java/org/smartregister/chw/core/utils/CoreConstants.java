@@ -728,6 +728,9 @@ public class CoreConstants {
         public static final String PNC = "PNC";
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
+        public static final String Index= "Index";
+        public static final String CASE_PLAN = "Case plan";
+        public static final String BENEFICIARIES = "Beneficiaries";
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
@@ -958,6 +961,9 @@ public class CoreConstants {
 
     public static final class REGISTERED_ACTIVITIES {
         public static final String CHILD_REGISTER_ACTIVITY = "CHILD_REGISTER_ACTIVITY";
+        public static final String INDEX_REGISTER_ACTIVITY = "INDEX_REGISTER_ACTIVITY";
+        public static final String BENEFICIARIES_REGISTER_ACTIVITY = "BENEFICIARIES_REGISTER_ACTIVITY";
+        public static final String CASE_PLAN_REGISTER_ACTIVITY = "CASE_PLAN_REGISTER_ACTIVITY";
         public static final String FAMILY_REGISTER_ACTIVITY = "FAMILY_REGISTER_ACTIVITY";
         public static final String ANC_REGISTER_ACTIVITY = "ANC_REGISTER_ACTIVITY";
         public static final String PNC_REGISTER_ACTIVITY = "PNC_REGISTER_ACTIVITY";
