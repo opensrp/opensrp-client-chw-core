@@ -345,7 +345,7 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-version = "1.0.0-RELEASE"
+version = "1.0.1-RELEASE"
 
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
