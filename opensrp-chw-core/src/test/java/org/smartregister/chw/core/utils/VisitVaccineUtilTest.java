@@ -36,7 +36,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.smartregister.domain.AlertStatus.normal;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ImmunizationLibrary.class)
@@ -88,7 +87,7 @@ public class VisitVaccineUtilTest {
         String scheduleName2 = "TT";
         Alert scheduleName1Alert1 = new Alert("Case X", scheduleName1, "ANC 1", AlertStatus.normal, "2012-01-01", "2012-01-11");
         Alert scheduleName1Alert2 = new Alert("Case Y", scheduleName1, "ANC 2", AlertStatus.complete, "2012-01-01", "2012-01-11");
-        Alert scheduleName2Alert = new Alert("Case X", scheduleName2, "TT 1", normal, "2012-01-01", "2012-01-11");
+        Alert scheduleName2Alert = new Alert("Case X", scheduleName2, "TT 1", AlertStatus.normal, "2012-01-01", "2012-01-11");
         List<Alert> alerts  = Arrays.asList(scheduleName1Alert1, scheduleName1Alert2, scheduleName2Alert);
 
         Map<String, List<Alert>> grouped = VisitVaccineUtil.groupByType(alerts);
