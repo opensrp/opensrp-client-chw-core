@@ -66,8 +66,11 @@ public class VisitVaccineUtilTest {
                 .thenReturn(vaccineMapMock);
 
         Map<String, VaccineRepo.Vaccine> vaccinesMap = VisitVaccineUtil.getAllVaccines();
-        Assert.assertTrue(vaccinesMap.containsValue(womanVaccine));
-        Assert.assertTrue(vaccinesMap.containsValue(childVaccine));
+        String womanVaccineKey = womanVaccine.display().toLowerCase().replace(" ", "").replace("-", "");
+        String childVaccineKey = childVaccine.display().toLowerCase().replace(" ", "").replace("-", "");
+        Assert.assertEquals(2, vaccinesMap.size());
+        Assert.assertEquals(womanVaccine, vaccinesMap.get(womanVaccineKey));
+        Assert.assertEquals(childVaccine, vaccinesMap.get(childVaccineKey));
     }
 
     @Test
@@ -94,8 +97,8 @@ public class VisitVaccineUtilTest {
 
         String type1Key = scheduleName1.substring(0, scheduleName1.length() - 1).trim();
         String type2Key = scheduleName2.substring(0, scheduleName2.length() - 1).trim();
-        Assert.assertTrue(grouped.get(type1Key).containsAll(Arrays.asList(scheduleName1Alert1, scheduleName1Alert2)));
-        Assert.assertTrue(grouped.get(type2Key).contains(scheduleName2Alert));
+        Assert.assertEquals(2, grouped.get(type1Key).size());
+        Assert.assertEquals(1, grouped.get(type2Key).size());
     }
 
     @Test
@@ -122,6 +125,6 @@ public class VisitVaccineUtilTest {
 
         List<Alert> inMemoryAlerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, baseEntityId, dob, vaccineCategory, issuedVaccines);
         verify(vaccineSchedule, atLeastOnce()).getOfflineAlert(eq(baseEntityId), eq(dob.toDate()), eq(issuedVaccines));
-        Assert.assertTrue(inMemoryAlerts.contains(offlineAlert));
+        Assert.assertEquals(1, inMemoryAlerts.size());
     }
 }
