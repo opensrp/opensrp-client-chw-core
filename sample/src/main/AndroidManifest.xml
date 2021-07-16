@@ -39,94 +39,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/HFTheme.NoActionBar" />
 
-        <activity
-            android:name="org.smartregister.chw.hf.activity.FamilyProfileActivity"
-            android:label="@string/title_family_detail"
-            android:parentActivityName="org.smartregister.chw.hf.activity.FamilyRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.smartregister.chw.hf.activity.FamilyRegisterActivity" />
-        </activity>
-
-        <activity
-            android:name=".activity.FamilyOtherMemberProfileActivity"
-            android:label="@string/title_family_detail"
-            android:parentActivityName=".activity.FamilyRegisterActivity"
-            android:theme="@style/FamilyTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.FamilyProfileActivity" />
-        </activity>
-
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ChildRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.chw.hf.activity.AncMedicalHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ChildHomeVisitActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ChildProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-
-        <activity
-            android:name="org.smartregister.chw.hf.activity.FamilyRemoveMemberActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-
-        <activity
-            android:name="org.smartregister.chw.hf.activity.FamilyProfileMenuActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ChildMedicalHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ReferralRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.chw.hf.activity.ReferralTaskViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.AncRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.AncMemberProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PncRegisterActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PncMemberProfileActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PncMedicalHistoryActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.MalariaRegisterActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name=".activity.MalariaProfileActivity"
-            android:theme="@style/HFTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.chw.hf.activity.UpdatesRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HFTheme.NoActionBar" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3f94f9c3caeff331b3a2bd8c2182b663ad6a955a" />
@@ -139,11 +51,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/captured_images_path" />
         </provider>
-
-        <activity
-            android:name=".activity.AboveFiveChildProfileActivity"
-            android:label="@string/child_details"
-            android:theme="@style/HFTheme.NoActionBar" />
 
         <activity
             android:name="org.smartregister.chw.core.activity.HIA2ReportsActivity"

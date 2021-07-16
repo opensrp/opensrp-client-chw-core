@@ -1,45 +1,18 @@
 package org.smartregister.chw.hf.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 
 import org.smartregister.chw.core.activity.CoreFamilyRegisterActivity;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.listener.CoreBottomNavigationListener;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hf.BuildConfig;
 import org.smartregister.chw.hf.HealthFacilityApplication;
-import org.smartregister.chw.hf.R;
 import org.smartregister.chw.hf.fragment.FamilyRegisterFragment;
-import org.smartregister.chw.hf.listener.HfFamilyBottomNavListener;
-import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.Map;
 
 public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
-
-    public static void registerBottomNavigation(BottomNavigationHelper bottomNavigationHelper,
-                                                BottomNavigationView bottomNavigationView, Activity activity) {
-        if (bottomNavigationView != null) {
-            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-
-            bottomNavigationView.getMenu().clear();
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_family_menu);
-            bottomNavigationHelper.disableShiftMode(bottomNavigationView);
-            bottomNavigationView.setOnNavigationItemSelectedListener(new CoreBottomNavigationListener(activity));
-        }
-
-        if (!BuildConfig.SUPPORT_QR)
-            bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_scan_qr);
-
-        if (!BuildConfig.SUPPORT_REPORT)
-            bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_job_aids);
-
-    }
 
     @Override
     protected void registerBottomNavigation() {
@@ -51,7 +24,6 @@ public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
         if (!BuildConfig.SUPPORT_REPORT)
             bottomNavigationView.getMenu().removeItem(org.smartregister.family.R.id.action_job_aids);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new HfFamilyBottomNavListener(this, bottomNavigationView));
     }
 
     @Override
@@ -73,6 +45,6 @@ public class FamilyRegisterActivity extends CoreFamilyRegisterActivity {
 
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
-
+        //Overridden
     }
 }
