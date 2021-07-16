@@ -52,7 +52,7 @@ public class FamilyCallDialogInteractorTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetHeadOfFamilyUpdatesHeadOfFamilyWhenCaregiver(){
+    public void testGetHeadOfFamilyCallsUpdateHeadOfFamilyWhenPrimaryCaregiverIsSet(){
         columnMaps.put(DBConstants.KEY.PRIMARY_CAREGIVER, "d04aebf7-93d6-4aeb-9565-0c0e8be8260b");
         FamilyCallDialogContract.Presenter presenter = mock(FamilyCallDialogContract.Presenter.class);
         Context context = mock(Context.class);
@@ -62,7 +62,7 @@ public class FamilyCallDialogInteractorTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetHeadOfFamilyUpdatesCareGiverWhenCareGiverAndIsIndependent(){
+    public void testGetHeadOfFamilyCallsUpdateCareGiverWhenPrimaryCareGiverIsSetAndClientIsIndependent(){
         columnMaps.put(DBConstants.KEY.PRIMARY_CAREGIVER, "d04aebf7-93d6-4aeb-9565-0c0e8be8260b");
         columnMaps.put(DBConstants.KEY.ENTITY_TYPE, CoreConstants.TABLE_NAME.INDEPENDENT_CLIENT);
         FamilyCallDialogContract.Presenter presenter = mock(FamilyCallDialogContract.Presenter.class);
