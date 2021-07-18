@@ -1,10 +1,8 @@
 package org.smartregister.chw.core.contract;
 
 import org.json.JSONObject;
-import org.smartregister.chw.hiv.contract.BaseHivProfileContract;
 import org.smartregister.chw.hiv.contract.BaseIndexContactProfileContract;
 import org.smartregister.chw.hiv.domain.HivIndexContactObject;
-import org.smartregister.chw.hiv.domain.HivMemberObject;
 import org.smartregister.repository.AllSharedPreferences;
 
 public interface CoreIndexContactProfileContract {

@@ -824,7 +824,8 @@ public class CoreConstants {
         public static final String CHILD_CLIENTS = "Child Clients";
         public static final String CHILD = "Child";
         public static final String HIV_CLIENTS = "HIV Clients";
-        public static final String HIV_INDEX_CLIENTS = "HIV Index Clients";
+        public static final String HIV_INDEX_CLIENTS = "HIV Index Contacts Followups";
+        public static final String HIV_INDEX_CLIENTS_HF = "HIV Index Contact";
         public static final String TB_CLIENTS = "TB Clients";
         public static final String ANC = "ANC";
         public static final String LD = "L&D";

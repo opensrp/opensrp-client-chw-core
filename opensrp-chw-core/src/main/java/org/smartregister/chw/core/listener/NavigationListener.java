@@ -70,6 +70,7 @@ public class NavigationListener implements View.OnClickListener {
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.HIV_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.HIV_INDEX_CLIENTS:
+                case CoreConstants.DrawerMenu.HIV_INDEX_CLIENTS_HF:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.HIV_INDEX_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.TB_CLIENTS:

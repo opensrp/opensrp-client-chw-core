@@ -53,6 +53,8 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
             gotToMalariaProfile(commonPersonObjectClient, bundle);
         } else if (notificationType.equals(activity.get().getString(R.string.notification_type_hiv_problem_outcome))) {
             goToHivProfile(commonPersonObjectClient.entityId(), activity.get());
+        } else if (notificationType.equals(activity.get().getString(R.string.notification_type_hiv_index))) {
+            goToHivIndexContactProfile(commonPersonObjectClient.entityId(), activity.get());
         } else if (notificationType.equals(activity.get().getString(R.string.notification_type_tb_problem_outcome))) {
             goToTbProfile(commonPersonObjectClient.entityId(), activity.get());
         }
@@ -119,6 +121,8 @@ public abstract class CoreChwNotificationGoToMemberProfileTask extends AsyncTask
     protected abstract void goToFpProfile(String baseEntityId, Activity activity);
 
     protected abstract void goToHivProfile(String baseEntityId, Activity activity);
+
+    protected abstract void goToHivIndexContactProfile(String baseEntityId, Activity activity);
 
     protected abstract void goToTbProfile(String baseEntityId, Activity activity);
 

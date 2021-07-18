@@ -117,11 +117,6 @@ public abstract class CoreTbRegisterFragment extends BaseTbRegisterFragment {
         presenter = new BaseTbRegisterFragmentPresenter(this, new BaseTbRegisterFragmentModel(), viewConfigurationIdentifier);
     }
 
-    @Override
-    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-        //TODO
-    }
-
     protected void toggleFilterSelection(View dueOnlyLayout) {
         if (dueOnlyLayout != null) {
             if (dueOnlyLayout.getTag() == null) {

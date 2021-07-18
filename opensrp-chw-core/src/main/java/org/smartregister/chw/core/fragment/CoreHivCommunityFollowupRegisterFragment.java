@@ -118,12 +118,6 @@ public abstract class CoreHivCommunityFollowupRegisterFragment extends BaseHivCo
     }
 
     @Override
-    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-        //TODO
-        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
-    }
-
-    @Override
     protected void onViewClicked(View view) {
         super.onViewClicked(view);
 
@@ -247,7 +241,6 @@ public abstract class CoreHivCommunityFollowupRegisterFragment extends BaseHivCo
             c = commonRepository().rawCustomQueryForAdapter(query);
             c.moveToFirst();
             clientAdapter.setTotalcount(c.getInt(0));
-            Timber.v("total count here %s", clientAdapter.getTotalcount());
 
             clientAdapter.setCurrentlimit(20);
             clientAdapter.setCurrentoffset(0);

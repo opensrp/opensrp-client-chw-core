@@ -85,7 +85,7 @@ public abstract class CoreHivIndexContactProfileActivity extends BaseIndexContac
     @Override
     protected void initializePresenter() {
         showProgressBar(true);
-        setHivContactProfilePresenter(new CoreHivIndexContactProfilePresenter(this, new CoreHivIndexContactProfileInteractor(this), getHivIndexContactObject()));
+        setHivContactProfilePresenter(new CoreHivIndexContactProfilePresenter(this, new CoreHivIndexContactProfileInteractor(), getHivIndexContactObject()));
         fetchProfileData();
     }
 
@@ -129,47 +129,9 @@ public abstract class CoreHivIndexContactProfileActivity extends BaseIndexContac
                     }
                 }
                 break;
-            case Constants.REQUEST_CODE_HOME_VISIT:
-                refreshViewOnHomeVisitResult();
-                break;
             default:
                 break;
         }
-    }
-
-    private void refreshViewOnHomeVisitResult() {
-        Observable<Visit> observable = Observable.create(visitObservableEmitter -> {
-            Visit lastVisit = HivDao.getLatestVisit(getHivIndexContactObject().getBaseEntityId(), org.smartregister.chw.hiv.util.Constants.EventType.FOLLOW_UP_VISIT);
-            visitObservableEmitter.onNext(lastVisit);
-            visitObservableEmitter.onComplete();
-        });
-
-        final Disposable[] disposable = new Disposable[1];
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Visit>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposable[0] = d;
-                    }
-
-                    @Override
-                    public void onNext(Visit visit) {
-                        updateLastVisitRow(visit.getDate());
-                        onMemberDetailsReloaded(getHivIndexContactObject());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        disposable[0].dispose();
-                        disposable[0] = null;
-                    }
-                });
     }
 
     public void onMemberDetailsReloaded(HivIndexContactObject hivIndexContactObject) {

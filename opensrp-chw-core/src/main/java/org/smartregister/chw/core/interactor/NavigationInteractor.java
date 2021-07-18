@@ -15,6 +15,7 @@ import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
@@ -337,7 +338,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
                                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY, HIV_OUTCOME_COUNT_QUERY,
-                                TB_OUTCOME_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
+                                TB_OUTCOME_COUNT_QUERY,HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV:
@@ -349,7 +350,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and p.is_closed = '0' and " +
-                                "              (p.client_hiv_status_after_testing = 'Positive' OR p.client_hiv_status_after_testing IS NULL) " +
+                                "              ( UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') OR p.client_hiv_status_after_testing IS NULL) " +
                                 "         UNION ALL\n" +
                                 "              select count(*) as c " +
                                 "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_COMMUNITY_FOLLOWUP + " p " +
@@ -366,8 +367,18 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and " +
-                                "              p.test_results IS NULL ";
+                                "              p.test_results IS NULL and p.refer_to_chw = 'Yes' and p.how_to_notify_the_contact_client <> 'na' ";
                 return NavigationDao.getQueryCount(sqlIndex);
+
+            case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF:
+                String sqlIndexHf =
+                        "SELECT count(*) " +
+                                "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF + " p " +
+                                "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                                "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                                "              where m.date_removed is null and " +
+                                "              p.test_results IS NULL and p.how_to_notify_the_contact_client <> 'na' ";
+                return NavigationDao.getQueryCount(sqlIndexHf);
 
             case org.smartregister.chw.tb.util.Constants.Tables.TB:
                 String sqlTb =

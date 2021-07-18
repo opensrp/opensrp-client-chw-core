@@ -46,7 +46,7 @@
     <string name="menu_pnc">Baada ya kujifungua</string>
     <string name="menu_child">Mtoto</string>
     <string name="menu_family_planning">Uzazi wa Mpango</string>
-    <string name="menu_hiv_index_contacts">Washirika wa Ngono/Wakujidunga/Watoto wa wateja wenye VVU/UKIMWI</string>
+    <string name="menu_hiv_index_contacts">Washirika wa Ngono/Wakujidunga</string>
 
     <!-- Family Register -->
     <string name="menu_malaria">Malaria</string>

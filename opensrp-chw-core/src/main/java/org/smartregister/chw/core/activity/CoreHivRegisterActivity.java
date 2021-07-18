@@ -10,7 +10,7 @@ import org.smartregister.chw.core.job.HomeVisitServiceJob;
 import org.smartregister.chw.core.job.VaccineRecurringServiceJob;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.hiv.activity.BaseHivRegisterActivity;
-import org.smartregister.chw.hiv.activity.BaseHivNeatFormsActivity;
+import org.smartregister.chw.hiv.activity.BaseHivFormsActivity;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
@@ -29,7 +29,7 @@ public class CoreHivRegisterActivity extends BaseHivRegisterActivity {
 
     @Override
     public void startFormActivity(@Nullable String formName, @Nullable String entityId, @Nullable String metaData) {
-        Intent intent = new Intent(this, BaseHivNeatFormsActivity.class);
+        Intent intent = new Intent(this, BaseHivFormsActivity.class);
         intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.BASE_ENTITY_ID, baseEntityID);
         intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.JSON_FORM, metaData);
         intent.putExtra(org.smartregister.chw.hiv.util.Constants.ActivityPayload.USE_DEFAULT_NEAT_FORM_LAYOUT, false);

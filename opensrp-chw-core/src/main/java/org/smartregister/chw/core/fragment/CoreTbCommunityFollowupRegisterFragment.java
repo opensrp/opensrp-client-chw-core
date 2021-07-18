@@ -117,11 +117,6 @@ public abstract class CoreTbCommunityFollowupRegisterFragment extends BaseTbComm
         presenter = new BaseTbRegisterFragmentPresenter(this, new BaseTbRegisterFragmentModel(), viewConfigurationIdentifier);
     }
 
-    @Override
-    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-        //TODO
-    }
-
     protected String searchText() {
         return (getSearchView() == null) ? "" : getSearchView().getText().toString();
     }

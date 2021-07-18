@@ -119,12 +119,6 @@ public abstract class CoreHivIndexContactsRegisterFragment extends BaseHivIndexC
     }
 
     @Override
-    public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-        //TODO
-        //Log.d(TAG, "setAdvancedSearchFormData unimplemented");
-    }
-
-    @Override
     protected void onViewClicked(View view) {
         super.onViewClicked(view);
 
