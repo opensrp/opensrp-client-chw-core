@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.utils;
 
+import org.hamcrest.MatcherAssert;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -98,7 +101,9 @@ public class VisitVaccineUtilTest {
         String type1Key = scheduleName1.substring(0, scheduleName1.length() - 1).trim();
         String type2Key = scheduleName2.substring(0, scheduleName2.length() - 1).trim();
         Assert.assertEquals(2, grouped.get(type1Key).size());
+        MatcherAssert.assertThat(grouped.get(type1Key), hasItems(scheduleName1Alert1, scheduleName1Alert2));
         Assert.assertEquals(1, grouped.get(type2Key).size());
+        MatcherAssert.assertThat(grouped.get(type2Key), hasItem(scheduleName2Alert));
     }
 
     @Test
@@ -126,5 +131,6 @@ public class VisitVaccineUtilTest {
         List<Alert> inMemoryAlerts = VisitVaccineUtil.getInMemoryAlerts(vaccineSchedules, baseEntityId, dob, vaccineCategory, issuedVaccines);
         verify(vaccineSchedule, atLeastOnce()).getOfflineAlert(eq(baseEntityId), eq(dob.toDate()), eq(issuedVaccines));
         Assert.assertEquals(1, inMemoryAlerts.size());
+        MatcherAssert.assertThat(inMemoryAlerts, hasItem(offlineAlert));
     }
 }
