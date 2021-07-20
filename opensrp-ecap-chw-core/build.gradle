@@ -1,13 +1,16 @@
 description = 'OpenSRP chw aggregated client library'
 
 buildscript {
+    ext.kotlinVersion = '1.5.21'
     repositories {
         google()
+        mavenCentral()
         mavenLocal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -15,14 +18,22 @@ apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'maven-publish'
+apply plugin: 'kotlin-android'
 
 jacoco {
     toolVersion = "0.8.0"
 }
 
+def githubProperties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+} else if (project.rootProject.file("github.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+}
+
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion androidBuildToolsVersion
 
     defaultPublishConfig !isReleaseBuild() ? "debug" : "release"
@@ -30,6 +41,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     defaultConfig {
@@ -89,6 +104,17 @@ android {
             jvmArgs "-Xmx3g"
         }
     }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-household")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
 }
 
 tasks.withType(Test) {
@@ -103,9 +129,14 @@ dependencies {
         exclude group: 'com.android.volley', module: 'volley'
         exclude group: 'stax', module: 'stax-api'
     }
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "id.zelory:compressor:2.1.1"
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'com.ibm.fhir:fhir-model:4.7.0'
 
     api('org.smartregister:opensrp-client-thinkmd:1.0.4-SNAPSHOT@aar') {
         transitive = true
@@ -119,7 +150,6 @@ dependencies {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         exclude group: 'xpp3', module: 'xpp3'
     }
-
     api('org.smartregister:opensrp-client-native-form:2.0.8-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -130,9 +160,6 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
         exclude group: 'com.google.guava', module: 'guava'
     }
-
-    compileOnly 'com.ibm.fhir:fhir-model:4.7.0'
-
     api('org.smartregister:opensrp-client-core:4.3.6-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
@@ -143,15 +170,11 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
     api('org.smartregister:opensrp-client-configurable-views:1.1.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-
     api('org.smartregister:opensrp-household:1.0.0-RELEASE@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -160,14 +183,12 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-client-immunization:3.0.3-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-
     api('org.smartregister:opensrp-client-reporting:0.0.22-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -177,7 +198,6 @@ dependencies {
         exclude group: 'com.github.lecho', module: 'hellocharts-library'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-client-growth-monitoring:1.1.23-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -186,7 +206,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
     }
-
     api('org.smartregister:opensrp-client-chw-anc:2.0.6-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -197,7 +216,6 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-family'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-client-chw-pnc:2.0.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
@@ -209,7 +227,6 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-family'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-client-chw-malaria:1.2.19-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -218,7 +235,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-chw-family-planning:1.0.27-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -235,7 +251,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
     api('org.smartregister:opensrp-client-opd:0.0.13-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
@@ -245,18 +260,13 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'id.zelory', module: 'compressor'
     }
-
-    implementation "id.zelory:compressor:2.1.1"
-
-    api 'com.google.guava:guava:20.0'
+    api 'com.google.guava:guava:30.1.1-android'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     api 'io.reactivex.rxjava2:rxjava:2.2.15'
-    //do not update for now- compatibility issues with client-core
     api 'com.evernote:android-job:1.2.6'
     api 'org.greenrobot:eventbus:3.1.1'
-
     api("org.smartregister:android-p2p-sync:0.3.8-aplha4-SNAPSHOT") {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -265,7 +275,6 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
-
     api 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     androidTestImplementation 'org.mockito:mockito-android:3.0.0'
@@ -345,7 +354,7 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-version = "1.0.1-RELEASE"
+version = "1.0.2-RELEASE"
 
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
@@ -419,10 +428,11 @@ publishing {
              */
             url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-ecap-chw-core")
             credentials {
-                /** get credentials from local.properties in root project folder file with
-                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise
-                 ** Set env variable GPR_USER & GPR_API_KEY**/
-
+                /**
+                 * Get credentials from local.properties in root project folder file with
+                 * gpr.usr=GITHUB_USER_ID &  gpr.key=PERSONAL_ACCESS_TOKEN
+                 * otherwise set env variable GPR_USER & GPR_API_KEY
+                 */
                 username = properties['gpr.usr'] ?: System.getenv("GPR_USER")
                 password = properties['gpr.key'] ?: System.getenv("GPR_API_KEY")
             }

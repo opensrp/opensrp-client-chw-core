@@ -686,6 +686,7 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
+        public static final String EC_CLIENT_INDEX = "ec_client_index";
     }
 
     public static final class INTENT_KEY {

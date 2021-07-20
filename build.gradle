@@ -9,7 +9,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
         maven { url "https://repo.maven.apache.org/maven2" }
         maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
-        maven{  url "https://plugins.gradle.org/m2/" }
+        maven { url "https://plugins.gradle.org/m2/" }
         mavenLocal()
     }
 
@@ -29,13 +29,6 @@ apply plugin: 'io.codearte.nexus-staging'
 
 jacoco {
     toolVersion = "0.8.0"
-}
-
-def githubProperties = new Properties()
-if (project.rootProject.file("local.properties").exists()) {
-    githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
-} else if (project.rootProject.file("github.properties").exists()) {
-    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 }
 
 allprojects {
@@ -59,17 +52,9 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
-        maven{  url "https://plugins.gradle.org/m2/" }
+        maven { url "https://plugins.gradle.org/m2/" }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-household")
-            credentials {
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
-        }
     }
 }
 
@@ -91,11 +76,11 @@ subprojects {
 
     group = 'org.smartregister'
 
-    ext.androidToolsBuildGradle     = '4.0.0'
-    ext.androidBuildToolsVersion    = '29.0.3'
-    ext.androidMinSdkVersion        = 18
-    ext.androidCompileSdkVersion    = 28
-    ext.androidTargetSdkVersion     = 28
+    ext.androidToolsBuildGradle = '4.0.0'
+    ext.androidBuildToolsVersion = '29.0.3'
+    ext.androidMinSdkVersion = 18
+    ext.androidCompileSdkVersion = 28
+    ext.androidTargetSdkVersion = 28
 
     ext.androidAnnotationsVersion = '3.0.1'
     ext.androidAnnotationsAPIVersion = '3.0.1'

@@ -15,9 +15,16 @@ buildscript {
     }
 }
 
+def githubProperties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+} else if (project.rootProject.file("github.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+}
+
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 28
+    compileSdkVersion 30
     buildToolsVersion androidBuildToolsVersion
 
     compileOptions {
@@ -28,7 +35,7 @@ android {
     defaultConfig {
         applicationId "org.smartregister.chw.hf"
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.2.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -125,6 +132,16 @@ android {
         javaMaxHeapSize "4g"
     }
 
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/BlueCodeSystems/opensrp-client-household")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -152,7 +169,6 @@ dependencies {
     testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
 
 }
-
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
