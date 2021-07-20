@@ -183,6 +183,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
     }
 
     public void processEvents(ClientClassification clientClassification, Table vaccineTable, Table serviceTable, EventClient eventClient, Event event, String eventType) throws Exception {
+        String baseEntityID = eventClient.getEvent().getBaseEntityId();
         switch (eventType) {
             case VaccineIntentService.EVENT_TYPE:
             case VaccineIntentService.EVENT_TYPE_IS_VOIDED:
@@ -253,12 +254,14 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                     return;
                 }
                 processRemoveFamily(eventClient.getClient().getBaseEntityId(), event.getEventDate().toDate());
+                CoreChwApplication.getInstance().getScheduleRepository().deleteSchedulesByFamilyEntityID(baseEntityID);
                 break;
             case CoreConstants.EventType.REMOVE_MEMBER:
                 if (eventClient.getClient() == null) {
                     return;
                 }
                 processRemoveMember(eventClient.getClient().getBaseEntityId(), event);
+                CoreChwApplication.getInstance().getScheduleRepository().deleteSchedulesByEntityID(baseEntityID);
                 break;
             case FamilyPlanningConstants.EventType.FAMILY_PLANNING_CHANGE_METHOD:
                 clientProcessByObs(eventClient, clientClassification, event, "reason_stop_fp_chw", "decided_to_change_method");
