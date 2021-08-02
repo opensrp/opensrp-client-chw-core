@@ -20,10 +20,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 public class NavigationModelTest {
 
-    NavigationModel navigationModel = NavigationModel.getInstance();
-
     @Mock
-    NavigationModel.Flavor flavor;
+    private NavigationModel.Flavor flavor;
 
     @Before
     public void setup(){
@@ -34,6 +32,7 @@ public class NavigationModelTest {
 
     @Test
     public void assertGetInstanceIsNotNull(){
+        NavigationModel navigationModel = NavigationModel.getInstance();
         mockStatic(NavigationModel.class);
         when(NavigationModel.getInstance()).thenReturn(navigationModel);
         Assert.assertEquals(navigationModel, NavigationModel.getInstance());
@@ -42,14 +41,15 @@ public class NavigationModelTest {
 
     @Test
     public void verifyGetNavigationItemsIsDelegatedToFlavorGetNavigationItems(){
+        NavigationModel navigationModel = NavigationModel.getInstance();
         navigationModel.setNavigationFlavor(flavor);
         List<NavigationOption> modles= navigationModel.getNavigationItems();
-        System.out.println("size "+modles.size());
         Mockito.verify(flavor).getNavigationItems();
     }
 
     @Test
     public void assertGetCurrentuserIsNotNull(){
+        NavigationModel navigationModel = NavigationModel.getInstance();
         Assert.assertNotNull(navigationModel.getCurrentUser());
     }
 
