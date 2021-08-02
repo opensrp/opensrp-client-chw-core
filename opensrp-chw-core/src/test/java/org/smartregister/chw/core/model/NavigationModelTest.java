@@ -42,6 +42,7 @@ public class NavigationModelTest {
     public void verifyGetNavigationItemsIsDelegatedToFlavorGetNavigationItems() {
         NavigationModel navigationModel = NavigationModel.getInstance();
         navigationModel.setNavigationFlavor(flavor);
+        navigationModel.getNavigationItems();
         Mockito.verify(flavor).getNavigationItems();
     }
 
