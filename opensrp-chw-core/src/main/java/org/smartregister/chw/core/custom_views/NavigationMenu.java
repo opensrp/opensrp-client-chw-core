@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.custom_views;
 
+import static org.smartregister.chw.core.utils.Utils.getSyncEntityString;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -71,6 +73,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private static NavigationModel.Flavor modelFlavor;
     private static Map<String, Class> registeredActivities;
     private static boolean showDeviceToDeviceSync = true;
+    private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationAdapter navigationAdapter;
@@ -82,7 +85,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private NavigationContract.Presenter mPresenter;
     private View parentView;
     private Timer timer;
-    private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
     private SyncProgressBroadcastReceiver syncProgressBroadcastReceiver = new SyncProgressBroadcastReceiver(this);
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
@@ -490,7 +492,15 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     @Override
     public void onSyncProgress(SyncProgress syncProgress) {
-
+        if (menuFlavor.hasSyncProgressBar()) {
+            ProgressBar syncProgressBar = rootView.findViewById(R.id.sync_progress_bar);
+            TextView syncProgressBarLabel = rootView.findViewById(R.id.sync_progress_bar_label);
+            int progress = syncProgress.getPercentageSynced();
+            String entity = getSyncEntityString(syncProgress.getSyncEntity());
+            String labelText = String.format(rootView.getResources().getString(R.string.progressBarLabel), entity, progress);
+            syncProgressBar.setProgress(progress);
+            syncProgressBarLabel.setText(labelText);
+        }
     }
 
     @Override

@@ -750,4 +750,10 @@
     <!-- Sync status progress bar -->
     <string name="device_data_synced">Device data synced</string>
     <string name="device_data_not_synced">Device data not synced</string>
+    <string name="progressBarLabel">Syncing %s : %d%% </string>
+    <string name="events">Events</string>
+    <string name="locations">Locations</string>
+    <string name="plans">Plans</string>
+    <string name="structures">Structures</string>
+    <string name="tasks_text">Tasks</string>
 </resources>
