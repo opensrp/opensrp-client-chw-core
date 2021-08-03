@@ -22,5 +22,7 @@
     <color name="disabled_button_background">#C6C6C6</color>
     <color name="holo_blue_light">#ff33b5e5</color>
     <color name="text_gray">#A4A4A4</color>
+    <color name="background_alert_green">#B3EDC3</color>
+    <color name="background_alert_red">#FFBDBD</color>
 
 </resources>

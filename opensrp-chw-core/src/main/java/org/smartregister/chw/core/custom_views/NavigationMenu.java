@@ -210,11 +210,19 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         // update all actions
 
         if (menuFlavor.hasSyncProgressBar()) {
+            hideSyncTimeViews();
             checkSynced();
         } else {
             mPresenter.refreshLastSync();
         }
         mPresenter.refreshNavigationCount(activity);
+    }
+
+    private void hideSyncTimeViews() {
+        TextView syncTimeTitleView = rootView.findViewById(R.id.tvSyncTimeTitle);
+        TextView syncTimeView = rootView.findViewById(R.id.tvSyncTime);
+        syncTimeTitleView.setVisibility(View.GONE);
+        syncTimeView.setVisibility(View.GONE);
     }
 
     private void checkSynced() {
@@ -286,8 +294,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void updateSyncStatusDisplay(Activity activity, boolean synced) {
         if (activity == null) return;
         NavigationView navigationView = activity.findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView syncLabel = headerView.findViewById(R.id.sync_label);
+        TextView syncLabel = navigationView.findViewById(R.id.sync_label);
         if (syncLabel != null) {
             if (synced) {
                 syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
