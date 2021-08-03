@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.google.android.material.navigation.NavigationView;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.smartregister.chw.core.R;
@@ -40,8 +42,11 @@ import org.smartregister.chw.core.model.NavigationOption;
 import org.smartregister.chw.core.presenter.NavigationPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.domain.FetchStatus;
+import org.smartregister.domain.SyncProgress;
+import org.smartregister.receiver.SyncProgressBroadcastReceiver;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.util.LangUtils;
+import org.smartregister.util.NetworkUtils;
 import org.smartregister.util.PermissionUtils;
 
 import java.lang.ref.WeakReference;
@@ -57,7 +62,8 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener , NavigationAdapterHost {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener,
+        SyncProgressBroadcastReceiver.SyncProgressListener, DrawerLayout.DrawerListener, NavigationAdapterHost {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -77,6 +83,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private View parentView;
     private Timer timer;
     private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
+    private SyncProgressBroadcastReceiver syncProgressBroadcastReceiver = new SyncProgressBroadcastReceiver(this);
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
                                            NavigationModel.Flavor modelFlavor, Map<String, Class> registeredActivities, boolean showDeviceToDeviceSync) {
@@ -199,8 +206,17 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
 
         // update all actions
-        mPresenter.refreshLastSync();
+
+        if (menuFlavor.hasSyncProgressBar()) {
+            checkSynced();
+        } else {
+            mPresenter.refreshLastSync();
+        }
         mPresenter.refreshNavigationCount(activity);
+    }
+
+    private void checkSynced() {
+        mPresenter.checkSynced(activityWeakReference.get());
     }
 
     @Override
@@ -242,12 +258,55 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    @Override
+    public void toggleProgressBarView(boolean syncing) {
+        Activity activity = activityWeakReference.get();
+        if (activity != null && menuFlavor.hasSyncProgressBar()) {
+            TextView syncBadge = activity.findViewById(R.id.sync_label);
+            ProgressBar progressBar = activity.findViewById(R.id.sync_progress_bar);
+            TextView progressLabel = activity.findViewById(R.id.sync_progress_bar_label);
+            if (progressBar == null || syncBadge == null)
+                return;
+            if (syncing && NetworkUtils.isNetworkAvailable()) {
+                // Only hide the sync button when there is internet connection
+                progressBar.setVisibility(View.VISIBLE);
+                progressLabel.setVisibility(View.VISIBLE);
+                syncBadge.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+                progressLabel.setVisibility(View.GONE);
+                syncBadge.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void updateSyncStatusDisplay(Activity activity, boolean synced) {
+        if (activity == null) return;
+        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView syncLabel = headerView.findViewById(R.id.sync_label);
+        if (syncLabel != null) {
+            if (synced) {
+                syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
+                syncLabel.setText(activity.getApplicationContext().getString(R.string.device_data_synced));
+                syncLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_complete_green));
+                syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_green));
+            } else {
+                syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_oval));
+                syncLabel.setText(activity.getApplicationContext().getString(R.string.device_data_not_synced));
+                syncLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_urgent_red));
+                syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
+            }
+        }
+    }
+
     private void registerServiceActivity(Activity activity) {
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
-                activity.startActivity( menuFlavor.getHIA2ReportActivityIntent(activity));
+                activity.startActivity(menuFlavor.getHIA2ReportActivityIntent(activity));
             });
         }
     }
@@ -413,8 +472,15 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     @Override
     public void onSyncStart() {
-        // set the sync icon to be a rotating menu
-        refreshSyncProgressSpinner();
+        if (menuFlavor.hasSyncProgressBar()) {
+            if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
+                // Show sync status progress bar
+                toggleProgressBarView(true);
+            }
+        } else {
+            // set the sync icon to be a rotating menu
+            refreshSyncProgressSpinner();
+        }
     }
 
     @Override
@@ -423,12 +489,23 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     @Override
+    public void onSyncProgress(SyncProgress syncProgress) {
+
+    }
+
+    @Override
     public void onSyncComplete(FetchStatus fetchStatus) {
-        // hide the rotating menu
-        refreshSyncProgressSpinner();
-        // update the time
-        mPresenter.refreshLastSync();
-        // refreshLastSync(new Date());
+        if (menuFlavor.hasSyncProgressBar()) {
+            if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
+                toggleProgressBarView(false);
+            }
+        } else {
+            // hide the rotating menu
+            refreshSyncProgressSpinner();
+            // update the time
+            mPresenter.refreshLastSync();
+            // refreshLastSync(new Date());
+        }
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
@@ -490,9 +567,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void setSelectedView(String selectedView) {
         NavigationMenu.selectedView = selectedView;
     }
-  
-    public static String getChildNavigationCountString(){
-       return menuFlavor.childNavigationMenuCountString();
+
+    public static String getChildNavigationCountString() {
+        return menuFlavor.childNavigationMenuCountString();
     }
 
     public interface Flavour {
@@ -505,6 +582,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         boolean hasStockReport();
 
         boolean hasCommunityResponders();
+
+        boolean hasSyncProgressBar();
 
         Intent getStockReportIntent(Activity activity);
 
