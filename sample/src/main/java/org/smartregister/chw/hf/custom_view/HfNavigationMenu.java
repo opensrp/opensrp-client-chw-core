@@ -63,7 +63,7 @@ public class HfNavigationMenu implements NavigationMenu.Flavour {
     }
 
     @Override
-    public boolean hasSyncProgressBar() {
+    public boolean hasSyncStatusProgressBar() {
         return false;
     }
 
