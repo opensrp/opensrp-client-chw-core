@@ -426,6 +426,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:indeterminate="false"
+                        android:indeterminateTint="@color/colorGreen"
                         android:max="100"
                         android:visibility="invisible" />
                 </LinearLayout>

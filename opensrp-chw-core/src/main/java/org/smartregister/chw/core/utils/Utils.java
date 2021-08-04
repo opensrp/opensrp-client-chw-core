@@ -891,7 +891,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             case TASKS:
                 return context.getString(R.string.tasks_text);
             default:
-                throw new IllegalStateException("Invalid Sync Entity");
+                return "";
         }
     }
 
