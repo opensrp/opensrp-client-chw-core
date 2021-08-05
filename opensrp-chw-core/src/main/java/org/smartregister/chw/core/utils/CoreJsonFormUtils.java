@@ -64,8 +64,16 @@ import java.util.TimeZone;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DBLocation.FAMILY_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.DBLocation.FAMILY_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.DBLocation.FAMILY_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.DBLocation.FAMILY_WARD;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_WARD;
 
 /**
  * Created by keyman on 13/11/2018.
@@ -367,6 +375,22 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case DBConstants.KEY.UNIQUE_ID:
                 String uniqueId = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.UNIQUE_ID, false);
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, uniqueId.replace("-", ""));
+                break;
+            case FAMILY_LOCATION_STATE:
+                String stateValue = Utils.getValue(client.getColumnmaps(), FAMILY_STATE, false);
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, stateValue);
+                break;
+            case FAMILY_LOCATION_LGA:
+                String lgaValue = Utils.getValue(client.getColumnmaps(), FAMILY_LGA, false);
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, lgaValue);
+                break;
+            case FAMILY_LOCATION_WARD:
+                String wardValue = Utils.getValue(client.getColumnmaps(), FAMILY_WARD, false);
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, wardValue);
+                break;
+            case FAMILY_LOCATION_COMMUNITY:
+                String communityValue = Utils.getValue(client.getColumnmaps(), FAMILY_COMMUNITY, false);
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, communityValue);
                 break;
             case "fam_name":
                 String fam_name = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, false);

@@ -1022,6 +1022,20 @@ public class CoreConstants {
     }
 
 
+    public static class LOCATIONS {
+        public static final String FAMILY_LOCATION_STATE = "state";
+        public static final String FAMILY_LOCATION_LGA = "lga";
+        public static final String FAMILY_LOCATION_WARD = "ward";
+        public static final String FAMILY_LOCATION_COMMUNITY = "community";
+    }
+
+    public static class DBLocation {
+        public static final String FAMILY_STATE = "family_state";
+        public static final String FAMILY_LGA = "family_lga";
+        public static final String FAMILY_WARD = "family_ward";
+        public static final String FAMILY_COMMUNITY = "family_community";
+    }
+
     public static class ThinkMdConstants {
         public static String CARE_PLAN_DATE = "care_plan_date";
         public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
