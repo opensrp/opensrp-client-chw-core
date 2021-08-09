@@ -4,6 +4,7 @@ import android.util.Pair;
 import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
@@ -89,19 +90,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
             JSONObject clientJson = null;
             JSONObject eventJson = null;
 
-            if (baseClient != null) {
-                clientJson = new JSONObject(JsonFormUtils.gson.toJson(baseClient));
-                if (isEditMode) {
-                    JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
-                } else {
-                    getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
-                }
-            }
-
-            if (baseEvent != null) {
-                eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
-                getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, BaseRepository.TYPE_Unsynced);
-            }
+            checkBaseClientEvent(baseClient, baseEvent, clientJson, isEditMode, eventJson);
 
             if (isEditMode) {
                 // Unassign current OPENSRP ID
@@ -128,15 +117,8 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
                 JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
             }
 
-
             List<EventClient> eventClientList = new ArrayList<>();
-
-            org.smartregister.domain.Event domainEvent = (eventJson != null) ?
-                    JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
-            org.smartregister.domain.Client domainClient = (clientJson != null) ?
-                    JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
-
-            eventClientList.add(new EventClient(domainEvent, domainClient));
+            fillEventClientList(eventJson, clientJson, eventClientList);
 
             long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
@@ -148,6 +130,31 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
             return false;
         }
         return true;
+    }
+
+    private void fillEventClientList(JSONObject eventJson, JSONObject clientJson, List<EventClient> eventClientList) {
+        org.smartregister.domain.Event domainEvent = (eventJson != null) ?
+                JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
+        org.smartregister.domain.Client domainClient = (clientJson != null) ?
+                JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
+
+        eventClientList.add(new EventClient(domainEvent, domainClient));
+    }
+
+    private void checkBaseClientEvent(Client baseClient, Event baseEvent, JSONObject clientJson, boolean isEditMode, JSONObject eventJson) throws Exception {
+        if (baseClient != null) {
+            clientJson = new JSONObject(JsonFormUtils.gson.toJson(baseClient));
+            if (isEditMode) {
+                JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
+            } else {
+                getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
+            }
+        }
+
+        if (baseEvent != null) {
+            eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
+            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, BaseRepository.TYPE_Unsynced);
+        }
     }
 
     public ECSyncHelper getSyncHelper() {
@@ -166,5 +173,4 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
         return CoreChwApplication.getInstance().getUniqueIdRepository();
     }
 
-    public enum type {SAVED, UPDATED}
 }
