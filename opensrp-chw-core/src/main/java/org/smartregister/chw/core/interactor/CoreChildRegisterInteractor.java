@@ -4,7 +4,6 @@ import android.util.Pair;
 import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.CoreChildRegisterContract;
@@ -90,7 +89,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
             JSONObject clientJson = null;
             JSONObject eventJson = null;
 
-            checkBaseClientEvent(baseClient, baseEvent, clientJson, isEditMode, eventJson);
+            checkBaseClientEvent(baseClient, baseEvent, isEditMode);
 
             if (isEditMode) {
                 // Unassign current OPENSRP ID
@@ -114,6 +113,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
             if (baseClient != null || baseEvent != null) {
                 String imageLocation = JsonFormUtils.getFieldValue(jsonString, Constants.KEY.PHOTO);
+                assert baseClient != null;
                 JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
             }
 
@@ -141,19 +141,17 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
         eventClientList.add(new EventClient(domainEvent, domainClient));
     }
 
-    private void checkBaseClientEvent(Client baseClient, Event baseEvent, JSONObject clientJson, boolean isEditMode, JSONObject eventJson) throws Exception {
+    private void checkBaseClientEvent(Client baseClient, Event baseEvent, boolean isEditMode) throws Exception {
         if (baseClient != null) {
-            clientJson = new JSONObject(JsonFormUtils.gson.toJson(baseClient));
             if (isEditMode) {
                 JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
             } else {
-                getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
+                getSyncHelper().addClient(baseClient.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseClient)));
             }
         }
 
         if (baseEvent != null) {
-            eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
-            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, BaseRepository.TYPE_Unsynced);
+            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseEvent)), BaseRepository.TYPE_Unsynced);
         }
     }
 
