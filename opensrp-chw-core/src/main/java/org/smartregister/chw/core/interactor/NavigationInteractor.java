@@ -99,7 +99,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
 
     private String getBirthSummarySize() {
         if (NavigationMenu.getChildNavigationCountString() == null) {
-            return "Select ((Select count(*) from ec_child LEFT JOIN ec_family ON  ec_child.relational_id = ec_family.id COLLATE NOCASE  LEFT JOIN ec_family_member ON ec_family_member.base_entity_id = ec_family.primary_caregiver COLLATE NOCASE  LEFT JOIN (select base_entity_id , max(visit_date) visit_date from visits GROUP by base_entity_id) VISIT_SUMMARY ON VISIT_SUMMARY.base_entity_id = ec_child.base_entity_id WHERE  ec_child.date_removed is null AND ((( julianday('now') - julianday(ec_child.dob))/365.25) <5)   and (( ifnull(ec_child.entry_point,'') <> 'PNC' ) or (ifnull(ec_child.entry_point,'') = 'PNC' and ( date(ec_child.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 0))) or (ifnull(ec_child.entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 1)) and ((( julianday('now') - julianday(ec_child.dob))/365.25) < 5)) + (Select count(*) from ec_out_of_area_child)) as sumcount";
+            return QueryUtils.countBirthSummary;
         } else {
             return NavigationMenu.getChildNavigationCountString();
         }
@@ -157,12 +157,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(allClients);
 
             case Constants.Tables.REFERRAL:
-                String sqlReferral = "select count(*) " +
-                        "from " + Constants.Tables.REFERRAL + " p " +
-                        "inner join ec_family_member m on p.entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "inner join task t on p.id = t.reason_reference COLLATE NOCASE " +
-                        "where m.date_removed is null and t.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "' ";
+                String sqlReferral = QueryUtils.countReferral;
                 return NavigationDao.getQueryCount(sqlReferral);
 
             case CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:

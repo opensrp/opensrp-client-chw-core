@@ -1,11 +1,9 @@
 package org.smartregister.chw.core.utils;
 
 import android.content.res.AssetManager;
-
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.malaria.util.Constants;
-
 import java.util.Locale;
 
 public class CoreConstants {

@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.utils;
 
+import org.smartregister.chw.referral.util.Constants;
+
 public class QueryUtils {
 
     public static String countEcFamily = "select count(*) from ec_family where date_removed is null AND (entity_type = 'ec_family' OR entity_type = 'ec_family_member' OR entity_type IS NULL)";
@@ -21,6 +23,13 @@ public class QueryUtils {
             "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
             "where m.date_removed is null and p.is_closed = 0 AND p.malaria = 1 " +
             "AND datetime('NOW') <= datetime(p.last_interacted_with/1000, 'unixCoreDeadClientsProviderepoch', 'localtime','+15 days')";
+    public static String countReferral = "select count(*) " +
+            "from " + Constants.Tables.REFERRAL + " p " +
+            "inner join ec_family_member m on p.entity_id = m.base_entity_id COLLATE NOCASE " +
+            "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+            "inner join task t on p.id = t.reason_reference COLLATE NOCASE " +
+            "where m.date_removed is null and t.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "' ";
+    public static String countBirthSummary = "Select ((Select count(*) from ec_child LEFT JOIN ec_family ON  ec_child.relational_id = ec_family.id COLLATE NOCASE  LEFT JOIN ec_family_member ON ec_family_member.base_entity_id = ec_family.primary_caregiver COLLATE NOCASE  LEFT JOIN (select base_entity_id , max(visit_date) visit_date from visits GROUP by base_entity_id) VISIT_SUMMARY ON VISIT_SUMMARY.base_entity_id = ec_child.base_entity_id WHERE  ec_child.date_removed is null AND ((( julianday('now') - julianday(ec_child.dob))/365.25) <5)   and (( ifnull(ec_child.entry_point,'') <> 'PNC' ) or (ifnull(ec_child.entry_point,'') = 'PNC' and ( date(ec_child.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 0))) or (ifnull(ec_child.entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 1)) and ((( julianday('now') - julianday(ec_child.dob))/365.25) < 5)) + (Select count(*) from ec_out_of_area_child)) as sumcount";
     public static String countEcFamilyPlanning = "select count(*) " +
             "from ec_family_planning p " +
             "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
