@@ -158,4 +158,9 @@ public class FamilyProfileActivity extends CoreFamilyProfileActivity {
     public FamilyProfilePresenter getFamilyProfilePresenter() {
         return (FamilyProfilePresenter) presenter;
     }
+
+    @Override
+    public void setEventDate(String eventDate) {
+
+    }
 }

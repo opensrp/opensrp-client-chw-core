@@ -112,7 +112,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     private void init(Activity activity, View myParentView, Toolbar myToolbar) {
-        // parentActivity = activity;
         try {
             setParentView(activity, parentView);
             toolbar = myToolbar;
@@ -290,7 +289,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (recyclerView != null) {
 
             List<NavigationOption> navigationOptions = mPresenter.getOptions();
-            navigationAdapter = new NavigationAdnapter(navigationOptions, parentActivity, registeredActivities, this);
+            navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

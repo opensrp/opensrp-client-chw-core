@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.presenter;
 
 import android.app.Activity;
-
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.interactor.NavigationInteractor;
@@ -17,12 +16,10 @@ import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.SyncTaskServiceJob;
-
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import timber.log.Timber;
 
 public class NavigationPresenter implements NavigationContract.Presenter {
@@ -55,6 +52,10 @@ public class NavigationPresenter implements NavigationContract.Presenter {
         tableMap.put(CoreConstants.DrawerMenu.FAMILY_PLANNING, FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE);
         tableMap.put(CoreConstants.DrawerMenu.ALL_CLIENTS, CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         tableMap.put(CoreConstants.DrawerMenu.UPDATES, CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE);
+        tableMap.put(CoreConstants.DrawerMenu.BIRTH_NOTIFICATION, CoreConstants.TABLE_NAME.BIRTH_CERTIFICATE);
+        tableMap.put(CoreConstants.DrawerMenu.DEATH_NOTIFICATION, CoreConstants.TABLE_NAME.DEATH_CERTIFICATE);
+        tableMap.put(CoreConstants.DrawerMenu.OUT_OF_AREA_CHILD, CoreConstants.TABLE_NAME.OUT_OF_AREA_CHILD);
+        tableMap.put(CoreConstants.DrawerMenu.OUT_OF_AREA_DEATH, CoreConstants.TABLE_NAME.OUT_OF_AREA_DEATH);
     }
 
     public HashMap<String, String> getTableMap() {

@@ -171,6 +171,13 @@
             "creates_case": [
               "ec_pnc_referral"
             ]
+          },
+          {
+            "field": "eventType",
+            "field_value": "Out Of Area Child Registration",
+            "creates_case": [
+              "ec_out_of_area_child"
+            ]
           }
         ]
       }

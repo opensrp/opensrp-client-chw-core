@@ -290,6 +290,7 @@
         }
       ]
     },
+
     {
       "name": "ec_child",
       "columns": [
@@ -387,43 +388,19 @@
           }
         },
         {
+          "column_name": "low_birth_weight",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "1431AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        },
+        {
           "column_name": "physically_challenged",
           "type": "Event",
           "json_mapping": {
             "field": "obs.fieldCode",
-            "concept": "162558AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          }
-        },
-        {
-          "column_name": "type_of_disability",
-          "type": "Event",
-          "json_mapping": {
-            "field": "obs.fieldCode",
-            "concept": "160632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          }
-        },
-        {
-          "column_name": "birth_cert",
-          "type": "Event",
-          "json_mapping": {
-            "field": "obs.fieldCode",
-            "concept": "165406AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          }
-        },
-        {
-          "column_name": "rhc_card",
-          "type": "Event",
-          "json_mapping": {
-            "field": "obs.fieldCode",
-            "concept": "164147AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          }
-        },
-        {
-          "column_name": "nutrition_status",
-          "type": "Event",
-          "json_mapping": {
-            "field": "obs.fieldCode",
-            "concept": "163301AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "concept": "159522AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
         },
         {
@@ -464,6 +441,14 @@
           }
         },
         {
+          "column_name": "birth_cert",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "165406AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        },
+        {
           "column_name": "birth_cert_issue_date",
           "type": "Event",
           "json_mapping": {
@@ -484,7 +469,7 @@
           "type": "Event",
           "json_mapping": {
             "field": "obs.fieldCode",
-            "formSubmissionField": "birth_notification"
+            "concept": "165405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
         },
         {
@@ -520,28 +505,32 @@
           }
         },
         {
-          "column_name": "insurance_provider",
-          "type": "Client",
+          "column_name": "received_death_certificate",
+          "type": "Event",
           "json_mapping": {
-            "field": "attributes.insurance_provider"
+            "field": "obs.fieldCode",
+            "formSubmissionField": "receivedDeathCertificate"
           }
         },
         {
-          "column_name": "insurance_provider_other",
-          "type": "Client",
+          "column_name": "death_certificate_issue_date",
+          "type": "Event",
           "json_mapping": {
-            "field": "attributes.Other_Health_Insurance_Type"
+            "field": "obs.fieldCode",
+            "formSubmissionField": "deathCertificateIssueDate"
           }
         },
         {
-          "column_name": "insurance_provider_number",
-          "type": "Client",
+          "column_name": "birth_registration",
+          "type": "Event",
           "json_mapping": {
-            "field": "attributes.Health_Insurance_Number"
+            "field": "obs.fieldCode",
+            "formSubmissionField": "birthRegistration"
           }
         }
       ]
     },
+
     {
       "name": "ec_child_activity",
       "columns": [

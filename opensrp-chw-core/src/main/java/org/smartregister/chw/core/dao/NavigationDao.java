@@ -8,7 +8,7 @@ import java.util.List;
 
 public class NavigationDao extends AbstractDao {
 
-    public static Integer getQueryCount(String sql) {
+        public static Integer getQueryCount(String sql) {
 
         DataMap<Integer> dataMap = c -> c.getType(0) == Cursor.FIELD_TYPE_NULL ? null : c.getInt(0);
         List<Integer> values = AbstractDao.readData(sql, dataMap);

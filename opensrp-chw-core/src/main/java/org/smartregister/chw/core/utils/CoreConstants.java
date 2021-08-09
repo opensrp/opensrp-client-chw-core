@@ -103,7 +103,7 @@ public class CoreConstants {
     }
 
     public static final class EventType {
-        public static final String BIRTH_CERTIFICATION = "Birth Certification";
+            public static final String BIRTH_CERTIFICATION = "Birth Certification";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -657,6 +657,10 @@ public class CoreConstants {
         public static final String FAMILY_MEMBER = "ec_family_member";
         public static final String CHILD = "ec_child";
         public static final String CHILD_ACTIVITY = "ec_child_activity";
+        public static final String BIRTH_CERTIFICATE = "birth_certification";
+        public static final String DEATH_CERTIFICATE = "death_certification";
+        public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
+        public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
         public static final String ANC_MEMBER = "ec_anc_register";
         public static final String PNC_MEMBER = "ec_pregnancy_outcome";
         public static final String ANC_MEMBER_LOG = "ec_anc_log";
@@ -726,6 +730,10 @@ public class CoreConstants {
         public static final String ANC = "ANC";
         public static final String LD = "L&D";
         public static final String PNC = "PNC";
+        public static final String BIRTH_NOTIFICATION = "Birth Notification";
+        public static final String DEATH_NOTIFICATION = "Death Notification";
+        public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
+        public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
@@ -964,6 +972,10 @@ public class CoreConstants {
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
+        public static final String BNOTIFICATION_REGISTER_ACTIVITY = "BNOTIFICATION_REGISTER_ACTIVITY";
+        public static final String DEATH_NOTIFICATION_REGISTER_ACTIVITY = "DEATH_NOTIFICATION_REGISTER_ACTIVITY";
+        public static final String OUT_OF_AREA_REGISTER_ACTIVITY = "OUT_OF_AREA_REGISTER_ACTIVITY";
+        public static final String OUT_OF_AREA_DEATH_ACTIVITY = "OUT_OF_AREA_DEATH_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
     }

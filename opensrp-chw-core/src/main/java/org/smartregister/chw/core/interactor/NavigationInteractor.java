@@ -88,6 +88,38 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         }
     }
 
+    private String getDeathCertificateSqlString() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select (SELECT count(*) from ec_family_member LEFT JOIN ec_family ON ec_family_member.base_entity_id = ec_family.primary_caregiver COLLATE NOCASE WHERE ec_family_member.is_closed = 1) + (Select count(*) FROM ec_child LEFT JOIN ec_family ON  ec_child.relational_id = ec_family.id COLLATE NOCASE LEFT JOIN ec_family_member ON  ec_family_member.base_entity_id = ec_family.primary_caregiver COLLATE NOCASE  LEFT JOIN (select base_entity_id , max(visit_date) visit_date from visits GROUP by base_entity_id) VISIT_SUMMARY ON VISIT_SUMMARY.base_entity_id = ec_child.base_entity_id WHERE  ec_child.is_closed is 1) + (Select count(*) from ec_pregnancy_outcome LEFT JOIN ec_family_member ON ec_pregnancy_outcome.base_entity_id = ec_family_member.base_entity_id LEFT JOIN ec_family ON  ec_pregnancy_outcome.relational_id = ec_family.id COLLATE NOCASE WHERE ec_pregnancy_outcome.preg_outcome = 'Stillbirth' ) + (Select count(*) from ec_out_of_area_death ) as sumcount";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
+    private String getBirthSummarySize() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select ((Select count(*) from ec_child LEFT JOIN ec_family ON  ec_child.relational_id = ec_family.id COLLATE NOCASE  LEFT JOIN ec_family_member ON ec_family_member.base_entity_id = ec_family.primary_caregiver COLLATE NOCASE  LEFT JOIN (select base_entity_id , max(visit_date) visit_date from visits GROUP by base_entity_id) VISIT_SUMMARY ON VISIT_SUMMARY.base_entity_id = ec_child.base_entity_id WHERE  ec_child.date_removed is null AND ((( julianday('now') - julianday(ec_child.dob))/365.25) <5)   and (( ifnull(ec_child.entry_point,'') <> 'PNC' ) or (ifnull(ec_child.entry_point,'') = 'PNC' and ( date(ec_child.dob, '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 0))) or (ifnull(ec_child.entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 1)) and ((( julianday('now') - julianday(ec_child.dob))/365.25) < 5)) + (Select count(*) from ec_out_of_area_child)) as sumcount";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
+    private String getOutOfAreaChildSize() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select count(*) from ec_out_of_area_child";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
+    private String getOutOfAreaDeathSize() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select count(*) from ec_out_of_area_death";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
     private int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
@@ -125,7 +157,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                         "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                         "where m.date_removed is null and p.is_closed = 0 AND p.malaria = 1 " +
-                        "AND datetime('NOW') <= datetime(p.last_interacted_with/1000, 'unixepoch', 'localtime','+15 days')";
+                        "AND datetime('NOW') <= datetime(p.last_interacted_with/1000, 'unixCoreDeadClientsProviderepoch', 'localtime','+15 days')";
                 return NavigationDao.getQueryCount(sqlMalaria);
 
             case FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE:
@@ -270,6 +302,22 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
+
+            case CoreConstants.TABLE_NAME.BIRTH_CERTIFICATE:
+                String birthCertification = getBirthSummarySize();
+                return NavigationDao.getQueryCount(birthCertification);
+
+            case CoreConstants.TABLE_NAME.DEATH_CERTIFICATE:
+                String deathCertification = getDeathCertificateSqlString();
+                return NavigationDao.getQueryCount(deathCertification);
+
+            case CoreConstants.TABLE_NAME.OUT_OF_AREA_CHILD:
+                String outOfAreaChild = getOutOfAreaChildSize();
+                return NavigationDao.getQueryCount(outOfAreaChild);
+
+            case CoreConstants.TABLE_NAME.OUT_OF_AREA_DEATH:
+                String outOfAreaDeath = getOutOfAreaDeathSize();
+                return NavigationDao.getQueryCount(outOfAreaDeath);
 
             default:
                 return NavigationDao.getTableCount(tableName);

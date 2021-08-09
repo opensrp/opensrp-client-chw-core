@@ -2,7 +2,6 @@ package org.smartregister.chw.core.dao;
 
 import org.smartregister.chw.core.model.CoreFamilyMemberModel;
 import org.smartregister.dao.AbstractDao;
-
 import java.util.List;
 
 public class FamilyMemberDao extends AbstractDao {
@@ -24,6 +23,19 @@ public class FamilyMemberDao extends AbstractDao {
     public static List<CoreFamilyMemberModel> getMaleFamilyMembers(String relationalID) {
         String sql = String.format("SELECT * FROM ec_family_member WHERE relational_id = '" + relationalID + "' " +
                 "AND gender = 'Male' AND entity_type = 'ec_family_member'");
+
+        DataMap<CoreFamilyMemberModel> dataMap = cursor ->
+                new CoreFamilyMemberModel(getCursorValue(cursor, "last_name"),
+                        getCursorValue(cursor, "first_name"),
+                        getCursorValue(cursor, "base_entity_id"),
+                        getCursorValue(cursor, "relational_id"),
+                        getCursorValue(cursor, "entity_type"));
+
+        return readData(sql, dataMap);
+    }
+
+    public static List<CoreFamilyMemberModel> getAliveOrDeadFamilyMembers(String status) {
+        String sql = String.format("SELECT * FROM ec_family_member WHERE is_closed = '" + status + "' ");
 
         DataMap<CoreFamilyMemberModel> dataMap = cursor ->
                 new CoreFamilyMemberModel(getCursorValue(cursor, "last_name"),

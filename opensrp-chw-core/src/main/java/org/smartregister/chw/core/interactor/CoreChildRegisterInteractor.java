@@ -1,9 +1,7 @@
 package org.smartregister.chw.core.interactor;
 
 import android.util.Pair;
-
 import androidx.annotation.VisibleForTesting;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -22,16 +20,11 @@ import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import timber.log.Timber;
 
-/**
- * Created by keyman 12/11/2018.
- */
 public class CoreChildRegisterInteractor implements CoreChildRegisterContract.Interactor {
 
     public static final String TAG = CoreChildRegisterInteractor.class.getName();
@@ -72,15 +65,9 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
     @Override
     public void saveRegistration(final Pair<Client, Event> pair, final String jsonString, final boolean isEditMode, final CoreChildRegisterContract.InteractorCallBack callBack) {
-
-        //   Runnable runnable = () -> {
         if (saveRegistration(pair, jsonString, isEditMode)) {
             callBack.onRegistrationSaved(isEditMode, true, null);
         }
-        //    appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode));
-        // };
-
-        // appExecutors.diskIO().execute(runnable);
     }
 
     @Override
@@ -143,6 +130,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
 
             List<EventClient> eventClientList = new ArrayList<>();
+
             org.smartregister.domain.Event domainEvent = (eventJson != null) ?
                     JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
             org.smartregister.domain.Client domainClient = (clientJson != null) ?

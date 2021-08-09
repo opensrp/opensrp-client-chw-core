@@ -283,6 +283,35 @@ public class VisitDao extends AbstractDao {
         return detailsMap;
     }
 
+    public static Map<String, List<VisitDetail>> getVisitHistory(String baseEntityID, String visitType) {
+        String sql = "select visits.visit_id, visits.visit_date, visits.base_entity_id, visits.visit_type, visits.visit_json, visits.pre_processed " +
+                "from visits " +
+                "where visits.base_entity_id  = '" + baseEntityID + "' AND visits.visit_type  = '" + visitType + "' order by visits.visit_date desc ";
+
+        DataMap<VisitDetail> dataMap = c -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setVisitId(getCursorValue(c, "visit_id"));
+            detail.setBaseEntityId(getCursorValue(c, "base_entity_id"));
+            detail.setJsonDetails(getCursorValue(c, "visit_json"));
+            return detail;
+        };
+
+        HashMap<String, List<VisitDetail>> detailsMap = new LinkedHashMap<>();
+
+        List<VisitDetail> details = readData(sql, dataMap);
+        if (details != null) {
+            for (VisitDetail d : details) {
+                List<VisitDetail> currentDetails = detailsMap.get(d.getVisitId());
+                if (currentDetails == null) currentDetails = new ArrayList<>();
+
+                currentDetails.add(d);
+                detailsMap.put(d.getVisitId(), currentDetails);
+            }
+        }
+
+        return detailsMap;
+    }
+
     public static List<Visit> getVisitsByMemberID(String baseEntityID) {
         String sql = "SELECT * from visits WHERE base_entity_id  = '" + baseEntityID + "' COLLATE NOCASE " +
                 " OR base_entity_id = (SELECT base_entity_id from ec_child WHERE mother_entity_id  = '" + baseEntityID + "' COLLATE NOCASE )";
