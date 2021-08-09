@@ -8,11 +8,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,27 +32,19 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildRegisterFragmentContract;
-import org.smartregister.chw.core.mock.MockCoreBirthNotificationFragment;
-import org.smartregister.chw.core.mock.MockCoreFpRegisterFragment;
-import org.smartregister.chw.core.presenter.CoreChildRegisterFragmentPresenter;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
 
 public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
 
@@ -162,21 +152,6 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void testOnViewClickedOpensProfile() {
-        FragmentActivity registerActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
-        MockCoreBirthNotificationFragment coreFpRegisterFragment = Mockito.spy(new MockCoreBirthNotificationFragment());
-        Context.bindtypes = new ArrayList<>();
-        Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
-        Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
-        registerActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
-        when(view.getTag(org.smartregister.family.R.id.VIEW_ID)).thenReturn(CLICK_VIEW_NORMAL);
-        CommonPersonObjectClient client = new CommonPersonObjectClient("12", null, "");
-        client.setColumnmaps(new HashMap<String, String>());
-        when(view.getTag()).thenReturn(client);
-        coreFpRegisterFragment.onViewClicked(view);
-    }
-
-    @Test
     public void getDueCondition() {
         String expectedDueCondition = String.format(" %s.%s is null AND %s", CoreConstants.TABLE_NAME.CHILD, DBConstants.KEY.DATE_REMOVED, ChildDBConstants.childAgeLimitFilter()) +" AND "+ChildDBConstants.childDueFilter();
         assertEquals(expectedDueCondition, coreFpRegisterFragment.getDueFilterCondition());
@@ -189,8 +164,8 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         coreFpRegisterFragment.toggleFilterSelection(view);
 
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+        verify(coreFpRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
+        assertEquals(captor.getValue(), view);
     }
 
     @After
