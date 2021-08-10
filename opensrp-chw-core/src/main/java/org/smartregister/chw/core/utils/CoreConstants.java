@@ -1029,7 +1029,7 @@ public class CoreConstants {
         public static final String FAMILY_LOCATION_COMMUNITY = "community";
     }
 
-    public static class DBLocation {
+    public static class DB_LOCATION {
         public static final String FAMILY_STATE = "family_state";
         public static final String FAMILY_LGA = "family_lga";
         public static final String FAMILY_WARD = "family_ward";
