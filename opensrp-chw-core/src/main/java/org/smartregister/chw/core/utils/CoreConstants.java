@@ -1022,14 +1022,14 @@ public class CoreConstants {
     }
 
 
-    public static class JSON_FORM_KEY {
+    public static class familyJsonFormKey {
         public static final String FAMILY_LOCATION_STATE = "state";
         public static final String FAMILY_LOCATION_LGA = "lga";
         public static final String FAMILY_LOCATION_WARD = "ward";
         public static final String FAMILY_LOCATION_COMMUNITY = "community";
     }
 
-    public static class DB_LOCATION {
+    public static class DbLocation {
         public static final String FAMILY_STATE = "family_state";
         public static final String FAMILY_LGA = "family_lga";
         public static final String FAMILY_WARD = "family_ward";
