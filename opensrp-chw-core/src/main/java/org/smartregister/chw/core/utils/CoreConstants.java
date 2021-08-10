@@ -69,6 +69,10 @@ public class CoreConstants {
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
         String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
+        String FAMILY_STATE = "family_state";
+        String FAMILY_LGA = "family_lga";
+        String FAMILY_WARD = "family_ward";
+        String FAMILY_COMMUNITY = "family_community";
     }
 
     public interface SERVICE_GROUPS {
@@ -686,6 +690,10 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
+        public static final String FAMILY_LOCATION_STATE = "state";
+        public static final String FAMILY_LOCATION_LGA = "lga";
+        public static final String FAMILY_LOCATION_WARD = "ward";
+        public static final String FAMILY_LOCATION_COMMUNITY = "community";
     }
 
     public static final class INTENT_KEY {
@@ -1017,23 +1025,8 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
-    public static class AncHealthFacilityVisitUtil{
-        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
-    }
-
-
-    public static class familyJsonFormKey {
-        public static final String FAMILY_LOCATION_STATE = "state";
-        public static final String FAMILY_LOCATION_LGA = "lga";
-        public static final String FAMILY_LOCATION_WARD = "ward";
-        public static final String FAMILY_LOCATION_COMMUNITY = "community";
-    }
-
-    public static class DbLocation {
-        public static final String FAMILY_STATE = "family_state";
-        public static final String FAMILY_LGA = "family_lga";
-        public static final String FAMILY_WARD = "family_ward";
-        public static final String FAMILY_COMMUNITY = "family_community";
+    public static class AncHealthFacilityVisitUtil {
+        public static final String TETANUS_TOXOID = "Tetanus toxoid (TT)";
     }
 
     public static class ThinkMdConstants {

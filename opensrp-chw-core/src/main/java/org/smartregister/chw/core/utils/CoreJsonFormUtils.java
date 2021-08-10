@@ -1,15 +1,15 @@
 package org.smartregister.chw.core.utils;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DbLocation.FAMILY_COMMUNITY;
-import static org.smartregister.chw.core.utils.CoreConstants.DbLocation.FAMILY_LGA;
-import static org.smartregister.chw.core.utils.CoreConstants.DbLocation.FAMILY_STATE;
-import static org.smartregister.chw.core.utils.CoreConstants.DbLocation.FAMILY_WARD;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_WARD;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
-import static org.smartregister.chw.core.utils.CoreConstants.familyJsonFormKey.FAMILY_LOCATION_COMMUNITY;
-import static org.smartregister.chw.core.utils.CoreConstants.familyJsonFormKey.FAMILY_LOCATION_LGA;
-import static org.smartregister.chw.core.utils.CoreConstants.familyJsonFormKey.FAMILY_LOCATION_STATE;
-import static org.smartregister.chw.core.utils.CoreConstants.familyJsonFormKey.FAMILY_LOCATION_WARD;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_WARD;
 
 import android.content.Context;
 import android.content.Intent;
