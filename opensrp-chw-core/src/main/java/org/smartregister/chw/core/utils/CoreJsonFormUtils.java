@@ -6,10 +6,10 @@ import static org.smartregister.chw.core.utils.CoreConstants.DB_LOCATION.FAMILY_
 import static org.smartregister.chw.core.utils.CoreConstants.DB_LOCATION.FAMILY_WARD;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
-import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_COMMUNITY;
-import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_LGA;
-import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_STATE;
-import static org.smartregister.chw.core.utils.CoreConstants.LOCATIONS.FAMILY_LOCATION_WARD;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM_KEY.FAMILY_LOCATION_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM_KEY.FAMILY_LOCATION_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM_KEY.FAMILY_LOCATION_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM_KEY.FAMILY_LOCATION_WARD;
 
 import android.content.Context;
 import android.content.Intent;
