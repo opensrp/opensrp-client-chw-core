@@ -151,13 +151,6 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void getDueCondition() {
-        String expectedDueCondition = String.format(" %s.%s is null AND %s", CoreConstants.TABLE_NAME.CHILD, DBConstants.KEY.DATE_REMOVED, ChildDBConstants.childAgeLimitFilter()) +" AND "+ChildDBConstants.childDueFilter();
-        assertEquals(expectedDueCondition, coreFpRegisterFragment.getDueFilterCondition());
-    }
-
-
-    @Test
     public void whenToggleFilterSelectionAnswered() {
         Mockito.doNothing().when(coreFpRegisterFragment).toggleFilterSelection(view);
         coreFpRegisterFragment.toggleFilterSelection(view);
