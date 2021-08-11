@@ -91,31 +91,9 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
             checkBaseClientEvent(baseClient, baseEvent, isEditMode);
 
-            if (isEditMode) {
-                // Unassign current OPENSRP ID
-                if (baseClient != null) {
-                    String newOpenSRPId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey).replace("-", "");
-                    String currentOpenSRPId = JsonFormUtils.getString(jsonString, JsonFormUtils.CURRENT_OPENSRP_ID).replace("-", "");
-                    if (!newOpenSRPId.equals(currentOpenSRPId)) {
-                        //OPENSRP ID was changed
-                        getUniqueIdRepository().open(currentOpenSRPId);
-                    }
-                }
+            checkEditMode(isEditMode, baseClient, jsonString);
 
-            } else {
-                if (baseClient != null) {
-                    String opensrpId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey);
-
-                    //mark OPENSRP ID as used
-                    getUniqueIdRepository().close(opensrpId);
-                }
-            }
-
-            if (baseClient != null || baseEvent != null) {
-                String imageLocation = JsonFormUtils.getFieldValue(jsonString, Constants.KEY.PHOTO);
-                assert baseClient != null;
-                JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
-            }
+            saveImage(baseClient, baseEvent, jsonString);
 
             List<EventClient> eventClientList = new ArrayList<>();
             fillEventClientList(eventJson, clientJson, eventClientList);
@@ -130,6 +108,36 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
             return false;
         }
         return true;
+    }
+
+    private void saveImage(Client baseClient, Event baseEvent, String jsonString) {
+        if (baseClient != null || baseEvent != null) {
+            String imageLocation = JsonFormUtils.getFieldValue(jsonString, Constants.KEY.PHOTO);
+            assert baseClient != null;
+            JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
+        }
+    }
+
+    private void checkEditMode(boolean isEditMode, Client baseClient, String jsonString) {
+        if (isEditMode) {
+            // Unassign current OPENSRP ID
+            if (baseClient != null) {
+                String newOpenSRPId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey).replace("-", "");
+                String currentOpenSRPId = JsonFormUtils.getString(jsonString, JsonFormUtils.CURRENT_OPENSRP_ID).replace("-", "");
+                if (!newOpenSRPId.equals(currentOpenSRPId)) {
+                    //OPENSRP ID was changed
+                    getUniqueIdRepository().open(currentOpenSRPId);
+                }
+            }
+
+        } else {
+            if (baseClient != null) {
+                String opensrpId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey);
+
+                //mark OPENSRP ID as used
+                getUniqueIdRepository().close(opensrpId);
+            }
+        }
     }
 
     private void fillEventClientList(JSONObject eventJson, JSONObject clientJson, List<EventClient> eventClientList) {

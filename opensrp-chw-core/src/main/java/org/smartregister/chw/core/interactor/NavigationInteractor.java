@@ -124,28 +124,22 @@ public class NavigationInteractor implements NavigationContract.Interactor {
     private int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
-                String sqlChild = getChildSqlString();
-                return NavigationDao.getQueryCount(sqlChild);
+                return NavigationDao.getQueryCount(getChildSqlString());
 
             case CoreConstants.TABLE_NAME.FAMILY:
-                String sqlFamily = QueryUtils.countEcFamily;
-                return NavigationDao.getQueryCount(sqlFamily);
+                return NavigationDao.getQueryCount(sqlFamily());
 
             case CoreConstants.TABLE_NAME.ANC_MEMBER:
-                String sqlAncMember = QueryUtils.countAncMember;
-                return NavigationDao.getQueryCount(sqlAncMember);
+                return NavigationDao.getQueryCount(sqlAncMember());
 
             case CoreConstants.TABLE_NAME.TASK:
-                String sqlTask = String.format(QueryUtils.countTask, CoreConstants.BUSINESS_STATUS.REFERRED);
-                return NavigationDao.getQueryCount(sqlTask);
+                return NavigationDao.getQueryCount(sqlTask());
 
             case CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME:
-                String sqlPregnancy = QueryUtils.countEcPregnencyOutcome;
-                return NavigationDao.getQueryCount(sqlPregnancy);
+                return NavigationDao.getQueryCount(QueryUtils.countEcPregnencyOutcome);
 
             case CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION:
-                String sqlMalaria = QueryUtils.countEcMalaria;
-                return NavigationDao.getQueryCount(sqlMalaria);
+                return NavigationDao.getQueryCount(QueryUtils.countEcMalaria);
 
             case FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE:
                 String sqlFP = QueryUtils.countEcFamilyPlanning;
@@ -161,12 +155,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                 return NavigationDao.getQueryCount(sqlReferral);
 
             case CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:
-                String referralNotificationQuery =
-                        String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s)",
-                                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
-                                PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
-                                MALARIA_HF_FOLLOW_UP_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
-                return NavigationDao.getQueryCount(referralNotificationQuery);
+                return NavigationDao.getQueryCount(referralNotificationQuery());
 
             case CoreConstants.TABLE_NAME.BIRTH_CERTIFICATE:
                 String birthCertification = getBirthSummarySize();
@@ -187,6 +176,26 @@ public class NavigationInteractor implements NavigationContract.Interactor {
             default:
                 return NavigationDao.getTableCount(tableName);
         }
+    }
+
+    private String sqlFamily() {
+        return QueryUtils.countEcFamily;
+    }
+
+    private String sqlAncMember() {
+        return QueryUtils.countAncMember;
+    }
+
+    private String sqlTask() {
+        return String.format(QueryUtils.countTask, CoreConstants.BUSINESS_STATUS.REFERRED);
+    }
+
+    private String referralNotificationQuery() {
+        String query = String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s)",
+                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
+                PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
+                MALARIA_HF_FOLLOW_UP_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
+        return query;
     }
 
     private Long getLastCheckTimeStamp() {
