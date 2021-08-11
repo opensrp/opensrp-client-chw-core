@@ -89,25 +89,46 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
             JSONObject clientJson = null;
             JSONObject eventJson = null;
 
-            checkBaseClientEvent(baseClient, baseEvent, isEditMode);
+            if (baseClient != null) {
+                clientJson = new JSONObject(JsonFormUtils.gson.toJson(baseClient));
+                mergeAndSave(isEditMode, baseClient, clientJson);
+            }
+
+            if (baseEvent != null) {
+                eventJson = new JSONObject(JsonFormUtils.gson.toJson(baseEvent));
+                getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, BaseRepository.TYPE_Unsynced);
+            }
 
             checkEditMode(isEditMode, baseClient, jsonString);
 
             saveImage(baseClient, baseEvent, jsonString);
 
+
             List<EventClient> eventClientList = new ArrayList<>();
             fillEventClientList(eventJson, clientJson, eventClientList);
 
-            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            getClientProcessorForJava().processClient(eventClientList);
-            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+            processClient(eventClientList);
 
         } catch (Exception e) {
             Timber.e(e);
             return false;
         }
         return true;
+    }
+
+    private void mergeAndSave(boolean isEditMode, Client baseClient, JSONObject clientJson) throws Exception {
+        if (isEditMode) {
+            JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
+        } else {
+            getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
+        }
+    }
+
+    private void processClient(List<EventClient> eventClientList) throws Exception {
+        long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+        Date lastSyncDate = new Date(lastSyncTimeStamp);
+        getClientProcessorForJava().processClient(eventClientList);
+        getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
     }
 
     private void saveImage(Client baseClient, Event baseEvent, String jsonString) {
@@ -141,26 +162,12 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
     }
 
     private void fillEventClientList(JSONObject eventJson, JSONObject clientJson, List<EventClient> eventClientList) {
-        org.smartregister.domain.Event domainEvent = (eventJson != null) ?
+        org.smartregister.domain.Event domainEvent = (null != eventJson) ?
                 JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
         org.smartregister.domain.Client domainClient = (clientJson != null) ?
                 JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
 
         eventClientList.add(new EventClient(domainEvent, domainClient));
-    }
-
-    private void checkBaseClientEvent(Client baseClient, Event baseEvent, boolean isEditMode) throws Exception {
-        if (baseClient != null) {
-            if (isEditMode) {
-                JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
-            } else {
-                getSyncHelper().addClient(baseClient.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseClient)));
-            }
-        }
-
-        if (baseEvent != null) {
-            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), new JSONObject(JsonFormUtils.gson.toJson(baseEvent)), BaseRepository.TYPE_Unsynced);
-        }
     }
 
     public ECSyncHelper getSyncHelper() {
