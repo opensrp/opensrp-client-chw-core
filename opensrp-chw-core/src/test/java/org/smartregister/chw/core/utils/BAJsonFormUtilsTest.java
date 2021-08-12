@@ -1,6 +1,10 @@
 package org.smartregister.chw.core.utils;
 
 import android.content.Context;
+import android.content.Intent;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -24,17 +28,24 @@ import org.smartregister.chw.core.shadows.UtilsShadowUtil;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
+import org.smartregister.family.util.DBConstants;
 import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.HashMap;
+import java.util.Objects;
 
+import static org.junit.Assert.assertEquals;
 import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.STEP1;
 
 @Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
+
+    @Mock
+    CommonPersonObjectClient client;
 
     @Mock
     private SQLiteDatabase database;
@@ -53,7 +64,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         HashMap<String, String> detailsMap = new HashMap<>();
         HashMap<String, String> columnMaps = new HashMap<>();
 
-        CommonPersonObjectClient client = new CommonPersonObjectClient("testId", detailsMap, "tester");
+        client = new CommonPersonObjectClient("testId", detailsMap, "tester");
         client.setColumnmaps(columnMaps);
 
         CoreChwApplication coreChwApplication = Mockito.mock(CoreChwApplication.class, Mockito.CALLS_REAL_METHODS);
@@ -95,6 +106,28 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
         JSONObject stepOne = resultObject.getJSONObject(STEP1);
         Assert.assertEquals(formTitle, stepOne.getString(TITLE));
+    }
+
+    @Test
+    public void getStartFormActivityReturnsCorrectIntent() {
+        Context context = RuntimeEnvironment.application;
+        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
+        Assert.assertNotNull(testIntent);
+        Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
+        assertEquals("test form", form.getName());
+    }
+
+    @Test
+    public void testComputeAge() {
+        JSONObject jsonObj = new JSONObject();
+        String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
+        dobString = getDuration(dobString);
+        dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : "0";
+        try {
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE, Integer.valueOf(dobString));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getClientJsonString() {
