@@ -16,7 +16,6 @@ import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
-import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.activity.impl.CoreAboveFiveChildProfileActivityImpl;
 import org.smartregister.chw.core.utils.CoreConstants;
@@ -30,8 +29,6 @@ public class CoreAboveFiveChildProfileActivityTest extends BaseUnitTest {
 
     private ActivityController<CoreAboveFiveChildProfileActivityImpl> controller;
 
-    @Mock
-    private MemberObject memberObject;
     @Mock
     private ImageRenderHelper imageRenderHelper;
 
@@ -47,9 +44,6 @@ public class CoreAboveFiveChildProfileActivityTest extends BaseUnitTest {
 
         controller = Robolectric.buildActivity(CoreAboveFiveChildProfileActivityImpl.class).create().start();
         activity = controller.get();
-        memberObject = Mockito.mock(MemberObject.class);
-        memberObject.setBaseEntityId("some-base-entity-id");
-        memberObject.setFamilyName("Some Family Name");
     }
 
     @After
