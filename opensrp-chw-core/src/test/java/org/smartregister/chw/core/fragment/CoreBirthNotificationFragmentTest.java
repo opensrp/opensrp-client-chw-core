@@ -36,6 +36,7 @@ import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import java.util.ArrayList;
 import java.util.HashSet;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -136,6 +137,20 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         View searchBarLayout = view.findViewById(org.smartregister.R.id.search_bar_layout);
         searchBarLayout.setBackgroundResource(R.color.customAppThemeBlue);
         assertEquals(View.VISIBLE, dueOnlyLayout.getVisibility());
+    }
+
+    @Test
+    public void testSetUniqueID() {
+        if (coreFpRegisterFragment.getSearchView() != null) {
+            coreFpRegisterFragment.getSearchView().setText(Mockito.anyString());
+        }
+        assertNotNull(coreFpRegisterFragment.getSearchView());
+    }
+
+    @Test
+    public void getMainConditionCallsPresenterGetCondition() {
+        coreFpRegisterFragment.getMainCondition();
+        Mockito.verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getMainCondition();
     }
 
     @Test
