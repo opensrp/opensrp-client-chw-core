@@ -150,7 +150,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
         coreFpRegisterFragment.getMainCondition();
-        Mockito.verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getMainCondition();
+        verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getMainCondition();
     }
 
     @Test
