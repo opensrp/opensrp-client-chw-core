@@ -2,15 +2,19 @@ package org.smartregister.chw.core.activity;
 
 import android.content.Intent;
 
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.chw.anc.presenter.BaseAncRegisterPresenter;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.utils.CoreConstants;
 
@@ -46,6 +50,17 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().resume();
         activity = controller.get();
         activity.onCreation();
+    }
+
+    @Test
+    public void testActivityLoaded() {
+        Assert.assertNotNull(activity);
+    }
+
+    @Test
+    public void testPresenterIsSetUp() {
+        BaseAncRegisterPresenter presenter = ReflectionHelpers.getField(activity, "presenter");
+        Assert.assertTrue(presenter != null);
     }
 
     @After
