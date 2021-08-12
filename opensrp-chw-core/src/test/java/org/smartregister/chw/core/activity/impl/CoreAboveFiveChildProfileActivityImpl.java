@@ -1,12 +1,6 @@
 package org.smartregister.chw.core.activity.impl;
 
 import org.smartregister.chw.core.activity.CoreAboveFiveChildProfileActivity;
-import org.smartregister.chw.core.activity.CoreAncMemberProfileActivity;
-import org.smartregister.domain.Task;
-
-import java.util.Set;
-
-import timber.log.Timber;
 
 public class CoreAboveFiveChildProfileActivityImpl extends CoreAboveFiveChildProfileActivity {
     @Override
