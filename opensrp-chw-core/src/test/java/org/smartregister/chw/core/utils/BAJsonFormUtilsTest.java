@@ -128,6 +128,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Assert.assertNotNull(dobString);
     }
 
     private String getClientJsonString() {
