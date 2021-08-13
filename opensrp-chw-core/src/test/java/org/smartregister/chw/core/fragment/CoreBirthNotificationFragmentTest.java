@@ -1,5 +1,8 @@
 package org.smartregister.chw.core.fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,22 +33,38 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.activity.CoreChildRegisterActivity;
 import org.smartregister.chw.core.contract.CoreChildRegisterFragmentContract;
+import org.smartregister.chw.core.mock.MockCoreChildBirthRegisterFragment;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.domain.FetchStatus;
+import org.smartregister.family.fragment.NoMatchDialogFragment;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
+import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
+import static org.smartregister.view.fragment.SecuredNativeSmartRegisterFragment.DIALOG_TAG;
 
 public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
 
+    @Mock
+    private FragmentTransaction fragmentTransaction;
+    @Mock
+    private CoreChildRegisterActivity coreChildRegisterActivity;
+    @Mock
+    private FragmentManager fragmentManager;
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     @Mock
@@ -187,6 +206,34 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
         coreFpRegisterFragment.onSyncComplete(fetchStatus);
         verify(syncProgressBar, Mockito.times(2)).setVisibility(View.GONE);
+    }
+
+    @Test
+    public void testOnViewClickedOpensProfile() {
+        FragmentActivity childRegisterActivity = Robolectric.buildActivity(AppCompatActivity.class).create().resume().get();
+        coreFpRegisterFragment = new MockCoreChildBirthRegisterFragment();
+        Context.bindtypes = new ArrayList<>();
+        Whitebox.setInternalState(coreFpRegisterFragment, "clientsView", clientsView);
+        Whitebox.setInternalState(coreFpRegisterFragment, "presenter", presenter);
+        childRegisterActivity.getSupportFragmentManager().beginTransaction().add(0, coreFpRegisterFragment).commit();
+        when(view.getTag(org.smartregister.family.R.id.VIEW_ID)).thenReturn(CLICK_VIEW_NORMAL);
+        CommonPersonObjectClient client = new CommonPersonObjectClient("12", null, "");
+        client.setColumnmaps(new HashMap<String, String>());
+        when(view.getTag()).thenReturn(client);
+        coreFpRegisterFragment.onViewClicked(view);
+        Intent intent = shadowOf(childRegisterActivity).getNextStartedActivity();
+        assertNotNull(intent);
+    }
+
+    @Test
+    public void testShowNotFoundPopupShowsDialog() {
+        when(coreFpRegisterFragment.getActivity()).thenReturn(coreChildRegisterActivity);
+        when(coreChildRegisterActivity.getFragmentManager()).thenReturn(fragmentManager);
+        when(fragmentManager.beginTransaction()).thenReturn(fragmentTransaction);
+        coreFpRegisterFragment.showNotFoundPopup("1234");
+        verify(fragmentManager).beginTransaction();
+        verify(fragmentTransaction).addToBackStack(null);
+        verify(fragmentTransaction).add(any(NoMatchDialogFragment.class), eq(DIALOG_TAG));
     }
 
     @After
