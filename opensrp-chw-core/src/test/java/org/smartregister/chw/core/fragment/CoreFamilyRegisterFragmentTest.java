@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.fragment;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CoreFamilyRegisterFragmentTest extends BaseUnitTest {
@@ -88,6 +90,24 @@ public class CoreFamilyRegisterFragmentTest extends BaseUnitTest {
     public void getMainConditionCallsPresenterGetCondition() {
         fragment.getMainCondition();
         Mockito.verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
+    }
+
+    @Test
+    public void testGetMainCondition() {
+        assertEquals(fragment.getMainCondition(), presenter.getMainCondition());
+    }
+
+    @Test
+    public void testGetDefaultSortQuery() {
+        assertEquals(fragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
+    }
+
+    @Test
+    public void testRefreshSyncProgressSpinner() {
+        Whitebox.setInternalState(fragment, "syncProgressBar", syncProgressBar);
+        Whitebox.setInternalState(fragment, "syncButton", syncButton);
+        fragment.refreshSyncProgressSpinner();
+        verify(syncButton).setVisibility(View.GONE);
     }
 
     @Test
