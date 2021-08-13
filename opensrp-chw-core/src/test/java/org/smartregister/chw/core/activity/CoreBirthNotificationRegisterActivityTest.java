@@ -1,11 +1,14 @@
 package org.smartregister.chw.core.activity;
 
+import android.app.ProgressDialog;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.chw.core.presenter.CoreChildRegisterPresenter;
@@ -13,6 +16,8 @@ import org.smartregister.chw.core.presenter.CoreChildRegisterPresenter;
 public class CoreBirthNotificationRegisterActivityTest {
 
     private CoreBirthNotificationRegisterActivity coreBirthNotificationRegisterActivity;
+    @Mock
+    private ProgressDialog progressDialog;
 
     @Before
     public void setUp() {
@@ -35,6 +40,18 @@ public class CoreBirthNotificationRegisterActivityTest {
     public void testInitializePresenter() {
         coreBirthNotificationRegisterActivity.initializePresenter();
         Assert.assertTrue(ReflectionHelpers.getField(coreBirthNotificationRegisterActivity, "presenter") instanceof CoreChildRegisterPresenter);
+    }
+
+    @Test
+    public void testGetContext() {
+        Assert.assertEquals(coreBirthNotificationRegisterActivity, coreBirthNotificationRegisterActivity.getContext());
+    }
+
+    @Test
+    public void testHideProgressDialog() {
+        Whitebox.setInternalState(coreBirthNotificationRegisterActivity, "progressDialog", progressDialog);
+        coreBirthNotificationRegisterActivity.hideProgressDialog();
+        Mockito.verify(progressDialog).dismiss();
     }
 
     @After
