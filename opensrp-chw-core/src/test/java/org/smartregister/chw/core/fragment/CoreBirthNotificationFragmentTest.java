@@ -266,6 +266,31 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         verify(syncButton).setVisibility(View.GONE);
     }
 
+    @Test
+    public void refreshSyncProgressSpinnerTogglesSyncVisibility() {
+        ReflectionHelpers.setField(coreFpRegisterFragment, "syncButton", syncButton);
+        ReflectionHelpers.setField(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
+        coreFpRegisterFragment.refreshSyncProgressSpinner();
+        verify(syncProgressBar, Mockito.times(1)).setVisibility(View.GONE);
+        verify(syncButton, Mockito.times(1)).setVisibility(View.GONE);
+    }
+
+    @Test
+    public void testGetToolBarTitle() {
+        int title = R.string.child_register_title;
+        assertEquals(coreFpRegisterFragment.getToolBarTitle(), title);
+    }
+
+    @Test
+    public void testGetMainCondition() {
+        assertEquals(coreFpRegisterFragment.getMainCondition(), presenter.getMainCondition());
+    }
+
+    @Test
+    public void testGetDefaultSortQuery() {
+        assertEquals(coreFpRegisterFragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
+    }
+
     @After
     public void tearDown() {
         try {
