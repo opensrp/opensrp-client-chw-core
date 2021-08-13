@@ -33,6 +33,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreChildRegisterFragmentContract;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
+import org.smartregister.domain.FetchStatus;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -170,6 +171,22 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         verify(coreFpRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
         assertEquals(captor.getValue(), view);
+    }
+
+    @Test
+    public void testOnViewClick() {
+        coreFpRegisterFragment.onViewClicked(view);
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
+        assertEquals(captor.getValue(), view);
+    }
+
+    @Test
+    public void onSyncCompleteTogglesSyncVisibility() {
+        FetchStatus fetchStatus = Mockito.anyObject();
+        ReflectionHelpers.setField(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
+        coreFpRegisterFragment.onSyncComplete(fetchStatus);
+        verify(syncProgressBar, Mockito.times(2)).setVisibility(View.GONE);
     }
 
     @After
