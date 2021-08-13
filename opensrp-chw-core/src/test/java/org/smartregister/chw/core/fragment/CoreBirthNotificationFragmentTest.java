@@ -52,6 +52,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
@@ -59,6 +60,8 @@ import static org.smartregister.view.fragment.SecuredNativeSmartRegisterFragment
 
 public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
 
+    @Mock
+    private ImageView syncButton;
     @Mock
     private FragmentTransaction fragmentTransaction;
     @Mock
@@ -234,6 +237,33 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         verify(fragmentManager).beginTransaction();
         verify(fragmentTransaction).addToBackStack(null);
         verify(fragmentTransaction).add(any(NoMatchDialogFragment.class), eq(DIALOG_TAG));
+    }
+
+    @Test
+    public void getDefaultSortQueryCallsPresenterGetSortQuery() {
+        coreFpRegisterFragment.getDefaultSortQuery();
+        verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
+    }
+
+    @Test
+    public void getDueFilterConditionCallsPresenterGetSortQuery() {
+        coreFpRegisterFragment.getDueFilterCondition();
+        verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getDueFilterCondition();
+    }
+
+    @Test
+    public void testOnViewClickedDoesNothing() {
+        when(coreFpRegisterFragment.getActivity()).thenReturn(null);
+        coreFpRegisterFragment.onViewClicked(view);
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void testRefreshSyncProgressSpinner() {
+        Whitebox.setInternalState(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
+        Whitebox.setInternalState(coreFpRegisterFragment, "syncButton", syncButton);
+        coreFpRegisterFragment.refreshSyncProgressSpinner();
+        verify(syncButton).setVisibility(View.GONE);
     }
 
     @After
