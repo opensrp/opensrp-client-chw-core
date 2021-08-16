@@ -37,6 +37,11 @@ public class CoreStockMonthlyReportAdapterTest extends BaseUnitTest {
     }
 
     @Test
+    public void testGetItemValidYear() {
+        Assert.assertEquals("2019", monthStockUsageModelList.get(1).getYear());
+    }
+
+    @Test
     public void testGetItemId() {
         Assert.assertEquals(adapter.getItemId(0), 0);
     }

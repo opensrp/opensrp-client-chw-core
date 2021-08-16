@@ -52,6 +52,10 @@ public class CoreStockUsageItemDetailsAdapterTest {
     @Test
     public void testGetItemCount() {
         Assert.assertEquals(2, stockUsageItemDetailsModelList.size());
+    }
 
+    @Test
+    public void testValidYear() {
+        Assert.assertEquals("2020", stockUsageItemDetailsModelList.get(0).getItemDetailsYear());
     }
 }
