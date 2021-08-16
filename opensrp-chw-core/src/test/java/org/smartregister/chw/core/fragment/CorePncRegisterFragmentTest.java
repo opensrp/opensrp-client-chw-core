@@ -1,11 +1,13 @@
 package org.smartregister.chw.core.fragment;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -15,7 +17,13 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.pnc.presenter.BasePncRegisterFragmentPresenter;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+
 public class CorePncRegisterFragmentTest extends BaseUnitTest {
+
+    @Mock
+    private View view;
 
     @Mock
     private ProgressBar syncProgressBar;
@@ -33,6 +41,7 @@ public class CorePncRegisterFragmentTest extends BaseUnitTest {
         MockitoAnnotations.initMocks(this);
         fragment = Mockito.mock(CorePncRegisterFragment.class, Mockito.CALLS_REAL_METHODS);
         ReflectionHelpers.setField(fragment, "presenter", presenter);
+        ReflectionHelpers.setField(fragment, "view", view);
     }
 
     @Test
@@ -49,6 +58,14 @@ public class CorePncRegisterFragmentTest extends BaseUnitTest {
         Mockito.verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
         Mockito.verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
 
+    }
+
+    @Test
+    public void testOnViewClick() {
+        fragment.onViewClicked(view);
+        ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
+        verify(fragment, Mockito.times(1)).onViewClicked(captor.capture());
+        assertEquals(captor.getValue(), view);
     }
 
     @Test
