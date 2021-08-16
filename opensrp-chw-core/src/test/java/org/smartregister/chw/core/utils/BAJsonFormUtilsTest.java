@@ -137,23 +137,6 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testComputeDOB() {
-        JSONObject jsonObj = new JSONObject();
-        String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
-        if (StringUtils.isNotBlank(dobString)) {
-            Date dob = Utils.dobStringToDate(dobString);
-            if (dob != null) {
-                try {
-                    jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE, CoreJsonFormUtils.dd_MM_yyyy.format(dob));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        Assert.assertNotNull(jsonObj);
-    }
-
-    @Test
     public void testComputeSurname() {
         JSONObject jsonObj = new JSONObject();
         if (clientEvent != null) {
