@@ -124,20 +124,6 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void testComputeAge() {
-        JSONObject jsonObj = new JSONObject();
-        String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
-        dobString = getDuration(dobString);
-        dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : "0";
-        try {
-            jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE, Integer.valueOf(dobString));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(jsonObj);
-    }
-
-    @Test
     public void testComputeDOBUnknown() {
         JSONObject jsonObj = new JSONObject();
         JSONObject optionsObject = new JSONObject();
