@@ -291,6 +291,18 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         assertEquals(coreFpRegisterFragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
     }
 
+    private void getDueFilterCondition() {
+        Mockito.doReturn("").when(coreFpRegisterFragment).getDueFilterCondition();
+    }
+
+    @Test
+    public void testOnResumption() {
+        Mockito.doNothing().when(coreFpRegisterFragment).filterAndSortExecute();
+        getDueFilterCondition();
+        Mockito.doReturn(textView).when(coreFpRegisterFragment).getDueOnlyTextView(coreFpRegisterFragment.dueOnlyLayout);
+        assertEquals(coreFpRegisterFragment.dueOnlyLayout, view);
+    }
+
     @After
     public void tearDown() {
         try {
