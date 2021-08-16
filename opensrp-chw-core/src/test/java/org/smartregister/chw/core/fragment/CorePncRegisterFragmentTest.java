@@ -42,6 +42,7 @@ public class CorePncRegisterFragmentTest extends BaseUnitTest {
         fragment = Mockito.mock(CorePncRegisterFragment.class, Mockito.CALLS_REAL_METHODS);
         ReflectionHelpers.setField(fragment, "presenter", presenter);
         ReflectionHelpers.setField(fragment, "view", view);
+        ReflectionHelpers.setField(fragment, "dueOnlyLayout", view);
     }
 
     @Test
