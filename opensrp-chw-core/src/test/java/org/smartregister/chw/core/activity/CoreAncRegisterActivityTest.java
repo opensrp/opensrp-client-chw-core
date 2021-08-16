@@ -70,7 +70,7 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
     @Test
     public void testActivityLoaded() {
-        Assert.assertNotNull(activity);
+        assertNotNull(activity);
     }
 
     @Test
