@@ -40,7 +40,6 @@ import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
-import static org.smartregister.chw.core.utils.Utils.getDuration;
 import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.STEP1;
 
