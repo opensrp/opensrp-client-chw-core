@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
@@ -22,6 +23,8 @@ import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
 import timber.log.Timber;
+
+import static org.junit.Assert.assertNotNull;
 
 public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
@@ -126,5 +129,10 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         Activity activity = Mockito.mock(Activity.class);
         CoreChildProfileActivity.startMe(activity, memberObject, activity.getClass());
         Mockito.verify(activity).startActivity(Mockito.any());
+    }
+
+    @Test
+    public void testOnCreate() {
+        assertNotNull(Whitebox.getInternalState(activity, "mPagerAdapter"));
     }
 }
