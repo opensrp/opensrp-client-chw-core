@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -308,8 +307,8 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     public void whenOnViewClickedAnswered() {
         coreFpRegisterFragment.onViewClicked(view);
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
-        Mockito.verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        Assert.assertEquals(captor.getValue(), view);
+        verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
+        assertEquals(captor.getValue(), view);
     }
 
     @Test
