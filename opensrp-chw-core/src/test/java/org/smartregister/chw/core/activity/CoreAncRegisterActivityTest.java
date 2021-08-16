@@ -1,11 +1,13 @@
 package org.smartregister.chw.core.activity;
 
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
@@ -14,8 +16,9 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.presenter.BaseAncRegisterPresenter;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.adapter.NavigationAdapter;
+import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
-
 import timber.log.Timber;
 
 public class CoreAncRegisterActivityTest extends BaseUnitTest {
@@ -23,6 +26,9 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     private CoreAncRegisterActivity activity;
 
     private ActivityController<CoreAncRegisterActivity> controller;
+
+    @Mock
+    private BaseAncRegisterPresenter presenter;
 
     @Before
     public void setUp() {
@@ -78,5 +84,26 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         Assert.assertEquals(activity.getUniqueId(), "unique_id");
         Assert.assertEquals(activity.getFamilyName(), "familyName");
         Assert.assertEquals(activity.getPhoneNumber(), "phone_number");
+    }
+
+    @Test
+    public void testOnResumption() {
+        NavigationMenu menu = Mockito.mock(NavigationMenu.class);
+        NavigationAdapter adapter = Mockito.mock(NavigationAdapter.class);
+
+        Mockito.doReturn(adapter).when(menu).getNavigationAdapter();
+        ReflectionHelpers.setStaticField(NavigationMenu.class, "instance", menu);
+
+        ReflectionHelpers.setField(activity, "presenter", presenter);
+        activity.onResumption();
+
+        Mockito.verify(adapter).setSelectedView(Mockito.anyString());
+    }
+
+    @Test
+    public void testOnBackPressed() {
+        CoreAncRegisterActivity spyActivity = Mockito.spy(activity);
+        spyActivity.onBackPressed();
+        Mockito.verify(spyActivity).onBackPressed();
     }
 }
