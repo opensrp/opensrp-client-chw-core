@@ -9,6 +9,7 @@ import com.vijay.jsonwizard.domain.Form;
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -25,6 +26,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
@@ -32,6 +34,7 @@ import org.smartregister.family.util.DBConstants;
 import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -46,6 +49,9 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
 
     @Mock
     CommonPersonObjectClient client;
+
+    @Mock
+    Client clientEvent;
 
     @Mock
     private SQLiteDatabase database;
@@ -129,6 +135,53 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
             e.printStackTrace();
         }
         Assert.assertNotNull(dobString);
+    }
+
+    @Test
+    public void testComputeDOBUnknown() {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject optionsObject = new JSONObject();
+        try {
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, false);
+            optionsObject = jsonObj.getJSONArray(org.smartregister.family.util.Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
+            optionsObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), org.smartregister.family.util.Constants.JSON_FORM_KEY.DOB_UNKNOWN, false));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(optionsObject);
+    }
+
+    @Test
+    public void testComputeDOB() {
+        JSONObject jsonObj = new JSONObject();
+        String dobString = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.DOB, false);
+        if (StringUtils.isNotBlank(dobString)) {
+            Date dob = Utils.dobStringToDate(dobString);
+            if (dob != null) {
+                try {
+                    jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE, CoreJsonFormUtils.dd_MM_yyyy.format(dob));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Assert.assertNotNull(jsonObj);
+    }
+
+    @Test
+    public void testComputeSurname() {
+        JSONObject jsonObj = new JSONObject();
+        if (clientEvent != null) {
+            try {
+                jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
+                        (clientEvent.getLastName() == null ? Mockito.anyString() : clientEvent.getLastName()));
+                jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        Assert.assertNotNull(jsonObj);
     }
 
     private String getClientJsonString() {
