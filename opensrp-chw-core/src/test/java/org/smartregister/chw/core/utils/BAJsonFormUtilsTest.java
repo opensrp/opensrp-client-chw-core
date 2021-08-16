@@ -134,7 +134,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Assert.assertNotNull(dobString);
+        Assert.assertNotNull(jsonObj);
     }
 
     @Test
