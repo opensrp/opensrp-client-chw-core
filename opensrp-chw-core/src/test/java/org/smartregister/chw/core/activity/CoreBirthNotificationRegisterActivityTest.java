@@ -117,6 +117,14 @@ public class CoreBirthNotificationRegisterActivityTest {
         Mockito.verify(view).displayShortToast(Mockito.anyInt());
     }
 
+    @Test
+    public void testOnUniqueIdFetched() {
+        String anyString = Mockito.anyString();
+        Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
+        presenter.onUniqueIdFetched(triple, Mockito.anyString(), Mockito.anyString());
+        Assert.assertNotNull(view);
+    }
+
     @After
     public void tearDown() {
         try {
