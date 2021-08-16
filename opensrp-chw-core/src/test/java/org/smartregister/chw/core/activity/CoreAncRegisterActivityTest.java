@@ -1,7 +1,6 @@
 package org.smartregister.chw.core.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
