@@ -146,6 +146,29 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         Assert.assertNotNull(jsonObj);
     }
 
+    @Test
+    public void testSurname() {
+        JSONObject jsonObj = new JSONObject();
+        if (clientEvent != null) {
+            try {
+                jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
+                        (clientEvent.getLastName() == null ? "test" : "last"));
+                jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        String value = "";
+        try{
+            value = jsonObj.getString(org.smartregister.family.util.JsonFormUtils.VALUE);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(jsonObj);
+        Assert.assertEquals("test", value);
+    }
+
     private String getClientJsonString() {
         return "{\"type\":\"Client\",\"dateCreated\":\"2020-06-12T21:53:21.758+03:00\",\"serverVersion\":1591988001743,\"clientApplicationVersion\":6,\"clientDatabaseVersion\":9," +
                 "\"baseEntityId\":\"0b83417a-99e2-47ea-bc2a-6cef93fb3584\",\"identifiers\":{\"opensrp_id\":\"7984255\"},\"addresses\":[],\"attributes\":{\"age\":\"54\",\"id_avail\":\"[\\\"chk_none\\\"]\"," +
