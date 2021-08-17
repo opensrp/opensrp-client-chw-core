@@ -9,10 +9,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.smartregister.chw.anc.domain.VisitDetail;
 import org.smartregister.repository.Repository;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class VisitDaoTest extends VisitDao {
 
@@ -187,6 +190,21 @@ public class VisitDaoTest extends VisitDao {
         Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
 
         VisitDao.getMedicalHistory("123456");
+        Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
+    }
+
+    @Test
+    public void testGetVisitHistory() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"visit_id", "visit_type", "parent_visit_id", "base_entity_id", "visit_date",
+        "visit_json", "pre_processed", "form_submission_id", "processed", "updated_at", "created_at", "visit_group"});
+        matrixCursor.addRow(new Object[]{"4", "test", "111", "222", "1615772099000", "{test_json}", "yes", "444", "yes", "1615772099000",
+        "1615772099000", "12344557"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        Map<String, List<VisitDetail>> visitHistory = VisitDao.getVisitHistory("222", "test");
+        Assert.assertNotNull(visitHistory);
         Mockito.verify(database).rawQuery(Mockito.anyString(), Mockito.any());
     }
 
