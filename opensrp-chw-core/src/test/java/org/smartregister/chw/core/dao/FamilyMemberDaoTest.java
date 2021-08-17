@@ -43,4 +43,36 @@ public class FamilyMemberDaoTest extends FamilyMemberDao {
         Assert.assertEquals(familyMembers.get(0).getLastName(), "demo_last_name");
     }
 
+    @Test
+    public void testGetMaleFamilyMembers() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"id", "relationalId", "details", "is_closed", "base_entity_id", "unique_id",
+        "relational_id", "first_name", "middle_name", "last_name", "dob", "dod", "dob_unknown", "gender", "phone_number", "other_phone_number",
+        "highest_edu_level", "national_id", "entity_type", "last_interacted_with", "date_removed", "marital_status"});
+        matrixCursor.addRow(new Object[]{"1", "11334", "test_detail", "1", "1", "1", "11334", "f", "m", "l", "2019-01-01", "2019-01-01",
+                "2019-01-01", "Male", "0304050", "040506", "test", "112233444", "ec_family_member", "12134213", "2019-01-01", "Single"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<CoreFamilyMemberModel> familyMembers = FamilyMemberDao.getMaleFamilyMembers("11334");
+        Assert.assertNotNull(familyMembers);
+        Assert.assertEquals(familyMembers.get(0).getLastName(), "l");
+    }
+
+    @Test
+    public void testGetAliveOrDeadFamilyMembers() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+
+        MatrixCursor matrixCursor = new MatrixCursor(new String[]{"id", "relationalId", "details", "is_closed", "base_entity_id", "unique_id",
+        "relational_id", "first_name", "middle_name", "last_name", "dob", "dod", "dob_unknown", "gender", "phone_number", "other_phone_number",
+        "highest_edu_level", "national_id", "entity_type", "last_interacted_with", "date_removed", "marital_status"});
+        matrixCursor.addRow(new Object[]{"1", "11334", "test_detail", "1", "1", "1", "11334", "f", "m", "l", "2019-01-01", "2019-01-01",
+                "2019-01-01", "Male", "0304050", "040506", "test", "112233444", "ec_family_member", "12134213", "2019-01-01", "Single"});
+        Mockito.doReturn(matrixCursor).when(database).rawQuery(Mockito.any(), Mockito.any());
+
+        List<CoreFamilyMemberModel> familyMembers = FamilyMemberDao.getAliveOrDeadFamilyMembers("1");
+        Assert.assertNotNull(familyMembers);
+        Assert.assertEquals(familyMembers.get(0).getLastName(), "l");
+    }
+
 }
