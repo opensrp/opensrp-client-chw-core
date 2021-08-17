@@ -166,7 +166,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
             e.printStackTrace();
         }
         Assert.assertNotNull(jsonObj);
-        Assert.assertEquals("test", value);
+        assertEquals("test", value);
     }
 
     private String getClientJsonString() {
