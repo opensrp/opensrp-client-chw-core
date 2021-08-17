@@ -121,7 +121,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         }
     }
 
-    private int getCount(String tableName) {
+    public int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
                 return NavigationDao.getQueryCount(getChildSqlString());
