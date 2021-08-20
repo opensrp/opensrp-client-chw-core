@@ -37,12 +37,11 @@ public class CoreFamilyPlanningMemberProfileActivityTest extends BaseUnitTest {
 
     private CoreFamilyPlanningMemberProfileActivityImpl activity;
     private ActivityController<CoreFamilyPlanningMemberProfileActivityImpl> controller;
-    private FpMemberObject fpMemberObject;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        fpMemberObject = new FpMemberObject();
+        FpMemberObject fpMemberObject = new FpMemberObject();
         fpMemberObject.setFamilyName("Tester");
         fpMemberObject.setFpMethod(FamilyPlanningConstants.DBConstants.FP_COC);
         fpMemberObject.setFpStartDate("2021-08-01");
