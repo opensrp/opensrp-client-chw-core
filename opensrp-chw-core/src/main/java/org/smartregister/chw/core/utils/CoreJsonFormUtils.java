@@ -401,6 +401,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case DBConstants.KEY.STREET:
             case DBConstants.KEY.LANDMARK:
             case DBConstants.KEY.FAMILY_SOURCE_INCOME:
+            case CoreConstants.TABLE_NAME.FAMILY_INCOME_BRACKET:
             case ChwDBConstants.NEAREST_HEALTH_FACILITY:
             case DBConstants.KEY.GPS:
             case ChwDBConstants.EVENT_DATE:
@@ -592,11 +593,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     private static FamilyEventClient processFamilyForm(AllSharedPreferences allSharedPreferences, String jsonString, String familyBaseEntityId, String encounterType) {
         try {
             Triple<Boolean, JSONObject, JSONArray> registrationFormParams = validateParameters(jsonString);
-            if (!(Boolean)registrationFormParams.getLeft()) {
+            if (!(Boolean) registrationFormParams.getLeft()) {
                 return null;
             } else {
-                JSONObject jsonForm = (JSONObject)registrationFormParams.getMiddle();
-                JSONArray fields = (JSONArray)registrationFormParams.getRight();
+                JSONObject jsonForm = (JSONObject) registrationFormParams.getMiddle();
+                JSONArray fields = (JSONArray) registrationFormParams.getRight();
                 String entityId = getString(jsonForm, "entity_id");
                 if (StringUtils.isBlank(entityId)) {
                     entityId = generateRandomUUIDString();
@@ -646,7 +647,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 Event event = new Event()
                         .withFormSubmissionId(generateRandomUUIDString())
                         .withBaseEntityId(familyMember.getBaseEntityId())
-                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ?  UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
+                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ? UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
                         .withEntityType(familyMember.getEntityType())
                         .withEventDate(new Date());
                 event.withDateCreated(new Date());

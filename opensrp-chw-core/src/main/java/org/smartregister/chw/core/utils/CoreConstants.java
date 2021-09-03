@@ -694,6 +694,7 @@ public class CoreConstants {
         public static final String FAMILY_LOCATION_LGA = "lga";
         public static final String FAMILY_LOCATION_WARD = "ward";
         public static final String FAMILY_LOCATION_COMMUNITY = "community";
+        public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
     public static final class INTENT_KEY {
