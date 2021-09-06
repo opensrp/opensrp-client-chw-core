@@ -5,9 +5,9 @@ name: Android CI with Gradle
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, lmh_issue_fixes_vts_2.0 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, lmh_issue_fixes_vts_2 ]
 
 jobs:
   unit_tests:
