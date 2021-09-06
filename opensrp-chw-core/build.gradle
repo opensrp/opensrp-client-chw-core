@@ -24,6 +24,24 @@ allprojects {
     repositories {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
+        maven {
+            def githubProperties = new Properties()
+            if (rootProject.file("github.properties").exists()) {
+                githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+            }
+
+            name = "GitHubPackages"
+            /*  Configure path to the library hosted on GitHub Package Registry
+             *  Replace UserID with package owner userID and REPOSITORY with the repository name
+             *  e.g. ""https://maven.pkg.github.com/opensrp/opensrp-client-reporting""
+             */
+            url = uri("https://maven.pkg.github.com/onaio/kujaku")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+
+        }
         mavenLocal()
     }
 }
@@ -147,7 +165,16 @@ dependencies {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
+        exclude group: 'com.ibm.fhir', module: 'fhir-path'
     }
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
+    implementation('io.ona.kujaku:library:0.9.0') {
+        exclude group: 'com.android.volley', module: 'volley'
+        exclude group: 'stax', module: 'stax-api'
+    }
+     implementation 'com.ibm.fhir:fhir-model:4.7.0'
+    implementation 'com.ibm.fhir:fhir-path:4.7.0'
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
 
@@ -273,6 +300,8 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation 'org.robolectric:shadows-multidex:4.3.1'
     testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
+    testImplementation 'com.ibm.fhir:fhir-model:4.7.0'
+    testImplementation 'com.ibm.fhir:fhir-path:4.7.0'
 
     // unit test
     def powerMockVersion = '2.0.7'

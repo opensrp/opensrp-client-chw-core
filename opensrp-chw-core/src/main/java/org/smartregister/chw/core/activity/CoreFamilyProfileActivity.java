@@ -60,10 +60,10 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected String familyHead;
     protected String primaryCaregiver;
     protected String familyName;
-    private FamilyFloatingMenu familyFloatingMenu;
+    public FamilyFloatingMenu familyFloatingMenu;
 
     @Override
-    protected void setupViews() {
+    public void setupViews() {
         super.setupViews();
 
         // Update profile border
