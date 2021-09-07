@@ -176,22 +176,22 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + FAMILY_LOCATION_STATE + "}";
         jsonObject = new JSONObject(jsonString);
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
-        Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+        Assert.assertEquals("dummy state", jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
 
         jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + FAMILY_LOCATION_LGA + "}";
         jsonObject = new JSONObject(jsonString);
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
-        Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+        Assert.assertEquals("dummy lga", jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
 
         jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + FAMILY_LOCATION_WARD + "}";
         jsonObject = new JSONObject(jsonString);
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
-        Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+        Assert.assertEquals("dummy ward", jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
 
         jsonString = "{" + org.smartregister.family.util.JsonFormUtils.KEY + " : " + FAMILY_LOCATION_COMMUNITY + "}";
         jsonObject = new JSONObject(jsonString);
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
-        Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
+        Assert.assertEquals("dummy community", jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
 
     }
 
