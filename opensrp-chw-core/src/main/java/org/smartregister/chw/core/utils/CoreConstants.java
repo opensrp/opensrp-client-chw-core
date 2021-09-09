@@ -69,10 +69,6 @@ public class CoreConstants {
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
         String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
-        String FAMILY_STATE = "family_state";
-        String FAMILY_LGA = "family_lga";
-        String FAMILY_WARD = "family_ward";
-        String FAMILY_COMMUNITY = "family_community";
     }
 
     public interface SERVICE_GROUPS {

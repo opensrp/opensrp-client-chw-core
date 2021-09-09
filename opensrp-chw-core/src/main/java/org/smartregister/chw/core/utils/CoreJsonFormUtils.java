@@ -1,9 +1,5 @@
 package org.smartregister.chw.core.utils;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_COMMUNITY;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_LGA;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_STATE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.FAMILY_WARD;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
@@ -376,22 +372,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 String uniqueId = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.UNIQUE_ID, false);
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, uniqueId.replace("-", ""));
                 break;
-            case FAMILY_LOCATION_STATE:
-                String stateValue = Utils.getValue(client.getColumnmaps(), FAMILY_STATE, false);
-                jsonObject.put(VALUE, stateValue);
-                break;
-            case FAMILY_LOCATION_LGA:
-                String lgaValue = Utils.getValue(client.getColumnmaps(), FAMILY_LGA, false);
-                jsonObject.put(VALUE, lgaValue);
-                break;
-            case FAMILY_LOCATION_WARD:
-                String wardValue = Utils.getValue(client.getColumnmaps(), FAMILY_WARD, false);
-                jsonObject.put(VALUE, wardValue);
-                break;
-            case FAMILY_LOCATION_COMMUNITY:
-                String communityValue = Utils.getValue(client.getColumnmaps(), FAMILY_COMMUNITY, false);
-                jsonObject.put(VALUE, communityValue);
-                break;
             case "fam_name":
                 String fam_name = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, false);
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, fam_name);
@@ -405,6 +385,10 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case ChwDBConstants.NEAREST_HEALTH_FACILITY:
             case DBConstants.KEY.GPS:
             case ChwDBConstants.EVENT_DATE:
+            case FAMILY_LOCATION_STATE:
+            case FAMILY_LOCATION_LGA:
+            case FAMILY_LOCATION_WARD:
+            case FAMILY_LOCATION_COMMUNITY:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), key, false));
                 break;
 
