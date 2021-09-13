@@ -270,6 +270,12 @@ public class UtilsTest {
         Assert.assertEquals("15y 1m", duration);
     }
 
+    @Test
+    public void testConvertDpToPixel() {
+        float pixel = Utils.convertDpToPixel(36,context);
+        Assert.assertEquals("36.0", String.valueOf(pixel));
+    }
+
     @After
     public void tearDown() {
         columnMap = null;
