@@ -1,5 +1,12 @@
 package org.smartregister.chw.core.utils;
 
+import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_STATE;
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_WARD;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -63,9 +70,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
-import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
 
 /**
  * Created by keyman on 13/11/2018.
@@ -377,9 +381,14 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case DBConstants.KEY.STREET:
             case DBConstants.KEY.LANDMARK:
             case DBConstants.KEY.FAMILY_SOURCE_INCOME:
+            case CoreConstants.TABLE_NAME.FAMILY_INCOME_BRACKET:
             case ChwDBConstants.NEAREST_HEALTH_FACILITY:
             case DBConstants.KEY.GPS:
             case ChwDBConstants.EVENT_DATE:
+            case FAMILY_LOCATION_STATE:
+            case FAMILY_LOCATION_LGA:
+            case FAMILY_LOCATION_WARD:
+            case FAMILY_LOCATION_COMMUNITY:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), key, false));
                 break;
 
@@ -568,11 +577,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     private static FamilyEventClient processFamilyForm(AllSharedPreferences allSharedPreferences, String jsonString, String familyBaseEntityId, String encounterType) {
         try {
             Triple<Boolean, JSONObject, JSONArray> registrationFormParams = validateParameters(jsonString);
-            if (!(Boolean)registrationFormParams.getLeft()) {
+            if (!(Boolean) registrationFormParams.getLeft()) {
                 return null;
             } else {
-                JSONObject jsonForm = (JSONObject)registrationFormParams.getMiddle();
-                JSONArray fields = (JSONArray)registrationFormParams.getRight();
+                JSONObject jsonForm = (JSONObject) registrationFormParams.getMiddle();
+                JSONArray fields = (JSONArray) registrationFormParams.getRight();
                 String entityId = getString(jsonForm, "entity_id");
                 if (StringUtils.isBlank(entityId)) {
                     entityId = generateRandomUUIDString();
@@ -622,7 +631,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 Event event = new Event()
                         .withFormSubmissionId(generateRandomUUIDString())
                         .withBaseEntityId(familyMember.getBaseEntityId())
-                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ?  UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
+                        .withEventType(familyMember.getEntityType().equals("ec_family_member") ? UPDATE_FAMILY_MEMBER_REGISTRATION : UPDATE_CHILD_REGISTRATION)
                         .withEntityType(familyMember.getEntityType())
                         .withEventDate(new Date());
                 event.withDateCreated(new Date());
