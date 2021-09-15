@@ -686,6 +686,11 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
+        public static final String FAMILY_LOCATION_STATE = "state";
+        public static final String FAMILY_LOCATION_LGA = "lga";
+        public static final String FAMILY_LOCATION_WARD = "ward";
+        public static final String FAMILY_LOCATION_COMMUNITY = "community";
+        public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
     public static final class INTENT_KEY {
@@ -1017,10 +1022,9 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
-    public static class AncHealthFacilityVisitUtil{
-        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
+    public static class AncHealthFacilityVisitUtil {
+        public static final String TETANUS_TOXOID = "Tetanus toxoid (TT)";
     }
-
 
     public static class ThinkMdConstants {
         public static String CARE_PLAN_DATE = "care_plan_date";

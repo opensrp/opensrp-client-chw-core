@@ -1,6 +1,9 @@
 package org.smartregister.chw.core.utils;
 
 
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.METADATA;
+import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
@@ -46,9 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.METADATA;
-import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
 
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
         UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
@@ -163,7 +163,6 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         jsonObject = new JSONObject(jsonString);
         CoreJsonFormUtils.processPopulatableFields(testClient, jsonObject);
         Assert.assertEquals(streetName, jsonObject.getString(org.smartregister.family.util.JsonFormUtils.VALUE));
-
     }
 
     @Test
