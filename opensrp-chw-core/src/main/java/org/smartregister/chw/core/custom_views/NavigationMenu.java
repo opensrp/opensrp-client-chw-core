@@ -1,13 +1,17 @@
 package org.smartregister.chw.core.custom_views;
 
+import static org.smartregister.chw.core.utils.Utils.getSyncEntityString;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,8 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.smartregister.AllConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.ChwP2pModeSelectActivity;
 import org.smartregister.chw.core.activity.CoreCommunityRespondersRegisterActivity;
@@ -40,8 +47,12 @@ import org.smartregister.chw.core.model.NavigationOption;
 import org.smartregister.chw.core.presenter.NavigationPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.domain.FetchStatus;
+import org.smartregister.domain.SyncProgress;
+import org.smartregister.receiver.SyncProgressBroadcastReceiver;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+import org.smartregister.util.AppHealthUtils;
 import org.smartregister.util.LangUtils;
+import org.smartregister.util.NetworkUtils;
 import org.smartregister.util.PermissionUtils;
 
 import java.lang.ref.WeakReference;
@@ -57,7 +68,8 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener , NavigationAdapterHost {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener,
+        SyncProgressBroadcastReceiver.SyncProgressListener, DrawerLayout.DrawerListener, NavigationAdapterHost {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private static CoreChwApplication application;
@@ -65,6 +77,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private static NavigationModel.Flavor modelFlavor;
     private static Map<String, Class> registeredActivities;
     private static boolean showDeviceToDeviceSync = true;
+    private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
+    private static SyncProgressBroadcastReceiver syncProgressBroadcastReceiver;
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationAdapter navigationAdapter;
@@ -73,10 +87,13 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private View rootView = null;
     private ImageView ivSync;
     private ProgressBar syncProgressBar;
+    private LinearLayout progressStatusLayout;
+    private TextView syncStatusLabel;
+    private TextView syncStatusProgressLabel;
+    private ProgressBar syncStatusProgressBar;
     private NavigationContract.Presenter mPresenter;
     private View parentView;
     private Timer timer;
-    private static String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
                                            NavigationModel.Flavor modelFlavor, Map<String, Class> registeredActivities, boolean showDeviceToDeviceSync) {
@@ -99,6 +116,11 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 }
 
                 SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(instance);
+                IntentFilter syncProgressFilter = new IntentFilter(AllConstants.SyncProgressConstants.ACTION_SYNC_PROGRESS);
+                if (syncProgressBroadcastReceiver == null) {
+                    syncProgressBroadcastReceiver = new SyncProgressBroadcastReceiver(instance);
+                }
+                LocalBroadcastManager.getInstance(activity).registerReceiver(syncProgressBroadcastReceiver, syncProgressFilter);
                 instance.init(activity, parentView, myToolbar);
                 return instance;
             } else {
@@ -109,6 +131,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
 
         return null;
+    }
+
+    public static String getChildNavigationCountString() {
+        return menuFlavor.childNavigationMenuCountString();
     }
 
     private void init(Activity activity, View myParentView, Toolbar myToolbar) {
@@ -173,6 +199,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
         syncProgressBar = rootView.findViewById(R.id.pbSync);
 
+
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         ivLogo.setContentDescription(activity.getString(R.string.nav_logo));
         ivLogo.setImageResource(R.drawable.ic_logo);
@@ -184,6 +211,11 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             FadingCircle circle = new FadingCircle();
             syncProgressBar.setIndeterminateDrawable(circle);
         }
+
+        progressStatusLayout = rootView.findViewById(R.id.progress_status_layout);
+        syncStatusLabel = rootView.findViewById(R.id.sync_label);
+        syncStatusProgressLabel = rootView.findViewById(R.id.sync_progress_bar_label);
+        syncStatusProgressBar = rootView.findViewById(R.id.sync_status_progress_bar);
 
         // register top section menu items
         registerDrawer(activity);
@@ -199,8 +231,31 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLogout(activity);
 
         // update all actions
-        mPresenter.refreshLastSync();
+
+        if (menuFlavor.hasSyncStatusProgressBar()) {
+            new AppHealthUtils(activity.findViewById(R.id.progress_status_layout));
+            hideSyncTimeViews();
+            checkSynced();
+        } else {
+            hideSyncStatusProgressViews();
+            mPresenter.refreshLastSync();
+        }
         mPresenter.refreshNavigationCount(activity);
+    }
+
+    private void hideSyncTimeViews() {
+        TextView syncTimeTitleView = rootView.findViewById(R.id.tvSyncTimeTitle);
+        TextView syncTimeView = rootView.findViewById(R.id.tvSyncTime);
+        syncTimeTitleView.setVisibility(View.GONE);
+        syncTimeView.setVisibility(View.GONE);
+    }
+
+    private void hideSyncStatusProgressViews() {
+        progressStatusLayout.setVisibility(View.GONE);
+    }
+
+    private void checkSynced() {
+        mPresenter.checkSynced(activityWeakReference.get());
     }
 
     @Override
@@ -242,12 +297,45 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    @Override
+    public void toggleProgressBarView(boolean syncing) {
+        if (syncStatusProgressBar != null && syncStatusProgressLabel != null && syncStatusLabel != null) {
+            if (syncing && NetworkUtils.isNetworkAvailable()) {
+                // Only hide the sync button when there is internet connection
+                syncStatusProgressBar.setVisibility(View.VISIBLE);
+                syncStatusProgressLabel.setVisibility(View.VISIBLE);
+                syncStatusLabel.setVisibility(View.GONE);
+            } else {
+                syncStatusProgressBar.setVisibility(View.GONE);
+                syncStatusProgressLabel.setVisibility(View.GONE);
+                syncStatusLabel.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void updateSyncStatusDisplay(Activity activity, boolean synced) {
+        if (syncStatusLabel != null) {
+            if (synced) {
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
+                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_synced));
+                syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_complete_green));
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_green));
+            } else {
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_oval));
+                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_not_synced));
+                syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_urgent_red));
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
+            }
+        }
+    }
+
     private void registerServiceActivity(Activity activity) {
         if (menuFlavor.hasServiceReport()) {
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
-                activity.startActivity( menuFlavor.getHIA2ReportActivityIntent(activity));
+                activity.startActivity(menuFlavor.getHIA2ReportActivityIntent(activity));
             });
         }
     }
@@ -318,7 +406,12 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         tvSync.setOnClickListener(syncClicker);
         ivSync.setOnClickListener(syncClicker);
 
-        refreshSyncProgressSpinner();
+        if (menuFlavor.hasSyncStatusProgressBar()) {
+            syncProgressBar.setVisibility(View.GONE);
+            refreshSyncStatusBar();
+        } else {
+            refreshSyncProgressSpinner();
+        }
     }
 
     private void registerLanguageSwitcher(final Activity context) {
@@ -370,6 +463,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 .setOnClickListener(v -> startP2PActivity(activity));
     }
 
+    private void refreshSyncStatusBar() {
+        toggleProgressBarView(SyncStatusBroadcastReceiver.getInstance().isSyncing());
+    }
+
     private void refreshSyncProgressSpinner() {
         if (syncProgressBar == null || ivSync == null)
             return;
@@ -413,8 +510,15 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     @Override
     public void onSyncStart() {
-        // set the sync icon to be a rotating menu
-        refreshSyncProgressSpinner();
+        if (menuFlavor.hasSyncStatusProgressBar()) {
+            if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
+                // Show sync status progress bar
+                toggleProgressBarView(true);
+            }
+        } else {
+            // set the sync icon to be a rotating menu
+            refreshSyncProgressSpinner();
+        }
     }
 
     @Override
@@ -423,12 +527,29 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     }
 
     @Override
+    public void onSyncProgress(SyncProgress syncProgress) {
+        if (menuFlavor.hasSyncStatusProgressBar()) {
+            int progress = syncProgress.getPercentageSynced();
+            String entity = getSyncEntityString(syncProgress.getSyncEntity());
+            String labelText = String.format(rootView.getResources().getString(R.string.progressBarLabel), entity, progress);
+            syncStatusProgressLabel.setText(labelText);
+            syncStatusProgressBar.setProgress(progress);
+        }
+    }
+
+    @Override
     public void onSyncComplete(FetchStatus fetchStatus) {
-        // hide the rotating menu
-        refreshSyncProgressSpinner();
-        // update the time
-        mPresenter.refreshLastSync();
-        // refreshLastSync(new Date());
+        if (menuFlavor.hasSyncStatusProgressBar()) {
+            if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
+                toggleProgressBarView(false);
+            }
+        } else {
+            // hide the rotating menu
+            refreshSyncProgressSpinner();
+            // update the time
+            mPresenter.refreshLastSync();
+            // refreshLastSync(new Date());
+        }
         if (activityWeakReference.get() != null && !activityWeakReference.get().isDestroyed()) {
             mPresenter.refreshNavigationCount(activityWeakReference.get());
         }
@@ -451,7 +572,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (timer != null)
             timer = null;
     }
-
 
     @Override
     public void onDrawerStateChanged(int newState) {
@@ -490,10 +610,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void setSelectedView(String selectedView) {
         NavigationMenu.selectedView = selectedView;
     }
-  
-    public static String getChildNavigationCountString(){
-       return menuFlavor.childNavigationMenuCountString();
-    }
 
     public interface Flavour {
         List<Pair<String, Locale>> getSupportedLanguages();
@@ -505,6 +621,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         boolean hasStockReport();
 
         boolean hasCommunityResponders();
+
+        boolean hasSyncStatusProgressBar();
 
         Intent getStockReportIntent(Activity activity);
 
