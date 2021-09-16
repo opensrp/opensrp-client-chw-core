@@ -299,30 +299,34 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     @Override
     public void toggleProgressBarView(boolean syncing) {
-        if (syncing && NetworkUtils.isNetworkAvailable()) {
-            // Only hide the sync button when there is internet connection
-            syncStatusProgressBar.setVisibility(View.VISIBLE);
-            syncStatusProgressLabel.setVisibility(View.VISIBLE);
-            syncStatusLabel.setVisibility(View.GONE);
-        } else {
-            syncStatusProgressBar.setVisibility(View.GONE);
-            syncStatusProgressLabel.setVisibility(View.GONE);
-            syncStatusLabel.setVisibility(View.VISIBLE);
+        if (syncStatusProgressBar != null && syncStatusProgressLabel != null && syncStatusLabel != null) {
+            if (syncing && NetworkUtils.isNetworkAvailable()) {
+                // Only hide the sync button when there is internet connection
+                syncStatusProgressBar.setVisibility(View.VISIBLE);
+                syncStatusProgressLabel.setVisibility(View.VISIBLE);
+                syncStatusLabel.setVisibility(View.GONE);
+            } else {
+                syncStatusProgressBar.setVisibility(View.GONE);
+                syncStatusProgressLabel.setVisibility(View.GONE);
+                syncStatusLabel.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void updateSyncStatusDisplay(Activity activity, boolean synced) {
-        if (synced) {
-            syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
-            syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_synced));
-            syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_complete_green));
-            syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_green));
-        } else {
-            syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_oval));
-            syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_not_synced));
-            syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_urgent_red));
-            syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
+        if (syncStatusLabel != null) {
+            if (synced) {
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
+                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_synced));
+                syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_complete_green));
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_green));
+            } else {
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_oval));
+                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_not_synced));
+                syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_urgent_red));
+                syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
+            }
         }
     }
 
