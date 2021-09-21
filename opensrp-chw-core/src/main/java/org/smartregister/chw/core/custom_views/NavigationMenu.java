@@ -339,27 +339,31 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             }
             x++;
         }
+        if(menuFlavor.hasMultipleLanguages()){
+            rlIconLang.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(context.getString(R.string.choose_language));
+                builder.setItems(languages, (dialog, which) -> {
+                    Pair<String, Locale> lang = locales.get(which);
+                    tvLang.setText(lang.getLeft());
+                    LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
 
-        rlIconLang.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(context.getString(R.string.choose_language));
-            builder.setItems(languages, (dialog, which) -> {
-                Pair<String, Locale> lang = locales.get(which);
-                tvLang.setText(lang.getLeft());
-                LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
+                    // destroy current instance
+                    drawer.closeDrawers();
+                    instance = null;
+                    Intent intent = context.getIntent();
+                    context.finish();
+                    context.startActivity(intent);
+                    application.notifyAppContextChange();
+                });
 
-                // destroy current instance
-                drawer.closeDrawers();
-                instance = null;
-                Intent intent = context.getIntent();
-                context.finish();
-                context.startActivity(intent);
-                application.notifyAppContextChange();
+                AlertDialog dialog = builder.create();
+                dialog.show();
             });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
+        }
+        else {
+            rlIconLang.setOnClickListener(null);
+        }
     }
 
     private void registerDeviceToDeviceSync(@NonNull final Activity activity) {
@@ -495,6 +499,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         boolean hasStockReport();
 
         boolean hasCommunityResponders();
+
+        boolean hasMultipleLanguages();
 
         Intent getStockReportIntent(Activity activity);
 

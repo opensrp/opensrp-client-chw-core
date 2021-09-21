@@ -59,6 +59,7 @@ import java.util.Set;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.getMalariaConfirmation;
 import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
@@ -166,8 +167,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             upArrow.setColorFilter(getResources().getColor(R.color.text_blue), PorterDuff.Mode.SRC_ATOP);
             actionBar.setHomeAsUpIndicator(upArrow);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        textViewTitle.setOnClickListener(v -> onBackPressed());
         appBarLayout = findViewById(R.id.collapsing_toolbar_appbarlayout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
