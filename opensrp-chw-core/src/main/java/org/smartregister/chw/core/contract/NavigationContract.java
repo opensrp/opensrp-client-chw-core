@@ -26,6 +26,8 @@ public interface NavigationContract {
         List<NavigationOption> getOptions();
 
         void updateTableMap(HashMap<String, String> tableMap);
+
+        void checkSynced(Activity activity);
     }
 
     interface View {
@@ -41,6 +43,10 @@ public interface NavigationContract {
         void refreshCount();
 
         void displayToast(Activity activity, String message);
+
+        void toggleProgressBarView(boolean syncing);
+
+        void updateSyncStatusDisplay(Activity activity, boolean synced);
     }
 
     interface Model {
@@ -61,6 +67,8 @@ public interface NavigationContract {
         Date sync();
 
         void setApplication(CoreApplication coreApplication);
+
+        void checkSynced(InteractorCallback<Boolean> callback);
     }
 
     interface InteractorCallback<T> {

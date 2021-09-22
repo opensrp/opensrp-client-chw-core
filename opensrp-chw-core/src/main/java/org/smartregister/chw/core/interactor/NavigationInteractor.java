@@ -76,6 +76,26 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         this.coreApplication = coreApplication;
     }
 
+    @Override
+    public void checkSynced(NavigationContract.InteractorCallback<Boolean> callback) {
+        String sql = "select sum(c) from (\n" +
+                "SELECT count(client.syncStatus) as c FROM client WHERE client.syncStatus = \"Unsynced\"\n" +
+                "union all\n" +
+                "SELECT count(event.syncStatus) as c FROM event WHERE event.syncStatus = \"Unsynced\"\n" +
+                ")";
+
+        if (callback != null) {
+            appExecutors.diskIO().execute(() -> {
+                try {
+                    boolean synced = NavigationDao.getQueryCount(sql) == 0;
+                    appExecutors.mainThread().execute(() -> callback.onResult(synced));
+                }catch (Exception ex) {
+                    appExecutors.mainThread().execute(() -> callback.onError(ex));
+                }
+            });
+        }
+    }
+
     private String getChildSqlString() {
         if (NavigationMenu.getChildNavigationCountString() == null) {
             return "select count(*) from ec_child c " +

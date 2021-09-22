@@ -67,6 +67,7 @@ import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.domain.Event;
+import org.smartregister.domain.SyncEntity;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.tag.FormTag;
 import org.smartregister.family.FamilyLibrary;
@@ -876,6 +877,22 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             Timber.e(e);
         }
         return "";
+    }
+
+    public static String getSyncEntityString(SyncEntity syncEntity) {
+        Context context = CoreLibrary.getInstance().context().applicationContext();
+        switch (syncEntity) {
+            case EVENTS:
+                return context.getString(R.string.events);
+            case LOCATIONS:
+                return context.getString(R.string.locations);
+            case PLANS:
+                return context.getString(R.string.plans);
+            case TASKS:
+                return context.getString(R.string.tasks_text);
+            default:
+                return "";
+        }
     }
 
     public static String getDuration(DateTime dateTime) {
