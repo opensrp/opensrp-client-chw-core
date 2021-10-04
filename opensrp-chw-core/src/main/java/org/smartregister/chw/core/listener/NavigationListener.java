@@ -9,6 +9,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.util.Utils;
+import org.smartregister.view.activity.BaseRegisterActivity;
 
 public class NavigationListener implements View.OnClickListener {
 
@@ -26,6 +27,7 @@ public class NavigationListener implements View.OnClickListener {
             String tag = (String) v.getTag();
             switch (tag) {
                 case CoreConstants.DrawerMenu.CHILD_CLIENTS:
+                case CoreConstants.DrawerMenu.ALL_CHILDREN:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.CHILD_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.ALL_FAMILIES:
@@ -65,6 +67,21 @@ public class NavigationListener implements View.OnClickListener {
                     break;
                 case CoreConstants.DrawerMenu.UPDATES:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.UPDATES_REGISTER_ACTIVITY));
+                    break;
+                case CoreConstants.DrawerMenu.REPORTS:
+                    activity.startActivity(new Intent(activity, getActivity(CoreConstants.REGISTERED_ACTIVITIES.REPORTS_ACTIVITY)));
+                    activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                    activity.finish();
+                    break;
+                case CoreConstants.DrawerMenu.ADD_NEW_FAMILY:
+                    if (activity instanceof BaseRegisterActivity) {
+                        BaseRegisterActivity baseRegisterActivity = (BaseRegisterActivity) activity;
+                        baseRegisterActivity.startRegistration();
+                    } else {
+                        Intent intent = new Intent(activity, getActivity(CoreConstants.REGISTERED_ACTIVITIES.REPORTS_ACTIVITY));
+                        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.ACTION, CoreConstants.ACTION.START_REGISTRATION);
+                        activity.startActivity(intent);
+                    }
                     break;
                 default:
                     Utils.showShortToast(activity.getApplicationContext(), "Unspecified navigation action");
