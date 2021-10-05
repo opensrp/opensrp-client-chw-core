@@ -74,11 +74,12 @@ public class NavigationListener implements View.OnClickListener {
                     activity.finish();
                     break;
                 case CoreConstants.DrawerMenu.ADD_NEW_FAMILY:
-                    if (activity instanceof BaseRegisterActivity) {
+                    Class<?> newFamilyRegisterClass = getActivity(CoreConstants.REGISTERED_ACTIVITIES.ADD_NEW_FAMILY);
+                    if (newFamilyRegisterClass.isInstance(activity)) {
                         BaseRegisterActivity baseRegisterActivity = (BaseRegisterActivity) activity;
                         baseRegisterActivity.startRegistration();
                     } else {
-                        Intent intent = new Intent(activity, getActivity(CoreConstants.REGISTERED_ACTIVITIES.REPORTS_ACTIVITY));
+                        Intent intent = new Intent(activity, newFamilyRegisterClass);
                         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.ACTION, CoreConstants.ACTION.START_REGISTRATION);
                         activity.startActivity(intent);
                     }
