@@ -66,9 +66,9 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         NavigationOption model = navigationOptionList.get(position);
         holder.tvName.setText(context.getResources().getText(model.getTitleID()));
-        if (model.getRegisterCount() >= 0) {
+        if (model.hasRegisterCount()) {
             holder.tvCount.setText(String.format(Locale.getDefault(), "%d", model.getRegisterCount()));
-        }else{
+        } else {
             holder.tvCount.setText(null);
         }
         holder.ivIcon.setImageResource(model.getResourceID());
@@ -81,7 +81,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.ivIcon.setImageResource(model.getResourceID());
-        }else if (selectedView != null && selectedView.equals(model.getMenuTitle())){
+        } else if (selectedView != null && selectedView.equals(model.getMenuTitle())) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
@@ -117,7 +117,9 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
 
             if (onClickListener != null) {
                 view.setOnClickListener(v -> {
-                    if (drawerLayout != null) drawerLayout.closeDrawers();
+                    if (drawerLayout != null) {
+                        drawerLayout.closeDrawers();
+                    }
                     onClickListener.onClick(v);
                 });
             }

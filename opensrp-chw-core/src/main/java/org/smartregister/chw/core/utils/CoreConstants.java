@@ -725,7 +725,6 @@ public class CoreConstants {
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
-        public static final String ALL_CHILDREN = "All Children";
         public static final String REPORTS = "Reports";
         public static final String ADD_NEW_FAMILY = "Add New Family";
     }
