@@ -34,7 +34,7 @@
     <string name="all_registers">Toutes les registres</string>
     <string name="log_out_as">Déconnexion</string>
     <string name="device_data_synced">Données de l’appareil synchronisées</string>
-    <string name="device_data_not_synced">Données de l'appareil non synchronisées</string>
+    <string name="device_data_not_synced">Données de l\'appareil non synchronisées</string>
     <string name="progressBarLabel">Synchronisation %s : %d%% </string>
 
     <!--Navigation side menu -->
