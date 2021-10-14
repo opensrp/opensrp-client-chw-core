@@ -430,6 +430,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:visibility="invisible"
+                        android:text="@string/device_data_synced"
                         android:textSize="16sp" />
                     <TextView
                         android:id="@+id/sync_progress_bar_label"

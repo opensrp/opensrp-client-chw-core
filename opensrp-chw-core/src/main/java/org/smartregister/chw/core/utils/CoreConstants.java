@@ -767,6 +767,7 @@ public class CoreConstants {
 
     public static class JsonAssets {
         public static final String DETAILS = "details";
+        public static final String HIDDEN_GENDER = "hiddengender";
         public static final String FAM_NAME = "fam_name";
         public static final String SURNAME = "surname";
         public static final String PREGNANT_1_YR = "preg_1yr";

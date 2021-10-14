@@ -61,16 +61,18 @@ public abstract class CoreFamilyRemoveMemberModel extends CoreFamilyProfileMembe
                     String dobString = getDuration(dob);
                     dobString = dobString.contains("y") ? dobString.substring(0, dobString.indexOf("y")) : dobString;
 
-                    String details = String.format("%s %s %s, %s %s",
+                    String details = String.format("%s %s %s, %s",
                             Utils.getValue(client.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true),
                             Utils.getValue(client.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true),
                             Utils.getValue(client.getColumnmaps(), DBConstants.KEY.LAST_NAME, true),
-                            dobString,
-                            Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true)
+                            dobString
                     );
 
                     jsonObject.put("text", details);
 
+                } else if (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).equalsIgnoreCase(CoreConstants.JsonAssets.HIDDEN_GENDER)) {
+                    String gender = Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GENDER, true);
+                    jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, gender);
                 }
             }
 

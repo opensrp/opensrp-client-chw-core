@@ -46,6 +46,7 @@ import org.smartregister.chw.core.model.NavigationModel;
 import org.smartregister.chw.core.model.NavigationOption;
 import org.smartregister.chw.core.presenter.NavigationPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.SyncProgress;
 import org.smartregister.receiver.SyncProgressBroadcastReceiver;
@@ -317,12 +318,12 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (syncStatusLabel != null) {
             if (synced) {
                 syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_green_oval));
-                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_synced));
+                syncStatusLabel.setText(Utils.getLocaleStringResource(new Locale(CoreChwApplication.getLanguage(activity.getApplicationContext())), R.string.device_data_synced, activity.getApplicationContext()));
                 syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_complete_green));
                 syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_green));
             } else {
                 syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.badge_oval));
-                syncStatusLabel.setText(activity.getApplicationContext().getString(R.string.device_data_not_synced));
+                syncStatusLabel.setText(Utils.getLocaleStringResource(new Locale(CoreChwApplication.getLanguage(activity.getApplicationContext())), R.string.device_data_not_synced, activity.getApplicationContext()));
                 syncStatusLabel.setTextColor(ContextCompat.getColor(activity, R.color.alert_urgent_red));
                 syncStatusLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
             }
