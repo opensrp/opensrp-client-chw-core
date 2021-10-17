@@ -594,6 +594,17 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                     baseClient.addRelationship(org.smartregister.family.util.Utils.metadata().familyMemberRegister.familyRelationKey, familyBaseEntityId);
                 }
 
+                if (baseClient != null) {
+                    Map<String, Object> attributes = baseClient.getAttributes();
+                    if (attributes != null) {
+                        if (baseClient.getAttribute("fam_source_income").toString().equals("Family source of income"))
+                            attributes.remove("fam_source_income");
+                        if (baseClient.getAttribute("income_bracket").toString().equals("Income Bracket"))
+                            attributes.remove("income_bracket");
+                        baseClient.setAttributes(attributes.isEmpty() ? null : attributes);
+                    }
+                }
+
                 Event baseEvent = org.smartregister.util.JsonFormUtils.createEvent(fields, getJSONObject(jsonForm, "metadata"), formTag(allSharedPreferences), entityId, encounterType, org.smartregister.family.util.Utils.metadata().familyMemberRegister.tableName);
                 tagSyncMetadata(allSharedPreferences, baseEvent);
                 if (encounterType.equals(org.smartregister.family.util.Utils.metadata().familyRegister.updateEventType) && baseClient != null) {
