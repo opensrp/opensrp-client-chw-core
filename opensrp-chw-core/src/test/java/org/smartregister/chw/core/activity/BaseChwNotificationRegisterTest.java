@@ -17,7 +17,6 @@ import org.smartregister.chw.core.activity.mock.BaseChwNotificationRegisterMock;
 import org.smartregister.view.contract.BaseRegisterContract;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class BaseChwNotificationRegisterTest extends BaseUnitTest {
@@ -43,7 +42,7 @@ public class BaseChwNotificationRegisterTest extends BaseUnitTest {
     public void testRegisterBottomNavigation() {
         BottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottom_navigation);
         assertNotNull(bottomNavigationView);
-        assertNotEquals(4, bottomNavigationView.getMenu().size());
+        assertEquals(4, bottomNavigationView.getMenu().size());
     }
 
     @After
