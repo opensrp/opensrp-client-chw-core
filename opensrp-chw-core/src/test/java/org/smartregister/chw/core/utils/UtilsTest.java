@@ -103,7 +103,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void testConvertDpToPixel() {
+    public void testingConvertDpToPixel() {
         Assert.assertEquals(0.0, Utils.convertDpToPixel(0, context), 0);
     }
 
