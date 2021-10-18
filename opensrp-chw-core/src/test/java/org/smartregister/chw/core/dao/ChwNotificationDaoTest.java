@@ -158,4 +158,12 @@ public class ChwNotificationDaoTest extends ChwNotificationDao {
 
         Assert.assertEquals("123", syncLocationId);
     }
+
+    @Test
+    public void formatVisitDate() {
+
+        String formatVisitDate = ChwNotificationDao.formatVisitDate("2021-10-18 01:46:50");
+
+        Assert.assertEquals("18-10-2021", formatVisitDate);
+    }
 }
