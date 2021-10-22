@@ -113,7 +113,7 @@ android {
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
-32
+
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -139,7 +139,7 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
 
-    api('org.smartregister:opensrp-client-native-form:2.1.6-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:2.1.12-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -152,7 +152,7 @@ dependencies {
 
     compileOnly 'com.ibm.fhir:fhir-model:4.7.0'
 
-    api('org.smartregister:opensrp-client-core:4.3.22-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.3.23-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
