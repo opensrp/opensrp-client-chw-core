@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="3dp"
-        android:checked="true"
+        android:checked="@bool/initial_vaccine_checked_state"
         android:clickable="true" />
 
     <org.smartregister.view.customcontrols.CustomFontTextView
