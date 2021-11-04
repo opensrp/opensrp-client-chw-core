@@ -2,8 +2,11 @@ package org.smartregister.chw.core.custom_views;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -245,7 +248,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             View rlIconServiceReport = rootView.findViewById(R.id.rlServiceReport);
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
-                activity.startActivity( menuFlavor.getHIA2ReportActivityIntent(activity));
+                activity.startActivity(menuFlavor.getHIA2ReportActivityIntent(activity));
             });
         }
     }
@@ -286,22 +289,36 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerNavigation(Activity parentActivity) {
         if (recyclerView != null) {
-
-            List<NavigationOption> navigationOptions = mPresenter.getOptions();
-            if (navigationAdapter == null) {
-                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities);
-            }
-
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(navigationAdapter);
+
+            List<NavigationOption> navigationOptions = mPresenter.getOptions();
+            if (navigationAdapter == null) {
+                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, drawer);
+                recyclerView.setAdapter(navigationAdapter);
+            }else {
+                NavigationAdapter previous = navigationAdapter;
+                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, drawer);
+                recyclerView.swapAdapter(navigationAdapter, true);
+                navigationAdapter.setSelectedView(previous.getSelectedView());
+            }
         }
     }
 
     private void registerLogout(final Activity parentActivity) {
         mPresenter.displayCurrentUser();
-        tvLogout.setOnClickListener(v -> logout(parentActivity));
+        AlertDialog logOutDialog = menuFlavor.doLogOutDialog(parentActivity);
+        tvLogout.setOnClickListener(v -> {
+//            drawer.closeDrawers();
+            if (logOutDialog != null) {
+                logOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Log Out", (dialog, which) -> logout(parentActivity));
+                logOutDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
+                logOutDialog.show();
+            }else {
+                logout(parentActivity);
+            }
+        });
     }
 
     private void registerSync(final Activity parentActivity) {
@@ -339,7 +356,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             }
             x++;
         }
-        if(menuFlavor.hasMultipleLanguages()){
+        if (menuFlavor.hasMultipleLanguages()) {
             rlIconLang.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(context.getString(R.string.choose_language));
@@ -360,8 +377,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 AlertDialog dialog = builder.create();
                 dialog.show();
             });
-        }
-        else {
+        } else {
             rlIconLang.setOnClickListener(null);
         }
     }
@@ -485,8 +501,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         return drawer;
     }
 
-    public static String getChildNavigationCountString(){
-       return menuFlavor.childNavigationMenuCountString();
+    public static String getChildNavigationCountString() {
+        return menuFlavor.childNavigationMenuCountString();
     }
 
     public interface Flavour {
@@ -509,5 +525,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         String childNavigationMenuCountString();
 
         Intent getHIA2ReportActivityIntent(Activity activity);
+
+        default AlertDialog doLogOutDialog(Activity activity){
+            return null;
+        }
     }
 }

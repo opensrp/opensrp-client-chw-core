@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        app:tint="@color/navigation_item_icon_tint"
         app:srcCompat="@drawable/child_boy_infant" />
 
     <TextView

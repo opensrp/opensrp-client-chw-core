@@ -81,7 +81,7 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
             activityMain.setBackgroundResource(R.color.transparent);
 
             fab.startAnimation(rotateBack);
-            fab.setImageResource(R.drawable.ic_edit_white);
+            fab.setImageResource(R.drawable.family_floating_fab_icon);
 
             callLayout.startAnimation(fabClose);
             addNewMember.startAnimation(fabClose);
