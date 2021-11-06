@@ -9,6 +9,10 @@ import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OU
 import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_MAIN_SELECT;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_MAIN_SELECT;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_FOLLOW_UP_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
@@ -17,6 +21,8 @@ import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OU
 import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT;
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_MAIN_SELECT;
+import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_MAIN_SELECT;
 
 public class BaseChwNotificationQueryProvider {
     /**
@@ -46,6 +52,9 @@ public class BaseChwNotificationQueryProvider {
                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
                 FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY,
+                HIV_OUTCOME_COUNT_QUERY,
+                TB_OUTCOME_COUNT_QUERY,
+                HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY,
                 NOT_YET_DONE_REFERRAL_COUNT_QUERY
         };
     }
@@ -59,9 +68,9 @@ public class BaseChwNotificationQueryProvider {
      */
     @NonNull
     public String mainSelectWhereIDsIn() {
-        return String.format("%s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s",
+        return String.format("%s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s UNION ALL %s",
                 SICK_CHILD_FOLLOW_UP_MAIN_SELECT, ANC_DANGER_SIGNS_OUTCOME_MAIN_SELECT,
                 PNC_DANGER_SIGNS_OUTCOME_MAIN_SELECT, FAMILY_PLANNING_UPDATE_MAIN_SELECT,
-                MALARIA_FOLLOW_UP_MAIN_SELECT, NOT_YET_DONE_REFERRAL_MAIN_SELECT);
+                MALARIA_FOLLOW_UP_MAIN_SELECT, HIV_OUTCOME_MAIN_SELECT, TB_OUTCOME_MAIN_SELECT,HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_MAIN_SELECT, NOT_YET_DONE_REFERRAL_MAIN_SELECT);
     }
 }

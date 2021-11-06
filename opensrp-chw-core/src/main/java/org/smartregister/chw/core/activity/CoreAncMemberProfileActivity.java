@@ -164,12 +164,12 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         return Months.monthsBetween( date1.withDayOfMonth(1), date2.withDayOfMonth(1)).getMonths();
     }
 
-    private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
+    protected boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
         return getMonthsDifference(lastVisitDate, todayDate) < 1;
 
     }
 
-    private LocalDate getDateCreated() {
+    protected LocalDate getDateCreated() {
         try {
             Date dateCreated = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(memberObject.getDateCreated().substring(0, 10));
             String createdDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(dateCreated);
@@ -180,7 +180,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         return ancCreatedDate;
     }
 
-    private void getLayoutVisibility() {
+    protected void getLayoutVisibility() {
         layoutRecordView.setVisibility(View.VISIBLE);
         record_reccuringvisit_done_bar.setVisibility(View.GONE);
         textViewAncVisitNot.setVisibility(View.VISIBLE);
