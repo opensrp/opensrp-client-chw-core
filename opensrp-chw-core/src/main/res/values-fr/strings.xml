@@ -42,6 +42,7 @@
     <string name="menu_anc_clients">Clients CPN</string>
     <string name="menu_child_clients">Enfants Clients</string>
     <string name="menu_hiv">VIH</string>
+    <string name="menu_hts">Dépistage du VIH</string>
     <string name="menu_anc">Clients CPN</string>
     <string name="menu_pnc">Clients CPoN</string>
     <string name="menu_child">CH</string>

@@ -43,6 +43,7 @@
     <string name="menu_anc_clients">ANC Clients</string>
     <string name="menu_child_clients">Child Clients</string>
     <string name="menu_hiv">HIV</string>
+    <string name="menu_hts">HTS</string>
     <string name="menu_hiv_index_contacts">Index Contacts</string>
     <string name="menu_tb">TB</string>
     <string name="menu_anc">ANC</string>
@@ -723,7 +724,7 @@
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Edit Client Details</string>
     <string name="location_info">Location info</string>
-    <string name="hiv_registration">HIV registration</string>
+    <string name="hiv_registration">HIV Services Registration</string>
     <string name="tb_registration">TB registration</string>
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>

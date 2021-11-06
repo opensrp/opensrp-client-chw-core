@@ -88,7 +88,6 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     public void setupViews() {
         super.setupViews();
         new UpdateFollowUpVisitButtonTask(getHivMemberObject()).execute();
-        new SetIndexClientsTask(getHivMemberObject()).execute();
     }
 
     @Override
@@ -274,34 +273,15 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
             ) {
                 updateFollowUpVisitButton(hivFollowupRule.getButtonStatus());
             }
-            if (hivFollowupRule != null && hivFollowupRule.getDaysDifference() > 7)
-                hideFollowUpVisitButton();
 
-            updateFollowUpVisitStatusRow(lastVisit);
+//            updateFollowUpVisitStatusRow(lastVisit);
             Date lastVisitDate = lastVisit != null ? lastVisit.getDate() : null;
             updateLastVisitRow(lastVisitDate);
-        }
-    }
 
-    private class SetIndexClientsTask extends AsyncTask<Void, Void, Integer> {
-        private HivMemberObject hivMemberObject;
+            if (hivFollowupRule != null && hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET))
+                showFollowUpVisitButton(true);
 
-        public SetIndexClientsTask(HivMemberObject hivMemberObject) {
-            this.hivMemberObject = hivMemberObject;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            List<HivIndexContactObject> indexContactObjectList = HivIndexDao.getIndexContacts(hivMemberObject.getBaseEntityId());
-            if (indexContactObjectList != null)
-                return indexContactObjectList.size();
-            else
-                return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer param) {
-            setIndexClientsStatus(param > 0);
+            setProfileViewDetails(hivMemberObject);
         }
     }
 }

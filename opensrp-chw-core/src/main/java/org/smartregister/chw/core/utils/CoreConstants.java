@@ -227,6 +227,7 @@ public class CoreConstants {
         private static final String ANC_UNIFIED_REFERRAL_FORM = "referrals/anc_referral_form";
         private static final String PNC_UNIFIED_REFERRAL_FORM = "referrals/pnc_referral_form";
         private static final String HIV_REFERRAL_FORM = "referrals/hiv_referral_form";
+        private static final String HTS_REFERRAL_FORM = "referrals/hts_referral_form";
         private static final String TB_REFERRAL_FORM = "referrals/tb_referral_form";
         private static final String GBV_REFERRAL_FORM = "referrals/gbv_referral_form";
         private static final String FEMALE_FAMILY_PLANNING_UNIFIED_REFERRAL_FORM = "referrals/female_fp_referral_form";
@@ -244,8 +245,10 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
-        private static final String HIV_REGISTRATION = "hiv_registration";
+        private static final String FEMALE_HIV_REGISTRATION = "male_hiv_registration";
+        private static final String MALE_HIV_REGISTRATION = "female_hiv_registration";
         private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
+        private static final String HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS = "hiv_followup_visit_for_clients_with_ctc_numbers";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT = "hiv_index_contact_followup";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_NEGATIVE_CLIENTS = "hiv_index_contact_followup_for_negative_clients";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_POSITIVE_CLIENTS = "hiv_index_contact_followup_for_positive_clients";
@@ -413,6 +416,10 @@ public class CoreConstants {
             return HIV_REFERRAL_FORM;
         }
 
+        public static String getHtsReferralForm() {
+            return HTS_REFERRAL_FORM;
+        }
+
         public static String getTbReferralForm() {
             return TB_REFERRAL_FORM;
         }
@@ -441,8 +448,12 @@ public class CoreConstants {
             return Utils.getLocalForm(MALARIA_FOLLOW_UP_HF_FORM, locale, assetManager);
         }
 
-        public static String getHivRegistration() {
-            return HIV_REGISTRATION;
+        public static String getFemaleHivRegistration() {
+            return FEMALE_HIV_REGISTRATION;
+        }
+
+        public static String getMaleHivRegistration() {
+            return MALE_HIV_REGISTRATION;
         }
 
         public static String getTbRegistration() {
@@ -451,6 +462,10 @@ public class CoreConstants {
 
         public static String getHivFollowupVisit() {
             return HIV_FOLLOWUP_VISIT;
+        }
+
+        public static String getHivFollowupVisitForClientsWithCtcNumbers() {
+            return HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS;
         }
 
         public static String getHivIndexContactFollowupVisit() {
@@ -824,6 +839,7 @@ public class CoreConstants {
         public static final String CHILD_CLIENTS = "Child Clients";
         public static final String CHILD = "Child";
         public static final String HIV_CLIENTS = "HIV Clients";
+        public static final String HTS_CLIENTS = "HTS Clients";
         public static final String HIV_INDEX_CLIENTS = "HIV Index Contacts Followups";
         public static final String HIV_INDEX_CLIENTS_HF = "HIV Index Contact";
         public static final String TB_CLIENTS = "TB Clients";
@@ -1066,6 +1082,7 @@ public class CoreConstants {
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
         public static final String HIV_REGISTER_ACTIVITY = "HIV_REGISTER_ACTIVITY";
+        public static final String HTS_REGISTER_ACTIVITY = "HTS_REGISTER_ACTIVITY";
         public static final String HIV_INDEX_REGISTER_ACTIVITY = "HIV_INDEX_REGISTER_ACTIVITY";
         public static final String TB_REGISTER_ACTIVITY = "TB_REGISTER_ACTIVITY";
     }
@@ -1084,6 +1101,7 @@ public class CoreConstants {
         public static final String FP_SIDE_EFFECTS = "FP Initiation";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
         public static final String SUSPECTED_HIV = "Suspected HIV";
+        public static final String SICK_HIV = "HIV Treatment and Care";
         public static final String SUSPECTED_TB = "Suspected TB";
         public static final String SUSPECTED_GBV = "Suspected GBV";
         public static final String SUSPECTED_CHILD_GBV = "Suspected Child GBV";

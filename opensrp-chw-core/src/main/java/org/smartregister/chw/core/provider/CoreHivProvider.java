@@ -51,6 +51,7 @@ public class CoreHivProvider extends BaseHivRegisterProvider {
             viewHolder.getDueButton().setVisibility(View.VISIBLE);
             if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
                 setVisitButtonNextDueStatus(context, FpUtil.sdf.format(hivFollowupRule.getDueDate()), viewHolder.getDueButton());
+                viewHolder.getDueButton().setVisibility(View.GONE);
             }
             if (hivFollowupRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
                 setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(hivFollowupRule.getDueDate()), new DateTime()).getDays()), viewHolder.getDueButton());
