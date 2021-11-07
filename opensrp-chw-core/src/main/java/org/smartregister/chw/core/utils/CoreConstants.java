@@ -247,8 +247,10 @@ public class CoreConstants {
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
         private static final String FEMALE_HIV_REGISTRATION = "female_hiv_registration";
         private static final String MALE_HIV_REGISTRATION = "male_hiv_registration";
-        private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
-        private static final String HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS = "hiv_followup_visit_for_clients_with_ctc_numbers";
+        private static final String FEMALE_HIV_FOLLOWUP_VISIT = "female_hiv_followup_visit";
+        private static final String MALE_HIV_FOLLOWUP_VISIT = "male_hiv_followup_visit";
+        private static final String FEMALE_HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS = "female_hiv_followup_visit_for_clients_with_ctc_numbers";
+        private static final String MALE_HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS = "male_hiv_followup_visit_for_clients_with_ctc_numbers";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT = "hiv_index_contact_followup";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_NEGATIVE_CLIENTS = "hiv_index_contact_followup_for_negative_clients";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT_FOR_POSITIVE_CLIENTS = "hiv_index_contact_followup_for_positive_clients";
@@ -460,12 +462,20 @@ public class CoreConstants {
             return TB_REGISTRATION;
         }
 
-        public static String getHivFollowupVisit() {
-            return HIV_FOLLOWUP_VISIT;
+        public static String getFemaleHivFollowupVisit() {
+            return FEMALE_HIV_FOLLOWUP_VISIT;
         }
 
-        public static String getHivFollowupVisitForClientsWithCtcNumbers() {
-            return HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS;
+        public static String getMaleHivFollowupVisit() {
+            return MALE_HIV_FOLLOWUP_VISIT;
+        }
+
+        public static String getMaleHivFollowupVisitForClientsWithCtcNumbers() {
+            return MALE_HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS;
+        }
+
+        public static String getFemaleHivFollowupVisitForClientsWithCtcNumbers() {
+            return FEMALE_HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS;
         }
 
         public static String getHivIndexContactFollowupVisit() {
