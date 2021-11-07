@@ -245,8 +245,8 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
-        private static final String FEMALE_HIV_REGISTRATION = "male_hiv_registration";
-        private static final String MALE_HIV_REGISTRATION = "female_hiv_registration";
+        private static final String FEMALE_HIV_REGISTRATION = "female_hiv_registration";
+        private static final String MALE_HIV_REGISTRATION = "male_hiv_registration";
         private static final String HIV_FOLLOWUP_VISIT = "hiv_followup_visit";
         private static final String HIV_FOLLOWUP_VISIT_FOR_CLIENTS_WITH_CTC_NUMBERS = "hiv_followup_visit_for_clients_with_ctc_numbers";
         private static final String HIV_INDEX_CONTACT_FOLLOWUP_VISIT = "hiv_index_contact_followup";
