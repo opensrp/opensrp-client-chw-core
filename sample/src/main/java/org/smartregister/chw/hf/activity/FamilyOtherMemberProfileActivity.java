@@ -83,6 +83,11 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
         //TODO implement start malaria  follow-up visit for HF
     }
 
+    @Override
+    protected void startPmtctRegisration() {
+        //TODO implement start pmtct registration
+    }
+
 
     @Override
     protected void setIndependentClient(boolean isIndependent) {

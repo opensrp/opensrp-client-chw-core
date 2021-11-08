@@ -758,5 +758,8 @@
     <string name="gbv_referral">Huduma ya kuzui ukatili wa kijinsia (dawati la jinsia)</string>
     <string name="child_gbv_referral">Huduma ya kuzui ukatili wa kijinsia (dawati la jinsia)</string>
 
+    <!--PMTCT Titles -->
+    <string name="pmtct_registration">Usajili wa PMTCT</string>
+
 </resources>
 
