@@ -5,21 +5,16 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.rule.PmtctFollowUpRule;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FpUtil;
 import org.smartregister.chw.core.utils.HomeVisitUtil;
-import org.smartregister.chw.core.utils.MalariaVisitUtil;
-import org.smartregister.chw.malaria.dao.MalariaDao;
 import org.smartregister.chw.pmtct.dao.PmtctDao;
-import org.smartregister.provider.MalariaRegisterProvider;
 import org.smartregister.provider.PmtctRegisterProvider;
 import org.smartregister.util.Utils;
 import org.smartregister.view.contract.SmartRegisterClient;
@@ -33,6 +28,7 @@ import java.util.Set;
 public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
 
     private Context context;
+
     public CorePmtctRegisterProvider(Context context, View.OnClickListener paginationClickListener, View.OnClickListener onClickListener, Set visibleColumns) {
         super(context, paginationClickListener, onClickListener, visibleColumns);
         this.context = context;
@@ -44,11 +40,11 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         registerViewHolder.dueButton.setVisibility(View.GONE);
         registerViewHolder.dueButton.setOnClickListener(null);
         String baseEntityId = smartRegisterClient.entityId();
-        Utils.startAsyncTask(new UpdatePmtctDueButtonStatusTask(registerViewHolder,baseEntityId),null);
+        Utils.startAsyncTask(new UpdatePmtctDueButtonStatusTask(registerViewHolder, baseEntityId), null);
     }
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, PmtctFollowUpRule pmtctFollowUpRule) {
-        if(pmtctFollowUpRule.getDueDate()!=null) {
+        if (pmtctFollowUpRule.getDueDate() != null) {
             viewHolder.dueButton.setVisibility(View.VISIBLE);
             if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
                 setVisitButtonNextDueStatus(context, FpUtil.sdf.format(pmtctFollowUpRule.getDueDate()), viewHolder.dueButton);
@@ -62,6 +58,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
             }
         }
     }
+
     private void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
         dueButton.setText(context.getString(R.string.hiv_visit_day_next_due, visitDue));
@@ -115,7 +112,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         protected Void doInBackground(Void... voids) {
             Date pmtctRegisterDate = PmtctDao.getPmtctRegisterDate(baseEntityId);
             Date followUpDate = PmtctDao.getPmtctFollowUpVisitDate(baseEntityId);
-            pmtctFollowUpRule = HomeVisitUtil.getPmtctVisitStatus(pmtctRegisterDate,followUpDate);
+            pmtctFollowUpRule = HomeVisitUtil.getPmtctVisitStatus(pmtctRegisterDate, followUpDate);
             return null;
         }
 

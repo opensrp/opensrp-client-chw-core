@@ -270,8 +270,8 @@ public class CoreConstants {
 
         private static final String HIV_INDEX_CLIENTS_CONTACTS_REGISTRATION_FORM = "hiv_index_clients_contacts_registration_form";
 
-        private static final String PMTCT_FORM = "pmtct_form";
-        private static final String PMTCT_FOLLOWUP_FORM = "pmtct_followup";
+        private static final String PMTCT_FORM = "pmtct_registration_form";
+        private static final String PMTCT_FOLLOWUP_FORM = "pmtct_followup_form";
 
 
         public static AssetManager assetManager;

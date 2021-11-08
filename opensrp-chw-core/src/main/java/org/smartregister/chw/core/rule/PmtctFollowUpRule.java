@@ -1,5 +1,8 @@
 package org.smartregister.chw.core.rule;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -8,9 +11,6 @@ import org.smartregister.chw.core.utils.CoreConstants;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class PmtctFollowUpRule implements ICommonRule {
 
@@ -23,7 +23,6 @@ public class PmtctFollowUpRule implements ICommonRule {
     private DateTime dueDate;
     private DateTime overDueDate;
     private DateTime expiryDate;
-    private String buttonStatus = "";
 
     public PmtctFollowUpRule(Date pmtctDate, @Nullable Date latestFollowUpDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -35,12 +34,12 @@ public class PmtctFollowUpRule implements ICommonRule {
         return Days.daysBetween(new DateTime(pmtctDate), new DateTime()).getDays();
     }
 
-    public boolean isValid(int dueDay, int overDueDay, int expiry){
-        if(latestFollowUpDate != null){
+    public boolean isValid(int dueDay, int overDueDay, int expiry) {
+        if (latestFollowUpDate != null) {
             this.dueDate = latestFollowUpDate.plusDays(dueDay);
             this.overDueDate = latestFollowUpDate.plusDays(overDueDay);
             this.expiryDate = latestFollowUpDate.plusDays(expiry);
-        }else{
+        } else {
             this.dueDate = pmtctDate.plusDays(dueDay);
             this.overDueDate = pmtctDate.plusDays(overDueDay);
             this.expiryDate = pmtctDate.plusDays(expiry);

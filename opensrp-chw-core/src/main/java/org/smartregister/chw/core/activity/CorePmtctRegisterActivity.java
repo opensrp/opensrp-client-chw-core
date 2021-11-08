@@ -10,8 +10,6 @@ import org.smartregister.chw.core.utils.FormUtils;
 import org.smartregister.chw.pmtct.activity.BasePmtctRegisterActivity;
 import org.smartregister.family.util.JsonFormUtils;
 
-import java.util.List;
-
 /**
  * Created by Billy on 20/10/2021.
  */
@@ -19,7 +17,7 @@ public class CorePmtctRegisterActivity extends BasePmtctRegisterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NavigationMenu.getInstance(this,null,null);
+        NavigationMenu.getInstance(this, null, null);
     }
 
     @Override
@@ -30,6 +28,7 @@ public class CorePmtctRegisterActivity extends BasePmtctRegisterActivity {
             menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.PMTCT);
         }
     }
+
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         startActivityForResult(FormUtils.getStartFormActivity(jsonForm, this.getString(R.string.pmtct_registration), this), JsonFormUtils.REQUEST_CODE_GET_JSON);

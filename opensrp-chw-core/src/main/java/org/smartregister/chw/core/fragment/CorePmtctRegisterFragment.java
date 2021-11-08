@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
@@ -18,7 +22,6 @@ import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.pmtct.fragment.BasePmtctRegisterFragment;
 import org.smartregister.chw.pmtct.model.BasePmtctRegisterFragmentModel;
 import org.smartregister.chw.pmtct.presenter.BasePmtctRegisterFragmentPresenter;
-
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
@@ -28,10 +31,6 @@ import org.smartregister.view.customcontrols.CustomFontTextView;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 
 import timber.log.Timber;
 
