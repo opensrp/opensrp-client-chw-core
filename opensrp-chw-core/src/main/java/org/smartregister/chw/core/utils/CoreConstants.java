@@ -831,6 +831,10 @@ public class CoreConstants {
             public static final String REASON = "remove_reason";
             public static final String DATE_DIED = "date_died";
             public static final String DATE_MOVED = "date_moved";
+            public static final String RECEIVED_DEATH_CERTIFICATE = "received_death_certificate";
+            public static final String DEATH_CERTIFICATE_ISSUE_DATE = "death_certificate_issue_date";
+            public static final String DEATH_CERTIFICATE_NUMBER = "death_certificate_number";
+            public static final String DEATH_NOTIFICATION_DONE = "death_notification_done";
         }
 
         public static class CHANGE_CARE_GIVER {

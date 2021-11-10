@@ -2,6 +2,10 @@ package org.smartregister.chw.core.utils;
 
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_STATE;
@@ -469,6 +473,12 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                         Timber.d(e.toString());
                     }
                 }
+
+                if (myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE)) fields.put(registrationFormParams.getRight().get(x));
+                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE)) fields.put(registrationFormParams.getRight().get(x));
+                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER)) fields.put(registrationFormParams.getRight().get(x));
+                if (myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE)) fields.put(registrationFormParams.getRight().get(x));
+
                 x++;
             }
 
