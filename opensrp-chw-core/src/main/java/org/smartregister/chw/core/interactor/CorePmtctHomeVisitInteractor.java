@@ -25,7 +25,7 @@ public class CorePmtctHomeVisitInteractor extends BasePmtctHomeVisitInteractor {
     }
 
     @Override
-    public void calculateActions(BasePmtctHomeVisitContract.View view, org.smartregister.chw.pmtct.domain.MemberObject memberObject, BasePmtctHomeVisitContract.InteractorCallBack callBack) {
+    public void calculateActions(BasePmtctHomeVisitContract.View view, MemberObject memberObject, BasePmtctHomeVisitContract.InteractorCallBack callBack) {
         try {
             VisitUtils.processVisits(memberObject.getBaseEntityId());
         } catch (Exception e) {
