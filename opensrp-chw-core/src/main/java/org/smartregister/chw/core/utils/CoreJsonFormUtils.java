@@ -194,10 +194,10 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return new ArrayList<>(Arrays.asList(vals));
     }
 
-    public static HashMap<String, String> getChoice(Context context) {
+    public static HashMap<String, String> getChoice() {
         HashMap<String, String> choices = new HashMap<>();
-        choices.put(context.getResources().getString(R.string.yes), "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        choices.put(context.getResources().getString(R.string.no), "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put("Yes", "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put("No", "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return choices;
     }
 
