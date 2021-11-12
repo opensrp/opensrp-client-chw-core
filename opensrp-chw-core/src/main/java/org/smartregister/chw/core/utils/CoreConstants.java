@@ -822,6 +822,8 @@ public class CoreConstants {
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
         public static final String HIV_MEMBER = "ec_hiv_register";
         public static final String TB_MEMBER = "ec_tb_register";
+        public static final String HTS_MEMBERS = "ec_hts_register" ;
+        public static final String CBHS_CLIENTS = "ec_cbhs_register";
     }
 
     public static final class INTENT_KEY {
@@ -872,6 +874,7 @@ public class CoreConstants {
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
         public static final String PMTCT = "PMTCT";
+        public static final String CBHS_CLIENTS = "CBHS Clients" ;
     }
 
     public static final class RULE_FILE {
