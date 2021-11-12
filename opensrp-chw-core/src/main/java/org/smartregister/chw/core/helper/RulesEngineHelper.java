@@ -13,6 +13,7 @@ import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.rule.ICommonRule;
 import org.smartregister.chw.core.rule.MalariaFollowUpRule;
 import org.smartregister.chw.core.rule.PNCHealthFacilityVisitRule;
+import org.smartregister.chw.core.rule.PmtctFollowUpRule;
 import org.smartregister.chw.core.rule.TbFollowupRule;
 
 import java.io.BufferedReader;
@@ -180,5 +181,20 @@ public class RulesEngineHelper {
         processDefaultRules(rules, facts);
 
         return malariaFollowUpRule;
+    }
+
+    public PmtctFollowUpRule getPmtctRule(PmtctFollowUpRule pmtctFollowUpRule, String rulesFile) {
+
+        Facts facts = new Facts();
+        facts.put(PmtctFollowUpRule.RULE_KEY, pmtctFollowUpRule);
+
+        Rules rules = getRulesFromAsset(RULE_FOLDER_PATH + rulesFile);
+        if (rules == null) {
+            return null;
+        }
+
+        processDefaultRules(rules, facts);
+
+        return pmtctFollowUpRule;
     }
 }

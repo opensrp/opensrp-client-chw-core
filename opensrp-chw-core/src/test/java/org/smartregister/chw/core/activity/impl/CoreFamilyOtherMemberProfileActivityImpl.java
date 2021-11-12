@@ -53,6 +53,11 @@ public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMem
     }
 
     @Override
+    protected void startPmtctRegisration() {
+        // do nothing
+    }
+
+    @Override
     public void setIndependentClient(boolean isIndependent) {
         // do nothing
     }

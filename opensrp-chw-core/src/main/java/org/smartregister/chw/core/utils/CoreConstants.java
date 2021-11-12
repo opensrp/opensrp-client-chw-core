@@ -89,6 +89,7 @@ public class CoreConstants {
         String TB_VISIT = "TB_VISIT";
         String HIV_VISIT = "HIV_VISIT";
         String ROUTINE_HOUSEHOLD_VISIT = "ROUTINE_HOUSEHOLD_VISIT";
+        String PMTCT_VISIT = "PMTCT_VISIT";
     }
 
     public interface SCHEDULE_GROUPS {
@@ -269,7 +270,8 @@ public class CoreConstants {
 
         private static final String HIV_INDEX_CLIENTS_CONTACTS_REGISTRATION_FORM = "hiv_index_clients_contacts_registration_form";
 
-
+        private static final String PMTCT_FORM = "pmtct_registration_form";
+        private static final String PMTCT_FOLLOWUP_FORM = "pmtct_followup_form";
 
 
         public static AssetManager assetManager;
@@ -325,6 +327,14 @@ public class CoreConstants {
 
         public static String getMalariaReferralForm() {
             return MALARIA_REFERRAL_FORM;
+        }
+
+        public static String getPmtctForm(){
+            return PMTCT_FORM;
+        }
+
+        public static String getPmtctFollowupForm(){
+            return PMTCT_FOLLOWUP_FORM;
         }
 
         public static String getBirthCertification() {
@@ -863,6 +873,7 @@ public class CoreConstants {
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
+        public static final String PMTCT = "PMTCT";
         public static final String CBHS_CLIENTS = "CBHS Clients" ;
     }
 
@@ -881,6 +892,7 @@ public class CoreConstants {
         public static final String FP_IUCD = "fp-iucd-rule.yml";
         public static final String TB_FOLLOW_UP_VISIT = "tb-followup-rules.yml";
         public static final String HIV_FOLLOW_UP_VISIT = "hiv-followup-rules.yml";
+        public static final String PMTCT_FOLLOW_UP_VISIT = "pmtct-followup-rules.yml";
     }
 
     public static class PROFILE_CHANGE_ACTION {
@@ -1098,6 +1110,7 @@ public class CoreConstants {
         public static final String HTS_REGISTER_ACTIVITY = "HTS_REGISTER_ACTIVITY";
         public static final String HIV_INDEX_REGISTER_ACTIVITY = "HIV_INDEX_REGISTER_ACTIVITY";
         public static final String TB_REGISTER_ACTIVITY = "TB_REGISTER_ACTIVITY";
+        public static final String PMTCT_REGISTER_ACTIVITY = "PMTCT_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
