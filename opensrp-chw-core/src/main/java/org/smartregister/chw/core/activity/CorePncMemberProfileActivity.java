@@ -72,7 +72,12 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         } else if (itemId == R.id.action_fp_initiation_pnc) {
             startFpRegister();
             return true;
-        } else if (itemId == R.id.action_hiv_registration) {
+        }
+        else if (itemId == R.id.action_cbhs_registration) {
+            startHivRegister();
+            return true;
+        }
+        else if (itemId == R.id.action_hiv_registration) {
             startHivRegister();
             return true;
         } else if (itemId == R.id.action_tb_registration) {

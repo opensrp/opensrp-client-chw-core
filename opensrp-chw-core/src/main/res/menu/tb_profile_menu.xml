@@ -37,5 +37,11 @@
         android:title="@string/hiv_registration"
         android:visible="false"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_cbhs_registration"
+        android:enabled="true"
+        android:title="@string/cbhs_registration"
+        android:visible="false"
+        app:showAsAction="never" />
 
 </menu>

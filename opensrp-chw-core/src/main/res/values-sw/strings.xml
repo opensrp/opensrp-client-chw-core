@@ -710,6 +710,7 @@
     <string name="edit_all_client_member_form_title">Hariri taarifa za mteja</string>
     <string name="location_info">Taarifa za ramani</string>
     <string name="hiv_registration">Usajili wa VVU</string>
+    <string name="cbhs_registration">Usajili wa CBHS</string>
     <string name="tb_registration">Usajili wa TB</string>
     <string name="remove_client">Ondoa mteja</string>
     <string name="call_all_clients_member">Piga simu kwa mteja au mlezi</string>

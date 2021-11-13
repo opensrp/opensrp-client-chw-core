@@ -87,6 +87,13 @@
         android:visible="false"
         android:orderInCategory="1100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_cbhs_registration"
+        android:enabled="true"
+        android:title="@string/cbhs_registration"
+        android:visible="false"
+        android:orderInCategory="1100"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_tb_registration"
