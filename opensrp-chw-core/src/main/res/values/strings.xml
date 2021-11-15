@@ -724,7 +724,8 @@
     <!--All Client Member Profile -->
     <string name="edit_all_client_member_form_title">Edit Client Details</string>
     <string name="location_info">Location info</string>
-    <string name="hiv_registration">CBHS Registration</string>
+    <string name="hiv_registration">HIV Registration</string>
+    <string name="cbhs_registration">CBHS Registration</string>
     <string name="tb_registration">TB registration</string>
     <string name="remove_client">Remove Client</string>
     <string name="call_all_clients_member">Call client or caregiver</string>
@@ -782,7 +783,6 @@
 
     <!--PMTCT Titles -->
     <string name="pmtct_registration">PMTCT Registration</string>
-
 
 
 </resources>

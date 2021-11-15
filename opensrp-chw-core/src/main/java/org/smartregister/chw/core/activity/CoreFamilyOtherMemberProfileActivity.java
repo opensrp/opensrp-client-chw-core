@@ -169,7 +169,11 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_hiv_registration) {
             startHivRegister();
             return true;
-        } else if (i == R.id.action_tb_registration) {
+        } else if (i == R.id.action_cbhs_registration) {
+            startHivRegister();
+            return true;
+        }
+        else if (i == R.id.action_tb_registration) {
             startTbRegister();
         } else if (i == R.id.action_malaria_diagnosis) {
             startHfMalariaFollowupForm();
