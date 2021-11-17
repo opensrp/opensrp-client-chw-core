@@ -26,7 +26,7 @@
     <!-- Navigation Strings -->
     <string name="action_start_sync">Synchronisation démarrée</string>
     <string name="action_sync_failed">Synchronisation échouée</string>
-    <string name="nav_registers">Registres</string>
+    <string name="nav_registers">Modules</string>
     <string name="nav_logout_as">Déconnexion</string>
     <string name="nav_sync">Synchro.</string>
     <string name="nav_last">Dernier:</string>
