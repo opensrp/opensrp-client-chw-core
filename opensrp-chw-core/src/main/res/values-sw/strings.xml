@@ -25,7 +25,7 @@
     <!-- Navigation Strings -->
     <string name="action_start_sync">Sync imeanza</string>
     <string name="action_sync_failed">Sync imeshindikana</string>
-    <string name="nav_registers">Rejesta</string>
+    <string name="nav_registers">Moduli</string>
     <string name="nav_logout_as">Toka kwenye mfumo kama</string>
     <string name="nav_sync">Sync</string>
     <string name="nav_last">Mwisho:</string>
