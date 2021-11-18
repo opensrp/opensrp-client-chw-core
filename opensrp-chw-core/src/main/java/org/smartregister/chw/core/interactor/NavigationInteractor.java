@@ -6,6 +6,7 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
+
 import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
 
@@ -387,7 +388,8 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              from " + CoreConstants.TABLE_NAME.HTS_MEMBERS + " p " +
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                                "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null and p.chw_referral_service = 'Suspected HIV' )" ;
+                                "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null and p.chw_referral_service = 'Suspected HIV' and " +
+                                "              ( UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') OR p.client_hiv_status_after_testing IS NULL) )" ;
                 return NavigationDao.getQueryCount(sqlHts);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX:
