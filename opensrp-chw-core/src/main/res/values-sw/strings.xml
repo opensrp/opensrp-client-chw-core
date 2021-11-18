@@ -761,6 +761,8 @@
 
     <!--PMTCT Titles -->
     <string name="pmtct_registration">Usajili wa PMTCT</string>
+    <string name="hiv_problem_outcome">Matokeo ya matatizo ya VVU</string>
+    <string name="hiv_community_followup_referral">Tuma ufuatiliaji wa jamii wa VVU</string>
 
 </resources>
 
