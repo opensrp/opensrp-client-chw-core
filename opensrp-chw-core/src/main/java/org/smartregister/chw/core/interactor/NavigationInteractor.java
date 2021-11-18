@@ -6,7 +6,7 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
-import org.smartregister.chw.hiv.util.DBConstants;
+
 import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
 
