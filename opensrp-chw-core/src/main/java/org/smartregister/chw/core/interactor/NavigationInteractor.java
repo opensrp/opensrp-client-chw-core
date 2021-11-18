@@ -384,10 +384,10 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "SELECT SUM(c)\n" +
                                 "FROM (\n" +
                                 "              select count(*) as c " +
-                                "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV + " p " +
+                                "              from " + CoreConstants.TABLE_NAME.HTS_MEMBERS + " p " +
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                                "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null )" ;
+                                "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null and p.chw_referral_service = 'Suspected HIV' )" ;
                 return NavigationDao.getQueryCount(sqlHts);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX:
