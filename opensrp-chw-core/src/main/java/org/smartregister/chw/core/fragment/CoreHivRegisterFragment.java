@@ -39,7 +39,7 @@ public abstract class CoreHivRegisterFragment extends BaseHivRegisterFragment {
     private static final String DUE_FILTER_TAG = "PRESSED";
     private View view;
     private View dueOnlyLayout;
-    private boolean dueFilterActive = false;
+    protected boolean dueFilterActive = false;
 
     @Override
     public void initializeAdapter(@Nullable Set<? extends org.smartregister.configurableviews.model.View> visibleColumns) {
