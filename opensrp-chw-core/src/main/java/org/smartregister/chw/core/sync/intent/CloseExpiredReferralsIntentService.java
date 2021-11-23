@@ -22,10 +22,13 @@ import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.JsonFormUtils;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -99,7 +102,16 @@ public class CloseExpiredReferralsIntentService extends IntentService {
                         break;
                     default:
                         if (appointmentDate != null && !appointmentDate.isEmpty()) {
-                            expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
+                            try{
+                                expiredCalendar.setTimeInMillis(new BigDecimal(appointmentDate).longValue());
+                            }catch (Exception e){
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                try {
+                                    expiredCalendar.setTime(sdf.parse(appointmentDate));
+                                } catch (ParseException parseException) {
+                                    Timber.e(parseException);
+                                }
+                            }
                         } else {
                             expiredCalendar.setTimeInMillis(new BigDecimal(startDate).longValue());
                         }
