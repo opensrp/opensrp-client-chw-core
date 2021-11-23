@@ -299,6 +299,7 @@
     <string name="interpunct" translatable="false"> &#183; </string>
     <string name="anc_health_facility_visits">ANC HEALTH FACILITY VISITS</string>
     <string name="anc_card">ANC Card</string>
+    <string name="delivery_kit">Delivery Kit</string>
     <string name="anc_tt_immunization">TT IMMUNIZATION</string>
     <string name="anc_iptp_sp">IPTp-SP DOSE</string>
     <string name="urine_analysis">Urine analysis</string>
@@ -314,6 +315,7 @@
     <string name="ifa_received_status">IFA received: {0}</string>
     <string name="tests_done_details">Tests done: {0}</string>
     <string name="anc_home_visit_anc_card_received">ANC card received</string>
+    <string name="anc_home_visit_delivery_kit_received">Delivery kit received</string>
     <string name="tt_done">TT{0} - done {1}</string>
     <string name="iptpsp_done">IPTp-SP dose{0}- done {1} </string>
     <string name="one">1</string>
@@ -737,11 +739,21 @@
     <string name="thinkmd_health_assessment">ThinkMD health assessment</string>
     <string name="thinkmd_careplan">ThinkMD care plan (%1$s)</string>
     <string name="care_plan">Care plan</string>
-    <string name="thinkmd_identifier_type">thinkmd_id</string>
     <string name="thinkmd_assessment_saved">ThinkMD health assessment saved</string>
     <string name="no_thinkmd_care_plan_found">No thinkmd care plan found</string>
 
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">View vaccine history</string>
     <string name="see_vaccines_due_today">See vaccines due today</string>
+    <string name="physically_challenged">Physically Challenged</string>
+
+    <!-- Sync status progress bar -->
+    <string name="device_data_synced">Device data synced</string>
+    <string name="device_data_not_synced">Device data not synced</string>
+    <string name="progressBarLabel">Syncing %s : %d%% </string>
+    <string name="events">Events</string>
+    <string name="locations">Locations</string>
+    <string name="plans">Plans</string>
+    <string name="structures">Structures</string>
+    <string name="tasks_text">Tasks</string>
 </resources>

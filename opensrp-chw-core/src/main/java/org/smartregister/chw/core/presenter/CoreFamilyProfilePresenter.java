@@ -19,6 +19,7 @@ import org.smartregister.chw.core.model.CoreChildProfileModel;
 import org.smartregister.chw.core.model.CoreChildRegisterModel;
 import org.smartregister.chw.core.repository.AncRegisterRepository;
 import org.smartregister.chw.core.repository.PncRegisterRepository;
+import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.Utils;
@@ -41,9 +42,9 @@ import static org.smartregister.chw.core.utils.CoreJsonFormUtils.toList;
 
 public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresenter implements FamilyProfileExtendedContract.Presenter, CoreChildRegisterContract.InteractorCallBack, FamilyProfileExtendedContract.PresenterCallBack {
 
+    protected CoreChildProfileModel childProfileModel;
     private WeakReference<FamilyProfileExtendedContract.View> viewReference;
     private CoreChildRegisterInteractor childRegisterInteractor;
-    protected CoreChildProfileModel childProfileModel;
 
 
     public CoreFamilyProfilePresenter(FamilyProfileExtendedContract.View view, FamilyProfileContract.Model model, String familyBaseEntityId, String familyHead, String primaryCaregiver, String familyName) {
@@ -201,5 +202,18 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
 
     private PncRegisterRepository getPncRegisterRepository() {
         return CoreChwApplication.pncRegisterRepository();
+    }
+
+    @Override
+    public void refreshProfileTopSection(CommonPersonObjectClient client) {
+        super.refreshProfileTopSection(client);
+
+        if (client == null || client.getColumnmaps() == null) {
+            return;
+        }
+        String eventDateValue = Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, true);
+        String eventDate = eventDateValue != null && !eventDateValue.equals("") ? eventDateValue.substring(0,10) : "";
+
+        getView().setEventDate(eventDate);
     }
 }

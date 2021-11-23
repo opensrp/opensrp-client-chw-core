@@ -12,6 +12,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
@@ -31,6 +36,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import org.smartregister.chw.core.contract.CoreChildRegisterContract;
+
 public class CoreChildRegisterActivityTest extends BaseUnitTest {
 
     @Rule
@@ -49,8 +56,8 @@ public class CoreChildRegisterActivityTest extends BaseUnitTest {
         //Auto login by default
         String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        context.configuration().getDrishtiApplication().setPassword(password);
-        context.session().setPassword(password);
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         controller = Robolectric.buildActivity(CoreChildRegisterActivity.class, new Intent());
         activity = controller.get();
@@ -93,4 +100,52 @@ public class CoreChildRegisterActivityTest extends BaseUnitTest {
         assertEquals(R.id.action_family, navigationView.getSelectedItemId());
     }
 
+    @Test
+    public void canInitializePresenter() {
+        activity.initializePresenter();
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "presenter"));
+        Assert.assertTrue(ReflectionHelpers.getField(activity, "presenter") instanceof CoreChildRegisterPresenter);
+    }
+
+    @Test
+    public void getPresenterReturnsCorrectPresenter() {
+        activity.initializePresenter();
+        Assert.assertTrue(activity.presenter() instanceof CoreChildRegisterContract.Presenter);
+    }
+
+    @Test
+    public void registerBottomNavIsInitialisedCorrectly() {
+        activity.setContentView(R.layout.activity_base_register);
+        activity.registerBottomNavigation();
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "bottomNavigationHelper"));
+        BottomNavigationView bottomNavigationView = ReflectionHelpers.getField(activity, "bottomNavigationView");
+        Assert.assertNotNull(bottomNavigationView);
+        Assert.assertEquals(4, bottomNavigationView.getMenu().size());
+        Assert.assertEquals(LabelVisibilityMode.LABEL_VISIBILITY_LABELED, bottomNavigationView.getLabelVisibilityMode());
+    }
+
+    @Test
+    public void canOpenFamilyListView() {
+        activity.setContentView(R.layout.activity_base_register);
+        activity.registerBottomNavigation();
+        BottomNavigationView mockView = Mockito.spy((BottomNavigationView) ReflectionHelpers.getField(activity, "bottomNavigationView"));
+        ReflectionHelpers.setField(activity, "bottomNavigationView", mockView);
+        activity.openFamilyListView();
+        Mockito.verify(mockView).setSelectedItemId(R.id.action_family);
+    }
+
+    @Test
+    public void getRegisterFragmentReturnsCoreChildRegisterFragment() {
+        Assert.assertTrue(activity.getRegisterFragment() instanceof CoreChildRegisterFragment);
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            activity.finish();
+            controller.pause().stop().destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

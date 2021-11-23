@@ -15,39 +15,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.vijay.jsonwizard.domain.Form;
 
-import org.jeasy.rules.api.Rules;
-import org.joda.time.LocalDate;
-import org.joda.time.Months;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
-import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
 import org.smartregister.chw.anc.domain.MemberObject;
-import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.util.Constants;
-import org.smartregister.chw.anc.util.VisitUtils;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
 import org.smartregister.chw.core.dao.AncDao;
 import org.smartregister.chw.core.interactor.CoreAncMemberProfileInteractor;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.HomeVisitUtil;
-import org.smartregister.chw.core.utils.VisitSummary;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.AlertStatus;
 import org.smartregister.domain.Task;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
+
+import timber.log.Timber;
 
 import static org.smartregister.chw.core.utils.Utils.getCommonPersonObjectClient;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
@@ -57,8 +45,7 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     protected RecyclerView notificationAndReferralRecyclerView;
     protected RelativeLayout notificationAndReferralLayout;
     protected boolean hasDueServices = false;
-    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
-    private LocalDate ancCreatedDate;
+    private int loadingThreads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,26 +157,6 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         super.onClick(view);
     }
 
-    private int getMonthsDifference(LocalDate date1, LocalDate date2) {
-        return Months.monthsBetween( date1.withDayOfMonth(1), date2.withDayOfMonth(1)).getMonths();
-    }
-
-    private boolean isVisitThisMonth(LocalDate lastVisitDate, LocalDate todayDate) {
-        return getMonthsDifference(lastVisitDate, todayDate) < 1;
-
-    }
-
-    private LocalDate getDateCreated() {
-        try {
-            Date dateCreated = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(memberObject.getDateCreated().substring(0, 10));
-            String createdDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(dateCreated);
-            ancCreatedDate = formatter.parseLocalDate(createdDate);
-        } catch (Exception e) {
-
-        }
-        return ancCreatedDate;
-    }
-
     private void getLayoutVisibility() {
         layoutRecordView.setVisibility(View.VISIBLE);
         record_reccuringvisit_done_bar.setVisibility(View.GONE);
@@ -197,35 +164,40 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         layoutNotRecordView.setVisibility(View.GONE);
     }
 
-    private void getButtonStatus() {
-        openVisitMonthView();
-        textViewUndo.setVisibility(View.GONE);
+    @Override
+    public void onVisitStatusReloaded(String status, Date lastVisitDate) {
+        if (status.equalsIgnoreCase(CoreConstants.VISIT_STATE.WITHIN_24_HR)) {
 
-        Rules rules = CoreChwApplication.getInstance().getRulesEngineHelper().rules(CoreConstants.RULE_FILE.ANC_HOME_VISIT);
-        Visit lastNotDoneVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE);
-        if (lastNotDoneVisit != null) {
-            Visit lastNotDoneVisitUndo = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT_NOT_DONE_UNDO);
-            if (lastNotDoneVisitUndo != null
-                    && lastNotDoneVisitUndo.getDate().after(lastNotDoneVisit.getDate())) {
-                lastNotDoneVisit = null;
-            }
-        }
+            String monthString = (String) DateFormat.format("MMMM", lastVisitDate);
+            layoutRecordView.setVisibility(View.GONE);
+            tvEdit.setVisibility(View.VISIBLE);
+            textViewNotVisitMonth.setText(getContext().getString(R.string.anc_visit_done, monthString));
+            imageViewCross.setImageResource(R.drawable.activityrow_visited);
 
-        Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(baseEntityID, org.smartregister.chw.anc.util.Constants.EVENT_TYPE.ANC_HOME_VISIT);
-        String visitDate = lastVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getDate()) : null;
-        String lastVisitNotDone = lastNotDoneVisit != null ? new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastNotDoneVisit.getDate()) : null;
+            textViewUndo.setVisibility(View.GONE);
+            textViewAncVisitNot.setVisibility(View.GONE);
+        } else if (status.equalsIgnoreCase(CoreConstants.VISIT_STATE.WITHIN_MONTH)) {
 
-        VisitSummary visitSummary = HomeVisitUtil.getAncVisitStatus(this, rules, visitDate, lastVisitNotDone, getDateCreated());
-        String visitStatus = visitSummary.getVisitStatus();
+            record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
+            layoutNotRecordView.setVisibility(View.GONE);
 
-        if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
+            textViewUndo.setVisibility(View.GONE);
+            textViewAncVisitNot.setVisibility(View.GONE);
+        } else if (status.equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
+
+            openVisitMonthView();
+            textViewUndo.setVisibility(View.GONE);
             textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_selector_overdue);
             getLayoutVisibility();
+        } else if (status.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
 
-        } else if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
+            openVisitMonthView();
+            textViewUndo.setVisibility(View.GONE);
             textview_record_anc_visit.setBackgroundResource(R.drawable.record_btn_anc_selector);
             getLayoutVisibility();
-        } else if (visitStatus.equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_VISIT_THIS_MONTH)) {
+        } else if (status.equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_VISIT_THIS_MONTH)) {
+
+            openVisitMonthView();
             textViewUndo.setVisibility(View.VISIBLE);
             textViewUndo.setText(getString(org.smartregister.chw.opensrp_chw_anc.R.string.undo));
             record_reccuringvisit_done_bar.setVisibility(View.GONE);
@@ -237,40 +209,14 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
     public void setupViews() {
         super.setupViews();
         updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
-        Visit lastVisit = getVisit(Constants.EVENT_TYPE.ANC_HOME_VISIT);
-        if (lastVisit != null) {
-            boolean within24Hours = VisitUtils.isVisitWithin24Hours(lastVisit);
-            String lastVisitDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(lastVisit.getDate());
-            if (isVisitThisMonth(formatter.parseLocalDate(lastVisitDate), new LocalDate())) {
-                if (within24Hours) {
-                    Calendar cal = Calendar.getInstance();
-                    int offset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
-                    Long longDate = lastVisit.getDate().getTime();
-                    Date date = new Date(longDate - (long) offset);
-                    String monthString = (String) DateFormat.format("MMMM", date);
-                    layoutRecordView.setVisibility(View.GONE);
-                    tvEdit.setVisibility(View.VISIBLE);
-                    textViewNotVisitMonth.setText(getContext().getString(R.string.anc_visit_done, monthString));
-                    imageViewCross.setImageResource(R.drawable.activityrow_visited);
-                } else {
-                    record_reccuringvisit_done_bar.setVisibility(View.VISIBLE);
-                    layoutNotRecordView.setVisibility(View.GONE);
-                }
-                textViewUndo.setVisibility(View.GONE);
-                textViewAncVisitNot.setVisibility(View.GONE);
-
-            } else {
-                getButtonStatus();
-            }
-        } else {
-            getButtonStatus();
-        }
+        ancMemberProfilePresenter().refreshVisitStatus(memberObject);
     }
 
     protected void initializeNotificationReferralRecyclerView() {
         notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
         notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (notificationAndReferralRecyclerView != null)
+            notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -294,4 +240,14 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         return AncDao.getMember(baseEntityID);
     }
 
+    @Override
+    public void showProgressBar(boolean isLoading) {
+        loadingThreads = isLoading ? (loadingThreads + 1) : (loadingThreads - 1);
+        super.showProgressBar(loadingThreads > 0);
+    }
+
+    @Override
+    public <E extends Exception> void onError(E exception) {
+        Timber.e(exception);
+    }
 }

@@ -15,6 +15,7 @@ import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
+import org.smartregister.job.SyncAllLocationsServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.SyncTaskServiceJob;
 
@@ -27,9 +28,9 @@ import timber.log.Timber;
 
 public class NavigationPresenter implements NavigationContract.Presenter {
 
-    private NavigationContract.Model mModel;
-    private NavigationContract.Interactor mInteractor;
-    private WeakReference<NavigationContract.View> mView;
+    private final NavigationContract.Model mModel;
+    private final NavigationContract.Interactor mInteractor;
+    private final WeakReference<NavigationContract.View> mView;
     private HashMap<String, String> tableMap = new HashMap<>();
 
     public NavigationPresenter(CoreApplication application, NavigationContract.View view, NavigationModel.Flavor modelFlavor) {
@@ -72,6 +73,21 @@ public class NavigationPresenter implements NavigationContract.Presenter {
     }
 
     @Override
+    public void checkSynced(Activity activity) {
+        mInteractor.checkSynced(new NavigationContract.InteractorCallback<Boolean>() {
+            @Override
+            public void onResult(Boolean result) {
+                getNavigationView().updateSyncStatusDisplay(activity, result);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Timber.e("Error checking sync status %s", e.getMessage());
+            }
+        });
+    }
+
+    @Override
     public NavigationContract.View getNavigationView() {
         return mView.get();
     }
@@ -106,7 +122,6 @@ public class NavigationPresenter implements NavigationContract.Presenter {
 
     }
 
-
     @Override
     public void refreshLastSync() {
         // get last sync date
@@ -128,12 +143,13 @@ public class NavigationPresenter implements NavigationContract.Presenter {
         PullUniqueIdsServiceJob.scheduleJobImmediately(PullUniqueIdsServiceJob.TAG);
         //PlanIntentServiceJob.scheduleJobImmediately(PlanIntentServiceJob.TAG);
         SyncTaskServiceJob.scheduleJobImmediately(SyncTaskServiceJob.TAG);
+        // sync all locations into device
+        SyncAllLocationsServiceJob.scheduleJobImmediately(SyncAllLocationsServiceJob.TAG);
     }
 
     @Override
     public List<NavigationOption> getOptions() {
         return mModel.getNavigationItems();
     }
-
 
 }

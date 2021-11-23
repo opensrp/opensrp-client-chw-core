@@ -19,13 +19,13 @@ public class CoreConstants {
     public static final String DATE = "date";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
+    public static String PERSISTED_LANGUAGE = "persisted_language";
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, DONE, EXPIRY}
 
     public enum ServiceType {DUE, OVERDUE, UPCOMING}
 
     public enum FamilyServiceType {DUE, OVERDUE, NOTHING}
-
 
     interface Properties {
         String TASK_IDENTIFIER = "taskIdentifier";
@@ -64,7 +64,7 @@ public class CoreConstants {
         String NOTIFICATION_DATE = "notification_date";
         String REFERRAL_TASK_ID = "referral_task_id";
         String BASE_ENTITY_ID = "base_entity_id";
-        String THINK_MD_ID = "thinkmd_id";
+        String THINKMD_ID = "thinkmd_id";
         String PLAN_ID = "plan_id";
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
@@ -104,6 +104,7 @@ public class CoreConstants {
 
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
         public static final String FAMILY_REGISTRATION = "Family Registration";
@@ -192,6 +193,7 @@ public class CoreConstants {
      */
     public static class JSON_FORM {
         public static final String BIRTH_CERTIFICATION = "birth_certification";
+        public static final String DISABILITY = "child_disability";
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
         public static final String FAMILY_MEMBER_REGISTER = "family_member_register";
@@ -292,6 +294,10 @@ public class CoreConstants {
 
         public static String getBirthCertification() {
             return Utils.getLocalForm(BIRTH_CERTIFICATION, locale, assetManager);
+        }
+
+        public static String getDisability() {
+            return Utils.getLocalForm(DISABILITY, locale, assetManager);
         }
 
         public static String getObsIllness() {
@@ -680,6 +686,11 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING_UPDATE = "ec_family_planning_update";
         public static final String NOTIFICATION_UPDATE = "notification_update";
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
+        public static final String FAMILY_LOCATION_STATE = "state";
+        public static final String FAMILY_LOCATION_LGA = "lga";
+        public static final String FAMILY_LOCATION_WARD = "ward";
+        public static final String FAMILY_LOCATION_COMMUNITY = "community";
+        public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
     public static final class INTENT_KEY {
@@ -921,6 +932,12 @@ public class CoreConstants {
 
     public static final class ACTIVITY_PAYLOAD {
         public static final String ACTION = "action";
+        public static final String PHONE_NUMBER = "phone_number";
+        public static final String FORM_NAME = "form_name";
+        public static final String UNIQUE_ID = "unique_id";
+        public static final String FAMILY_BASE_ENTITY_ID = "familyBaseEntityId";
+        public static final String FAMILY_NAME = "familyName";
+        public static final String LAST_LMP = "lastMenstrualPeriod";
     }
 
     public static final class ACTION {
@@ -928,6 +945,8 @@ public class CoreConstants {
     }
 
     public static final class VISIT_STATE {
+        public static final String WITHIN_24_HR = "WITHIN_24_HR";
+        public static final String WITHIN_MONTH = "WITHIN_MONTH";
         public static final String EXPIRED = "EXPIRED";
         public static final String DUE = "DUE";
         public static final String OVERDUE = "OVERDUE";
@@ -1007,14 +1026,14 @@ public class CoreConstants {
         public static final String PROVIDER_TYPE = "in_app_providers";
     }
 
-    public static class AncHealthFacilityVisitUtil{
-        public static final String TETANUS_TOXOID  = "Tetanus toxoid (TT)";
+    public static class AncHealthFacilityVisitUtil {
+        public static final String TETANUS_TOXOID = "Tetanus toxoid (TT)";
     }
 
-
     public static class ThinkMdConstants {
-        public static String HTML_ASSESSMENT = "html_assessment";
         public static String CARE_PLAN_DATE = "care_plan_date";
         public static String CHILD_PROFILE_ACTIVITY = "org.smartregister.chw.activity.ChildProfileActivity";
+        public static String FHIR_BUNDLE_INTENT = "fhirBundle";
+        public static String THINKMD_IDENTIFIER_TYPE = "thinkmd_id";
     }
 }

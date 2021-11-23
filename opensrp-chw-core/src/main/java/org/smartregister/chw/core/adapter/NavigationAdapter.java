@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.listener.NavigationListener;
 import org.smartregister.chw.core.model.NavigationOption;
@@ -24,33 +25,27 @@ import java.util.Map;
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.MyViewHolder> {
 
     private List<NavigationOption> navigationOptionList;
-    private String selectedView = CoreConstants.DrawerMenu.ALL_FAMILIES;
     private View.OnClickListener onClickListener;
     private Context context;
     private Map<String, Class> registeredActivities;
+    private NavigationAdapterHost host;
     private DrawerLayout drawerLayout;
 
-    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities) {
-        this(navigationOptions, context, registeredActivities, null);
-    }
-
-    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities, DrawerLayout drawerLayout) {
+    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities, NavigationAdapterHost host, DrawerLayout drawerLayout) {
         this.navigationOptionList = navigationOptions;
         this.context = context;
         this.onClickListener = new NavigationListener(context, this);
         this.registeredActivities = registeredActivities;
+        this.host = host;
         this.drawerLayout = drawerLayout;
     }
 
     public String getSelectedView() {
-        if (selectedView == null || selectedView.equals(""))
-            setSelectedView(CoreConstants.DrawerMenu.ALL_FAMILIES);
-
-        return selectedView;
+        return StringUtils.isBlank(host.getSelectedView()) ? CoreConstants.DrawerMenu.ALL_FAMILIES : host.getSelectedView();
     }
 
     public void setSelectedView(String selectedView) {
-        this.selectedView = selectedView;
+        host.setSelectedView(selectedView);
         this.notifyDataSetChanged();
     }
 
@@ -76,12 +71,12 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         holder.getView().setTag(model.getMenuTitle());
 
 
-        if (selectedView != null && selectedView.equals(model.getMenuTitle()) && model.getResourceID() == model.getResourceActiveID()) {
+        if (host.getSelectedView().equals(model.getMenuTitle()) && model.getResourceID() == model.getResourceActiveID()) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.ivIcon.setImageResource(model.getResourceID());
-        } else if (selectedView != null && selectedView.equals(model.getMenuTitle())) {
+        } else if (host.getSelectedView() != null && host.getSelectedView().equals(model.getMenuTitle())) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));

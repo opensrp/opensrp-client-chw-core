@@ -136,7 +136,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
             updateProblemDisplay();
             String clientAge = (Utils.getTranslatedDate(Utils.getDuration(Utils.getValue(getPersonObjectClient().getColumnmaps(), DBConstants.KEY.DOB, false)), getBaseContext()));
             clientName.setText(getString(R.string.client_name_age_suffix, name, clientAge));
-            referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(getTask().getExecutionStartDate().toDate()));
+            referralDate.setText(org.smartregister.chw.core.utils.Utils.dd_MMM_yyyy.format(getTask().getExecutionPeriod().getStart().toDate()));
 
             //For PNC get children belonging to the woman
             String childrenForPncWoman = getChildrenForPncWoman(getPersonObjectClient().entityId());
@@ -190,7 +190,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
                 getString(R.string.children_prefix, children);
     }
 
-    private void updateProblemDisplay() {
+    protected void updateProblemDisplay() {
         if (CoreConstants.TASKS_FOCUS.ANC_DANGER_SIGNS.equals(getTask().getFocus())) {
             clientReferralProblem.setText(getString(R.string.anc_danger_sign_prefix, getTask().getDescription()));
         } else {
@@ -198,7 +198,7 @@ public abstract class BaseReferralTaskViewActivity extends SecuredActivity {
         }
     }
 
-    private String getFamilyMemberContacts() {
+    protected String getFamilyMemberContacts() {
 
         String familyPhoneNumber = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER, true);
         String familyPhoneNumberOther = Utils.getValue(getPersonObjectClient().getColumnmaps(), ChildDBConstants.KEY.FAMILY_MEMBER_PHONENUMBER_OTHER, true);

@@ -110,9 +110,9 @@
                         android:id="@+id/rlReferralNotification"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
                         android:visibility="gone">
 
                         <ImageView
@@ -143,9 +143,9 @@
                         android:id="@+id/rlServiceReport"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
                         android:visibility="gone">
 
                         <ImageView
@@ -177,9 +177,9 @@
                         android:id="@+id/rlIconStockReport"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
                         android:visibility="gone">
 
                         <ImageView
@@ -211,9 +211,9 @@
                         android:id="@+id/rlIconResponders"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
                         android:visibility="gone">
 
                         <ImageView
@@ -245,9 +245,9 @@
                         android:id="@+id/rlIconLang"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp">
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp">
 
                         <ImageView
                             android:id="@+id/ivIconLang"
@@ -278,9 +278,9 @@
                         android:id="@+id/rlIconDevice"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp">
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp">
 
                         <ImageView
                             android:id="@+id/ivIconDevice"
@@ -311,9 +311,9 @@
                         android:id="@+id/rlLogout"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingBottom="15dp">
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp">
 
                         <ImageView
                             android:id="@+id/ivLogout"
@@ -386,13 +386,46 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tvSync"
-                android:layout_width="80sp"
+            <LinearLayout
+                android:id="@+id/progress_status_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginStart="32dp"
+                android:layout_toEndOf="@+id/tvSync"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/sync_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="invisible"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/sync_progress_bar_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:visibility="invisible" />
+
+                <ProgressBar
+                    android:id="@+id/sync_status_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="false"
+                    android:indeterminateTint="@color/colorGreen"
+                    android:max="100"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="4dp"
                 android:layout_toEndOf="@+id/rlIconSync"
                 android:clickable="true"
                 android:ellipsize="end"
@@ -409,10 +442,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/tvSyncTime"
+                android:layout_toEndOf="@+id/tvSync"
                 android:fontFamily="sans-serif"
+                android:gravity="end"
                 android:text="@string/nav_last"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvSyncTime"
@@ -424,7 +459,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/nav_last_sync_time"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </RelativeLayout>
     </RelativeLayout>

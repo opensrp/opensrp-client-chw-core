@@ -73,10 +73,12 @@ public abstract class CoreChildHomeVisitActivity extends BaseAncHomeVisitActivit
         tvTitle.setText(MessageFormat.format("{0}, {1} {2}", memberObject.getFullName(), getDuration(memberObject.getDob()), getString(R.string.home_visit_suffix)));
     }
 
+    /*
     @Override
     protected void attachBaseContext(Context base) {
         // get language from prefs
         String lang = LangUtils.getLanguage(base.getApplicationContext());
         super.attachBaseContext(LangUtils.setAppLocale(base, lang));
     }
+     */
 }

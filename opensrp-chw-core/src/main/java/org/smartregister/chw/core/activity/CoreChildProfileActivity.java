@@ -60,7 +60,6 @@ import java.util.Set;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.getMalariaConfirmation;
 import static org.smartregister.chw.core.utils.Utils.passToolbarTitle;
 import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 
@@ -106,6 +105,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
     private TextView textViewRecord;
     private TextView textViewVisitNot;
     private TextView tvEdit;
+    protected TextView physicallyChallenged;
     private RelativeLayout layoutNotRecordView;
     private RelativeLayout layoutMostDueOverdue;
     private RelativeLayout layoutSickVisit;
@@ -156,7 +156,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+        if (extras != null && getIntent().hasExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT)) {
             memberObject = (MemberObject) getIntent().getSerializableExtra(org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT);
             childBaseEntityId = memberObject.getBaseEntityId();
         }
@@ -240,6 +240,7 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         viewMostDueRow = findViewById(R.id.view_most_due_overdue_row);
         viewFamilyRow = findViewById(R.id.view_family_row);
         progressBar = findViewById(R.id.progress_bar);
+        physicallyChallenged = findViewById(R.id.physically_challenged);
         textViewRecord.setOnClickListener(this);
         textViewVisitNot.setOnClickListener(this);
         textViewUndo.setOnClickListener(this);
@@ -590,6 +591,12 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         }
         setProgressBarState(false);
     }
+
+    @Override
+    public void thinkMdAssessmentProcessed() {
+        invalidateOptionsMenu();
+    }
+
 
     protected View.OnClickListener getSickListener() {
         return null;
