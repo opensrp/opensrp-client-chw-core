@@ -385,7 +385,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             if (navigationAdapter == null) {
                 navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this, drawer);
                 recyclerView.setAdapter(navigationAdapter);
-            }else {
+            } else {
                 NavigationAdapter previous = navigationAdapter;
                 navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this, drawer);
                 recyclerView.swapAdapter(navigationAdapter, true);
@@ -403,7 +403,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 logOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Log Out", (dialog, which) -> logout(parentActivity));
                 logOutDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
                 logOutDialog.show();
-            }else {
+            } else {
                 logout(parentActivity);
             }
         });
@@ -553,8 +553,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             int progress = syncProgress.getPercentageSynced();
             String entity = getSyncEntityString(syncProgress.getSyncEntity());
             String labelText = String.format(rootView.getResources().getString(R.string.progressBarLabel), entity, progress);
-            syncStatusProgressLabel.setText(labelText);
-            syncStatusProgressBar.setProgress(progress);
+            if (syncStatusProgressLabel != null)
+                syncStatusProgressLabel.setText(labelText);
+            if (syncStatusProgressBar != null)
+                syncStatusProgressBar.setProgress(progress);
         }
     }
 
@@ -655,7 +657,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         Intent getHIA2ReportActivityIntent(Activity activity);
 
-        default AlertDialog doLogOutDialog(Activity activity){
+        default AlertDialog doLogOutDialog(Activity activity) {
             return null;
         }
     }
