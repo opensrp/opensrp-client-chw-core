@@ -1142,6 +1142,8 @@ public class CoreConstants {
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String TB = "TB";
         public static final String HIV = "HIV";
+        public static final String CBHS = "CBHS";
+        public static final String HTS = "HTS";
         public static final String OTHER = "Other";
         public static final String INDEPENDENT = "Independent";
     }
