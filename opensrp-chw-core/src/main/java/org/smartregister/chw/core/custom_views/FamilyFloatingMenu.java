@@ -17,10 +17,10 @@ import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 
 public class FamilyFloatingMenu extends LinearLayout implements View.OnClickListener {
     private RelativeLayout activityMain;
-    private FloatingActionButton fab;
-    private LinearLayout menuBar;
-    private Animation fabOpen, fabClose, rotateForward, rotateBack;
-    private boolean isFabMenuOpen = false;
+    protected FloatingActionButton fab;
+    protected LinearLayout menuBar;
+    protected Animation fabOpen, fabClose, rotateForward, rotateBack;
+    protected boolean isFabMenuOpen = false;
     private OnClickFloatingMenu onClickFloatingMenu;
 
     private View callLayout;
@@ -41,7 +41,7 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
         initUi();
     }
 
-    private void initUi() {
+    public void initUi() {
         inflate(getContext(), R.layout.view_family_floating_menu, this);
         activityMain = findViewById(R.id.activity_main);
         menuBar = findViewById(R.id.menu_bar);
