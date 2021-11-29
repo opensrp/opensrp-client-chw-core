@@ -38,4 +38,10 @@
         android:title="@string/malaria_diagnosis"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_pmtct_register"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/pmtct_registration"
+        app:showAsAction="never" />
 </menu>
