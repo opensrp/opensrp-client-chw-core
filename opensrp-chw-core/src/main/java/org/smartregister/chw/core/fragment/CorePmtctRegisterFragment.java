@@ -92,7 +92,7 @@ public class CorePmtctRegisterFragment extends BasePmtctRegisterFragment {
         filterSortLayout.setVisibility(View.GONE);
 
         dueOnlyLayout = view.findViewById(R.id.due_only_layout);
-        dueOnlyLayout.setVisibility(View.VISIBLE);
+        dueOnlyLayout.setVisibility(View.GONE);
         dueOnlyLayout.setOnClickListener(registerActionHandler);
         if (getSearchView() != null) {
             getSearchView().setBackgroundResource(org.smartregister.family.R.color.white);
