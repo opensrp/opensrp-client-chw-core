@@ -7,12 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.smartregister.chw.core.R;
@@ -27,12 +22,12 @@ import org.smartregister.chw.core.presenter.CoreFamilyOtherMemberActivityPresent
 import org.smartregister.chw.core.presenter.CorePmtctMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
-import org.smartregister.chw.core.utils.CoreReferralUtils;
 import org.smartregister.chw.pmtct.activity.BasePmtctProfileActivity;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,8 +41,6 @@ import static org.smartregister.chw.core.utils.Utils.updateToolbarTitle;
 public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity implements
         FamilyOtherMemberProfileExtendedContract.View, CorePmtctProfileContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
-    protected RecyclerView notificationAndReferralRecyclerView;
-    protected RelativeLayout notificationAndReferralLayout;
     private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
 
     public interface OnMemberTypeLoadedListener {
@@ -83,14 +76,8 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
     @Override
     protected void setupViews() {
         super.setupViews();
-        initializeNotificationReferralRecyclerView();
     }
 
-    protected void initializeNotificationReferralRecyclerView() {
-        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
-        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
-        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
 
     @Override
     protected void initializePresenter() {
@@ -108,7 +95,7 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
             return true;
         } else if (itemId == R.id.action_registration) {
             startFormForEdit(R.string.registration_info,
-                    CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
+                    CoreConstants.JSON_FORM.getFamilyMemberRegister());
             return true;
         } else if (itemId == R.id.action_remove_member) {
             removeMember();
@@ -130,32 +117,11 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
             return;
         }
 
-        switch (requestCode) {
-            case CoreConstants.ProfileActivityResults.CHANGE_COMPLETED:
-                Intent intent = new Intent(this, getFamilyProfileActivityClass());
-                intent.putExtras(getIntent().getExtras());
-                startActivity(intent);
-                finish();
-
-                break;
-            case JsonFormUtils.REQUEST_CODE_GET_JSON:
-                try {
-                    String jsonString = data.getStringExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON);
-                    JSONObject form = new JSONObject(jsonString);
-                    String encounterType = form.getString(JsonFormUtils.ENCOUNTER_TYPE);
-                    if (encounterType.equals(Utils.metadata().familyMemberRegister.updateEventType)) {
-                        presenter().updateFamilyMember(this, jsonString, false);
-                    } else if (encounterType.equals(CoreConstants.EventType.MALARIA_REFERRAL)) {
-                        CoreReferralUtils.createReferralEvent(Utils.getAllSharedPreferences(), jsonString, CoreConstants.TABLE_NAME.MALARIA_REFERRAL, memberObject.getBaseEntityId());
-                        showToast(this.getString(R.string.referral_submitted));
-                    }
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-
-                break;
-            default:
-                break;
+        if (requestCode == CoreConstants.ProfileActivityResults.CHANGE_COMPLETED) {
+            Intent intent = new Intent(this, getFamilyProfileActivityClass());
+            intent.putExtras(getIntent().getExtras());
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -181,19 +147,19 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
 
     @Override
     public void setProfileName(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_name);
+        TextView textView = findViewById(org.smartregister.pmtct.R.id.textview_name);
         textView.setText(s);
     }
 
     @Override
     public void setProfileDetailOne(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_gender);
+        TextView textView = findViewById(org.smartregister.pmtct.R.id.textview_gender);
         textView.setText(s);
     }
 
     @Override
     public void setProfileDetailTwo(@NonNull String s) {
-        TextView textView = findViewById(org.smartregister.malaria.R.id.textview_address);
+        TextView textView = findViewById(org.smartregister.pmtct.R.id.textview_address);
         textView.setText(s);
     }
 
