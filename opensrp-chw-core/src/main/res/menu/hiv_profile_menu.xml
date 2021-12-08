@@ -28,5 +28,11 @@
         android:visible="false"
         android:title="@string/tb_registration"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_pregnancy_confirmation"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/pregnancy_confirmation"
+        app:showAsAction="never" />
 
 </menu>

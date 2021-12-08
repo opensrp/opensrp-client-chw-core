@@ -80,13 +80,6 @@
         android:enabled="true"
         android:title="@string/malaria_diagnosis"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_remove_member"
-        android:enabled="true"
-        android:title="@string/remove_this_person"
-        app:showAsAction="never" />
-
     <item
         android:id="@+id/action_pregnancy_confirmation"
         android:enabled="true"
@@ -99,5 +92,10 @@
         android:enabled="true"
         android:visible="false"
         android:title="@string/pmtct_registration"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_remove_member"
+        android:enabled="true"
+        android:title="@string/remove_this_person"
         app:showAsAction="never" />
 </menu>
