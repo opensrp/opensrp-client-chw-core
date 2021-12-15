@@ -8,10 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.BuildConfig;
+import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.utils.CoreConstants;
 
 import timber.log.Timber;
@@ -31,9 +35,13 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
         Context context = Context.getInstance();
         CoreLibrary.init(context);
+        AncLibrary.init(context, ((TestApplication)RuntimeEnvironment.application).getRepository(), BuildConfig.VERSION_CODE, 1);
 
         //Auto login by default
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.PHONE_NUMBER, "phone_number");
@@ -43,9 +51,8 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_NAME, "familyName");
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.LAST_LMP, "lastMenstrualPeriod");
 
-        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().resume();
+        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().visible();
         activity = controller.get();
-        activity.onCreation();
     }
 
     @After
