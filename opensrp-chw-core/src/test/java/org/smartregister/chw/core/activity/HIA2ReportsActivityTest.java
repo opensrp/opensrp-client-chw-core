@@ -44,7 +44,10 @@ public class HIA2ReportsActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         controller = Robolectric.buildActivity(HIA2ReportsActivity.class).create().start().resume();
         activity = controller.get();

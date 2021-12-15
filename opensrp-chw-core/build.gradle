@@ -112,6 +112,11 @@ android {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
 }
 
 dependencies {

@@ -9,6 +9,7 @@ import org.smartregister.chw.anc.contract.BaseAncMemberProfileContract;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.interactor.BaseAncMemberProfileInteractor;
+import org.smartregister.chw.anc.repository.VisitRepository;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.anc.util.JsonFormUtils;
 import org.smartregister.chw.anc.util.NCUtils;
@@ -75,7 +76,8 @@ public class CoreAncMemberProfileInteractor extends BaseAncMemberProfileInteract
 
     protected Date getLastVisitDate(MemberObject memberObject) {
         Date lastVisitDate = null;
-        Visit lastVisit = AncLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), Constants.EVENT_TYPE.ANC_HOME_VISIT);
+        VisitRepository visitRepository = AncLibrary.getInstance().visitRepository();
+        Visit lastVisit = visitRepository.getLatestVisit(memberObject.getBaseEntityId(), Constants.EVENT_TYPE.ANC_HOME_VISIT);
         if (lastVisit != null) {
             lastVisitDate = lastVisit.getDate();
         }
