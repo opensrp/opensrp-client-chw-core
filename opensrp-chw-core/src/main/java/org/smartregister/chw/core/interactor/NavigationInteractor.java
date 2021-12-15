@@ -411,7 +411,15 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              where m.date_removed is null and " +
                                 "              p.test_results IS NULL and p.how_to_notify_the_contact_client <> 'na' ";
                 return NavigationDao.getQueryCount(sqlIndexHf);
-
+            case org.smartregister.chw.pmtct.util.Constants.TABLES.PMTCT_REGISTRATION:
+                String sqlPmtct =
+                        "SELECT count(*) "+
+                                "   from " + org.smartregister.chw.pmtct.util.Constants.TABLES.PMTCT_REGISTRATION + " p " +
+                                "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                                "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                                "              where m.date_removed is null and " +
+                                "              p.hiv_status = 'positive' ";
+                return NavigationDao.getQueryCount(sqlPmtct);
             case org.smartregister.chw.tb.util.Constants.Tables.TB:
                 String sqlTb =
                         "SELECT SUM(c)\n" +
