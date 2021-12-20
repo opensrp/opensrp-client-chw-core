@@ -264,7 +264,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa, dd MMM yyyy", Locale.getDefault());
         if (rootView != null) {
             TextView tvLastSyncTime = rootView.findViewById(R.id.tvSyncTime);
-            if (lastSync != null) {
+            if (lastSync != null && lastSync.compareTo(new Date(0)) > 0) {
                 tvLastSyncTime.setVisibility(View.VISIBLE);
                 tvLastSyncTime.setText(MessageFormat.format(" {0}", sdf.format(lastSync)));
             } else {
