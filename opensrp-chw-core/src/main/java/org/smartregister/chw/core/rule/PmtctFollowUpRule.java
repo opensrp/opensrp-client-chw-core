@@ -40,11 +40,15 @@ public class PmtctFollowUpRule implements ICommonRule {
             this.overDueDate = latestFollowUpDate.plusDays(overDueDay);
             this.expiryDate = latestFollowUpDate.plusDays(expiry);
         } else {
-            this.dueDate = pmtctDate.plusDays(dueDay);
+            this.dueDate = pmtctDate.plusDays(0);
             this.overDueDate = pmtctDate.plusDays(overDueDay);
             this.expiryDate = pmtctDate.plusDays(expiry);
         }
         return false;
+    }
+
+    public boolean isFirstVisit() {
+        return latestFollowUpDate == null;
     }
 
     public Date getDueDate() {
