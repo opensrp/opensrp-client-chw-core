@@ -107,7 +107,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "from ec_anc_register r " +
                         "inner join ec_family_member m on r.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                         "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and m.is_closed = 0 ";
+                        "where m.date_removed is null and m.is_closed = 0 and r.is_closed = 0 ";
                 return NavigationDao.getQueryCount(sqlAncMember);
 
             case CoreConstants.TABLE_NAME.TASK:
@@ -158,6 +158,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_register.base_entity_id\n" +
                         "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
                         "         where ec_family_member.date_removed is null\n" +
+                        "           and ec_anc_register.is_closed is 0\n" +
                         "         UNION ALL\n" +
                         "/**COUNT REGISTERED PNC CLIENTS*/\n" +
                         "         SELECT COUNT(*) AS c\n" +
