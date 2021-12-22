@@ -1,7 +1,9 @@
 package org.smartregister.chw.core.interactor;
 
 import android.util.Pair;
+
 import androidx.annotation.VisibleForTesting;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -20,9 +22,11 @@ import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.helper.ECSyncHelper;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import timber.log.Timber;
 
 public class CoreChildRegisterInteractor implements CoreChildRegisterContract.Interactor {
@@ -65,9 +69,13 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
     @Override
     public void saveRegistration(final Pair<Client, Event> pair, final String jsonString, final boolean isEditMode, final CoreChildRegisterContract.InteractorCallBack callBack) {
-        if (saveRegistration(pair, jsonString, isEditMode)) {
-            callBack.onRegistrationSaved(isEditMode, true, null);
-        }
+        Runnable runnable = () -> {
+            if (saveRegistration(pair, jsonString, isEditMode)) {
+                appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode, true, null));
+            }
+        };
+
+        appExecutors.diskIO().execute(runnable);
     }
 
     @Override

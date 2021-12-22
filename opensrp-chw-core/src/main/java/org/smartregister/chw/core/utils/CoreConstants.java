@@ -695,6 +695,16 @@ public class CoreConstants {
         public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
+    public static class COLUMN_NAME{
+        public static final String FIRST_NAME = "first_name";
+        public static final String LAST_NAME = "last_name";
+        public static final String BASE_ENTITY_ID = "base_entity_id";
+        public static final String RELATIONAL_ID = "relational_id";
+        public static final String ENTITY_TYPE = "entity_type";
+        public static final String VISIT_ID = "visit_id";
+        public static final String VISIT_JSON = "visit_json";
+    }
+
     public static final class INTENT_KEY {
         public static final String SERVICE_DUE = "service_due";
         public static final String CHILD_BASE_ID = "child_base_id";
@@ -817,6 +827,7 @@ public class CoreConstants {
             public static final String SCHOOL_LEVEL = "school_level";
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
+            public static final String LINK_TO_FATHER = "link_to_father";
         }
 
     }

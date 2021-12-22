@@ -2,12 +2,15 @@ package org.smartregister.chw.core.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
@@ -24,11 +27,14 @@ import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.family.fragment.NoMatchDialogFragment;
+import org.smartregister.family.util.AppExecutors;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.BaseRegisterActivity;
+
 import java.util.HashMap;
 import java.util.Set;
+
 import timber.log.Timber;
 
 public class CoreBirthNotificationFragment extends BaseChwRegisterFragment implements CoreChildRegisterFragmentContract.View {
@@ -38,6 +44,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
     protected View view;
     protected View dueOnlyLayout;
     protected boolean dueFilterActive = false;
+    private AppExecutors appExecutors;
 
     @Override
     protected void initializePresenter() {
@@ -47,7 +54,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
 
         String viewConfigurationIdentifier = ((BaseRegisterActivity) getActivity()).getViewIdentifiers().get(0);
         presenter = new CoreChildRegisterFragmentPresenter(this, new CoreChildRegisterFragmentModel(), viewConfigurationIdentifier);
-
+        appExecutors = new AppExecutors();
     }
 
     @Override
@@ -187,8 +194,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         switchViews(dueOnlyLayout, true);
     }
 
-    protected void filterAndSortExecute()
-    {
+    protected void filterAndSortExecute() {
         filterandSortExecute(countBundle());
     }
 
@@ -271,15 +277,18 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
 
     @Override
     public void countExecute() {
-        try (Cursor c = commonRepository().rawCustomQueryForAdapter(getCountSelect())) {
-            c.moveToFirst();
-            clientAdapter.setTotalcount(c.getInt(0));
+        Runnable runnable = () -> {
+            try {
+                int count = commonRepository().countSearchIds(getCountSelect());
+                clientAdapter.setTotalcount(count);
+                clientAdapter.setCurrentlimit(20);
+                clientAdapter.setCurrentoffset(0);
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        };
 
-            clientAdapter.setCurrentlimit(20);
-            clientAdapter.setCurrentoffset(0);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+        appExecutors.diskIO().execute(runnable);
     }
 
     private String getCountSelect() {
@@ -293,7 +302,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
             if (dueFilterActive)
                 query = sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
             query = sqb.Endquery(query);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Timber.e(e);
         }
 
@@ -312,7 +321,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
                 sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
             query = sqb.orderbyCondition(Sortqueries);
             query = sqb.Endquery(sqb.addlimitandOffset(query, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset()));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Timber.e(e);
         }
 

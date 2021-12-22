@@ -1,5 +1,8 @@
 package org.smartregister.chw.core.activity;
 
+import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.LINK_TO_FATHER;
+import static org.smartregister.util.JsonFormUtils.VALUES;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -148,12 +151,12 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
 
             try {
                 List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
-                JSONObject linkToFather = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "link_to_father");
+                JSONObject linkToFather = CoreJsonFormUtils.getFieldJSONObject(jsonArray, LINK_TO_FATHER);
                 JSONArray memberNames = new JSONArray();
                 for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
                     memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
                 }
-                Objects.requireNonNull(linkToFather).put("values", memberNames);
+                Objects.requireNonNull(linkToFather).put(VALUES, memberNames);
             } catch (Exception e) {
                 Timber.e(e);
             }

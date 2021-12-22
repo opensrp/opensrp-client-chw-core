@@ -1,5 +1,9 @@
 package org.smartregister.chw.core.dao;
 
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.VISIT_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.VISIT_JSON;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
@@ -290,9 +294,9 @@ public class VisitDao extends AbstractDao {
 
         DataMap<VisitDetail> dataMap = c -> {
             VisitDetail detail = new VisitDetail();
-            detail.setVisitId(getCursorValue(c, "visit_id"));
-            detail.setBaseEntityId(getCursorValue(c, "base_entity_id"));
-            detail.setJsonDetails(getCursorValue(c, "visit_json"));
+            detail.setVisitId(getCursorValue(c, VISIT_ID));
+            detail.setBaseEntityId(getCursorValue(c, BASE_ENTITY_ID));
+            detail.setJsonDetails(getCursorValue(c, VISIT_JSON));
             return detail;
         };
 
