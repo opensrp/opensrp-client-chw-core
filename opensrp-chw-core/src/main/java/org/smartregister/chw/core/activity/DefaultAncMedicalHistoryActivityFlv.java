@@ -68,7 +68,7 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
 
                 // the first object in this list is the days difference
                 if (x == 0) {
-                    days = Days.daysBetween(new DateTime(visits.get(0).getDate()), new DateTime()).getDays();
+                    days = Days.daysBetween(new DateTime(visits.get(visits.size()-1).getDate()), new DateTime()).getDays();
                 }
 
                 // anc card
