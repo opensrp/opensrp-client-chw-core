@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
-import com.vijay.jsonwizard.domain.Form;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -30,6 +29,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.client.utils.domain.Form;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
@@ -38,7 +38,6 @@ import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 @Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
@@ -115,7 +114,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         Context context = RuntimeEnvironment.application;
         Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
         Assert.assertNotNull(testIntent);
-        Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
+        Form form = (Form) testIntent.getExtras().get(JsonFormConstants.JSON_FORM_KEY.FORM);
         assertEquals("test form", form.getName());
     }
 
