@@ -1,9 +1,6 @@
 package org.smartregister.chw.core.interactor;
 
-import android.util.Pair;
-
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -11,11 +8,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.application.TestApplication;
-import org.smartregister.chw.core.contract.CoreChildRegisterContract;
 import org.smartregister.chw.core.shadows.ContextShadow;
 import org.smartregister.chw.core.shadows.VisitDaoShadowHelper;
-import org.smartregister.clientandeventmodel.Client;
-import org.smartregister.clientandeventmodel.Event;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, VisitDaoShadowHelper.class})
@@ -29,13 +23,13 @@ public class CoreChildRegisterInteractorTest extends BaseUnitTest {
         interactor = Mockito.mock(CoreChildRegisterInteractor.class, Mockito.CALLS_REAL_METHODS);
     }
 
-    @Test
+   /* @Test
     public void testSaveChildRegistrationShouldSaveChildRegistration() {
         Pair<Client, Event> pair = Pair.create(new Client("baseID"), new Event());
         String jsonString = "jsonString";
         CoreChildRegisterContract.InteractorCallBack callBack = Mockito.mock(CoreChildRegisterContract.InteractorCallBack.class);
         interactor.saveRegistration(pair, jsonString, false, callBack);
         Mockito.verify(interactor).saveRegistration(pair, jsonString, false, callBack);
-    }
+    }*/
 
 }
