@@ -1,9 +1,11 @@
 package org.smartregister.chw.core.task;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DrawerMenu.BIRTH_NOTIFICATION;
+import static org.smartregister.chw.core.utils.CoreConstants.ISO8601DATEFORMAT;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,15 +25,9 @@ import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Map;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.core.utils.CoreConstants.DrawerMenu.BIRTH_NOTIFICATION;
-import static org.smartregister.chw.core.utils.CoreConstants.ISO8601DATEFORMAT;
-import static org.smartregister.chw.core.utils.Utils.getDuration;
 
 public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, Void> {
     public final Context context;
@@ -93,6 +89,17 @@ public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, 
             viewHolder.dueButton.setVisibility(View.VISIBLE);
             viewHolder.dueButton.setText(BIRTH_NOTIFICATION);
         } else {
+             /*if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.DUE.name())) {
+                setVisitButtonDueStatus(context, viewHolder.dueButton);
+            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.OVERDUE.name())) {
+                setVisitButtonOverdueStatus(context, viewHolder.dueButton, childVisit.getNoOfMonthDue());
+            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.LESS_TWENTY_FOUR.name())) {
+                setVisitLessTwentyFourView(context, viewHolder.dueButton);
+            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.VISIT_THIS_MONTH.name())) {
+                setVisitAboveTwentyFourView(context, viewHolder.dueButton);
+            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name())) {
+                setVisitNotDone(context, viewHolder.dueButton);
+            }*/
             viewHolder.dueButton.setVisibility(View.GONE);
         }
 

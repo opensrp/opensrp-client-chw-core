@@ -104,9 +104,9 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
                 context, client, Utils.metadata().familyMemberRegister.updateEventType, familyName, false);
         Assert.assertNotNull(resultObject);
         JSONObject formMetadata = resultObject.getJSONObject(org.smartregister.family.util.JsonFormUtils.METADATA);
-        Assert.assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
+        assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
         JSONObject stepOne = resultObject.getJSONObject(STEP1);
-        Assert.assertEquals(formTitle, stepOne.getString(TITLE));
+        assertEquals(formTitle, stepOne.getString(TITLE));
     }
 
     @Test

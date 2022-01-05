@@ -438,7 +438,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
      * @return Returns a triple object <b>DateOfDeath as String, BaseEntityID , List of Events </b>that should be processed
      */
     public static Triple<Pair<Date, String>, String, List<Event>> processRemoveMemberEvent(String familyID, AllSharedPreferences allSharedPreferences, JSONObject jsonObject, String providerId) {
-
         try {
 
             List<Event> events = new ArrayList<>();
