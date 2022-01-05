@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.provider;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -28,8 +30,6 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 
 import java.text.MessageFormat;
 import java.util.Set;
-
-import static org.smartregister.chw.core.utils.Utils.getDuration;
 
 /**
  * Created by keyman on 13/11/2018.
@@ -62,7 +62,6 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
         if (visibleColumns.isEmpty()) {
             populatePatientColumn(pc, client, viewHolder);
-            populateIdentifierColumn(pc, viewHolder);
         }
     }
 
@@ -150,10 +149,6 @@ public class CoreChildRegisterProvider implements RecyclerViewProvider<RegisterV
 
         addButtonClickListeners(client, viewHolder);
 
-    }
-
-    protected void populateIdentifierColumn(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
-        //fillValue(viewHolder.ancId, String.format(context.getString(R.string.unique_id_text), uniqueId));
     }
 
     public void setAddressAndGender(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {

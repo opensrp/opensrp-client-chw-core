@@ -108,16 +108,6 @@ public class UtilsTest {
     }
 
     @Test
-    public void testRandomGeneratedId() {
-        Assert.assertNotEquals(2, Utils.getRandomGeneratedId());
-    }
-
-    @Test
-    public void testDateDifference() {
-        Assert.assertNotEquals("0", Utils.getDuration("08/16/2021"));
-    }
-
-    @Test
     public void canConvertReferralToANCMemberObject() {
         client = new CommonPersonObjectClient("case1", details, "test user");
         client.setColumnmaps(columnMap);

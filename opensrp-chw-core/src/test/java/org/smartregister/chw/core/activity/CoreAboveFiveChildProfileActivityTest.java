@@ -57,13 +57,13 @@ public class CoreAboveFiveChildProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void registerPresenter() {
+    public void testInitializePresenterShouldInitializeThePresenter() {
         activity.initializePresenter();
         Assert.assertNotNull(activity.presenter());
     }
 
     @Test
-    public void setProfileImageBorderTest() {
+    public void testSetProfileImageShouldHaveCorrectBorderWidth() {
         CircleImageView imageView = Mockito.spy(new CircleImageView(RuntimeEnvironment.application));
         ReflectionHelpers.setField(activity, "imageViewProfile", imageView);
         ReflectionHelpers.setField(activity, "imageRenderHelper", imageRenderHelper);
@@ -72,7 +72,7 @@ public class CoreAboveFiveChildProfileActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void setParentNameViewGone() {
+    public void testsSetParentNameViewGone() {
         TextView textView = Mockito.spy(new TextView(RuntimeEnvironment.application));
         ReflectionHelpers.setField(activity, "textViewParentName", textView);
         activity.setParentName("sdfs");
@@ -92,11 +92,6 @@ public class CoreAboveFiveChildProfileActivityTest extends BaseUnitTest {
 
         activity.onOptionsItemSelected(menuItem);
         Mockito.verify(activity).onBackPressed();
-    }
-
-    @Test
-    public void testActivityLoaded() {
-        Assert.assertNotNull(activity);
     }
 
 }

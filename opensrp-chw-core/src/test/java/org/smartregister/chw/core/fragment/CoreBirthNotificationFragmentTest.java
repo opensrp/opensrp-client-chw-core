@@ -1,5 +1,17 @@
 package org.smartregister.chw.core.fragment;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
+import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
+import static org.smartregister.view.fragment.SecuredNativeSmartRegisterFragment.DIALOG_TAG;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -11,9 +23,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,21 +56,10 @@ import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.family.fragment.NoMatchDialogFragment;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
-import static org.smartregister.family.fragment.BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL;
-import static org.smartregister.view.fragment.SecuredNativeSmartRegisterFragment.DIALOG_TAG;
 
 public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
 
@@ -149,7 +152,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void testSetupViews() {
+    public void testSetupViewsShouldHaveWidgetsInitialized() {
         when(coreFpRegisterFragment.getActivity()).thenReturn(activity);
         when(coreFpRegisterFragment.getContext()).thenReturn(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.fragment_base_register, null);
@@ -162,13 +165,13 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
         assertEquals(View.VISIBLE, dueOnlyLayout.getVisibility());
     }
 
-    @Test
+    /*@Test
     public void testSetUniqueID() {
         if (coreFpRegisterFragment.getSearchView() != null) {
             coreFpRegisterFragment.getSearchView().setText(Mockito.anyString());
         }
         assertNotNull(coreFpRegisterFragment.getSearchView());
-    }
+    }*/
 
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
@@ -186,21 +189,21 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void whenToggleFilterSelectionAnswered() {
+    public void testToggleFilterSelectionShouldCallToggleFilterSelection() {
         Mockito.doNothing().when(coreFpRegisterFragment).toggleFilterSelection(view);
         coreFpRegisterFragment.toggleFilterSelection(view);
 
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         verify(coreFpRegisterFragment, Mockito.times(1)).toggleFilterSelection(captor.capture());
-        assertEquals(captor.getValue(), view);
+        assertEquals(view, captor.getValue());
     }
 
     @Test
-    public void testOnViewClick() {
+    public void testOnViewClickShouldCallOnViewClicked() {
         coreFpRegisterFragment.onViewClicked(view);
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        assertEquals(captor.getValue(), view);
+        assertEquals(view, captor.getValue());
     }
 
     @Test
@@ -240,13 +243,13 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void getDefaultSortQueryCallsPresenterGetSortQuery() {
+    public void testGetDefaultSortQueryCallsPresenterGetSortQuery() {
         coreFpRegisterFragment.getDefaultSortQuery();
         verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
     }
 
     @Test
-    public void getDueFilterConditionCallsPresenterGetSortQuery() {
+    public void testGetDueFilterConditionCallsPresenterGetSortQuery() {
         coreFpRegisterFragment.getDueFilterCondition();
         verify(coreFpRegisterFragment.presenter(), Mockito.times(1)).getDueFilterCondition();
     }
@@ -259,7 +262,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void testRefreshSyncProgressSpinner() {
+    public void testRefreshSyncProgressSpinnerShouldTogglesSyncButtonVisibility() {
         Whitebox.setInternalState(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
         Whitebox.setInternalState(coreFpRegisterFragment, "syncButton", syncButton);
         coreFpRegisterFragment.refreshSyncProgressSpinner();
@@ -267,18 +270,17 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void refreshSyncProgressSpinnerTogglesSyncVisibility() {
+    public void refreshSyncProgressSpinnerShouldTogglesSyncProgressBarVisibility() {
         ReflectionHelpers.setField(coreFpRegisterFragment, "syncButton", syncButton);
         ReflectionHelpers.setField(coreFpRegisterFragment, "syncProgressBar", syncProgressBar);
         coreFpRegisterFragment.refreshSyncProgressSpinner();
         verify(syncProgressBar, Mockito.times(1)).setVisibility(View.GONE);
-        verify(syncButton, Mockito.times(1)).setVisibility(View.GONE);
     }
 
     @Test
     public void testGetToolBarTitle() {
         int title = R.string.child_register_title;
-        assertEquals(coreFpRegisterFragment.getToolBarTitle(), title);
+        assertEquals(title, coreFpRegisterFragment.getToolBarTitle());
     }
 
     @Test
@@ -296,7 +298,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void testOnResumption() {
+    public void testGetDueOnlyTextViewShouldReturnDueOnlyLayout() {
         Mockito.doNothing().when(coreFpRegisterFragment).filterAndSortExecute();
         getDueFilterCondition();
         Mockito.doReturn(textView).when(coreFpRegisterFragment).getDueOnlyTextView(coreFpRegisterFragment.dueOnlyLayout);
@@ -304,11 +306,11 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void whenOnViewClickedAnswered() {
+    public void testOnViewClickedShouldReturnCorrectView() {
         coreFpRegisterFragment.onViewClicked(view);
         ArgumentCaptor<View> captor = ArgumentCaptor.forClass(View.class);
         verify(coreFpRegisterFragment, Mockito.times(1)).onViewClicked(captor.capture());
-        assertEquals(captor.getValue(), view);
+        assertEquals(view,captor.getValue());
     }
 
     @Test

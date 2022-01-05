@@ -6,10 +6,12 @@ import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMO
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER;
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE;
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
+import static org.smartregister.chw.core.utils.CoreConstants.NO;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_STATE;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_WARD;
+import static org.smartregister.chw.core.utils.CoreConstants.YES;
 
 import android.content.Context;
 import android.content.Intent;
@@ -196,8 +198,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
     public static HashMap<String, String> getChoice() {
         HashMap<String, String> choices = new HashMap<>();
-        choices.put("Yes", "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        choices.put("No", "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put(YES, "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put(NO, "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return choices;
     }
 
@@ -455,31 +457,34 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
             JSONArray fields = new JSONArray();
 
-            int x = 0;
-            while (x < registrationFormParams.getRight().length()) {
-                //JSONObject obj = registrationFormParams.getRight().getJSONObject(x);
-                String myKey = registrationFormParams.getRight().getJSONObject(x).getString(KEY);
+            int index = 0;
+            while (index < registrationFormParams.getRight().length()) {
+                //JSONObject obj = registrationFormParams.getRight().getJSONObject(index);
+                String myKey = registrationFormParams.getRight().getJSONObject(index).getString(KEY);
 
                 if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED) ||
                         myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON)
                 ) {
-                    fields.put(registrationFormParams.getRight().get(x));
+                    fields.put(registrationFormParams.getRight().get(index));
                 }
                 if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_DIED)) {
-                    fields.put(registrationFormParams.getRight().get(x));
+                    fields.put(registrationFormParams.getRight().get(index));
                     try {
-                        dod = dd_MM_yyyy.parse(registrationFormParams.getRight().getJSONObject(x).getString(VALUE));
+                        dod = dd_MM_yyyy.parse(registrationFormParams.getRight().getJSONObject(index).getString(VALUE));
                     } catch (Exception e) {
                         Timber.d(e.toString());
                     }
                 }
 
-                if (myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE)) fields.put(registrationFormParams.getRight().get(x));
-                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE)) fields.put(registrationFormParams.getRight().get(x));
-                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER)) fields.put(registrationFormParams.getRight().get(x));
-                if (myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE)) fields.put(registrationFormParams.getRight().get(x));
-
-                x++;
+                if (myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE))
+                    fields.put(registrationFormParams.getRight().get(index));
+                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE))
+                    fields.put(registrationFormParams.getRight().get(index));
+                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER))
+                    fields.put(registrationFormParams.getRight().get(index));
+                if (myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE))
+                    fields.put(registrationFormParams.getRight().get(index));
+                index++;
             }
 
             String encounterType = getString(jsonObject, ENCOUNTER_TYPE);

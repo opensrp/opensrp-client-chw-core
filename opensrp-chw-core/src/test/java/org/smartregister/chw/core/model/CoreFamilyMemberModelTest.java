@@ -42,7 +42,7 @@ public class CoreFamilyMemberModelTest {
     }
 
     @Test
-    public void testBaseEntityId() {
+    public void testCoreFamilyMemberModelShouldReturnCorrectBaseEntityId() {
         CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, baseEntityId, familyBaseEntityId, entityType);
         Assert.assertNotNull(coreFamilyMemberModel.getBaseEntityId());
     }

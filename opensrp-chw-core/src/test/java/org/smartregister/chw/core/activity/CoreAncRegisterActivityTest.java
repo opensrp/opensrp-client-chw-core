@@ -1,8 +1,11 @@
 package org.smartregister.chw.core.activity;
 
+import static org.junit.Assert.assertNotNull;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,9 +25,8 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
-import timber.log.Timber;
 
-import static org.junit.Assert.assertNotNull;
+import timber.log.Timber;
 
 public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
@@ -69,14 +71,9 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testActivityLoaded() {
-        assertNotNull(activity);
-    }
-
-    @Test
     public void testPresenterIsSetUp() {
         BaseAncRegisterPresenter presenter = ReflectionHelpers.getField(activity, "presenter");
-        Assert.assertTrue(presenter != null);
+        assertNotNull(presenter);
     }
 
     @After
@@ -99,7 +96,7 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testOnResumption() {
+    public void testOnResumptionAdapterMenu() {
         NavigationMenu menu = Mockito.mock(NavigationMenu.class);
         NavigationAdapter adapter = Mockito.mock(NavigationAdapter.class);
 
@@ -113,7 +110,7 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testOnBackPressed() {
+    public void testOnBackPressedShouldCallOnBackPressed() {
         CoreAncRegisterActivity spyActivity = Mockito.spy(activity);
         spyActivity.onBackPressed();
         Mockito.verify(spyActivity).onBackPressed();
@@ -125,7 +122,7 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
     }
 
     @Test
-    public void testStartMe() {
+    public void testStartMeShouldLaunchCoreChildProfileActivity() {
         Activity activity = Mockito.mock(Activity.class);
         CoreChildProfileActivity.startMe(activity, memberObject, activity.getClass());
         Mockito.verify(activity).startActivity(Mockito.any());

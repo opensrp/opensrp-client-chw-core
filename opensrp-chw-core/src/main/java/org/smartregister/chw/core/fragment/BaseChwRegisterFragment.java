@@ -19,7 +19,6 @@ public abstract class BaseChwRegisterFragment extends BaseRegisterFragment {
     public void setupViews(View view) {
         super.setupViews(view);
 
-
         Toolbar toolbar = view.findViewById(org.smartregister.R.id.register_toolbar);
         toolbar.setContentInsetsAbsolute(0, 0);
         toolbar.setContentInsetsRelative(0, 0);

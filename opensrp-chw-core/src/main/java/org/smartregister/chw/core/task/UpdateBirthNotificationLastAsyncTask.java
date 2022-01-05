@@ -29,6 +29,8 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DrawerMenu.BIRTH_NOTIFICATION;
+import static org.smartregister.chw.core.utils.CoreConstants.ISO8601DATEFORMAT;
 import static org.smartregister.chw.core.utils.Utils.getDuration;
 
 public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -40,7 +42,6 @@ public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, 
     public CommonPersonObject commonPersonObject;
     public ChildVisit childVisit;
     public View.OnClickListener onClickListener;
-    private SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public UpdateBirthNotificationLastAsyncTask(Context context, CommonRepository commonRepository, RegisterViewHolder viewHolder, String baseEntityId, View.OnClickListener onClickListener) {
         this.context = context;
@@ -90,24 +91,7 @@ public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, 
     protected void onPostExecute(Void param) {
         if (commonPersonObject != null) {
             viewHolder.dueButton.setVisibility(View.VISIBLE);
-            viewHolder.dueButton.setText("Birth Notification");
-            viewHolder.dueButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("duebtnclicked", "due button clicked");
-                }
-            });
-            /*if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.DUE.name())) {
-                setVisitButtonDueStatus(context, viewHolder.dueButton);
-            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.OVERDUE.name())) {
-                setVisitButtonOverdueStatus(context, viewHolder.dueButton, childVisit.getNoOfMonthDue());
-            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.LESS_TWENTY_FOUR.name())) {
-                setVisitLessTwentyFourView(context, viewHolder.dueButton);
-            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.VISIT_THIS_MONTH.name())) {
-                setVisitAboveTwentyFourView(context, viewHolder.dueButton);
-            } else if (childVisit.getVisitStatus().equalsIgnoreCase(CoreConstants.VisitType.NOT_VISIT_THIS_MONTH.name())) {
-                setVisitNotDone(context, viewHolder.dueButton);
-            }*/
+            viewHolder.dueButton.setText(BIRTH_NOTIFICATION);
         } else {
             viewHolder.dueButton.setVisibility(View.GONE);
         }
@@ -123,7 +107,7 @@ public class UpdateBirthNotificationLastAsyncTask extends AsyncTask<Void, Void, 
 
     public void setVisitButtonOverdueStatus(Context context, Button dueButton, String lastVisitDays) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
-        if (TextUtils.isEmpty(lastVisitDays)) {
+        if (StringUtils.isBlank(lastVisitDays)) {
             dueButton.setText(context.getString(R.string.record_visit));
         } else {
             dueButton.setText(context.getString(R.string.due_visit, lastVisitDays));

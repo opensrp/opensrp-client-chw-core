@@ -71,14 +71,14 @@ public class CoreBirthNotificationRegisterActivityTest {
     }
 
     @Test
-    public void testHideProgressDialog() {
+    public void testHideProgressDialogShouldDismissDialog() {
         Whitebox.setInternalState(coreBirthNotificationRegisterActivity, "progressDialog", progressDialog);
         coreBirthNotificationRegisterActivity.hideProgressDialog();
         Mockito.verify(progressDialog).dismiss();
     }
 
     @Test
-    public void testStartForm() {
+    public void testStartFormShouldCallStartFormActivity() {
         try {
             String entityId = Mockito.anyString();
             String familyId = Mockito.anyString();
@@ -100,25 +100,25 @@ public class CoreBirthNotificationRegisterActivityTest {
     }
 
     @Test
-    public void testSaveLanguage() {
+    public void testSaveLanguageShouldDisplayToast() {
         presenter.saveLanguage(Mockito.anyString());
         Mockito.verify(view).displayToast(Mockito.anyString());
     }
 
     @Test
-    public void testOnDestroy() {
+    public void testOnDestroyShouldCallOnDestroy() {
         presenter.onDestroy(true);
         Mockito.verify(interactor).onDestroy(true);
     }
 
     @Test
-    public void testOnNoUniqueId() {
+    public void testOnNoUniqueIdShouldDisplayShortToast() {
         presenter.onNoUniqueId();
         Mockito.verify(view).displayShortToast(Mockito.anyInt());
     }
 
     @Test
-    public void testOnUniqueIdFetched() {
+    public void testOnUniqueIdFetchedHaveNonNullView() {
         String anyString = Mockito.anyString();
         Triple<String, String, String> triple = Triple.of(anyString, anyString, anyString);
         presenter.onUniqueIdFetched(triple, Mockito.anyString(), Mockito.anyString());

@@ -1,11 +1,19 @@
 package org.smartregister.chw.core.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
+import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
+import static org.smartregister.util.JsonFormUtils.STEP1;
+
 import android.content.Context;
 import android.content.Intent;
+
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
+
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -31,11 +39,6 @@ import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.HashMap;
 import java.util.Objects;
-
-import static org.junit.Assert.assertEquals;
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
-import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
-import static org.smartregister.util.JsonFormUtils.STEP1;
 
 @Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
@@ -108,26 +111,12 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     }
 
     @Test
-    public void getStartFormActivityReturnsCorrectIntent() {
+    public void testGetStartFormActivityReturnsCorrectIntent() {
         Context context = RuntimeEnvironment.application;
         Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
         Assert.assertNotNull(testIntent);
         Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
         assertEquals("test form", form.getName());
-    }
-
-    @Test
-    public void testComputeDOBUnknown() {
-        JSONObject jsonObj = new JSONObject();
-        JSONObject optionsObject = new JSONObject();
-        try {
-            jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, false);
-            optionsObject = jsonObj.getJSONArray(org.smartregister.family.util.Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
-            optionsObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), org.smartregister.family.util.Constants.JSON_FORM_KEY.DOB_UNKNOWN, false));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Assert.assertNotNull(optionsObject);
     }
 
     @Test

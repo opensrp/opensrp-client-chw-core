@@ -30,7 +30,7 @@ public class CoreChildRegisterInteractorTest extends BaseUnitTest {
     }
 
     @Test
-    public void testSaveChildRegistration() throws Exception {
+    public void testSaveChildRegistrationShouldSaveChildRegistration() {
         Pair<Client, Event> pair = Pair.create(new Client("baseID"), new Event());
         String jsonString = "jsonString";
         CoreChildRegisterContract.InteractorCallBack callBack = Mockito.mock(CoreChildRegisterContract.InteractorCallBack.class);

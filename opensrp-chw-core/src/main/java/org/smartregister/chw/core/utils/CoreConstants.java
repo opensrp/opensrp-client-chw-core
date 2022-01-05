@@ -4,6 +4,8 @@ import android.content.res.AssetManager;
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.malaria.util.Constants;
+
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CoreConstants {
@@ -15,9 +17,14 @@ public class CoreConstants {
     public static final String FORMSUBMISSION_FIELD = "formsubmissionField";
     public static final String TEXT = "text";
     public static final String DATE = "date";
+    public static final String MALE = "Male";
+    public static final String FEMALE = "Female";
+    public static final String YES = "Yes";
+    public static final String NO = "No";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
     public static String PERSISTED_LANGUAGE = "persisted_language";
+    public static  SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, DONE, EXPIRY}
 
@@ -828,6 +835,7 @@ public class CoreConstants {
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
             public static final String LINK_TO_FATHER = "link_to_father";
+            public static final String DELIVERY_DATE = "delivery_date";
         }
 
     }

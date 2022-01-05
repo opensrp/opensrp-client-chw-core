@@ -231,6 +231,7 @@ public abstract class CoreFamilyRemoveMemberInteractor implements FamilyRemoveMe
 
     private void updateRepo(Triple<Pair<Date, String>, String, List<Event>> triple, String tableName) {
         AllCommonsRepository commonsRepository = coreChwApplication.getAllCommonsRepository(tableName);
+        ContentValues values = new ContentValues();
 
         Date date_removed = new Date();
         Date dod = null;
@@ -239,36 +240,36 @@ public abstract class CoreFamilyRemoveMemberInteractor implements FamilyRemoveMe
         }
 
         if (commonsRepository != null && dod == null) {
-            updateDbFieldAndSearch(commonsRepository, DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(date_removed), triple.getMiddle(), tableName);
+            values.put(DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(date_removed));
         }
 
         // enter the date of death
         if (dod != null && commonsRepository != null) {
-            updateDbFieldAndSearch(commonsRepository, DBConstants.KEY.DOD, getDBFormatedDate(dod), triple.getMiddle(), tableName);
+            values.put(DBConstants.KEY.DOD, getDBFormatedDate(dod));
         }
 
-        if (commonsRepository != null) {
-            List<Obs> obs = triple.getRight().get(0).getObs();
-            for (int i = 0; i < obs.size(); i++) {
-                if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE) && obs.get(i).getHumanReadableValues() != null) {
-                    updateDbFieldAndSearch(commonsRepository, RECEIVED_DEATH_CERTIFICATE, obs.get(i).getHumanReadableValues().get(0).toString(), triple.getMiddle(), tableName);
+        List<Obs> obs = triple.getRight().get(0).getObs();
+        for (int i = 0; i < obs.size(); i++) {
+            if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE) && obs.get(i).getHumanReadableValues() != null) {
+                values.put(RECEIVED_DEATH_CERTIFICATE, obs.get(i).getHumanReadableValues().get(0).toString());
 
-                } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE) && obs.get(i).getValues() != null) {
-                    updateDbFieldAndSearch(commonsRepository, DEATH_CERTIFICATE_ISSUE_DATE, obs.get(i).getValues().get(0).toString(), triple.getMiddle(), tableName);
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE) && obs.get(i).getValues() != null) {
+                values.put(DEATH_CERTIFICATE_ISSUE_DATE, obs.get(i).getValues().get(0).toString());
 
-                } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER) && obs.get(i).getValues() != null) {
-                    updateDbFieldAndSearch(commonsRepository, DEATH_CERTIFICATE_NUMBER, obs.get(i).getValues().get(0).toString(), triple.getMiddle(), tableName);
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER) && obs.get(i).getValues() != null) {
+                values.put(DEATH_CERTIFICATE_NUMBER, obs.get(i).getValues().get(0).toString());
 
-                } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_NOTIFICATION_DONE) && obs.get(i).getHumanReadableValues() != null) {
-                    updateDbFieldAndSearch(commonsRepository, DEATH_NOTIFICATION_DONE, obs.get(i).getHumanReadableValues().get(0).toString(), triple.getMiddle(), tableName);
-                }
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_NOTIFICATION_DONE) && obs.get(i).getHumanReadableValues() != null) {
+                values.put(DEATH_NOTIFICATION_DONE, obs.get(i).getHumanReadableValues().get(0).toString());
+
             }
         }
+
+        if (commonsRepository != null)
+            updateDbFieldAndSearch(commonsRepository, values, triple.getMiddle(), tableName);
     }
 
-    private void updateDbFieldAndSearch(AllCommonsRepository commonsRepository, String key, String value, String caseId, String tableName) {
-        ContentValues values = new ContentValues();
-        values.put(key, value);
+    private void updateDbFieldAndSearch(AllCommonsRepository commonsRepository, ContentValues values, String caseId, String tableName) {
         commonsRepository.update(tableName, values, caseId);
         commonsRepository.updateSearch(caseId);
     }

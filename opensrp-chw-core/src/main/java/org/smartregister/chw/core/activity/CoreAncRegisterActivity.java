@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.activity;
 
+import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.DELIVERY_DATE;
 import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.LINK_TO_FATHER;
 import static org.smartregister.util.JsonFormUtils.VALUES;
 
@@ -29,7 +30,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -143,20 +143,23 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
             values.put(org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
             values.put(DBConstants.KEY.LAST_MENSTRUAL_PERIOD, lastMenstrualPeriod);
             try {
-                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "delivery_date");
-                min_date.put("min_date", lastMenstrualPeriod);
+                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, DELIVERY_DATE);
+                if (min_date != null) min_date.put("min_date", lastMenstrualPeriod);
+
             } catch (Exception e) {
                 Timber.e(e);
             }
 
             try {
-                List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
                 JSONObject linkToFather = CoreJsonFormUtils.getFieldJSONObject(jsonArray, LINK_TO_FATHER);
-                JSONArray memberNames = new JSONArray();
-                for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
-                    memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
+                if (linkToFather != null) {
+                    List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
+                    JSONArray memberNames = new JSONArray();
+                    for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
+                        memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
+                    }
+                    linkToFather.put(VALUES, memberNames);
                 }
-                Objects.requireNonNull(linkToFather).put(VALUES, memberNames);
             } catch (Exception e) {
                 Timber.e(e);
             }

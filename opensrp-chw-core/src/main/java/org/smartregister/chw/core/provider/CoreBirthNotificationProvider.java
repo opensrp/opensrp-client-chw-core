@@ -1,12 +1,18 @@
 package org.smartregister.chw.core.provider;
 
+import static org.smartregister.chw.core.utils.CoreConstants.FEMALE;
+import static org.smartregister.chw.core.utils.CoreConstants.MALE;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.holders.FooterViewHolder;
@@ -23,10 +29,9 @@ import org.smartregister.view.dialog.FilterOption;
 import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 import org.smartregister.view.viewholder.OnClickFormLauncher;
+
 import java.text.MessageFormat;
 import java.util.Set;
-
-import static org.smartregister.chw.core.utils.Utils.getDuration;
 
 public class CoreBirthNotificationProvider implements RecyclerViewProvider<RegisterViewHolder> {
     public final LayoutInflater inflater;
@@ -53,9 +58,8 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
     @Override
     public void getView(Cursor cursor, SmartRegisterClient client, RegisterViewHolder viewHolder) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
-        if (visibleColumns.isEmpty()) {
+        if (visibleColumns != null && visibleColumns.isEmpty()) {
             populatePatientColumn(pc, client, viewHolder);
-            populateIdentifierColumn(pc, viewHolder);
         }
     }
 
@@ -116,36 +120,38 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
         String parentLastName = Utils.getValue(pc.getColumnmaps(), ChildDBConstants.KEY.FAMILY_LAST_NAME, true);
         String parentMiddleName = Utils.getValue(pc.getColumnmaps(), ChildDBConstants.KEY.FAMILY_MIDDLE_NAME, true);
 
-        String parentName = context.getResources().getString(R.string.care_giver_initials) + ": " + org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName);
+        StringBuilder parentName = new StringBuilder();
+        parentName.append(context.getResources().getString(R.string.care_giver_initials)).append(": ").append(org.smartregister.util.Utils.getName(parentFirstName, parentMiddleName + " " + parentLastName));
         String firstName = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.FIRST_NAME, true);
         String middleName = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.MIDDLE_NAME, true);
         String lastName = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.LAST_NAME, true);
         String childName = org.smartregister.util.Utils.getName(firstName, middleName + " " + lastName);
 
-        fillValue(viewHolder.textViewParentName, WordUtils.capitalize(parentName));
+        fillValue(viewHolder.textViewParentName, WordUtils.capitalize(parentName.toString()));
 
         String dobString = getDuration(Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.DOB, false));
-        fillValue(viewHolder.textViewChildName, WordUtils.capitalize(childName) + ", " + WordUtils.capitalize(Utils.getTranslatedDate(dobString, context)));
+        StringBuilder childNameWithDOB = new StringBuilder();
+        childNameWithDOB.append(WordUtils.capitalize(childName)).append(", ").append(WordUtils.capitalize(Utils.getTranslatedDate(dobString, context)));
+
+        fillValue(viewHolder.textViewChildName, childNameWithDOB.toString());
         setAddressAndGender(pc, viewHolder);
 
         addButtonClickListeners(client, viewHolder);
 
     }
 
-    protected void populateIdentifierColumn(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
-        //fillValue(viewHolder.ancId, String.format(context.getString(R.string.unique_id_text), uniqueId));
-    }
-
     public void setAddressAndGender(CommonPersonObjectClient pc, RegisterViewHolder viewHolder) {
         String address = Utils.getValue(pc.getColumnmaps(), ChildDBConstants.KEY.FAMILY_HOME_ADDRESS, true);
-        String gender_key = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.GENDER, true);
+        String genderKey = Utils.getValue(pc.getColumnmaps(), DBConstants.KEY.GENDER, true);
         String gender = "";
-        if (gender_key.equalsIgnoreCase("Male")) {
+        if (genderKey.equalsIgnoreCase(MALE)) {
             gender = context.getString(R.string.male);
-        } else if (gender_key.equalsIgnoreCase("Female")) {
+        } else if (genderKey.equalsIgnoreCase(FEMALE)) {
             gender = context.getString(R.string.female);
         }
-        fillValue(viewHolder.textViewAddressGender, address + " \u00B7 " + gender);
+        StringBuilder addressGender = new StringBuilder();
+        addressGender.append(address).append(" \u00B7 ").append(gender);
+        fillValue(viewHolder.textViewAddressGender, addressGender.toString());
     }
 
     public void addButtonClickListeners(SmartRegisterClient client, RegisterViewHolder viewHolder) {

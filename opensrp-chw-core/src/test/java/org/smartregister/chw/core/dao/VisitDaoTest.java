@@ -194,7 +194,7 @@ public class VisitDaoTest extends VisitDao {
     }
 
     @Test
-    public void testGetVisitHistory() {
+    public void testGetVisitHistoryShouldReturnListOfVisitDetails() {
         Mockito.doReturn(database).when(repository).getReadableDatabase();
 
         MatrixCursor matrixCursor = new MatrixCursor(new String[]{"visit_id", "visit_type", "parent_visit_id", "base_entity_id", "visit_date",
