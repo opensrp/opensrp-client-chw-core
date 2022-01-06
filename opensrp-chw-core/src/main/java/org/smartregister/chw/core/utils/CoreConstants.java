@@ -1,6 +1,7 @@
 package org.smartregister.chw.core.utils;
 
 import android.content.res.AssetManager;
+
 import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.malaria.util.Constants;
@@ -24,7 +25,7 @@ public class CoreConstants {
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
     public static String PERSISTED_LANGUAGE = "persisted_language";
-    public static  SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    public static SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, DONE, EXPIRY}
 
@@ -108,7 +109,7 @@ public class CoreConstants {
     }
 
     public static final class EventType {
-            public static final String BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String BIRTH_CERTIFICATION = "Birth Certification";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -702,7 +703,7 @@ public class CoreConstants {
         public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
-    public static class COLUMN_NAME{
+    public static class COLUMN_NAME {
         public static final String FIRST_NAME = "first_name";
         public static final String LAST_NAME = "last_name";
         public static final String BASE_ENTITY_ID = "base_entity_id";
