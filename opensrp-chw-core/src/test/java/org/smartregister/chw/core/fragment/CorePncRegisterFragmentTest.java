@@ -56,8 +56,8 @@ public class CorePncRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.refreshSyncProgressSpinner();
-        verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
-        verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(1)).setVisibility(View.GONE);
+        verify(syncButton, Mockito.times(1)).setVisibility(View.GONE);
     }
 
     @Test
