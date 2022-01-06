@@ -119,7 +119,7 @@ public class CoreCommunityRespondersRegisterActivity extends MultiLanguageActivi
 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
-        startActivityForResult(FormUtils.getStartFormActivity(jsonForm, this.getString(R.string.add_community_responder), this), JsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(FormUtils.getStartFormActivity(jsonForm, this.getString(R.string.add_community_responder), this, Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override

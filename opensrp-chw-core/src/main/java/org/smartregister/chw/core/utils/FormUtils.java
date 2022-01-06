@@ -60,8 +60,8 @@ public class FormUtils {
         return metadata;
     }
 
-    public static Intent getStartFormActivity(JSONObject jsonForm, String title, Context context) {
-        Intent intent = new Intent(context, Utils.metadata().familyMemberFormActivity);
+    public static Intent getStartFormActivity(JSONObject jsonForm, String title, Context context, Class familyMemberFormActivity) {
+        Intent intent = new Intent(context, familyMemberFormActivity);
         intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
         Form form = new Form();
         form.setActionBarBackground(R.color.family_actionbar);

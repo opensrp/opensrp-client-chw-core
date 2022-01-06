@@ -2,6 +2,7 @@ package org.smartregister.chw.core.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
 import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.STEP1;
@@ -78,8 +79,8 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
 
         Mockito.doReturn(repository).when(coreChwApplication).getRepository();
         Mockito.doReturn(database).when(repository).getReadableDatabase();
-        Mockito.doReturn(clientJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from client where baseEntityId = ? order by updatedAt desc"), Mockito.any());
-        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from event where baseEntityId = 'testId' and eventType in ('Update Family Member Registration','Family Member Registration') order by updatedAt desc limit 1;"), Mockito.any());
+        Mockito.doReturn(clientJsonMatrixCursor).when(database).rawQuery(eq("select json from client where baseEntityId = ? order by updatedAt desc"), Mockito.any());
+        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(eq("select json from event where baseEntityId = 'testId' and eventType in ('Update Family Member Registration','Family Member Registration') order by updatedAt desc limit 1;"), Mockito.any());
 
         FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
                 BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
@@ -112,10 +113,10 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     @Test
     public void testGetStartFormActivityReturnsCorrectIntent() {
         Context context = RuntimeEnvironment.application;
-        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
+        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context, Utils.metadata().familyMemberFormActivity);
         assertNotNull(testIntent);
         Form form = (Form) testIntent.getExtras().get(JsonFormConstants.JSON_FORM_KEY.FORM);
-        assertEquals("test form", form.getName());
+        assertEquals("test form",form.getName());
     }
 
     @Test
@@ -125,7 +126,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
             jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
                     (clientEvent.getLastName() == null ? Mockito.anyString() : clientEvent.getLastName()));
             jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

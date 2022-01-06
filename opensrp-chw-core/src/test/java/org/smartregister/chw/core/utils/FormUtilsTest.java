@@ -1,19 +1,11 @@
 package org.smartregister.chw.core.utils;
 
-import android.content.Context;
-import android.content.Intent;
+import static org.junit.Assert.assertEquals;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-import com.vijay.jsonwizard.domain.Form;
-
-import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
@@ -25,9 +17,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.Objects;
-
-import static org.junit.Assert.assertEquals;
 
 @Config(shadows = {UtilsShadowUtil.class})
 public class FormUtilsTest extends BaseUnitTest {
@@ -54,14 +43,4 @@ public class FormUtilsTest extends BaseUnitTest {
         assertEquals(event.getObs().get(0).getFormSubmissionField(), "wra");
     }
 
-
-    @Test
-    @Ignore("FIX Android CI unit tests NPE thrown here")
-    public void getStartFormActivityReturnsCorrectIntent() {
-        Context context = RuntimeEnvironment.application;
-        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
-        Assert.assertNotNull(testIntent);
-        Form form = (Form) Objects.requireNonNull(testIntent.getExtras()).get(JsonFormConstants.JSON_FORM_KEY.FORM);
-        assertEquals("test form", form.getName());
-    }
 }

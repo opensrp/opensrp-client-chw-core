@@ -7,6 +7,7 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.FormUtils;
+import org.smartregister.chw.core.utils.Utils;
 import org.smartregister.chw.malaria.activity.BaseMalariaRegisterActivity;
 import org.smartregister.family.util.JsonFormUtils;
 
@@ -23,7 +24,7 @@ public abstract class CoreMalariaRegisterActivity extends BaseMalariaRegisterAct
 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
-        startActivityForResult(FormUtils.getStartFormActivity(jsonForm, this.getString(R.string.malaria_registration), this), JsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(FormUtils.getStartFormActivity(jsonForm, this.getString(R.string.malaria_registration), this, Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override
