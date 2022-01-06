@@ -1,18 +1,21 @@
 package org.smartregister.chw.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
 import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.STEP1;
 
 import android.content.Context;
+import android.content.Intent;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,6 +29,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.client.utils.domain.Form;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
@@ -98,36 +102,34 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         BAJsonFormUtils baJsonFormUtils = new BAJsonFormUtils(coreChwApplication);
         JSONObject resultObject = baJsonFormUtils.getAutoJsonEditMemberFormString(formTitle, "family_register",
                 context, client, Utils.metadata().familyMemberRegister.updateEventType, familyName, false);
-        Assert.assertNotNull(resultObject);
+        assertNotNull(resultObject);
         JSONObject formMetadata = resultObject.getJSONObject(org.smartregister.family.util.JsonFormUtils.METADATA);
         assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
         JSONObject stepOne = resultObject.getJSONObject(STEP1);
         assertEquals(formTitle, stepOne.getString(TITLE));
     }
 
-    /*@Test
+    @Test
     public void testGetStartFormActivityReturnsCorrectIntent() {
         Context context = RuntimeEnvironment.application;
         Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
-        Assert.assertNotNull(testIntent);
+        assertNotNull(testIntent);
         Form form = (Form) testIntent.getExtras().get(JsonFormConstants.JSON_FORM_KEY.FORM);
         assertEquals("test form", form.getName());
-    }*/
+    }
 
     @Test
     public void testComputeSurname() {
         JSONObject jsonObj = new JSONObject();
-        if (clientEvent != null) {
-            try {
-                jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
-                        (clientEvent.getLastName() == null ? Mockito.anyString() : clientEvent.getLastName()));
-                jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+        try {
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
+                    (clientEvent.getLastName() == null ? Mockito.anyString() : clientEvent.getLastName()));
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        Assert.assertNotNull(jsonObj);
+        assertNotNull(jsonObj);
     }
 
     private String getClientJsonString() {

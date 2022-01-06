@@ -1,5 +1,10 @@
 package org.smartregister.chw.core.utils;
 
+import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
+import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
+import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
+import static org.smartregister.util.Utils.getAllSharedPreferences;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
@@ -7,7 +12,6 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
-import com.vijay.jsonwizard.domain.Form;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -18,6 +22,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.anc.util.JsonFormUtils;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
+import org.smartregister.client.utils.domain.Form;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.clientandeventmodel.Obs;
@@ -34,11 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
-
-import static org.smartregister.chw.anc.util.NCUtils.getSyncHelper;
-import static org.smartregister.chw.core.utils.CoreConstants.JSON_FORM.isMultiPartForm;
-import static org.smartregister.util.JsonFormUtils.getFieldJSONObject;
-import static org.smartregister.util.Utils.getAllSharedPreferences;
 
 public class FormUtils {
     public static FamilyMetadata getFamilyMetadata(BaseProfileActivity baseProfileActivity, String defaultLocation, ArrayList<String> locationHierarchy, ArrayList<Pair<String, String>> locationFields) {
