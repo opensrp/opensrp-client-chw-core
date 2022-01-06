@@ -106,7 +106,6 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         assertEquals(formTitle, stepOne.getString(TITLE));
     }
 
-
     @Test
     public void testComputeSurname() {
         JSONObject jsonObj = new JSONObject();
