@@ -120,13 +120,13 @@ public class CoreFamilyRegisterFragmentTest extends BaseUnitTest {
     public void testSetupViews() {
         when(fragment.getActivity()).thenReturn(activity);
         when(fragment.getContext()).thenReturn(activity);
-        android.view.View view = LayoutInflater.from(activity).inflate(org.smartregister.family.R.layout.fragment_base_register, null);
+        View view = LayoutInflater.from(activity).inflate(org.smartregister.family.R.layout.fragment_base_register, null);
         fragment.setupViews(view);
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.top_left_layout).getVisibility());
-        assertEquals(android.view.View.VISIBLE, view.findViewById(R.id.top_right_layout).getVisibility());
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.register_sort_filter_bar_layout).getVisibility());
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.filter_sort_layout).getVisibility());
-        assertEquals(android.view.View.VISIBLE, view.findViewById(R.id.due_only_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.top_left_layout).getVisibility());
+        assertEquals(View.VISIBLE, view.findViewById(R.id.top_right_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.register_sort_filter_bar_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.filter_sort_layout).getVisibility());
+        assertEquals(View.VISIBLE, view.findViewById(R.id.due_only_layout).getVisibility());
     }
 
 }
