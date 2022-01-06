@@ -113,7 +113,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
     @Test
     public void testGetStartFormActivityReturnsCorrectIntent() {
         Context context = RuntimeEnvironment.application;
-        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context, Utils.metadata().familyMemberFormActivity);
+        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context, eq(Utils.metadata().familyMemberFormActivity));
         assertNotNull(testIntent);
         Form form = (Form) testIntent.getExtras().get(JsonFormConstants.JSON_FORM_KEY.FORM);
         assertEquals("test form",form.getName());
