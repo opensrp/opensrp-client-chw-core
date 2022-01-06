@@ -8,7 +8,6 @@ import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LO
 import static org.smartregister.util.JsonFormUtils.STEP1;
 
 import android.content.Context;
-import android.content.Intent;
 
 import net.sqlcipher.MatrixCursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -107,12 +106,6 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         assertEquals(formTitle, stepOne.getString(TITLE));
     }
 
-    @Test
-    public void testGetStartFormActivityReturnsCorrectIntent() {
-        Context context = RuntimeEnvironment.application;
-        Intent testIntent = FormUtils.getStartFormActivity(new JSONObject(), "test form", context);
-        assertNotNull(testIntent);
-    }
 
     @Test
     public void testComputeSurname() {
