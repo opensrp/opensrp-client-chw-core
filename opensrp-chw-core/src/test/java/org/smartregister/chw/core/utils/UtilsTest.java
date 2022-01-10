@@ -1,7 +1,12 @@
 package org.smartregister.chw.core.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 
 import org.joda.time.DateTime;
@@ -54,57 +59,57 @@ public class UtilsTest {
 
     @Test
     public void testGetAnCWomanImageResourceIdentifier() {
-        Assert.assertEquals(R.drawable.anc_woman, Utils.getAnCWomanImageResourceIdentifier());
+        assertEquals(R.drawable.anc_woman, Utils.getAnCWomanImageResourceIdentifier());
     }
 
     @Test
     public void testGetPnCWomanImageResourceIdentifier() {
-        Assert.assertEquals(R.drawable.pnc_woman, Utils.getPnCWomanImageResourceIdentifier());
+        assertEquals(R.drawable.pnc_woman, Utils.getPnCWomanImageResourceIdentifier());
     }
 
     @Test
     public void testGetMemberImageResourceIdentifier() {
-        Assert.assertEquals(R.mipmap.ic_member, Utils.getMemberImageResourceIdentifier());
+        assertEquals(R.mipmap.ic_member, Utils.getMemberImageResourceIdentifier());
     }
 
     @Test
     public void testGetYesNoAsLanguageSpecific() {
-        Assert.assertEquals(context.getString(R.string.yes), Utils.getYesNoAsLanguageSpecific(context, "Yes"));
-        Assert.assertEquals(context.getString(R.string.yes), Utils.getYesNoAsLanguageSpecific(context, "YES"));
-        Assert.assertEquals("", Utils.getYesNoAsLanguageSpecific(context, ""));
-        Assert.assertEquals(context.getString(R.string.no), Utils.getYesNoAsLanguageSpecific(context, "No"));
-        Assert.assertEquals(context.getString(R.string.no), Utils.getYesNoAsLanguageSpecific(context, "NO"));
-        Assert.assertEquals("other", Utils.getYesNoAsLanguageSpecific(context, "other"));
+        assertEquals(context.getString(R.string.yes), Utils.getYesNoAsLanguageSpecific(context, "Yes"));
+        assertEquals(context.getString(R.string.yes), Utils.getYesNoAsLanguageSpecific(context, "YES"));
+        assertEquals("", Utils.getYesNoAsLanguageSpecific(context, ""));
+        assertEquals(context.getString(R.string.no), Utils.getYesNoAsLanguageSpecific(context, "No"));
+        assertEquals(context.getString(R.string.no), Utils.getYesNoAsLanguageSpecific(context, "NO"));
+        assertEquals("other", Utils.getYesNoAsLanguageSpecific(context, "other"));
     }
 
     @Test
     public void testFirstCharacterUppercase() {
-        Assert.assertEquals(Utils.firstCharacterUppercase(" "), " ");
-        Assert.assertEquals(Utils.firstCharacterUppercase(""), "");
-        Assert.assertEquals(Utils.firstCharacterUppercase("mike"), "Mike");
-        Assert.assertEquals(Utils.firstCharacterUppercase("s"), "S");
-        Assert.assertEquals(Utils.firstCharacterUppercase("kevin hart"), "Kevin hart");
+        assertEquals(Utils.firstCharacterUppercase(" "), " ");
+        assertEquals(Utils.firstCharacterUppercase(""), "");
+        assertEquals(Utils.firstCharacterUppercase("mike"), "Mike");
+        assertEquals(Utils.firstCharacterUppercase("s"), "S");
+        assertEquals(Utils.firstCharacterUppercase("kevin hart"), "Kevin hart");
     }
 
     @Test
     public void testConvertToDateFormateString() {
-        Assert.assertEquals("2018-08-12", Utils.convertToDateFormateString("12-08-2018", new SimpleDateFormat("yyyy-MM-dd")));
-        Assert.assertEquals("", Utils.convertToDateFormateString("me", new SimpleDateFormat("yyyy-MM-dd")));
+        assertEquals("2018-08-12", Utils.convertToDateFormateString("12-08-2018", new SimpleDateFormat("yyyy-MM-dd")));
+        assertEquals("", Utils.convertToDateFormateString("me", new SimpleDateFormat("yyyy-MM-dd")));
     }
 
     @Test
     public void testGetOverDueProfileImageResourceIDentifier() {
-        Assert.assertEquals(R.color.visit_status_over_due, Utils.getOverDueProfileImageResourceIDentifier());
+        assertEquals(R.color.visit_status_over_due, Utils.getOverDueProfileImageResourceIDentifier());
     }
 
     @Test
     public void testGetDueProfileImageResourceIDentifier() {
-        Assert.assertEquals(R.color.due_profile_blue, Utils.getDueProfileImageResourceIDentifier());
+        assertEquals(R.color.due_profile_blue, Utils.getDueProfileImageResourceIDentifier());
     }
 
     @Test
     public void testingConvertDpToPixel() {
-        Assert.assertEquals(0.0, Utils.convertDpToPixel(0, context), 0);
+        assertEquals(0.0, Utils.convertDpToPixel(0, context), 0);
     }
 
     @Test
@@ -148,7 +153,7 @@ public class UtilsTest {
         Date oneDayBefore = cal.getTime();
 
         DateTime referralTime = new DateTime(oneDayBefore);
-        Assert.assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.application));
+        assertEquals("Yesterday", Utils.formatReferralDuration(referralTime, RuntimeEnvironment.application));
     }
 
 
@@ -159,62 +164,78 @@ public class UtilsTest {
     }
 
     @Test
+    public void testGetDateDifferenceInDays() {
+        Date endDate = new Date(Long.parseLong("1641486299000"));
+        Date startDate = new Date(Long.parseLong("1641054299000"));
+        String differenceInDays = Utils.getDateDifferenceInDays(endDate, startDate);
+        assertEquals(5, Integer.parseInt(differenceInDays));
+    }
+
+    @Test
     public void assertGetDurationTests() {
         Utils.getDuration("2020-10-09T18:17:07.830+05:00", "2020-05-15T18:17:07.830+05:00");
         Locale locale = RuntimeEnvironment.application.getApplicationContext().getResources().getConfiguration().locale;
         DateTime todayDateTime = new DateTime("2020-10-09T18:17:07.830+05:00");
 
-        Assert.assertEquals("1d", Utils.getDuration(Long.parseLong("100000000"),
+        assertEquals("1d", Utils.getDuration(Long.parseLong("100000000"),
                 new DateTime("2020-10-10T18:17:07.830+05:00"),
                 todayDateTime,
                 locale));
 
-        Assert.assertEquals("2w 5d", Utils.getDuration(Long.parseLong("1641600000"),
+        assertEquals("2w 5d", Utils.getDuration(Long.parseLong("1641600000"),
                 new DateTime("2020-11-12T18:17:07.830+05:00"),
                 todayDateTime,
                 locale));
 
 
-        Assert.assertEquals("4m 3w", Utils.getDuration(Long.parseLong("12700800000"),
+        assertEquals("4m 3w", Utils.getDuration(Long.parseLong("12700800000"),
                 new DateTime("2020-11-12T18:17:07.830+05:00"),
                 todayDateTime,
                 locale));
 
-        Assert.assertEquals("4y 11m", Utils.getDuration(Long.parseLong("157334400000"),
+        assertEquals("4y 11m", Utils.getDuration(Long.parseLong("157334400000"),
                 new DateTime("2015-10-10T05:00:00.000+05:00"),
                 todayDateTime,
                 locale));
 
-        Assert.assertEquals("5y", Utils.getDuration(Long.parseLong("157334400000"),
+        assertEquals("5y", Utils.getDuration(Long.parseLong("157334400000"),
                 new DateTime("2015-10-09T05:00:00.000+05:00"),
                 todayDateTime,
                 locale));
 
-        Assert.assertEquals("25y 11m", Utils.getDuration("2020-10-12T00:00:00.000+00:00",
+        assertEquals("25y 11m", Utils.getDuration("2020-10-12T00:00:00.000+00:00",
                 "1994-10-15T00:00:00.000+00:00"));
     }
 
     @Test
     public void getGenderLanguageSpecificReturnsCorrectString() {
-        Assert.assertEquals("", Utils.getGenderLanguageSpecific(context, ""));
-        Assert.assertEquals("Male", Utils.getGenderLanguageSpecific(context, "male"));
-        Assert.assertEquals("Female", Utils.getGenderLanguageSpecific(context, "female"));
+        assertEquals("", Utils.getGenderLanguageSpecific(context, ""));
+        assertEquals("Male", Utils.getGenderLanguageSpecific(context, "male"));
+        assertEquals("Female", Utils.getGenderLanguageSpecific(context, "female"));
     }
 
     @Test
     public void getImmunizationHeaderLanguageSpecificReturnsCorrectString() {
-        Assert.assertEquals("", Utils.getImmunizationHeaderLanguageSpecific(context, ""));
-        Assert.assertEquals("at birth", Utils.getImmunizationHeaderLanguageSpecific(context, "at birth"));
-        Assert.assertEquals("weeks", Utils.getImmunizationHeaderLanguageSpecific(context, "weeks"));
-        Assert.assertEquals("months", Utils.getImmunizationHeaderLanguageSpecific(context, "months"));
+        assertEquals("", Utils.getImmunizationHeaderLanguageSpecific(context, ""));
+        assertEquals("at birth", Utils.getImmunizationHeaderLanguageSpecific(context, "at birth"));
+        assertEquals("weeks", Utils.getImmunizationHeaderLanguageSpecific(context, "weeks"));
+        assertEquals("months", Utils.getImmunizationHeaderLanguageSpecific(context, "months"));
     }
 
     @Test
-    public void getFileNameReturnsFormIdentityIfFormExists() {
+    public void testGetLocalFormReturnsFileIfFileExists() {
+        String testForm = Utils.getLocalForm("test_form");
+        String childEnrollment = Utils.getLocalForm("child_enrollment");
+        assertEquals("test_form", testForm);
+        assertEquals("child_enrollment", childEnrollment);
+    }
+
+    @Test
+    public void testGetFileNameReturnsFormIdentityIfFormExists() {
         Locale locale = CoreChwApplication.getCurrentLocale();
         AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
-        Assert.assertEquals("test_form", Utils.getFileName("test_form", locale, assetManager));
-        Assert.assertEquals("child_enrollment", Utils.getFileName("child_enrollment", locale, assetManager));
+        assertEquals("test_form", Utils.getFileName("test_form", locale, assetManager));
+        assertEquals("child_enrollment", Utils.getFileName("child_enrollment", locale, assetManager));
     }
 
     @Test
@@ -229,26 +250,26 @@ public class UtilsTest {
         String suffixOne = "st";
         String suffixTwo = "nd";
         String suffixThree = "th";
-        Assert.assertEquals(suffixOne, Utils.getDayOfMonthSuffix(1));
-        Assert.assertEquals(suffixTwo, Utils.getDayOfMonthSuffix(2));
-        Assert.assertEquals(suffixThree, Utils.getDayOfMonthSuffix(11));
+        assertEquals(suffixOne, Utils.getDayOfMonthSuffix(1));
+        assertEquals(suffixTwo, Utils.getDayOfMonthSuffix(2));
+        assertEquals(suffixThree, Utils.getDayOfMonthSuffix(11));
     }
 
     @Test
     public void testGetLocale() {
         Locale expectedLocaleNull = Locale.getDefault();
         Locale expectedLocaleNotNull = RuntimeEnvironment.application.getResources().getConfiguration().locale;
-        Assert.assertEquals(expectedLocaleNull, Utils.getLocale(null));
-        Assert.assertEquals(expectedLocaleNotNull, Utils.getLocale(RuntimeEnvironment.application));
+        assertEquals(expectedLocaleNull, Utils.getLocale(null));
+        assertEquals(expectedLocaleNotNull, Utils.getLocale(RuntimeEnvironment.application));
     }
 
     @Test
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
-        Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
-        Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
-        Assert.assertEquals("8th", Utils.getDayOfMonthWithSuffix(8, context));
-        Assert.assertEquals("11th", Utils.getDayOfMonthWithSuffix(11, context));
-        Assert.assertEquals("12th", Utils.getDayOfMonthWithSuffix(12, context));
+        assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
+        assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
+        assertEquals("8th", Utils.getDayOfMonthWithSuffix(8, context));
+        assertEquals("11th", Utils.getDayOfMonthWithSuffix(11, context));
+        assertEquals("12th", Utils.getDayOfMonthWithSuffix(12, context));
         Assert.assertNull(Utils.getDayOfMonthWithSuffix(22, context));
     }
 
@@ -258,19 +279,27 @@ public class UtilsTest {
         String time = localDate.toString();
 
         String duration = Utils.getDuration(time);
-        Assert.assertEquals("15y 1m", duration);
+        assertEquals("15y 1m", duration);
     }
 
     @Test
     public void testConvertDpToPixel() {
-        float pixel = Utils.convertDpToPixel(36,context);
-        Assert.assertEquals("36.0", String.valueOf(pixel));
+        float pixel = Utils.convertDpToPixel(36, context);
+        assertEquals("36.0", String.valueOf(pixel));
     }
 
     @Test
     public void testActualDaysBetweenDateAndNow() {
         String dateNow = Utils.actualDaysBetweenDateAndNow(context, String.valueOf(System.currentTimeMillis()));
-        Assert.assertEquals("0 day", dateNow);
+        assertEquals("0 day", dateNow);
+    }
+
+    @Test
+    public void testGetBitmapShouldReturnBitmapWhenPassDrawable() {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.OVAL);
+        Bitmap bitmap = Utils.getBitmap(shape);
+        assertNotNull(bitmap);
     }
 
     @After

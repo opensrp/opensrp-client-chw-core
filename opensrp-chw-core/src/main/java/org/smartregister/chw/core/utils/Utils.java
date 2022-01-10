@@ -1,5 +1,9 @@
 package org.smartregister.chw.core.utils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
@@ -9,7 +13,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,7 +21,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -95,10 +97,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
 
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
@@ -393,13 +391,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static Map<String, List<Obs>> groupObsByFieldObservations(List<Obs> obs) {
         Map<String, List<Obs>> map = new HashMap<>();
         for (Obs o : obs) {
-            List<Obs> cur_vals = map.get(o.getFormSubmissionField());
-            if (cur_vals == null) {
-                cur_vals = new ArrayList<>();
+            List<Obs> curValues = map.get(o.getFormSubmissionField());
+            if (curValues == null) {
+                curValues = new ArrayList<>();
             }
-            cur_vals.add(o);
+            curValues.add(o);
 
-            map.put(o.getFormSubmissionField(), cur_vals);
+            map.put(o.getFormSubmissionField(), curValues);
         }
         return map;
     }
@@ -475,25 +473,10 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
     public static String getLocaleStringResource(Locale requestedLocale, int resourceId, Context context) {
         String result;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) { // use latest api
-            Configuration config = new Configuration(context.getResources().getConfiguration());
-            config.setLocale(requestedLocale);
-            result = context.createConfigurationContext(config).getText(resourceId).toString();
-        }
-        else { // support older android versions
-            Resources resources = context.getResources();
-            Configuration conf = resources.getConfiguration();
-            Locale savedLocale = conf.locale;
-            conf.locale = requestedLocale;
-            resources.updateConfiguration(conf, null);
-
-            // retrieve resources from desired locale
-            result = resources.getString(resourceId);
-
-            // restore original locale
-            conf.locale = savedLocale;
-            resources.updateConfiguration(conf, null);
-        }
+        // use latest api
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        config.setLocale(requestedLocale);
+        result = context.createConfigurationContext(config).getText(resourceId).toString();
 
         return result;
     }

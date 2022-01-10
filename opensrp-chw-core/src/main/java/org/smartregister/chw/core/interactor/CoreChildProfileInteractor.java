@@ -155,7 +155,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         }
     }
 
-    private ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {
+    public ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {
         switch (alertStatus) {
             case normal:
                 return ImmunizationState.DUE;

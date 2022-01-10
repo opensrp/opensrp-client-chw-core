@@ -27,6 +27,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.ImageUtilsShadowHelper;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.domain.AlertStatus;
 import org.smartregister.family.util.AppExecutors;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.JsonFormUtils;
@@ -103,5 +104,13 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
         Context context = RuntimeEnvironment.application;
         assertEquals("Vitamin A",interactor.getTranslatedService(context, "vitamin"));
         assertEquals("demo_service",interactor.getTranslatedService(context, "Demo Service"));
+    }
+
+    @Test
+    public void testImmunizationStateFromAlertShouldReturnCorrectAlertMessage() {
+        assertEquals("DUE",interactor.getImmunizationStateFromAlert(AlertStatus.normal).name());
+        assertEquals("OVERDUE",interactor.getImmunizationStateFromAlert(AlertStatus.urgent).name());
+        assertEquals("UPCOMING",interactor.getImmunizationStateFromAlert(AlertStatus.upcoming).name());
+        assertEquals("NO_ALERT",interactor.getImmunizationStateFromAlert(AlertStatus.inProcess).name());
     }
 }
