@@ -1,8 +1,8 @@
 package org.smartregister.chw.core.dao;
 
-import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.BASE_ENTITY_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.VISIT_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.COLUMN_NAME.VISIT_JSON;
+import static org.smartregister.chw.core.utils.CoreConstants.columnName.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.columnName.VISIT_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.columnName.VISIT_JSON;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.domain.Visit;
