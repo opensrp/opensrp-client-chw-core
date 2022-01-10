@@ -93,8 +93,8 @@ public class UtilsTest {
 
     @Test
     public void testConvertToDateFormateString() {
-        assertEquals("2018-08-12", Utils.convertToDateFormateString("12-08-2018", new SimpleDateFormat("yyyy-MM-dd")));
-        assertEquals("", Utils.convertToDateFormateString("me", new SimpleDateFormat("yyyy-MM-dd")));
+        assertEquals("2018-08-12", Utils.convertToDateFormatString("12-08-2018", new SimpleDateFormat("yyyy-MM-dd")));
+        assertEquals("", Utils.convertToDateFormatString("me", new SimpleDateFormat("yyyy-MM-dd")));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UtilsTest {
     @Test
     public void getFormTagShouldNotReturnNullValues() {
         FormTag formTag = Utils.getFormTag(org.smartregister.util.Utils.getAllSharedPreferences());
-        Assert.assertNotNull(formTag);
+        assertNotNull(formTag);
     }
 
     @Test

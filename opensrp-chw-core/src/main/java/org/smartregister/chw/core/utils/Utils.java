@@ -170,7 +170,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String convertToDateFormateString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
+    public static String convertToDateFormatString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());//12-08-2018
         try {
             Date date = sdf.parse(timeAsDDMMYYYY);
