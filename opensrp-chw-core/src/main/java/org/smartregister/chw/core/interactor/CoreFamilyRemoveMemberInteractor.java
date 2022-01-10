@@ -233,18 +233,15 @@ public abstract class CoreFamilyRemoveMemberInteractor implements FamilyRemoveMe
         AllCommonsRepository commonsRepository = coreChwApplication.getAllCommonsRepository(tableName);
         ContentValues values = new ContentValues();
 
-        Date date_removed = new Date();
+        Date dateRemoved = new Date();
         Date dod = null;
         if (triple.getLeft() != null && triple.getLeft().first != null) {
             dod = triple.getLeft().first;
         }
 
-        if (commonsRepository != null && dod == null) {
-            values.put(DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(date_removed));
-        }
-
-        // enter the date of death
-        if (dod != null && commonsRepository != null) {
+        if (dod == null) {
+            values.put(DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(dateRemoved));
+        } else {
             values.put(DBConstants.KEY.DOD, getDBFormatedDate(dod));
         }
 
