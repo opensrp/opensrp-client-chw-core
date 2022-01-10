@@ -703,7 +703,7 @@ public class CoreConstants {
         public static final String FAMILY_INCOME_BRACKET = "income_bracket";
     }
 
-    public static class COLUMN {
+    public static class columnNameUtil {
         public static final String FIRST_NAME = "first_name";
         public static final String LAST_NAME = "last_name";
         public static final String BASE_ENTITY_ID = "base_entity_id";
