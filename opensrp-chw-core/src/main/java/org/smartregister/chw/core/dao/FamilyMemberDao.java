@@ -1,10 +1,10 @@
 package org.smartregister.chw.core.dao;
 
-import static org.smartregister.chw.core.utils.CoreConstants.columnName.BASE_ENTITY_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.columnName.ENTITY_TYPE;
-import static org.smartregister.chw.core.utils.CoreConstants.columnName.FIRST_NAME;
-import static org.smartregister.chw.core.utils.CoreConstants.columnName.LAST_NAME;
-import static org.smartregister.chw.core.utils.CoreConstants.columnName.RELATIONAL_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN.ENTITY_TYPE;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN.FIRST_NAME;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN.LAST_NAME;
+import static org.smartregister.chw.core.utils.CoreConstants.COLUMN.RELATIONAL_ID;
 
 import org.smartregister.chw.core.model.CoreFamilyMemberModel;
 import org.smartregister.dao.AbstractDao;
