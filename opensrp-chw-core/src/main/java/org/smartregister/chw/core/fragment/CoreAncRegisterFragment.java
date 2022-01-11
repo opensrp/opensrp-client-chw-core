@@ -223,7 +223,7 @@ public abstract class CoreAncRegisterFragment extends BaseAncRegisterFragment {
         return query;
     }
 
-    private String getFilterString() {
+    protected String getFilterString() {
         StringBuilder customFilter = new StringBuilder();
         if (StringUtils.isNotBlank(filters)) {
             customFilter.append(MessageFormat.format(" and ( {0}.{1} like ''%{2}%'' ", CoreConstants.TABLE_NAME.FAMILY_MEMBER, DBConstants.KEY.FIRST_NAME, filters));
