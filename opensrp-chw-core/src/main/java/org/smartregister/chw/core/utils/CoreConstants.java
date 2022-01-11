@@ -192,6 +192,7 @@ public class CoreConstants {
         public static final String CLOSE_TB_FEEDBACK = "Close Tb Feedback";
         public static final String HIV_INDEX_CONTACT_REGISTRATION = "Hiv Index Contact Registration";
         public static final String HIV_INDEX_CONTACT_TESTING_FOLLOWUP = "HIV Index Contact Testing Followup";
+        public static final String PREGNANCY_CONFIRMATION_DISMISSAL = "Pregnancy Confirmation Dismissal";
     }
 
     public static final class EncounterType {

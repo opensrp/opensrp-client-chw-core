@@ -43,6 +43,9 @@ public class ChwNotificationUtil {
         } else if (context.getString(R.string.notification_type_hiv_index).equals(notificationType)) {
             return "ec_hiv_index_contact_community_followup";
         }
+        else if (context.getString(R.string.notification_type_pregnancy_confirmation).equals(notificationType)) {
+            return "ec_pregnancy_confirmation_updates";
+        }
         return null;
     }
 
@@ -56,6 +59,7 @@ public class ChwNotificationUtil {
         notificationEventMap.put(context.getString(R.string.notification_type_hiv_problem_outcome), CoreConstants.EventType.HIV_NOTIFICATION_DISMISSAL);
         notificationEventMap.put(context.getString(R.string.notification_type_tb_problem_outcome), CoreConstants.EventType.TB_NOTIFICATION_DISMISSAL);
         notificationEventMap.put(context.getString(R.string.notification_type_hiv_index), CoreConstants.EventType.HIV_INDEX_CONCTACT_COMMUNITY_FOLLOWUP_NOTIFICATION_DISMISSAL);
+        notificationEventMap.put(context.getString(R.string.notification_type_pregnancy_confirmation),CoreConstants.EventType.PREGNANCY_CONFIRMATION_DISMISSAL);
 
         return notificationEventMap.get(notificationType);
     }

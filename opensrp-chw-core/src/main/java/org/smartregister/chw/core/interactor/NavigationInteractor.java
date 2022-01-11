@@ -21,6 +21,7 @@ import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_COUNT_Q
 import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
 import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_COUNT_QUERY;
 
@@ -335,11 +336,11 @@ public class NavigationInteractor implements NavigationContract.Interactor {
 
             case CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:
                 String referralNotificationQuery =
-                        String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s \nUNION ALL %s \nUNION ALL %s)",
+                        String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s \nUNION ALL %s \nUNION ALL %s \nUNION ALL %s \nUNION ALL %s)",
                                 SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
                                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY, HIV_OUTCOME_COUNT_QUERY,
-                                TB_OUTCOME_COUNT_QUERY,HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
+                                TB_OUTCOME_COUNT_QUERY,HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY,PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV:

@@ -79,6 +79,8 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
             notificationItem = getHivTbProblemOutcomeDetails(notificationId, notificationType);
         else if (notificationType.equalsIgnoreCase(context.getString(R.string.notification_type_hiv_index)))
             notificationItem = getHivIndexContactFollowupReferralDetails(notificationId, notificationType);
+        else if (notificationType.equalsIgnoreCase(context.getString(R.string.notification_type_pregnancy_confirmation)))
+            notificationItem = getPregnancyConfirmationReferralDetails(notificationId, notificationType);
 
         presenter.onNotificationDetailsFetched(notificationItem);
     }
@@ -202,6 +204,22 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
 
         if (notificationRecord.getDiagnosis() != null)
             details.add(context.getString(R.string.index_contact_community_followup_referral_notification_message, notificationRecord.getDiagnosis()));
+        return new NotificationItem(title, details);
+    }
+
+    @NotNull
+    private NotificationItem getPregnancyConfirmationReferralDetails(String notificationId, String notificationType) {
+        NotificationRecord notificationRecord;
+        notificationRecord = ChwNotificationDao.getPregnancyConfirmationReferralRecord(notificationId, ChwNotificationUtil.getNotificationDetailsTable(context, notificationType));
+
+        String title = context.getString(R.string.pregnancy_confirmation_referral_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
+        List<String> details = new ArrayList<>();
+        details.add(context.getString(R.string.notification_action_taken, notificationRecord.getActionTaken()));
+
+        details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
+
+//        if (notificationRecord.getDiagnosis() != null)
+//            details.add(context.getString(R.string.index_contact_community_followup_referral_notification_message, notificationRecord.getDiagnosis()));
         return new NotificationItem(title, details);
     }
 
