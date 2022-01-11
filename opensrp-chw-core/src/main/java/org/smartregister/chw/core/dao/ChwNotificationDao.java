@@ -132,6 +132,24 @@ public class ChwNotificationDao extends AbstractDao {
         return AbstractDao.readSingleValue(sql, mapHivIndexCommunityReferralColumnValuesToModel());
     }
 
+    public static NotificationRecord getPregnancyConfirmationReferralRecord(String notificationId, String table) {
+        String sql = String.format(
+                "/* Get details for Pregnancy Confirmation Referral Record */\n" +
+                        "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
+                        "ec_family.village_town        AS      village,\n" +
+                        table + ".visit_date,\n" +
+                        "'Enrolled to ANC' as action_taken\n" +
+                        "FROM " + table + "\n" +
+                        "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".entity_id\n" +
+                        "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
+                        "\n" +
+                        "WHERE ec_family_member.is_closed = '0'\n" +
+                        "  AND ec_family_member.date_removed is null\n" +
+                        "  AND " + table + ".id = '%s'\n", notificationId);
+
+        return AbstractDao.readSingleValue(sql, mapPregnancyConfirmationReferralColumnValuesToModel());
+    }
+
 
     public static NotificationRecord getMalariaFollowUpRecord(String notificationId) {
         String sql = String.format(
@@ -256,6 +274,25 @@ public class ChwNotificationDao extends AbstractDao {
                 record.setDiagnosis(comment);
             }
 
+            if (actionTaken != null) {
+                record.setActionTaken(ChwNotificationUtil.getStringFromJSONArrayString(actionTaken));
+            }
+            return record;
+        };
+    }
+
+    private static DataMap<NotificationRecord> mapPregnancyConfirmationReferralColumnValuesToModel() {
+        return row -> {
+            NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
+            record.setVillage(getCursorValue(row, "village"));
+            record.setClientName(getCursorValue(row, "full_name"));
+            String careGiverName = getCursorValue(row, "cg_full_name");
+            record.setVisitDate(formatVisitDate(getCursorValue(row, "visit_date", "")));
+
+            String actionTaken = getCursorValue(row, "action_taken");
+            if (careGiverName != null) {
+                record.setCareGiverName(careGiverName);
+            }
             if (actionTaken != null) {
                 record.setActionTaken(ChwNotificationUtil.getStringFromJSONArrayString(actionTaken));
             }
