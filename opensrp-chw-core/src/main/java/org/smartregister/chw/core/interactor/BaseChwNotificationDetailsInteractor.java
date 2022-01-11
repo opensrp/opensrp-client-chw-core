@@ -197,8 +197,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         String title = context.getString(R.string.hiv_index_community_followup_notification_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
         List<String> details = new ArrayList<>();
         details.add(context.getString(R.string.notification_action_taken, notificationRecord.getActionTaken()));
-//
-//        details.add(context.getString(R.string.notification_diagnosis, context.getString(R.string.hiv_positive_status)));
 
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
 
@@ -217,9 +215,6 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
         details.add(context.getString(R.string.notification_action_taken, notificationRecord.getActionTaken()));
 
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
-
-//        if (notificationRecord.getDiagnosis() != null)
-//            details.add(context.getString(R.string.index_contact_community_followup_referral_notification_message, notificationRecord.getDiagnosis()));
         return new NotificationItem(title, details);
     }
 

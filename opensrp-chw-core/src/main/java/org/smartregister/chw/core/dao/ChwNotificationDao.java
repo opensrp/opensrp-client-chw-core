@@ -132,7 +132,7 @@ public class ChwNotificationDao extends AbstractDao {
         return AbstractDao.readSingleValue(sql, mapHivIndexCommunityReferralColumnValuesToModel());
     }
 
-    public static NotificationRecord getPregnancyConfirmationReferralRecord(String notificationId, String table){
+    public static NotificationRecord getPregnancyConfirmationReferralRecord(String notificationId, String table) {
         String sql = String.format(
                 "/* Get details for Pregnancy Confirmation Referral Record */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
@@ -281,14 +281,13 @@ public class ChwNotificationDao extends AbstractDao {
         };
     }
 
-    private static DataMap<NotificationRecord> mapPregnancyConfirmationReferralColumnValuesToModel(){
+    private static DataMap<NotificationRecord> mapPregnancyConfirmationReferralColumnValuesToModel() {
         return row -> {
             NotificationRecord record = new NotificationRecord(getCursorValue(row, "base_entity_id"));
             record.setVillage(getCursorValue(row, "village"));
             record.setClientName(getCursorValue(row, "full_name"));
             String careGiverName = getCursorValue(row, "cg_full_name");
             record.setVisitDate(formatVisitDate(getCursorValue(row, "visit_date", "")));
-//            String comment = getCursorValue(row, "comment");
 
             String actionTaken = getCursorValue(row, "action_taken");
             if (careGiverName != null) {
@@ -297,9 +296,6 @@ public class ChwNotificationDao extends AbstractDao {
             if (actionTaken != null) {
                 record.setActionTaken(ChwNotificationUtil.getStringFromJSONArrayString(actionTaken));
             }
-//            if (comment != null) {
-//                record.setDiagnosis(ChwNotificationUtil.getStringFromJSONArrayString(comment));
-//            }
             return record;
         };
     }
