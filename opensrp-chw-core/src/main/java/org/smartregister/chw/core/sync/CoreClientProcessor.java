@@ -316,6 +316,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.FAMILY_PLANNING_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.HIV_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.TB_NOTIFICATION_DISMISSAL:
+            case CoreConstants.EventType.PREGNANCY_CONFIRMATION_DISMISSAL:
                 processNotificationDismissalEvent(eventClient.getEvent());
                 break;
             default:
