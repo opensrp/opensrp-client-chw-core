@@ -232,6 +232,7 @@ public class CoreConstants {
         private static final String HTS_REFERRAL_FORM = "referrals/hts_referral_form";
         private static final String TB_REFERRAL_FORM = "referrals/tb_referral_form";
         private static final String GBV_REFERRAL_FORM = "referrals/gbv_referral_form";
+        public static String PREGNANCY_CONFIRMATION_REFERRAL_FORM = "referrals/pregnancy_confirmation_referral_form";
         private static final String FEMALE_FAMILY_PLANNING_UNIFIED_REFERRAL_FORM = "referrals/female_fp_referral_form";
         private static final String MALE_FAMILY_PLANNING_UNIFIED_REFERRAL_FORM = "referrals/male_fp_referral_form";
         private static final String CHILD_GBV_REFERRAL_FORM = "referrals/child_gbv_referral_form";
@@ -304,6 +305,10 @@ public class CoreConstants {
 
         public static String getPncReferralForm() {
             return PNC_REFERRAL_FORM;
+        }
+
+        public static String getPregnancyConfirmationReferralForm() {
+            return PREGNANCY_CONFIRMATION_REFERRAL_FORM;
         }
 
         public static String getChildUnifiedReferralForm() {
@@ -1124,6 +1129,7 @@ public class CoreConstants {
     public static final class TASKS_FOCUS {
         public static final String SICK_CHILD = "Sick Child";
         public static final String ANC_DANGER_SIGNS = "ANC Danger Signs";
+        public static final String PREGNANCY_CONFIRMATION = "Pregnancy Confirmation";
         public static final String PNC_DANGER_SIGNS = "PNC Danger Signs";
         public static final String FP_SIDE_EFFECTS = "FP Initiation";
         public static final String SUSPECTED_MALARIA = "Suspected Malaria";
