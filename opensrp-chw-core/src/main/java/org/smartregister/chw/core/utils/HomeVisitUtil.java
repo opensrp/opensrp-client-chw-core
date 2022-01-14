@@ -65,8 +65,8 @@ public class HomeVisitUtil {
         return hivFollowupRule;
     }
 
-    public static PmtctFollowUpRule getPmtctVisitStatus(Date pmtctRegisterDate, Date followUpDate) {
-        PmtctFollowUpRule pmtctFollowUpRule = new PmtctFollowUpRule(pmtctRegisterDate, followUpDate);
+    public static PmtctFollowUpRule getPmtctVisitStatus(Date pmtctRegisterDate, Date followUpDate, String baseEntityId) {
+        PmtctFollowUpRule pmtctFollowUpRule = new PmtctFollowUpRule(pmtctRegisterDate, followUpDate, baseEntityId);
         CoreChwApplication.getInstance().getRulesEngineHelper().getPmtctRule(pmtctFollowUpRule, CoreConstants.RULE_FILE.PMTCT_FOLLOW_UP_VISIT);
         return pmtctFollowUpRule;
     }
