@@ -112,7 +112,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         protected Void doInBackground(Void... voids) {
             Date pmtctRegisterDate = PmtctDao.getPmtctRegisterDate(baseEntityId);
             Date followUpDate = PmtctDao.getPmtctFollowUpVisitDate(baseEntityId);
-            pmtctFollowUpRule = HomeVisitUtil.getPmtctVisitStatus(pmtctRegisterDate, followUpDate);
+            pmtctFollowUpRule = HomeVisitUtil.getPmtctVisitStatus(pmtctRegisterDate, followUpDate, baseEntityId);
             return null;
         }
 

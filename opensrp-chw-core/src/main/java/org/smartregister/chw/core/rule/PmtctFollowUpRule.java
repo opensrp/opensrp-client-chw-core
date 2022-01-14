@@ -6,7 +6,9 @@ import androidx.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.smartregister.chw.core.dao.CorePmtctDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.pmtct.dao.PmtctDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,10 +25,12 @@ public class PmtctFollowUpRule implements ICommonRule {
     private DateTime dueDate;
     private DateTime overDueDate;
     private DateTime expiryDate;
+    private String baseEntityId;
 
-    public PmtctFollowUpRule(Date pmtctDate, @Nullable Date latestFollowUpDate) {
+    public PmtctFollowUpRule(Date pmtctDate, @Nullable Date latestFollowUpDate, String baseEntityId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         this.pmtctDate = pmtctDate != null ? new DateTime(sdf.format(pmtctDate)) : null;
+        this.baseEntityId = baseEntityId;
         this.latestFollowUpDate = latestFollowUpDate == null ? null : new DateTime(sdf.format(latestFollowUpDate));
     }
 
@@ -40,7 +44,12 @@ public class PmtctFollowUpRule implements ICommonRule {
             this.overDueDate = latestFollowUpDate.plusDays(overDueDay);
             this.expiryDate = latestFollowUpDate.plusDays(expiry);
         } else {
-            this.dueDate = pmtctDate.plusDays(0);
+            if(CorePmtctDao.isClientKnownOnArt(baseEntityId)){
+                this.dueDate = pmtctDate.plusDays(0);
+            }else{
+                this.dueDate = pmtctDate.plusDays(dueDay);
+            }
+
             this.overDueDate = pmtctDate.plusDays(overDueDay);
             this.expiryDate = pmtctDate.plusDays(expiry);
         }
