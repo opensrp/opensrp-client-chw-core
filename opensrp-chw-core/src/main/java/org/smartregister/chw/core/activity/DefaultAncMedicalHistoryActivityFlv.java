@@ -28,10 +28,10 @@ public abstract class DefaultAncMedicalHistoryActivityFlv implements CoreAncMedi
     protected LinearLayout linearLayoutHealthFacilityVisit;
     protected LinearLayout linearLayoutHealthFacilityVisitDetails;
     protected LayoutInflater inflater;
-    private LinearLayout linearLayoutLastVisit;
+    protected LinearLayout linearLayoutLastVisit;
     private LinearLayout linearLayoutTTImmunization, linearLayoutTTImmunizationDetails;
     private LinearLayout linearLayoutIPTp, linearLayoutIPTpDetails;
-    private TextView customFontTextViewLastVisit;
+    protected TextView customFontTextViewLastVisit;
     private TextView customFontTextViewAncCard;
 
     @Override
