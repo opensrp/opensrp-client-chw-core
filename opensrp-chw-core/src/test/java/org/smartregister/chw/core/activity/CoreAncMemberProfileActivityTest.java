@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.activity;
 
+import static org.mockito.Mockito.doReturn;
 import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT;
 
 import android.content.Intent;
@@ -22,15 +23,13 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
-import org.smartregister.CoreLibrary;
 import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.anc.repository.VisitRepository;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.BuildConfig;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreAncMemberProfileActivityImpl;
-import org.smartregister.chw.core.application.TestApplication;
 import org.smartregister.chw.core.presenter.CoreAncMemberProfilePresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.domain.AlertStatus;
@@ -47,14 +46,16 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
 
     @Mock
     private MemberObject memberObject;
+    @Mock
+    private AncLibrary ancLibrary;
+    @Mock
+    private VisitRepository visitRepository;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         Context context = Context.getInstance();
-        CoreLibrary.init(context);
-        AncLibrary.init(context, ((TestApplication)RuntimeEnvironment.application).getRepository(), BuildConfig.VERSION_CODE, 1);
 
         //Auto login by default
         context.session().start(context.session().lengthInMilliseconds());
@@ -69,6 +70,9 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
         Intent intent = new Intent();
         intent.putExtra(Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, memberObject.getBaseEntityId());
         intent.putExtra(MEMBER_PROFILE_OBJECT, memberObject);
+
+        ReflectionHelpers.setStaticField(AncLibrary.class, "instance", ancLibrary);
+        doReturn(visitRepository).when(ancLibrary).visitRepository();
 
         controller = Robolectric.buildActivity(CoreAncMemberProfileActivityImpl.class, intent);
         controller.create().start();
