@@ -25,6 +25,7 @@ public interface ChwDBConstants {
     String TASK_STATUS_REFERRAL = "Referral";
     String DETAILS = "details";
     String EVENT_DATE = "event_date";
+    String SYNC_LOCATION_ID = "sync_location_id";
 
     interface TaskTable {
         String FOR = "for";
