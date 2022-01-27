@@ -40,6 +40,7 @@ import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.LocationRepository;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.util.AssetHandler;
 import org.smartregister.util.FormUtils;
@@ -457,7 +458,11 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             case DBConstants.KEY.GPS:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), DBConstants.KEY.GPS, false));
                 break;
-
+            case ChwDBConstants.SYNC_LOCATION_ID:
+                LocationRepository locationRepository= new LocationRepository();
+                Location location = locationRepository.getLocationById(Utils.getValue(client.getColumnmaps(), "sync_location_id", false));
+                jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, location.getProperties().getName());
+                break;
             case ChwDBConstants.EVENT_DATE:
                 jsonObject.put(org.smartregister.family.util.JsonFormUtils.VALUE, Utils.getValue(client.getColumnmaps(), ChwDBConstants.EVENT_DATE, false));
                 break;
