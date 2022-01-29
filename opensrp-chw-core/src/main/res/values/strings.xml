@@ -786,5 +786,5 @@
     <!--PMTCT Titles -->
     <string name="pmtct_registration">PMTCT Registration</string>
 
-
+    <string name="menu_independent">Independent</string>
 </resources>
