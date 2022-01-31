@@ -217,7 +217,7 @@ dependencies {
         exclude group: 'id.zelory', module: 'compressor'
     }
 
-    api('org.smartregister:opensrp-client-chw-pnc:2.0.3-alpha-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pnc:2.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-chw-anc'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
