@@ -6,7 +6,6 @@ import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
-
 import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
 
@@ -179,7 +178,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "           AND (ec_family.entity_type = 'ec_family' OR ec_family.entity_type is null)\n" +
                         "           AND ec_family_member.base_entity_id NOT IN (\n" +
                         "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
+                        "             FROM ec_anc_register WHERE ec_anc_register.is_closed IS 0\n" +
                         "             UNION ALL\n" +
                         "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_pregnancy_outcome\n" +
@@ -209,7 +208,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                         "           AND ec_family.entity_type = 'ec_independent_client'\n" +
                         "           AND ec_family_member.base_entity_id NOT IN (\n" +
                         "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
+                        "             FROM ec_anc_register WHERE ec_anc_register.is_closed IS 0\n" +
                         "             UNION ALL\n" +
                         "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
                         "             FROM ec_pregnancy_outcome\n" +
@@ -340,7 +339,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
                                 PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
                                 MALARIA_HF_FOLLOW_UP_COUNT_QUERY, HIV_OUTCOME_COUNT_QUERY,
-                                TB_OUTCOME_COUNT_QUERY,HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY,PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
+                                TB_OUTCOME_COUNT_QUERY, HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY, PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
                 return NavigationDao.getQueryCount(referralNotificationQuery);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV:
@@ -391,7 +390,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null and p.chw_referral_service = 'Suspected HIV' and " +
                                 "              ( UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') OR p.client_hiv_status_after_testing IS NULL) " +
-                                "               and p.base_entity_id NOT IN (SELECT base_entity_id FROM " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF +" ))" ;
+                                "               and p.base_entity_id NOT IN (SELECT base_entity_id FROM " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF + " ))";
                 return NavigationDao.getQueryCount(sqlHts);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX:
@@ -411,11 +410,13 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and " +
-                                "              p.test_results IS NULL and p.how_to_notify_the_contact_client <> 'na' ";
+                                "               p.ctc_number IS NULL AND " +
+                                "               (p.test_results IS NULL OR p.test_results <> 'Negative')  AND " +
+                                "               p.how_to_notify_the_contact_client <> 'na' ";
                 return NavigationDao.getQueryCount(sqlIndexHf);
             case org.smartregister.chw.pmtct.util.Constants.TABLES.PMTCT_REGISTRATION:
                 String sqlPmtct =
-                        "SELECT count(*) "+
+                        "SELECT count(*) " +
                                 "   from " + org.smartregister.chw.pmtct.util.Constants.TABLES.PMTCT_REGISTRATION + " p " +
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +

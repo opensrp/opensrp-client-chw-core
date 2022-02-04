@@ -223,7 +223,7 @@ public abstract class CoreHivIndexContactProfileActivity extends BaseIndexContac
             //Updating the HivIndexContact object with the newly queried object
             setHivIndexContactObject(indexContactObject);
 
-            setupFollowupVisitEditViews(!indexContactObject.getHasTheContactClientBeenTested().equals(""));
+            setupFollowupVisitEditViews(!indexContactObject.getHasTheContactClientBeenTested().equals("") && !indexContactObject.getCtcNumber().equals(""));
         }
     }
 
