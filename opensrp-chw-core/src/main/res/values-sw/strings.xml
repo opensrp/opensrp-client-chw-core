@@ -768,7 +768,6 @@
     <string name="opd_str_page_info">Ukurasa {0} ya {1}</string>
     <string name="scan_qr">Ng\'amua QR</string>
     <string name="json_form_error_msg">Kosa/Makosa %d yamefanyika. Tafadhali sahihisha kabla ya kutuma.</string>
-    <string name="menu_independent">Huru</string>
     <string name="confirm_form_close">Thibitisha kufungwa kwa fomu hii</string>
 
 </resources>
