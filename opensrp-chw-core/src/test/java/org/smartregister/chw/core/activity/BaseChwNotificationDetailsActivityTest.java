@@ -1,18 +1,26 @@
 package org.smartregister.chw.core.activity;
 
+import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.ChwNotificationDetailsContract;
 import org.smartregister.chw.core.domain.NotificationItem;
+import org.smartregister.chw.core.presenter.BaseChwNotificationDetailsPresenter;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +40,70 @@ public class BaseChwNotificationDetailsActivityTest extends BaseUnitTest {
         ReflectionHelpers.setField(view, "notificationTitle", notificationTitle);
         ReflectionHelpers.setField(view, "markAsDoneTextView", markAsDoneTextView);
         ReflectionHelpers.setField(view, "notificationDetails", notificationDetails);
+    }
+
+    @Test
+    public void setUpViewsInitializesViews() {
+        activity.setContentView(R.layout.activity_chw_notification_details);
+        activity.setupViews();
+
+        TextView markAsDoneTV = ReflectionHelpers.getField(activity, "markAsDoneTextView");
+        TextView viewProfileTextView = ReflectionHelpers.getField(activity, "viewProfileTextView");
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "notificationTitle"));
+        Assert.assertNotNull(ReflectionHelpers.getField(activity, "notificationDetails"));
+        Assert.assertNotNull(markAsDoneTV);
+        Assert.assertTrue(markAsDoneTV.hasOnClickListeners());
+        Assert.assertNotNull(viewProfileTextView);
+        Assert.assertTrue(viewProfileTextView.hasOnClickListeners());
+    }
+
+    @Test
+    public void disableMarkAsDoneActionDisablesMarkAsDoneTv() {
+        TextView markAsDoneTV = Mockito.mock(TextView.class);
+        ReflectionHelpers.setField(activity, "markAsDoneTextView", markAsDoneTV);
+        activity.disableMarkAsDoneAction(true);
+        Mockito.verify(markAsDoneTV).setEnabled(Mockito.eq(false));
+        Mockito.verify(markAsDoneTV).setBackground(Mockito.any(Drawable.class));
+        Mockito.verify(markAsDoneTV).setTextColor(Mockito.eq(ContextCompat.getColor(activity,
+                R.color.text_black)));
+    }
+
+    @Test
+    public void getCommonPersonObjectClientReturnsCorrectClient() {
+        CommonPersonObjectClient client = Mockito.mock(CommonPersonObjectClient.class);
+        ReflectionHelpers.setField(activity, "commonPersonObjectClient", client);
+        Assert.assertEquals(client, activity.getCommonPersonObjectClient());
+    }
+
+
+    @Test
+    public void setCommonPersonsObjectClientAssignsClient() {
+        CommonPersonObjectClient client = Mockito.mock(CommonPersonObjectClient.class);
+        activity.setCommonPersonsObjectClient(client);
+        Assert.assertEquals(client, ReflectionHelpers.getField(activity, "commonPersonObjectClient"));
+    }
+
+
+    @Test
+    public void clickingViewProfileNavigatesToMemberProfile() {
+        View viewProfileView = new View(activity);
+        viewProfileView.setId(R.id.view_profile);
+        activity = Mockito.spy(activity);
+        activity.onClick(viewProfileView);
+        Mockito.verify(activity).goToMemberProfile();
+    }
+
+    @Test
+    public void clickingMarkAsDoneDismissesNotification() {
+        View markAsDoneView = new View(activity);
+        markAsDoneView.setId(R.id.mark_as_done);
+        ChwNotificationDetailsContract.Presenter presenter = Mockito.mock(BaseChwNotificationDetailsPresenter.class);
+        presenter = Mockito.spy(presenter);
+        ReflectionHelpers.setField(activity, "presenter", presenter);
+        ReflectionHelpers.setField(activity, "notificationId", "notificationId");
+        ReflectionHelpers.setField(activity, "notificationType", "notificationType");
+        activity.onClick(markAsDoneView);
+        Mockito.verify(presenter).dismissNotification(Mockito.eq("notificationId"), Mockito.eq("notificationType"));
     }
 
     @Test
