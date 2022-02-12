@@ -3,11 +3,12 @@ description = 'OpenSRP chw aggregated client library'
 buildscript {
     repositories {
         google()
-        mavenLocal()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
     }
 }
 
@@ -54,8 +55,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        /*versionCode 1
+        versionName "1.0"*/
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
@@ -139,7 +140,7 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:2.0.8-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:2.0.8-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -152,7 +153,7 @@ dependencies {
 
     compileOnly 'com.ibm.fhir:fhir-model:4.7.0'
 
-    implementation('org.smartregister:opensrp-client-core:4.3.23-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:4.3.23-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
@@ -334,7 +335,7 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
 
-apply from: '../maven.gradle'
+//apply from: '../maven.gradle'
 
 task javadoc(type: Javadoc) {
     failOnError false

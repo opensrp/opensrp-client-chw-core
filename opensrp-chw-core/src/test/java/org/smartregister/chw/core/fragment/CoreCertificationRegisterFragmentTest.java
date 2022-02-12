@@ -61,7 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
+public class CoreCertificationRegisterFragmentTest extends BaseUnitTest {
 
     @Mock
     private ImageView syncButton;
@@ -82,7 +82,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     private ArgumentCaptor<RecyclerViewPaginatedAdapter> adapterArgumentCaptor;
 
     @Mock
-    private CoreBirthNotificationFragment coreFpRegisterFragment;
+    private CoreCertificationRegisterFragment coreFpRegisterFragment;
 
     @Mock
     private CommonRepository commonRepository;
@@ -124,7 +124,7 @@ public class CoreBirthNotificationFragmentTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        coreFpRegisterFragment = Mockito.mock(CoreBirthNotificationFragment.class, Mockito.CALLS_REAL_METHODS);
+        coreFpRegisterFragment = Mockito.mock(CoreCertificationRegisterFragment.class, Mockito.CALLS_REAL_METHODS);
         ReflectionHelpers.setField(coreFpRegisterFragment, "presenter", presenter);
         ReflectionHelpers.setField(coreFpRegisterFragment, "view", view);
         ReflectionHelpers.setField(coreFpRegisterFragment, "dueOnlyLayout", view);

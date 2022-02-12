@@ -14,20 +14,16 @@ import androidx.loader.content.Loader;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.CoreChildProfileActivity;
-import org.smartregister.chw.core.activity.CoreChildRegisterActivity;
-import org.smartregister.chw.core.contract.CoreChildRegisterFragmentContract;
+import org.smartregister.chw.core.contract.CoreCertificationRegisterFragmentContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.model.CoreChildRegisterFragmentModel;
-import org.smartregister.chw.core.presenter.CoreChildRegisterFragmentPresenter;
-import org.smartregister.chw.core.provider.CoreBirthNotificationProvider;
-import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.model.CoreCertificationRegisterFragmentModel;
+import org.smartregister.chw.core.presenter.CoreCertificationRegisterFragmentPresenter;
+import org.smartregister.chw.core.provider.CoreCertificationRegisterProvider;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.family.fragment.NoMatchDialogFragment;
-import org.smartregister.family.util.AppExecutors;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.BaseRegisterActivity;
@@ -37,14 +33,25 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class CoreBirthNotificationFragment extends BaseChwRegisterFragment implements CoreChildRegisterFragmentContract.View {
+public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment implements CoreCertificationRegisterFragmentContract.View {
 
     public static final String CLICK_VIEW_NORMAL = "click_view_normal";
+    public static final String CLICK_CERTIFICATION_STATUS = "click_view_certification_status";
     private static final String DUE_FILTER_TAG = "PRESSED";
+
     protected View view;
     protected View dueOnlyLayout;
     protected boolean dueFilterActive = false;
-    private AppExecutors appExecutors;
+
+    @Override
+    public void setupViews(View view) {
+        super.setupViews(view);
+        this.view = view;
+
+        dueOnlyLayout = view.findViewById(R.id.due_only_layout);
+        dueOnlyLayout.setVisibility(View.VISIBLE);
+        dueOnlyLayout.setOnClickListener(registerActionHandler);
+    }
 
     @Override
     protected void initializePresenter() {
@@ -52,9 +59,15 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
             return;
         }
 
-        String viewConfigurationIdentifier = ((BaseRegisterActivity) getActivity()).getViewIdentifiers().get(0);
-        presenter = new CoreChildRegisterFragmentPresenter(this, new CoreChildRegisterFragmentModel(), viewConfigurationIdentifier);
-        appExecutors = new AppExecutors();
+        presenter = new CoreCertificationRegisterFragmentPresenter(this, new CoreCertificationRegisterFragmentModel(), null);
+    }
+
+    @Override
+    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
+        CoreCertificationRegisterProvider coreCertificationRegisterProvider = new CoreCertificationRegisterProvider(requireActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
+        clientAdapter = new RecyclerViewPaginatedAdapter(null, coreCertificationRegisterProvider, context().commonrepository(this.tablename));
+        clientAdapter.setCurrentlimit(20);
+        clientsView.setAdapter(clientAdapter);
     }
 
     @Override
@@ -66,7 +79,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
 
     @Override
     public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-        //// TODO: 15/08/19  
+        // Todo advanced search
     }
 
     @Override
@@ -90,7 +103,7 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
 
     @Override
     protected void startRegistration() {
-        ((CoreChildRegisterActivity) requireActivity()).startFormActivity(CoreConstants.JSON_FORM.getChildRegister(), null, "");
+        // Override start form if module requires registration
     }
 
     @Override
@@ -99,12 +112,12 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
             return;
         }
 
-        if (view.getTag() != null && view.getTag(R.id.VIEW_ID) == CLICK_VIEW_NORMAL) {
-            if (view.getTag() instanceof CommonPersonObjectClient) {
-                goToChildDetailActivity((CommonPersonObjectClient) view.getTag(), false);
-            }
-        } else if (view.getId() == R.id.due_only_layout) {
+        if (view.getId() == R.id.due_only_layout) {
             toggleFilterSelection(view);
+        } else if (view.getTag() != null && view.getTag(R.id.VIEW_ID) == CLICK_CERTIFICATION_STATUS) {
+            if (view.getTag() instanceof CommonPersonObjectClient) {
+                showUpdateForm((CommonPersonObjectClient) view.getTag());
+            }
         }
     }
 
@@ -155,15 +168,14 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         }
     }
 
-    public void goToChildDetailActivity(CommonPersonObjectClient patient,
-                                        boolean launchDialog) {
-        if (launchDialog) {
-            Timber.i(patient.name);
-        }
+    public void showUpdateForm(CommonPersonObjectClient client) {
+        Intent intent = getUpdateIntent(client);
+        if (intent != null)
+            startActivity(intent);
+    }
 
-        Intent intent = new Intent(getActivity(), CoreChildProfileActivity.class);
-        intent.putExtra(org.smartregister.family.util.Constants.INTENT_KEY.BASE_ENTITY_ID, patient.getCaseId());
-        startActivity(intent);
+    public Intent getUpdateIntent(CommonPersonObjectClient client) {
+        return null;
     }
 
     public void toggleFilterSelection(View dueOnlyLayout) {
@@ -184,18 +196,14 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         switchViews(dueOnlyLayout, false);
     }
 
-    protected String getDueFilterCondition() {
-        return presenter().getDueFilterCondition();
-    }
-
     private void dueFilter(View dueOnlyLayout) {
         filter(searchText(), "", getDueFilterCondition());
         dueOnlyLayout.setTag(DUE_FILTER_TAG);
         switchViews(dueOnlyLayout, true);
     }
 
-    protected void filterAndSortExecute() {
-        filterandSortExecute(countBundle());
+    protected String getDueFilterCondition() {
+        return presenter().getDueFilterCondition();
     }
 
     protected void filter(String filterString, String joinTableString, String mainConditionString) {
@@ -203,6 +211,10 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         joinTable = joinTableString;
         mainCondition = mainConditionString;
         filterAndSortExecute();
+    }
+
+    protected void filterAndSortExecute() {
+        filterandSortExecute(countBundle());
     }
 
     private String searchText() {
@@ -223,31 +235,13 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
     }
 
     @Override
-    public void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns) {
-        CoreBirthNotificationProvider childRegisterProvider = new CoreBirthNotificationProvider(requireActivity(), visibleColumns, registerActionHandler, paginationViewHandler);
-        clientAdapter = new RecyclerViewPaginatedAdapter(null, childRegisterProvider, context().commonrepository(this.tablename));
-        clientAdapter.setCurrentlimit(20);
-        clientsView.setAdapter(clientAdapter);
-    }
-
-    @Override
-    public CoreChildRegisterFragmentContract.Presenter presenter() {
-        return (CoreChildRegisterFragmentContract.Presenter) presenter;
-    }
-
-    @Override
-    public void setupViews(View view) {
-        super.setupViews(view);
-        this.view = view;
-
-        dueOnlyLayout = view.findViewById(R.id.due_only_layout);
-        dueOnlyLayout.setVisibility(View.VISIBLE);
-        dueOnlyLayout.setOnClickListener(registerActionHandler);
+    public CoreCertificationRegisterFragmentContract.Presenter presenter() {
+        return (CoreCertificationRegisterFragmentContract.Presenter) presenter;
     }
 
     @Override
     protected int getToolBarTitle() {
-        return R.string.child_register_title;
+        return R.string.certification_clients;
     }
 
     @Override
@@ -266,6 +260,10 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
                 @Override
                 public Cursor loadInBackground() {
                     // Count query
+                    final String COUNT = "count_execute";
+                    if (args != null && args.getBoolean(COUNT)) {
+                        countExecute();
+                    }
                     String query = filterandSortQuery();
                     return commonRepository().rawCustomQueryForAdapter(query);
                 }
@@ -277,18 +275,21 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
 
     @Override
     public void countExecute() {
-        Runnable runnable = () -> {
-            try {
-                int count = commonRepository().countSearchIds(getCountSelect());
-                clientAdapter.setTotalcount(count);
-                clientAdapter.setCurrentlimit(20);
-                clientAdapter.setCurrentoffset(0);
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-        };
+        Cursor c = null;
+        try {
+            c = commonRepository().rawCustomQueryForAdapter(getCountSelect());
+            c.moveToFirst();
+            clientAdapter.setTotalcount(c.getInt(0));
 
-        appExecutors.diskIO().execute(runnable);
+            clientAdapter.setCurrentlimit(20);
+            clientAdapter.setCurrentoffset(0);
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
     }
 
     private String getCountSelect() {
@@ -297,10 +298,10 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         String query = countSelect;
         try {
             if (StringUtils.isNotBlank(filters))
-                query = sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
+                query = sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
 
             if (dueFilterActive)
-                query = sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
+                query = sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
             query = sqb.Endquery(query);
         } catch (SQLException e) {
             Timber.e(e);
@@ -315,10 +316,10 @@ public class CoreBirthNotificationFragment extends BaseChwRegisterFragment imple
         String query = "";
         try {
             if (StringUtils.isNotBlank(filters))
-                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getFilterString(filters));
+                sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
 
             if (dueFilterActive)
-                sqb.addCondition(((CoreChildRegisterFragmentPresenter) presenter()).getDueCondition());
+                sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
             query = sqb.orderbyCondition(Sortqueries);
             query = sqb.Endquery(sqb.addlimitandOffset(query, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset()));
         } catch (SQLException e) {

@@ -1,21 +1,23 @@
 package org.smartregister.chw.core.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
+
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
-import org.smartregister.AllConstants;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.contract.CoreChildRegisterContract;
+import org.smartregister.chw.core.contract.CoreCertificationRegisterContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.fragment.CoreBirthNotificationFragment;
+import org.smartregister.chw.core.fragment.CoreCertificationRegisterFragment;
 import org.smartregister.chw.core.listener.CoreBottomNavigationListener;
-import org.smartregister.chw.core.model.CoreChildRegisterModel;
-import org.smartregister.chw.core.presenter.CoreChildRegisterPresenter;
+import org.smartregister.chw.core.model.CoreCertificationRegisterModel;
+import org.smartregister.chw.core.presenter.CoreCertificationRegisterPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
@@ -23,22 +25,22 @@ import org.smartregister.family.util.Utils;
 import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.view.activity.BaseRegisterActivity;
 import org.smartregister.view.fragment.BaseRegisterFragment;
-import java.util.Collections;
-import java.util.List;
+
 import java.util.Map;
+
 import timber.log.Timber;
 
-public class CoreBirthNotificationRegisterActivity extends BaseRegisterActivity implements CoreChildRegisterContract.View {
-
-    public static void startMe(Activity activity) {
-        Intent intent = new Intent(activity, CoreBirthNotificationRegisterActivity.class);
-        activity.startActivity(intent);
-    }
+public abstract class CoreCertificationRegisterActivity extends BaseRegisterActivity implements CoreCertificationRegisterContract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NavigationMenu.getInstance(this, null, null);
+
+        String action = getIntent().getStringExtra(CoreConstants.ACTIVITY_PAYLOAD.ACTION);
+
+        if (StringUtils.isNotBlank(action))
+            startUpdateFormActivity();
     }
 
     @Override
@@ -60,18 +62,17 @@ public class CoreBirthNotificationRegisterActivity extends BaseRegisterActivity 
 
             CoreBottomNavigationListener childBottomNavigationListener = new CoreBottomNavigationListener(this);
             bottomNavigationView.setOnNavigationItemSelectedListener(childBottomNavigationListener);
-
         }
     }
 
     @Override
     protected void initializePresenter() {
-        presenter = new CoreChildRegisterPresenter(this, new CoreChildRegisterModel());
+        presenter = new CoreCertificationRegisterPresenter(this, new CoreCertificationRegisterModel());
     }
 
     @Override
     protected BaseRegisterFragment getRegisterFragment() {
-        return new CoreBirthNotificationFragment();
+        return new CoreCertificationRegisterFragment();
     }
 
     @Override
@@ -79,45 +80,29 @@ public class CoreBirthNotificationRegisterActivity extends BaseRegisterActivity 
         return new Fragment[0];
     }
 
-    @Override
-    protected void onResumption() {
-        super.onResumption();
-        NavigationMenu menu = NavigationMenu.getInstance(this, null, null);
-        if (menu != null) {
-            menu.getNavigationAdapter().setSelectedView(CoreConstants.DrawerMenu.BIRTH_NOTIFICATION);
-        }
-    }
+
+    public abstract void startUpdateFormActivity();
 
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
-        // code
+        // Empty code block
     }
 
-    @Override
-    public void startFormActivity(String formName, String entityId, String metaData) {
-        try {
-            if (mBaseFragment instanceof CoreBirthNotificationFragment) {
-                String locationId = Utils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
-                presenter().startForm(formName, entityId, metaData, locationId, "");
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-            displayToast(getString(R.string.error_unable_to_start_form));
-        }
-    }
+    public abstract String getFormTitle();
 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
-        Intent intent = new Intent(this, Utils.metadata().familyFormActivity);
-        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+        Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
+        intent.putExtra(org.smartregister.family.util.Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
 
         Form form = new Form();
-        form.setName(getString(R.string.add_fam));
-        form.setActionBarBackground(R.color.family_actionbar);
-        form.setNavigationBackground(R.color.family_navigation);
-        form.setHomeAsUpIndicator(R.mipmap.ic_cross_white);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        form.setHideSaveLabel(true);
+        form.setName(getFormTitle());
+        form.setActionBarBackground(org.smartregister.chw.core.R.color.family_actionbar);
+        form.setNavigationBackground(org.smartregister.chw.core.R.color.family_navigation);
+        form.setHomeAsUpIndicator(org.smartregister.chw.core.R.mipmap.ic_cross_white);
 
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
@@ -130,42 +115,29 @@ public class CoreBirthNotificationRegisterActivity extends BaseRegisterActivity 
 
                 assert jsonString != null;
                 JSONObject form = new JSONObject(jsonString);
-                if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Utils.metadata().familyRegister.registerEventType)
-                        || form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(CoreConstants.EventType.CHILD_REGISTRATION)
+                if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals("")
                 ) {
                     presenter().saveForm(jsonString, false);
                 }
             } catch (Exception e) {
                 Timber.e(e);
             }
-
         }
     }
 
     @Override
-    public List<String> getViewIdentifiers() {
-        return Collections.singletonList(Utils.metadata().familyRegister.config);
+    public CoreCertificationRegisterContract.Presenter presenter() {
+        return (CoreCertificationRegisterContract.Presenter) presenter;
     }
 
     @Override
-    public void switchToBaseFragment() {
-        Intent intent = new Intent(this, CoreFamilyRegisterActivity.class);
-        startActivity(intent);
-        finish();
+    public void onRegistrationSaved() {
+        // Post processing
     }
 
-    @Override
-    public CoreChildRegisterContract.Presenter presenter() {
-        return (CoreChildRegisterContract.Presenter) presenter;
-    }
-
-    @Override
-    public void openFamilyListView() {
-        bottomNavigationView.setSelectedItemId(R.id.action_family);
-    }
 
     @Override
     public void startRegistration() {
-        startFormActivity(Utils.metadata().familyRegister.formName, null, "");
+        // Empty code block
     }
 }

@@ -1,6 +1,6 @@
 package org.smartregister.chw.core.mock;
 
-import org.smartregister.chw.core.fragment.CoreBirthNotificationFragment;
+import org.smartregister.chw.core.fragment.CoreChildRegisterFragment;
 import org.smartregister.cursoradapter.RecyclerViewPaginatedAdapter;
 
 import java.util.HashMap;

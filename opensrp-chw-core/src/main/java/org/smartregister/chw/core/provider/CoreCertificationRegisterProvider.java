@@ -9,12 +9,14 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.smartregister.chw.core.R;
+import org.smartregister.chw.core.fragment.CoreCertificationRegisterFragment;
 import org.smartregister.chw.core.holders.FooterViewHolder;
 import org.smartregister.chw.core.holders.RegisterViewHolder;
 import org.smartregister.chw.core.utils.ChildDBConstants;
@@ -33,26 +35,23 @@ import org.smartregister.view.viewholder.OnClickFormLauncher;
 import java.text.MessageFormat;
 import java.util.Set;
 
-public class CoreBirthNotificationProvider implements RecyclerViewProvider<RegisterViewHolder> {
+public class CoreCertificationRegisterProvider implements RecyclerViewProvider<RegisterViewHolder> {
+
     public final LayoutInflater inflater;
+
     private Set<org.smartregister.configurableviews.model.View> visibleColumns;
+
     private View.OnClickListener onClickListener;
     private View.OnClickListener paginationClickListener;
+
     private Context context;
 
-    public CoreBirthNotificationProvider(Context context, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
-
+    public CoreCertificationRegisterProvider(Context context, Set visibleColumns, View.OnClickListener onClickListener, View.OnClickListener paginationClickListener) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.visibleColumns = visibleColumns;
         this.onClickListener = onClickListener;
         this.paginationClickListener = paginationClickListener;
         this.context = context;
-    }
-
-    protected static void fillValue(TextView v, String value) {
-        if (v != null) {
-            v.setText(value);
-        }
     }
 
     @Override
@@ -83,7 +82,8 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
     }
 
     @Override
-    public void onServiceModeSelected(ServiceModeOption serviceModeOption) {//Implement Abstract Method
+    public void onServiceModeSelected(ServiceModeOption serviceModeOption) {
+        // Abstract method implementation
     }
 
     @Override
@@ -98,7 +98,7 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
 
     @Override
     public RegisterViewHolder createViewHolder(ViewGroup parent) {
-        View view = inflater.inflate(R.layout.adapter_child_register_list_row, parent, false);
+        View view = inflater.inflate(R.layout.adapter_certification_register_list_row, parent, false);
 
         return new RegisterViewHolder(view);
     }
@@ -136,7 +136,7 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
         fillValue(viewHolder.textViewChildName, childNameWithDOB.toString());
         setAddressAndGender(pc, viewHolder);
 
-        addButtonClickListeners(client, viewHolder);
+        addStatusButtonClickListener(client, viewHolder);
 
     }
 
@@ -154,52 +154,36 @@ public class CoreBirthNotificationProvider implements RecyclerViewProvider<Regis
         fillValue(viewHolder.textViewAddressGender, addressGender.toString());
     }
 
-    public void addButtonClickListeners(SmartRegisterClient client, RegisterViewHolder viewHolder) {
-        View patient = viewHolder.childColumn;
-        attachPatientOnclickListener(patient, client);
-
-
-        View dueButton = viewHolder.dueButton;
-        attachDosageOnclickListener(dueButton, client);
+    protected static void fillValue(TextView v, String value) {
+        if (v != null) {
+            v.setText(value);
+        }
     }
 
-    protected void attachPatientOnclickListener(View view, SmartRegisterClient client) {
-        view.setOnClickListener(onClickListener);
-        view.setTag(client);
-        view.setTag(R.id.VIEW_ID, BaseFamilyRegisterFragment.CLICK_VIEW_NORMAL);
+    public void addStatusButtonClickListener(SmartRegisterClient client, RegisterViewHolder viewHolder) {
+        View statusButton = viewHolder.dueButton;
+        statusButton.setOnClickListener(onClickListener);
+        statusButton.setTag(client);
+        statusButton.setTag(R.id.VIEW_ID, CoreCertificationRegisterFragment.CLICK_CERTIFICATION_STATUS);
+
+        viewHolder.dueButtonLayout.setOnClickListener(v -> viewHolder.dueButton.performClick());
     }
 
-    protected void attachDosageOnclickListener(View view, SmartRegisterClient client) {
-        view.setOnClickListener(onClickListener);
-        view.setTag(client);
-        view.setTag(R.id.VIEW_ID, BaseFamilyRegisterFragment.CLICK_VIEW_DOSAGE_STATUS);
+    public void setReceivedButtonColor(Context context, Button dueButton) {
+        dueButton.setTextColor(context.getResources().getColor(R.color.certificate_received_green));
+        dueButton.setText(context.getString(R.string.certificate_received));
+        dueButton.setBackgroundResource(0);
     }
 
-    public LayoutInflater getInflater() {
-        return inflater;
+    public void setUpdateStatusButtonColor(Context context, Button dueButton) {
+        dueButton.setTextColor(context.getResources().getColor(R.color.update_certificate_yellow));
+        dueButton.setText(context.getString(R.string.update_status));
+        dueButton.setBackgroundResource(R.drawable.update_cert_status_btn);
     }
 
-    public View.OnClickListener getOnClickListener() {
-        return onClickListener;
-    }
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    public View.OnClickListener getPaginationClickListener() {
-        return paginationClickListener;
-    }
-
-    public void setPaginationClickListener(View.OnClickListener paginationClickListener) {
-        this.paginationClickListener = paginationClickListener;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
+    public void setStatusUpdated(Context context, Button dueButton) {
+        dueButton.setTextColor(context.getResources().getColor(R.color.black));
+        dueButton.setText(context.getString(R.string.status_updated));
+        dueButton.setBackgroundResource(0);
     }
 }

@@ -971,6 +971,8 @@ public class CoreConstants {
 
     public static final class ACTION {
         public static final String START_REGISTRATION = "start_registration";
+        public static final String START_BIRTH_CERTIFICATION_UPDATE = "start_birth_certification_update";
+        public static final String START_DEATH_CERTIFICATION_UPDATE = "start_death_certification_update";
     }
 
     public static final class VISIT_STATE {

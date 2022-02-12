@@ -182,8 +182,7 @@
     <string name="exclusive_breastfeeding">Exclusive breastfeeding</string>
     <string name="deworming">Deworming</string>
     <string name="vaccine_card_title">Child vaccine card received</string>
-    <string name="birth_certification">Birth certification</string>
-    <string name="death_certification">Death certification</string>
+
     <string name="out_of_area_registration">Out of area birth</string>
     <string name="out_of_area_death">Out of area death</string>
     <string name="no_vaccines_were_done">No vaccines were done</string>
@@ -777,4 +776,14 @@
     <string name="summary_forms">Other Forms</string>
     <string name="permission_write_external_storage_rationale">Write access to the device internal storage is required for database download.</string>
 
+
+    <!-- Certification registers -->
+    <string name="certification_clients">Certification Clients</string>
+    <string name="birth_certification">Birth certification</string>
+    <string name="death_certification">Death certification</string>
+    <string name="certificate_received">Certificate received</string>
+    <string name="certificate_not_received">Certificate not received</string>
+    <string name="status_updated">Status updated</string>
+    <string name="update_status">Update Status</string>
+    <string name="update_details">Update Details</string>
 </resources>
