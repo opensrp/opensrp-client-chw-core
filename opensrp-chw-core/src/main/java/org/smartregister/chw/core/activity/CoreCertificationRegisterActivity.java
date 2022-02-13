@@ -19,7 +19,6 @@ import org.smartregister.chw.core.listener.CoreBottomNavigationListener;
 import org.smartregister.chw.core.model.CoreCertificationRegisterModel;
 import org.smartregister.chw.core.presenter.CoreCertificationRegisterPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.family.util.Constants;
 import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 import org.smartregister.helper.BottomNavigationHelper;
@@ -27,8 +26,6 @@ import org.smartregister.view.activity.BaseRegisterActivity;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.Map;
-
-import timber.log.Timber;
 
 public abstract class CoreCertificationRegisterActivity extends BaseRegisterActivity implements CoreCertificationRegisterContract.View {
 
@@ -83,6 +80,8 @@ public abstract class CoreCertificationRegisterActivity extends BaseRegisterActi
 
     public abstract void startUpdateFormActivity();
 
+    public abstract void startEditCertificationForm(String entityId) throws Exception;
+
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
         // Empty code block
@@ -107,37 +106,24 @@ public abstract class CoreCertificationRegisterActivity extends BaseRegisterActi
     }
 
     @Override
-    protected void onActivityResultExtended(int requestCode, int resultCode, Intent data) {
-        if (requestCode == JsonFormUtils.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
-            try {
-                String jsonString = data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON);
-                Timber.d("JSONResult : %s", jsonString);
-
-                assert jsonString != null;
-                JSONObject form = new JSONObject(jsonString);
-                if (form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals("")
-                ) {
-                    presenter().saveForm(jsonString, false);
-                }
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-        }
-    }
-
-    @Override
     public CoreCertificationRegisterContract.Presenter presenter() {
         return (CoreCertificationRegisterContract.Presenter) presenter;
     }
 
     @Override
     public void onRegistrationSaved() {
-        // Post processing
+        Intent intent = new Intent(this, getActivityClass());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.startActivity(intent);
     }
 
 
     @Override
     public void startRegistration() {
         // Empty code block
+    }
+
+    public Class<? extends CoreCertificationRegisterActivity> getActivityClass() {
+        return CoreCertificationRegisterActivity.class;
     }
 }

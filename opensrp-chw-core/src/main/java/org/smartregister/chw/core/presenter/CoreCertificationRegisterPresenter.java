@@ -1,11 +1,16 @@
 package org.smartregister.chw.core.presenter;
 
+import org.json.JSONObject;
+import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.contract.CoreCertificationRegisterContract;
 import org.smartregister.chw.core.interactor.CoreCertificationRegisterInteractor;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Map;
+
+import timber.log.Timber;
 
 public class CoreCertificationRegisterPresenter implements CoreCertificationRegisterContract.Presenter,
         CoreCertificationRegisterContract.InteractorCallBack {
@@ -30,8 +35,16 @@ public class CoreCertificationRegisterPresenter implements CoreCertificationRegi
     }
 
     @Override
-    public void saveForm(String jsonString, boolean isEditMode) {
-        // Todo
+    public void saveForm(String jsonString, String table) {
+        try {
+            if (getView() != null)
+                getView().showProgressDialog(R.string.saving_dialog_title);
+
+            interactor.saveRegistration(jsonString, table, this);
+        } catch (Exception ex) {
+            Timber.e(ex);
+        }
+
     }
 
     @Override
@@ -58,7 +71,28 @@ public class CoreCertificationRegisterPresenter implements CoreCertificationRegi
     }
 
     @Override
-    public void updateInitials() {
+    public void startEditCertForm(String formName, String updateEventType, String entityId, Map<String, String> valueMap) throws Exception {
+        JSONObject formJsonObject = model.getEditFormAsJson(getView().getContext(), formName, updateEventType, entityId, valueMap);
+        getView().startFormActivity(formJsonObject);
+    }
 
+    public void startCertificationForm(String formName, String entityId) throws Exception {
+        JSONObject formJsonObject = model.getFormAsJson(getView().getContext(), formName, entityId);
+        getView().startFormActivity(formJsonObject);
+    }
+
+
+
+    @Override
+    public void updateInitials() {
+        // Empty block
+    }
+
+    @Override
+    public void onRegistrationSaved() {
+        if (getView() != null) {
+            getView().hideProgressDialog();
+            getView().onRegistrationSaved();
+        }
     }
 }

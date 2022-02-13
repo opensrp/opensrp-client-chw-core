@@ -5,6 +5,8 @@ import android.content.Context;
 import org.json.JSONObject;
 import org.smartregister.view.contract.BaseRegisterContract;
 
+import java.util.Map;
+
 public interface CoreCertificationRegisterContract {
 
     interface View extends BaseRegisterContract.View {
@@ -17,20 +19,27 @@ public interface CoreCertificationRegisterContract {
 
         View getView();
 
-        void saveForm(String jsonString, boolean isEditMode);
+        void startCertificationForm(String formName, String entityId) throws Exception;
+
+        void startEditCertForm(String formName, String updateEventType, String entityId, Map<String, String> valueMap) throws Exception;
+
+        void saveForm(String jsonString, String table);
     }
 
     interface Model {
-        JSONObject getFormAsJson(Context context, String formName, String entityId, String currentLocationId) throws Exception;
+        JSONObject getFormAsJson(Context context, String formName, String entityId) throws Exception;
+
+        JSONObject getEditFormAsJson(Context context, String formName, String updateEventType, String entityId, Map<String, String> valueMap) throws Exception;
     }
 
     interface Interactor {
         void onDestroy(boolean isChangingConfiguration);
 
-        void saveRegistration();
+        void saveRegistration(final String jsonString, String table, InteractorCallBack callBack);
     }
 
     interface InteractorCallBack {
+        void onRegistrationSaved();
 
     }
 }

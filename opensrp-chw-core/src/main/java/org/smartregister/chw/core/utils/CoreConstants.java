@@ -110,6 +110,7 @@ public class CoreConstants {
 
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String UPDATE_BIRTH_CERTIFICATION = "Birth Certification";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -192,6 +193,7 @@ public class CoreConstants {
 
     public static final class EncounterType {
         public static final String CLOSE_REFERRAL = "Close Referral";
+        public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
     }
 
     /**

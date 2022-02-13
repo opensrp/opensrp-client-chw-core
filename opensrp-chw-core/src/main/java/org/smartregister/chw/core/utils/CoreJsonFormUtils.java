@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.utils;
 
+import static com.vijay.jsonwizard.utils.NativeFormLangUtils.getTranslatedString;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE;
@@ -30,6 +31,7 @@ import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.AllConstants;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
@@ -994,5 +996,12 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getJsonField(JSONObject form, String step, String key) {
         JSONArray field = fields(form, step);
         return getFieldJSONObject(field, key);
+    }
+
+    public static JSONObject getJson(Context context, String formName, String baseEntityID) throws Exception {
+        String locationId = CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
+        JSONObject jsonObject = new JSONObject(getTranslatedString(FormUtils.getInstance(context).getFormJson(formName).toString(), context));
+        org.smartregister.chw.anc.util.JsonFormUtils.getRegistrationForm(jsonObject, baseEntityID, locationId);
+        return jsonObject;
     }
 }
