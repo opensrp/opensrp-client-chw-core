@@ -105,7 +105,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
             return true;
         } else if (itemId == R.id.action_registration) {
             startFormForEdit(R.string.registration_info,
-                    CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
+                    CoreConstants.JSON_FORM.getFamilyMemberRegister());
             return true;
         }
 
@@ -211,12 +211,12 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
     }
 
     @Override
-    public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject, String formName) {
+    public void startFormActivity(JSONObject formJson, HivMemberObject hivMemberObject,String formName) {
         Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, formJson.toString());
         intent.putExtra(HIV_MEMBER_OBJECT, hivMemberObject);
 
         Form form = new Form();
-        form.setName(formName);
+
         form.setActionBarBackground(org.smartregister.chw.core.R.color.family_actionbar);
         form.setNavigationBackground(org.smartregister.chw.core.R.color.family_navigation);
         form.setHomeAsUpIndicator(org.smartregister.chw.core.R.mipmap.ic_cross_white);
