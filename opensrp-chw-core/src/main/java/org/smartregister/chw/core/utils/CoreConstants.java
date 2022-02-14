@@ -669,6 +669,7 @@ public class CoreConstants {
         public static final String DEATH_CERTIFICATE = "death_certification";
         public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
         public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
+        public static final String EC_OUT_OF_AREA_CHILD = "ec_out_of_area_child";
         public static final String ANC_MEMBER = "ec_anc_register";
         public static final String PNC_MEMBER = "ec_pregnancy_outcome";
         public static final String ANC_MEMBER_LOG = "ec_anc_log";

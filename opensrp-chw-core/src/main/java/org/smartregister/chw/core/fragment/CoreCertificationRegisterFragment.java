@@ -96,6 +96,10 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
         return presenter().getMainCondition();
     }
 
+    protected String getMainCondition(String tableName) {
+        return presenter().getMainCondition(tableName);
+    }
+
     @Override
     protected String getDefaultSortQuery() {
         return presenter().getDefaultSortQuery();
@@ -293,16 +297,53 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
     }
 
     private String getCountSelect() {
-        SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(countSelect);
+        SmartRegisterQueryBuilder mainQuery = new SmartRegisterQueryBuilder(presenter().getMainSelectString(getMainCondition()));
+        SmartRegisterQueryBuilder outOfCatchmentQuery = new SmartRegisterQueryBuilder(presenter().getOutOfCatchmentSelectString(getOutOfCatchmentMainCondition()));
 
-        String query = countSelect;
+        String query = "";
+        String outOfCatchmentQueryString = "";
         try {
-            if (StringUtils.isNotBlank(filters))
-                query = sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
+            if (StringUtils.isNotBlank(filters)) {
+                query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getOutOfCatchmentFilterString(filters));
+            }
 
-            if (dueFilterActive)
-                query = sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
-            query = sqb.Endquery(query);
+            if (dueFilterActive) {
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
+            }
+
+            query = mainQuery.customJoin(" UNION " + outOfCatchmentQueryString);
+        } catch (SQLException e) {
+            Timber.e(e);
+        }
+
+        return "SELECT COUNT(*) FROM (" + query + ") AS cnt;";
+    }
+
+    private String filterandSortQuery() {
+
+        SmartRegisterQueryBuilder mainQuery = new SmartRegisterQueryBuilder(presenter().getMainSelectString(getMainCondition()));
+        SmartRegisterQueryBuilder outOfCatchmentQuery = new SmartRegisterQueryBuilder(presenter().getOutOfCatchmentSelectString(getOutOfCatchmentMainCondition()));
+
+        String query = "";
+        String outOfCatchmentQueryString = "";
+        try {
+            if (StringUtils.isNotBlank(filters)) {
+                query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getOutOfCatchmentFilterString(filters));
+            }
+
+            if (dueFilterActive) {
+                query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
+            }
+
+            query = mainQuery.orderbyCondition(Sortqueries);
+            outOfCatchmentQueryString = outOfCatchmentQuery.orderbyCondition(getOutOfCatchmentSortQueries());
+
+            outOfCatchmentQueryString = outOfCatchmentQuery.addlimitandOffset(outOfCatchmentQueryString, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset());
+
+            query = mainQuery.Endquery(query + " UNION " + outOfCatchmentQueryString);
         } catch (SQLException e) {
             Timber.e(e);
         }
@@ -310,22 +351,11 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
         return query;
     }
 
-    private String filterandSortQuery() {
-        SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(mainSelect);
+    private String getOutOfCatchmentMainCondition() {
+        return presenter().getOutOfCatchmentMainCondition();
+    }
 
-        String query = "";
-        try {
-            if (StringUtils.isNotBlank(filters))
-                sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
-
-            if (dueFilterActive)
-                sqb.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
-            query = sqb.orderbyCondition(Sortqueries);
-            query = sqb.Endquery(sqb.addlimitandOffset(query, clientAdapter.getCurrentlimit(), clientAdapter.getCurrentoffset()));
-        } catch (SQLException e) {
-            Timber.e(e);
-        }
-
-        return query;
+    private String getOutOfCatchmentSortQueries() {
+        return presenter().getOutOfCatchmentSortQueries();
     }
 }

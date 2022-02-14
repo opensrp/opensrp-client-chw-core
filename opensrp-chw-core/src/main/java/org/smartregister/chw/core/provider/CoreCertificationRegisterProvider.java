@@ -170,20 +170,30 @@ public class CoreCertificationRegisterProvider implements RecyclerViewProvider<R
     }
 
     public void setReceivedButtonColor(Context context, Button dueButton) {
-        dueButton.setTextColor(context.getResources().getColor(R.color.certificate_received_green));
-        dueButton.setText(context.getString(R.string.certificate_received));
-        dueButton.setBackgroundResource(0);
+        updateButton(dueButton, context.getString(R.string.certificate_received),
+                context.getResources().getColor(R.color.certificate_received_green), 0);
     }
 
     public void setUpdateStatusButtonColor(Context context, Button dueButton) {
-        dueButton.setTextColor(context.getResources().getColor(R.color.update_certificate_yellow));
-        dueButton.setText(context.getString(R.string.update_status));
-        dueButton.setBackgroundResource(R.drawable.update_cert_status_btn);
+        updateButton(dueButton, context.getString(R.string.update_status),
+                context.getResources().getColor(R.color.update_certificate_yellow), R.drawable.update_cert_status_btn);
+
     }
 
+    // Todo -> When is this set?
     public void setStatusUpdated(Context context, Button dueButton) {
-        dueButton.setTextColor(context.getResources().getColor(R.color.black));
-        dueButton.setText(context.getString(R.string.status_updated));
-        dueButton.setBackgroundResource(0);
+        updateButton(dueButton, context.getString(R.string.status_updated),
+                context.getResources().getColor(R.color.black), 0);
+    }
+
+    public void setNotReceivedButtonColor(Context context, Button dueButton) {
+        updateButton(dueButton, context.getString(R.string.certificate_not_received),
+                context.getResources().getColor(R.color.certificate_not_received_red), R.drawable.certificate_not_received_btn);
+    }
+
+    public void updateButton(Button dueButton, String text, int colourId, int backgroundResource) {
+        dueButton.setTextColor(colourId);
+        dueButton.setText(text);
+        dueButton.setBackgroundResource(backgroundResource);
     }
 }

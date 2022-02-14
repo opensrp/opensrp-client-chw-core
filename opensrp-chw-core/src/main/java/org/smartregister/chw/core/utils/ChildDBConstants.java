@@ -13,6 +13,7 @@ public class ChildDBConstants {
         return childAgeLimitFilter(DBConstants.KEY.DOB, FIVE_YEAR, ChildDBConstants.KEY.ENTRY_POINT, ChildDBConstants.KEY.MOTHER_ENTITY_ID);
     }
 
+
     private static String childAgeLimitFilter(String dateColumn, int age, String entryPoint, String motherEntityId) {
         return " ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + "))/365.25) <" + age + ")  " +
                 " and (( ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') <> 'PNC' ) or (ifnull(" + CoreConstants.TABLE_NAME.CHILD + "." + entryPoint + ",'') = 'PNC' and ( date(" + CoreConstants.TABLE_NAME.CHILD + "." + dateColumn + ", '+28 days') <= date() and ((SELECT is_closed FROM ec_family_member WHERE base_entity_id = " + CoreConstants.TABLE_NAME.CHILD + "." + motherEntityId + " ) = 0)))  or (ifnull(ec_child.entry_point,'') = 'PNC'  and (SELECT is_closed FROM ec_family_member WHERE base_entity_id = ec_child.mother_entity_id ) = 1)) " +
@@ -21,6 +22,10 @@ public class ChildDBConstants {
 
     public static String childAgeLimitFilter(String tableName) {
         return childAgeLimitFilter(tableColConcat(tableName, DBConstants.KEY.DOB), FIVE_YEAR, tableColConcat(tableName, ChildDBConstants.KEY.ENTRY_POINT), tableColConcat(tableName, ChildDBConstants.KEY.MOTHER_ENTITY_ID));
+    }
+
+    public static String outOfCatchmentChildAgeLimitFilter() {
+        return " ((( julianday('now') - julianday(" + CoreConstants.TABLE_NAME.EC_OUT_OF_AREA_CHILD + "." + DBConstants.KEY.DOB + "))/365.25) < 5) ";
     }
 
     private static String tableColConcat(String tableName, String columnName) {
@@ -91,10 +96,14 @@ public class ChildDBConstants {
         public static final String ENTRY_POINT = "entry_point";
         public static final String CHILD_BF_HR = "early_bf_1hr";
         public static final String CHILD_PHYSICAL_CHANGE = "physically_challenged";
+        public static final String MOTHER_NAME = "mother_name";
         public static final String BIRTH_CERT = "birth_cert";
         public static final String BIRTH_CERT_ISSUE_DATE = "birth_cert_issue_date";
         public static final String BIRTH_CERT_NUMBER = "birth_cert_num";
         public static final String BIRTH_CERT_NOTIFIICATION = "birth_notification";
+        public static final String SYSTEM_BIRTH_NOTIFICATION = "system_birth_notification";
+        public static final String BIRTH_REG_TYPE = "birth_reg_type";
+        public static final String INFORMANT_REASON = "informant_reason";
         public static final String ILLNESS_DATE = "date_of_illness";
         public static final String ILLNESS_DESCRIPTION = "illness_description";
         public static final String ILLNESS_ACTION = "action_taken";
