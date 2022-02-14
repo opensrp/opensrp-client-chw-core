@@ -42,6 +42,7 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
     protected View view;
     protected View dueOnlyLayout;
     protected boolean dueFilterActive = false;
+    protected TextView dueOnlyFilter;
 
     @Override
     public void setupViews(View view) {
@@ -51,6 +52,8 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
         dueOnlyLayout = view.findViewById(R.id.due_only_layout);
         dueOnlyLayout.setVisibility(View.VISIBLE);
         dueOnlyLayout.setOnClickListener(registerActionHandler);
+        dueOnlyFilter = view.findViewById(org.smartregister.chw.core.R.id.due_only_text_view);
+        dueOnlyFilter.setText(getResources().getString(R.string.certified));
     }
 
     @Override
@@ -268,7 +271,7 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
                     if (args != null && args.getBoolean(COUNT)) {
                         countExecute();
                     }
-                    String query = filterandSortQuery();
+                    String query = filterAndSortQuery();
                     return commonRepository().rawCustomQueryForAdapter(query);
                 }
             };
@@ -305,11 +308,16 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
         try {
             if (StringUtils.isNotBlank(filters)) {
                 query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
-                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getOutOfCatchmentFilterString(filters));
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(presenter().getOutOfCatchmentFilterString(filters));
             }
 
             if (dueFilterActive) {
+                query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
                 outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getDueCondition());
+            }
+
+            if (StringUtils.isEmpty(outOfCatchmentQueryString)) {
+                outOfCatchmentQueryString = outOfCatchmentQuery.toString();
             }
 
             query = mainQuery.customJoin(" UNION " + outOfCatchmentQueryString);
@@ -320,17 +328,17 @@ public class CoreCertificationRegisterFragment extends BaseChwRegisterFragment i
         return "SELECT COUNT(*) FROM (" + query + ") AS cnt;";
     }
 
-    private String filterandSortQuery() {
+    private String filterAndSortQuery() {
 
         SmartRegisterQueryBuilder mainQuery = new SmartRegisterQueryBuilder(presenter().getMainSelectString(getMainCondition()));
         SmartRegisterQueryBuilder outOfCatchmentQuery = new SmartRegisterQueryBuilder(presenter().getOutOfCatchmentSelectString(getOutOfCatchmentMainCondition()));
 
         String query = "";
-        String outOfCatchmentQueryString = "";
+        String outOfCatchmentQueryString;
         try {
             if (StringUtils.isNotBlank(filters)) {
                 query = mainQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getFilterString(filters));
-                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(((CoreCertificationRegisterFragmentPresenter) presenter()).getOutOfCatchmentFilterString(filters));
+                outOfCatchmentQueryString = outOfCatchmentQuery.addCondition(presenter().getOutOfCatchmentFilterString(filters));
             }
 
             if (dueFilterActive) {

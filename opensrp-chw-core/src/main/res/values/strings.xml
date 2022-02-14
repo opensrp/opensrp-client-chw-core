@@ -786,4 +786,5 @@
     <string name="status_updated">Status updated</string>
     <string name="update_status">Update Status</string>
     <string name="update_details">Update Details</string>
+    <string name="certified">Certified</string>
 </resources>
