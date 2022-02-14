@@ -56,7 +56,7 @@ allprojects {
 
 configure(allprojects) { project ->
 
-    //version = VERSION_NAME
+    version = VERSION_NAME
     group = GROUP
     buildscript {
         repositories {
