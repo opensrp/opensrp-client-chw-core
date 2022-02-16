@@ -75,6 +75,7 @@ public class CoreConstants {
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
         String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
+        String NAME = "name";
     }
 
     public interface SERVICE_GROUPS {
@@ -110,7 +111,8 @@ public class CoreConstants {
 
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
-        public static final String UPDATE_BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
+        public static final String UPDATE_REMOVE_FAMILY_MEMBER = "Update Remove Family Member";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -200,7 +202,6 @@ public class CoreConstants {
      * Only access form constants via the getter
      */
     public static class JSON_FORM {
-        public static final String BIRTH_CERTIFICATION = "birth_certification";
         public static final String DISABILITY = "child_disability";
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
@@ -245,6 +246,12 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
+        private static final String DEATH_REGISTRATION = "death_member_form";
+        private static final String BIRTH_CERTIFICATION = "birth_certification";
+        private static final String BIRTH_CERTIFICATION_CHANGED = "birth_certification_changed";
+
+
+
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -299,6 +306,12 @@ public class CoreConstants {
         public static String getMalariaReferralForm() {
             return MALARIA_REFERRAL_FORM;
         }
+
+        public static String getDeathRegistrationForm() {
+            return DEATH_REGISTRATION;
+        }
+
+        public static String getBirthCertificationChangedForm() { return BIRTH_CERTIFICATION_CHANGED; }
 
         public static String getBirthCertification() {
             return Utils.getLocalForm(BIRTH_CERTIFICATION, locale, assetManager);
@@ -670,6 +683,7 @@ public class CoreConstants {
         public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
         public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
         public static final String EC_OUT_OF_AREA_CHILD = "ec_out_of_area_child";
+        public static final String EC_OUT_OF_AREA_DEATH = "ec_out_of_area_death";
         public static final String ANC_MEMBER = "ec_anc_register";
         public static final String PNC_MEMBER = "ec_pregnancy_outcome";
         public static final String ANC_MEMBER_LOG = "ec_anc_log";

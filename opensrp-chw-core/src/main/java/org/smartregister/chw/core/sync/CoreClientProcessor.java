@@ -73,13 +73,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private List<String> lazyEvents;
 
-    public List<String> getLazyEvents() {
-        if (lazyEvents == null)
-            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
-
-        return lazyEvents;
-    }
-
     protected CoreClientProcessor(Context context) {
         super(context);
     }
@@ -135,6 +128,13 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e);
         }
 
+    }
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
     }
 
     @Override
@@ -231,6 +231,8 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
             case CoreConstants.EventType.BIRTH_CERTIFICATION:
+            case CoreConstants.EventType.UPDATE_BIRTH_CERTIFICATION:
+            case CoreConstants.EventType.UPDATE_REMOVE_FAMILY_MEMBER:
             case CoreConstants.EventType.DISABILITY:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
@@ -443,7 +445,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    public VaccineRepository getVaccineRepository(){
+    public VaccineRepository getVaccineRepository() {
         return CoreChwApplication.getInstance().vaccineRepository();
     }
 
@@ -514,7 +516,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
-    private String serviceName(ContentValues contentValues){
+    private String serviceName(ContentValues contentValues) {
         String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
         if (StringUtils.isNotBlank(name)) {
             name = name.replaceAll("_", " ").replace("dose", "").trim();
@@ -522,15 +524,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return name;
     }
 
-    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository() {
         return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
     }
 
-    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository() {
         return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
     }
 
-    public boolean eventIsVoided(String submissionId){
+    public boolean eventIsVoided(String submissionId) {
         return EventDao.isVoidedEvent(submissionId);
     }
 
