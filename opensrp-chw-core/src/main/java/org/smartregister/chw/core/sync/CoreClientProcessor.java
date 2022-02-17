@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.sync;
 
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
+
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -232,7 +234,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.SICK_CHILD:
             case CoreConstants.EventType.BIRTH_CERTIFICATION:
             case CoreConstants.EventType.UPDATE_BIRTH_CERTIFICATION:
-            case CoreConstants.EventType.UPDATE_REMOVE_FAMILY_MEMBER:
             case CoreConstants.EventType.DISABILITY:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
@@ -725,11 +726,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     " object_id  = ?  ", new String[]{baseEntityId});
 
-
             try {
                 Date dod = getDate(obsMap, "date_died");
                 if (dod != null)
                     values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+
             } catch (ParseException e) {
                 Timber.e(e);
             }

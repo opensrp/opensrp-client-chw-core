@@ -22,6 +22,10 @@ public class CoreConstants {
     public static final String FEMALE = "Female";
     public static final String YES = "Yes";
     public static final String NO = "No";
+    public static final String DOB = "dob";
+    public static final String SURNAME = "surname";
+    public static final String DOB_UNKNOWN = "dob_unknown";
+    public static final String OTHER_NAME = "other_name";
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
     public static String PERSISTED_LANGUAGE = "persisted_language";
@@ -113,6 +117,7 @@ public class CoreConstants {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
         public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
         public static final String UPDATE_REMOVE_FAMILY_MEMBER = "Update Remove Family Member";
+        public static final String REMOVE_FAMILY_MEMBER = "Remove Family Member";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -246,11 +251,12 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
-        private static final String DEATH_REGISTRATION = "death_member_form";
+        private static final String DEATH_CERTIFICATION = "death_certification";
         private static final String BIRTH_CERTIFICATION = "birth_certification";
         private static final String BIRTH_CERTIFICATION_CHANGED = "birth_certification_changed";
-
-
+        private static final String OUT_OF_AREA_CHILD_FORM = "out_of_area_child_enrollment";
+        private static final String OUT_OF_AREA_DEATH_FORM = "out_of_area_death_form";
+        private static final String EC_CLIENT_CLASSIFICATION = "ec_client_classification.json";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -265,6 +271,18 @@ public class CoreConstants {
         public static void setLocaleAndAssetManager(Locale locale, AssetManager assetManager) {
             JSON_FORM.assetManager = assetManager;
             JSON_FORM.locale = locale;
+        }
+
+        public static String getOutOfAreaChildForm() {
+            return OUT_OF_AREA_CHILD_FORM;
+        }
+
+        public static String getOutOfAreaDeathForm() {
+            return OUT_OF_AREA_DEATH_FORM;
+        }
+
+        public static String getEcClientClassification() {
+            return EC_CLIENT_CLASSIFICATION;
         }
 
         public static String getChildReferralForm() {
@@ -308,7 +326,7 @@ public class CoreConstants {
         }
 
         public static String getDeathRegistrationForm() {
-            return DEATH_REGISTRATION;
+            return DEATH_CERTIFICATION;
         }
 
         public static String getBirthCertificationChangedForm() { return BIRTH_CERTIFICATION_CHANGED; }
