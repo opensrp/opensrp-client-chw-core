@@ -20,6 +20,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -168,14 +169,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
     public static boolean launchDialer(final Activity activity, final FamilyCallDialogContract.View callView, final String phoneNumber) {
 
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             // set a pending call execution request
             if (callView != null) {
                 callView.setPendingCallRequest(() -> Utils.launchDialer(activity, callView, phoneNumber));
             }
 
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, PermissionUtils.PHONE_STATE_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_SMS}, PermissionUtils.PHONE_STATE_PERMISSION_REQUEST_CODE);
 
             return false;
         } else {
@@ -532,13 +532,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             fpFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (has_phone && menu instanceof CoreTbFloatingMenu) {
             tbFloatingMenu = (CoreTbFloatingMenu) menu;
-            tbFloatingMenu.getCallLayout().setOnClickListener(tbFloatingMenu);
+            tbFloatingMenu.getCallLayout().setOnClickListener((View.OnClickListener) tbFloatingMenu);
         } else if (!has_phone && menu instanceof CoreTbFloatingMenu) {
             tbFloatingMenu = (CoreTbFloatingMenu) menu;
             tbFloatingMenu.getCallLayout().setOnClickListener(null);
         } else if (has_phone && menu instanceof CoreHivFloatingMenu) {
             hivFloatingMenu = (CoreHivFloatingMenu) menu;
-            hivFloatingMenu.getCallLayout().setOnClickListener(hivFloatingMenu);
+            hivFloatingMenu.getCallLayout().setOnClickListener((View.OnClickListener) hivFloatingMenu);
         } else if (!has_phone && menu instanceof CoreHivFloatingMenu) {
             hivFloatingMenu = (CoreHivFloatingMenu) menu;
             hivFloatingMenu.getCallLayout().setOnClickListener(null);
