@@ -780,8 +780,14 @@
     <string name="certification_clients">Certification Clients</string>
     <string name="birth_certification">Birth certification</string>
     <string name="death_certification">Death certification</string>
-    <string name="certificate_received">Certificate received</string>
-    <string name="certificate_not_received">Certificate not received</string>
+    <string name="birth_certificate_received">Certificate received</string>
+    <string name="death_certificate_received">Certificate not received</string>
+    <string name="birth_certificate_not_received">Certificate not received</string>
+    <string name="death_certificate_not_received">Certificate not received</string>
+    <string name="birth_summary_toggle">Certified</string>
+    <string name="death_summary_toggle">Certified</string>
+
+
     <string name="status_updated">Status updated</string>
     <string name="update_status">Update Status</string>
     <string name="update_details">Update Details</string>
