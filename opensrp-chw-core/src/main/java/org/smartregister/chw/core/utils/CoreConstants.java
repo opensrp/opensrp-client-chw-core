@@ -26,6 +26,19 @@ public class CoreConstants {
     public static final String SURNAME = "surname";
     public static final String DOB_UNKNOWN = "dob_unknown";
     public static final String OTHER_NAME = "other_name";
+    public static final String DEATH_CERTIFICATE_NUMBER = "death_certificate_number";
+    public static final String INFORMANT_NAME = "informant_name";
+    public static final String INFORMANT_RELATIONSHIP = "informant_relationship";
+    public static final String INFORMANT_ADDRESS = "informant_address";
+    public static final String INFORMANT_PHONE = "informant_phone";
+    public static final String OFFICIAL_NAME = "official_name";
+    public static final String OFFICIAL_POSITION = "official_position";
+    public static final String OFFICIAL_ADDRESS = "official_address";
+    public static final String OFFICIAL_NUMBER = "official_number";
+    public static final String OFFICIAL_ID = "official_id";
+    public static final String BIRTH_CERTIFICATE_ISSUE_DATE = "birth_cert_issue_date";
+
+
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
     public static String PERSISTED_LANGUAGE = "persisted_language";
@@ -116,7 +129,7 @@ public class CoreConstants {
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
         public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
-        public static final String UPDATE_REMOVE_FAMILY_MEMBER = "Update Remove Family Member";
+        public static final String UPDATE_DEATH_CERTIFICATION = "Update Death Certification";
         public static final String REMOVE_FAMILY_MEMBER = "Remove Family Member";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";

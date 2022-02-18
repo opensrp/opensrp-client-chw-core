@@ -1,7 +1,5 @@
 package org.smartregister.chw.core.sync;
 
-import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
-
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -12,8 +10,10 @@ import org.joda.time.DateTime;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.BirthCertificationDao;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.dao.DeathCertificationDao;
 import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
@@ -233,7 +233,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.OBSERVATIONS_AND_ILLNESS:
             case CoreConstants.EventType.SICK_CHILD:
             case CoreConstants.EventType.BIRTH_CERTIFICATION:
-            case CoreConstants.EventType.UPDATE_BIRTH_CERTIFICATION:
             case CoreConstants.EventType.DISABILITY:
                 processVisitEvent(eventClient, CoreConstants.EventType.CHILD_HOME_VISIT);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
@@ -331,6 +330,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.DELETE_EVENT:
                 processDeleteEvent(eventClient.getEvent());
                 break;
+            case CoreConstants.EventType.UPDATE_BIRTH_CERTIFICATION:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+                processBirthCertificationEvent(eventClient);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+            case CoreConstants.EventType.UPDATE_DEATH_CERTIFICATION:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+                processDeathCertificationEvent(eventClient);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
             case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
@@ -403,6 +415,16 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             usage.setId(formSubmissionId);
             repo.addOrUpdateStockUsage(usage);
         }
+    }
+
+    private void processDeathCertificationEvent(EventClient eventClient) {
+        Event event = eventClient.getEvent();
+        DeathCertificationDao.updateDeathCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
+    }
+
+    private void processBirthCertificationEvent(EventClient eventClient) {
+        Event event = eventClient.getEvent();
+        BirthCertificationDao.updateBirthCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
     }
 
     private void processNotificationDismissalEvent(Event event) {
@@ -686,6 +708,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             for (Obs obs : event.getObs()) {
                 if (obs.getValues().size() > 0) {
                     Object object = obs.getValues().get(0);
+                    obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
+                }
+            }
+        }
+        return obsMap;
+    }
+
+    private Map<String, String> readCertificationObs(Event event) {
+        Map<String, String> obsMap = new HashMap<>();
+        if (event.getObs() != null) {
+            for (Obs obs : event.getObs()) {
+                if (obs.getValues().size() > 0) {
+                    Object object = obs.getHumanReadableValue() != null ? obs.getHumanReadableValue() : obs.getValues().get(0);
                     obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
                 }
             }

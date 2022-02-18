@@ -102,6 +102,7 @@ public class ChildDBConstants {
         public static final String BIRTH_CERT_NUMBER = "birth_cert_num";
         public static final String BIRTH_CERT_NOTIFIICATION = "birth_notification";
         public static final String SYSTEM_BIRTH_NOTIFICATION = "system_birth_notification";
+        public static final String BIRTH_REGISTRATION = "birth_registration";
         public static final String BIRTH_REG_TYPE = "birth_reg_type";
         public static final String INFORMANT_REASON = "informant_reason";
         public static final String ILLNESS_DATE = "date_of_illness";
