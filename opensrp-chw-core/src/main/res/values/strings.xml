@@ -782,7 +782,7 @@
     <string name="death_certification">Death certification</string>
     <string name="certificate_received">Certificate received</string>
     <string name="birth_certificate_received">Certificate received</string>
-    <string name="death_certificate_received">Certificate not received</string>
+    <string name="death_certificate_received">Certificate received</string>
     <string name="certificate_not_received">Certificate not received</string>
     <string name="birth_certificate_not_received">Certificate not received</string>
     <string name="death_certificate_not_received">Certificate not received</string>
