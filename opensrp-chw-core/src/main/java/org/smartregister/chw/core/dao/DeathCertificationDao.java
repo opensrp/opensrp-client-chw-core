@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import static org.smartregister.chw.anc.util.DBConstants.KEY.LAST_INTERACTED_WITH;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE;
 import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER;
@@ -21,6 +22,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.dao.AbstractDao;
 
+import java.util.Date;
 import java.util.Map;
 
 public class DeathCertificationDao extends AbstractDao {
@@ -43,6 +45,7 @@ public class DeathCertificationDao extends AbstractDao {
         values.put(OFFICIAL_POSITION, obsMap.get(OFFICIAL_POSITION));
         values.put(OFFICIAL_ADDRESS, obsMap.get(OFFICIAL_ADDRESS));
         values.put(OFFICIAL_NUMBER, obsMap.get(OFFICIAL_NUMBER));
+        values.put(LAST_INTERACTED_WITH, new Date().getTime());
 
         SQLiteDatabase database = getRepository().getReadableDatabase();
         if (database != null) {

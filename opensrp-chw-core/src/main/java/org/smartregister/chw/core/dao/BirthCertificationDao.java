@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.dao;
 
+import static org.smartregister.chw.anc.util.DBConstants.KEY.LAST_INTERACTED_WITH;
 import static org.smartregister.chw.core.utils.ChildDBConstants.KEY.BIRTH_CERT;
 import static org.smartregister.chw.core.utils.ChildDBConstants.KEY.BIRTH_CERT_NUMBER;
 import static org.smartregister.chw.core.utils.ChildDBConstants.KEY.BIRTH_REGISTRATION;
@@ -17,6 +18,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.smartregister.chw.core.utils.ChildDBConstants;
 import org.smartregister.dao.AbstractDao;
 
+import java.util.Date;
 import java.util.Map;
 
 public class BirthCertificationDao extends AbstractDao {
@@ -34,6 +36,7 @@ public class BirthCertificationDao extends AbstractDao {
         values.put(SYSTEM_BIRTH_NOTIFICATION, obsMap.get(SYSTEM_BIRTH_NOTIFICATION));
         values.put(BIRTH_REG_TYPE, obsMap.get(BIRTH_REG_TYPE));
         values.put(INFORMANT_REASON, obsMap.get(INFORMANT_REASON));
+        values.put(LAST_INTERACTED_WITH, new Date().getTime());
 
         SQLiteDatabase database = getRepository().getReadableDatabase();
         if (database != null) {
