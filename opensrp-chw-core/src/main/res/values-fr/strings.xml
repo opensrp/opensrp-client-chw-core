@@ -495,6 +495,7 @@
     <string name="birth_certificate_received">Acte reçu</string>
     <string name="birth_certificate_not_received">Certificat non reçu</string>
     <string name="death_certificate_received">Certificat reçu</string>
+    <string name="update_details">Mettre à jour</string>
     <string name="death_certificate_not_received">Certificat non reçu</string>
     <string name="birth_summary_toggle">Acte reçu</string>
     <string name="death_summary_toggle">Cert. reçu</string>
