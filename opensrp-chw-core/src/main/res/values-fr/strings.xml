@@ -488,4 +488,15 @@
     <string name="summary_forms">Other Forms</string>
     <string name="permission_write_external_storage_rationale">Write access to the device internal storage is required for database download.</string>
 
+
+    <!-- Certification registers -->
+    <string name="certificate_received">Acte reçu</string>
+    <string name="certificate_not_received">Certificat non reçu</string>
+    <string name="birth_certificate_received">Acte reçu</string>
+    <string name="birth_certificate_not_received">Certificat non reçu</string>
+    <string name="death_certificate_received">Certificat reçu</string>
+    <string name="update_details">Mettre à jour</string>
+    <string name="death_certificate_not_received">Certificat non reçu</string>
+    <string name="birth_summary_toggle">Acte reçu</string>
+    <string name="death_summary_toggle">Cert. reçu</string>
 </resources>

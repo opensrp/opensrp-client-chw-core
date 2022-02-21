@@ -10,8 +10,10 @@ import org.joda.time.DateTime;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.application.CoreChwApplication;
+import org.smartregister.chw.core.dao.BirthCertificationDao;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
+import org.smartregister.chw.core.dao.DeathCertificationDao;
 import org.smartregister.chw.core.dao.EventDao;
 import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
@@ -73,13 +75,6 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private List<String> lazyEvents;
 
-    public List<String> getLazyEvents() {
-        if (lazyEvents == null)
-            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
-
-        return lazyEvents;
-    }
-
     protected CoreClientProcessor(Context context) {
         super(context);
     }
@@ -135,6 +130,13 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             Timber.e(e);
         }
 
+    }
+
+    public List<String> getLazyEvents() {
+        if (lazyEvents == null)
+            lazyEvents = new ArrayList<>(Arrays.asList(CoreChwApplication.getInstance().lazyProcessedEvents()));
+
+        return lazyEvents;
     }
 
     @Override
@@ -328,6 +330,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case org.smartregister.chw.anc.util.Constants.EVENT_TYPE.DELETE_EVENT:
                 processDeleteEvent(eventClient.getEvent());
                 break;
+            case CoreConstants.EventType.UPDATE_BIRTH_CERTIFICATION:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+                processBirthCertificationEvent(eventClient);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+            case CoreConstants.EventType.UPDATE_DEATH_CERTIFICATION:
+                if (eventClient.getClient() == null) {
+                    return;
+                }
+                processDeathCertificationEvent(eventClient);
+                processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
             case CoreConstants.EventType.ANC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.PNC_NOTIFICATION_DISMISSAL:
             case CoreConstants.EventType.MALARIA_NOTIFICATION_DISMISSAL:
@@ -402,6 +417,16 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
+    private void processDeathCertificationEvent(EventClient eventClient) {
+        Event event = eventClient.getEvent();
+        DeathCertificationDao.updateDeathCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
+    }
+
+    private void processBirthCertificationEvent(EventClient eventClient) {
+        Event event = eventClient.getEvent();
+        BirthCertificationDao.updateBirthCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
+    }
+
     private void processNotificationDismissalEvent(Event event) {
         List<Obs> notificationObs = event.getObs();
         String notificationId = null;
@@ -443,7 +468,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    public VaccineRepository getVaccineRepository(){
+    public VaccineRepository getVaccineRepository() {
         return CoreChwApplication.getInstance().vaccineRepository();
     }
 
@@ -514,7 +539,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return details != null ? details.get(IMConstants.VaccineEvent.PROGRAM_CLIENT_ID) : null;
     }
 
-    private String serviceName(ContentValues contentValues){
+    private String serviceName(ContentValues contentValues) {
         String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
         if (StringUtils.isNotBlank(name)) {
             name = name.replaceAll("_", " ").replace("dose", "").trim();
@@ -522,15 +547,15 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return name;
     }
 
-    public RecurringServiceTypeRepository getRecurringServiceTypeRepository(){
+    public RecurringServiceTypeRepository getRecurringServiceTypeRepository() {
         return ImmunizationLibrary.getInstance().recurringServiceTypeRepository();
     }
 
-    public RecurringServiceRecordRepository getRecurringServiceRecordRepository(){
+    public RecurringServiceRecordRepository getRecurringServiceRecordRepository() {
         return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
     }
 
-    public boolean eventIsVoided(String submissionId){
+    public boolean eventIsVoided(String submissionId) {
         return EventDao.isVoidedEvent(submissionId);
     }
 
@@ -690,6 +715,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return obsMap;
     }
 
+    private Map<String, String> readCertificationObs(Event event) {
+        Map<String, String> obsMap = new HashMap<>();
+        if (event.getObs() != null) {
+            for (Obs obs : event.getObs()) {
+                if (obs.getValues().size() > 0) {
+                    Object object = obs.getHumanReadableValue() != null ? obs.getHumanReadableValue() : obs.getValues().get(0);
+                    obsMap.put(obs.getFormSubmissionField(), (object == null) ? null : object.toString());
+                }
+            }
+        }
+        return obsMap;
+    }
+
     private Date getDate(Map<String, String> obsMap, String key) throws ParseException {
         String strDod = obsMap.get(key);
         if (StringUtils.isBlank(strDod)) return null;
@@ -723,11 +761,11 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
                     " object_id  = ?  ", new String[]{baseEntityId});
 
-
             try {
                 Date dod = getDate(obsMap, "date_died");
                 if (dod != null)
                     values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+
             } catch (ParseException e) {
                 Timber.e(e);
             }
