@@ -357,4 +357,13 @@ public class CoreReferralUtils {
         currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
         CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
     }
+
+    public static void cancelTask(Task currentTask) {
+        DateTime now = new DateTime();
+        currentTask.setStatus(Task.TaskStatus.CANCELLED);
+        currentTask.setBusinessStatus(CoreConstants.BUSINESS_STATUS.CANCELLED);
+        currentTask.setLastModified(now);
+        currentTask.setSyncStatus(BaseRepository.TYPE_Unsynced);
+        CoreChwApplication.getInstance().getTaskRepository().addOrUpdate(currentTask);
+    }
 }

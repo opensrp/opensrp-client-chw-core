@@ -1125,6 +1125,7 @@ public class CoreConstants {
         public static final String IN_PROGRESS = "In-Progress";
         public static final String COMPLETE = "Complete";
         public static final String EXPIRED = "Expired";
+        public static final String CANCELLED = "Cancelled";
     }
 
     public static final class TASKS_FOCUS {
