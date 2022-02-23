@@ -672,6 +672,7 @@
     <string name="notification_diagnosis">Diagnosis: %1$s</string>
     <string name="notification_danger_sign">Danger signs: %1$s</string>
     <string name="notification_action_taken">Action taken: %1$s</string>
+    <string name="notification_pregnancy_status">Confirmation Status: %1$s</string>
     <string name="notification_village">Village: %1$s</string>
     <string name="notification_selected_method">Selected method: %1$s</string>
     <string name="notification_record_closed">Record closed</string>
@@ -776,6 +777,7 @@
     <string name="notification_type_pregnancy_confirmation">Pregnancy Confirmation</string>
     <string name="hiv_index_community_followup_notification_title">%1$s has been referred for Community followup on %2$s</string>
     <string name="pregnancy_confirmation_referral_title">%1$s has been confirmed Pregnant on %2$s</string>
+    <string name="pregnancy_unconfirmation_referral_title">%1$s has not been confirmed Pregnant on %2$s</string>
 
     <!--Referral Titles-->
     <string name="hiv_referral">Clinic of Treatment and Care</string>
