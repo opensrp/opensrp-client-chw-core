@@ -204,7 +204,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
 
         try {
             assert form != null;
-            startFormActivity(form, getHivMemberObject(), formName);
+            startFormActivity(form, getHivMemberObject(), titleResource != null ? getResources().getString(titleResource): null);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -216,7 +216,7 @@ public abstract class CoreHivProfileActivity extends BaseHivProfileActivity impl
         intent.putExtra(HIV_MEMBER_OBJECT, hivMemberObject);
 
         Form form = new Form();
-
+        form.setName(formName);
         form.setActionBarBackground(org.smartregister.chw.core.R.color.family_actionbar);
         form.setNavigationBackground(org.smartregister.chw.core.R.color.family_navigation);
         form.setHomeAsUpIndicator(org.smartregister.chw.core.R.mipmap.ic_cross_white);
