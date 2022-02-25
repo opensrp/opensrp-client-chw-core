@@ -2,6 +2,8 @@ package org.smartregister.chw.core.activity;
 
 import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.DELIVERY_DATE;
 import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.LINK_TO_FATHER;
+import static org.smartregister.client.utils.constants.JsonFormConstants.KEYS;
+import static org.smartregister.util.JsonFormUtils.KEY;
 import static org.smartregister.util.JsonFormUtils.VALUES;
 
 import android.content.Intent;
@@ -155,9 +157,12 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
                 if (linkToFather != null) {
                     List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
                     JSONArray memberNames = new JSONArray();
+                    JSONArray memberBaseEntityIds = new JSONArray();
                     for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
                         memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
+                        memberBaseEntityIds.put(coreFamilyMemberModel.getBaseEntityId());
                     }
+                    linkToFather.put(KEYS, memberBaseEntityIds);
                     linkToFather.put(VALUES, memberNames);
                 }
             } catch (Exception e) {
