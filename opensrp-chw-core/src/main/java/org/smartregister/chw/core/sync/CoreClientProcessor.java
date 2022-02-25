@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.sync;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_PLACE;
+
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -419,12 +421,12 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
     private void processDeathCertificationEvent(EventClient eventClient) {
         Event event = eventClient.getEvent();
-        DeathCertificationDao.updateDeathCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
+        DeathCertificationDao.updateDeathCertification(readObsWithHumanReadableValues(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
     }
 
     private void processBirthCertificationEvent(EventClient eventClient) {
         Event event = eventClient.getEvent();
-        BirthCertificationDao.updateBirthCertification(readCertificationObs(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
+        BirthCertificationDao.updateBirthCertification(readObsWithHumanReadableValues(event), event.getEntityType(), eventClient.getClient().getBaseEntityId());
     }
 
     private void processNotificationDismissalEvent(Event event) {
@@ -715,7 +717,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         return obsMap;
     }
 
-    private Map<String, String> readCertificationObs(Event event) {
+    private Map<String, String> readObsWithHumanReadableValues(Event event) {
         Map<String, String> obsMap = new HashMap<>();
         if (event.getObs() != null) {
             for (Obs obs : event.getObs()) {
@@ -748,7 +750,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
 
         SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Map<String, String> obsMap = readObs(event);
+        Map<String, String> obsMap = readObsWithHumanReadableValues(event);
 
         AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER);
         if (commonsRepository != null) {
@@ -766,7 +768,19 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 if (dod != null)
                     values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
 
-            } catch (ParseException e) {
+                String deathManner = obsMap.get("death_manner");
+                if (deathManner != null)
+                    values.put(DEATH_PLACE, deathManner);
+
+                String deathPlace = obsMap.get("death_place");
+                if (deathPlace != null)
+                    values.put(DEATH_PLACE, deathPlace);
+
+                String knownDeathCause = obsMap.get("know_death_cause");
+                if (knownDeathCause != null)
+                    values.put(DEATH_PLACE, knownDeathCause);
+
+            } catch (Exception e) {
                 Timber.e(e);
             }
 
@@ -807,6 +821,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 Date dod = getDate(obsMap, "date_died");
                 if (dod != null)
                     values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+
             } catch (ParseException e) {
                 Timber.e(e);
             }

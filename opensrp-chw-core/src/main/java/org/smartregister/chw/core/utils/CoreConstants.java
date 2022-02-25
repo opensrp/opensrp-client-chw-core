@@ -93,6 +93,9 @@ public class CoreConstants {
         String DETAILS = "details";
         String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
         String NAME = "name";
+        String DEATH_PLACE = "death_place";
+        String KNOW_DEATH_CAUSE = "know_death_cause";
+        String DEATH_MANNER = "death_manner";
     }
 
     public interface SERVICE_GROUPS {
@@ -903,6 +906,9 @@ public class CoreConstants {
             public static final String DEATH_CERTIFICATE_ISSUE_DATE = "death_certificate_issue_date";
             public static final String DEATH_CERTIFICATE_NUMBER = "death_certificate_number";
             public static final String DEATH_NOTIFICATION_DONE = "death_notification_done";
+            public static final String DEATH_PLACE = "death_place";
+            public static final String KNOW_DEATH_CAUSE = "know_death_cause";
+            public static final String DEATH_MANNER = "death_manner";
         }
 
         public static class CHANGE_CARE_GIVER {

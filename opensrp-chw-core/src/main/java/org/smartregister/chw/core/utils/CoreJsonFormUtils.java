@@ -464,7 +464,14 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                 String myKey = registrationFormParams.getRight().getJSONObject(index).getString(KEY);
 
                 if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON)
+                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON) ||
+                        myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE) ||
+                        myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE) ||
+                        myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER) ||
+                        myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE) ||
+                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_MANNER) ||
+                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_PLACE) ||
+                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.KNOW_DEATH_CAUSE)
                 ) {
                     fields.put(registrationFormParams.getRight().get(index));
                 }
@@ -477,14 +484,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                     }
                 }
 
-                if (myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE))
-                    fields.put(registrationFormParams.getRight().get(index));
-                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE))
-                    fields.put(registrationFormParams.getRight().get(index));
-                if (myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER))
-                    fields.put(registrationFormParams.getRight().get(index));
-                if (myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE))
-                    fields.put(registrationFormParams.getRight().get(index));
                 index++;
             }
 
