@@ -1,6 +1,17 @@
 package org.smartregister.chw.core.sync;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_MANNER;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_PLACE;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_ADDRESS;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_NAME;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_PHONE;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_RELATIONSHIP;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.KNOW_DEATH_CAUSE;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_ADDRESS;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_NAME;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_NUMBER;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_POSITION;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -770,7 +781,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 String deathManner = obsMap.get("death_manner");
                 if (deathManner != null)
-                    values.put(DEATH_PLACE, deathManner);
+                    values.put(DEATH_MANNER, deathManner);
 
                 String deathPlace = obsMap.get("death_place");
                 if (deathPlace != null)
@@ -778,7 +789,43 @@ public class CoreClientProcessor extends ClientProcessorForJava {
 
                 String knownDeathCause = obsMap.get("know_death_cause");
                 if (knownDeathCause != null)
-                    values.put(DEATH_PLACE, knownDeathCause);
+                    values.put(KNOW_DEATH_CAUSE, knownDeathCause);
+
+                String officialName = obsMap.get("official_name");
+                if (officialName != null)
+                    values.put(OFFICIAL_NAME, officialName);
+
+                String officialId = obsMap.get("official_id");
+                if (officialId != null)
+                    values.put(OFFICIAL_ID, officialId);
+
+                String officialPosition = obsMap.get("official_position");
+                if (officialPosition != null)
+                    values.put(OFFICIAL_POSITION, officialPosition);
+
+                String officialAddress = obsMap.get("official_address");
+                if (officialAddress != null)
+                    values.put(OFFICIAL_ADDRESS, officialAddress);
+
+                String officialNumber = obsMap.get("official_number");
+                if (officialNumber != null)
+                    values.put(OFFICIAL_NUMBER, officialNumber);
+
+                String informantName = obsMap.get("informant_name");
+                if (informantName != null)
+                    values.put(INFORMANT_NAME, informantName);
+
+                String informantRelationship = obsMap.get("informant_relationship");
+                if (informantRelationship != null)
+                    values.put(INFORMANT_RELATIONSHIP, informantRelationship);
+
+                String informantAddress = obsMap.get("informant_address");
+                if (informantAddress != null)
+                    values.put(INFORMANT_ADDRESS, informantAddress);
+
+                String informantPhone = obsMap.get("informant_phone");
+                if (informantPhone != null)
+                    values.put(INFORMANT_PHONE, informantPhone);
 
             } catch (Exception e) {
                 Timber.e(e);

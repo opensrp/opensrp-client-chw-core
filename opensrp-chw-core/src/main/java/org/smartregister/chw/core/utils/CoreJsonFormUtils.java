@@ -3,10 +3,6 @@ package org.smartregister.chw.core.utils;
 import static com.vijay.jsonwizard.utils.NativeFormLangUtils.getTranslatedString;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
-import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE;
-import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER;
-import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE;
-import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
 import static org.smartregister.chw.core.utils.CoreConstants.NO;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
@@ -89,8 +85,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static final int REQUEST_CODE_GET_JSON = 2244;
     public static final String CURRENT_OPENSRP_ID = "current_opensrp_id";
     public static final String READ_ONLY = "read_only";
-    private static HashMap<String, String> actionMap = null;
     private static final String LOCATION_UUIDS = "location_uuids";
+    private static HashMap<String, String> actionMap = null;
 
     public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass) {
         Intent intent = new Intent(context, activityClass);
@@ -461,20 +457,36 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
             int index = 0;
             while (index < registrationFormParams.getRight().length()) {
                 //JSONObject obj = registrationFormParams.getRight().getJSONObject(index);
+
                 String myKey = registrationFormParams.getRight().getJSONObject(index).getString(KEY);
 
-                if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON) ||
-                        myKey.equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE) ||
-                        myKey.equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE) ||
-                        myKey.equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER) ||
-                        myKey.equalsIgnoreCase(DEATH_NOTIFICATION_DONE) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_MANNER) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_PLACE) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.KNOW_DEATH_CAUSE)
-                ) {
-                    fields.put(registrationFormParams.getRight().get(index));
+                // Remove member form informant and official details
+                switch (myKey) {
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_PLACE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.KNOW_DEATH_CAUSE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_MANNER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_NAME:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_ID:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_POSITION:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_ADDRESS:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_NUMBER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_NAME:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_RELATIONSHIP:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_ADDRESS:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_PHONE:
+                        fields.put(registrationFormParams.getRight().get(index));
+                        break;
+
+                    default:
+                        break;
                 }
+
                 if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_DIED)) {
                     fields.put(registrationFormParams.getRight().get(index));
                     try {

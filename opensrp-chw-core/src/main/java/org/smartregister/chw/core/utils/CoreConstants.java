@@ -96,6 +96,15 @@ public class CoreConstants {
         String DEATH_PLACE = "death_place";
         String KNOW_DEATH_CAUSE = "know_death_cause";
         String DEATH_MANNER = "death_manner";
+        String OFFICIAL_NAME = "official_name";
+        String OFFICIAL_ID = "official_id";
+        String OFFICIAL_POSITION = "official_position";
+        String OFFICIAL_ADDRESS = "official_address";
+        String OFFICIAL_NUMBER = "official_number";
+        String INFORMANT_NAME = "informant_name";
+        String INFORMANT_RELATIONSHIP = "informant_relationship";
+        String INFORMANT_ADDRESS = "informant_address";
+        String INFORMANT_PHONE = "informant_phone";
     }
 
     public interface SERVICE_GROUPS {
@@ -909,6 +918,16 @@ public class CoreConstants {
             public static final String DEATH_PLACE = "death_place";
             public static final String KNOW_DEATH_CAUSE = "know_death_cause";
             public static final String DEATH_MANNER = "death_manner";
+            public static final String OFFICIAL_NAME = "official_name";
+            public static final String OFFICIAL_ID = "official_id";
+            public static final String OFFICIAL_POSITION = "official_position";
+            public static final String OFFICIAL_ADDRESS = "official_address";
+            public static final String OFFICIAL_NUMBER = "official_number";
+            public static final String INFORMANT_NAME = "informant_name";
+            public static final String INFORMANT_RELATIONSHIP = "informant_relationship";
+            public static final String INFORMANT_ADDRESS = "informant_address";
+            public static final String INFORMANT_PHONE = "informant_phone";
+
         }
 
         public static class CHANGE_CARE_GIVER {
