@@ -25,4 +25,8 @@
     <color name="background_alert_green">#B3EDC3</color>
     <color name="background_alert_red">#FFBDBD</color>
 
+    <color name="certificate_not_received_red">#FFD13F3F</color>
+    <color name="certificate_received_green">#5FD13F</color>
+    <color name="update_certificate_yellow">#F6C732</color>
+
 </resources>

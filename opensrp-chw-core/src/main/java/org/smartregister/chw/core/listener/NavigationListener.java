@@ -48,12 +48,36 @@ public class NavigationListener implements View.OnClickListener {
                         startRegisterActivity(fPlanning);
                     }
                     break;
+                case CoreConstants.DrawerMenu.BIRTH_NOTIFICATION:
+                    Class bNotification = getActivity(CoreConstants.REGISTERED_ACTIVITIES.BNOTIFICATION_REGISTER_ACTIVITY);
+                    if (bNotification == null) {
+                        Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.BIRTH_NOTIFICATION, Toast.LENGTH_SHORT).show();
+                    } else {
+                        startRegisterActivity(bNotification);
+                    }
+                    break;
+                case CoreConstants.DrawerMenu.DEATH_NOTIFICATION:
+                    Class deathNotification = getActivity(CoreConstants.REGISTERED_ACTIVITIES.DEATH_NOTIFICATION_REGISTER_ACTIVITY);
+                    if (deathNotification != null) {
+                        startRegisterActivity(deathNotification);
+                    }
+                    break;
+                case CoreConstants.DrawerMenu.OUT_OF_AREA_CHILD:
+                    Class outOfAreaChild = getActivity(CoreConstants.REGISTERED_ACTIVITIES.OUT_OF_AREA_REGISTER_ACTIVITY);
+                    if (outOfAreaChild != null) {
+                        startRegisterActivity(outOfAreaChild);
+                    }
+                    break;
+                case CoreConstants.DrawerMenu.OUT_OF_AREA_DEATH:
+                    Class outOfAreaDeath = getActivity(CoreConstants.REGISTERED_ACTIVITIES.OUT_OF_AREA_DEATH_ACTIVITY);
+                    if (outOfAreaDeath != null) {
+                        startRegisterActivity(outOfAreaDeath);
+                    }
+                    break;
 
                 case CoreConstants.DrawerMenu.MALARIA:
                     Class malaria = getActivity(CoreConstants.REGISTERED_ACTIVITIES.MALARIA_REGISTER_ACTIVITY);
-                    if (malaria == null) {
-                        Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.MALARIA, Toast.LENGTH_SHORT).show();
-                    } else {
+                    if (malaria != null) {
                         startRegisterActivity(malaria);
                     }
                     break;

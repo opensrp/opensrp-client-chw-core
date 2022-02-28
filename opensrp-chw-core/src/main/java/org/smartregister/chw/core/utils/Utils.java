@@ -1,5 +1,9 @@
 package org.smartregister.chw.core.utils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
@@ -8,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -93,10 +98,6 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
-
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
     public static final SimpleDateFormat yyyy_mm_dd = new SimpleDateFormat("yyyy-mm-dd");
@@ -169,7 +170,7 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String convertToDateFormateString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
+    public static String convertToDateFormatString(String timeAsDDMMYYYY, SimpleDateFormat dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());//12-08-2018
         try {
             Date date = sdf.parse(timeAsDDMMYYYY);
@@ -390,13 +391,13 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
     public static Map<String, List<Obs>> groupObsByFieldObservations(List<Obs> obs) {
         Map<String, List<Obs>> map = new HashMap<>();
         for (Obs o : obs) {
-            List<Obs> cur_vals = map.get(o.getFormSubmissionField());
-            if (cur_vals == null) {
-                cur_vals = new ArrayList<>();
+            List<Obs> curValues = map.get(o.getFormSubmissionField());
+            if (curValues == null) {
+                curValues = new ArrayList<>();
             }
-            cur_vals.add(o);
+            curValues.add(o);
 
-            map.put(o.getFormSubmissionField(), cur_vals);
+            map.put(o.getFormSubmissionField(), curValues);
         }
         return map;
     }
@@ -468,6 +469,16 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
             Timber.v(e);
         }
         return form_name;
+    }
+
+    public static String getLocaleStringResource(Locale requestedLocale, int resourceId, Context context) {
+        String result;
+        // use latest api
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        config.setLocale(requestedLocale);
+        result = context.createConfigurationContext(config).getText(resourceId).toString();
+
+        return result;
     }
 
     public static String getFamilyMembersSql(String familyID) {

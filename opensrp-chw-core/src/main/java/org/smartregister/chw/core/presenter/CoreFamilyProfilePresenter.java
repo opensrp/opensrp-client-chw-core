@@ -2,7 +2,6 @@ package org.smartregister.chw.core.presenter;
 
 import android.content.Context;
 import android.util.Pair;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
@@ -144,6 +143,7 @@ public abstract class CoreFamilyProfilePresenter extends BaseFamilyProfilePresen
             }
             FamilyMember familyMember = CoreJsonFormUtils.getFamilyMemberFromRegistrationForm(jsonString, familyBaseEntityId, familyBaseEntityId);
             Event eventMember = familyEventClient.getEvent();
+            assert familyMember != null;
             eventMember.addObs(new Obs("concept", "text", CoreConstants.FORM_CONSTANTS.CHANGE_CARE_GIVER.EverSchool.CODE, "",
                     toList(CoreJsonFormUtils.getEverSchoolOptions(context).get(familyMember.getEverSchool())), toList(familyMember.getEverSchool()), null, CoreConstants.JsonAssets.FAMILY_MEMBER.EVER_SCHOOL));
 

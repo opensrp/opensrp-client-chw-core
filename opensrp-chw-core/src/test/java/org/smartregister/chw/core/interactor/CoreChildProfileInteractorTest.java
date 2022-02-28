@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.interactor;
 
+import static org.junit.Assert.assertEquals;
+
 import android.content.Context;
 
 import org.json.JSONArray;
@@ -25,6 +27,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.ImageUtilsShadowHelper;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.domain.AlertStatus;
 import org.smartregister.family.util.AppExecutors;
 import org.smartregister.family.util.DBConstants;
 import org.smartregister.family.util.JsonFormUtils;
@@ -58,13 +61,13 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
     public void testSetVaccineListReturnsExpectedList() {
         Map<String, Date> vaccineList = new LinkedHashMap<>();
         interactor.setVaccineList(vaccineList);
-        Assert.assertEquals(vaccineList, ReflectionHelpers.getField(interactor, "vaccineList"));
+        assertEquals(vaccineList, ReflectionHelpers.getField(interactor, "vaccineList"));
     }
 
     @Test
     public void testGetVaccineListReturnsExpectedList() {
         Map<String, Date> vaccineList = interactor.getVaccineList();
-        Assert.assertEquals(vaccineList, ReflectionHelpers.getField(interactor, "vaccineList"));
+        assertEquals(vaccineList, ReflectionHelpers.getField(interactor, "vaccineList"));
     }
 
     @Test
@@ -82,7 +85,7 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
 
         Assert.assertNotNull(jsonObject);
         // check the title was properly set
-        Assert.assertEquals(jsonObject.getJSONObject(JsonFormUtils.STEP1).get(CoreJsonFormUtils.TITLE), title);
+        assertEquals(jsonObject.getJSONObject(JsonFormUtils.STEP1).get(CoreJsonFormUtils.TITLE), title);
 
         Mockito.verify(interactor, Mockito.times(jsonObject.getJSONObject(JsonFormUtils.STEP1).getJSONArray(JsonFormUtils.FIELDS).length()))
                 .processPopulatableFields(Mockito.any(CommonPersonObjectClient.class), Mockito.any(JSONObject.class), Mockito.any(JSONArray.class));
@@ -94,5 +97,20 @@ public class CoreChildProfileInteractorTest extends BaseUnitTest implements Exec
         Mockito.doNothing().when(interactor).saveRegistration(null, null, true);
         interactor.saveRegistration(null, null, true, callBack);
         Mockito.verify(callBack).onRegistrationSaved(true);
+    }
+
+    @Test
+    public void testGetTranslatedServiceShouldReturnTheCorrectService() {
+        Context context = RuntimeEnvironment.application;
+        assertEquals("Vitamin A",interactor.getTranslatedService(context, "vitamin"));
+        assertEquals("demo_service",interactor.getTranslatedService(context, "Demo Service"));
+    }
+
+    @Test
+    public void testImmunizationStateFromAlertShouldReturnCorrectAlertMessage() {
+        assertEquals("DUE",interactor.getImmunizationStateFromAlert(AlertStatus.normal).name());
+        assertEquals("OVERDUE",interactor.getImmunizationStateFromAlert(AlertStatus.urgent).name());
+        assertEquals("UPCOMING",interactor.getImmunizationStateFromAlert(AlertStatus.upcoming).name());
+        assertEquals("NO_ALERT",interactor.getImmunizationStateFromAlert(AlertStatus.inProcess).name());
     }
 }

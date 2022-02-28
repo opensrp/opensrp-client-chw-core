@@ -1,5 +1,12 @@
 package org.smartregister.chw.core.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
+import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
+import static org.smartregister.util.JsonFormUtils.STEP1;
+
 import android.content.Context;
 
 import net.sqlcipher.MatrixCursor;
@@ -7,7 +14,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,6 +27,7 @@ import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
 import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
@@ -29,12 +36,14 @@ import org.smartregister.view.activity.BaseProfileActivity;
 
 import java.util.HashMap;
 
-import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
-import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
-import static org.smartregister.util.JsonFormUtils.STEP1;
-
 @Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
+
+    @Mock
+    CommonPersonObjectClient client;
+
+    @Mock
+    Client clientEvent;
 
     @Mock
     private SQLiteDatabase database;
@@ -53,7 +62,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         HashMap<String, String> detailsMap = new HashMap<>();
         HashMap<String, String> columnMaps = new HashMap<>();
 
-        CommonPersonObjectClient client = new CommonPersonObjectClient("testId", detailsMap, "tester");
+        client = new CommonPersonObjectClient("testId", detailsMap, "tester");
         client.setColumnmaps(columnMaps);
 
         CoreChwApplication coreChwApplication = Mockito.mock(CoreChwApplication.class, Mockito.CALLS_REAL_METHODS);
@@ -66,8 +75,8 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
 
         Mockito.doReturn(repository).when(coreChwApplication).getRepository();
         Mockito.doReturn(database).when(repository).getReadableDatabase();
-        Mockito.doReturn(clientJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from client where baseEntityId = ? order by updatedAt desc"), Mockito.any());
-        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(Mockito.eq("select json from event where baseEntityId = 'testId' and eventType in ('Update Family Member Registration','Family Member Registration') order by updatedAt desc limit 1;"), Mockito.any());
+        Mockito.doReturn(clientJsonMatrixCursor).when(database).rawQuery(eq("select json from client where baseEntityId = ? order by updatedAt desc"), Mockito.any());
+        Mockito.doReturn(eventJsonMatrixCursor).when(database).rawQuery(eq("select json from event where baseEntityId = 'testId' and eventType in ('Update Family Member Registration','Family Member Registration') order by updatedAt desc limit 1;"), Mockito.any());
 
         FamilyMetadata metadata = new FamilyMetadata(FamilyWizardFormActivity.class, FamilyWizardFormActivity.class,
                 BaseProfileActivity.class, CoreConstants.IDENTIFIER.UNIQUE_IDENTIFIER_KEY, false);
@@ -90,11 +99,25 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
         BAJsonFormUtils baJsonFormUtils = new BAJsonFormUtils(coreChwApplication);
         JSONObject resultObject = baJsonFormUtils.getAutoJsonEditMemberFormString(formTitle, "family_register",
                 context, client, Utils.metadata().familyMemberRegister.updateEventType, familyName, false);
-        Assert.assertNotNull(resultObject);
+        assertNotNull(resultObject);
         JSONObject formMetadata = resultObject.getJSONObject(org.smartregister.family.util.JsonFormUtils.METADATA);
-        Assert.assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
+        assertEquals("test_location_id", formMetadata.getString(ENCOUNTER_LOCATION));
         JSONObject stepOne = resultObject.getJSONObject(STEP1);
-        Assert.assertEquals(formTitle, stepOne.getString(TITLE));
+        assertEquals(formTitle, stepOne.getString(TITLE));
+    }
+
+    @Test
+    public void testComputeSurname() {
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.VALUE,
+                    (clientEvent.getLastName() == null ? Mockito.anyString() : clientEvent.getLastName()));
+            jsonObj.put(org.smartregister.family.util.JsonFormUtils.READ_ONLY, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertNotNull(jsonObj);
     }
 
     private String getClientJsonString() {

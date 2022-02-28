@@ -32,6 +32,9 @@
     <string name="nav_last_sync_time">HH:mm a , MMM DD</string>
     <string name="all_registers">Rejesta Zote</string>
     <string name="log_out_as">Toka kwenye mfumo kama</string>
+    <string name="device_data_synced">Data ya kifaa imesawazishwa</string>
+    <string name="device_data_not_synced">Data ya kifaa haijasawazishwa</string>
+    <string name="progressBarLabel">Inasawazisha %s : %d%% </string>
 
     <!--Navigation side menu -->
     <string name="device_to_device">Device-to-device sync</string>
@@ -172,6 +175,9 @@
     <string name="deworming">Tiba kinga dhidi ya minyoo</string>
     <string name="vaccine_card_title">Kadi ya chanjo ya mtoto imepokelewa</string>
     <string name="birth_certification">Cheti cha kuzaliwa</string>
+    <string name="death_certification">Vyeti vya kifo</string>
+    <string name="out_of_area_registration">Nje ya kuzaliwa kwa eneo</string>
+    <string name="out_of_area_death">Kati ya kifo cha eneo hilo</string>
     <string name="no_vaccines_were_done">Hakuna chanjo zilizotolewa</string>
     <string name="vaccine_card_text">Je, mtoto alipewa kadi ya chanjo?</string>
     <string name="record_immunizations">Rekodi chanjo</string>
@@ -732,4 +738,8 @@
     <!-- LMH Last Visit Row-->
     <string name="view_vaccine_histroy">Angalia historia ya chanjo</string>
     <string name="see_vaccines_due_today">Angalia chanjo zinazopaswa kutolewa leo</string>
+
+    <!-- Sync Statistics View -->
+    <string name="download_database">Download Database sw</string>
+
 </resources>

@@ -29,9 +29,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * Created by keyman 12/11/2018.
- */
 public class CoreChildRegisterInteractor implements CoreChildRegisterContract.Interactor {
 
     public static final String TAG = CoreChildRegisterInteractor.class.getName();
@@ -72,15 +69,13 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
     @Override
     public void saveRegistration(final Pair<Client, Event> pair, final String jsonString, final boolean isEditMode, final CoreChildRegisterContract.InteractorCallBack callBack) {
+        Runnable runnable = () -> {
+            if (saveRegistration(pair, jsonString, isEditMode)) {
+                appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode, true, null));
+            }
+        };
 
-        //   Runnable runnable = () -> {
-        if (saveRegistration(pair, jsonString, isEditMode)) {
-            callBack.onRegistrationSaved(isEditMode, true, null);
-        }
-        //    appExecutors.mainThread().execute(() -> callBack.onRegistrationSaved(isEditMode));
-        // };
-
-        // appExecutors.diskIO().execute(runnable);
+        appExecutors.diskIO().execute(runnable);
     }
 
     @Override
@@ -104,11 +99,7 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
 
             if (baseClient != null) {
                 clientJson = new JSONObject(JsonFormUtils.gson.toJson(baseClient));
-                if (isEditMode) {
-                    JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
-                } else {
-                    getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
-                }
+                mergeAndSave(isEditMode, baseClient, clientJson);
             }
 
             if (baseEvent != null) {
@@ -116,50 +107,75 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
                 getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, BaseRepository.TYPE_Unsynced);
             }
 
-            if (isEditMode) {
-                // Unassign current OPENSRP ID
-                if (baseClient != null) {
-                    String newOpenSRPId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey).replace("-", "");
-                    String currentOpenSRPId = JsonFormUtils.getString(jsonString, JsonFormUtils.CURRENT_OPENSRP_ID).replace("-", "");
-                    if (!newOpenSRPId.equals(currentOpenSRPId)) {
-                        //OPENSRP ID was changed
-                        getUniqueIdRepository().open(currentOpenSRPId);
-                    }
-                }
+            checkEditMode(isEditMode, baseClient, jsonString);
 
-            } else {
-                if (baseClient != null) {
-                    String opensrpId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey);
-
-                    //mark OPENSRP ID as used
-                    getUniqueIdRepository().close(opensrpId);
-                }
-            }
-
-            if (baseClient != null || baseEvent != null) {
-                String imageLocation = JsonFormUtils.getFieldValue(jsonString, Constants.KEY.PHOTO);
-                JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
-            }
+            saveImage(baseClient, baseEvent, jsonString);
 
 
             List<EventClient> eventClientList = new ArrayList<>();
-            org.smartregister.domain.Event domainEvent = (eventJson != null) ?
-                    JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
-            org.smartregister.domain.Client domainClient = (clientJson != null) ?
-                    JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
+            fillEventClientList(eventJson, clientJson, eventClientList);
 
-            eventClientList.add(new EventClient(domainEvent, domainClient));
-
-            long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            getClientProcessorForJava().processClient(eventClientList);
-            getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+            processClient(eventClientList);
 
         } catch (Exception e) {
             Timber.e(e);
             return false;
         }
         return true;
+    }
+
+    private void mergeAndSave(boolean isEditMode, Client baseClient, JSONObject clientJson) throws Exception {
+        if (isEditMode) {
+            JsonFormUtils.mergeAndSaveClient(getSyncHelper(), baseClient);
+        } else {
+            getSyncHelper().addClient(baseClient.getBaseEntityId(), clientJson);
+        }
+    }
+
+    private void processClient(List<EventClient> eventClientList) throws Exception {
+        long lastSyncTimeStamp = getAllSharedPreferences().fetchLastUpdatedAtDate(0);
+        Date lastSyncDate = new Date(lastSyncTimeStamp);
+        getClientProcessorForJava().processClient(eventClientList);
+        getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
+    }
+
+    private void saveImage(Client baseClient, Event baseEvent, String jsonString) {
+        if (baseClient != null || baseEvent != null) {
+            String imageLocation = JsonFormUtils.getFieldValue(jsonString, Constants.KEY.PHOTO);
+            assert baseClient != null;
+            JsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
+        }
+    }
+
+    private void checkEditMode(boolean isEditMode, Client baseClient, String jsonString) {
+        if (isEditMode) {
+            // Unassign current OPENSRP ID
+            if (baseClient != null) {
+                String newOpenSRPId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey).replace("-", "");
+                String currentOpenSRPId = JsonFormUtils.getString(jsonString, JsonFormUtils.CURRENT_OPENSRP_ID).replace("-", "");
+                if (!newOpenSRPId.equals(currentOpenSRPId)) {
+                    //OPENSRP ID was changed
+                    getUniqueIdRepository().open(currentOpenSRPId);
+                }
+            }
+
+        } else {
+            if (baseClient != null) {
+                String opensrpId = baseClient.getIdentifier(Utils.metadata().uniqueIdentifierKey);
+
+                //mark OPENSRP ID as used
+                getUniqueIdRepository().close(opensrpId);
+            }
+        }
+    }
+
+    private void fillEventClientList(JSONObject eventJson, JSONObject clientJson, List<EventClient> eventClientList) {
+        org.smartregister.domain.Event domainEvent = (null != eventJson) ?
+                JsonFormUtils.gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class) : null;
+        org.smartregister.domain.Client domainClient = (clientJson != null) ?
+                JsonFormUtils.gson.fromJson(clientJson.toString(), org.smartregister.domain.Client.class) : null;
+
+        eventClientList.add(new EventClient(domainEvent, domainClient));
     }
 
     public ECSyncHelper getSyncHelper() {
@@ -178,5 +194,4 @@ public class CoreChildRegisterInteractor implements CoreChildRegisterContract.In
         return CoreChwApplication.getInstance().getUniqueIdRepository();
     }
 
-    public enum type {SAVED, UPDATED}
 }

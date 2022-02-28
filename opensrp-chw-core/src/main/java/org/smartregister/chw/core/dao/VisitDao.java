@@ -1,5 +1,9 @@
 package org.smartregister.chw.core.dao;
 
+import static org.smartregister.chw.core.utils.CoreConstants.ColumnNameConstants.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.ColumnNameConstants.VISIT_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.ColumnNameConstants.VISIT_JSON;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.anc.domain.Visit;
 import org.smartregister.chw.anc.domain.VisitDetail;
@@ -264,6 +268,35 @@ public class VisitDao extends AbstractDao {
             detail.setPreProcessedType(getCursorValue(c, "preprocessed_type"));
             detail.setDetails(getCursorValue(c, "details"));
             detail.setHumanReadable(getCursorValue(c, "human_readable_details"));
+            return detail;
+        };
+
+        HashMap<String, List<VisitDetail>> detailsMap = new LinkedHashMap<>();
+
+        List<VisitDetail> details = readData(sql, dataMap);
+        if (details != null) {
+            for (VisitDetail d : details) {
+                List<VisitDetail> currentDetails = detailsMap.get(d.getVisitId());
+                if (currentDetails == null) currentDetails = new ArrayList<>();
+
+                currentDetails.add(d);
+                detailsMap.put(d.getVisitId(), currentDetails);
+            }
+        }
+
+        return detailsMap;
+    }
+
+    public static Map<String, List<VisitDetail>> getVisitHistory(String baseEntityID, String visitType) {
+        String sql = "select visits.visit_id, visits.visit_date, visits.base_entity_id, visits.visit_type, visits.visit_json, visits.pre_processed " +
+                "from visits " +
+                "where visits.base_entity_id  = '" + baseEntityID + "' AND visits.visit_type  = '" + visitType + "' order by visits.visit_date desc ";
+
+        DataMap<VisitDetail> dataMap = c -> {
+            VisitDetail detail = new VisitDetail();
+            detail.setVisitId(getCursorValue(c, VISIT_ID));
+            detail.setBaseEntityId(getCursorValue(c, BASE_ENTITY_ID));
+            detail.setJsonDetails(getCursorValue(c, VISIT_JSON));
             return detail;
         };
 

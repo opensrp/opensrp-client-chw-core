@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class CoreFamilyMemberModelTest {
 
+    private String firstName;
     private String lastName;
     private String baseEntityId;
     private String familyBaseEntityId;
@@ -13,6 +14,7 @@ public class CoreFamilyMemberModelTest {
 
     @Before
     public void setUp(){
+        firstName = "AnotherFirst";
         lastName = "Another";
         baseEntityId = "2356789ijmwertyu";
         familyBaseEntityId = "n93894jmdp";
@@ -37,5 +39,35 @@ public class CoreFamilyMemberModelTest {
     public void getFamilyBaseEntityIdTest() {
         CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, baseEntityId, familyBaseEntityId, entityType);
         Assert.assertEquals(coreFamilyMemberModel.getFamilyBaseEntityId(), familyBaseEntityId);
+    }
+
+    @Test
+    public void testCoreFamilyMemberModelShouldReturnCorrectBaseEntityId() {
+        CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, baseEntityId, familyBaseEntityId, entityType);
+        Assert.assertNotNull(coreFamilyMemberModel.getBaseEntityId());
+    }
+
+    @Test
+    public void testFamilyBaseEntityId() {
+        CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, baseEntityId, familyBaseEntityId, entityType);
+        Assert.assertNotNull(coreFamilyMemberModel.getFamilyBaseEntityId());
+    }
+
+    @Test
+    public void testFirstName() {
+        CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, firstName, baseEntityId, familyBaseEntityId, entityType);
+        Assert.assertNotNull(coreFamilyMemberModel.getFirstName());
+    }
+
+    @Test
+    public void testLastName() {
+        CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, baseEntityId, familyBaseEntityId, entityType);
+        Assert.assertNotNull(coreFamilyMemberModel.getLastName());
+    }
+
+    @Test
+    public void testCompareFirstName() {
+        CoreFamilyMemberModel coreFamilyMemberModel = new CoreFamilyMemberModel(lastName, firstName, baseEntityId, familyBaseEntityId, entityType);
+        Assert.assertEquals("AnotherFirst", coreFamilyMemberModel.getFirstName());
     }
 }

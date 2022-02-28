@@ -1,5 +1,11 @@
 package org.smartregister.chw.core.activity;
 
+import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.DELIVERY_DATE;
+import static org.smartregister.chw.core.utils.CoreConstants.JsonAssets.FAMILY_MEMBER.LINK_TO_FATHER;
+import static org.smartregister.client.utils.constants.JsonFormConstants.KEYS;
+import static org.smartregister.util.JsonFormUtils.KEY;
+import static org.smartregister.util.JsonFormUtils.VALUES;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +19,8 @@ import org.smartregister.chw.anc.activity.BaseAncRegisterActivity;
 import org.smartregister.chw.anc.util.DBConstants;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.dao.FamilyMemberDao;
+import org.smartregister.chw.core.model.CoreFamilyMemberModel;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.chw.core.utils.FormUtils;
@@ -137,8 +145,26 @@ public class CoreAncRegisterActivity extends BaseAncRegisterActivity {
             values.put(org.smartregister.family.util.DBConstants.KEY.RELATIONAL_ID, familyBaseEntityId);
             values.put(DBConstants.KEY.LAST_MENSTRUAL_PERIOD, lastMenstrualPeriod);
             try {
-                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, "delivery_date");
-                min_date.put("min_date", lastMenstrualPeriod);
+                JSONObject min_date = CoreJsonFormUtils.getFieldJSONObject(jsonArray, DELIVERY_DATE);
+                if (min_date != null) min_date.put("min_date", lastMenstrualPeriod);
+
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
+            try {
+                JSONObject linkToFather = CoreJsonFormUtils.getFieldJSONObject(jsonArray, LINK_TO_FATHER);
+                if (linkToFather != null) {
+                    List<CoreFamilyMemberModel> coreFamilyMemberModels = FamilyMemberDao.getMaleFamilyMembers(familyBaseEntityId);
+                    JSONArray memberNames = new JSONArray();
+                    JSONArray memberBaseEntityIds = new JSONArray();
+                    for (CoreFamilyMemberModel coreFamilyMemberModel : coreFamilyMemberModels) {
+                        memberNames.put(String.format("%s %s", coreFamilyMemberModel.getFirstName(), coreFamilyMemberModel.getLastName()));
+                        memberBaseEntityIds.put(coreFamilyMemberModel.getBaseEntityId());
+                    }
+                    linkToFather.put(KEYS, memberBaseEntityIds);
+                    linkToFather.put(VALUES, memberNames);
+                }
             } catch (Exception e) {
                 Timber.e(e);
             }

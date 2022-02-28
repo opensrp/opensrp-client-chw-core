@@ -1,6 +1,12 @@
 package org.smartregister.chw.core.fragment;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -26,10 +32,6 @@ import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 public class CoreFamilyRegisterFragmentTest extends BaseUnitTest {
 
@@ -79,34 +81,52 @@ public class CoreFamilyRegisterFragmentTest extends BaseUnitTest {
         ReflectionHelpers.setField(fragment, "syncButton", syncButton);
         ReflectionHelpers.setField(fragment, "syncProgressBar", syncProgressBar);
         fragment.refreshSyncProgressSpinner();
-        Mockito.verify(syncProgressBar, Mockito.times(1)).setVisibility(android.view.View.GONE);
-        Mockito.verify(syncButton, Mockito.times(1)).setVisibility(android.view.View.GONE);
+        verify(syncProgressBar, Mockito.times(1)).setVisibility(View.GONE);
+        verify(syncButton, Mockito.times(1)).setVisibility(View.GONE);
 
     }
 
     @Test
     public void getMainConditionCallsPresenterGetCondition() {
         fragment.getMainCondition();
-        Mockito.verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
+        verify(fragment.presenter(), Mockito.times(1)).getMainCondition();
+    }
+
+    @Test
+    public void testGetMainCondition() {
+        assertEquals(fragment.getMainCondition(), presenter.getMainCondition());
+    }
+
+    @Test
+    public void testGetDefaultSortQuery() {
+        assertEquals(fragment.getDefaultSortQuery(), presenter.getDefaultSortQuery());
+    }
+
+    @Test
+    public void testRefreshSyncProgressSpinner() {
+        Whitebox.setInternalState(fragment, "syncProgressBar", syncProgressBar);
+        Whitebox.setInternalState(fragment, "syncButton", syncButton);
+        fragment.refreshSyncProgressSpinner();
+        verify(syncButton).setVisibility(View.GONE);
     }
 
     @Test
     public void getDefaultSortQueryCallsPresenterGetSortQuery() {
         fragment.getDefaultSortQuery();
-        Mockito.verify(fragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
+        verify(fragment.presenter(), Mockito.times(1)).getDefaultSortQuery();
     }
 
     @Test
     public void testSetupViews() {
         when(fragment.getActivity()).thenReturn(activity);
         when(fragment.getContext()).thenReturn(activity);
-        android.view.View view = LayoutInflater.from(activity).inflate(org.smartregister.family.R.layout.fragment_base_register, null);
+        View view = LayoutInflater.from(activity).inflate(org.smartregister.family.R.layout.fragment_base_register, null);
         fragment.setupViews(view);
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.top_left_layout).getVisibility());
-        assertEquals(android.view.View.VISIBLE, view.findViewById(R.id.top_right_layout).getVisibility());
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.register_sort_filter_bar_layout).getVisibility());
-        assertEquals(android.view.View.GONE, view.findViewById(R.id.filter_sort_layout).getVisibility());
-        assertEquals(android.view.View.VISIBLE, view.findViewById(R.id.due_only_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.top_left_layout).getVisibility());
+        assertEquals(View.VISIBLE, view.findViewById(R.id.top_right_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.register_sort_filter_bar_layout).getVisibility());
+        assertEquals(View.GONE, view.findViewById(R.id.filter_sort_layout).getVisibility());
+        assertEquals(View.VISIBLE, view.findViewById(R.id.due_only_layout).getVisibility());
     }
 
 }

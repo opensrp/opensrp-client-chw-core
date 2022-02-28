@@ -1,5 +1,14 @@
 package org.smartregister.chw.core.interactor;
 
+import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithIdentifier;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
+import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+import static org.smartregister.chw.core.utils.Utils.getFormTag;
+import static org.smartregister.thinkmd.utils.Constants.THINKMD_FHIR_BUNDLE;
+import static org.smartregister.thinkmd.utils.Utils.decodeBase64;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -76,15 +85,6 @@ import java.util.Set;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.dao.ChildDao.queryColumnWithIdentifier;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.BASE_ENTITY_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.THINKMD_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.INTENT_KEY.CONTENT_TO_DISPLAY;
-import static org.smartregister.chw.core.utils.Utils.getDuration;
-import static org.smartregister.chw.core.utils.Utils.getFormTag;
-import static org.smartregister.thinkmd.utils.Constants.THINKMD_FHIR_BUNDLE;
-import static org.smartregister.thinkmd.utils.Utils.decodeBase64;
-
 public class CoreChildProfileInteractor implements CoreChildProfileContract.Interactor {
     public static final String TAG = CoreChildProfileInteractor.class.getName();
     protected AppExecutors appExecutors;
@@ -137,7 +137,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         });
     }
 
-    private String getTranslatedService(Context context, String _name) {
+    public String getTranslatedService(Context context, String _name) {
         String name = _name.toLowerCase();
 
         String num = name.replaceAll("\\D+", "");
@@ -155,7 +155,7 @@ public class CoreChildProfileInteractor implements CoreChildProfileContract.Inte
         }
     }
 
-    private ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {
+    public ImmunizationState getImmunizationStateFromAlert(AlertStatus alertStatus) {
         switch (alertStatus) {
             case normal:
                 return ImmunizationState.DUE;

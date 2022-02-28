@@ -137,7 +137,8 @@ public class BAJsonFormUtils {
         return Pair.create(ecEvent, ecClient);
     }
 
-    protected void processFieldsForMemberEdit(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray, String familyName, boolean isPrimaryCaregiver, Event ecEvent, Client ecClient) throws JSONException {
+    protected void processFieldsForMemberEdit(CommonPersonObjectClient client, JSONObject jsonObject, JSONArray jsonArray,
+                                              String familyName, boolean isPrimaryCaregiver, Event ecEvent, Client ecClient) throws JSONException {
 
         switch (jsonObject.getString(org.smartregister.family.util.JsonFormUtils.KEY).toLowerCase()) {
             case org.smartregister.family.util.Constants.JSON_FORM_KEY.DOB_UNKNOWN:

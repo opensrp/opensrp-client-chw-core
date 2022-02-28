@@ -259,7 +259,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         choicesTestMap.put("Yes", "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         choicesTestMap.put("No", "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-        Assert.assertEquals(choicesTestMap, CoreJsonFormUtils.getChoice(RuntimeEnvironment.application));
+        Assert.assertEquals(choicesTestMap, CoreJsonFormUtils.getChoice());
     }
 
     @Test

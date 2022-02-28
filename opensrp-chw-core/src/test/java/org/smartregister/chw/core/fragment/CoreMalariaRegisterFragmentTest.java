@@ -162,6 +162,14 @@ public class CoreMalariaRegisterFragmentTest extends BaseUnitTest {
     }
 
     @Test
+    public void testSetUniqueID() {
+        if (coreMalariaRegisterFragment.getSearchView() != null) {
+            coreMalariaRegisterFragment.getSearchView().setText(Mockito.anyString());
+        }
+        assertNotNull(coreMalariaRegisterFragment.getSearchView());
+    }
+
+    @Test
     public void testSetupViewsInitializesViews() {
         when(coreMalariaRegisterFragment.getActivity()).thenReturn(activity);
         when(coreMalariaRegisterFragment.getContext()).thenReturn(activity);

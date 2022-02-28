@@ -1,6 +1,8 @@
 package org.smartregister.chw.core.application;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.util.Pair;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -333,6 +335,16 @@ public abstract class CoreChwApplication extends DrishtiApplication implements C
         });
     }
 
+    public static String getLanguage(android.content.Context context) {
+        Configuration configuration = context.getResources().getConfiguration();
+        String language;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            language = configuration.getLocales().get(0).getLanguage();
+        } else {
+            language = configuration.locale.getLanguage();
+        }
+        return language;
+    }
 
     @Override
     public ExecutorService getExecutorService() {

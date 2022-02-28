@@ -33,6 +33,9 @@
     <string name="nav_last_sync_time">HH:mm a , MMM DD</string>
     <string name="all_registers">Toutes les registres</string>
     <string name="log_out_as">Déconnexion</string>
+    <string name="device_data_synced">Données de l’appareil synchronisées</string>
+    <string name="device_data_not_synced">Données de l\'appareil non synchronisées</string>
+    <string name="progressBarLabel">Synchronisation %s : %d%% </string>
 
     <!--Navigation side menu -->
     <string name="device_to_device">Synchro entre appareils</string>
@@ -172,8 +175,11 @@
     <string name="deworming">Déparasitage</string>
     <string name="vaccine_card_title">Carnet de vaccination infantile reçu</string>
     <string name="birth_certification">Acte de naissance</string>
+    <string name="death_certification">Certification de décès</string>
+    <string name="out_of_area_registration">Naissance hors zone</string>
+    <string name="out_of_area_death">Décès hors zone</string>
     <string name="no_vaccines_were_done">Aucun vaccinations n\'a été effectuée</string>
-    <string name="vaccine_card_text">L\'enfant a t-il ou elle reçu son carnet de vaccination ou carnet mère et Enfant?</string>
+    <string name="vaccine_card_text">L\'enfant a t-il ou elle reçu son carnet de vaccinatison ou carnet mère et Enfant?</string>
     <string name="record_immunizations">Enregistrer les vaccinations</string>
     <string name="exclusive_feeding">L\'enfant a t-il bu ou mangé du liquide ou de la nourriture autre que le lait maternel depuis hier et hier soir?</string>
 
@@ -464,4 +470,33 @@
 
     <!---All Clients Register -->
     <string name="return_to_all_client">Revenir à tous les clients</string>
+
+    <!-- Sync Statistics View -->
+    <string name="download_database">Télécharger la base de données</string>
+    <string name="view_sync_stats">Afficher l\'état de la synchronisation</string>
+    <string name="synced_events">Événements synchronisés:</string>
+    <string name="unsynced_events">Événements non synchronisés:</string>
+    <string name="synced_clients">Clients synchronisés:</string>
+    <string name="unsynced_clients">Clients non synchronisés:</string>
+    <string name="validated_events">Événements validés:</string>
+    <string name="validated_clients">Clients validés:</string>
+    <string name="task_unprocessed_events">Événements avec tâches non traités:</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="export_db_notification">Exporting Database…</string>
+    <string name="database_download_success">Database download successful</string>
+    <string name="return_to_register">Return</string>
+    <string name="summary_forms">Other Forms</string>
+    <string name="permission_write_external_storage_rationale">Write access to the device internal storage is required for database download.</string>
+
+
+    <!-- Certification registers -->
+    <string name="certificate_received">Acte reçu</string>
+    <string name="certificate_not_received">Certificat non reçu</string>
+    <string name="birth_certificate_received">Acte reçu</string>
+    <string name="birth_certificate_not_received">Certificat non reçu</string>
+    <string name="death_certificate_received">Certificat reçu</string>
+    <string name="update_details">Mettre à jour</string>
+    <string name="death_certificate_not_received">Certificat non reçu</string>
+    <string name="birth_summary_toggle">Acte reçu</string>
+    <string name="death_summary_toggle">Cert. reçu</string>
 </resources>

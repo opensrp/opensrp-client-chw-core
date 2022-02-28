@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.chw.malaria.util.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CoreConstants {
@@ -17,9 +18,31 @@ public class CoreConstants {
     public static final String FORMSUBMISSION_FIELD = "formsubmissionField";
     public static final String TEXT = "text";
     public static final String DATE = "date";
+    public static final String MALE = "Male";
+    public static final String FEMALE = "Female";
+    public static final String YES = "Yes";
+    public static final String NO = "No";
+    public static final String DOB = "dob";
+    public static final String SURNAME = "surname";
+    public static final String DOB_UNKNOWN = "dob_unknown";
+    public static final String OTHER_NAME = "other_name";
+    public static final String DEATH_CERTIFICATE_NUMBER = "death_certificate_number";
+    public static final String INFORMANT_NAME = "informant_name";
+    public static final String INFORMANT_RELATIONSHIP = "informant_relationship";
+    public static final String INFORMANT_ADDRESS = "informant_address";
+    public static final String INFORMANT_PHONE = "informant_phone";
+    public static final String OFFICIAL_NAME = "official_name";
+    public static final String OFFICIAL_POSITION = "official_position";
+    public static final String OFFICIAL_ADDRESS = "official_address";
+    public static final String OFFICIAL_NUMBER = "official_number";
+    public static final String OFFICIAL_ID = "official_id";
+    public static final String BIRTH_CERTIFICATE_ISSUE_DATE = "birth_cert_issue_date";
+
+
     public static String EC_CLIENT_FIELDS = "ec_client_fields.json";
     public static String IGNORE = "ignore";
     public static String PERSISTED_LANGUAGE = "persisted_language";
+    public static SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public enum VisitType {DUE, OVERDUE, LESS_TWENTY_FOUR, VISIT_THIS_MONTH, NOT_VISIT_THIS_MONTH, DONE, EXPIRY}
 
@@ -69,6 +92,19 @@ public class CoreConstants {
         String BUSINESS_STATUS = "business_status";
         String DETAILS = "details";
         String PRIMARY_CAREGIVER_NAME = "primary_caregiver_name";
+        String NAME = "name";
+        String DEATH_PLACE = "death_place";
+        String KNOW_DEATH_CAUSE = "know_death_cause";
+        String DEATH_MANNER = "death_manner";
+        String OFFICIAL_NAME = "official_name";
+        String OFFICIAL_ID = "official_id";
+        String OFFICIAL_POSITION = "official_position";
+        String OFFICIAL_ADDRESS = "official_address";
+        String OFFICIAL_NUMBER = "official_number";
+        String INFORMANT_NAME = "informant_name";
+        String INFORMANT_RELATIONSHIP = "informant_relationship";
+        String INFORMANT_ADDRESS = "informant_address";
+        String INFORMANT_PHONE = "informant_phone";
     }
 
     public interface SERVICE_GROUPS {
@@ -104,6 +140,9 @@ public class CoreConstants {
 
     public static final class EventType {
         public static final String BIRTH_CERTIFICATION = "Birth Certification";
+        public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
+        public static final String UPDATE_DEATH_CERTIFICATION = "Update Death Certification";
+        public static final String REMOVE_FAMILY_MEMBER = "Remove Family Member";
         public static final String DISABILITY = "Disability";
         public static final String OBS_ILLNESS = "Observations Illness";
         public static final String COUNSELING = "Counseling";
@@ -186,13 +225,13 @@ public class CoreConstants {
 
     public static final class EncounterType {
         public static final String CLOSE_REFERRAL = "Close Referral";
+        public static final String UPDATE_BIRTH_CERTIFICATION = "Update Birth Certification";
     }
 
     /**
      * Only access form constants via the getter
      */
     public static class JSON_FORM {
-        public static final String BIRTH_CERTIFICATION = "birth_certification";
         public static final String DISABILITY = "child_disability";
         public static final String OBS_ILLNESS = "observation_illness";
         public static final String FAMILY_REGISTER = "family_register";
@@ -237,6 +276,13 @@ public class CoreConstants {
         private static final String MALE_FAMILY_PLANNING_CHANGE_METHOD_FORM = "male_family_planning_change_method";
         private static final String PNC_DANGER_SIGNS_OUTCOME_FORM = "pnc_danger_signs_outcome";
         private static final String MALARIA_FOLLOW_UP_HF_FORM = "malaria_follow_up_hf";
+        private static final String DEATH_CERTIFICATION = "death_certification";
+        private static final String BIRTH_CERTIFICATION = "birth_certification";
+        private static final String BIRTH_CERTIFICATION_CHANGED = "birth_certification_changed";
+        private static final String OUT_OF_AREA_CHILD_FORM = "out_of_area_child_enrollment";
+        private static final String OUT_OF_AREA_DEATH_FORM = "out_of_area_death_form";
+        private static final String EC_CLIENT_CLASSIFICATION = "ec_client_classification.json";
+
         public static AssetManager assetManager;
         public static Locale locale;
 
@@ -250,6 +296,18 @@ public class CoreConstants {
         public static void setLocaleAndAssetManager(Locale locale, AssetManager assetManager) {
             JSON_FORM.assetManager = assetManager;
             JSON_FORM.locale = locale;
+        }
+
+        public static String getOutOfAreaChildForm() {
+            return OUT_OF_AREA_CHILD_FORM;
+        }
+
+        public static String getOutOfAreaDeathForm() {
+            return OUT_OF_AREA_DEATH_FORM;
+        }
+
+        public static String getEcClientClassification() {
+            return EC_CLIENT_CLASSIFICATION;
         }
 
         public static String getChildReferralForm() {
@@ -291,6 +349,12 @@ public class CoreConstants {
         public static String getMalariaReferralForm() {
             return MALARIA_REFERRAL_FORM;
         }
+
+        public static String getDeathRegistrationForm() {
+            return DEATH_CERTIFICATION;
+        }
+
+        public static String getBirthCertificationChangedForm() { return BIRTH_CERTIFICATION_CHANGED; }
 
         public static String getBirthCertification() {
             return Utils.getLocalForm(BIRTH_CERTIFICATION, locale, assetManager);
@@ -657,6 +721,12 @@ public class CoreConstants {
         public static final String FAMILY_MEMBER = "ec_family_member";
         public static final String CHILD = "ec_child";
         public static final String CHILD_ACTIVITY = "ec_child_activity";
+        public static final String BIRTH_CERTIFICATE = "birth_certification";
+        public static final String DEATH_CERTIFICATE = "death_certification";
+        public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
+        public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
+        public static final String EC_OUT_OF_AREA_CHILD = "ec_out_of_area_child";
+        public static final String EC_OUT_OF_AREA_DEATH = "ec_out_of_area_death";
         public static final String ANC_MEMBER = "ec_anc_register";
         public static final String PNC_MEMBER = "ec_pregnancy_outcome";
         public static final String ANC_MEMBER_LOG = "ec_anc_log";
@@ -691,6 +761,16 @@ public class CoreConstants {
         public static final String FAMILY_LOCATION_WARD = "ward";
         public static final String FAMILY_LOCATION_COMMUNITY = "community";
         public static final String FAMILY_INCOME_BRACKET = "income_bracket";
+    }
+
+    public static class ColumnNameConstants {
+        public static final String FIRST_NAME = "first_name";
+        public static final String LAST_NAME = "last_name";
+        public static final String BASE_ENTITY_ID = "base_entity_id";
+        public static final String RELATIONAL_ID = "relational_id";
+        public static final String ENTITY_TYPE = "entity_type";
+        public static final String VISIT_ID = "visit_id";
+        public static final String VISIT_JSON = "visit_json";
     }
 
     public static final class INTENT_KEY {
@@ -731,6 +811,10 @@ public class CoreConstants {
         public static final String ANC = "ANC";
         public static final String LD = "L&D";
         public static final String PNC = "PNC";
+        public static final String BIRTH_NOTIFICATION = "Birth Notification";
+        public static final String DEATH_NOTIFICATION = "Death Notification";
+        public static final String OUT_OF_AREA_CHILD = "out_of_area_child";
+        public static final String OUT_OF_AREA_DEATH = "out_of_area_death";
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
         public static final String REFERRALS = "Referrals";
@@ -761,6 +845,7 @@ public class CoreConstants {
 
     public static class JsonAssets {
         public static final String DETAILS = "details";
+        public static final String HIDDEN_GENDER = "hiddengender";
         public static final String FAM_NAME = "fam_name";
         public static final String SURNAME = "surname";
         public static final String PREGNANT_1_YR = "preg_1yr";
@@ -810,6 +895,8 @@ public class CoreConstants {
             public static final String SCHOOL_LEVEL = "school_level";
             public static final String PHONE_NUMBER = "phone_number";
             public static final String OTHER_PHONE_NUMBER = "other_phone_number";
+            public static final String LINK_TO_FATHER = "link_to_father";
+            public static final String DELIVERY_DATE = "delivery_date";
         }
 
     }
@@ -824,6 +911,23 @@ public class CoreConstants {
             public static final String REASON = "remove_reason";
             public static final String DATE_DIED = "date_died";
             public static final String DATE_MOVED = "date_moved";
+            public static final String RECEIVED_DEATH_CERTIFICATE = "received_death_certificate";
+            public static final String DEATH_CERTIFICATE_ISSUE_DATE = "death_certificate_issue_date";
+            public static final String DEATH_CERTIFICATE_NUMBER = "death_certificate_number";
+            public static final String DEATH_NOTIFICATION_DONE = "death_notification_done";
+            public static final String DEATH_PLACE = "death_place";
+            public static final String KNOW_DEATH_CAUSE = "know_death_cause";
+            public static final String DEATH_MANNER = "death_manner";
+            public static final String OFFICIAL_NAME = "official_name";
+            public static final String OFFICIAL_ID = "official_id";
+            public static final String OFFICIAL_POSITION = "official_position";
+            public static final String OFFICIAL_ADDRESS = "official_address";
+            public static final String OFFICIAL_NUMBER = "official_number";
+            public static final String INFORMANT_NAME = "informant_name";
+            public static final String INFORMANT_RELATIONSHIP = "informant_relationship";
+            public static final String INFORMANT_ADDRESS = "informant_address";
+            public static final String INFORMANT_PHONE = "informant_phone";
+
         }
 
         public static class CHANGE_CARE_GIVER {
@@ -940,6 +1044,8 @@ public class CoreConstants {
 
     public static final class ACTION {
         public static final String START_REGISTRATION = "start_registration";
+        public static final String START_BIRTH_CERTIFICATION_UPDATE = "start_birth_certification_update";
+        public static final String START_DEATH_CERTIFICATION_UPDATE = "start_death_certification_update";
     }
 
     public static final class VISIT_STATE {
@@ -969,6 +1075,10 @@ public class CoreConstants {
         public static final String REFERRALS_REGISTER_ACTIVITY = "REFERRALS_REGISTER_ACTIVITY";
         public static final String MALARIA_REGISTER_ACTIVITY = "MALARIA_REGISTER_ACTIVITY";
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
+        public static final String BNOTIFICATION_REGISTER_ACTIVITY = "BNOTIFICATION_REGISTER_ACTIVITY";
+        public static final String DEATH_NOTIFICATION_REGISTER_ACTIVITY = "DEATH_NOTIFICATION_REGISTER_ACTIVITY";
+        public static final String OUT_OF_AREA_REGISTER_ACTIVITY = "OUT_OF_AREA_REGISTER_ACTIVITY";
+        public static final String OUT_OF_AREA_DEATH_ACTIVITY = "OUT_OF_AREA_DEATH_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
     }

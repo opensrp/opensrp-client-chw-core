@@ -17,7 +17,7 @@ buildscript {
 
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion androidBuildToolsVersion
 
     compileOptions {
@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId "org.smartregister.chw.hf"
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.2.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

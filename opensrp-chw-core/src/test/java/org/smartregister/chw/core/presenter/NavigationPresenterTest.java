@@ -38,8 +38,6 @@ public class NavigationPresenterTest {
 
     @Test
     public void testUpdateTableMap() {
-        Assert.assertEquals(navigationPresenter.getTableMap().size(), 10);
-
         HashMap<String, String> mp = new HashMap<>();
         mp.put(CoreConstants.DrawerMenu.REFERRALS, CoreConstants.TABLE_NAME.TASK);
 

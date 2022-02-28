@@ -1,11 +1,14 @@
 package org.smartregister.chw.core.utils;
 
+import static com.vijay.jsonwizard.utils.NativeFormLangUtils.getTranslatedString;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_CHILD_REGISTRATION;
 import static org.smartregister.chw.core.utils.CoreConstants.EventType.UPDATE_FAMILY_MEMBER_REGISTRATION;
+import static org.smartregister.chw.core.utils.CoreConstants.NO;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_COMMUNITY;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_LGA;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_STATE;
 import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.FAMILY_LOCATION_WARD;
+import static org.smartregister.chw.core.utils.CoreConstants.YES;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +27,7 @@ import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.AllConstants;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
 import org.smartregister.chw.core.R;
@@ -81,8 +85,8 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static final int REQUEST_CODE_GET_JSON = 2244;
     public static final String CURRENT_OPENSRP_ID = "current_opensrp_id";
     public static final String READ_ONLY = "read_only";
-    private static HashMap<String, String> actionMap = null;
     private static final String LOCATION_UUIDS = "location_uuids";
+    private static HashMap<String, String> actionMap = null;
 
     public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass) {
         Intent intent = new Intent(context, activityClass);
@@ -190,10 +194,10 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
         return new ArrayList<>(Arrays.asList(vals));
     }
 
-    public static HashMap<String, String> getChoice(Context context) {
+    public static HashMap<String, String> getChoice() {
         HashMap<String, String> choices = new HashMap<>();
-        choices.put(context.getResources().getString(R.string.yes), "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        choices.put(context.getResources().getString(R.string.no), "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put(YES, "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        choices.put(NO, "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return choices;
     }
 
@@ -432,7 +436,6 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
      * @return Returns a triple object <b>DateOfDeath as String, BaseEntityID , List of Events </b>that should be processed
      */
     public static Triple<Pair<Date, String>, String, List<Event>> processRemoveMemberEvent(String familyID, AllSharedPreferences allSharedPreferences, JSONObject jsonObject, String providerId) {
-
         try {
 
             List<Event> events = new ArrayList<>();
@@ -451,25 +454,49 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
 
             JSONArray fields = new JSONArray();
 
-            int x = 0;
-            while (x < registrationFormParams.getRight().length()) {
-                //JSONObject obj = registrationFormParams.getRight().getJSONObject(x);
-                String myKey = registrationFormParams.getRight().getJSONObject(x).getString(KEY);
+            int index = 0;
+            while (index < registrationFormParams.getRight().length()) {
+                //JSONObject obj = registrationFormParams.getRight().getJSONObject(index);
 
-                if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED) ||
-                        myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON)
-                ) {
-                    fields.put(registrationFormParams.getRight().get(x));
+                String myKey = registrationFormParams.getRight().getJSONObject(index).getString(KEY);
+
+                // Remove member form informant and official details
+                switch (myKey) {
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_MOVED:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.REASON:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_PLACE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.KNOW_DEATH_CAUSE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_MANNER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_NAME:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_ID:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_POSITION:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_ADDRESS:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_NUMBER:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_NAME:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_RELATIONSHIP:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_ADDRESS:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.INFORMANT_PHONE:
+                        fields.put(registrationFormParams.getRight().get(index));
+                        break;
+
+                    default:
+                        break;
                 }
+
                 if (myKey.equalsIgnoreCase(CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DATE_DIED)) {
-                    fields.put(registrationFormParams.getRight().get(x));
+                    fields.put(registrationFormParams.getRight().get(index));
                     try {
-                        dod = dd_MM_yyyy.parse(registrationFormParams.getRight().getJSONObject(x).getString(VALUE));
+                        dod = dd_MM_yyyy.parse(registrationFormParams.getRight().getJSONObject(index).getString(VALUE));
                     } catch (Exception e) {
                         Timber.d(e.toString());
                     }
                 }
-                x++;
+
+                index++;
             }
 
             String encounterType = getString(jsonObject, ENCOUNTER_TYPE);
@@ -980,5 +1007,12 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     public static JSONObject getJsonField(JSONObject form, String step, String key) {
         JSONArray field = fields(form, step);
         return getFieldJSONObject(field, key);
+    }
+
+    public static JSONObject getJson(Context context, String formName, String baseEntityID) throws Exception {
+        String locationId = CoreChwApplication.getInstance().getContext().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
+        JSONObject jsonObject = new JSONObject(getTranslatedString(FormUtils.getInstance(context).getFormJson(formName).toString(), context));
+        org.smartregister.chw.anc.util.JsonFormUtils.getRegistrationForm(jsonObject, baseEntityID, locationId);
+        return jsonObject;
     }
 }

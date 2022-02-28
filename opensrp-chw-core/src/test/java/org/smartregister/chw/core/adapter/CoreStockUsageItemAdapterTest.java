@@ -69,4 +69,9 @@ public class CoreStockUsageItemAdapterTest extends BaseUnitTest {
         int count = stockUsageItemModelList.size();
         Assert.assertEquals(adapter.getItemCount(), count);
     }
+
+    @Test
+    public void testValidStockName() {
+        Assert.assertEquals("zinc 10", stockUsageItemModelList.get(0).getStockName());
+    }
 }

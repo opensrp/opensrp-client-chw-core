@@ -5,6 +5,7 @@ import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.chw.core.dao.NavigationDao;
 import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.core.utils.QueryUtils;
 import org.smartregister.chw.fp.util.FamilyPlanningConstants;
 import org.smartregister.chw.referral.util.Constants;
 import org.smartregister.family.util.AppExecutors;
@@ -108,192 +109,96 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         }
     }
 
-    private int getCount(String tableName) {
+    private String getOutOfAreaChildSize() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select count(*) from ec_out_of_area_child";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
+    private String getOutOfAreaDeathSize() {
+        if (NavigationMenu.getChildNavigationCountString() == null) {
+            return "Select count(*) from ec_out_of_area_death";
+        } else {
+            return NavigationMenu.getChildNavigationCountString();
+        }
+    }
+
+    public int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
-                String sqlChild = getChildSqlString();
-                return NavigationDao.getQueryCount(sqlChild);
+                return NavigationDao.getQueryCount(getChildSqlString());
 
             case CoreConstants.TABLE_NAME.FAMILY:
-                String sqlFamily = "select count(*) from ec_family where date_removed is null AND (entity_type = 'ec_family' OR entity_type = 'ec_family_member' OR entity_type IS NULL)";
-                return NavigationDao.getQueryCount(sqlFamily);
+                return NavigationDao.getQueryCount(sqlFamily());
 
             case CoreConstants.TABLE_NAME.ANC_MEMBER:
-                String sqlAncMember = "select count(*) " +
-                        "from ec_anc_register r " +
-                        "inner join ec_family_member m on r.base_entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and m.is_closed = 0 and r.is_closed = 0 ";
-                return NavigationDao.getQueryCount(sqlAncMember);
+                return NavigationDao.getQueryCount(sqlAncMember());
 
             case CoreConstants.TABLE_NAME.TASK:
-                String sqlTask = String.format("select count(*) from task inner join " +
-                        "ec_family_member member on member.base_entity_id = task.for COLLATE NOCASE " +
-                        "WHERE task.business_status = '%s' and member.date_removed is null ", CoreConstants.BUSINESS_STATUS.REFERRED);
-                return NavigationDao.getQueryCount(sqlTask);
+                return NavigationDao.getQueryCount(sqlTask());
 
             case CoreConstants.TABLE_NAME.ANC_PREGNANCY_OUTCOME:
-                String sqlPregnancy = "select count(*) " +
-                        "from ec_pregnancy_outcome p " +
-                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and p.delivery_date is not null and p.is_closed = 0 and m.is_closed = 0 ";
-                return NavigationDao.getQueryCount(sqlPregnancy);
+                return NavigationDao.getQueryCount(QueryUtils.countEcPregnencyOutcome);
 
             case CoreConstants.TABLE_NAME.MALARIA_CONFIRMATION:
-                String sqlMalaria = "select count (p.base_entity_id) from ec_malaria_confirmation p " +
-                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and p.is_closed = 0 AND p.malaria = 1 " +
-                        "AND datetime('NOW') <= datetime(p.last_interacted_with/1000, 'unixepoch', 'localtime','+15 days')";
-                return NavigationDao.getQueryCount(sqlMalaria);
+                return NavigationDao.getQueryCount(QueryUtils.countEcMalaria);
 
             case FamilyPlanningConstants.DBConstants.FAMILY_PLANNING_TABLE:
-                String sqlFP = "select count(*) " +
-                        "from ec_family_planning p " +
-                        "inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "where m.date_removed is null and p.is_closed = 0 ";
+                String sqlFP = QueryUtils.countEcFamilyPlanning;
                 return NavigationDao.getQueryCount(sqlFP);
 
             case CoreConstants.TABLE_NAME.FAMILY_MEMBER:
                 String allClients = "/**COUNT REGISTERED CHILD CLIENTS*/\n" +
-                        "SELECT SUM(c)\n" +
-                        "FROM (\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_child\n" +
-                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_child.base_entity_id\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         WHERE ec_family_member.is_closed = '0'\n" +
-                        "           AND ec_family_member.date_removed is null\n" +
-                        "           AND cast(strftime('%Y-%m-%d %H:%M:%S', 'now') - strftime('%Y-%m-%d %H:%M:%S', ec_child.dob) as int) > 0\n" +
-                        "         UNION ALL\n" +
-                        "/**COUNT REGISTERED ANC CLIENTS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_anc_register\n" +
-                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_anc_register.base_entity_id\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           and ec_anc_register.is_closed is 0\n" +
-                        "         UNION ALL\n" +
-                        "/**COUNT REGISTERED PNC CLIENTS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_pregnancy_outcome\n" +
-                        "                  inner join ec_family_member on ec_family_member.base_entity_id = ec_pregnancy_outcome.base_entity_id\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           and ec_pregnancy_outcome.is_closed is 0\n" +
-                        "           AND ec_pregnancy_outcome.base_entity_id NOT IN\n" +
-                        "               (SELECT base_entity_id FROM ec_anc_register WHERE ec_anc_register.is_closed IS 0)\n" +
-                        "         UNION ALL\n" +
-                        "/*COUNT OTHER FAMILY MEMBERS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_family_member\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           AND (ec_family.entity_type = 'ec_family' OR ec_family.entity_type is null)\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_pregnancy_outcome\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_child\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_malaria_confirmation\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_family_planning\n" +
-                        "         )\n" +
-                        "         UNION ALL\n" +
-                        "/*COUNT INDEPENDENT MEMBERS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_family_member\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           AND ec_family.entity_type = 'ec_independent_client'\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_pregnancy_outcome\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_child\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_malaria_confirmation\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_family_planning\n" +
-                        "         )\n" +
-                        "         UNION ALL\n" +
-                        "/**COUNT REGISTERED MALARIA CLIENTS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_family_member\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "                  inner join ec_malaria_confirmation\n" +
-                        "                             on ec_family_member.base_entity_id = ec_malaria_confirmation.base_entity_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_pregnancy_outcome\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_child\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_family_planning.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_family_planning\n" +
-                        "         )\n" +
-                        "         UNION ALL\n" +
-                        "/**COUNT FAMILY_PLANNING CLIENTS*/\n" +
-                        "         SELECT COUNT(*) AS c\n" +
-                        "         FROM ec_family_member\n" +
-                        "                  inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
-                        "                  inner join ec_family_planning on ec_family_member.base_entity_id = ec_family_planning.base_entity_id\n" +
-                        "         where ec_family_member.date_removed is null\n" +
-                        "           AND ec_family_member.base_entity_id NOT IN (\n" +
-                        "             SELECT ec_anc_register.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_anc_register\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_pregnancy_outcome.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_pregnancy_outcome\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_child.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_child\n" +
-                        "             UNION ALL\n" +
-                        "             SELECT ec_malaria_confirmation.base_entity_id AS base_entity_id\n" +
-                        "             FROM ec_malaria_confirmation\n" +
-                        "         ));";
+                        QueryUtils.countRegisteredChildClients;
                 return NavigationDao.getQueryCount(allClients);
 
             case Constants.Tables.REFERRAL:
-                String sqlReferral = "select count(*) " +
-                        "from " + Constants.Tables.REFERRAL + " p " +
-                        "inner join ec_family_member m on p.entity_id = m.base_entity_id COLLATE NOCASE " +
-                        "inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                        "inner join task t on p.id = t.reason_reference COLLATE NOCASE " +
-                        "where m.date_removed is null and t.business_status = '" + CoreConstants.BUSINESS_STATUS.REFERRED + "' ";
+                String sqlReferral = QueryUtils.countReferral;
                 return NavigationDao.getQueryCount(sqlReferral);
 
             case CoreConstants.TABLE_NAME.NOTIFICATION_UPDATE:
-                String referralNotificationQuery =
-                        String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s)",
-                                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
-                                PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
-                                MALARIA_HF_FOLLOW_UP_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
-                return NavigationDao.getQueryCount(referralNotificationQuery);
+                return NavigationDao.getQueryCount(referralNotificationQuery());
+
+            case CoreConstants.TABLE_NAME.BIRTH_CERTIFICATE:
+                String birthCertificationCountQuery = QueryUtils.countBirthCertification;
+                return NavigationDao.getQueryCount(birthCertificationCountQuery);
+
+            case CoreConstants.TABLE_NAME.DEATH_CERTIFICATE:
+                String deathCertificationCountQuery = QueryUtils.countDeathCertification;
+                return NavigationDao.getQueryCount(deathCertificationCountQuery);
+
+            case CoreConstants.TABLE_NAME.OUT_OF_AREA_CHILD:
+                String outOfAreaChild = getOutOfAreaChildSize();
+                return NavigationDao.getQueryCount(outOfAreaChild);
+
+            case CoreConstants.TABLE_NAME.OUT_OF_AREA_DEATH:
+                String outOfAreaDeath = getOutOfAreaDeathSize();
+                return NavigationDao.getQueryCount(outOfAreaDeath);
 
             default:
                 return NavigationDao.getTableCount(tableName);
         }
+    }
+
+    private String sqlFamily() {
+        return QueryUtils.countEcFamily;
+    }
+
+    private String sqlAncMember() {
+        return QueryUtils.countAncMember;
+    }
+
+    private String sqlTask() {
+        return String.format(QueryUtils.countTask, CoreConstants.BUSINESS_STATUS.REFERRED);
+    }
+
+    private String referralNotificationQuery() {
+        return String.format("SELECT SUM(c) FROM (\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL\n %s \nUNION ALL %s)",
+                SICK_CHILD_FOLLOW_UP_COUNT_QUERY, ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY,
+                PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY, FAMILY_PLANNING_UPDATE_COUNT_QUERY,
+                MALARIA_HF_FOLLOW_UP_COUNT_QUERY, NOT_YET_DONE_REFERRAL_COUNT_QUERY);
     }
 
     private Long getLastCheckTimeStamp() {

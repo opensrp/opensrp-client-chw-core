@@ -1,5 +1,10 @@
 package org.smartregister.chw.core.interactor;
 
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_ISSUE_DATE;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CERTIFICATE_NUMBER;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE;
+import static org.smartregister.chw.core.utils.CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.RECEIVED_DEATH_CERTIFICATE;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Pair;
@@ -13,6 +18,7 @@ import org.smartregister.chw.core.contract.FamilyRemoveMemberContract;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.chw.core.utils.CoreJsonFormUtils;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -225,28 +231,44 @@ public abstract class CoreFamilyRemoveMemberInteractor implements FamilyRemoveMe
 
     private void updateRepo(Triple<Pair<Date, String>, String, List<Event>> triple, String tableName) {
         AllCommonsRepository commonsRepository = coreChwApplication.getAllCommonsRepository(tableName);
+        ContentValues values = new ContentValues();
 
-        Date date_removed = new Date();
+        Date dateRemoved = new Date();
         Date dod = null;
         if (triple.getLeft() != null && triple.getLeft().first != null) {
             dod = triple.getLeft().first;
         }
 
-        if (commonsRepository != null && dod == null) {
-            ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(date_removed));
-            commonsRepository.update(tableName, values, triple.getMiddle());
-            commonsRepository.updateSearch(triple.getMiddle());
-            commonsRepository.close(triple.getMiddle());
+        if (dod == null) {
+            values.put(DBConstants.KEY.DATE_REMOVED, getDBFormatedDate(dateRemoved));
+        } else {
+            values.put(DBConstants.KEY.DOD, getDBFormatedDate(dod));
         }
 
-        // enter the date of death
-        if (dod != null && commonsRepository != null) {
-            ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DOD, getDBFormatedDate(dod));
-            commonsRepository.update(tableName, values, triple.getMiddle());
-            commonsRepository.updateSearch(triple.getMiddle());
+        List<Obs> obs = triple.getRight().get(0).getObs();
+        for (int i = 0; i < obs.size(); i++) {
+            if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(RECEIVED_DEATH_CERTIFICATE) && obs.get(i).getHumanReadableValues() != null) {
+                values.put(RECEIVED_DEATH_CERTIFICATE, obs.get(i).getHumanReadableValues().get(0).toString());
+
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_ISSUE_DATE) && obs.get(i).getValues() != null) {
+                values.put(DEATH_CERTIFICATE_ISSUE_DATE, obs.get(i).getValues().get(0).toString());
+
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_CERTIFICATE_NUMBER) && obs.get(i).getValues() != null) {
+                values.put(DEATH_CERTIFICATE_NUMBER, obs.get(i).getValues().get(0).toString());
+
+            } else if (obs.get(i).getFormSubmissionField().equalsIgnoreCase(DEATH_NOTIFICATION_DONE) && obs.get(i).getHumanReadableValues() != null) {
+                values.put(DEATH_NOTIFICATION_DONE, obs.get(i).getHumanReadableValues().get(0).toString());
+
+            }
         }
+
+        if (commonsRepository != null)
+            updateDbFieldAndSearch(commonsRepository, values, triple.getMiddle(), tableName);
+    }
+
+    private void updateDbFieldAndSearch(AllCommonsRepository commonsRepository, ContentValues values, String caseId, String tableName) {
+        commonsRepository.update(tableName, values, caseId);
+        commonsRepository.updateSearch(caseId);
     }
 
     public AllSharedPreferences getAllSharedPreferences() {
