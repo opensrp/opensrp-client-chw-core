@@ -239,7 +239,7 @@ dependencies {
         exclude group: 'id.zelory', module: 'compressor'
     }
 
-    api('org.smartregister:opensrp-client-opd:0.0.13-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-opd:0.1.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.lecho', module: 'hellocharts-android'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
