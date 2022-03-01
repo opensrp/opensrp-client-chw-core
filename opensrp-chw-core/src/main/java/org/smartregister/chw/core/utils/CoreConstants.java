@@ -336,11 +336,11 @@ public class CoreConstants {
             return MALARIA_REFERRAL_FORM;
         }
 
-        public static String getPmtctForm(){
+        public static String getPmtctForm() {
             return PMTCT_FORM;
         }
 
-        public static String getPmtctFollowupForm(){
+        public static String getPmtctFollowupForm() {
             return PMTCT_FOLLOWUP_FORM;
         }
 
@@ -829,7 +829,7 @@ public class CoreConstants {
         public static final String INDEPENDENT_CLIENT = "ec_independent_client";
         public static final String HIV_MEMBER = "ec_hiv_register";
         public static final String TB_MEMBER = "ec_tb_register";
-        public static final String HTS_MEMBERS = "ec_hts_register" ;
+        public static final String HTS_MEMBERS = "ec_hts_register";
         public static final String CBHS_CLIENTS = "ec_cbhs_register";
     }
 
@@ -881,7 +881,7 @@ public class CoreConstants {
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
         public static final String PMTCT = "PMTCT";
-        public static final String CBHS_CLIENTS = "CBHS Clients" ;
+        public static final String CBHS_CLIENTS = "CBHS Clients";
     }
 
     public static final class RULE_FILE {
@@ -1125,6 +1125,7 @@ public class CoreConstants {
         public static final String IN_PROGRESS = "In-Progress";
         public static final String COMPLETE = "Complete";
         public static final String EXPIRED = "Expired";
+        public static final String CANCELLED = "Cancelled";
     }
 
     public static final class TASKS_FOCUS {
