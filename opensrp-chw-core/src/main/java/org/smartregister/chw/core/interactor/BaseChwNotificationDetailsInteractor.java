@@ -209,11 +209,17 @@ public class BaseChwNotificationDetailsInteractor implements ChwNotificationDeta
     private NotificationItem getPregnancyConfirmationReferralDetails(String notificationId, String notificationType) {
         NotificationRecord notificationRecord;
         notificationRecord = ChwNotificationDao.getPregnancyConfirmationReferralRecord(notificationId, ChwNotificationUtil.getNotificationDetailsTable(context, notificationType));
-
-        String title = context.getString(R.string.pregnancy_confirmation_referral_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
+        String title;
+        if(notificationRecord.getActionTaken().equalsIgnoreCase("Unconfirmed")){
+            title = context.getString(R.string.pregnancy_unconfirmation_referral_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
+        }else{
+            title = context.getString(R.string.pregnancy_confirmation_referral_title, notificationRecord.getClientName(), notificationRecord.getVisitDate());
+        }
         List<String> details = new ArrayList<>();
-        details.add(context.getString(R.string.notification_action_taken, notificationRecord.getActionTaken()));
-
+        details.add(context.getString(R.string.notification_pregnancy_status, notificationRecord.getActionTaken()));
+        if(!notificationRecord.getActionTaken().equalsIgnoreCase("Unconfirmed")){
+            details.add(context.getString(R.string.notification_action_taken, "Enrolled To ANC"));
+        }
         details.add(context.getString(R.string.notification_village, notificationRecord.getVillage()));
         return new NotificationItem(title, details);
     }

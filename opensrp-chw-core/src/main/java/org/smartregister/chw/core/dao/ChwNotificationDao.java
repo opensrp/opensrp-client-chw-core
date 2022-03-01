@@ -138,7 +138,7 @@ public class ChwNotificationDao extends AbstractDao {
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
                         "ec_family.village_town        AS      village,\n" +
                         table + ".visit_date,\n" +
-                        "'Enrolled to ANC' as action_taken\n" +
+                        table + ".confirmation_status as action_taken\n" +
                         "FROM " + table + "\n" +
                         "         inner join ec_family_member on ec_family_member.base_entity_id = " + table + ".entity_id\n" +
                         "         inner join ec_family on ec_family.base_entity_id = ec_family_member.relational_id\n" +
