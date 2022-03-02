@@ -789,4 +789,7 @@
     <string name="pmtct_registration">PMTCT Registration</string>
     <string name="remove_individual_client_save_button">Save</string>
 
+    <!--ANC Titles-->
+    <string name="anc_partner_followup_referral">ANC Partner Followup Referral</string>
+
 </resources>

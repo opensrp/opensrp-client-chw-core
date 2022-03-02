@@ -44,4 +44,11 @@
         android:visible="false"
         android:title="@string/pmtct_registration"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_anc_partner_followup_referral"
+        android:enabled="true"
+        android:visible="false"
+        android:title="@string/anc_partner_followup_referral"
+        app:showAsAction="never" />
 </menu>
