@@ -193,6 +193,7 @@ public class CoreConstants {
         public static final String HIV_INDEX_CONTACT_REGISTRATION = "Hiv Index Contact Registration";
         public static final String HIV_INDEX_CONTACT_TESTING_FOLLOWUP = "HIV Index Contact Testing Followup";
         public static final String PREGNANCY_CONFIRMATION_DISMISSAL = "Pregnancy Confirmation Dismissal";
+        public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "ANC Partner Community Followup Referral";
     }
 
     public static final class EncounterType {
