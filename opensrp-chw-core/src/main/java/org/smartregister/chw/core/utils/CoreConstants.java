@@ -276,6 +276,8 @@ public class CoreConstants {
         private static final String PMTCT_FORM = "pmtct_registration_form";
         private static final String PMTCT_FOLLOWUP_FORM = "pmtct_followup_form";
 
+        private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "anc_partner_community_followup_referral";
+
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -549,6 +551,10 @@ public class CoreConstants {
 
         public static String getHivIndexClientsContactsRegistrationForm() {
             return HIV_INDEX_CLIENTS_CONTACTS_REGISTRATION_FORM;
+        }
+
+        public static String getAncPartnerCommunityFollowupReferral() {
+            return ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL;
         }
 
         public static String getTbCommunityFollowFeedback() {
