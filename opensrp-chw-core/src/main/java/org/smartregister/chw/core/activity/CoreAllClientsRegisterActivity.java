@@ -18,6 +18,7 @@ import org.smartregister.chw.core.fragment.CoreAllClientsRegisterFragment;
 import org.smartregister.chw.core.presenter.CoreAllClientsRegisterPresenter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.family.util.JsonFormUtils;
+import org.smartregister.family.util.Utils;
 import org.smartregister.opd.activity.BaseOpdFormActivity;
 import org.smartregister.opd.activity.BaseOpdRegisterActivity;
 import org.smartregister.opd.contract.OpdRegisterActivityContract;
@@ -39,7 +40,7 @@ public class CoreAllClientsRegisterActivity extends BaseOpdRegisterActivity impl
 
     @Override
     public void startFormActivity(JSONObject jsonObject) {
-        Intent intent = new Intent(this, BaseOpdFormActivity.class);
+        Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
         intent.putExtra(OpdConstants.JSON_FORM_EXTRA.JSON, jsonObject.toString());
 
         Form form = new Form();
