@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -28,6 +29,9 @@ import org.smartregister.family.util.JsonFormUtils;
 import org.smartregister.family.util.Utils;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,9 +46,17 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
         FamilyOtherMemberProfileExtendedContract.View, CorePmtctProfileContract.View, FamilyProfileExtendedContract.PresenterCallBack {
 
     private OnMemberTypeLoadedListener onMemberTypeLoadedListener;
+    protected RecyclerView notificationAndReferralRecyclerView;
+    protected RelativeLayout notificationAndReferralLayout;
 
     public interface OnMemberTypeLoadedListener {
         void onMemberTypeLoaded(CorePmtctProfileActivity.MemberType memberType);
+    }
+
+    protected void initializeNotificationReferralRecyclerView() {
+        notificationAndReferralLayout = findViewById(R.id.notification_and_referral_row);
+        notificationAndReferralRecyclerView = findViewById(R.id.notification_and_referral_recycler_view);
+        notificationAndReferralRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public static class MemberType {
@@ -70,6 +82,7 @@ public abstract class CorePmtctProfileActivity extends BasePmtctProfileActivity 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeNotificationReferralRecyclerView();
         updateToolbarTitle(this, R.id.toolbar_title, memberObject.getFamilyName());
     }
 

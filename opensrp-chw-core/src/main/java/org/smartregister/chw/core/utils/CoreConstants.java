@@ -278,6 +278,7 @@ public class CoreConstants {
         private static final String PMTCT_FOLLOWUP_FORM = "pmtct_followup_form";
 
         private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "anc_partner_community_followup_referral";
+        private static final String PMTCTC_COMMUNITY_FOLLOWUP_REFERRAL = "pmtct_community_followup_referral";
 
 
         public static AssetManager assetManager;
@@ -556,6 +557,10 @@ public class CoreConstants {
 
         public static String getAncPartnerCommunityFollowupReferral() {
             return ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL;
+        }
+
+        public static String getPmtctcCommunityFollowupReferral() {
+            return PMTCTC_COMMUNITY_FOLLOWUP_REFERRAL;
         }
 
         public static String getTbCommunityFollowFeedback() {

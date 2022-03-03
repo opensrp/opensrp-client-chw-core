@@ -9,6 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_issue_pmtct_followup_referral"
+        android:enabled="true"
+        android:title="@string/issue_pmtct_community_followup_referral"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_remove_member"
         android:enabled="true"
         android:title="@string/remove_this_person"

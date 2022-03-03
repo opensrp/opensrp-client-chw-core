@@ -791,5 +791,6 @@
 
     <!--ANC Titles-->
     <string name="anc_partner_followup_referral">ANC Partner Followup Referral</string>
+    <string name="issue_pmtct_community_followup_referral">Issue PMTCT Community Followup Referral</string>
 
 </resources>
