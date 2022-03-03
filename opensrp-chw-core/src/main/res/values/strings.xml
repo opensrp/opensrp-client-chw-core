@@ -791,5 +791,8 @@
 
     <!--ANC Titles-->
     <string name="anc_partner_followup_referral">ANC Partner Followup Referral</string>
+    <string name="register_partner">Register Partner</string>
+    <string name="return_to_anc_profile">Return to %s\'s Profile</string>
+
 
 </resources>
