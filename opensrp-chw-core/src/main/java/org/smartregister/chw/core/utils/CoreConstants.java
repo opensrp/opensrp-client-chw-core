@@ -838,6 +838,7 @@ public class CoreConstants {
         public static final String TB_MEMBER = "ec_tb_register";
         public static final String HTS_MEMBERS = "ec_hts_register";
         public static final String CBHS_CLIENTS = "ec_cbhs_register";
+        public static final String ANC_PARTNER_FOLLOWUP = "ec_anc_partner_community_followup";
     }
 
     public static final class INTENT_KEY {
