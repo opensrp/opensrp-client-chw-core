@@ -194,6 +194,7 @@ public class CoreConstants {
         public static final String HIV_INDEX_CONTACT_TESTING_FOLLOWUP = "HIV Index Contact Testing Followup";
         public static final String PREGNANCY_CONFIRMATION_DISMISSAL = "Pregnancy Confirmation Dismissal";
         public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "ANC Partner Community Followup Referral";
+        public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK = "ANC Partner Community Followup Feedback";
     }
 
     public static final class EncounterType {
@@ -844,6 +845,7 @@ public class CoreConstants {
         public static final String HTS_MEMBERS = "ec_hts_register";
         public static final String CBHS_CLIENTS = "ec_cbhs_register";
         public static final String ANC_PARTNER_FOLLOWUP = "ec_anc_partner_community_followup";
+        public static final String ANC_PARTNER_FOLLOWUP_FEEDBACK = "ec_anc_partner_community_feedback";
     }
 
     public static final class INTENT_KEY {
