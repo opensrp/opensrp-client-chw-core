@@ -786,6 +786,7 @@
     <string name="child_gbv_referral">Child Gender Based Violence Referral</string>
 
     <!--PMTCT Titles -->
+    <string name="menu_pmtct">PMTCT</string>
     <string name="pmtct_registration">PMTCT Registration</string>
     <string name="remove_individual_client_save_button">Save</string>
 
