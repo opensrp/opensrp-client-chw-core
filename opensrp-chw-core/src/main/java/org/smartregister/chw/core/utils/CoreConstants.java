@@ -280,7 +280,7 @@ public class CoreConstants {
 
         private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "anc_partner_community_followup_referral";
         private static final String PMTCTC_COMMUNITY_FOLLOWUP_REFERRAL = "pmtct_community_followup_referral";
-
+        private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK = "anc_partner_community_followup_feedback";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -558,6 +558,10 @@ public class CoreConstants {
 
         public static String getAncPartnerCommunityFollowupReferral() {
             return ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL;
+        }
+
+        public static String getAncPartnerCommunityFollowupFeedback() {
+            return ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK;
         }
 
         public static String getPmtctcCommunityFollowupReferral() {
