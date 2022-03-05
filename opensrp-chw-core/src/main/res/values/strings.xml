@@ -796,5 +796,10 @@
     <string name="return_to_anc_profile">Return to %s\'s Profile</string>
 
     <string name="issue_pmtct_community_followup_referral">Issue PMTCT Community Followup Referral</string>
+    <string name="register">Register</string>
+    <string name="test_partner">Test Partner</string>
+    <string name="partner_testing">Partner Testing</string>
+    <string name="record_partner_details">Record Partner details</string>
+    <string name="record_partner_testing_results">Record Partner Testing Results</string>
 
 </resources>
