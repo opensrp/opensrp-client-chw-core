@@ -267,7 +267,7 @@ dependencies {
         exclude group: 'com.nerdstone', module: 'neat-form-core'
     }
 
-    api('org.smartregister:opensrp-client-chw-pmtct:1.1.0.4-NACP-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-chw-pmtct:1.1.0.5-NACP-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
