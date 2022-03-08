@@ -196,6 +196,7 @@ public class CoreConstants {
         public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "ANC Partner Community Followup Referral";
         public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK = "ANC Partner Community Followup Feedback";
         public static final String PMTCT_COMMUNITY_FOLLOWUP = "PMTCT Community Followup";
+        public static final String CLOSE_PMTCT_FEEDBACK = "Close PMTCT Feedback";
     }
 
     public static final class EncounterType {
@@ -852,6 +853,7 @@ public class CoreConstants {
         public static final String ANC_PARTNER_FOLLOWUP = "ec_anc_partner_community_followup";
         public static final String ANC_PARTNER_FOLLOWUP_FEEDBACK = "ec_anc_partner_community_feedback";
         public static final String PMTCT_COMMUNITY_FOLLOWUP = "ec_pmtct_community_followup";
+        public static final String PMTCT_COMMUNITY_FEEDBACK = "ec_pmtct_community_feedback";
     }
 
     public static final class INTENT_KEY {
