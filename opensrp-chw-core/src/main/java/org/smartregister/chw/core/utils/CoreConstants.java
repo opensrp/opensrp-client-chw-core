@@ -902,6 +902,7 @@ public class CoreConstants {
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
         public static final String PMTCT = "PMTCT";
+        public static final String PMTCT_FOLLOWUP = "PMTCT Followup";
         public static final String CBHS_CLIENTS = "CBHS Clients";
     }
 
@@ -1139,6 +1140,7 @@ public class CoreConstants {
         public static final String HIV_INDEX_REGISTER_ACTIVITY = "HIV_INDEX_REGISTER_ACTIVITY";
         public static final String TB_REGISTER_ACTIVITY = "TB_REGISTER_ACTIVITY";
         public static final String PMTCT_REGISTER_ACTIVITY = "PMTCT_REGISTER_ACTIVITY";
+        public static final String PMTCT_FOLLOWUP_REGISTER_ACTIVITY = "PMTCT_FOLLOWUP_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
