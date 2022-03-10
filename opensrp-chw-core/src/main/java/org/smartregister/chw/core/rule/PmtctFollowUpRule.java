@@ -44,12 +44,7 @@ public class PmtctFollowUpRule implements ICommonRule {
             this.overDueDate = latestFollowUpDate.plusDays(overDueDay);
             this.expiryDate = latestFollowUpDate.plusDays(expiry);
         } else {
-            if(CorePmtctDao.isClientKnownOnArt(baseEntityId)){
-                this.dueDate = pmtctDate.plusDays(0);
-            }else{
-                this.dueDate = pmtctDate.plusDays(dueDay);
-            }
-
+            this.dueDate = pmtctDate.plusDays(dueDay);
             this.overDueDate = pmtctDate.plusDays(overDueDay);
             this.expiryDate = pmtctDate.plusDays(expiry);
         }
