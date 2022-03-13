@@ -63,6 +63,7 @@ public class NavigationPresenter implements NavigationContract.Presenter {
         tableMap.put(CoreConstants.DrawerMenu.TB_CLIENTS, org.smartregister.chw.tb.util.Constants.Tables.TB);
         tableMap.put(CoreConstants.DrawerMenu.PMTCT, org.smartregister.chw.pmtct.util.Constants.TABLES.PMTCT_REGISTRATION);
         tableMap.put(CoreConstants.DrawerMenu.PMTCT_FOLLOWUP, CoreConstants.TABLE_NAME.PMTCT_COMMUNITY_FOLLOWUP);
+        tableMap.put(CoreConstants.DrawerMenu.HEI, CoreConstants.TABLE_NAME.HEI);
     }
 
     public HashMap<String, String> getTableMap() {
