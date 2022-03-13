@@ -854,6 +854,7 @@ public class CoreConstants {
         public static final String ANC_PARTNER_FOLLOWUP_FEEDBACK = "ec_anc_partner_community_feedback";
         public static final String PMTCT_COMMUNITY_FOLLOWUP = "ec_pmtct_community_followup";
         public static final String PMTCT_COMMUNITY_FEEDBACK = "ec_pmtct_community_feedback";
+        public static final String HEI = "ec_hei";
     }
 
     public static final class INTENT_KEY {
@@ -906,6 +907,7 @@ public class CoreConstants {
         public static final String PMTCT = "PMTCT";
         public static final String PMTCT_FOLLOWUP = "PMTCT Followup";
         public static final String CBHS_CLIENTS = "CBHS Clients";
+        public static final String HEI = "HEI";
     }
 
     public static final class RULE_FILE {
@@ -1143,6 +1145,7 @@ public class CoreConstants {
         public static final String TB_REGISTER_ACTIVITY = "TB_REGISTER_ACTIVITY";
         public static final String PMTCT_REGISTER_ACTIVITY = "PMTCT_REGISTER_ACTIVITY";
         public static final String PMTCT_FOLLOWUP_REGISTER_ACTIVITY = "PMTCT_FOLLOWUP_REGISTER_ACTIVITY";
+        public static final String HEI = "HEI_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
