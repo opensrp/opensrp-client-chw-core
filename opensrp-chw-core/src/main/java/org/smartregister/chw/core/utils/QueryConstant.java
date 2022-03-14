@@ -727,7 +727,7 @@ public interface QueryConstant {
                     "       ec_family_member.relational_id AS relationalid,\n" +
                     "       ec_hiv_outcome.id AS n_id,\n" +
                     "       ec_hiv_outcome.visit_date AS notification_date,\n" +
-                    "       'HIV Problem Outcome'          AS notification_type\n" +
+                    "       'HIV Testing Outcome'          AS notification_type\n" +
                     "FROM ec_hiv_outcome\n" +
                     "         inner join ec_family_member on ec_family_member.base_entity_id = ec_hiv_outcome.entity_id\n" +
                     "WHERE ec_family_member.is_closed = '0'\n" +

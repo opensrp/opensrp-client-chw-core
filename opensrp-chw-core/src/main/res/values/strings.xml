@@ -706,7 +706,7 @@
     <string name="notification_type_family_planning">Family Planning</string>
     <string name="notification_type_not_yet_done_referrals">Referral not completed yet</string>
     <string name="perform_click_action">perform click action</string>
-    <string name="notification_type_hiv_problem_outcome">HIV Problem Outcome</string>
+    <string name="notification_type_hiv_problem_outcome">HIV Testing Outcome</string>
     <string name="notification_type_tb_problem_outcome">TB Problem Outcome</string>
 
 
@@ -750,7 +750,7 @@
 
     <string name="hiv_register">HIV Register</string>
     <string name="routine_hiv_visit"> · Routine HIV Visit</string>
-    <string name="hiv_problem_outcome">HIV Problem Outcome</string>
+    <string name="hiv_problem_outcome">HIV Testing Outcome</string>
     <string name="hiv_community_followup_referral">Issue HIV community followup referral</string>
 
     <!--    TB Register-->
