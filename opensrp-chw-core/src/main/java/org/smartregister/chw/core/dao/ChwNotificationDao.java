@@ -98,7 +98,6 @@ public class ChwNotificationDao extends AbstractDao {
                 "/* Get details for HIV or TB Danger Signs Outcome */\n" +
                         "SELECT ec_family_member.first_name || ' ' || ifnull(ec_family_member.last_name, ec_family_member.middle_name) as full_name,\n" +
                         "ec_family.village_town        AS      village,\n" +
-                        table + ".problem,\n" +
                         table + ".action_taken,\n" +
                         table + ".test_results,\n" +
                         table + ".visit_date\n" +
@@ -235,7 +234,6 @@ public class ChwNotificationDao extends AbstractDao {
             record.setVisitDate(formatVisitDate(getCursorValue(row, "visit_date", "")));
             String diagnosis = getCursorValue(row, "diagnosis");
             String results = getCursorValue(row, "test_results");
-            String dangerSigns = getCursorValue(row, "problem");
             String actionTaken = getCursorValue(row, "action_taken");
 
             if (careGiverName != null) {
@@ -246,9 +244,6 @@ public class ChwNotificationDao extends AbstractDao {
             }
             if (results != null) {
                 record.setResults(ChwNotificationUtil.getStringFromJSONArrayString(results));
-            }
-            if (dangerSigns != null) {
-                record.setDangerSigns(ChwNotificationUtil.getStringFromJSONArrayString(dangerSigns));
             }
             if (actionTaken != null) {
                 record.setActionTaken(ChwNotificationUtil.getStringFromJSONArrayString(actionTaken));
