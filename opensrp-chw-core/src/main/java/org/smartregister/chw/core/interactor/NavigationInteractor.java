@@ -351,8 +351,8 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV + " p " +
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                                "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is not null and " +
-                                "              ( UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') OR p.client_hiv_status_after_testing IS NULL) " +
+                                "              where m.date_removed is null and p.is_closed =  '0' and " +
+                                "              UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') " +
                                 "         UNION ALL\n" +
                                 "              select count(*) as c " +
                                 "              from " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_COMMUNITY_FOLLOWUP + " p " +
@@ -390,8 +390,8 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and p.is_closed = '0' and p.ctc_number is null and p.chw_referral_service = 'Suspected HIV' and " +
-                                "              ( UPPER (p.client_hiv_status_after_testing) LIKE UPPER('Positive') OR p.client_hiv_status_after_testing IS NULL) " +
-                                "               and p.base_entity_id NOT IN (SELECT base_entity_id FROM " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF + " ))";
+                                "              p.client_hiv_status_after_testing IS NULL " +
+                                "              and p.base_entity_id NOT IN (SELECT base_entity_id FROM " + org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX_HF + " ))";
                 return NavigationDao.getQueryCount(sqlHts);
 
             case org.smartregister.chw.hiv.util.Constants.Tables.HIV_INDEX:
