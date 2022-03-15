@@ -1,12 +1,10 @@
 package org.smartregister.chw.core.repository;
 
-import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.smartregister.chw.anc.util.Constants;
