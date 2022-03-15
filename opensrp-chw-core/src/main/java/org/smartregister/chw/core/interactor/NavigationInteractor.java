@@ -422,6 +422,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and " +
+                                "              p.is_closed is 0 and " +
                                 "              p.hiv_status = 'positive' ";
                 return NavigationDao.getQueryCount(sqlPmtct);
             case PMTCT_COMMUNITY_FOLLOWUP:
@@ -452,6 +453,16 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              p.base_entity_id NOT IN (SELECT community_referral_form_id FROM " + org.smartregister.chw.tb.util.Constants.Tables.TB_COMMUNITY_FEEDBACK + " ))";
 
                 return NavigationDao.getQueryCount(sqlTb);
+            case CoreConstants.TABLE_NAME.HEI:
+                String sqlHei =
+                        "SELECT count(*) " +
+                                "   from " + CoreConstants.TABLE_NAME.HEI + " p " +
+                                "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
+                                "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
+                                "              where m.date_removed is null and " +
+                                "              p.is_closed is 0 and " +
+                                "              p.hiv_status = 'positive' ";
+                return NavigationDao.getQueryCount(sqlHei);
 
             default:
                 return NavigationDao.getTableCount(tableName);
