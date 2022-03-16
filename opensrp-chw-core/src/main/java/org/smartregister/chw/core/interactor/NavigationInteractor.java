@@ -460,8 +460,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
                                 "              where m.date_removed is null and " +
-                                "              p.is_closed is 0 and " +
-                                "              p.hiv_status = 'positive' ";
+                                "              p.is_closed is 0 ";
                 return NavigationDao.getQueryCount(sqlHei);
 
             default:
