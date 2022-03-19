@@ -45,13 +45,15 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
 
     private void updateDueColumn(Context context, RegisterViewHolder viewHolder, PmtctFollowUpRule pmtctFollowUpRule) {
         if (pmtctFollowUpRule.getDueDate() != null) {
-            viewHolder.dueButton.setVisibility(View.VISIBLE);
             if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
                 setVisitButtonNextDueStatus(context, FpUtil.sdf.format(pmtctFollowUpRule.getDueDate()), viewHolder.dueButton);
+                viewHolder.dueButton.setVisibility(View.GONE);
             }
             if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
+                viewHolder.dueButton.setVisibility(View.VISIBLE);
                 setVisitButtonDueStatus(context, String.valueOf(Days.daysBetween(new DateTime(pmtctFollowUpRule.getDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
             } else if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.OVERDUE)) {
+                viewHolder.dueButton.setVisibility(View.VISIBLE);
                 setVisitButtonOverdueStatus(context, String.valueOf(Days.daysBetween(new DateTime(pmtctFollowUpRule.getOverDueDate()), new DateTime()).getDays()), viewHolder.dueButton);
             } else if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.VISIT_DONE)) {
                 setVisitDone(context, viewHolder.dueButton);
