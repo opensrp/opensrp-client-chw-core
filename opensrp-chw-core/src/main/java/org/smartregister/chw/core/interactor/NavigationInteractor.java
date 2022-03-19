@@ -1,17 +1,5 @@
 package org.smartregister.chw.core.interactor;
 
-import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.PMTCT_COMMUNITY_FOLLOWUP;
-import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
-import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_COUNT_QUERY;
-
 import org.smartregister.chw.core.contract.CoreApplication;
 import org.smartregister.chw.core.contract.NavigationContract;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
@@ -24,6 +12,18 @@ import org.smartregister.family.util.AppExecutors;
 import java.util.Date;
 
 import timber.log.Timber;
+
+import static org.smartregister.chw.core.utils.CoreConstants.TABLE_NAME.MOTHER_CHAMPION;
+import static org.smartregister.chw.core.utils.QueryConstant.ANC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.FAMILY_PLANNING_UPDATE_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_INDEX_CONTACT_COMMUNITY_FOLLOWUP_REFERRAL_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.HIV_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.MALARIA_HF_FOLLOW_UP_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.NOT_YET_DONE_REFERRAL_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.PNC_DANGER_SIGNS_OUTCOME_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.PREGNANCY_CONFIRMATION_UPDATES_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.SICK_CHILD_FOLLOW_UP_COUNT_QUERY;
+import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_COUNT_QUERY;
 
 public class NavigationInteractor implements NavigationContract.Interactor {
 
@@ -425,14 +425,14 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              p.is_closed is 0 and " +
                                 "              p.hiv_status = 'positive' ";
                 return NavigationDao.getQueryCount(sqlPmtct);
-            case PMTCT_COMMUNITY_FOLLOWUP:
-                String sqlPmtctFollowup =
+            case MOTHER_CHAMPION:
+                String sqlMotherChampion =
                         "SELECT count(*) " +
-                                "   from " + PMTCT_COMMUNITY_FOLLOWUP + " p " +
-                                "              inner join ec_family_member m on p.entity_id = m.base_entity_id COLLATE NOCASE " +
+                                "   from " + MOTHER_CHAMPION + " p " +
+                                "              inner join ec_family_member m on p.base_entity_id = m.base_entity_id COLLATE NOCASE " +
                                 "              inner join ec_family f on f.base_entity_id = m.relational_id COLLATE NOCASE " +
-                                "              where m.date_removed is null and p.base_entity_id NOT IN (SELECT community_referral_form_id FROM ec_pmtct_community_feedback)";
-                return NavigationDao.getQueryCount(sqlPmtctFollowup);
+                                "              where m.date_removed is null and p.is_closed is 0";
+                return NavigationDao.getQueryCount(sqlMotherChampion);
             case org.smartregister.chw.tb.util.Constants.Tables.TB:
                 String sqlTb =
                         "SELECT SUM(c)\n" +
