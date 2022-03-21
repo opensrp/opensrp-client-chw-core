@@ -283,6 +283,7 @@ public class CoreConstants {
         private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_REFERRAL = "anc_partner_community_followup_referral";
         private static final String PMTCTC_COMMUNITY_FOLLOWUP_REFERRAL = "pmtct_community_followup_referral";
         private static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK = "anc_partner_community_followup_feedback";
+        private static final String PMTCT_REFERRAL_FORM = "referrals/pmtct_referral_form";
 
         public static AssetManager assetManager;
         public static Locale locale;
@@ -568,6 +569,10 @@ public class CoreConstants {
 
         public static String getPmtctcCommunityFollowupReferral() {
             return PMTCTC_COMMUNITY_FOLLOWUP_REFERRAL;
+        }
+
+        public static String getPmtctReferralForm() {
+            return PMTCT_REFERRAL_FORM;
         }
 
         public static String getTbCommunityFollowFeedback() {
@@ -1169,6 +1174,7 @@ public class CoreConstants {
         public static final String SUSPECTED_HIV = "Suspected HIV";
         public static final String SICK_HIV = "HIV Treatment and Care";
         public static final String SUSPECTED_TB = "Suspected TB";
+        public static final String PMTCT = "PMTCT Referral";
         public static final String SUSPECTED_GBV = "Suspected GBV";
         public static final String SUSPECTED_CHILD_GBV = "Suspected Child GBV";
     }
