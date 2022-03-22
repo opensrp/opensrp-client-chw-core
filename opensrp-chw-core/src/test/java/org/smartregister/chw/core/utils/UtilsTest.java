@@ -255,7 +255,14 @@ public class UtilsTest {
     public void getDayOfMonthWithSuffixReturnsCorrectSuffix() {
         Assert.assertEquals("1st", Utils.getDayOfMonthWithSuffix(1, context));
         Assert.assertEquals("2nd", Utils.getDayOfMonthWithSuffix(2, context));
+        Assert.assertEquals("3rd", Utils.getDayOfMonthWithSuffix(3, context));
+        Assert.assertEquals("4th", Utils.getDayOfMonthWithSuffix(4, context));
+        Assert.assertEquals("5th", Utils.getDayOfMonthWithSuffix(5, context));
+        Assert.assertEquals("6th", Utils.getDayOfMonthWithSuffix(6, context));
+        Assert.assertEquals("7th", Utils.getDayOfMonthWithSuffix(7, context));
         Assert.assertEquals("8th", Utils.getDayOfMonthWithSuffix(8, context));
+        Assert.assertEquals("9th", Utils.getDayOfMonthWithSuffix(9, context));
+        Assert.assertEquals("10th", Utils.getDayOfMonthWithSuffix(10, context));
         Assert.assertEquals("11th", Utils.getDayOfMonthWithSuffix(11, context));
         Assert.assertEquals("12th", Utils.getDayOfMonthWithSuffix(12, context));
         Assert.assertNull(Utils.getDayOfMonthWithSuffix(22, context));
