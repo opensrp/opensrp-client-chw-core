@@ -801,5 +801,6 @@
     <string name="partner_testing">Partner Testing</string>
     <string name="record_partner_details">Record Partner details</string>
     <string name="record_partner_testing_results">Record Partner Testing Results</string>
+    <string name="reports_activity">Reports</string>
 
 </resources>

@@ -193,6 +193,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerStockReport(activity);
         registerCommunityResponders(activity);
         registerDeviceToDeviceSync(activity);
+        registerReportsActivity(activity);
         registerSync(activity);
         registerLogout(activity);
 
@@ -246,6 +247,16 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             rlIconServiceReport.setVisibility(View.VISIBLE);
             rlIconServiceReport.setOnClickListener(view -> {
                 activity.startActivity( menuFlavor.getHIA2ReportActivityIntent(activity));
+            });
+        }
+    }
+
+    private void registerReportsActivity(Activity activity) {
+        if (menuFlavor.hasInAppReports()) {
+            View rlInAppReports = rootView.findViewById(R.id.rlInAppReports);
+            rlInAppReports.setVisibility(View.VISIBLE);
+            rlInAppReports.setOnClickListener(view -> {
+                activity.startActivity( menuFlavor.getInAppReportsActivityIntent(activity));
             });
         }
     }
@@ -503,5 +514,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         String childNavigationMenuCountString();
 
         Intent getHIA2ReportActivityIntent(Activity activity);
+
+        boolean hasInAppReports();
+
+        Intent getInAppReportsActivityIntent(Activity activity);
     }
 }
