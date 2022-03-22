@@ -39,7 +39,7 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
     private static final String DUE_FILTER_TAG = "PRESSED";
     protected View dueOnlyLayout;
     private View view;
-    private boolean dueFilterActive = false;
+    protected boolean dueFilterActive = false;
     private CommonPersonObjectClient client;
 
     @Override

@@ -144,7 +144,10 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
         } else if (i == R.id.action_anc_registration) {
             startAncRegister();
             return true;
-        } else if (i == R.id.action_fp_initiation) {
+        } else if (i == R.id.action_pregnancy_out_come) {
+            startPncRegister();
+            return true;
+        }else if (i == R.id.action_fp_initiation) {
             startFpRegister();
             return true;
         } else if (i == R.id.action_fp_change) {
@@ -190,6 +193,8 @@ public abstract class CoreFamilyOtherMemberProfileActivity extends BaseFamilyOth
     }
 
     protected abstract void startAncRegister();
+
+    protected abstract void startPncRegister();
 
     protected abstract void startFpRegister();
 

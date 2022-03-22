@@ -88,6 +88,10 @@ public class FamilyOtherMemberProfileActivity extends CoreFamilyOtherMemberProfi
         //TODO implement start pmtct registration
     }
 
+    @Override
+    protected void startPncRegister() {
+        //TODO implement start pnc registration
+    }
 
     @Override
     protected void setIndependentClient(boolean isIndependent) {
