@@ -10,6 +10,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.contract.RegisterAlert;
 import org.smartregister.chw.core.rule.AncVisitAlertRule;
 import org.smartregister.chw.core.rule.FpAlertRule;
+import org.smartregister.chw.core.rule.HeiFollowupRule;
 import org.smartregister.chw.core.rule.HivFollowupRule;
 import org.smartregister.chw.core.rule.PmtctFollowUpRule;
 import org.smartregister.chw.core.rule.PncVisitAlertRule;
@@ -69,5 +70,11 @@ public class HomeVisitUtil {
         PmtctFollowUpRule pmtctFollowUpRule = new PmtctFollowUpRule(pmtctRegisterDate, followUpDate, baseEntityId);
         CoreChwApplication.getInstance().getRulesEngineHelper().getPmtctRule(pmtctFollowUpRule, CoreConstants.RULE_FILE.PMTCT_FOLLOW_UP_VISIT);
         return pmtctFollowUpRule;
+    }
+
+    public static HeiFollowupRule getHeiVisitStatus(Date heiStartDate, Date followupDate, String baseEntityId){
+        HeiFollowupRule heiFollowupRule = new HeiFollowupRule(heiStartDate,followupDate,baseEntityId);
+        CoreChwApplication.getInstance().getRulesEngineHelper().getHeiRule(heiFollowupRule,CoreConstants.RULE_FILE.HEI_FOLLOWUP_VISIT);
+        return heiFollowupRule;
     }
 }
