@@ -14,12 +14,12 @@ import androidx.annotation.Nullable;
 public class HeiFollowupRule implements ICommonRule {
 
     public static final String RULE_KEY = "heiFollowupRule";
-    private final DateTime startDate;
+    protected final DateTime startDate;
     @Nullable
-    private final DateTime latestFollowupDate;
+    protected final DateTime latestFollowupDate;
     private final String baseEntityId;
-    private DateTime dueDate;
-    private DateTime overDueDate;
+    protected DateTime dueDate;
+    protected DateTime overDueDate;
 
     public HeiFollowupRule(Date startDate, @Nullable Date latestFollowupDate, String baseEntityId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
