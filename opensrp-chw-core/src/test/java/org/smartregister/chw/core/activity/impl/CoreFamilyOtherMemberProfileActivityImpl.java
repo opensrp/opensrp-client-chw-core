@@ -18,6 +18,11 @@ public class CoreFamilyOtherMemberProfileActivityImpl extends CoreFamilyOtherMem
     }
 
     @Override
+    protected void startPncRegister() {
+        // do nothing
+    }
+
+    @Override
     public void startFpRegister() {
         // do nothing
     }
