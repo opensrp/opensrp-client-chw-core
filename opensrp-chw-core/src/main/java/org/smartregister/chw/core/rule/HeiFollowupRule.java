@@ -17,6 +17,7 @@ public class HeiFollowupRule implements ICommonRule {
     private final DateTime startDate;
     @Nullable
     private final DateTime latestFollowupDate;
+    private final String baseEntityId;
     private DateTime dueDate;
     private DateTime overDueDate;
 
@@ -24,11 +25,16 @@ public class HeiFollowupRule implements ICommonRule {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         this.startDate = new DateTime(sdf.format(startDate));
         this.latestFollowupDate = latestFollowupDate != null ? new DateTime(sdf.format(latestFollowupDate)) : null;
+        this.baseEntityId = baseEntityId;
         updateDueDates();
     }
 
     public int getDatesDiff() {
         return Days.daysBetween(new DateTime(startDate), new DateTime()).getDays();
+    }
+
+    public String getBaseEntityId() {
+        return baseEntityId;
     }
 
     public void updateDueDates() {
@@ -37,7 +43,7 @@ public class HeiFollowupRule implements ICommonRule {
             this.overDueDate = latestFollowupDate.plusDays(49);
             return;
         }
-        if(isFirstVisit()){
+        if (isFirstVisit()) {
             this.dueDate = startDate.plusDays(0);
             this.overDueDate = startDate.plusDays(7);
         }
