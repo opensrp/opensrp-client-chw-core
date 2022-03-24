@@ -802,5 +802,6 @@
     <string name="record_partner_details">Record Partner details</string>
     <string name="record_partner_testing_results">Record Partner Testing Results</string>
     <string name="reports_activity">Reports</string>
+    <string name="mark_as_deceased">Mark client as deceased</string>
 
 </resources>
