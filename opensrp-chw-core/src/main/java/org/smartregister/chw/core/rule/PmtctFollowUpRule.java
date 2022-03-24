@@ -51,6 +51,10 @@ public class PmtctFollowUpRule implements ICommonRule {
         return false;
     }
 
+    public String getBaseEntityId() {
+        return baseEntityId;
+    }
+
     public boolean isFirstVisit() {
         return latestFollowUpDate == null;
     }
