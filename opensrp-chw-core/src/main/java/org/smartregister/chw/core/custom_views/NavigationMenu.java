@@ -400,8 +400,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         tvLogout.setOnClickListener(v -> {
 //            drawer.closeDrawers();
             if (logOutDialog != null) {
-                logOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Log Out", (dialog, which) -> logout(parentActivity));
-                logOutDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
+                logOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, parentActivity.getString(R.string.logout_text), (dialog, which) -> logout(parentActivity));
+                logOutDialog.setButton(DialogInterface.BUTTON_NEGATIVE, parentActivity.getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
                 logOutDialog.show();
             } else {
                 logout(parentActivity);
@@ -434,7 +434,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerLanguageSwitcher(final Activity context) {
 
-        View rlIconLang = rootView.findViewById(R.id.rlIconLang);
+        View languageSwitcherView = rootView.findViewById(R.id.rlIconLang);
         final TextView tvLang = rootView.findViewById(R.id.tvLang);
 
         final List<Pair<String, Locale>> locales = menuFlavor.getSupportedLanguages();
@@ -450,7 +450,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             x++;
         }
         if (menuFlavor.hasMultipleLanguages()) {
-            rlIconLang.setOnClickListener(v -> {
+            languageSwitcherView.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(context.getString(R.string.choose_language));
                 builder.setItems(languages, (dialog, which) -> {
@@ -472,7 +472,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 dialog.show();
             });
         } else {
-            rlIconLang.setOnClickListener(null);
+            languageSwitcherView.setOnClickListener(null);
         }
     }
 
