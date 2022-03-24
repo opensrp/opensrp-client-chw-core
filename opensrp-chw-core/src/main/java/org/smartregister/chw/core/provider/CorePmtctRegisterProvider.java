@@ -43,7 +43,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         Utils.startAsyncTask(new UpdatePmtctDueButtonStatusTask(registerViewHolder, baseEntityId), null);
     }
 
-    private void updateDueColumn(Context context, RegisterViewHolder viewHolder, PmtctFollowUpRule pmtctFollowUpRule) {
+    protected void updateDueColumn(Context context, RegisterViewHolder viewHolder, PmtctFollowUpRule pmtctFollowUpRule) {
         if (pmtctFollowUpRule.getDueDate() != null) {
             if (pmtctFollowUpRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.NOT_DUE_YET)) {
                 setVisitButtonNextDueStatus(context, FpUtil.sdf.format(pmtctFollowUpRule.getDueDate()), viewHolder.dueButton);
@@ -61,7 +61,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         }
     }
 
-    private void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
+    protected void setVisitButtonNextDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.light_grey_text));
         dueButton.setText(context.getString(R.string.hiv_visit_day_next_due, visitDue));
         dueButton.setBackgroundResource(R.drawable.colorless_btn_selector);
@@ -69,7 +69,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
     }
 
 
-    private void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
+    protected void setVisitButtonDueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_in_progress_blue));
         if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.hiv_visit_day_due_today));
@@ -81,7 +81,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
     }
 
 
-    private void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
+    protected void setVisitButtonOverdueStatus(Context context, String visitDue, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.white));
         if (visitDue.equalsIgnoreCase("0")) {
             dueButton.setText(context.getString(R.string.hiv_visit_day_overdue_today));
@@ -93,7 +93,7 @@ public class CorePmtctRegisterProvider extends PmtctRegisterProvider {
         dueButton.setOnClickListener(onClickListener);
     }
 
-    private void setVisitDone(Context context, Button dueButton) {
+    protected void setVisitDone(Context context, Button dueButton) {
         dueButton.setTextColor(context.getResources().getColor(R.color.alert_complete_green));
         dueButton.setText(context.getString(R.string.visit_done));
         dueButton.setBackgroundColor(context.getResources().getColor(R.color.transparent));
