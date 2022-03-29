@@ -2,7 +2,6 @@ package org.smartregister.chw.core.repository;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.apache.commons.validator.Arg;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseRobolectricTest;
-import org.smartregister.chw.core.utils.CoreConstants;
-
-import java.util.HashMap;
 
 public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
     @Mock
