@@ -35,7 +35,6 @@ import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Obs;
 import org.smartregister.domain.db.EventClient;
-import org.smartregister.domain.jsonmapping.ClassificationRule;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
@@ -411,24 +410,24 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         }
     }
 
-    private void processSBCCEvent(Event event){
+    private void processSBCCEvent(Event event) {
         List<Obs> sbcObs = event.getObs();
-    	String sbccDate = null;
-    	String sbccLocationType = null;
-    	String sbccParticipantsNumber = null;
-    	if(sbcObs.size() > 0){
-    		for(Obs obs : sbcObs){
-    			if(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_PARTICIPANTS_NUMBER.equals(obs.getFormSubmissionField())){
-    				sbccParticipantsNumber = (String) obs.getValue();
-    			}else if(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_LOCATION_TYPE.equals(obs.getFormSubmissionField())){
-    				sbccLocationType = (String) obs.getValue();
-    			}else if(CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_DATE.equals(obs.getFormSubmissionField())){
+        String sbccDate = null;
+        String sbccLocationType = null;
+        String sbccParticipantsNumber = null;
+        if (sbcObs.size() > 0) {
+            for (Obs obs : sbcObs) {
+                if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_PARTICIPANTS_NUMBER.equals(obs.getFormSubmissionField())) {
+                    sbccParticipantsNumber = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_LOCATION_TYPE.equals(obs.getFormSubmissionField())) {
+                    sbccLocationType = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_DATE.equals(obs.getFormSubmissionField())) {
                     sbccDate = (String) obs.getValue();
                 }
-    		}
+            }
 
-            SbccDao.updateData(event.getBaseEntityId(),sbccDate, sbccLocationType, sbccParticipantsNumber);
-    	}
+            SbccDao.updateData(event.getBaseEntityId(), sbccDate, sbccLocationType, sbccParticipantsNumber);
+        }
     }
 
     private void clientProcessByObs(EventClient eventClient, ClientClassification clientClassification, Event event, String formSubmissionField, String humanReadableValues) {
