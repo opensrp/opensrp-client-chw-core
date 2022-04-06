@@ -44,10 +44,10 @@ public class CoreFamilyRegisterActivityTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
-        //String password = "pwd";
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
-        //context.configuration().getDrishtiApplication().setPassword(password);
-        //context.session().setPassword(password);
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         controller = Robolectric.buildActivity(CoreFamilyRegisterActivityTestImpl.class, new Intent()).create().start();
         activity = controller.get();

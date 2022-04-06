@@ -23,7 +23,7 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
     private boolean isFabMenuOpen = false;
     private OnClickFloatingMenu onClickFloatingMenu;
 
-    private View callLayout;
+    public View callLayout;
     private View addNewMember;
 
     public FamilyFloatingMenu(Context context) {
@@ -41,7 +41,7 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
         initUi();
     }
 
-    private void initUi() {
+    public void initUi() {
         inflate(getContext(), R.layout.view_family_floating_menu, this);
         activityMain = findViewById(R.id.activity_main);
         menuBar = findViewById(R.id.menu_bar);
@@ -61,10 +61,15 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
         addNewMember.setOnClickListener(this);
 
         callLayout.setClickable(false);
+        setCallLayoutVisibility();
         addNewMember.setClickable(false);
 
         menuBar.setVisibility(GONE);
 
+    }
+
+    public void setCallLayoutVisibility(){
+        callLayout.setVisibility(View.VISIBLE);
     }
 
     public void animateFAB() {
@@ -76,7 +81,7 @@ public class FamilyFloatingMenu extends LinearLayout implements View.OnClickList
             activityMain.setBackgroundResource(R.color.transparent);
 
             fab.startAnimation(rotateBack);
-            fab.setImageResource(R.drawable.ic_edit_white);
+            fab.setImageResource(R.drawable.family_floating_fab_icon);
 
             callLayout.startAnimation(fabClose);
             addNewMember.startAnimation(fabClose);

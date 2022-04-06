@@ -12,6 +12,7 @@
         android:layout_width="33dp"
         android:layout_height="33dp"
         android:scaleType="fitXY"
+        app:tint="@color/navigation_item_icon_tint"
         app:srcCompat="@drawable/child_boy_infant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -18,7 +18,7 @@
         android:tint="@android:color/white"
         app:backgroundTint="@color/text_black"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_edit_white" />
+        app:srcCompat="@drawable/family_floating_fab_icon" />
 
     <LinearLayout
         android:id="@+id/menu_bar"
@@ -37,7 +37,7 @@
             android:layout_marginBottom="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="wrap_content"

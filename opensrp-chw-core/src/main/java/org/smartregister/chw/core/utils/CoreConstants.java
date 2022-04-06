@@ -736,6 +736,8 @@ public class CoreConstants {
         public static final String REFERRALS = "Referrals";
         public static final String STOCK_USAGE_REPORT = "StockUsageItemModel usage report";
         public static final String UPDATES = "Updates";
+        public static final String REPORTS = "Reports";
+        public static final String ADD_NEW_FAMILY = "Add New Family";
     }
 
     public static final class RULE_FILE {
@@ -971,6 +973,8 @@ public class CoreConstants {
         public static final String FP_REGISTER_ACTIVITY = "FP_REGISTER_ACTIVITY";
         public static final String ALL_CLIENTS_REGISTERED_ACTIVITY = "ALL_CLIENTS";
         public static final String UPDATES_REGISTER_ACTIVITY = "UPDATES_REGISTER_ACTIVITY";
+        public static final String REPORTS_ACTIVITY = "REPORTS_ACTIVITY";
+        public static final String ADD_NEW_FAMILY = "ADD_NEW_FAMILY";
     }
 
     public static final class BUSINESS_STATUS {

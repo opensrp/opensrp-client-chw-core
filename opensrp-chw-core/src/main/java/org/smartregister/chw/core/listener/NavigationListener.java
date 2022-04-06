@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.util.Utils;
+import org.smartregister.view.activity.BaseRegisterActivity;
 
 public class NavigationListener implements View.OnClickListener {
 
@@ -66,6 +70,20 @@ public class NavigationListener implements View.OnClickListener {
                 case CoreConstants.DrawerMenu.UPDATES:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.UPDATES_REGISTER_ACTIVITY));
                     break;
+                case CoreConstants.DrawerMenu.REPORTS:
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.REPORTS_ACTIVITY));
+                    break;
+                case CoreConstants.DrawerMenu.ADD_NEW_FAMILY:
+                    Class<?> newFamilyRegisterClass = getActivity(CoreConstants.REGISTERED_ACTIVITIES.ADD_NEW_FAMILY);
+                    if (newFamilyRegisterClass.isInstance(activity)) {
+                        BaseRegisterActivity baseRegisterActivity = (BaseRegisterActivity) activity;
+                        baseRegisterActivity.startRegistration();
+                    } else {
+                        Intent intent = new Intent(activity, newFamilyRegisterClass);
+                        intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.ACTION, CoreConstants.ACTION.START_REGISTRATION);
+                        startRegisterActivity(intent,  false);
+                    }
+                    break;
                 default:
                     Utils.showShortToast(activity.getApplicationContext(), "Unspecified navigation action");
                     break;
@@ -74,11 +92,34 @@ public class NavigationListener implements View.OnClickListener {
         }
     }
 
-    public void startRegisterActivity(Class registerClass) {
+    private boolean isClassCurrentActivity(Class<? extends Activity> klass){
+        return klass.getName().equals(activity.getClass().getName());
+    }
+
+    private boolean isIntentForCurrentActivity(Intent intent) {
+        return intent.getComponent().getClassName().equals(activity.getClass().getName());
+    }
+
+    public void startRegisterActivity(@NotNull @NonNull Class registerClass) {
+        startRegisterActivity(registerClass, true);
+    }
+
+    public void startRegisterActivity(@NotNull @NonNull Class registerClass,  boolean finish) {
         if (registerClass != null) {
             Intent intent = new Intent(activity, registerClass);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
+            if (!isClassCurrentActivity(registerClass) && finish) {
+                activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                activity.finish();
+            }
+        }
+    }
+
+    public void startRegisterActivity(@NonNull @NotNull Intent intent,  boolean finish) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        if (!isIntentForCurrentActivity(intent) && finish) {
             activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             activity.finish();
         }
