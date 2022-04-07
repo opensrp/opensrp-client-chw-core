@@ -26,6 +26,7 @@ public interface ChwDBConstants {
     String DETAILS = "details";
     String EVENT_DATE = "event_date";
     String SYNC_LOCATION_ID = "sync_location_id";
+    String SERVICE_PROVIDER = "service_provider";
 
     interface TaskTable {
         String FOR = "for";

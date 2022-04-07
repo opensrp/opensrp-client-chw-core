@@ -1,5 +1,8 @@
 package org.smartregister.chw.core.utils;
 
+import static org.smartregister.chw.core.utils.Utils.getDuration;
+import static org.smartregister.util.AssetHandler.jsonStringToJava;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Pair;
@@ -27,9 +30,6 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
-import static org.smartregister.chw.core.utils.Utils.getDuration;
-import static org.smartregister.util.AssetHandler.jsonStringToJava;
-
 public class BAJsonFormUtils {
     private static final String TITLE = "title";
     private HashMap<String, String> JSON_DB_MAP;
@@ -49,6 +49,7 @@ public class BAJsonFormUtils {
         JSON_DB_MAP.put(CoreConstants.JsonAssets.DISABILITIES, ChwDBConstants.DISABILITIES);
         JSON_DB_MAP.put(CoreConstants.JsonAssets.DISABILITY_TYPE, ChwDBConstants.DISABILITY_TYPE);
         JSON_DB_MAP.put(CoreConstants.JsonAssets.OTHER_LEADER, ChwDBConstants.OTHER_LEADER);
+        JSON_DB_MAP.put(CoreConstants.JsonAssets.SERVICE_PROVIDER, ChwDBConstants.SERVICE_PROVIDER);
     }
 
     public JSONObject getAutoJsonEditMemberFormString(String title, String formName, Context context, CommonPersonObjectClient client, String eventType, String familyName, boolean isPrimaryCaregiver) {
@@ -178,10 +179,6 @@ public class BAJsonFormUtils {
 
             case CoreConstants.JsonAssets.ID_AVAIL:
                 computeIDAvail(jsonObject, ecClient);
-                break;
-
-            case CoreConstants.JsonAssets.SERVICE_PROVIDER:
-                computeServiceProvider(jsonObject, ecEvent);
                 break;
 
             case CoreConstants.JsonAssets.LEADER:
