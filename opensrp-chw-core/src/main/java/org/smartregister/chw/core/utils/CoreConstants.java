@@ -197,6 +197,8 @@ public class CoreConstants {
         public static final String ANC_PARTNER_COMMUNITY_FOLLOWUP_FEEDBACK = "ANC Partner Community Followup Feedback";
         public static final String PMTCT_COMMUNITY_FOLLOWUP = "PMTCT Community Followup";
         public static final String CLOSE_PMTCT_FEEDBACK = "Close PMTCT Feedback";
+
+        public static final String MOTHER_CHAMPION_SBCC = "Mother Champion SBCC Sessions";
     }
 
     public static final class EncounterType {
@@ -1078,6 +1080,11 @@ public class CoreConstants {
             public static final String NOTIFICATION_ID = "notification_id";
             public static final String DATE_NOTIFICATION_MARKED_AS_DONE = "date_marked_as_done";
             public static final String INDEX_CLIENT_BASE_ENTITY_ID = "index_client_base_entity_id";
+
+            public static final String SBCC_LOCATION_TYPE = "location_type";
+            public static final String SBCC_PARTICIPANTS_NUMBER = "participants_number";
+            public static final String SBCC_DATE = "sbcc_date";
+
         }
     }
 

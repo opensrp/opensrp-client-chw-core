@@ -12,6 +12,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.SbccDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
 import org.smartregister.chw.core.model.CommunityResponderModel;
@@ -323,6 +324,9 @@ public class CoreClientProcessor extends ClientProcessorForJava {
             case CoreConstants.EventType.PREGNANCY_CONFIRMATION_DISMISSAL:
                 processNotificationDismissalEvent(eventClient.getEvent());
                 break;
+            case CoreConstants.EventType.MOTHER_CHAMPION_SBCC:
+                processSBCCEvent(eventClient.getEvent());
+                break;
             default:
                 if (eventClient.getClient() != null) {
                     if (eventType.equals(CoreConstants.EventType.UPDATE_FAMILY_RELATIONS) && event.getEntityType().equalsIgnoreCase(CoreConstants.TABLE_NAME.FAMILY_MEMBER)) {
@@ -403,6 +407,26 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 dateMarkedAsDone = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(event.getDateCreated().toDate());
             }
             ChwNotificationDao.markNotificationAsDone(getContext(), notificationId, event.getEntityType(), dateMarkedAsDone);
+        }
+    }
+
+    private void processSBCCEvent(Event event) {
+        List<Obs> sbcObs = event.getObs();
+        String sbccDate = null;
+        String sbccLocationType = null;
+        String sbccParticipantsNumber = null;
+        if (sbcObs.size() > 0) {
+            for (Obs obs : sbcObs) {
+                if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_PARTICIPANTS_NUMBER.equals(obs.getFormSubmissionField())) {
+                    sbccParticipantsNumber = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_LOCATION_TYPE.equals(obs.getFormSubmissionField())) {
+                    sbccLocationType = (String) obs.getValue();
+                } else if (CoreConstants.FORM_CONSTANTS.FORM_SUBMISSION_FIELD.SBCC_DATE.equals(obs.getFormSubmissionField())) {
+                    sbccDate = (String) obs.getValue();
+                }
+            }
+
+            SbccDao.updateData(event.getBaseEntityId(), sbccDate, sbccLocationType, sbccParticipantsNumber);
         }
     }
 
