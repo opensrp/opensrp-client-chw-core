@@ -16,7 +16,7 @@ import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
-        CustomFontTextViewShadowHelper.class}, sdk = Build.VERSION_CODES.P)
+        CustomFontTextViewShadowHelper.class}, sdk = {Build.VERSION_CODES.P})
 public abstract class BaseUnitTest {
 
 }

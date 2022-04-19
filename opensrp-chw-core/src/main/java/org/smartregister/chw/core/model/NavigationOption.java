@@ -56,4 +56,8 @@ public class NavigationOption {
         RegisterCount = registerCount;
     }
 
+    public boolean hasRegisterCount() {
+        return this.RegisterCount >= 0;
+    }
+
 }

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
@@ -167,8 +168,6 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
             upArrow.setColorFilter(getResources().getColor(R.color.text_blue), PorterDuff.Mode.SRC_ATOP);
             actionBar.setHomeAsUpIndicator(upArrow);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        textViewTitle.setOnClickListener(v -> onBackPressed());
         appBarLayout = findViewById(R.id.collapsing_toolbar_appbarlayout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout.setOutlineProvider(null);
@@ -326,10 +325,18 @@ public class CoreChildProfileActivity extends BaseProfileActivity implements Cor
         return this;
     }
 
+    public Form getForm(){
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        return form;
+    }
+
     @Override
     public void startFormActivity(JSONObject jsonForm) {
-        startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, jsonForm,
-                Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(
+                CoreJsonFormUtils.getJsonIntent(this, jsonForm,Utils.metadata().familyMemberFormActivity, getForm()),
+                JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override

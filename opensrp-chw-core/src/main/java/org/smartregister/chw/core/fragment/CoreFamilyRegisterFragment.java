@@ -182,9 +182,10 @@ public abstract class CoreFamilyRegisterFragment extends BaseFamilyRegisterFragm
         filterSortLayout.setVisibility(View.GONE);
 
         dueOnlyLayout = view.findViewById(R.id.due_only_layout);
-        dueOnlyLayout.setVisibility(View.VISIBLE);
-        dueOnlyLayout.setOnClickListener(registerActionHandler);
-
+        if(dueOnlyLayout != null){
+            dueOnlyLayout.setVisibility(View.VISIBLE);
+            dueOnlyLayout.setOnClickListener(registerActionHandler);
+        }
         if (getSearchView() != null) {
             getSearchView().setBackgroundResource(org.smartregister.family.R.color.white);
             getSearchView().setCompoundDrawablesWithIntrinsicBounds(org.smartregister.family.R.drawable.ic_action_search, 0, 0, 0);

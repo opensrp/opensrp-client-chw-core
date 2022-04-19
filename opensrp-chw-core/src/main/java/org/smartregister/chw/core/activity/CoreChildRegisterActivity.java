@@ -105,17 +105,22 @@ public class CoreChildRegisterActivity extends BaseRegisterActivity implements C
         }
     }
 
-    @Override
-    public void startFormActivity(JSONObject jsonForm) {
-        Intent intent = new Intent(this, Utils.metadata().familyFormActivity);
-        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
-
+    public Form getFormConfig(){
         Form form = new Form();
         form.setName(getString(R.string.add_fam));
         form.setActionBarBackground(R.color.family_actionbar);
         form.setNavigationBackground(R.color.family_navigation);
         form.setHomeAsUpIndicator(R.mipmap.ic_cross_white);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        return form;
+    }
+
+    @Override
+    public void startFormActivity(JSONObject jsonForm) {
+        Intent intent = new Intent(this, Utils.metadata().familyFormActivity);
+        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+
+
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getFormConfig());
 
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }

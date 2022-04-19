@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vijay.jsonwizard.domain.Form;
+
 import org.json.JSONObject;
 import org.smartregister.chw.anc.domain.MemberObject;
 import org.smartregister.chw.anc.util.NCUtils;
@@ -101,10 +103,18 @@ public abstract class CorePncMemberProfileActivity extends BasePncMemberProfileA
         return getCommonPersonObjectClient(baseEntityId);
     }
 
+    public Form getForm(){
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        return form;
+    }
+
     @Override
     public void startFormActivity(JSONObject formJson) {
-        startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, formJson,
-                org.smartregister.family.util.Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(
+                CoreJsonFormUtils.getJsonIntent(this, formJson,org.smartregister.family.util.Utils.metadata().familyMemberFormActivity, getForm()),
+                JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     protected List<CommonPersonObjectClient> getChildren(MemberObject memberObject) {
