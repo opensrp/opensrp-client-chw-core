@@ -4,7 +4,6 @@ import net.sqlcipher.Cursor;
 
 import org.smartregister.chw.core.utils.ChwDBConstants;
 import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.cloudant.models.Event;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
@@ -36,8 +35,8 @@ public class ChwTaskRepository extends TaskRepository {
                         " INNER JOIN %s ON %s.%s = %s.%s " +
                         " WHERE %s =? OR %s IS NULL) AND %s <> %S AND %s IS NOT NULL "
                 , "task", "_id", "_id", "task", "ec_family_member", "ec_family_member", "base_entity_id",
-                "task", "for", EventClientRepository.Table.event.name(), EventClientRepository.Table.event.name(), Event.form_submission_id_key,
-                "task", "reason_reference", "sync_status", "server_version","status","'COMPLETED'","reason_reference"), new String[]{BaseRepository.TYPE_Created})) {
+                "task", "for", EventClientRepository.Table.event.name(), EventClientRepository.Table.event.name(), "formSubmissionId",
+                "task", "reason_reference", "sync_status", "server_version", "status", "'COMPLETED'", "reason_reference"), new String[]{BaseRepository.TYPE_Created})) {
             while (cursor.moveToNext()) {
                 tasks.add(readCursor(cursor));
             }
@@ -47,7 +46,7 @@ public class ChwTaskRepository extends TaskRepository {
         return tasks;
     }
 
-    public Set<Task> getReferralTasksForClientByStatus(String planId, String forEntity, String businessStatus ) {
+    public Set<Task> getReferralTasksForClientByStatus(String planId, String forEntity, String businessStatus) {
         Cursor cursor = null;
         Set<Task> taskSet = new HashSet<>();
         try {
