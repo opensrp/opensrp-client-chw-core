@@ -96,7 +96,7 @@ public abstract class CoreHivIndexContactProfileActivity extends BaseIndexContac
             onBackPressed();
             return true;
         } else if (itemId == R.id.action_registration) {
-            startFormForEdit(R.string.registration_info,
+            startFormForEdit(R.string.update_client_registration,
                     CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
             return true;
         }
@@ -158,7 +158,7 @@ public abstract class CoreHivIndexContactProfileActivity extends BaseIndexContac
 
         try {
             assert form != null;
-            startFormActivity(form, getHivIndexContactObject(), formName);
+            startFormActivity(form, getHivIndexContactObject(), titleResource != null ? getResources().getString(titleResource): null);
         } catch (Exception e) {
             Timber.e(e);
         }
