@@ -27,11 +27,11 @@ import static org.smartregister.chw.core.utils.QueryConstant.TB_OUTCOME_COUNT_QU
 
 public class NavigationInteractor implements NavigationContract.Interactor {
 
-    private static NavigationInteractor instance;
-    private AppExecutors appExecutors = new AppExecutors();
+    protected static NavigationInteractor instance;
+    protected AppExecutors appExecutors = new AppExecutors();
     private CoreApplication coreApplication;
 
-    private NavigationInteractor() {
+    protected NavigationInteractor() {
 
     }
 
@@ -93,7 +93,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         }
     }
 
-    private int getCount(String tableName) {
+    protected int getCount(String tableName) {
         switch (tableName.toLowerCase().trim()) {
             case CoreConstants.TABLE_NAME.CHILD:
                 String sqlChild = getChildSqlString();

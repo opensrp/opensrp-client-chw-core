@@ -27,9 +27,9 @@ import timber.log.Timber;
 
 public class NavigationPresenter implements NavigationContract.Presenter {
 
-    private NavigationContract.Model mModel;
-    private NavigationContract.Interactor mInteractor;
-    private WeakReference<NavigationContract.View> mView;
+    protected NavigationContract.Model mModel;
+    protected NavigationContract.Interactor mInteractor;
+    protected WeakReference<NavigationContract.View> mView;
     private HashMap<String, String> tableMap = new HashMap<>();
 
     public NavigationPresenter(CoreApplication application, NavigationContract.View view, NavigationModel.Flavor modelFlavor) {
@@ -44,7 +44,7 @@ public class NavigationPresenter implements NavigationContract.Presenter {
         initialize();
     }
 
-    private void initialize() {
+    protected void initialize() {
         tableMap.put(CoreConstants.DrawerMenu.ALL_FAMILIES, CoreConstants.TABLE_NAME.FAMILY);
         tableMap.put(CoreConstants.DrawerMenu.CHILD_CLIENTS, CoreConstants.TABLE_NAME.CHILD);
         tableMap.put(CoreConstants.DrawerMenu.ANC_CLIENTS, CoreConstants.TABLE_NAME.ANC_MEMBER);
