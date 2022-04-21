@@ -59,21 +59,21 @@ import timber.log.Timber;
 public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, DrawerLayout.DrawerListener {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
-    private static CoreChwApplication application;
-    private static NavigationMenu.Flavour menuFlavor;
-    private static NavigationModel.Flavor modelFlavor;
+    protected static CoreChwApplication application;
+    protected static NavigationMenu.Flavour menuFlavor;
+    protected static NavigationModel.Flavor modelFlavor;
     private static Map<String, Class> registeredActivities;
     private static boolean showDeviceToDeviceSync = true;
     private DrawerLayout drawer;
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
     private NavigationAdapter navigationAdapter;
     private RecyclerView recyclerView;
     private TextView tvLogout;
     private View rootView = null;
     private ImageView ivSync;
     private ProgressBar syncProgressBar;
-    private NavigationContract.Presenter mPresenter;
-    private View parentView;
+    protected NavigationContract.Presenter mPresenter;
+    protected View parentView;
     private Timer timer;
 
     public static void setupNavigationMenu(CoreChwApplication application, NavigationMenu.Flavour menuFlavor,
@@ -109,7 +109,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         return null;
     }
 
-    private void init(Activity activity, View myParentView, Toolbar myToolbar) {
+    protected void init(Activity activity, View myParentView, Toolbar myToolbar) {
         // parentActivity = activity;
         try {
             setParentView(activity, parentView);
@@ -123,7 +123,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void setParentView(Activity activity, View parentView) {
+    protected void setParentView(Activity activity, View parentView) {
         if (parentView != null) {
             rootView = parentView;
         } else {
