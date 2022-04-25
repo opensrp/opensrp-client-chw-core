@@ -22,7 +22,7 @@ public class AncDao extends AlertDao {
     }
 
     public static boolean isANCMember(String baseEntityID) {
-        String sql = "select count(*) count from ec_anc_register where base_entity_id = '" + baseEntityID + "' and is_closed = 0";
+        String sql = "select count(*) count from ec_anc_register where base_entity_id = '" + baseEntityID + "' and is_closed = 0 and confirmation_status = 'Confirmed'";
 
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
@@ -74,7 +74,7 @@ public class AncDao extends AlertDao {
             memberObject.setDateCreated(getCursorValue(cursor, "date_created"));
             memberObject.setAddress(getCursorValue(cursor, "village_town"));
             memberObject.setHasAncCard(getCursorValue(cursor, "has_anc_card", ""));
-            memberObject.setDeliveryKit(getCursorValue(cursor, "delivery_kit",""));
+            memberObject.setDeliveryKit(getCursorValue(cursor, "delivery_kit", ""));
             memberObject.setGps(getCursorValue(cursor, "gps"));
             memberObject.setLandmark(getCursorValue(cursor, "landmark"));
 
@@ -99,7 +99,8 @@ public class AncDao extends AlertDao {
         List<Integer> res = readData(sql, dataMap);
         return (res == null || res.size() < 1) ? 0 : res.get(0);
     }
-    public static boolean showTT(String baseEntityID){
+
+    public static boolean showTT(String baseEntityID) {
         String sql = "SELECT count(*) as count\n" +
                 "FROM visit_details vd\n" +
                 "INNER JOIN visits v on v.visit_id = vd.visit_id\n" +
