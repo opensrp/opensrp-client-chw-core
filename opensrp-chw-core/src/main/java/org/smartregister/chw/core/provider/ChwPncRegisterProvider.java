@@ -51,7 +51,7 @@ public class ChwPncRegisterProvider extends PncRegisterProvider {
         Utils.startAsyncTask(new UpdateAsyncTask(context, viewHolder, pc), null);
     }
 
-    private void updateDueColumn(Context context, RegisterViewHolder viewHolder, PncVisitAlertRule pncVisitAlertRule) {
+    protected void updateDueColumn(Context context, RegisterViewHolder viewHolder, PncVisitAlertRule pncVisitAlertRule) {
         viewHolder.dueButton.setVisibility(View.VISIBLE);
         if (pncVisitAlertRule.getButtonStatus().equalsIgnoreCase(CoreConstants.VISIT_STATE.DUE)) {
             setVisitButtonDueStatus(context, pncVisitAlertRule.getVisitID(), viewHolder.dueButton);
