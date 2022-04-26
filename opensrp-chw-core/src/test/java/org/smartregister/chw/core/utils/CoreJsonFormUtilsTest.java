@@ -31,7 +31,7 @@ import org.smartregister.chw.core.shadows.FamilyLibraryShadowUtil;
 import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
-import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.chw.core.shadows.FamilyUtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -51,7 +51,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Config(application = TestApplication.class, shadows = {ContextShadow.class, FamilyLibraryShadowUtil.class,
-        UtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
+        FamilyUtilsShadowUtil.class, EcSyncHelperShadowHelper.class, FormUtilsShadowHelper.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class})
 public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     private JSONObject jsonForm;
@@ -199,7 +199,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
         testClient.setRelationships(new HashMap<>());
         EcSyncHelperShadowHelper.setTestClient(testClient);
 
-        UtilsShadowUtil.setMetadata(initializeFamilyMetadata());
+        FamilyUtilsShadowUtil.setMetadata(initializeFamilyMetadata());
 
         Pair<List<Client>, List<Event>> resultPair = CoreJsonFormUtils.processFamilyUpdateRelations(application, RuntimeEnvironment.application, testMember, "Kenya");
 
@@ -218,7 +218,7 @@ public class CoreJsonFormUtilsTest extends BaseUnitTest {
 
     @Test
     public void getFormAsJsonReturnsRegistrationFormWithCorrectIds() throws Exception {
-        UtilsShadowUtil.setMetadata(initializeFamilyMetadata());
+        FamilyUtilsShadowUtil.setMetadata(initializeFamilyMetadata());
         JSONObject form = getFormAsJson("family_register");
         String formName = "family_register";
         String entityId = "test-entity-id";

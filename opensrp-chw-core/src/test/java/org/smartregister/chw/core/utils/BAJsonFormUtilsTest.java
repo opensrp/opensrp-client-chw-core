@@ -20,7 +20,7 @@ import org.smartregister.chw.core.application.CoreChwApplication;
 import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.shadows.LocationHelperShadowHelper;
 import org.smartregister.chw.core.shadows.LocationPickerViewShadowHelper;
-import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.chw.core.shadows.FamilyUtilsShadowUtil;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.family.activity.FamilyWizardFormActivity;
 import org.smartregister.family.domain.FamilyMetadata;
@@ -33,7 +33,7 @@ import static org.smartregister.chw.core.utils.CoreJsonFormUtils.TITLE;
 import static org.smartregister.family.util.Constants.JSON_FORM_KEY.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.STEP1;
 
-@Config(shadows = {UtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
+@Config(shadows = {FamilyUtilsShadowUtil.class, LocationHelperShadowHelper.class, LocationPickerViewShadowHelper.class, FormUtilsShadowHelper.class})
 public class BAJsonFormUtilsTest extends BaseUnitTest {
 
     @Mock
@@ -83,7 +83,7 @@ public class BAJsonFormUtilsTest extends BaseUnitTest {
                 "updateEventType",
                 "config",
                 "familyRelationKey");
-        UtilsShadowUtil.setMetadata(metadata);
+        FamilyUtilsShadowUtil.setMetadata(metadata);
 
         String formTitle = "Sample test registration form";
         String familyName = "Sample Family Name";

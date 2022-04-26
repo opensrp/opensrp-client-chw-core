@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.chw.core.BaseUnitTest;
-import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.chw.core.shadows.FamilyUtilsShadowUtil;
 import org.smartregister.clientandeventmodel.Client;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.family.domain.FamilyEventClient;
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 
-@Config(shadows = {UtilsShadowUtil.class})
+@Config(shadows = {FamilyUtilsShadowUtil.class})
 public class FormUtilsTest extends BaseUnitTest {
 
     @Before
