@@ -88,13 +88,11 @@ public class CoreAncMemberProfilePresenterTest extends BaseUnitTest {
 
     @Test
     public void testStartAncDangerSignsOutcomeForm() throws JSONException {
-        ancMemberProfilePresenter = Mockito.mock(CoreAncMemberProfilePresenter.class, Mockito.CALLS_REAL_METHODS);
-        ReflectionHelpers.setField(ancMemberProfilePresenter, "view", new WeakReference<>(ancMemberProfileView));
+//        ancMemberProfilePresenter = Mockito.mock(CoreAncMemberProfilePresenter.class, Mockito.CALLS_REAL_METHODS);
+//        ReflectionHelpers.setField(ancMemberProfilePresenter, "view", new WeakReference<>(ancMemberProfileView));
         ancMemberProfilePresenter.startAncDangerSignsOutcomeForm(Mockito.mock(MemberObject.class));
         Mockito.verify(ancMemberProfileView, Mockito.atLeastOnce()).startFormActivity(Mockito.any());
-//        look for that file needed "anc..."
-//        folder holding json form za tests
-//        look for shadow class returning form utils and provide a shadow implementation of
+
     }
 
 }
