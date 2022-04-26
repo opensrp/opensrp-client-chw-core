@@ -258,7 +258,7 @@ public class CoreAncMemberProfilePresenter extends BaseAncMemberProfilePresenter
         }
     }
 
-    private FormUtils getFormUtils() {
+    protected FormUtils getFormUtils() {
 
         if (formUtils == null) {
             try {
