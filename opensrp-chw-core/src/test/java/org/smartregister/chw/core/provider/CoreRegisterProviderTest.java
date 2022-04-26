@@ -19,13 +19,13 @@ import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreRegisterProviderImpl;
 import org.smartregister.chw.core.shadows.ContextShadow;
-import org.smartregister.chw.core.shadows.UtilsShadowUtil;
+import org.smartregister.chw.core.shadows.FamilyUtilsShadowUtil;
 import org.smartregister.commonregistry.CommonRepository;
 
 import java.util.List;
 import java.util.Map;
 
-@Config(shadows = {UtilsShadowUtil.class, ContextShadow.class})
+@Config(shadows = {FamilyUtilsShadowUtil.class, ContextShadow.class})
 public class CoreRegisterProviderTest extends BaseUnitTest {
 
     private CoreRegisterProvider coreRegisterProvider;
