@@ -95,6 +95,7 @@ public class CoreConstants {
         String NAME = "name";
         String DEATH_PLACE = "death_place";
         String KNOW_DEATH_CAUSE = "know_death_cause";
+        String DEATH_CAUSE = "death_cause";
         String DEATH_MANNER = "death_manner";
         String OFFICIAL_NAME = "official_name";
         String OFFICIAL_ID = "official_id";

@@ -1,5 +1,6 @@
 package org.smartregister.chw.core.sync;
 
+import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_CAUSE;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_MANNER;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_PLACE;
 import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_ADDRESS;
@@ -790,6 +791,10 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 String knownDeathCause = obsMap.get("know_death_cause");
                 if (knownDeathCause != null)
                     values.put(KNOW_DEATH_CAUSE, knownDeathCause);
+
+                String causeOfDeath = obsMap.get("death_cause");
+                if (knownDeathCause != null)
+                    values.put(DEATH_CAUSE, causeOfDeath);
 
                 String officialName = obsMap.get("official_name");
                 if (officialName != null)
