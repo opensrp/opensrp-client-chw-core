@@ -1163,7 +1163,7 @@ public class CoreConstants {
         public static final String PMTCT_FOLLOWUP_REGISTER_ACTIVITY = "PMTCT_FOLLOWUP_REGISTER_ACTIVITY";
         public static final String HEI = "HEI_REGISTER_ACTIVITY";
         public static final String MOTHER_CHAMPION_ACTIVITY = "MOTHER_CHAMPION_ACTIVITY";
-        public static final String REPORTS = "REPORTS_ACTIVITY" ;
+        public static final String REPORTS = "REPORTS_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
@@ -1187,6 +1187,7 @@ public class CoreConstants {
         public static final String PMTCT = "PMTCT Referral";
         public static final String SUSPECTED_GBV = "Suspected GBV";
         public static final String SUSPECTED_CHILD_GBV = "Suspected Child GBV";
+        public static final String ANC_MALE_ENGAGEMENT = "ANC Male engagement";
     }
 
     public static final class REGISTER_TYPE {
