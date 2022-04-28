@@ -777,6 +777,11 @@
 
 
     <!-- Certification registers -->
+    <string name="patient_name">Patient Name</string>
+    <string name="parent_name">CG: Parent Name</string>
+    <string name="stillbirth">Stillbirth</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <string name="certification_clients">Certification Clients</string>
     <string name="birth_certification">Birth certification</string>
     <string name="death_certification">Death certification</string>

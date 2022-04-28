@@ -30,7 +30,7 @@
             android:maxLines="1"
             android:paddingLeft="0dp"
             android:singleLine="true"
-            android:text="CG:Parent Name"
+            android:text="@string/parent_name"
             android:textColor="@color/text_black"
             android:textSize="@dimen/child_register_title_size" />
 
@@ -43,7 +43,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingLeft="0dp"
-            android:text="Patient Name"
+            android:text="@string/patient_name"
             android:textColor="@color/text_black"
             android:textSize="@dimen/child_register_title_size"
             android:textStyle="normal" />
