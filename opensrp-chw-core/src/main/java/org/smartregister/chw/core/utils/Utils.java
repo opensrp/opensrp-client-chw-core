@@ -1,5 +1,10 @@
 package org.smartregister.chw.core.utils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
+import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
@@ -16,7 +21,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Pair;
@@ -94,11 +98,6 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.smartregister.chw.core.dao.VisitDao.getMUACValue;
-import static org.smartregister.opd.utils.OpdJsonFormUtils.locationId;
-
 public abstract class Utils extends org.smartregister.family.util.Utils {
     public static final SimpleDateFormat dd_MMM_yyyy = new SimpleDateFormat("dd MMM yyyy");
     public static final SimpleDateFormat yyyy_mm_dd = new SimpleDateFormat("yyyy-mm-dd");
@@ -169,21 +168,20 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
     public static boolean launchDialer(final Activity activity, final FamilyCallDialogContract.View callView, final String phoneNumber) {
 
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
             // set a pending call execution request
             if (callView != null) {
                 callView.setPendingCallRequest(() -> Utils.launchDialer(activity, callView, phoneNumber));
             }
 
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_SMS}, PermissionUtils.PHONE_STATE_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, PermissionUtils.PHONE_STATE_PERMISSION_REQUEST_CODE);
 
             return false;
         } else {
 
-            if (((TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number()
-                    == null) {
-
-                Timber.i("No dial application so we launch copy to clipboard...");
+            if (isIntentAvailable(activity, Intent.ACTION_DIAL)) {
+                Timber.i("No action dial intent is available so we launch copy to clipboard...");
 
                 ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(activity.getText(R.string.copied_phone_number), phoneNumber);
@@ -962,5 +960,14 @@ public abstract class Utils extends org.smartregister.family.util.Utils {
 
         return duration;
 
+    }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List resolveInfo =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        return resolveInfo.size() > 0;
     }
 }
