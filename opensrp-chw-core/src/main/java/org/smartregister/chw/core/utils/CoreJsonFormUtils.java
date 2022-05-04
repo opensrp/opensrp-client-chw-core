@@ -470,6 +470,7 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_NOTIFICATION_DONE:
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_PLACE:
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.KNOW_DEATH_CAUSE:
+                    case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_CAUSE:
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.DEATH_MANNER:
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_NAME:
                     case CoreConstants.FORM_CONSTANTS.REMOVE_MEMBER_FORM.OFFICIAL_ID:

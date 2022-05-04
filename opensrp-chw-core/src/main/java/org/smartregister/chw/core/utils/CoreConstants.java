@@ -918,6 +918,7 @@ public class CoreConstants {
             public static final String DEATH_NOTIFICATION_DONE = "death_notification_done";
             public static final String DEATH_PLACE = "death_place";
             public static final String KNOW_DEATH_CAUSE = "know_death_cause";
+            public static final String DEATH_CAUSE = "death_cause";
             public static final String DEATH_MANNER = "death_manner";
             public static final String OFFICIAL_NAME = "official_name";
             public static final String OFFICIAL_ID = "official_id";

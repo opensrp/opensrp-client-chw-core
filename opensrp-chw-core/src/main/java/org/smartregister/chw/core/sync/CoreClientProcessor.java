@@ -1,19 +1,5 @@
 package org.smartregister.chw.core.sync;
 
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_CAUSE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_MANNER;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.DEATH_PLACE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_ADDRESS;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_NAME;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_PHONE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.INFORMANT_RELATIONSHIP;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.KNOW_DEATH_CAUSE;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_ADDRESS;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_ID;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_NAME;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_NUMBER;
-import static org.smartregister.chw.core.utils.CoreConstants.DB_CONSTANTS.OFFICIAL_POSITION;
-
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -29,6 +15,7 @@ import org.smartregister.chw.core.dao.ChildDao;
 import org.smartregister.chw.core.dao.ChwNotificationDao;
 import org.smartregister.chw.core.dao.DeathCertificationDao;
 import org.smartregister.chw.core.dao.EventDao;
+import org.smartregister.chw.core.dao.FamilyMemberDao;
 import org.smartregister.chw.core.dao.VaccinesDao;
 import org.smartregister.chw.core.domain.MonthlyTally;
 import org.smartregister.chw.core.domain.StockUsage;
@@ -764,84 +751,21 @@ public class CoreClientProcessor extends ClientProcessorForJava {
         SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Map<String, String> obsMap = readObsWithHumanReadableValues(event);
 
-        AllCommonsRepository commonsRepository = CoreChwApplication.getInstance().getAllCommonsRepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER);
-        if (commonsRepository != null) {
+        ContentValues values = new ContentValues();
+        values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
+        values.put("is_closed", 1);
 
-            ContentValues values = new ContentValues();
-            values.put(DBConstants.KEY.DATE_REMOVED, defaultDf.format(myEventDate));
-            values.put("is_closed", 1);
-
-            // clean fts table
-            getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
-                    " object_id  = ?  ", new String[]{baseEntityId});
-
-            try {
-                Date dod = getDate(obsMap, "date_died");
-                if (dod != null)
-                    values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
-
-                String deathManner = obsMap.get("death_manner");
-                if (deathManner != null)
-                    values.put(DEATH_MANNER, deathManner);
-
-                String deathPlace = obsMap.get("death_place");
-                if (deathPlace != null)
-                    values.put(DEATH_PLACE, deathPlace);
-
-                String knownDeathCause = obsMap.get("know_death_cause");
-                if (knownDeathCause != null)
-                    values.put(KNOW_DEATH_CAUSE, knownDeathCause);
-
-                String causeOfDeath = obsMap.get("death_cause");
-                if (knownDeathCause != null)
-                    values.put(DEATH_CAUSE, causeOfDeath);
-
-                String officialName = obsMap.get("official_name");
-                if (officialName != null)
-                    values.put(OFFICIAL_NAME, officialName);
-
-                String officialId = obsMap.get("official_id");
-                if (officialId != null)
-                    values.put(OFFICIAL_ID, officialId);
-
-                String officialPosition = obsMap.get("official_position");
-                if (officialPosition != null)
-                    values.put(OFFICIAL_POSITION, officialPosition);
-
-                String officialAddress = obsMap.get("official_address");
-                if (officialAddress != null)
-                    values.put(OFFICIAL_ADDRESS, officialAddress);
-
-                String officialNumber = obsMap.get("official_number");
-                if (officialNumber != null)
-                    values.put(OFFICIAL_NUMBER, officialNumber);
-
-                String informantName = obsMap.get("informant_name");
-                if (informantName != null)
-                    values.put(INFORMANT_NAME, informantName);
-
-                String informantRelationship = obsMap.get("informant_relationship");
-                if (informantRelationship != null)
-                    values.put(INFORMANT_RELATIONSHIP, informantRelationship);
-
-                String informantAddress = obsMap.get("informant_address");
-                if (informantAddress != null)
-                    values.put(INFORMANT_ADDRESS, informantAddress);
-
-                String informantPhone = obsMap.get("informant_phone");
-                if (informantPhone != null)
-                    values.put(INFORMANT_PHONE, informantPhone);
-
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-
-            getWritableDatabase().update(CoreConstants.TABLE_NAME.FAMILY_MEMBER, values,
-                    DBConstants.KEY.BASE_ENTITY_ID + " = ?  ", new String[]{baseEntityId});
-
-            // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
-            //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
+        // clean fts table
+        getWritableDatabase().update(CommonFtsObject.searchTableName(CoreConstants.TABLE_NAME.FAMILY_MEMBER), values,
+                " object_id  = ?  ", new String[]{baseEntityId});
+        try {
+            FamilyMemberDao.updateRemovedFamilyMember(obsMap, baseEntityId, values);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+        // Utils.context().commonrepository(CoreConstants.TABLE_NAME.FAMILY_MEMBER).populateSearchValues(baseEntityId, DBConstants.KEY.DATE_REMOVED, new SimpleDateFormat("yyyy-MM-dd").format(eventDate), null);
+        //CoreChwApplication.getInstance().getContext().alertService().deleteOfflineAlerts(baseEntityId);
     }
 
     private void processRemoveChild(String baseEntityId, Event event) {
