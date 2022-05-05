@@ -35,7 +35,7 @@ public class NavigationListener implements View.OnClickListener {
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.ANC_REGISTER_ACTIVITY));
                     break;
                 case CoreConstants.DrawerMenu.LD:
-                    Toast.makeText(activity.getApplicationContext(), CoreConstants.DrawerMenu.LD, Toast.LENGTH_SHORT).show();
+                    startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.LD));
                     break;
                 case CoreConstants.DrawerMenu.PNC:
                     startRegisterActivity(getActivity(CoreConstants.REGISTERED_ACTIVITIES.PNC_REGISTER_ACTIVITY));

@@ -1164,6 +1164,7 @@ public class CoreConstants {
         public static final String HEI = "HEI_REGISTER_ACTIVITY";
         public static final String MOTHER_CHAMPION_ACTIVITY = "MOTHER_CHAMPION_ACTIVITY";
         public static final String REPORTS = "REPORTS_ACTIVITY";
+        public static final String LD = "L&D_REGISTER_ACTIVITY";
     }
 
     public static final class BUSINESS_STATUS {
