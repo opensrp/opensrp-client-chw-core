@@ -780,5 +780,8 @@
     <string name="issue_pmtct_community_followup_referral">Issue PMTCT Community Followup Referral</string>
     <string name="pnc_registration">Usajili wa PNC</string>
 
+    <!--L&D Titles -->
+    <string name="menu_ld">L&amp;D</string>
+
 </resources>
 
