@@ -20,11 +20,39 @@ jacoco {
     toolVersion = "0.8.0"
 }
 
+def githubProperties = new Properties()
+if (rootProject.file("github.properties").exists()) {
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+}
+
 allprojects {
     repositories {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         mavenLocal()
+
+        maven {
+
+            name = "GitHubPackages"
+
+            url = uri("https://maven.pkg.github.com/SoftmedTanzania/opensrp-client-chw-ld")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+
+        maven {
+
+            name = "GitHubPackages"
+
+            url = uri("https://maven.pkg.github.com/SoftmedTanzania/opensrp-client-native-form")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+
+        }
     }
 }
 
