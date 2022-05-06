@@ -463,6 +463,13 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                                 "              p.is_closed is 0 ";
                 return NavigationDao.getQueryCount(sqlHei);
 
+            case CoreConstants.TABLE_NAME.LABOUR_AND_DELIVERY:
+                String sqlLD =
+                        "SELECT count(*) " +
+                                "   from " + CoreConstants.TABLE_NAME.LABOUR_AND_DELIVERY + " p " +
+                                "              where " +
+                                "              p.is_closed is 0 ";
+                return NavigationDao.getQueryCount(sqlLD);
             default:
                 return NavigationDao.getTableCount(tableName);
         }

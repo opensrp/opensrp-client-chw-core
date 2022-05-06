@@ -863,6 +863,7 @@ public class CoreConstants {
         public static final String PMTCT_COMMUNITY_FEEDBACK = "ec_pmtct_community_feedback";
         public static final String MOTHER_CHAMPION = "ec_mother_champion";
         public static final String HEI = "ec_hei";
+        public static final String LABOUR_AND_DELIVERY = "ec_ld_confirmation";
     }
 
     public static final class INTENT_KEY {
