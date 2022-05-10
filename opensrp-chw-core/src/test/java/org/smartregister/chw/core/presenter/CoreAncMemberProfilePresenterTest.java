@@ -6,8 +6,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.annotation.Config;
 import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.contract.AncMemberProfileContract;
+import org.smartregister.chw.core.shadows.ChwCoreUtilsShadowHelper;
+import org.smartregister.chw.core.shadows.ContextShadow;
+import org.smartregister.chw.core.shadows.FamilyUtilsShadowUtil;
+import org.smartregister.chw.core.shadows.FormUtilsShadowHelper;
 import org.smartregister.chw.core.utils.CoreConstants;
 import org.smartregister.domain.Task;
 import org.smartregister.repository.AllSharedPreferences;
@@ -15,10 +21,11 @@ import org.smartregister.repository.AllSharedPreferences;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CoreAncMemberProfilePresenterTest {
+@Config(shadows = {ChwCoreUtilsShadowHelper.class, FamilyUtilsShadowUtil.class, FormUtilsShadowHelper.class, ContextShadow.class})
+public class CoreAncMemberProfilePresenterTest extends BaseUnitTest {
 
     @Mock
-    private AncMemberProfileContract.View view;
+    private AncMemberProfileContract.View ancMemberProfileView;
 
     @Mock
     private AncMemberProfileContract.Interactor interactor;
@@ -36,14 +43,15 @@ public class CoreAncMemberProfilePresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         memberObject.setBaseEntityId(baseEntityId);
-        ancMemberProfilePresenter = new CoreAncMemberProfilePresenter(view, interactor, memberObject);
+        memberObject.setLastMenstrualPeriod("01-01-2022");
+        ancMemberProfilePresenter = new CoreAncMemberProfilePresenter(ancMemberProfileView, interactor, memberObject);
     }
 
     @Test
     public void setClientTasks() {
         Set<Task> taskSet = new HashSet<>();
         ancMemberProfilePresenter.setClientTasks(taskSet);
-        Mockito.verify(view, Mockito.atLeastOnce()).setClientTasks(taskSet);
+        Mockito.verify(ancMemberProfileView, Mockito.atLeastOnce()).setClientTasks(taskSet);
     }
 
     @Test
@@ -70,4 +78,11 @@ public class CoreAncMemberProfilePresenterTest {
         ancMemberProfilePresenter.fetchTasks();
         Mockito.verify(interactor, Mockito.atLeastOnce()).getClientTasks(CoreConstants.REFERRAL_PLAN_ID, baseEntityId, ancMemberProfilePresenter);
     }
+
+    @Test
+    public void testStartAncDangerSignsOutcomeForm() {
+        ancMemberProfilePresenter.startAncDangerSignsOutcomeForm(memberObject);
+        Mockito.verify(ancMemberProfileView, Mockito.atLeastOnce()).startFormActivity(Mockito.any());
+    }
+
 }
