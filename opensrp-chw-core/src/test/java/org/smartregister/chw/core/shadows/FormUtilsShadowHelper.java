@@ -2,6 +2,7 @@ package org.smartregister.chw.core.shadows;
 
 import android.content.Context;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
