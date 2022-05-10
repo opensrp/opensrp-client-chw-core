@@ -80,7 +80,6 @@ public class CoreAncMemberProfilePresenterTest extends BaseUnitTest {
     }
 
     @Test
-
     public void testStartAncDangerSignsOutcomeForm() {
         ancMemberProfilePresenter.startAncDangerSignsOutcomeForm(memberObject);
         Mockito.verify(ancMemberProfileView, Mockito.atLeastOnce()).startFormActivity(Mockito.any());
