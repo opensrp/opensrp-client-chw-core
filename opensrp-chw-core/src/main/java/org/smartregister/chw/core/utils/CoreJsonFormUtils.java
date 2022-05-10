@@ -85,12 +85,16 @@ public class CoreJsonFormUtils extends org.smartregister.family.util.JsonFormUti
     private static final String LOCATION_UUIDS = "location_uuids";
 
     public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass) {
-        Intent intent = new Intent(context, activityClass);
-        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
         Form form = new Form();
         form.setActionBarBackground(R.color.family_actionbar);
         form.setWizard(false);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        return getJsonIntent(context, jsonForm, activityClass, form);
+    }
+
+    public static Intent getJsonIntent(Context context, JSONObject jsonForm, Class activityClass, Form formConfig){
+        Intent intent = new Intent(context, activityClass);
+        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formConfig);
         return intent;
     }
 

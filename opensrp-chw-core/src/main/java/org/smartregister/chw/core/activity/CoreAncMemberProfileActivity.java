@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vijay.jsonwizard.domain.Form;
+
 import org.json.JSONObject;
 import org.smartregister.chw.anc.activity.BaseAncMemberProfileActivity;
 import org.smartregister.chw.anc.domain.MemberObject;
@@ -96,9 +98,17 @@ public abstract class CoreAncMemberProfileActivity extends BaseAncMemberProfileA
         }
     }
 
+    public Form getForm(){
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        return form;
+    }
+
     public void startFormActivity(JSONObject formJson) {
-        startActivityForResult(CoreJsonFormUtils.getJsonIntent(this, formJson,
-                Utils.metadata().familyMemberFormActivity), JsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(
+                CoreJsonFormUtils.getJsonIntent(this, formJson,Utils.metadata().familyMemberFormActivity, getForm()),
+                JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     // to chw
