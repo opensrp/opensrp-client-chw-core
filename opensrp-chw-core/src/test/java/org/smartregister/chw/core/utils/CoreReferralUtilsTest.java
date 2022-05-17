@@ -22,4 +22,9 @@ public class CoreReferralUtilsTest {
         String[] expectedColumns = {tableName + ".relational_id as relationalid", tableName + ".last_interacted_with", tableName + ".base_entity_id", tableName + ".first_name", tableName + ".middle_name", tableName + ".last_name", familyTable + ".village_town as family_home_address", familyTable + ".primary_caregiver", familyTable + ".family_head", tableName + ".unique_id", tableName + ".gender", tableName + ".dob", tableName + ".dob_unknown"};
         Assert.assertArrayEquals(expectedColumns, CoreReferralUtils.mainColumns(tableName, familyTable));
     }
+
+    @Test
+    public void mainCaregiverSelectTest(){
+        Assert.assertEquals(CoreReferralUtils.mainCareGiverSelect("test_tbl",""),"Select test_tbl.id as _id , test_tbl.relational_id as relationalid , test_tbl.first_name as family_first_name , test_tbl.middle_name as family_last_name , test_tbl.last_name as family_middle_name , test_tbl.phone_number as family_member_phone_number , test_tbl.other_phone_number as family_member_phone_number_other FROM test_tbl WHERE test_tbl.base_entity_id = '' ");
+    }
 }
