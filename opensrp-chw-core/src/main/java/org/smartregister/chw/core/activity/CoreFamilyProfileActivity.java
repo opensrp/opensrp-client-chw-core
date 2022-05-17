@@ -18,6 +18,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
+
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -60,10 +63,10 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
     protected String familyHead;
     protected String primaryCaregiver;
     protected String familyName;
-    private FamilyFloatingMenu familyFloatingMenu;
+    public FamilyFloatingMenu familyFloatingMenu;
 
     @Override
-    protected void setupViews() {
+    public void setupViews() {
         super.setupViews();
 
         // Update profile border
@@ -276,6 +279,23 @@ public abstract class CoreFamilyProfileActivity extends BaseFamilyProfileActivit
         if (familyFloatingMenu != null) {
             familyFloatingMenu.reDraw(hasPhone);
         }
+    }
+
+    public Form getFormConfig(){
+        Form form = new Form();
+        form.setActionBarBackground(R.color.family_actionbar);
+        form.setWizard(false);
+        return form;
+    }
+
+    @Override
+    public void startFormActivity(JSONObject jsonForm) {
+        Intent intent = new Intent(this, Utils.metadata().familyMemberFormActivity);
+        intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getFormConfig());
+
+        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override

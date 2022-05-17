@@ -1,16 +1,20 @@
 package org.smartregister.chw.core.activity;
 
+import static org.mockito.Mockito.doReturn;
+
 import android.content.Intent;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
-import org.smartregister.CoreLibrary;
+import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.utils.CoreConstants;
 
@@ -22,6 +26,9 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
 
     private ActivityController<CoreAncRegisterActivity> controller;
 
+    @Mock
+    private AncLibrary ancLibrary;
+
     @Before
     public void setUp() {
 
@@ -30,10 +37,12 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         MockitoAnnotations.initMocks(this);
 
         Context context = Context.getInstance();
-        CoreLibrary.init(context);
 
         //Auto login by default
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.PHONE_NUMBER, "phone_number");
@@ -43,9 +52,11 @@ public class CoreAncRegisterActivityTest extends BaseUnitTest {
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.FAMILY_NAME, "familyName");
         intent.putExtra(CoreConstants.ACTIVITY_PAYLOAD.LAST_LMP, "lastMenstrualPeriod");
 
-        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().resume();
+        ReflectionHelpers.setStaticField(AncLibrary.class, "instance", ancLibrary);
+        doReturn(context).when(ancLibrary).context();
+
+        controller = Robolectric.buildActivity(CoreAncRegisterActivity.class, intent).create().start().visible();
         activity = controller.get();
-        activity.onCreation();
     }
 
     @After
