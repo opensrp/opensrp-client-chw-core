@@ -78,6 +78,7 @@ public class FamilyMemberDao extends AbstractDao {
 
         return readData(sql, dataMap);
     }
+
     public static void updateRemovedFamilyMember(Map<String, String> obsMap, String baseEntityId, ContentValues values) throws ParseException {
         if (obsMap == null || baseEntityId == null) {
             return;
@@ -86,7 +87,8 @@ public class FamilyMemberDao extends AbstractDao {
         if (database != null) {
             SimpleDateFormat defaultDf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date dod = getDate(obsMap, "date_died");
-            values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
+            if (dod != null)
+                values.put(DBConstants.KEY.DOD, defaultDf.format(dod));
 
             if (obsMap.containsKey(DEATH_MANNER))
                 values.put(DEATH_MANNER, obsMap.get(DEATH_MANNER));

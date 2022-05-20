@@ -21,6 +21,8 @@ import org.smartregister.dao.AbstractDao;
 import java.util.Date;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class BirthCertificationDao extends AbstractDao {
 
     public static void updateBirthCertification(Map<String, String> obsMap, String entityType, String baseEntityId) {
@@ -43,7 +45,12 @@ public class BirthCertificationDao extends AbstractDao {
             String where = "" + BASE_ENTITY_ID + "=?";
             String[] whereArgs = new String[]{baseEntityId};
 
-            database.update(entityType, values, where, whereArgs);
+            try {
+                database.update(entityType, values, where, whereArgs);
+            }
+            catch (Exception ex) {
+                Timber.e(ex, "Problem updating birth certification details!");
+            }
         }
     }
 }

@@ -25,6 +25,8 @@ import org.smartregister.dao.AbstractDao;
 import java.util.Date;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class DeathCertificationDao extends AbstractDao {
 
     public static void updateDeathCertification(Map<String, String> obsMap, String entityType, String baseEntityId) {
@@ -51,8 +53,11 @@ public class DeathCertificationDao extends AbstractDao {
         if (database != null) {
             String where = "" + BASE_ENTITY_ID + "=?";
             String[] whereArgs = new String[]{baseEntityId};
-
-            database.update(entityType, values, where, whereArgs);
+            try {
+                database.update(entityType, values, where, whereArgs);
+            } catch (Exception ex) {
+                Timber.e(ex, "Problem updating birth certification details!");
+            }
         }
     }
 }
