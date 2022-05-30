@@ -17,10 +17,10 @@ import org.smartregister.chw.core.listener.OnClickFloatingMenu;
 
 public class FamilyFloatingMenu extends LinearLayout implements View.OnClickListener {
     private RelativeLayout activityMain;
-    private FloatingActionButton fab;
-    private LinearLayout menuBar;
-    private Animation fabOpen, fabClose, rotateForward, rotateBack;
-    private boolean isFabMenuOpen = false;
+    protected FloatingActionButton fab;
+    protected LinearLayout menuBar;
+    protected Animation fabOpen, fabClose, rotateForward, rotateBack;
+    protected boolean isFabMenuOpen = false;
     private OnClickFloatingMenu onClickFloatingMenu;
 
     public View callLayout;
