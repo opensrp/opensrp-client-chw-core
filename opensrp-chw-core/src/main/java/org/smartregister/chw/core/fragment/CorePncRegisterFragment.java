@@ -255,7 +255,10 @@ public abstract class CorePncRegisterFragment extends BasePncRegisterFragment {
                     .withColumn("count(*)")
                     .withJoinClause("INNER JOIN " + CoreConstants.TABLE_NAME.FAMILY_MEMBER + " ON "
                             + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
-                            + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
+                            + CoreConstants.TABLE_NAME.FAMILY_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID
+                            + " INNER JOIN " + CoreConstants.TABLE_NAME.ANC_MEMBER + " ON "
+                                    + mainTable + "." + DBConstants.KEY.BASE_ENTITY_ID + " = "
+                                    + CoreConstants.TABLE_NAME.ANC_MEMBER + "." + DBConstants.KEY.BASE_ENTITY_ID)
 
                     .withWhereClause(getCountMainCondition());
 

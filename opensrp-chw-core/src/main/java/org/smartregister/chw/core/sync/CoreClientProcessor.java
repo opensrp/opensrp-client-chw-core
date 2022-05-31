@@ -337,6 +337,7 @@ public class CoreClientProcessor extends ClientProcessorForJava {
                 }
                 processBirthCertificationEvent(eventClient);
                 processEvent(eventClient.getEvent(), eventClient.getClient(), clientClassification);
+                break;
             case CoreConstants.EventType.UPDATE_DEATH_CERTIFICATION:
                 if (eventClient.getClient() == null) {
                     return;

@@ -56,7 +56,7 @@ public class DeathCertificationDao extends AbstractDao {
             try {
                 database.update(entityType, values, where, whereArgs);
             } catch (Exception ex) {
-                Timber.e(ex, "Problem updating birth certification details!");
+                Timber.e(ex, "Problem updating death certification details!");
             }
         }
     }
