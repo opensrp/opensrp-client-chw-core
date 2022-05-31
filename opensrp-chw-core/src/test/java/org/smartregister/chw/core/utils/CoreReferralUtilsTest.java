@@ -27,4 +27,10 @@ public class CoreReferralUtilsTest {
     public void mainCaregiverSelectTest(){
         Assert.assertEquals(CoreReferralUtils.mainCareGiverSelect("test_tbl",""),"Select test_tbl.id as _id , test_tbl.relational_id as relationalid , test_tbl.first_name as family_first_name , test_tbl.middle_name as family_last_name , test_tbl.last_name as family_middle_name , test_tbl.phone_number as family_member_phone_number , test_tbl.other_phone_number as family_member_phone_number_other FROM test_tbl WHERE test_tbl.base_entity_id = '' ");
     }
+
+    @Test
+    public void mainAncDetailsSelectTest(){
+        Assert.assertEquals(CoreReferralUtils.mainAncDetailsSelect("test_tbl","base_entity_id"),"Select test_tbl.id as _id , test_tbl.relational_id as relationalid , test_tbl.last_menstrual_period , ec_anc_log.date_created , ec_family.village_town , test_tbl.confirmed_visits , test_tbl.last_home_visit FROM test_tbl LEFT JOIN ec_anc_log ON  test_tbl.base_entity_id = ec_anc_log.id COLLATE NOCASE  LEFT JOIN ec_family ON  test_tbl.relational_id = ec_family.base_entity_id WHERE test_tbl.base_entity_id = 'base_entity_id' ");
+    }
+
 }
