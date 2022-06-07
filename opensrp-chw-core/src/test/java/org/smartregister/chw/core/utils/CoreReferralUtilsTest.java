@@ -25,6 +25,6 @@ public class CoreReferralUtilsTest {
 
     @Test
     public void mainCaregiverSelectTest(){
-        Assert.assertEquals(CoreReferralUtils.mainCareGiverSelect("test_tbl",""),"Select test_tbl.id as _id , test_tbl.relational_id as relationalid , test_tbl.first_name as family_first_name , test_tbl.middle_name as family_last_name , test_tbl.last_name as family_middle_name , test_tbl.phone_number as family_member_phone_number , test_tbl.other_phone_number as family_member_phone_number_other FROM test_tbl WHERE test_tbl.base_entity_id = '' ");
+        Assert.assertEquals("Select test_tbl.id as _id , test_tbl.relational_id as relationalid , test_tbl.first_name as family_first_name , test_tbl.middle_name as family_last_name , test_tbl.last_name as family_middle_name , test_tbl.phone_number as family_member_phone_number , test_tbl.other_phone_number as family_member_phone_number_other FROM test_tbl WHERE test_tbl.base_entity_id = '' ",CoreReferralUtils.mainCareGiverSelect("test_tbl",""));
     }
 }
