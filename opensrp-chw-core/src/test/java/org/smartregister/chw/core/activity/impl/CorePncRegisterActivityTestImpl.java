@@ -1,11 +1,8 @@
 package org.smartregister.chw.core.activity.impl;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.CoreFamilyRegisterActivity;
 import org.smartregister.chw.core.activity.CorePncRegisterActivity;
-import org.smartregister.chw.core.contract.NavigationContract;
 
 public class CorePncRegisterActivityTestImpl extends CorePncRegisterActivity {
 

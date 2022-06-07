@@ -2,10 +2,15 @@ package org.smartregister.chw.core.activity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
+import android.content.Intent;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,17 +21,9 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
-import org.smartregister.chw.core.activity.impl.CorePncRegisterActivityTestImpl;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
 import org.smartregister.view.activity.BaseRegisterActivity;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
-import android.content.Intent;
 
 
 public class CorePncRegisterActivityTest extends BaseUnitTest {
