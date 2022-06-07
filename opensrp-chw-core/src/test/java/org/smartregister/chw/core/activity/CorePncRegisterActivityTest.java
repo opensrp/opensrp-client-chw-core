@@ -31,6 +31,7 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
+    @Mock
     public CorePncRegisterActivity activity;
 
     @Mock
