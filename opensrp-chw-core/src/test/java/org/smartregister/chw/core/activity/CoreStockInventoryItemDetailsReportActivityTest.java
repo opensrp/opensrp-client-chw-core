@@ -77,11 +77,6 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
     }
 
-//    @Test
-//    public void evaluateStockNameTest(){
-//        Assert.assertEquals("Female Condoms",CoreStockInventoryItemDetailsReportActivity,"Female Condoms");
-//    }
-
     @After
     public void tearDown() {
         try {
