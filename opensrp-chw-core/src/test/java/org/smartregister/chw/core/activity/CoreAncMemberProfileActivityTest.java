@@ -1,5 +1,9 @@
 package org.smartregister.chw.core.activity;
 
+import static org.mockito.Mockito.doReturn;
+import static org.smartregister.chw.anc.util.Constants.ANC_MEMBER_OBJECTS.MEMBER_PROFILE_OBJECT;
+
+import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,8 +23,10 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
-import org.smartregister.CoreLibrary;
+import org.smartregister.chw.anc.AncLibrary;
 import org.smartregister.chw.anc.domain.MemberObject;
+import org.smartregister.chw.anc.repository.VisitRepository;
+import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CoreAncMemberProfileActivityImpl;
@@ -40,22 +46,37 @@ public class CoreAncMemberProfileActivityTest extends BaseUnitTest {
 
     @Mock
     private MemberObject memberObject;
+    @Mock
+    private AncLibrary ancLibrary;
+    @Mock
+    private VisitRepository visitRepository;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         Context context = Context.getInstance();
-        CoreLibrary.init(context);
 
         //Auto login by default
         context.session().start(context.session().lengthInMilliseconds());
 
-        controller = Robolectric.buildActivity(CoreAncMemberProfileActivityImpl.class).create().start();
-        activity = controller.get();
-        memberObject = Mockito.mock(MemberObject.class);
+        memberObject = new MemberObject();
         memberObject.setBaseEntityId("some-base-entity-id");
         memberObject.setFamilyName("Some Family Name");
+        memberObject.setFirstName("firstName");
+        memberObject.setLastName("lastName");
+        memberObject.setDob("2010-01-22");
+        memberObject.setMiddleName("Kenanah");
+        Intent intent = new Intent();
+        intent.putExtra(Constants.ANC_MEMBER_OBJECTS.BASE_ENTITY_ID, memberObject.getBaseEntityId());
+        intent.putExtra(MEMBER_PROFILE_OBJECT, memberObject);
+
+        ReflectionHelpers.setStaticField(AncLibrary.class, "instance", ancLibrary);
+        doReturn(visitRepository).when(ancLibrary).visitRepository();
+
+        controller = Robolectric.buildActivity(CoreAncMemberProfileActivityImpl.class, intent);
+        controller.create().start();
+        activity = controller.get();
 
         ReflectionHelpers.setField(activity, "memberObject", memberObject);
         View viewFamilyRow = new View(RuntimeEnvironment.systemContext);
