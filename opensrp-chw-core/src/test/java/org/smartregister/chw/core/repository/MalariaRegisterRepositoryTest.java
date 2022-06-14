@@ -9,7 +9,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseRobolectricTest;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
     @Mock
@@ -43,9 +47,31 @@ public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
     @Test
     public void testDatabaseQueryIsCreatedWithTheCorrectArgumentInGetFamilyNamePhone(){
         String baseEntityId = "4b3e6408-0549-470a-b24a-82ac71180a30";
+        String selection = "baseEntityId = ?  COLLATE NOCASE";
         malariaRegisterRepository.getFamilyNameAndPhone(baseEntityId);
         Mockito.verify(database).query(tableNameCaptor.capture(), tableColumnsCaptor.capture(), selectionCaptor.capture(), selectionArgsCaptor.capture(),
                 groupByCaptor.capture(), havingCaptor.capture(), orderByCaptor.capture());
         Assert.assertEquals(MalariaRegisterRepository.TABLE_NAME, tableNameCaptor.getValue());
+        Assert.assertEquals(MalariaRegisterRepository.TABLE_COLUMNS, tableColumnsCaptor.getValue());
+        Assert.assertEquals(new String[]{baseEntityId}, selectionArgsCaptor.getValue());
+    }
+
+
+    @Test
+    public void testGetFamilyNameAndPhoneWithBaseEntityIdReturnsCorrectDetails(){
+
+        String correctBaseEntityId = "4b3e6408-0549-470a-b24a-82ac71180a30";
+        String nonExistentRecordBaseEntityId = "adbc49cc-f0f2-42c2-a53f-634983922eb0";
+
+        HashMap<String, String> results = new HashMap<>();
+        results.put(Constants.ANC_MEMBER_OBJECTS.FAMILY_HEAD_NAME, "Kibaki");
+        results.put(Constants.ANC_MEMBER_OBJECTS.FAMILY_HEAD_PHONE, "9938383");
+
+        Mockito.doReturn(results).when(malariaRegisterRepository).getFamilyNameAndPhone(correctBaseEntityId);
+
+        Assert.assertEquals(results, malariaRegisterRepository.getFamilyNameAndPhone(correctBaseEntityId));
+        Assert.assertNull(null, malariaRegisterRepository.getFamilyNameAndPhone(nonExistentRecordBaseEntityId));
+
+
     }
 }
