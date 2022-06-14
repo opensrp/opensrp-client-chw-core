@@ -76,8 +76,6 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
 
         recyclerView.setAdapter(coreStockUsageItemDetailsAdapter);
     }
-
-
     @After
     public void tearDown() {
         try {
