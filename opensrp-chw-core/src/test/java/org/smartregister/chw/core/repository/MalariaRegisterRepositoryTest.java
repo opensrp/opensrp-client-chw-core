@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseRobolectricTest;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
@@ -52,9 +51,11 @@ public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
         Mockito.verify(database).query(tableNameCaptor.capture(), tableColumnsCaptor.capture(), selectionCaptor.capture(), selectionArgsCaptor.capture(),
                 groupByCaptor.capture(), havingCaptor.capture(), orderByCaptor.capture());
         Assert.assertEquals(MalariaRegisterRepository.TABLE_NAME, tableNameCaptor.getValue());
-        Assert.assertEquals(MalariaRegisterRepository.TABLE_COLUMNS, tableColumnsCaptor.getValue());
-        Assert.assertEquals(new String[]{baseEntityId}, selectionArgsCaptor.getValue());
+        Assert.assertArrayEquals(MalariaRegisterRepository.TABLE_COLUMNS, tableColumnsCaptor.getValue());
+        Assert.assertArrayEquals(new String[]{baseEntityId}, selectionArgsCaptor.getValue());
+        Assert.assertEquals(selection, selectionCaptor.getValue());
     }
+
 
 
     @Test
