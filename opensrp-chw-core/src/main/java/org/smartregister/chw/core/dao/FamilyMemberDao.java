@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class FamilyMemberDao extends AbstractDao {
 
     public static List<CoreFamilyMemberModel> familyMembersToUpdateLastName(String baseEntityId) {
@@ -139,7 +141,12 @@ public class FamilyMemberDao extends AbstractDao {
         String strDod = obsMap.get(key);
         if (StringUtils.isBlank(strDod)) return null;
 
-        SimpleDateFormat nfDf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-        return nfDf.parse(strDod);
+        try {
+            SimpleDateFormat nfDf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+            return nfDf.parse(strDod);
+        } catch (Exception ex) {
+            Timber.e(ex, "Problem formatting dod ");
+            return null;
+        }
     }
 }
