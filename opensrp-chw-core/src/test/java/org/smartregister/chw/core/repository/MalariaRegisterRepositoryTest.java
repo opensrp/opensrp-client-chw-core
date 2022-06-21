@@ -1,5 +1,7 @@
 package org.smartregister.chw.core.repository;
 
+import static org.smartregister.repository.BaseRepository.COLLATE_NOCASE;
+
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.junit.Assert;
@@ -46,7 +48,7 @@ public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
     @Test
     public void testDatabaseQueryIsCreatedWithTheCorrectArgumentInGetFamilyNamePhone(){
         String baseEntityId = "4b3e6408-0549-470a-b24a-82ac71180a30";
-        String selection = "base_entity_id = ?  COLLATE NOCASE";
+        String selection = "base_entity_id = ? "+COLLATE_NOCASE;
         malariaRegisterRepository.getFamilyNameAndPhone(baseEntityId);
         Mockito.verify(database).query(tableNameCaptor.capture(), tableColumnsCaptor.capture(), selectionCaptor.capture(), selectionArgsCaptor.capture(),
                 groupByCaptor.capture(), havingCaptor.capture(), orderByCaptor.capture());
