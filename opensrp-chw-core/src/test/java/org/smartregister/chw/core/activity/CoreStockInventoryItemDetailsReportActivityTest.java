@@ -69,11 +69,6 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
     }
 
     @Test
-    public void evaluateStockNameTest(){
-
-    }
-
-    @Test
     public void testOnCreation() {
         // check if created views are found
         activity.onCreation();
