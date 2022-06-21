@@ -98,20 +98,25 @@ public class NavigationPresenter implements NavigationContract.Presenter {
 
         int x = 0;
         while (x < mModel.getNavigationItems().size()) {
-            final int finalX = x;
-            mInteractor.getRegisterCount(tableMap.get(mModel.getNavigationItems().get(x).getMenuTitle()), new NavigationContract.InteractorCallback<Integer>() {
-                @Override
-                public void onResult(Integer result) {
-                    mModel.getNavigationItems().get(finalX).setRegisterCount(result);
-                    getNavigationView().refreshCount();
-                }
+            final NavigationOption navigationOption = mModel.getNavigationItems().get(x);
+            final String navTitle = navigationOption.getMenuTitle();
+            if (tableMap.containsKey(navTitle)) {
+                mInteractor.getRegisterCount(tableMap.get(navTitle), new NavigationContract.InteractorCallback<Integer>() {
+                    @Override
+                    public void onResult(Integer result) {
+                        navigationOption.setRegisterCount(result);
+                        getNavigationView().refreshCount();
+                    }
 
-                @Override
-                public void onError(Exception e) {
-                    // getNavigationView().displayToast(activity, "Error retrieving count for " + tableMap.get(mModel.getNavigationItems().get(finalX).getMenuTitle()));
-                    Timber.e("Error retrieving count for %s", tableMap.get(mModel.getNavigationItems().get(finalX).getMenuTitle()));
-                }
-            });
+                    @Override
+                    public void onError(Exception e) {
+                        // getNavigationView().displayToast(activity, "Error retrieving count for " + tableMap.get(mModel.getNavigationItems().get(finalX).getMenuTitle()));
+                        Timber.e("Error retrieving count for %s", tableMap.get(navTitle));
+                    }
+                });
+            }else if (navigationOption.hasRegisterCount()){
+                Timber.e("Error retrieving count for %s, table not defined in 'tableMap'", navTitle);
+            }
             x++;
         }
 

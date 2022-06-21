@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,13 +29,15 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     private Context context;
     private Map<String, Class> registeredActivities;
     private NavigationAdapterHost host;
+    private DrawerLayout drawerLayout;
 
-    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities, NavigationAdapterHost host) {
+    public NavigationAdapter(List<NavigationOption> navigationOptions, Activity context, Map<String, Class> registeredActivities, NavigationAdapterHost host, DrawerLayout drawerLayout) {
         this.navigationOptionList = navigationOptions;
         this.context = context;
         this.onClickListener = new NavigationListener(context, this);
         this.registeredActivities = registeredActivities;
         this.host = host;
+        this.drawerLayout = drawerLayout;
     }
 
     public String getSelectedView() {
@@ -58,17 +61,28 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         NavigationOption model = navigationOptionList.get(position);
         holder.tvName.setText(context.getResources().getText(model.getTitleID()));
-        holder.tvCount.setText(String.format(Locale.getDefault(), "%d", model.getRegisterCount()));
+        if (model.hasRegisterCount()) {
+            holder.tvCount.setText(String.format(Locale.getDefault(), "%d", model.getRegisterCount()));
+        } else {
+            holder.tvCount.setText(null);
+        }
         holder.ivIcon.setImageResource(model.getResourceID());
 
         holder.getView().setTag(model.getMenuTitle());
 
 
-        if (host.getSelectedView().equals(model.getMenuTitle())) {
+        if (host.getSelectedView().equals(model.getMenuTitle()) && model.getResourceID() == model.getResourceActiveID()) {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.navigation_item_selected));
+            holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
+            holder.ivIcon.setImageResource(model.getResourceID());
+        } else if (host.getSelectedView() != null && host.getSelectedView().equals(model.getMenuTitle())) {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_selected));
             holder.ivIcon.setImageResource(model.getResourceActiveID());
         } else {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
             holder.tvCount.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.tvName.setTextColor(context.getResources().getColor(R.color.navigation_item_unselected));
             holder.ivIcon.setImageResource(model.getResourceID());
@@ -97,7 +111,12 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
             ivIcon = view.findViewById(R.id.ivIcon);
 
             if (onClickListener != null) {
-                view.setOnClickListener(onClickListener);
+                view.setOnClickListener(v -> {
+                    if (drawerLayout != null) {
+                        drawerLayout.closeDrawers();
+                    }
+                    onClickListener.onClick(v);
+                });
             }
 
             myView = view;

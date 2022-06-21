@@ -55,7 +55,10 @@ public class CoreStockInventoryReportActivityTest extends BaseUnitTest {
         year = "2019";
 
         //Auto login by default
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         controller = Robolectric.buildActivity(CoreStockInventoryReportActivity.class).create().start();
         activity = controller.get();
