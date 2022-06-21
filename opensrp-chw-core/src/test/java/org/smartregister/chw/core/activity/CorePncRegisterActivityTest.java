@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -19,7 +18,6 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CorePncRegisterActivityTestImpl;
-import org.smartregister.view.activity.BaseRegisterActivity;
 
 
 public class CorePncRegisterActivityTest extends BaseUnitTest {
@@ -30,6 +28,7 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
     public CorePncRegisterActivity activity;
 
     private ActivityController<CorePncRegisterActivityTestImpl> controller;
+
 
 
     @Before
@@ -69,4 +68,5 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
         activity.registerBottomNavigation();
         assertNotNull(ReflectionHelpers.getField(activity, "bottomNavigationHelper"));
     }
+
 }
