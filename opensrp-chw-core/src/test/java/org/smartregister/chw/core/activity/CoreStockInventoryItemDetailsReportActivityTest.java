@@ -27,7 +27,7 @@ import org.smartregister.chw.core.utils.CoreConstants;
 
 
 @RunWith(RobolectricTestRunner.class)
-public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTest {
+public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     @Mock
