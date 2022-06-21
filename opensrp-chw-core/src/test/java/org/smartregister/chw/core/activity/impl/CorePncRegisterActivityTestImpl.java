@@ -10,15 +10,8 @@ public class CorePncRegisterActivityTestImpl extends CorePncRegisterActivity {
     @Override
     public Class<? extends CoreFamilyRegisterActivity> getFamilyRegisterActivity() {
         return CoreFamilyRegisterActivity.class;
-//        return null;
     }
 
-    @Override
-    public void registerBottomNavigation() {
-        if(this.bottomNavigationView == null){
-            this.bottomNavigationView = findViewById(R.layout.activity_base_register);
-        }
-        super.registerBottomNavigation();
-    }
+
 
 }
