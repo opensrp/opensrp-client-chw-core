@@ -54,18 +54,10 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
         //context.session().setPassword(password);
 
         String stockItemName = "Male Condoms";
-        String stockItemName2="Female Condoms";
-        String stockItemName3="Cycle beads (Standard day method)";
-        String stockItemName4="Paracetamol";
-        String stockItemName5="";
 
         String providerName = "All-CHWs";
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName);
-        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName2);
-        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName3);
-        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName4);
-        intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName5);
         intent.putExtra(CoreConstants.HfStockUsageUtil.PROVIDER_NAME, providerName);
         controller = Robolectric.buildActivity(CoreStockInventoryItemDetailsReportActivity.class, intent).create().start();
         activity = controller.get();
@@ -74,6 +66,11 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
     @Test
     public void testOnCreateOptionsMenu() {
         Assert.assertFalse(activity.onCreateOptionsMenu(menu));
+    }
+
+    @Test
+    public void evaluateStockNameTest(){
+
     }
 
     @Test
