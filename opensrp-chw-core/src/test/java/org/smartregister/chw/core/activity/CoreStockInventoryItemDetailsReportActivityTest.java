@@ -54,7 +54,6 @@ public class CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTes
         context.session().setPassword(password.getBytes());
 
         String stockItemName = "Male Condoms";
-
         String providerName = "All-CHWs";
         Intent intent = new Intent();
         intent.putExtra(CoreConstants.HfStockUsageUtil.STOCK_NAME, stockItemName);
