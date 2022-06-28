@@ -4,6 +4,7 @@ import static org.smartregister.chw.core.utils.Utils.getSyncEntityString;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -263,7 +264,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa, dd MMM yyyy", Locale.getDefault());
         if (rootView != null) {
             TextView tvLastSyncTime = rootView.findViewById(R.id.tvSyncTime);
-            if (lastSync != null) {
+            if (lastSync != null && lastSync.compareTo(new Date(0)) > 0) {
                 tvLastSyncTime.setVisibility(View.VISIBLE);
                 tvLastSyncTime.setText(MessageFormat.format(" {0}", sdf.format(lastSync)));
             } else {
@@ -376,19 +377,36 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerNavigation(Activity parentActivity) {
         if (recyclerView != null) {
-
-            List<NavigationOption> navigationOptions = mPresenter.getOptions();
-            navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(navigationAdapter);
+
+            List<NavigationOption> navigationOptions = mPresenter.getOptions();
+            if (navigationAdapter == null) {
+                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this, drawer);
+                recyclerView.setAdapter(navigationAdapter);
+            } else {
+                NavigationAdapter previous = navigationAdapter;
+                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity, registeredActivities, this, drawer);
+                recyclerView.swapAdapter(navigationAdapter, true);
+                navigationAdapter.setSelectedView(previous.getSelectedView());
+            }
         }
     }
 
     private void registerLogout(final Activity parentActivity) {
         mPresenter.displayCurrentUser();
-        tvLogout.setOnClickListener(v -> logout(parentActivity));
+        AlertDialog logOutDialog = menuFlavor.doLogOutDialog(parentActivity);
+        tvLogout.setOnClickListener(v -> {
+//            drawer.closeDrawers();
+            if (logOutDialog != null) {
+                logOutDialog.setButton(DialogInterface.BUTTON_POSITIVE, parentActivity.getString(R.string.logout_text), (dialog, which) -> logout(parentActivity));
+                logOutDialog.setButton(DialogInterface.BUTTON_NEGATIVE, parentActivity.getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
+                logOutDialog.show();
+            } else {
+                logout(parentActivity);
+            }
+        });
     }
 
     private void registerSync(final Activity parentActivity) {
@@ -416,7 +434,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerLanguageSwitcher(final Activity context) {
 
-        View rlIconLang = rootView.findViewById(R.id.rlIconLang);
+        View languageSwitcherView = rootView.findViewById(R.id.rlIconLang);
         final TextView tvLang = rootView.findViewById(R.id.tvLang);
 
         final List<Pair<String, Locale>> locales = menuFlavor.getSupportedLanguages();
@@ -431,28 +449,31 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             }
             x++;
         }
+        if (menuFlavor.hasMultipleLanguages()) {
+            languageSwitcherView.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(context.getString(R.string.choose_language));
+                builder.setItems(languages, (dialog, which) -> {
+                    Pair<String, Locale> lang = locales.get(which);
+                    tvLang.setText(lang.getLeft());
+                    LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
+                    CoreChwApplication.getInstance().persistLanguage(lang.getValue().getLanguage());
 
-        rlIconLang.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(context.getString(R.string.choose_language));
-            builder.setItems(languages, (dialog, which) -> {
-                Pair<String, Locale> lang = locales.get(which);
-                tvLang.setText(lang.getLeft());
-                LangUtils.saveLanguage(context.getApplication(), lang.getValue().getLanguage());
-                CoreChwApplication.getInstance().persistLanguage(lang.getValue().getLanguage());
+                    // destroy current instance
+                    drawer.closeDrawers();
+                    instance = null;
+                    Intent intent = context.getIntent();
+                    context.finish();
+                    context.startActivity(intent);
+                    application.notifyAppContextChange();
+                });
 
-                // destroy current instance
-                drawer.closeDrawers();
-                instance = null;
-                Intent intent = context.getIntent();
-                context.finish();
-                context.startActivity(intent);
-                application.notifyAppContextChange();
+                AlertDialog dialog = builder.create();
+                dialog.show();
             });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
+        } else {
+            languageSwitcherView.setOnClickListener(null);
+        }
     }
 
     private void registerDeviceToDeviceSync(@NonNull final Activity activity) {
@@ -532,8 +553,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             int progress = syncProgress.getPercentageSynced();
             String entity = getSyncEntityString(syncProgress.getSyncEntity());
             String labelText = String.format(rootView.getResources().getString(R.string.progressBarLabel), entity, progress);
-            syncStatusProgressLabel.setText(labelText);
-            syncStatusProgressBar.setProgress(progress);
+            if (syncStatusProgressLabel != null)
+                syncStatusProgressLabel.setText(labelText);
+            if (syncStatusProgressBar != null)
+                syncStatusProgressBar.setProgress(progress);
         }
     }
 
@@ -624,6 +647,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         boolean hasSyncStatusProgressBar();
 
+        boolean hasMultipleLanguages();
+
         Intent getStockReportIntent(Activity activity);
 
         Intent getServiceReportIntent(Activity activity);
@@ -631,5 +656,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         String childNavigationMenuCountString();
 
         Intent getHIA2ReportActivityIntent(Activity activity);
+
+        default AlertDialog doLogOutDialog(Activity activity) {
+            return null;
+        }
     }
 }

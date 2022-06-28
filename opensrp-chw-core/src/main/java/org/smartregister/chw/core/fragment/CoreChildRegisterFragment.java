@@ -40,7 +40,7 @@ public class CoreChildRegisterFragment extends BaseChwRegisterFragment implement
     public static final String CLICK_VIEW_DOSAGE_STATUS = "click_view_dosage_status";
     private static final String DUE_FILTER_TAG = "PRESSED";
     protected View view;
-    protected View dueOnlyLayout;
+    public View dueOnlyLayout;
     protected boolean dueFilterActive = false;
 
     @Override

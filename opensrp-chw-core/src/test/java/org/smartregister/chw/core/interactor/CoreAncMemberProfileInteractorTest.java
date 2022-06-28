@@ -65,7 +65,10 @@ public class CoreAncMemberProfileInteractorTest extends BaseUnitTest {
         CoreLibrary.init(context);
 
         //Auto login by default
+        String password = "pwd";
         context.session().start(context.session().lengthInMilliseconds());
+        context.configuration().getDrishtiApplication().setPassword(password.getBytes());
+        context.session().setPassword(password.getBytes());
 
         interactor = Mockito.mock(CoreAncMemberProfileInteractor.class, Mockito.CALLS_REAL_METHODS);
 
