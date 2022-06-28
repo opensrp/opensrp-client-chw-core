@@ -94,4 +94,17 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
         ReflectionHelpers.setStaticField(NavigationMenu.class, "instance", menu);
 
     }
+
+    @Test
+    public void testSwitchToBaseFragment() {
+        CorePncRegisterActivity spyActivity = spy(activity);
+        doNothing().when(spyActivity).startActivity(any(Intent.class));
+        doNothing().when(spyActivity).finish();
+        spyActivity.switchToBaseFragment();
+        verify(spyActivity).finish();
+
+        ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
+        verify(spyActivity).startActivity(intentArgumentCaptor.capture());
+        assertEquals(CoreFamilyRegisterActivity.class.getName(), intentArgumentCaptor.getValue().getComponent().getClassName());
+    }
 }
