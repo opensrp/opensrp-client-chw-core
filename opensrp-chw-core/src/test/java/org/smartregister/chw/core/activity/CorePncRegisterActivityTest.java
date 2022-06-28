@@ -1,6 +1,11 @@
 package org.smartregister.chw.core.activity;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import android.content.Intent;
 
@@ -8,6 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -18,6 +26,13 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CorePncRegisterActivityTestImpl;
+import org.smartregister.chw.core.adapter.NavigationAdapter;
+import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
+import org.smartregister.chw.core.presenter.CorePncMemberProfilePresenter;
+import org.smartregister.chw.core.utils.CoreConstants;
+import org.smartregister.chw.pnc.activity.BasePncRegisterActivity;
+import org.smartregister.view.activity.BaseRegisterActivity;
 
 
 public class CorePncRegisterActivityTest extends BaseUnitTest {
@@ -28,6 +43,7 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
     public CorePncRegisterActivity activity;
 
     private ActivityController<CorePncRegisterActivityTestImpl> controller;
+
 
 
 
@@ -69,4 +85,13 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
         assertNotNull(ReflectionHelpers.getField(activity, "bottomNavigationHelper"));
     }
 
+        @Test
+    public void testOnResumption() {
+        NavigationMenu menu = Mockito.mock(NavigationMenu.class);
+        NavigationAdapter adapter = Mockito.mock(NavigationAdapter.class);
+
+        Mockito.doReturn(adapter).when(menu).getNavigationAdapter();
+        ReflectionHelpers.setStaticField(NavigationMenu.class, "instance", menu);
+
+    }
 }
