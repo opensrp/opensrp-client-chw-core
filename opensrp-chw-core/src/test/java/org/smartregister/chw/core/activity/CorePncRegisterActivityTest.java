@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
@@ -28,11 +27,6 @@ import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CorePncRegisterActivityTestImpl;
 import org.smartregister.chw.core.adapter.NavigationAdapter;
 import org.smartregister.chw.core.custom_views.NavigationMenu;
-import org.smartregister.chw.core.presenter.CoreFamilyProfilePresenter;
-import org.smartregister.chw.core.presenter.CorePncMemberProfilePresenter;
-import org.smartregister.chw.core.utils.CoreConstants;
-import org.smartregister.chw.pnc.activity.BasePncRegisterActivity;
-import org.smartregister.view.activity.BaseRegisterActivity;
 
 
 public class CorePncRegisterActivityTest extends BaseUnitTest {
