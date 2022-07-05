@@ -243,4 +243,24 @@ public class CoreConstantsTest {
     public void testGetHivReferralForm() {
         Assert.assertEquals("referrals/hiv_referral_form", CoreConstants.JSON_FORM.getHivReferralForm());
     }
+
+    @Test
+    public void testTbReferralForm() {
+        Assert.assertEquals("referrals/tb_referral_form", CoreConstants.JSON_FORM.getTbReferralForm());
+    }
+
+    @Test
+    public void testGbvReferralForm() {
+        Assert.assertEquals("referrals/gbv_referral_form", CoreConstants.JSON_FORM.getGbvReferralForm());
+    }
+
+    @Test
+    public void testChildGbvReferralForm() {
+        Assert.assertEquals("referrals/child_gbv_referral_form", CoreConstants.JSON_FORM.getChildGbvReferralForm());
+    }
+
+    @Test
+    public void testPncDangerSignsOutcomeForm() {
+        Assert.assertEquals("pnc_danger_signs_outcome", CoreConstants.JSON_FORM.getPncDangerSignsOutcomeForm());
+    }
 }
