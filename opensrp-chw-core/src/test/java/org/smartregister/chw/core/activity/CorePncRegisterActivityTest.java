@@ -38,9 +38,6 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
 
 
 
-
-
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -69,7 +66,6 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
             e.printStackTrace();
         }
     }
-
 
 
     @Test
