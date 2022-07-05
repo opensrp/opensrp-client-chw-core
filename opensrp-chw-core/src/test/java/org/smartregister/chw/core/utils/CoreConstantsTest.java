@@ -185,6 +185,33 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void testGetRoutineHouseholdVisit() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("routine_household_visit", locale, assetManager), CoreConstants.JSON_FORM.getRoutineHouseholdVisit());
+    }
+
+    @Test
+    public void testGetReferralFollowupForm() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("referrals/referral_followup_neat_form", locale, assetManager), CoreConstants.JSON_FORM.getReferralFollowupForm());
+    }
+
+    @Test
+    public void testGetMalariaFollowUpHfForm() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("malaria_follow_up_hf", locale, assetManager), CoreConstants.JSON_FORM.getMalariaFollowUpHfForm());
+    }
+
+    @Test
     public void testGetFamilyMemberRegister() {
         Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
         AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
