@@ -77,6 +77,90 @@ public class CoreConstantsTest {
     }
 
     @Test
+    public void testGetBirthCertification() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("birth_certification", locale, assetManager), CoreConstants.JSON_FORM.getBirthCertification());
+    }
+
+    @Test
+    public void testGetDisability() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("child_disability", locale, assetManager), CoreConstants.JSON_FORM.getDisability());
+    }
+
+    @Test
+    public void testGetObsIllness() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("observation_illness", locale, assetManager), CoreConstants.JSON_FORM.getObsIllness());
+    }
+
+    @Test
+    public void testGetChildSickForm() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("child_sick_form", locale, assetManager), CoreConstants.JSON_FORM.getChildSickForm());
+    }
+
+    @Test
+    public void testGetFamilyDetailsRegister() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("family_details_register", locale, assetManager), CoreConstants.JSON_FORM.getFamilyDetailsRegister());
+    }
+
+    @Test
+    public void testGetFamilyDetailsRemoveMember() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("family_details_remove_member", locale, assetManager), CoreConstants.JSON_FORM.getFamilyDetailsRemoveMember());
+    }
+
+    @Test
+    public void testGetFamilyDetailsRemoveChild() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("family_details_remove_child", locale, assetManager), CoreConstants.JSON_FORM.getFamilyDetailsRemoveChild());
+    }
+
+    @Test
+    public void testGetFamilyDetailsRemoveFamily() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("family_details_remove_family", locale, assetManager), CoreConstants.JSON_FORM.getFamilyDetailsRemoveFamily());
+    }
+
+    @Test
+    public void testGetHomeVisitCounselling() {
+        Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
+        AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
+        ReflectionHelpers.setField(jsonForm, "assetManager", assetManager);
+        ReflectionHelpers.setField(jsonForm, "locale", locale);
+        Assert.assertEquals(Utils.getLocalForm("routine_home_visit", locale, assetManager), CoreConstants.JSON_FORM.getHomeVisitCounselling());
+    }
+
+
+
+
+    @Test
     public void testGetFamilyMemberRegister() {
         Locale locale = CoreChwApplication.getInstance().getResources().getConfiguration().locale;
         AssetManager assetManager = CoreChwApplication.getInstance().getAssets();
