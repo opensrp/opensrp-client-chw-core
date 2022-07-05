@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -24,6 +26,9 @@ import org.smartregister.Context;
 import org.smartregister.chw.core.BaseUnitTest;
 import org.smartregister.chw.core.R;
 import org.smartregister.chw.core.activity.impl.CorePncRegisterActivityTestImpl;
+import org.smartregister.chw.core.adapter.NavigationAdapter;
+import org.smartregister.chw.core.custom_views.NavigationMenu;
+import org.smartregister.view.activity.BaseRegisterActivity;
 
 
 public class CorePncRegisterActivityTest extends BaseUnitTest {
@@ -34,6 +39,8 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
     public CorePncRegisterActivity activity;
 
     private ActivityController<CorePncRegisterActivityTestImpl> controller;
+
+
 
 
 
@@ -87,5 +94,15 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
         verify(spyActivity).startActivity(intentArgumentCaptor.capture());
         assertEquals(CoreFamilyRegisterActivity.class.getName(), intentArgumentCaptor.getValue().getComponent().getClassName());
+    }
+
+    @Test
+    public void testOnResumption() {
+        NavigationMenu menu = Mockito.mock(NavigationMenu.class);
+        NavigationAdapter adapter = Mockito.mock(NavigationAdapter.class);
+
+        Mockito.doReturn(adapter).when(menu).getNavigationAdapter();
+        ReflectionHelpers.setStaticField(NavigationMenu.class, "instance", menu);
+
     }
 }
