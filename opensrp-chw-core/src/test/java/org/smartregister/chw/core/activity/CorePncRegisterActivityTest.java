@@ -95,14 +95,4 @@ public class CorePncRegisterActivityTest extends BaseUnitTest {
         verify(spyActivity).startActivity(intentArgumentCaptor.capture());
         assertEquals(CoreFamilyRegisterActivity.class.getName(), intentArgumentCaptor.getValue().getComponent().getClassName());
     }
-
-    @Test
-    public void testOnResumption() {
-        NavigationMenu menu = Mockito.mock(NavigationMenu.class);
-        NavigationAdapter adapter = Mockito.mock(NavigationAdapter.class);
-
-        Mockito.doReturn(adapter).when(menu).getNavigationAdapter();
-        ReflectionHelpers.setStaticField(NavigationMenu.class, "instance", menu);
-
-    }
 }
