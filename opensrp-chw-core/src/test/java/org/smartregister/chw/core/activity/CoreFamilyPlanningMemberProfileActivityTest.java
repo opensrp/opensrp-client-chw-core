@@ -102,5 +102,31 @@ public class CoreFamilyPlanningMemberProfileActivityTest extends BaseUnitTest {
         activity.onOptionsItemSelected(menuItem);
         Mockito.verify(activity).startFormForEdit(Mockito.eq(R.string.registration_info), Mockito.any());
 
+        // remove member
+        Mockito.doReturn(R.id.action_remove_member).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).removeMember();
+
+        // start family planning registration
+        Mockito.doReturn(R.id.action_fp_change).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startFamilyPlanningRegistrationActivity();
+
+        // start register
+        Mockito.doReturn(R.id.action_malaria_registration).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startMalariaRegister();
+
+        // Malaria diagnosis
+        Mockito.doReturn(R.id.action_malaria_followup_visit).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startMalariaFollowUpVisit();
+
+        // Malaria diagnosis
+        Mockito.doReturn(R.id.action_malaria_diagnosis).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startHfMalariaFollowupForm();
+
+
     }
 }
