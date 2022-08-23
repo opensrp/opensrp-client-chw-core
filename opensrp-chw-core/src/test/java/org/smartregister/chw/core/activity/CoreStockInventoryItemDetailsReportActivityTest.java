@@ -87,4 +87,5 @@ public class  CoreStockInventoryItemDetailsReportActivityTest extends BaseUnitTe
         }
     }
 
+
 }
