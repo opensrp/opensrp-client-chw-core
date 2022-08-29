@@ -127,7 +127,6 @@ dependencies {
         exclude group: 'com.android.volley', module: 'volley'
         exclude group: 'stax', module: 'stax-api'
     }
-    testImplementation project(path: ':opensrp-chw-core')
 
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
