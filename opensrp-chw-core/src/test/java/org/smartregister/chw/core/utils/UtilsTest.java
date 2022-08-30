@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -284,7 +285,7 @@ public class UtilsTest {
         Assert.assertEquals("Locations",Utils.getSyncEntityString(SyncEntity.LOCATIONS));
         Assert.assertEquals("Plans",Utils.getSyncEntityString(SyncEntity.PLANS));
         Assert.assertEquals("Tasks",Utils.getSyncEntityString(SyncEntity.TASKS));
-        Assert.assertEquals("",Utils.getSyncEntityString(SyncEntity.STRUCTURES));
+        Assert.assertEquals("",Utils.getSyncEntityString(SyncEntity.STRUCTURES));  //test default returns an empty string
     }
     @Test
     public void testConvertDpToPixel() {
