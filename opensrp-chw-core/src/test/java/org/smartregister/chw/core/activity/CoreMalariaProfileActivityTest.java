@@ -150,6 +150,14 @@ public class CoreMalariaProfileActivityTest extends BaseUnitTest {
         activity = Mockito.spy(activity);
         MenuItem menuItem = Mockito.mock(MenuItem.class);
 
+        Mockito.doReturn(android.R.id.home).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).onBackPressed();
+
+        Mockito.doReturn(R.id.action_remove_member).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).removeMember();
+
         Mockito.doNothing().when(activity).startFormForEdit(R.string.registration_info,
                 CoreConstants.JSON_FORM.FAMILY_MEMBER_REGISTER);
 

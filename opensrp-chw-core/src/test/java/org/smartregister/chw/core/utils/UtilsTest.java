@@ -284,7 +284,9 @@ public class UtilsTest {
         Assert.assertEquals("Locations",Utils.getSyncEntityString(SyncEntity.LOCATIONS));
         Assert.assertEquals("Plans",Utils.getSyncEntityString(SyncEntity.PLANS));
         Assert.assertEquals("Tasks",Utils.getSyncEntityString(SyncEntity.TASKS));
+
         Assert.assertEquals("",Utils.getSyncEntityString(SyncEntity.STRUCTURES));  //test default returns an empty string
+
     }
     @Test
     public void testConvertDpToPixel() {
