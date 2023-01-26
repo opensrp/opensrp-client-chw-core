@@ -4,27 +4,27 @@ import org.smartregister.chw.core.activity.CoreFamilyPlanningMemberProfileActivi
 
 public class CoreFamilyPlanningMemberProfileActivityImpl extends CoreFamilyPlanningMemberProfileActivity {
     @Override
-    protected void removeMember() {
+    public void removeMember() {
         // do nothing
     }
 
     @Override
-    protected void startFamilyPlanningRegistrationActivity() {
+    public void startFamilyPlanningRegistrationActivity() {
         // do nothing
     }
 
     @Override
-    protected void startMalariaRegister() {
+    public void startMalariaRegister() {
         // do nothing
     }
 
     @Override
-    protected void startMalariaFollowUpVisit() {
+    public void startMalariaFollowUpVisit() {
         // do nothing
     }
 
     @Override
-    protected void startHfMalariaFollowupForm() {
+    public void startHfMalariaFollowupForm() {
         // do nothing
     }
 
