@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.junit.After;
@@ -80,4 +81,44 @@ public class CoreFamilyPlanningMemberProfileActivityTest extends BaseUnitTest {
         }
     }
 
+    @Test
+    public void testOnOptionsItemSelected() {
+        activity = Mockito.spy(activity);
+
+        MenuItem menuItem = Mockito.mock(MenuItem.class);
+        CoreConstants.JSON_FORM.setLocaleAndAssetManager(activity.getApplicationContext().getResources().getConfiguration().locale, activity.getApplicationContext().getAssets());
+
+        // back pressed
+        Mockito.doReturn(android.R.id.home).when(menuItem).getItemId();
+        Mockito.doNothing().when(activity).onBackPressed();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).onBackPressed();
+        // start form
+        Mockito.doReturn(R.id.action_registration).when(menuItem).getItemId();
+        Mockito.doNothing().when(activity).startFormForEdit(Mockito.any(), Mockito.any());
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startFormForEdit(Mockito.eq(R.string.registration_info), Mockito.any());
+        // remove member
+        Mockito.doReturn(R.id.action_remove_member).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).removeMember();
+        // start family planning registration
+        Mockito.doReturn(R.id.action_fp_change).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startFamilyPlanningRegistrationActivity();
+        // start register
+        Mockito.doReturn(R.id.action_malaria_registration).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startMalariaRegister();
+        // Malaria diagnosis
+        Mockito.doReturn(R.id.action_malaria_followup_visit).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startMalariaFollowUpVisit();
+        // Malaria diagnosis
+        Mockito.doReturn(R.id.action_malaria_diagnosis).when(menuItem).getItemId();
+        activity.onOptionsItemSelected(menuItem);
+        Mockito.verify(activity).startHfMalariaFollowupForm();
+
+
+    }
 }

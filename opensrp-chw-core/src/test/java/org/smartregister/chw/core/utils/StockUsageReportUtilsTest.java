@@ -99,5 +99,6 @@ public class StockUsageReportUtilsTest {
         Assert.assertEquals(StockUsageReportUtils.monthConverter(10, reportActivity), "October");
         Assert.assertEquals(StockUsageReportUtils.monthConverter(11, reportActivity), "November");
         Assert.assertEquals(StockUsageReportUtils.monthConverter(12, reportActivity), "December");
+        Assert.assertEquals(StockUsageReportUtils.monthConverter(1, reportActivity), "January");
     }
 }
