@@ -16,7 +16,6 @@ import org.smartregister.chw.anc.util.Constants;
 import org.smartregister.chw.core.BaseRobolectricTest;
 
 import java.util.HashMap;
-import org.smartregister.chw.core.domain.FamilyMember;
 
 public class MalariaRegisterRepositoryTest extends BaseRobolectricTest {
     @Mock
